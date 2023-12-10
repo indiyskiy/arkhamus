@@ -1,0 +1,12 @@
+package com.arkhamusserver.arkhamus.model.dataaccess
+
+import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import org.springframework.data.repository.CrudRepository
+import java.util.*
+
+
+interface UserAccountRepository: CrudRepository<UserAccount, Long> {
+    fun findByEmail(email: String?): List<UserAccount?>?
+
+    override fun findById(id: Long): Optional<UserAccount>
+}
