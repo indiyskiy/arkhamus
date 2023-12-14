@@ -34,7 +34,7 @@ class GameController(
         return ResponseEntity.ok(gameSession)
     }
 
-    @PutMapping("connect/{playerId}/{gameId}")
+    @PutMapping("{gameId}/connect/{playerId}/")
     fun connect(
         @PathVariable playerId: Long,
         @PathVariable gameId: Long,
@@ -44,7 +44,7 @@ class GameController(
         return ResponseEntity.ok(gamesSession)
     }
 
-    @PutMapping("start/{playerId}/{gameId}")
+    @PutMapping("{gameId}/start/{playerId}/")
     fun start(
         @PathVariable playerId: Long,
         @PathVariable gameId: Long,

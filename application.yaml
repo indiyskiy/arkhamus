@@ -1,0 +1,5 @@
+version: '0.0.1'
+jwt:
+  key: eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcwMjI0MTcyMCwiaWF0IjoxNzAyMjQxNzIwfQ.yDNqBQyTYgAKeXwingR1_aiqMf9JEy9e9fsi43GLJ4c
+  access-token-expiration: 3600000
+  refresh-token-expiration: 86400000

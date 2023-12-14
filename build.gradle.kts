@@ -26,7 +26,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-authorization-server")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 //	implementation("org.springframework.boot:spring-boot-starter-websocket")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -35,10 +34,17 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 //	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.security:spring-security-test")
 	implementation("org.postgresql:postgresql:42.6.0")
-	implementation ("io.netty:netty-all:4.1.60.Final")
+	implementation ("io.netty:netty-all:4.1.86.Final")
 	implementation ("org.springframework.boot:spring-boot-starter:2.4.3")
+//  Temporary explicit version to fix Thymeleaf bug
+	implementation ("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE")
+
+	implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+	implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	testImplementation("org.springframework.security:spring-security-test")
 }
 
 tasks.withType<KotlinCompile> {
