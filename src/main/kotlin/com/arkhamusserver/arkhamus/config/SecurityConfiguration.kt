@@ -23,16 +23,18 @@ class SecurityConfiguration(
         http
             .csrf { it.disable() }
             .authorizeHttpRequests {
-                it
-                    .requestMatchers("/api/auth", "api/auth/refresh", "/error")
-                    .permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/user")
-                    .permitAll()
-                    .requestMatchers("/api/user**")
-                    .hasRole("ADMIN")
-                    .anyRequest()
-                    .fullyAuthenticated()
-            }
+//                it.requestMatchers("/public/auth").permitAll()
+                it.requestMatchers("/public/**").permitAll()
+                .anyRequest().fullyAuthenticated()
+                }
+//                it
+//                    .requestMatchers("/auth", "/error")
+//                    .permitAll()
+//                    .requestMatchers("/api/user**")
+//                    .hasRole("ADMIN")
+//                    .anyRequest()
+//                    .fullyAuthenticated()
+
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }

@@ -6,6 +6,8 @@ plugins {
 	kotlin("jvm") version "1.8.22"
 	kotlin("plugin.spring") version "1.8.22"
 	kotlin("plugin.jpa") version "1.8.22"
+//	id("com.bmuschko.tomcat") version "2.7.0"
+	war
 }
 
 group = "com.arkhamus-server"
@@ -38,19 +40,34 @@ dependencies {
 	implementation ("io.netty:netty-all:4.1.86.Final")
 	implementation ("org.springframework.boot:spring-boot-starter:2.4.3")
 //  Temporary explicit version to fix Thymeleaf bug
-	implementation ("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE")
+	implementation ("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE")
 
 	implementation("io.jsonwebtoken:jjwt-api:0.12.3")
 	implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	testImplementation("org.springframework.security:spring-security-test")
+//	testImplementation("org.springframework.security:spring-security-test")
+	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 }
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs += "-Xjsr305=strict"
 		jvmTarget = "17"
+	}
+}
+
+tasks.war {
+	archiveBaseName.value("arkhamus")
+	manifest {
+		attributes["Main-Class"] = "com.arkhamusserver.arkhamus.Application"
+	}
+}
+
+tasks.jar {
+	archiveBaseName.value("arkhamus")
+	manifest {
+		attributes["Main-Class"] = "com.arkhamusserver.arkhamus.Application"
 	}
 }
 
@@ -61,3 +78,4 @@ tasks.withType<Test> {
 tasks.bootBuildImage {
 	builder.set("paketobuildpacks/builder-jammy-base:latest")
 }
+

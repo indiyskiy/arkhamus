@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/auth")
-class AuthController(
+@RequestMapping("/public/auth")
+class UserController(
     private val authenticationService: AuthenticationService
 ) {
     @PostMapping

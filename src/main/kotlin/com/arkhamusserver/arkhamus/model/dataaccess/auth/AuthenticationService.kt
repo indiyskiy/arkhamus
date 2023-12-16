@@ -52,7 +52,7 @@ class AuthenticationService(
         expirationDate = getRefreshTokenExpiration()
     )
     private fun getAccessTokenExpiration(): Date =
-        Date(System.currentTimeMillis() + jwtProperties.accessTokenExpiration)
+        Date(System.currentTimeMillis() + jwtProperties.access)
     private fun getRefreshTokenExpiration(): Date =
-        Date(System.currentTimeMillis() + jwtProperties.refreshTokenExpiration)
+        Date(System.currentTimeMillis() + jwtProperties.refresh)
 }
