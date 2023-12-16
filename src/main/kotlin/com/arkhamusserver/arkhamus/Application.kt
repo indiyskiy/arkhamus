@@ -18,14 +18,14 @@ import org.springframework.security.crypto.password.PasswordEncoder
 @EnableConfigurationProperties(JwtProperties::class)
 class Application : SpringBootServletInitializer() {
 
-    private val log: Logger = LoggerFactory.getLogger(Application::class.java)
-
-    @Autowired
-    lateinit var userAccountRepository: UserAccountRepository
-
-
-    @Autowired
-    lateinit var encoder: PasswordEncoder
+//    private val log: Logger = LoggerFactory.getLogger(Application::class.java)
+//
+//    @Autowired
+//    lateinit var userAccountRepository: UserAccountRepository
+//
+//
+//    @Autowired
+//    lateinit var encoder: PasswordEncoder
 
     @Bean
     fun testDatabaseRequests(repository: UserAccountRepository): CommandLineRunner {
