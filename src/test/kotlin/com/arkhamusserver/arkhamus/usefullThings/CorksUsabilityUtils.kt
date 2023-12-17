@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.usefullThings
 
-import com.arkhamusserver.arkhamus.logic.GodCorkToReceiptResolver
+import com.arkhamusserver.arkhamus.logic.ingame.item.GodCorkToReceiptResolver
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
