@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.maker
+package com.arkhamusserver.arkhamus.logic.maker.ingame
 
 import com.arkhamusserver.arkhamus.logic.dto.ingame.ItemInformationDto
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item

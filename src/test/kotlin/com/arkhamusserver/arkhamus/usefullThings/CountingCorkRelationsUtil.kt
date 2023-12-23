@@ -26,10 +26,8 @@ class CountingCorkRelationsUtil {
 
         repeat(5000000) {
             val itemsForGod = mutableMapOf<God, List<Item>>()
-            God.values().forEachIndexed { index, firstGod ->
-                itemsForGod.put(
-                    firstGod, someItems(howManyItems, itemsForGod.values.toList(), random)
-                )
+            God.values().forEachIndexed { _, firstGod ->
+                itemsForGod[firstGod] = someItems(howManyItems, itemsForGod.values.toList(), random)
             }
 
             val godsWithItems = mutableListOf<GodsWithItems>()
@@ -42,7 +40,6 @@ class CountingCorkRelationsUtil {
                     }
                 }
             }
-            godsWithItems.forEach {}
             val similarityStats = godsWithItems.map {
                 countSimilarity(it)
             }
@@ -130,7 +127,7 @@ class CountingCorkRelationsUtil {
         val first: God, val second: God, val types: Int, val items: Int
     )
 
-    private fun List<CountingCorkRelationsUtil.GodsWithItems>?.convert(): String? =
+    private fun List<GodsWithItems>?.convert(): String? =
         this?.sortedBy { it.items }?.sortedBy { it.types }
             ?.joinToString("\r\n") { it.first.name + " - " + it.second.name + ": " + it.types + ", " + it.items }
 

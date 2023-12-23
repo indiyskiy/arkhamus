@@ -1,16 +1,30 @@
 package com.arkhamusserver.arkhamus.logic.ingame.item
 
 import com.arkhamusserver.arkhamus.logic.dto.ingame.ItemInformationDto
-import com.arkhamusserver.arkhamus.logic.maker.ItemToItemInformationDtoMaker
+import com.arkhamusserver.arkhamus.logic.dto.ingame.RecipeDto
+import com.arkhamusserver.arkhamus.logic.maker.ingame.ItemToItemInformationDtoMaker
+import com.arkhamusserver.arkhamus.logic.maker.ingame.RecipeToRecipeDtoMaker
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import org.springframework.stereotype.Component
 
 @Component
 class ItemLogic(
-    private val dtoMaker: ItemToItemInformationDtoMaker
+    private val itemsDtoMaker: ItemToItemInformationDtoMaker,
+    private val recipeDtoMaker: RecipeToRecipeDtoMaker,
+    private val itemToRecipeResolver: ItemToRecipeResolver
 ) {
     fun listAllItems(): List<ItemInformationDto>? =
-        dtoMaker.convert(Item.values().toList())
+        itemsDtoMaker.convert(Item.values().toList())
 
-
+    fun listAllRecipes(): List<RecipeDto> =
+        recipeDtoMaker.convert(
+            Item.values().map {
+                RecipeToRecipeDtoMaker.Data(
+                    it,
+                    itemToRecipeResolver.resolve(it)
+                )
+            }.filter {
+                it.recipe.ingredients?.isNotEmpty() ?: false
+            }
+        )
 }
