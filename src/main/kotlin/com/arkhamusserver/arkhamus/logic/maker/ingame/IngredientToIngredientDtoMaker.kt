@@ -12,7 +12,7 @@ class IngredientToIngredientDtoMaker {
     fun convert(from: Ingredient): IngredientDto =
         IngredientDto().apply {
             this.number = from.number
-            this.item = from.item
+            this.item = from.item?.name
         }
 
 

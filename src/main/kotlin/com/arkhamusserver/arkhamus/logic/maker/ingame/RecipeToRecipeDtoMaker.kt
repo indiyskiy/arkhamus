@@ -14,7 +14,7 @@ class RecipeToRecipeDtoMaker(
 
     fun convert(from: Data): RecipeDto =
         RecipeDto().apply {
-            this.item = from.item
+            this.item = from.item.name
             this.ingredients = ingredientToIngredientDtoMaker.convert(from.recipe.ingredients)
         }
 
