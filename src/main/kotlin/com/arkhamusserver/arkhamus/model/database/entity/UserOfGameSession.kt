@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleInGame
 import jakarta.persistence.*
+import java.sql.Timestamp
 
 @Entity
 data class UserOfGameSession(
@@ -10,11 +12,15 @@ data class UserOfGameSession(
 
     @ManyToOne
     @JoinColumn(name = "userAccountId", nullable = false)
-    var userAccount: UserAccount? = null,
+    var userAccount: UserAccount,
 
-    @ManyToOne
-    @JoinColumn(name = "gameSessionId", nullable = false)
-    var gameSession: GameSession? = null,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gameSessionId", referencedColumnName = "id", nullable = false)
+    var gameSession: GameSession,
 
-    var host: Boolean? = null
+    var host: Boolean,
+
+    var gameCreationTimestamp: Timestamp? = null,
+
+    var roleInGame: RoleInGame? = null
 )

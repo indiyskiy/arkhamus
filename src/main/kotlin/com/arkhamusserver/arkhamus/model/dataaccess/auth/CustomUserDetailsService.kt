@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class CustomUserDetailsService(
@@ -16,13 +17,17 @@ class CustomUserDetailsService(
         userRepository.findByEmail(username).orElseThrow {
             UsernameNotFoundException("Not found!")
         }
-            ?.mapToUserDetails()
+            ?.mapToUserDetailsExt()
             ?: throw UsernameNotFoundException("Not found!")
 
-    private fun UserAccount.mapToUserDetails(): UserDetails =
+    fun UserAccount.mapToUserDetailsExt(): UserDetails =
         User.builder()
             .username(this.email)
             .password(this.password)
             .roles(this.role?.name)
             .build()
+
+    fun mapToUserDetails(user: Optional<UserAccount>): UserDetails =
+        user.orElseThrow { UsernameNotFoundException("Not found!") }.mapToUserDetailsExt()
 }
+

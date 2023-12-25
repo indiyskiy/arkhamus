@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.view.controller.ingame
 
-import com.arkhamusserver.arkhamus.logic.dto.ingame.GodDto
-import com.arkhamusserver.arkhamus.logic.dto.ingame.GodWithCorksDto
+import com.arkhamusserver.arkhamus.view.dto.ingame.GodDto
+import com.arkhamusserver.arkhamus.view.dto.ingame.GodWithCorksDto
 import com.arkhamusserver.arkhamus.logic.ingame.GodLogic
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

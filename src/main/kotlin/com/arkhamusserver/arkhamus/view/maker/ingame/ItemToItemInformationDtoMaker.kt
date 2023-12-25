@@ -1,6 +1,6 @@
-package com.arkhamusserver.arkhamus.logic.maker.ingame
+package com.arkhamusserver.arkhamus.view.maker.ingame
 
-import com.arkhamusserver.arkhamus.logic.dto.ingame.ItemInformationDto
+import com.arkhamusserver.arkhamus.view.dto.ingame.ItemInformationDto
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import org.springframework.stereotype.Component
 
@@ -11,7 +11,7 @@ class ItemToItemInformationDtoMaker {
 
     fun convert(value: Item): ItemInformationDto =
         ItemInformationDto().apply {
-            name = value.name
+            name = value
             title = value.name.lowercase()
             type = value.getItemType()
         }

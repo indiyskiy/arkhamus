@@ -1,6 +1,6 @@
-package com.arkhamusserver.arkhamus.logic.maker.ingame
+package com.arkhamusserver.arkhamus.view.maker.ingame
 
-import com.arkhamusserver.arkhamus.logic.dto.ingame.RecipeDto
+import com.arkhamusserver.arkhamus.view.dto.ingame.RecipeDto
 import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import org.springframework.stereotype.Component
@@ -14,7 +14,7 @@ class RecipeToRecipeDtoMaker(
 
     fun convert(from: Data): RecipeDto =
         RecipeDto().apply {
-            this.item = from.item.name
+            this.item = from.item
             this.ingredients = ingredientToIngredientDtoMaker.convert(from.recipe.ingredients)
         }
 

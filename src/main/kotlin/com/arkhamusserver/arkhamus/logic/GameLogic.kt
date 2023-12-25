@@ -1,62 +1,109 @@
 package com.arkhamusserver.arkhamus.logic
 
-import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.model.dataaccess.GameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.UserOfGameSessionRepository
+import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleInGame
+import com.arkhamusserver.arkhamus.view.maker.GameSessionToGameSessionDtoMaker
+import com.arkhamusserver.arkhamus.view.validator.GameValidator
 import org.springframework.stereotype.Component
+import kotlin.random.Random
+
 
 @Component
 class GameLogic(
     private val gameRepository: GameRepository,
     private val userAccountRepository: UserAccountRepository,
-    private val userOfGameSessionRepository: UserOfGameSessionRepository
+    private val userOfGameSessionRepository: UserOfGameSessionRepository,
+    private val currentUserService: CurrentUserService,
+    private val gameValidator: GameValidator,
+    private val gameSessionToGameSessionDtoMaker: GameSessionToGameSessionDtoMaker
 ) {
-
     companion object {
         private const val DEFAULT_LOBBY_SIZE = 8
+        private const val DEFAULT_CULTIST_SIZE = 1
+        private val random: Random = Random(System.currentTimeMillis())
     }
 
-
-    fun findGame(gameId: Long): GameSession? {
-        return findGameNullSafe(gameId)
+    fun findGame(gameId: Long): GameSessionDto {
+        val player = currentUserService.getCurrentUserAccount()
+        return findGameNullSafe(gameId).toDto(player)
     }
 
-    fun findUsersOpenGame(playerId: Long): GameSession? {
-        val hosted = userOfGameSessionRepository.findByUserAccountId(playerId).filter { it.host ?: false }
-        val gameSessions: List<GameSession> = hosted.mapNotNull { it.gameSession }
-        return gameSessions.firstOrNull { it.state == GameState.NEW }
+    fun findUsersOpenGame(playerId: Long): GameSessionDto? {
+        val player = currentUserService.getCurrentUserAccount()
+        val hosted = userOfGameSessionRepository.findByUserAccountId(playerId).filter { it.host }
+        hosted.sortedByDescending { it.gameCreationTimestamp }.forEach {
+            val game = it.gameSession
+            if (game.state == GameState.NEW) {
+                return game.toDto(player)
+            }
+        }
+        return null
     }
 
-    fun createGame(playerId: Long): GameSession? {
-        val player = findPlayerNullSafe(playerId)
-        return player.id?.let {
-            createNewGameSession()
-        }.also {
+    fun createGame(): GameSessionDto {
+        val player = currentUserService.getCurrentUserAccount()
+        return createNewGameSession().also {
             connectUserToGame(player, it, true)
+        }.toDto(player)
+    }
+
+    fun connectToGame(gameId: Long): GameSessionDto {
+        val player = currentUserService.getCurrentUserAccount()
+        val game = findGameNullSafe(gameId)
+        val invitedUsers = userOfGameSessionRepository.findByGameSessionId(gameId)
+        gameValidator.checkJoinAccess(player, game, invitedUsers)
+        connectUserToGame(player, game)
+        return game.toDto(player)
+    }
+
+    fun start(gameId: Long): GameSessionDto {
+        val player = currentUserService.getCurrentUserAccount()
+        val game = findGameNullSafe(gameId)
+        val invitedUsers = userOfGameSessionRepository.findByGameSessionId(gameId)
+        gameValidator.checkStartAccess(player, game, invitedUsers)
+        startGame(game)
+        updateInvitedUsersInfoOnGameStart(game, invitedUsers)
+        return game.toDto(player)
+    }
+
+
+    fun updateLobby(gameId: Long, gameSessionDto: GameSessionDto): GameSessionDto {
+        val player = currentUserService.getCurrentUserAccount()
+        val game = findGameNullSafe(gameId)
+        gameValidator.checkUpdateAccess(player, game, gameSessionDto)
+        gameSessionToGameSessionDtoMaker.merge(game, gameSessionDto)
+        gameRepository.save(game)
+        return game.toDto(player)
+    }
+
+    private fun updateInvitedUsersInfoOnGameStart(
+        game: GameSession,
+        invitedUsers: List<UserOfGameSession>
+    ) {
+        val cultists = invitedUsers.shuffled(random).subList(0, game.numberOfCultists ?: DEFAULT_CULTIST_SIZE)
+        val cultistsIds = cultists.map { it.id }.toSet()
+        invitedUsers.forEach {
+            if (it.id in cultistsIds) {
+                it.roleInGame = RoleInGame.CULTIST
+            } else {
+                it.roleInGame = RoleInGame.INVESTIGATORS
+            }
+            userOfGameSessionRepository.save(it)
         }
     }
 
-    fun connectToGame(playerId: Long, gameId: Long): GameSession {
-        val player = findPlayerNullSafe(playerId)
-        val game = findGameNullSafe(gameId)
-        val invitedUsers = userOfGameSessionRepository.findByGameSessionId(gameId)
-        checkJoinAccess(player, game, invitedUsers)
-        connectUserToGame(player, game)
-        return game
-    }
-
-    fun start(playerId: Long, gameId: Long): GameSession {
-        val player = findPlayerNullSafe(playerId)
-        val game = findGameNullSafe(gameId)
-        val invitedUsers = userOfGameSessionRepository.findByGameSessionId(gameId)
-        checkStartAccess(player, game, invitedUsers)
+    private fun startGame(game: GameSession) {
+        game.god = God.values().random(random)
         game.state = GameState.IN_PROGRESS
         gameRepository.save(game)
-        return game
     }
 
     private fun findGameNullSafe(gameId: Long): GameSession =
@@ -64,41 +111,32 @@ class GameLogic(
             RuntimeException("wtf?")
         }
 
-    private fun findPlayerNullSafe(playerId: Long): UserAccount =
-        userAccountRepository.findById(playerId).orElseThrow {
-            RuntimeException("wtf?")
-        }
-
     private fun connectUserToGame(
-        player: UserAccount?,
-        game: GameSession?,
+        player: UserAccount,
+        game: GameSession,
         host: Boolean = false
     ) {
-        val userOfGameSession = UserOfGameSession().apply {
-            this.userAccount = player
-            this.gameSession = game
-            this.host = host
-        }
+        val userOfGameSession = UserOfGameSession(
+            userAccount = player,
+            gameSession = game,
+            host = host,
+            gameCreationTimestamp = game.creationTimestamp
+        )
         userOfGameSessionRepository.save(userOfGameSession)
-    }
-
-    private fun checkJoinAccess(player: UserAccount, game: GameSession, invitedUsers: List<UserOfGameSession>) {
-        assert(game.state == GameState.NEW)
-        assert(!invitedUsers.any { it.id == player.id })
-        assert(invitedUsers.size < (game.lobbySize ?: 0))
-    }
-
-    private fun checkStartAccess(player: UserAccount, game: GameSession, invitedUsers: List<UserOfGameSession>) {
-        assert(game.state == GameState.NEW)
-        assert(invitedUsers.first { it.host ?: false }.userAccount?.id == player.id)
     }
 
     private fun createNewGameSession() =
         GameSession(
             state = GameState.NEW,
-            lobbySize = DEFAULT_LOBBY_SIZE
+            lobbySize = DEFAULT_LOBBY_SIZE,
+            numberOfCultists = DEFAULT_CULTIST_SIZE
         ).apply {
             gameRepository.save(this)
         }
 
+    private fun GameSession.toDto(currentPlayer: UserAccount): GameSessionDto =
+        gameSessionToGameSessionDtoMaker.toDto(this, currentPlayer)
+
 }
+
+

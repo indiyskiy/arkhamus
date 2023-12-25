@@ -1,14 +1,15 @@
 package com.arkhamusserver.arkhamus.config
 
+import com.arkhamusserver.arkhamus.model.dataaccess.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.auth.CustomUserDetailsService
 import com.arkhamusserver.arkhamus.model.dataaccess.auth.TokenService
+import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
@@ -16,7 +17,8 @@ import org.springframework.web.filter.OncePerRequestFilter
 class JwtAuthenticationFilter(
     private val userDetailsService: CustomUserDetailsService,
     private val tokenService: TokenService,
-): OncePerRequestFilter() {
+    private val userAccountRepository: UserAccountRepository
+) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -30,19 +32,26 @@ class JwtAuthenticationFilter(
         val jwtToken = authHeader!!.extractTokenValue()
         val email = tokenService.extractEmail(jwtToken)
         if (email != null && SecurityContextHolder.getContext().authentication == null) {
-            val foundUser = userDetailsService.loadUserByUsername(email)
+            val player = userAccountRepository.findByEmail(email)
+            val foundUser = userDetailsService.mapToUserDetails(player)
             if (tokenService.isValid(jwtToken, foundUser))
-                updateContext(foundUser, request)
+                updateContext(player.get(), foundUser, request)
             filterChain.doFilter(request, response)
         }
     }
+
     private fun String?.doesNotContainBearerToken() =
         this == null || !this.startsWith("Bearer ")
+
     private fun String.extractTokenValue() =
         this.substringAfter("Bearer ")
-    private fun updateContext(foundUser: UserDetails, request: HttpServletRequest) {
+
+    private fun updateContext(player: UserAccount, foundUser: UserDetails, request: HttpServletRequest) {
         val authToken = UsernamePasswordAuthenticationToken(foundUser, null, foundUser.authorities)
-        authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
+        authToken.details = ArkhamusWebAuthenticationDetails(
+            userAccount = player,
+            context = request
+        )
         SecurityContextHolder.getContext().authentication = authToken
     }
 }

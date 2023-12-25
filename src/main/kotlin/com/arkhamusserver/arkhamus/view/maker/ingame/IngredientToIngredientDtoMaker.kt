@@ -1,6 +1,6 @@
-package com.arkhamusserver.arkhamus.logic.maker.ingame
+package com.arkhamusserver.arkhamus.view.maker.ingame
 
-import com.arkhamusserver.arkhamus.logic.dto.ingame.IngredientDto
+import com.arkhamusserver.arkhamus.view.dto.ingame.IngredientDto
 import com.arkhamusserver.arkhamus.logic.ingame.item.Ingredient
 import org.springframework.stereotype.Component
 
@@ -12,7 +12,7 @@ class IngredientToIngredientDtoMaker {
     fun convert(from: Ingredient): IngredientDto =
         IngredientDto().apply {
             this.number = from.number
-            this.item = from.item?.name
+            this.item = from.item
         }
 
 

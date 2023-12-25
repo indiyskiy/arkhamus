@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.auth
 
 import com.arkhamusserver.arkhamus.config.JwtProperties
-import com.arkhamusserver.arkhamus.logic.dto.user.AuthenticationRequest
-import com.arkhamusserver.arkhamus.logic.dto.user.AuthenticationResponse
+import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
+import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
