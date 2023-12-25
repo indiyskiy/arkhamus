@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic
 
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.model.dataaccess.GameRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -19,7 +18,6 @@ import kotlin.random.Random
 @Component
 class GameLogic(
     private val gameRepository: GameRepository,
-    private val userAccountRepository: UserAccountRepository,
     private val userOfGameSessionRepository: UserOfGameSessionRepository,
     private val currentUserService: CurrentUserService,
     private val gameValidator: GameValidator,
