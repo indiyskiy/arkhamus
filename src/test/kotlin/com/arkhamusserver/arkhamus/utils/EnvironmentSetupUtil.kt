@@ -2,24 +2,31 @@ package com.arkhamusserver.arkhamus.utils
 
 import com.arkhamusserver.arkhamus.model.dataaccess.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.enums.Role
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class EnvironmentSetupUtil {
 
+    companion object {
+        const val PLAYERS_NUMBER_TO_ADD = 10
+    }
+
     @Autowired
     lateinit var userAccountRepository: UserAccountRepository
 
     fun setupEnvironment() {
-        addSomePlayers(10)
+        addSomePlayers()
     }
 
-    private fun addSomePlayers(playerCount: Int) {
+    private fun addSomePlayers(playerCount: Int = PLAYERS_NUMBER_TO_ADD) {
         repeat(playerCount) {
             UserAccount().apply {
                 nickName = "Player $it"
                 email = "player$it@example.com"
+                password = "${it}omgCoolPassword${it}"
+                role = Role.USER
                 userAccountRepository.save(this)
             }
         }

@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleInGame
 import com.arkhamusserver.arkhamus.view.maker.GameSessionToGameSessionDtoMaker
 import com.arkhamusserver.arkhamus.view.validator.GameValidator
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -29,11 +30,12 @@ class GameLogic(
         private val random: Random = Random(System.currentTimeMillis())
     }
 
+    @Transactional
     fun findGame(gameId: Long): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         return findGameNullSafe(gameId).toDto(player)
     }
-
+    @Transactional
     fun findUsersOpenGame(playerId: Long): GameSessionDto? {
         val player = currentUserService.getCurrentUserAccount()
         val hosted = userOfGameSessionRepository.findByUserAccountId(playerId).filter { it.host }
@@ -46,6 +48,7 @@ class GameLogic(
         return null
     }
 
+    @Transactional
     fun createGame(): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         return createNewGameSession().also {
@@ -53,6 +56,7 @@ class GameLogic(
         }.toDto(player)
     }
 
+    @Transactional
     fun connectToGame(gameId: Long): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         val game = findGameNullSafe(gameId)
@@ -62,6 +66,7 @@ class GameLogic(
         return game.toDto(player)
     }
 
+    @Transactional
     fun start(gameId: Long): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         val game = findGameNullSafe(gameId)
@@ -73,6 +78,7 @@ class GameLogic(
     }
 
 
+    @Transactional
     fun updateLobby(gameId: Long, gameSessionDto: GameSessionDto): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         val game = findGameNullSafe(gameId)

@@ -1,40 +1,44 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
-enum class Item(private val itemType: ItemType) {
-    BOOK(ItemType.RARE_LOOT),
-    CLOCK(ItemType.RARE_LOOT),
-    MASK(ItemType.RARE_LOOT),
-    RING(ItemType.RARE_LOOT),
-    EYE(ItemType.RARE_LOOT),
-    TEAR(ItemType.RARE_LOOT),
-    SCYTHE(ItemType.RARE_LOOT),
+import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.*
 
-    CORK_YERLEG(ItemType.CORK),
-    CORK_CYBELE(ItemType.CORK),
-    CORK_BELETH(ItemType.CORK),
-    CORK_CTHULHU(ItemType.CORK),
-    CORK_KING_IN_YELLOW(ItemType.CORK),
-    CORK_TZONTEMOC(ItemType.CORK),
-    CORK_BHOLES(ItemType.CORK),
-    CORK_AAMON(ItemType.CORK),
-    CORK_NINGISHZIDA(ItemType.CORK),
-    CORK_YOG_SOTHOTH(ItemType.CORK),
-    CORK_MI_GO(ItemType.CORK),
-    CORK_NAMELESS_WINDS(ItemType.CORK),
-    CORK_COLOUR_OUT_OF_SPACE(ItemType.CORK),
-    CORK_DAGON(ItemType.CORK),
-    CORK_CZEOTHOQUA(ItemType.CORK),
-    CORK_SHUB_NIGGURATH(ItemType.CORK),
-    CORK_GREEN_FLAME(ItemType.CORK),
-    CORK_RED_MASK(ItemType.CORK),
-    CORK_PNAKOTIC_HORRORS(ItemType.CORK),
-    CORK_NYARLATHOTEP(ItemType.CORK),
-    
-    I1(ItemType.LOOT),
-    I2(ItemType.LOOT),
-    I3(ItemType.LOOT),
-    I4(ItemType.LOOT),
-    I5(ItemType.LOOT);
+enum class Item(private val itemType: ItemType) {
+    BLACK_STONE(RARE_LOOT),
+    BOOK(RARE_LOOT),
+    CLOCK(RARE_LOOT),
+    EYE(RARE_LOOT),
+    MASK(RARE_LOOT),
+    PLATE(RARE_LOOT),
+    RING(RARE_LOOT),
+    SCYTHE(RARE_LOOT),
+    TEAR(RARE_LOOT),
+
+    CORK_AAMON(CORK),
+    CORK_BELETH(CORK),
+    CORK_BHOLES(CORK),
+    CORK_COLOUR_OUT_OF_SPACE(CORK),
+    CORK_CTHULHU(CORK),
+    CORK_CYBELE(CORK),
+    CORK_CZEOTHOQUA(CORK),
+    CORK_DAGON(CORK),
+    CORK_GREEN_FLAME(CORK),
+    CORK_KING_IN_YELLOW(CORK),
+    CORK_MI_GO(CORK),
+    CORK_NAMELESS_WINDS(CORK),
+    CORK_NINGISHZIDA(CORK),
+    CORK_NYARLATHOTEP(CORK),
+    CORK_PNAKOTIC_HORRORS(CORK),
+    CORK_RED_MASK(CORK),
+    CORK_SHUB_NIGGURATH(CORK),
+    CORK_TZONTEMOC(CORK),
+    CORK_YERLEG(CORK),
+    CORK_YOG_SOTHOTH(CORK),
+
+    I1(LOOT),
+    I2(LOOT),
+    I3(LOOT),
+    I4(LOOT),
+    I5(LOOT);
 
     fun getItemType(): ItemType {
         return itemType

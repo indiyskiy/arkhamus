@@ -6,5 +6,5 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails
 
 class ArkhamusWebAuthenticationDetails(
     val userAccount: UserAccount,
-    context: HttpServletRequest
+    context: HttpServletRequest?
 ) : WebAuthenticationDetails(context)

@@ -6,7 +6,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.item.ItemToRecipeResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -20,7 +19,6 @@ class CorksUsabilityUtils() {
     @Autowired
     lateinit var godToCorkResolver: GodToCorkResolver
 
-    @Disabled
     @Test
     fun countItemsUsability() {
         val recipes: List<Pair<Item, Recipe>> = Item.values().map {
@@ -43,7 +41,6 @@ class CorksUsabilityUtils() {
         })
     }
 
-    @Disabled
     @Test
     fun listSameWithGodTypes() {
         val itemsForGod = mutableMapOf<God, List<Ingredient>>()
