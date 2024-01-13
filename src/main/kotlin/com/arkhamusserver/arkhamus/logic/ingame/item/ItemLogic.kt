@@ -2,14 +2,14 @@ package com.arkhamusserver.arkhamus.logic.ingame.item
 
 import com.arkhamusserver.arkhamus.view.dto.ingame.ItemInformationDto
 import com.arkhamusserver.arkhamus.view.dto.ingame.RecipeDto
-import com.arkhamusserver.arkhamus.view.maker.ingame.ItemToItemInformationDtoMaker
+import com.arkhamusserver.arkhamus.view.maker.ingame.ItemInformationDtoMaker
 import com.arkhamusserver.arkhamus.view.maker.ingame.RecipeToRecipeDtoMaker
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import org.springframework.stereotype.Component
 
 @Component
 class ItemLogic(
-    private val itemsDtoMaker: ItemToItemInformationDtoMaker,
+    private val itemsDtoMaker: ItemInformationDtoMaker,
     private val recipeDtoMaker: RecipeToRecipeDtoMaker,
     private val itemToRecipeResolver: ItemToRecipeResolver
 ) {

@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.view.maker
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.dto.RoleDto
 import org.springframework.stereotype.Component
@@ -13,7 +13,7 @@ class GameSessionToGameSessionDtoMaker {
     fun toDto(gameSession: GameSession, currentPlayer: UserAccount): GameSessionDto {
         val currentUserRole =
             gameSession.usersOfGameSession?.firstOrNull { it.userAccount.id == currentPlayer.id }?.roleInGame
-        val cultist = currentUserRole == RoleInGame.CULTIST
+        val cultist = currentUserRole == RoleTypeInGame.CULTIST
         return GameSessionDto().apply {
             id = gameSession.id
             state = gameSession.state
@@ -30,7 +30,7 @@ class GameSessionToGameSessionDtoMaker {
                     this.userName = it.userAccount.nickName
                     this.userRole = when (gameSession.state) {
                         GameState.NEW -> null
-                        GameState.IN_PROGRESS -> if (cultist) it.roleInGame else RoleInGame.INVESTIGATORS
+                        GameState.IN_PROGRESS -> if (cultist) it.roleInGame else RoleTypeInGame.INVESTIGATOR
                         GameState.FINISHED -> it.roleInGame
                     }
                 }

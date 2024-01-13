@@ -16,7 +16,7 @@ class GameController(
         return ResponseEntity.ok(gameSession)
     }
 
-    @GetMapping("byPlayer/{playerId}")
+    @GetMapping("byplayer/{playerId}")
     fun findUsersOpenGame(@PathVariable playerId: Long): ResponseEntity<GameSessionDto> {
         val gameSession = gameLogic.findUsersOpenGame(playerId)
         return ResponseEntity.ok(gameSession)
@@ -36,20 +36,20 @@ class GameController(
         return ResponseEntity.ok(gamesSession)
     }
 
-    @PutMapping("{gameId}/start")
-    fun start(
-        @PathVariable gameId: Long,
-    ): ResponseEntity<GameSessionDto> {
-        val gamesSession = gameLogic.start(gameId)
-        return ResponseEntity.ok(gamesSession)
-    }
-
     @PutMapping("{gameId}")
     fun update(
         @PathVariable gameId: Long,
         @RequestBody gameSession: GameSessionDto
     ): ResponseEntity<GameSessionDto> {
         val gamesSession = gameLogic.updateLobby(gameId, gameSession)
+        return ResponseEntity.ok(gamesSession)
+    }
+
+    @PutMapping("{gameId}/start")
+    fun start(
+        @PathVariable gameId: Long,
+    ): ResponseEntity<GameSessionDto> {
+        val gamesSession = gameLogic.start(gameId)
         return ResponseEntity.ok(gamesSession)
     }
 

@@ -7,15 +7,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class RecipeToRecipeDtoMaker(
-    private val ingredientToIngredientDtoMaker: IngredientToIngredientDtoMaker
+    private val ingredientDtoMaker: IngredientDtoMaker,
+    private val itemInformationDtoMaker: ItemInformationDtoMaker
 ) {
     fun convert(from: List<Data>): List<RecipeDto> =
         from.map { convert(it) }
 
     fun convert(from: Data): RecipeDto =
         RecipeDto().apply {
-            this.item = from.item
-            this.ingredients = ingredientToIngredientDtoMaker.convert(from.recipe.ingredients)
+            this.item = itemInformationDtoMaker.convert(from.item)
+            this.ingredients = ingredientDtoMaker.convert(from.recipe.ingredients)
         }
 
     data class Data(

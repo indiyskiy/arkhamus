@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
-enum class RoleInGame {
+enum class RoleTypeInGame {
     CULTIST,
-    INVESTIGATORS
+    INVESTIGATOR
 }

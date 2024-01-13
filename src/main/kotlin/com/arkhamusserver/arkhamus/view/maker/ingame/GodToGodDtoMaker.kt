@@ -7,13 +7,14 @@ import org.springframework.stereotype.Component
 @Component
 class GodToGodDtoMaker {
     fun convert(from: Collection<God>): List<GodDto> =
-        from.map { god -> convert(god) }
+        from.map { convert(it) }
 
     fun convert(from: God): GodDto =
         GodDto().apply {
+            this.id = from.getId()
             this.name = from
             this.title = from.name.lowercase()
-            this.types = from.getTypes().map { it.name }
+            this.types = from.getTypes()
         }
 
 }

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import jakarta.persistence.*
 import java.sql.Timestamp
 
@@ -22,5 +22,5 @@ data class UserOfGameSession(
 
     var gameCreationTimestamp: Timestamp? = null,
 
-    var roleInGame: RoleInGame? = null
+    var roleInGame: RoleTypeInGame? = null
 )

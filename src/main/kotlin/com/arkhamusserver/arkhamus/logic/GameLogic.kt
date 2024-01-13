@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.view.maker.GameSessionToGameSessionDtoMaker
 import com.arkhamusserver.arkhamus.view.validator.GameValidator
 import jakarta.transaction.Transactional
@@ -96,9 +96,9 @@ class GameLogic(
         val cultistsIds = cultists.map { it.id }.toSet()
         invitedUsers.forEach {
             if (it.id in cultistsIds) {
-                it.roleInGame = RoleInGame.CULTIST
+                it.roleInGame = RoleTypeInGame.CULTIST
             } else {
-                it.roleInGame = RoleInGame.INVESTIGATORS
+                it.roleInGame = RoleTypeInGame.INVESTIGATOR
             }
             userOfGameSessionRepository.save(it)
         }
