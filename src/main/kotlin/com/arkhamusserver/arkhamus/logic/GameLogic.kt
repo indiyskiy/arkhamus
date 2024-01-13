@@ -112,7 +112,7 @@ class GameLogic(
 
     private fun findGameNullSafe(gameId: Long): GameSession =
         gameRepository.findById(gameId).orElseThrow {
-            RuntimeException("wtf?")
+            RuntimeException("wtf? $gameId")
         }
 
     private fun connectUserToGame(

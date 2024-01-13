@@ -20,14 +20,25 @@ class GameValidator {
     fun checkStartAccess(player: UserAccount, game: GameSession, invitedUsers: List<UserOfGameSession>) {
         checkStateNew(game)
         checkIsHost(invitedUsers, player)
+        val lobbySize = game.lobbySize ?: 0
+        val numberOfCultistsSize = game.numberOfCultists ?: 0
+        checkLobbySize(lobbySize, numberOfCultistsSize)
+        assertTrue(invitedUsers.size > numberOfCultistsSize)
     }
 
     fun checkUpdateAccess(player: UserAccount, game: GameSession, gameSessionDto: GameSessionDto) {
         checkStateNew(game)
-        checkSameGame(game, gameSessionDto)
         checkIsHost(game.usersOfGameSession, player)
-        assertTrue(gameSessionDto.lobbySize?.let { it > 1 } ?: false)
-        assertTrue(gameSessionDto.numberOfCultists?.let { it > 0 } ?: false)
+        checkSameGame(game, gameSessionDto)
+        val lobbySize = gameSessionDto.lobbySize ?: 0
+        val numberOfCultistsSize = gameSessionDto.numberOfCultists ?: 0
+        checkLobbySize(lobbySize, numberOfCultistsSize)
+    }
+
+    private fun checkLobbySize(lobbySize: Int, numberOfCultistsSize: Int) {
+        assertTrue(lobbySize > 1)
+        assertTrue(numberOfCultistsSize > 0)
+        assertTrue(lobbySize > numberOfCultistsSize)
     }
 
     private fun checkSameGame(game: GameSession, gameSessionDto: GameSessionDto) {
@@ -47,7 +58,7 @@ class GameValidator {
         player: UserAccount
     ) {
         assertNotNull(invitedUsers)
-        assertTrue(invitedUsers?.let { it.first { it.userAccount.id == player.id }.host } ?: false)
+        assertTrue(invitedUsers?.first { it.userAccount.id == player.id }?.host ?: false)
     }
 
 }
