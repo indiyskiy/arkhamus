@@ -28,7 +28,7 @@ class Application : SpringBootServletInitializer() {
     @Bean
     fun run(repository: UserAccountRepository): CommandLineRunner {
         addDefaultUsers()
-        return CommandLineRunner { args: Array<String?>? ->
+        return CommandLineRunner { _: Array<String?>? ->
 
         }
     }
