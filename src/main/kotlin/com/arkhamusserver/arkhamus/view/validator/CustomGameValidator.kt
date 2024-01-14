@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.view.validator
 
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.database.entity.GameType.CUSTOM
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
@@ -10,29 +11,48 @@ import com.arkhamusserver.arkhamus.view.validator.utils.assertTrue
 import org.springframework.stereotype.Component
 
 @Component
-class GameValidator {
+class CustomGameValidator {
+
+    companion object {
+        val GAME_TYPE = setOf(CUSTOM)
+    }
+
     fun checkJoinAccess(player: UserAccount, game: GameSession, invitedUsers: List<UserOfGameSession>) {
+        checkGameType(game)
         checkStateNew(game)
-        assertTrue(invitedUsers.all { it.id != player.id })
+        assertTrue(
+            invitedUsers.all { it.id != player.id },
+            "this user ${player.nickName} is invited already"
+        )
         assertTrue(invitedUsers.size < (game.lobbySize ?: 0))
     }
 
     fun checkStartAccess(player: UserAccount, game: GameSession, invitedUsers: List<UserOfGameSession>) {
+        checkGameType(game)
         checkStateNew(game)
         checkIsHost(invitedUsers, player)
         val lobbySize = game.lobbySize ?: 0
         val numberOfCultistsSize = game.numberOfCultists ?: 0
         checkLobbySize(lobbySize, numberOfCultistsSize)
-        assertTrue(invitedUsers.size > numberOfCultistsSize)
+        assertTrue(
+            invitedUsers.size > numberOfCultistsSize,
+            "invited less or equal number (${invitedUsers.size}) users " +
+                    "than cultists needed (${numberOfCultistsSize})"
+        )
     }
 
     fun checkUpdateAccess(player: UserAccount, game: GameSession, gameSessionDto: GameSessionDto) {
+        checkGameType(game)
         checkStateNew(game)
         checkIsHost(game.usersOfGameSession, player)
         checkSameGame(game, gameSessionDto)
         val lobbySize = gameSessionDto.lobbySize ?: 0
         val numberOfCultistsSize = gameSessionDto.numberOfCultists ?: 0
         checkLobbySize(lobbySize, numberOfCultistsSize)
+    }
+
+    private fun checkGameType(game: GameSession) {
+        assertTrue(game.gameType in GAME_TYPE)
     }
 
     private fun checkLobbySize(lobbySize: Int, numberOfCultistsSize: Int) {

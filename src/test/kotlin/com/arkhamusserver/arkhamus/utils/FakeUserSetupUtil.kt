@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.utils
 
 import com.arkhamusserver.arkhamus.config.ArkhamusWebAuthenticationDetails
+import com.arkhamusserver.arkhamus.model.dataaccess.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import jakarta.servlet.http.HttpServletRequest
 import org.mockito.Mockito
@@ -11,8 +12,15 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Component
 
 @Component
-class FakeUserSetupUtil {
-    fun fakeUser(fakeUser: UserAccount) {
+class FakeUserSetupUtil(
+    private val userAccountRepository: UserAccountRepository
+) {
+    fun fakeUser(userEmail: String): UserAccount {
+        val user = userAccountRepository.findByEmail(userEmail).get()
+        return fakeUser(user)
+    }
+
+   private fun fakeUser(fakeUser: UserAccount): UserAccount {
         // create a mock user
         val fakeUserAccount = User(
             fakeUser.nickName,
@@ -24,5 +32,6 @@ class FakeUserSetupUtil {
         val authToken = UsernamePasswordAuthenticationToken(fakeUserAccount, null, fakeUserAccount.authorities)
         authToken.details = ArkhamusWebAuthenticationDetails(fakeUser, request)
         SecurityContextHolder.getContext().authentication = authToken
+        return fakeUser
     }
 }

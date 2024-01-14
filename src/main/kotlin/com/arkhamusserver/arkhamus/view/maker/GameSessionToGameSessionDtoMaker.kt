@@ -17,6 +17,7 @@ class GameSessionToGameSessionDtoMaker {
         return GameSessionDto().apply {
             id = gameSession.id
             state = gameSession.state
+            gameType = gameSession.gameType
             lobbySize = gameSession.lobbySize
             numberOfCultists = gameSession.numberOfCultists
             god = when (gameSession.state) {
