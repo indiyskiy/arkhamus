@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.config
+package com.arkhamusserver.arkhamus.config.auth
 
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import jakarta.servlet.http.HttpServletRequest

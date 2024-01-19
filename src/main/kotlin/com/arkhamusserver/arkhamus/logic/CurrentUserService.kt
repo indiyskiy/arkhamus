@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic
 
-import com.arkhamusserver.arkhamus.config.ArkhamusWebAuthenticationDetails
+import com.arkhamusserver.arkhamus.config.auth.ArkhamusWebAuthenticationDetails
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder

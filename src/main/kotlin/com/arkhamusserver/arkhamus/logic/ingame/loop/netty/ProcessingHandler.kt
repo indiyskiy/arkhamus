@@ -5,16 +5,19 @@ import com.arkhamusserver.arkhamus.model.netty.messages.NettyMessage
 import io.netty.channel.Channel
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class ProcessingHandler : SimpleChannelInboundHandler<NettyMessage>() {
 
     companion object {
         // List of connected client channels.
         val channels: MutableList<Channel> = ArrayList()
+        var logger: Logger = LoggerFactory.getLogger(JsonRequestDecoder::class.java)
     }
 
     override fun channelActive(ctx: ChannelHandlerContext) {
-        println("Client joined - $ctx")
+        logger.debug("Client joined")
         channels.add(ctx.channel())
     }
 
@@ -22,11 +25,11 @@ class ProcessingHandler : SimpleChannelInboundHandler<NettyMessage>() {
         val responseData = ResponseData()
         responseData.message = requestData.toString()
 
-        println("Server received - ${responseData.message}")
+        logger.debug("Server received - ${responseData.message}")
         for (channel in channels) {
-            println("write back - ${responseData.message}")
+            logger.debug("write back - ${responseData.message}")
             channel.writeAndFlush("-> ${responseData.message}\n")
-            println("write back - done")
+            logger.debug("write back - done")
         }
     }
 
@@ -36,8 +39,8 @@ class ProcessingHandler : SimpleChannelInboundHandler<NettyMessage>() {
 	 */
     @Deprecated("Deprecated in Java")
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
-        println("Closing connection for client - $ctx")
-        println(cause)
+        logger.error("Closing connection for client - $ctx")
+        logger.error("Closing connection exception", cause)
         ctx.close()
     }
 }

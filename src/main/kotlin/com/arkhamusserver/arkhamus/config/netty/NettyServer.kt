@@ -1,3 +1,5 @@
+package com.arkhamusserver.arkhamus.config.netty
+
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.JsonRequestDecoder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.JsonToObjectRequestDecoder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.ProcessingHandler
@@ -62,7 +64,7 @@ class NettyServer {
                 )
             // Start the server.
             val f: ChannelFuture = b.bind(PORT).sync()
-            println("Netty Server started. Ready to accept clients.")
+            logger.info("Netty Server started. Ready to accept clients.")
 
             // Wait until the server socket is closed.
             f.channel().closeFuture().sync()

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.auth
 
-import com.arkhamusserver.arkhamus.config.JwtProperties
+import com.arkhamusserver.arkhamus.config.auth.JwtProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys

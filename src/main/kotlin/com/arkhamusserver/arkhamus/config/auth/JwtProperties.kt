@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.config
+package com.arkhamusserver.arkhamus.config.auth
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
