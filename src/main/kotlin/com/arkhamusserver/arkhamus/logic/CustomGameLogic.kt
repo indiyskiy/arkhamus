@@ -54,7 +54,8 @@ class CustomGameLogic(
             DEFAULT_CULTIST_SIZE,
             GameType.CUSTOM
         ).also {
-            gameLogic.connectUserToGame(player, it, true)
+            val host = gameLogic.connectUserToGame(player, it, true)
+            it.usersOfGameSession = listOf(host)
         }.toDto(player)
     }
 
