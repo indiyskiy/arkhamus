@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.config.database
 
-import com.arkhamusserver.arkhamus.model.dataaccess.UserAccountRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.Role
 import jakarta.annotation.PostConstruct
@@ -21,6 +21,7 @@ class UsersConfig {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(UsersConfig::class.java)
     }
+
     @PostConstruct
     fun addDefaultUsers() {
         logger.info("add default users")

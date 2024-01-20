@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.config.netty
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.JsonRequestDecoder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.JsonToObjectRequestDecoder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.ProcessingHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.JsonRequestDecoder
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.JsonToObjectRequestDecoder
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ProcessingHandler
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.ChannelFuture
 import io.netty.channel.ChannelInitializer
@@ -30,6 +30,9 @@ class NettyServer {
     @Autowired
     lateinit var jsonToObjectDecoder: JsonToObjectRequestDecoder
 
+    @Autowired
+    lateinit var processingHandler: ProcessingHandler
+
     companion object {
         private val PORT: Int = 8081
         var logger: Logger = LoggerFactory.getLogger(NettyServer::class.java)
@@ -37,42 +40,44 @@ class NettyServer {
 
     @PostConstruct
     fun start() {
-        logger.info("Starting Netty on port $PORT")
-        // Create boss & worker groups. Boss accepts connections from client. Worker
-        // handles further communication through connections.
-        val bossGroup: EventLoopGroup = NioEventLoopGroup(1)
-        val workerGroup: EventLoopGroup = NioEventLoopGroup()
+        Thread {
+            logger.info("Starting Netty on port $PORT")
+            // Create boss & worker groups. Boss accepts connections from client. Worker
+            // handles further communication through connections.
+            val bossGroup: EventLoopGroup = NioEventLoopGroup(1)
+            val workerGroup: EventLoopGroup = NioEventLoopGroup()
 
-        try {
-            val b = ServerBootstrap()
-            b.group(bossGroup, workerGroup) // Set boss & worker groups
-                .channel(NioServerSocketChannel::class.java) // Use NIO to accept new connections.
-                .childHandler(object : ChannelInitializer<SocketChannel>() {
-                    public override fun initChannel(ch: SocketChannel) {
-                        val p: ChannelPipeline = ch.pipeline()
-                        /*
+            try {
+                val b = ServerBootstrap()
+                b.group(bossGroup, workerGroup) // Set boss & worker groups
+                    .channel(NioServerSocketChannel::class.java) // Use NIO to accept new connections.
+                    .childHandler(object : ChannelInitializer<SocketChannel>() {
+                        public override fun initChannel(ch: SocketChannel) {
+                            val p: ChannelPipeline = ch.pipeline()
+                            /*
                          * Socket/channel communication happens in byte streams. String decoder &
                          * encoder helps conversion between bytes & String.
                          */
-                        p.addLast(jsonDecoder)
-                        p.addLast(jsonToObjectDecoder)
-                        p.addLast(StringEncoder())
-                        // This is our custom server handler which will have logic for chat.
-                        p.addLast(ProcessingHandler())
+                            p.addLast(jsonDecoder)
+                            p.addLast(jsonToObjectDecoder)
+                            p.addLast(StringEncoder())
+                            // This is our custom server handler which will have logic for chat.
+                            p.addLast(processingHandler)
+                        }
                     }
-                }
-                )
-            // Start the server.
-            val f: ChannelFuture = b.bind(PORT).sync()
-            logger.info("Netty Server started. Ready to accept clients.")
+                    )
+                // Start the server.
+                val f: ChannelFuture = b.bind(PORT).sync()
+                logger.info("Netty Server started. Ready to accept clients.")
 
-            // Wait until the server socket is closed.
-            f.channel().closeFuture().sync()
-        } finally {
-            // Shut down all event loops to terminate all threads.
-            bossGroup.shutdownGracefully()
-            workerGroup.shutdownGracefully()
-        }
+                // Wait until the server socket is closed.
+                f.channel().closeFuture().sync()
+            } finally {
+                // Shut down all event loops to terminate all threads.
+                bossGroup.shutdownGracefully()
+                workerGroup.shutdownGracefully()
+            }
+        }.start()
     }
 
     @PreDestroy

@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.config.auth
 
-import com.arkhamusserver.arkhamus.model.dataaccess.UserAccountRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.auth.CustomUserDetailsService
-import com.arkhamusserver.arkhamus.model.dataaccess.auth.TokenService
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.CustomUserDetailsService
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.TokenService
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

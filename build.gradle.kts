@@ -50,6 +50,10 @@ dependencies {
 	implementation("com.google.code.gson:gson:2.10.1")
 
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+	implementation("org.springframework.boot:spring-boot-starter-data-redis:3.2.1")
+	implementation ("redis.clients:jedis")
+
 }
 
 tasks.withType<KotlinCompile> {

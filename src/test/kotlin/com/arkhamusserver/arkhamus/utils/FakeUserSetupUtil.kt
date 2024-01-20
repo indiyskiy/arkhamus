@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.utils
 
 import com.arkhamusserver.arkhamus.config.auth.ArkhamusWebAuthenticationDetails
-import com.arkhamusserver.arkhamus.model.dataaccess.UserAccountRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import jakarta.servlet.http.HttpServletRequest
 import org.mockito.Mockito

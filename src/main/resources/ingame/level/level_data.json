@@ -1,11 +1,14 @@
-{"containers":[
+[
   {
-    "id":1,
-    "interaction_radius":3.67195010185242,
-    "x":2.6800000667572,
-    "y":-0.07100000232458
+    "containers": [
+      {
+        "id": 1,
+        "interactionRadius": 3.67195010185242,
+        "x": 2.6800000667572,
+        "y": -0.07100000232458
+      }
+    ],
+    "levelId": 1,
+    "levelVersion": 1
   }
-],
-  "level_id":1,
-  "level_version":1
-}
+]

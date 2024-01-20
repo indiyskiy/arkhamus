@@ -1,14 +1,15 @@
 package com.arkhamusserver.arkhamus.logic
 
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
-import com.arkhamusserver.arkhamus.model.dataaccess.GameRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.UserOfGameSessionRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.service.LevelService
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.GameType
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState.NEW
 import com.arkhamusserver.arkhamus.view.maker.GameSessionToGameSessionDtoMaker
-import com.arkhamusserver.arkhamus.view.validator.CustomGameValidator
+import com.arkhamusserver.arkhamus.view.validator.GameValidator
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
 
@@ -17,14 +18,15 @@ import org.springframework.stereotype.Component
 class CustomGameLogic(
     private val gameLogic: GameLogic,
     private val gameRepository: GameRepository,
+    private val levelService: LevelService,
     private val userOfGameSessionRepository: UserOfGameSessionRepository,
     private val currentUserService: CurrentUserService,
-    private val gameValidator: CustomGameValidator,
+    private val gameValidator: GameValidator,
     private val gameSessionToGameSessionDtoMaker: GameSessionToGameSessionDtoMaker,
 ) {
     companion object {
         private const val DEFAULT_LOBBY_SIZE = 8
-        private const val DEFAULT_CULTIST_SIZE = 2
+        const val DEFAULT_CULTIST_SIZE = 2
     }
 
     @Transactional
@@ -50,9 +52,7 @@ class CustomGameLogic(
     fun createGame(): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         return gameLogic.createNewGameSession(
-            DEFAULT_LOBBY_SIZE,
-            DEFAULT_CULTIST_SIZE,
-            GameType.CUSTOM
+            DEFAULT_LOBBY_SIZE, DEFAULT_CULTIST_SIZE, GameType.CUSTOM
         ).also {
             val host = gameLogic.connectUserToGame(player, it, true)
             it.usersOfGameSession = listOf(host)
@@ -75,22 +75,14 @@ class CustomGameLogic(
     fun updateLobby(gameId: Long, gameSessionDto: GameSessionDto): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         val game = gameLogic.findGameNullSafe(gameId)
+        val level = gameSessionDto.level?.let { levelDto ->
+            levelDto.levelId?.let {
+                levelService.latestByLevelIdAndVersion(it)
+            }
+        }
         gameValidator.checkUpdateAccess(player, game, gameSessionDto)
-        gameSessionToGameSessionDtoMaker.merge(game, gameSessionDto)
+        gameSessionToGameSessionDtoMaker.merge(game, level, gameSessionDto)
         gameRepository.save(game)
-        return game.toDto(player)
-    }
-
-    fun start(game: GameSession): GameSessionDto? {
-        val player = currentUserService.getCurrentUserAccount()
-
-        val invitedUsers = game.id?.let {
-            userOfGameSessionRepository.findByGameSessionId(it)
-        } ?: throw IllegalStateException("users of game session")
-
-        gameValidator.checkStartAccess(player, game, invitedUsers)
-        gameLogic.startGame(game)
-        gameLogic.updateInvitedUsersInfoOnGameStart(game, invitedUsers, DEFAULT_CULTIST_SIZE)
         return game.toDto(player)
     }
 

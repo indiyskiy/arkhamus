@@ -1,10 +1,12 @@
 package com.arkhamusserver.arkhamus.view.maker
 
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.database.entity.Level
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
+import com.arkhamusserver.arkhamus.view.dto.LevelDto
 import com.arkhamusserver.arkhamus.view.dto.RoleDto
 import org.springframework.stereotype.Component
 
@@ -36,12 +38,19 @@ class GameSessionToGameSessionDtoMaker {
                     }
                 }
             }
+            gameSession.level?.let { level ->
+                this.level = LevelDto().apply {
+                    this.levelId = level.id
+                    this.version = level.version
+                }
+            }
         }
 
     }
 
-    fun merge(game: GameSession, gameSessionDto: GameSessionDto) {
+    fun merge(game: GameSession, level: Level?, gameSessionDto: GameSessionDto) {
         game.lobbySize = gameSessionDto.lobbySize
         game.numberOfCultists = gameSessionDto.numberOfCultists
+        game.level = level
     }
 }

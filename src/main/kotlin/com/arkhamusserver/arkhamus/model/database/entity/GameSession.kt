@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
 import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
@@ -23,4 +24,7 @@ data class GameSession(
     var lobbySize: Int? = null,
     var numberOfCultists: Int? = null,
     var god: God? = null,
+    @ManyToOne
+    @JoinColumn(name = "levelId", nullable = true)
+    var level: Level? = null
 )

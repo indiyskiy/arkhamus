@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.utils
 
-import com.arkhamusserver.arkhamus.model.dataaccess.UserAccountRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.Role
 import org.springframework.beans.factory.annotation.Autowired

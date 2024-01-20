@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus
 
 import com.arkhamusserver.arkhamus.config.auth.JwtProperties
-import com.arkhamusserver.arkhamus.model.dataaccess.UserAccountRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
