@@ -15,10 +15,10 @@ class CustomUserDetailsService(
 ) : UserDetailsService {
     override fun loadUserByUsername(username: String): UserDetails =
         userRepository.findByEmail(username).orElseThrow {
-            UsernameNotFoundException("Not found!")
+            UsernameNotFoundException("User not found!")
         }
             ?.mapToUserDetailsExt()
-            ?: throw UsernameNotFoundException("Not found!")
+            ?: throw UsernameNotFoundException("User not found!")
 
     fun UserAccount.mapToUserDetailsExt(): UserDetails =
         User.builder()
@@ -28,6 +28,6 @@ class CustomUserDetailsService(
             .build()
 
     fun mapToUserDetails(user: Optional<UserAccount>): UserDetails =
-        user.orElseThrow { UsernameNotFoundException("Not found!") }.mapToUserDetailsExt()
+        user.orElseThrow { UsernameNotFoundException("User not found!") }.mapToUserDetailsExt()
 }
 

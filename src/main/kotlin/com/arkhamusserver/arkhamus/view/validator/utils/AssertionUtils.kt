@@ -1,13 +1,15 @@
 package com.arkhamusserver.arkhamus.view.validator.utils
 
-fun assertTrue(expression: Boolean, message: String? = null) {
+import com.arkhamusserver.arkhamus.view.validator.ArkhamusValidationException
+
+fun assertTrue(expression: Boolean, message: String, relatedObject: String) {
     if (!expression) {
-        message?.let { throw IllegalStateException(message) } ?: throw IllegalStateException()
+        throw ArkhamusValidationException(message, relatedObject)
     }
 }
 
-fun assertNotNull(notNullable: Any?, message: String? = null) {
+fun assertNotNull(notNullable: Any?, message: String, relatedObject: String) {
     if (notNullable == null) {
-        message?.let { throw IllegalStateException(message) } ?: throw IllegalStateException()
+        throw ArkhamusValidationException(message, relatedObject)
     }
 }

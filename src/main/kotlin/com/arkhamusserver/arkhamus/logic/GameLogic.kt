@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic
 
+import com.arkhamusserver.arkhamus.logic.exception.ArkhamusServerRequestException
 import com.arkhamusserver.arkhamus.logic.ingame.GameStartLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
@@ -24,28 +25,29 @@ class GameLogic(
     private val currentUserService: CurrentUserService,
     private val gameValidator: GameValidator,
     private val gameSessionToGameSessionDtoMaker: GameSessionToGameSessionDtoMaker
-    ) {
+) {
 
     companion object {
         private val random: Random = Random(System.currentTimeMillis())
+        const val RELATED_ENTITY = "Game"
     }
 
     fun start(game: GameSession): GameSessionDto? {
         val player = currentUserService.getCurrentUserAccount()
-
-        val invitedUsers = game.id?.let {
-            userOfGameSessionRepository.findByGameSessionId(it)
-        } ?: throw IllegalStateException("users of game session")
-
-        gameValidator.checkStartAccess(player, game, invitedUsers)
-        startGame(game)
-        val cultistSize = when(game.gameType){
-            GameType.DEFAULT -> 0
-            GameType.CUSTOM -> CustomGameLogic.DEFAULT_CULTIST_SIZE
-            GameType.SINGLE -> SingleGameLogic.DEFAULT_CULTIST_SIZE
-        }
-        updateInvitedUsersInfoOnGameStart(game, invitedUsers, cultistSize)
-        return game.toDto(player)
+        game.usersOfGameSession?.let { invitedUsers ->
+            gameValidator.checkStartAccess(player, game, invitedUsers)
+            startGame(game)
+            val cultistSize = when (game.gameType) {
+                GameType.DEFAULT -> 0
+                GameType.CUSTOM -> CustomGameLogic.DEFAULT_CULTIST_SIZE
+                GameType.SINGLE -> SingleGameLogic.DEFAULT_CULTIST_SIZE
+            }
+            updateInvitedUsersInfoOnGameStart(game, invitedUsers, cultistSize)
+            return game.toDto(player)
+        } ?: throw ArkhamusServerRequestException(
+            "game has no users ${game.id}",
+            RELATED_ENTITY
+        )
     }
 
     fun updateInvitedUsersInfoOnGameStart(
@@ -73,7 +75,10 @@ class GameLogic(
     }
 
     fun findGameNullSafe(gameId: Long): GameSession = gameRepository.findById(gameId).orElseThrow {
-        RuntimeException("wtf? $gameId")
+        ArkhamusServerRequestException(
+            "game not found with id $gameId",
+            RELATED_ENTITY
+        )
     }
 
     fun connectUserToGame(

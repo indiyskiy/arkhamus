@@ -16,14 +16,23 @@ import org.springframework.stereotype.Component
 @Component
 class GameValidator {
 
+    companion object {
+        const val RELATED_OBJECT = "Game"
+    }
+
     fun checkJoinAccess(player: UserAccount, game: GameSession, invitedUsers: List<UserOfGameSession>) {
         checkGameTypeCustom(game)
         checkStateNew(game)
         assertTrue(
             invitedUsers.all { it.id != player.id },
-            "this user ${player.nickName} is invited already"
+            "this user ${player.nickName} is invited already",
+            RELATED_OBJECT
         )
-        assertTrue(invitedUsers.size < (game.lobbySize ?: 0))
+        assertTrue(
+            invitedUsers.size < (game.lobbySize ?: 0),
+            "lobby is full",
+            RELATED_OBJECT
+        )
     }
 
     fun checkStartAccess(player: UserAccount, game: GameSession, invitedUsers: List<UserOfGameSession>) {
@@ -35,8 +44,8 @@ class GameValidator {
         if (game.gameType == CUSTOM) {
             assertTrue(
                 invitedUsers.size > numberOfCultistsSize,
-                "invited less or equal number (${invitedUsers.size}) users " +
-                        "than cultists needed (${numberOfCultistsSize})"
+                "invited less or equal number (${invitedUsers.size}) users than cultists needed (${numberOfCultistsSize})",
+                RELATED_OBJECT
             )
         }
         checkLevelSelected(game.level)
@@ -52,17 +61,42 @@ class GameValidator {
     }
 
     private fun checkGameTypeCustom(game: GameSession) {
-        assertTrue(game.gameType == CUSTOM)
+        assertTrue(
+            game.gameType == CUSTOM,
+            "invalid mame type ${game.gameType}, should be $CUSTOM",
+            RELATED_OBJECT
+        )
+
     }
 
     private fun checkLobbySize(lobbySize: Int, numberOfCultistsSize: Int, gameType: GameType) {
         if (gameType == SINGLE) {
-            assertTrue(lobbySize == 1)
-            assertTrue(numberOfCultistsSize == 1)
+            assertTrue(
+                lobbySize == 1,
+                "lobby size for $SINGLE game must be 1",
+                RELATED_OBJECT
+            )
+            assertTrue(
+                numberOfCultistsSize <= 1,
+                "number of cultists for $SINGLE game must be 0 or 1",
+                RELATED_OBJECT
+            )
         } else {
-            assertTrue(lobbySize > 1)
-            assertTrue(numberOfCultistsSize > 0)
-            assertTrue(lobbySize > numberOfCultistsSize)
+            assertTrue(
+                lobbySize > 1,
+                "lobby size for $CUSTOM game must be >1",
+                RELATED_OBJECT
+            )
+            assertTrue(
+                numberOfCultistsSize > 0,
+                "number of cultists for $CUSTOM game must be >0",
+                RELATED_OBJECT
+            )
+            assertTrue(
+                lobbySize > numberOfCultistsSize,
+                "lobby size(${lobbySize}) must be > than number of cultists(${numberOfCultistsSize})",
+                RELATED_OBJECT
+            )
         }
     }
 
@@ -71,22 +105,44 @@ class GameValidator {
     }
 
     private fun checkSameGame(gameId: Long?, gameDtoId: Long?) {
-        assertTrue(gameId != null && gameDtoId != null && gameId == gameDtoId)
+        assertTrue(
+            gameId != null && gameDtoId != null && gameId == gameDtoId,
+            "dto game id ${gameDtoId}!= game id from URL $gameId",
+            RELATED_OBJECT
+        )
     }
 
     private fun checkStateNew(game: GameSession) {
-        assertTrue(game.state == GameState.NEW)
+        assertTrue(
+            game.state == GameState.NEW,
+            "game must be in state ${GameState.NEW}, now state is ${game.state}",
+            RELATED_OBJECT
+        )
     }
 
     private fun checkIsHost(
         invitedUsers: List<UserOfGameSession>?,
         player: UserAccount
     ) {
-        assertNotNull(invitedUsers)
-        assertTrue(invitedUsers?.first { it.userAccount.id == player.id }?.host ?: false)
+        assertNotNull(
+            invitedUsers,
+            "list of users is empty",
+            RELATED_OBJECT
+        )
+        assertTrue(
+            invitedUsers?.firstOrNull { it.host }?.userAccount?.id?.let {
+                it == player.id
+            } ?: false,
+            "user ${player.id} is not a host of the game",
+            RELATED_OBJECT
+        )
     }
 
     private fun checkLevelSelected(level: Level?) {
-        assertNotNull(level)
+        assertNotNull(
+            level,
+            "Level is not selected",
+            RELATED_OBJECT
+        )
     }
 }
