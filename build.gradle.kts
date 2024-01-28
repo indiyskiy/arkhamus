@@ -23,7 +23,7 @@ repositories {
 dependencies {
 	implementation ("io.netty:netty-all:4.1.101.Final")
 
-	implementation ("org.springframework.boot:spring-boot:3.2.1")
+	implementation("org.springframework.boot:spring-boot:3.2.2")
 	implementation ("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-data-rest")
@@ -53,6 +53,9 @@ dependencies {
 
 	implementation("org.springframework.boot:spring-boot-starter-data-redis:3.2.1")
 	implementation ("redis.clients:jedis")
+
+	implementation("jakarta.validation:jakarta.validation-api:3.1.0-M1")
+
 
 }
 

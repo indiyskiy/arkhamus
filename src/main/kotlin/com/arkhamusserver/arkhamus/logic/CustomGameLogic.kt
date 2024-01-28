@@ -63,8 +63,8 @@ class CustomGameLogic(
     fun connectToGame(gameId: Long): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         val game = gameLogic.findGameNullSafe(gameId)
-        val invitedUsers = userOfGameSessionRepository.findByGameSessionId(gameId)
-        gameValidator.checkJoinAccess(player, game, invitedUsers)
+//        val invitedUsers = userOfGameSessionRepository.findByGameSessionId(gameId)
+        gameValidator.checkJoinAccess(player, game)
         val connectedUser = gameLogic.connectUserToGame(player, game)
         val usersOfGameSession = game.usersOfGameSession?.let { it + connectedUser } ?: emptyList()
         game.usersOfGameSession = usersOfGameSession

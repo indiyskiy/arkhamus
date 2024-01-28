@@ -20,16 +20,16 @@ class GameValidator {
         const val RELATED_OBJECT = "Game"
     }
 
-    fun checkJoinAccess(player: UserAccount, game: GameSession, invitedUsers: List<UserOfGameSession>) {
+    fun checkJoinAccess(player: UserAccount, game: GameSession) {
         checkGameTypeCustom(game)
         checkStateNew(game)
         assertTrue(
-            invitedUsers.all { it.id != player.id },
+            game.usersOfGameSession?.all { it.id != player.id }?:false,
             "this user ${player.nickName} is invited already",
             RELATED_OBJECT
         )
         assertTrue(
-            invitedUsers.size < (game.lobbySize ?: 0),
+            (game.usersOfGameSession?.size?:0) < (game.lobbySize ?: 0),
             "lobby is full",
             RELATED_OBJECT
         )

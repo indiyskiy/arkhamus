@@ -1,50 +1,54 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
+import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.GameNettyLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.exception.entity.ChannelNotFoundException
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
 import com.google.gson.Gson
+import io.netty.channel.ChannelHandler.Sharable
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
+@Sharable
 class ProcessingHandler(
     private val gameNettyLogic: GameNettyLogic
 ) : SimpleChannelInboundHandler<NettyRequestMessage>() {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(JsonRequestDecoder::class.java)
+        var logger: Logger = LoggerFactory.getLogger(ProcessingHandler::class.java)
     }
 
-    private val channels: MutableList<ArkhamusChannel> = ArrayList()
-    private val gson = Gson()
+    @Autowired
+    private lateinit var channelRepository: ChannelRepository
 
     override fun channelActive(ctx: ChannelHandlerContext) {
         logger.debug("Client joined")
-        channels.add(
-            ArkhamusChannel().apply {
-                this.channel = ctx.channel()
-                this.channelId = ctx.channel().id().asLongText()
-            }
+        val arkhamusChannel = ArkhamusChannel(
+            channel = ctx.channel(),
+            channelId = ctx.channel().id().asLongText()
         )
+        channelRepository.put(arkhamusChannel)
     }
 
     override fun channelRead0(context: ChannelHandlerContext, requestData: NettyRequestMessage) {
         val id = context.channel().id().asLongText()
-        val channel = channels.first { it.channelId == id }
+        val arkhamusChannel = channelRepository.get(id) ?: throw ChannelNotFoundException(id)
 
-        val nettyResponse = gameNettyLogic.process(requestData, channel)
-        val responseJson = gson.toJson(nettyResponse)
+        val nettyResponse = gameNettyLogic.process(requestData, arkhamusChannel)
+        val responseJson = Gson().toJson(nettyResponse)
 
         logger.debug("Server received - $responseJson")
-        channels.forEach {
-            logger.debug("write back - $responseJson")
-            it.channel?.writeAndFlush(responseJson)
-            logger.debug("write back - done")
-        }
+//        channelRepository.forEach { channel ->
+        logger.debug("write back - $responseJson")
+        arkhamusChannel.channel.writeAndFlush(responseJson)
+        logger.debug("write back - done")
+//        }
     }
 
 

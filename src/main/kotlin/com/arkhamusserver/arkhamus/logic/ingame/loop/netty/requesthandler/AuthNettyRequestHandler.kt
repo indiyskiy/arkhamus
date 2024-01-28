@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
+import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AuthGameResponse
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameResponseMessage
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Component
 @Component
 class AuthNettyRequestHandler(
     private val nettyAuthService: NettyAuthService,
-    private val databaseDataAccess: DatabaseDataAccess
+    private val databaseDataAccess: DatabaseDataAccess,
+    private val channelRepository: ChannelRepository
 ) : NettyRequestHandler {
 
 
@@ -44,6 +46,7 @@ class AuthNettyRequestHandler(
                     arkhamusChannel.userAccount = auth.userAccount
                     arkhamusChannel.gameSession = auth.game
                     arkhamusChannel.userRole = auth.userOfTheGame
+                    channelRepository.update(arkhamusChannel)
                 }
             } ?: AuthGameResponse()
         }

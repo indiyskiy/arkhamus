@@ -6,8 +6,8 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import io.netty.channel.Channel
 
 data class ArkhamusChannel(
-    var channelId: String? = null,
-    var channel: Channel? = null,
+    var channelId: String,
+    var channel: Channel,
     var userAccount: UserAccount? = null,
     var gameSession: GameSession? = null,
     var userRole: UserOfGameSession? = null,

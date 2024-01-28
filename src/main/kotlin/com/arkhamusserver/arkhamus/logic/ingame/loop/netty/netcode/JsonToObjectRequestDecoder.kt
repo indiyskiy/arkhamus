@@ -9,10 +9,8 @@ import com.nimbusds.jose.shaded.gson.Gson
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageDecoder
-import org.springframework.stereotype.Component
 import java.nio.charset.Charset
 
-@Component
 class JsonToObjectRequestDecoder : MessageToMessageDecoder<ByteBuf>() {
     var mapper: ObjectMapper = ObjectMapper()
     var gson = Gson()
