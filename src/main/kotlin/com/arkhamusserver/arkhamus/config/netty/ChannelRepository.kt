@@ -64,13 +64,13 @@ class ChannelRepository {
 //        }
 //    }
 
-    fun size(): Int {
-        return arkhamusChannelCache.size
-    }
+//    fun size(): Int {
+//        return arkhamusChannelCache.size
+//    }
 
-    fun channelsSize(): Int {
-        return channelCache.size
-    }
+//    fun channelsSize(): Int {
+//        return channelCache.size
+//    }
 
     private fun addToTheGame(
         arkhamusChannel: ArkhamusChannel,
