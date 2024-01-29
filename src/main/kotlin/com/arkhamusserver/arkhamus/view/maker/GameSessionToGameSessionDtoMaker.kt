@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 class GameSessionToGameSessionDtoMaker {
     fun toDto(gameSession: GameSession, currentPlayer: UserAccount): GameSessionDto {
         val currentUserRole =
-            gameSession.usersOfGameSession?.firstOrNull { it.userAccount.id == currentPlayer.id }?.roleInGame
+            gameSession.usersOfGameSession.firstOrNull { it.userAccount.id == currentPlayer.id }?.roleInGame
         val cultist = currentUserRole == RoleTypeInGame.CULTIST
         return GameSessionDto().apply {
             id = gameSession.id
@@ -27,7 +27,7 @@ class GameSessionToGameSessionDtoMaker {
                 GameState.IN_PROGRESS -> if (cultist) gameSession.god else null
                 GameState.FINISHED -> gameSession.god
             }
-            roleDtos = gameSession.usersOfGameSession?.map {
+            roleDtos = gameSession.usersOfGameSession.map {
                 RoleDto().apply {
                     this.userId = it.userAccount.id
                     this.userName = it.userAccount.nickName

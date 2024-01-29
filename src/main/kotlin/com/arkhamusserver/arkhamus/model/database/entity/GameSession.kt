@@ -17,7 +17,7 @@ data class GameSession(
     var creationTimestamp: Timestamp? = null,
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "gameSession")
-    var usersOfGameSession: List<UserOfGameSession>? = null,
+    var usersOfGameSession: List<UserOfGameSession> = emptyList(),
 
     var state: GameState,
     var gameType: GameType,

@@ -43,34 +43,34 @@ class ChannelRepository {
     fun get(key: String): ArkhamusChannel? {
         return arkhamusChannelCache[key]
     }
-//
-//    fun getChannel(key: String): Channel? {
-//        return channelCache[key]
-//    }
-//
-//    fun getChannelsOfTheGame(id: Long): ConcurrentMap<String, ArkhamusChannel>? {
-//        return arkhamusChannelsOfTheGameCache[id]
-//    }
-//
-//    fun remove(key: String) {
-//        channelCache.remove(key)
-//        val arkhamusChannel = arkhamusChannelCache.remove(key)
-//        if (arkhamusChannel != null) {
-//            val gameSessionId = arkhamusChannel.gameSession?.id
-//            arkhamusChannelsOfTheGameCache[gameSessionId]?.remove(key)
-//            if (arkhamusChannelsOfTheGameCache[gameSessionId]?.isEmpty() == true) {
-//                arkhamusChannelsOfTheGameCache.remove(gameSessionId)
-//            }
-//        }
-//    }
 
-//    fun size(): Int {
-//        return arkhamusChannelCache.size
-//    }
+    fun getChannel(key: String): Channel? {
+        return channelCache[key]
+    }
 
-//    fun channelsSize(): Int {
-//        return channelCache.size
-//    }
+    fun getChannelsOfTheGame(id: Long): ConcurrentMap<String, ArkhamusChannel>? {
+        return arkhamusChannelsOfTheGameCache[id]
+    }
+
+    fun remove(key: String) {
+        channelCache.remove(key)
+        val arkhamusChannel = arkhamusChannelCache.remove(key)
+        if (arkhamusChannel != null) {
+            val gameSessionId = arkhamusChannel.gameSession?.id
+            arkhamusChannelsOfTheGameCache[gameSessionId]?.remove(key)
+            if (arkhamusChannelsOfTheGameCache[gameSessionId]?.isEmpty() == true) {
+                arkhamusChannelsOfTheGameCache.remove(gameSessionId)
+            }
+        }
+    }
+
+    fun size(): Int {
+        return arkhamusChannelCache.size
+    }
+
+    fun channelsSize(): Int {
+        return channelCache.size
+    }
 
     private fun addToTheGame(
         arkhamusChannel: ArkhamusChannel,
