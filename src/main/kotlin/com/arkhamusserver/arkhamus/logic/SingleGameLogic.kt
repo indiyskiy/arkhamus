@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
-import com.arkhamusserver.arkhamus.view.maker.GameSessionToGameSessionDtoMaker
+import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 class SingleGameLogic(
     private val gameLogic: GameLogic,
     private val currentUserService: CurrentUserService,
-    private val gameSessionToGameSessionDtoMaker: GameSessionToGameSessionDtoMaker,
+    private val gameSessionDtoMaker: GameSessionDtoMaker,
 ) {
     companion object {
         private const val DEFAULT_LOBBY_SIZE = 1
@@ -26,14 +26,13 @@ class SingleGameLogic(
         return gameLogic.createNewGameSession(
             DEFAULT_LOBBY_SIZE,
             DEFAULT_CULTIST_SIZE,
-            GameType.SINGLE
-        ).also {
-            gameLogic.connectUserToGame(player, it, true)
-        }.toDto(player)
+            GameType.SINGLE,
+            player
+        ).toDto(player)
     }
 
     fun GameSession.toDto(currentPlayer: UserAccount): GameSessionDto =
-        gameSessionToGameSessionDtoMaker.toDto(this, currentPlayer)
+        gameSessionDtoMaker.toDto(this, currentPlayer)
 
 }
 

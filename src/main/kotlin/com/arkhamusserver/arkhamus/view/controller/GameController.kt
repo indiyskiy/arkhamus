@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.CustomGameLogic
 import com.arkhamusserver.arkhamus.logic.DefaultGameLogic
 import com.arkhamusserver.arkhamus.logic.SingleGameLogic
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
+import com.arkhamusserver.arkhamus.view.dto.GameSessionSettingsDto
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -17,6 +18,11 @@ class GameController(
     @GetMapping("{gameId}")
     fun getGame(@PathVariable gameId: Long): ResponseEntity<GameSessionDto> {
         val gameSession = customGameLogic.findGame(gameId)
+        return ResponseEntity.ok(gameSession)
+    }
+    @GetMapping("byToken/{token}")
+    fun getGameByToken(@PathVariable token: String): ResponseEntity<GameSessionDto> {
+        val gameSession = customGameLogic.findGame(token)
         return ResponseEntity.ok(gameSession)
     }
 
@@ -49,9 +55,9 @@ class GameController(
     @PutMapping("{gameId}")
     fun update(
         @PathVariable gameId: Long,
-        @RequestBody gameSession: GameSessionDto
+        @RequestBody gameSessionSettingsDto: GameSessionSettingsDto
     ): ResponseEntity<GameSessionDto> {
-        val gamesSession = customGameLogic.updateLobby(gameId, gameSession)
+        val gamesSession = customGameLogic.updateLobby(gameId, gameSessionSettingsDto)
         return ResponseEntity.ok(gamesSession)
     }
 

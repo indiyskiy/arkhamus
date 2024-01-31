@@ -28,7 +28,7 @@ class GameStartLogic(
     }
 
     fun startGame(game: GameSession) {
-        game.level?.levelId?.let { levelId ->
+        game.gameSessionSettings.level?.levelId?.let { levelId ->
             val allLevelContainers = containerRepository.findByLevelId(levelId)
             logger.info(
                 "creating $allLevelContainers chests for level $levelId"
@@ -68,7 +68,7 @@ class GameStartLogic(
                 val items = Item.values().filter {
                     it.getItemType() in setOf(LOOT, RARE_LOOT)
                 }.shuffled(random).subList(0, random.nextInt(3) + 1)
-                items.associate { it.getId().toString() to (random.nextLong(3)+1) }
+                items.associate { it.getId().toString() to (random.nextLong(3) + 1) }
             }
         }
     }

@@ -2,13 +2,13 @@ package com.arkhamusserver.arkhamus.view.validator
 
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.Level
-import com.arkhamusserver.arkhamus.model.enums.ingame.GameType.CUSTOM
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameType.CUSTOM
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType.SINGLE
-import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
+import com.arkhamusserver.arkhamus.view.dto.GameSessionSettingsDto
 import com.arkhamusserver.arkhamus.view.validator.utils.assertNotNull
 import com.arkhamusserver.arkhamus.view.validator.utils.assertTrue
 import org.springframework.stereotype.Component
@@ -29,7 +29,7 @@ class GameValidator {
             RELATED_OBJECT
         )
         assertTrue(
-            (game.usersOfGameSession?.size?:0) < (game.lobbySize ?: 0),
+            (game.usersOfGameSession?.size?:0) < (game.gameSessionSettings.lobbySize),
             "lobby is full",
             RELATED_OBJECT
         )
@@ -38,8 +38,8 @@ class GameValidator {
     fun checkStartAccess(player: UserAccount, game: GameSession, invitedUsers: List<UserOfGameSession>) {
         checkStateNew(game)
         checkIsHost(invitedUsers, player)
-        val lobbySize = game.lobbySize ?: 0
-        val numberOfCultistsSize = game.numberOfCultists ?: 0
+        val lobbySize = game.gameSessionSettings.lobbySize
+        val numberOfCultistsSize = game.gameSessionSettings.numberOfCultists
         checkLobbySize(lobbySize, numberOfCultistsSize, game.gameType)
         if (game.gameType == CUSTOM) {
             assertTrue(
@@ -48,15 +48,14 @@ class GameValidator {
                 RELATED_OBJECT
             )
         }
-        checkLevelSelected(game.level)
+        checkLevelSelected(game.gameSessionSettings.level)
     }
 
-    fun checkUpdateAccess(player: UserAccount, game: GameSession, gameSessionDto: GameSessionDto) {
+    fun checkUpdateAccess(player: UserAccount, game: GameSession, gameSessionSettingsDto: GameSessionSettingsDto) {
         checkStateNew(game)
         checkIsHost(game.usersOfGameSession, player)
-        checkSameGame(game, gameSessionDto)
-        val lobbySize = gameSessionDto.lobbySize ?: 0
-        val numberOfCultistsSize = gameSessionDto.numberOfCultists ?: 0
+        val lobbySize = gameSessionSettingsDto.lobbySize
+        val numberOfCultistsSize = gameSessionSettingsDto.numberOfCultists
         checkLobbySize(lobbySize, numberOfCultistsSize, game.gameType)
     }
 
@@ -66,7 +65,6 @@ class GameValidator {
             "invalid mame type ${game.gameType}, should be $CUSTOM",
             RELATED_OBJECT
         )
-
     }
 
     private fun checkLobbySize(lobbySize: Int, numberOfCultistsSize: Int, gameType: GameType) {
@@ -79,6 +77,11 @@ class GameValidator {
             assertTrue(
                 numberOfCultistsSize <= 1,
                 "number of cultists for $SINGLE game must be 0 or 1",
+                RELATED_OBJECT
+            )
+            assertTrue(
+                numberOfCultistsSize >= 0,
+                "number of cultists must be positive",
                 RELATED_OBJECT
             )
         } else {
@@ -98,18 +101,6 @@ class GameValidator {
                 RELATED_OBJECT
             )
         }
-    }
-
-    private fun checkSameGame(game: GameSession, gameSessionDto: GameSessionDto) {
-        checkSameGame(game.id, gameSessionDto.id)
-    }
-
-    private fun checkSameGame(gameId: Long?, gameDtoId: Long?) {
-        assertTrue(
-            gameId != null && gameDtoId != null && gameId == gameDtoId,
-            "dto game id ${gameDtoId}!= game id from URL $gameId",
-            RELATED_OBJECT
-        )
     }
 
     private fun checkStateNew(game: GameSession) {
