@@ -5,7 +5,7 @@ import java.util.*
 
 
 class TaskCollection {
-    var taskList: List<NettyTickRequestMessage> = Collections.synchronizedList(ArrayList())
+    var taskList: MutableList<NettyTickRequestMessage> = Collections.synchronizedList(ArrayList())
     fun isEmpty(): Boolean = taskList.isEmpty()
     fun getByTick(currentTick: Long): List<NettyTickRequestMessage> =
         taskList.filter{it.tick() == currentTick}
