@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AuthRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.request.EmptyMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.GetContainerRequestMessage
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -20,24 +19,22 @@ class JsonToObjectRequestDecoder : MessageToMessageDecoder<ByteBuf>() {
         val jsonString = msg.toString(charset)
         val mainNode: JsonNode = mapper.readTree(jsonString)
         val type: String = mainNode.get("type").asText()
-        val tick: Long = mainNode.get("baseRequestData").get("tick").asLong()
         val parsed = when (type) {
-            AuthRequestMessage::class.java.simpleName -> {
-                gson.fromJson(jsonString, AuthRequestMessage::class.java)
-            }
 
-            GetContainerRequestMessage::class.java.simpleName -> {
+            AuthRequestMessage::class.java.simpleName ->
+                gson.fromJson(jsonString, AuthRequestMessage::class.java)
+
+            GetContainerRequestMessage::class.java.simpleName ->
                 gson.fromJson(
                     jsonString,
                     GetContainerRequestMessage::class.java
                 )
-            }
 
-            else -> {
-                EmptyMessage(type, tick).apply { this.type = type }
-            }
+            else -> null
         }
-        out.add(parsed)
+        if (parsed != null) {
+            out.add(parsed)
+        }
     }
 
 }
