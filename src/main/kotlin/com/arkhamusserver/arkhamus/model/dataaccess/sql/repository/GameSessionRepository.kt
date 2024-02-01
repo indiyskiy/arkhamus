@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import org.springframework.data.repository.CrudRepository
 import java.util.*
 
-interface GameRepository : CrudRepository<GameSession, Long> {
+interface GameSessionRepository : CrudRepository<GameSession, Long> {
     override fun findById(id: Long): Optional<GameSession>
+    fun findByToken(token: String): List<GameSession>
 }

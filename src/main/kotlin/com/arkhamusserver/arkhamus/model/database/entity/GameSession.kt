@@ -19,12 +19,12 @@ data class GameSession(
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "gameSession")
     var usersOfGameSession: List<UserOfGameSession> = emptyList(),
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gameSettingsId")
+    var gameSessionSettings: GameSessionSettings,
+
     var state: GameState,
     var gameType: GameType,
-    var lobbySize: Int? = null,
-    var numberOfCultists: Int? = null,
     var god: God? = null,
-    @ManyToOne
-    @JoinColumn(name = "levelId", nullable = true)
-    var level: Level? = null
+    var token: String? = null
 )

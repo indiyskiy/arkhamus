@@ -43,7 +43,7 @@ class LevelDesignInfoProcessor(
         val path = javaClass.getClassLoader().getResource("ingame/level/level_data.json")
         val uri = path?.toURI() ?: throw IllegalStateException("no level file!")
         val reader = JsonReader(FileReader(File(uri)))
-        val listType = object : TypeToken<ArrayList<LevelFromJson?>?>() {}.type
+        val listType = object : TypeToken<ArrayList<LevelFromJson>>() {}.type
         val levels: List<LevelFromJson> = gson.fromJson(reader, listType)
         logger.info("read ${levels.size} levels")
         return levels

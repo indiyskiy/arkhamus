@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.view.controller.exception
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
@@ -13,11 +15,17 @@ import java.time.LocalDateTime
 @ControllerAdvice
 @Order(Ordered.LOWEST_PRECEDENCE)
 class UnpredictedExceptionHandler {
+    companion object{
+        val logger: Logger = LoggerFactory.getLogger(UnpredictedExceptionHandler::class.java)
+
+    }
     @ExceptionHandler(Throwable::class)
     fun handleValidationException(
         e: Throwable,
         request: WebRequest
     ): ResponseEntity<Map<String, String>> {
+        logger.error("server fall with unpredicted exception ${e.message}", e)
+
         val body: MutableMap<String, String> = LinkedHashMap()
         body["timestamp"] = LocalDateTime.now().toString()
         body["message"] = e.message ?: "no message"
