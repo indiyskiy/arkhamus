@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyTickRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyContainerCell
 import org.springframework.stereotype.Component
@@ -22,7 +22,7 @@ class ContainerNettyResponseMapper : NettyResponseMapper {
 
     override fun process(
         gameResponseMessage: GameResponseMessage,
-        nettyRequestMessage: NettyRequestMessage,
+        nettyRequestMessage: NettyTickRequestMessage,
         user: UserAccount?,
         gameSession: GameSession?,
         userRole: UserOfGameSession?

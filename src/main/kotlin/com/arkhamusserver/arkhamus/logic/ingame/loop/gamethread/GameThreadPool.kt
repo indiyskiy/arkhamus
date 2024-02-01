@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.ResponseSendingLoopManager
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import jakarta.annotation.PostConstruct
@@ -9,7 +10,9 @@ import kotlin.collections.ArrayList
 
 @Component
 class GameThreadPool(
-    private val gameRepository: RedisGameRepository
+    private val gameRepository: RedisGameRepository,
+    private val responseSendingLoopManager: ResponseSendingLoopManager,
+    private val gameResponseBuilder: GameResponseBuilder
 ) {
     var gameTreads: List<ArkhamusGameThread>? = null
 
@@ -17,7 +20,11 @@ class GameThreadPool(
     fun initThreads() {
         gameTreads = Collections.synchronizedList(ArrayList<ArkhamusGameThread>()).apply {
             repeat(5) {
-                val runnable = ArkhamusGameThread(gameRepository)
+                val runnable = ArkhamusGameThread(
+                    gameRepository,
+                    responseSendingLoopManager,
+                    gameResponseBuilder
+                )
                 add(runnable)
                 Thread(runnable).start()
             }

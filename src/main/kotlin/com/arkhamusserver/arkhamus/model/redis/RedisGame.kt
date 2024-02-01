@@ -8,6 +8,7 @@ data class RedisGame(
     var id: String,
     var currentTick: Long = 0,
     var globalTimer: Long = 0,
+    var gameStart: Long = System.currentTimeMillis(),
     var godTimer: Long = 0,
     var state: String = GameState.IN_PROGRESS.name
 )

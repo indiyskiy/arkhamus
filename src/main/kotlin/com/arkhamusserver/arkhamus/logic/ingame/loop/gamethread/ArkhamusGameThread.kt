@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.ResponseSendingLoopManager
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import org.slf4j.Logger
@@ -7,20 +9,30 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
-class ArkhamusGameThread(private val gameRepository: RedisGameRepository) : Runnable {
+class ArkhamusGameThread(
+    private val gameRepository: RedisGameRepository,
+    private val responseSendingLoopManager: ResponseSendingLoopManager,
+    private val gameResponseBuilder: GameResponseBuilder,
+    private val gamesMap: ConcurrentMap<Long, GameSession> = ConcurrentHashMap(),
+    private val tasksMap: ConcurrentMap<Long, TaskCollection> = ConcurrentHashMap(),
+    private var threadLogic: ArkhamusGameThreadLoopLogic? = null
+) : Runnable {
 
     companion object {
         var logger: Logger = LoggerFactory.getLogger(ArkhamusGameThread::class.java)
     }
 
-    private val gamesMap: ConcurrentMap<Long, GameSession> = ConcurrentHashMap()
-    private val tasksMap: ConcurrentMap<Long, TaskCollection> = ConcurrentHashMap()
-    private var threadLogic: ArkhamusGameThreadLoopLogic? = null
 
     override fun run() {
         logger.info("Thread started")
         try {
-            threadLogic = ArkhamusGameThreadLoopLogic(gameRepository, gamesMap, tasksMap)
+            threadLogic = ArkhamusGameThreadLoopLogic(
+                gameRepository,
+                gamesMap,
+                tasksMap,
+                gameResponseBuilder,
+                responseSendingLoopManager
+            )
             threadLogic?.run()
         } finally {
             logger.info("Thread dead")
@@ -35,7 +47,11 @@ class ArkhamusGameThread(private val gameRepository: RedisGameRepository) : Runn
     }
 
     fun addGame(gameSession: GameSession) {
-        gamesMap[gameSession.id] = gameSession
+        threadLogic?.addGame(gameSession)
+    }
+
+    fun addTask(task: NettyTickRequestMessageContainer) {
+        threadLogic?.addTask(task)
     }
 
 }

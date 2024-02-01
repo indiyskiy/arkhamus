@@ -2,10 +2,14 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.GameNettyLogic
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.exception.entity.ChannelNotFoundException
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.AuthNettyRequestHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.AuthNettyResponseMapper
+import com.arkhamusserver.arkhamus.view.dto.netty.request.AuthRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
-import com.google.gson.Gson
+import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyTickRequestMessage
 import io.netty.channel.ChannelHandler.Sharable
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
@@ -17,7 +21,9 @@ import org.springframework.stereotype.Component
 @Component
 @Sharable
 class ProcessingHandler(
-    private val gameNettyLogic: GameNettyLogic
+    private val gameNettyLogic: GameNettyLogic,
+    private val authHandler: AuthNettyRequestHandler,
+    private val authResponseMapper: AuthNettyResponseMapper
 ) : SimpleChannelInboundHandler<NettyRequestMessage>() {
 
     companion object {
@@ -40,15 +46,23 @@ class ProcessingHandler(
         val id = context.channel().id().asLongText()
         val arkhamusChannel = channelRepository.get(id) ?: throw ChannelNotFoundException(id)
 
-        val nettyResponse = gameNettyLogic.process(requestData, arkhamusChannel)
-        val responseJson = Gson().toJson(nettyResponse)
-
-        logger.debug("Server received - $responseJson")
-//        channelRepository.forEach { channel ->
-        logger.debug("write back - $responseJson")
-        arkhamusChannel.channel.writeAndFlush(responseJson)
-        logger.debug("write back - done")
-//        }
+        if (requestData is NettyTickRequestMessage) {
+            val nettyTickRequestMessageContainer = NettyTickRequestMessageContainer(
+                requestData,
+                arkhamusChannel
+            )
+            gameNettyLogic.process(nettyTickRequestMessageContainer)
+        } else {
+            if (requestData is AuthRequestMessage) {
+                val auth = authHandler.process(requestData, arkhamusChannel)
+                val authResponse = authResponseMapper.process(
+                    auth.userAccount,
+                    auth.game,
+                    auth.userOfTheGame
+                )
+                arkhamusChannel.channel.writeAndFlush(authResponse)
+            }
+        }
     }
 
 
