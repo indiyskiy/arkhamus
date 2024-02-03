@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyTickRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyContainerCell
 import org.springframework.stereotype.Component
@@ -22,13 +22,13 @@ class ContainerNettyResponseMapper : NettyResponseMapper {
 
     override fun process(
         gameResponseMessage: GameResponseMessage,
-        nettyRequestMessage: NettyTickRequestMessage,
+        nettyRequestMessage: NettyBaseRequestMessage,
         user: UserAccount?,
         gameSession: GameSession?,
         userRole: UserOfGameSession?
     ): ContainerNettyResponse {
         with(gameResponseMessage as ContainerGameResponse) {
-            val mappedItem = gameResponseMessage.container.items.map {
+            val mappedItem = this.container.items.map {
                 itemMap[it.key]!! to it.value
             }
             val containerCells = mappedItem.map {
@@ -36,7 +36,9 @@ class ContainerNettyResponseMapper : NettyResponseMapper {
                     this.number = it.second
                 }
             }
-            return ContainerNettyResponse().apply {
+            return ContainerNettyResponse(
+                tick = nettyRequestMessage.baseRequestData().tick
+            ).apply {
                 this.containerCells = containerCells
             }
         }

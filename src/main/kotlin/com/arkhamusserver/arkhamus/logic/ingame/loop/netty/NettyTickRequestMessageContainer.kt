@@ -1,10 +1,15 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
-import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyTickRequestMessage
+import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 
 data class NettyTickRequestMessageContainer(
-    val nettyRequestMessage: NettyTickRequestMessage,
-    val arkhamusChannel: ArkhamusChannel,
-    val registrationTime: Long = System.currentTimeMillis()
+    val nettyRequestMessage: NettyBaseRequestMessage,
+    var channelId: String,
+    var userAccount: UserAccount? = null,
+    var gameSession: GameSession? = null,
+    var userRole: UserOfGameSession? = null,
+    val registrationTime: Long = System.currentTimeMillis(),
 )

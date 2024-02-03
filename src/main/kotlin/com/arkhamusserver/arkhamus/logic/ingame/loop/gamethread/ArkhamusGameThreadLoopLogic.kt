@@ -15,6 +15,7 @@ class ArkhamusGameThreadLoopLogic(
     private val gamesMap: ConcurrentMap<Long, GameSession>,
     private val tasksMap: ConcurrentMap<Long, TaskCollection>,
     private val gameResponseBuilder: GameResponseBuilder,
+    private val nettyResponseBuilder: NettyResponseBuilder,
     private val responseSendingLoopManager: ResponseSendingLoopManager
 ) : Runnable {
 
@@ -27,7 +28,11 @@ class ArkhamusGameThreadLoopLogic(
         synchronized(locker) {
             logger.info("endless game loop started")
             while (true) {
-                if (gamesMap.isEmpty() || tasksMap.isEmpty()) {
+                if (
+                    gamesMap.isEmpty() ||
+                    tasksMap.isEmpty() ||
+                    tasksMap.all { it.value.isEmpty() }
+                ) {
                     try {
                         logger.info("endless game loop goes to sleep")
                         locker.wait()
@@ -46,23 +51,23 @@ class ArkhamusGameThreadLoopLogic(
     fun addGame(gameSession: GameSession) {
         if (!gamesMap.contains(gameSession.id)) {
             gamesMap[gameSession.id] = gameSession
-            locker.notify()
-            logger.info("endless game loop has awakened")
         }
     }
 
     fun addTask(container: NettyTickRequestMessageContainer) {
-        container.arkhamusChannel.gameSession?.let {
-            val taskCollection = tasksMap[it.id]
-            if (taskCollection == null) {
-                tasksMap[it.id] = TaskCollection().apply {
-                    this.taskList.add(container)
+        synchronized(locker) {
+            container.gameSession?.let {
+                val taskCollection = tasksMap[it.id]
+                if (taskCollection == null) {
+                    tasksMap[it.id] = TaskCollection().apply {
+                        this.taskList.add(container)
+                    }
+                } else {
+                    taskCollection.taskList.add(container)
                 }
-            } else {
-                taskCollection.taskList.add(container)
+                locker.notify()
+                logger.info("endless game loop has awakened")
             }
-            locker.notify()
-            logger.info("endless game loop has awakened")
         }
     }
 
@@ -74,12 +79,10 @@ class ArkhamusGameThreadLoopLogic(
             val ongoingGame = gameRepository.findById(gameId.toString()).getOrNull()
             if (ongoingGame != null) {
                 val tick = ongoingGame.currentTick
-
                 val usersOfGame =
                     gameSession.usersOfGameSession.map { it.userAccount.id }.toSet()
                 val currentTasks = taskCollection.getByTick(tick)
-                val usersOfCurrentTasks = currentTasks.mapNotNull { it.arkhamusChannel.userAccount?.id }.toSet()
-
+                val usersOfCurrentTasks = currentTasks.mapNotNull { it.userAccount?.id }.toSet()
                 if (usersOfCurrentTasks == usersOfGame) {
                     processCurrentTasks(gameId, currentTasks, tick, ongoingGame)
                 }
@@ -98,7 +101,7 @@ class ArkhamusGameThreadLoopLogic(
             process(it, tick, game)
         }
         currentTasks.forEach {
-            addResponse(it, tick, game)
+            addResponse(it, tick, game, gameId)
         }
         flush(tick, game, gameId)
         cleanUp(tick, gameId)
@@ -114,10 +117,21 @@ class ArkhamusGameThreadLoopLogic(
     private fun addResponse(
         request: NettyTickRequestMessageContainer,
         tick: Long,
-        game: RedisGame
+        game: RedisGame,
+        gameId: Long,
     ) {
-        val response = gameResponseBuilder.buildResponse(request, tick, game)
-        responseSendingLoopManager.addResponse(response, tick, game)
+        val gameResponse = gameResponseBuilder.buildResponse(request, tick, game)
+        val nettyResponse = nettyResponseBuilder.buildResponse(gameResponse, request, tick, game)
+        request.userAccount?.id?.let {
+            responseSendingLoopManager.addResponse(
+                nettyResponse,
+                it,
+                tick,
+                game,
+                gameId,
+                request.channelId
+            )
+        }
     }
 
     private fun cleanUp(tick: Long, gameId: Long) {
@@ -129,7 +143,7 @@ class ArkhamusGameThreadLoopLogic(
         tick: Long,
         game: RedisGame
     ) {
-        TODO("Not yet implemented")
+        logger.info("Process ${request.nettyRequestMessage.javaClass.simpleName} of game ${game.id} tick $tick")
     }
 
     private fun flush(tick: Long, game: RedisGame, gameId: Long) {

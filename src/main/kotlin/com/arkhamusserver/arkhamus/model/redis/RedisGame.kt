@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import org.springframework.data.redis.core.RedisHash
 
-@RedisHash("RedisContainer")
+@RedisHash("RedisGame")
 data class RedisGame(
     var id: String,
     var currentTick: Long = 0,

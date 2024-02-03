@@ -17,9 +17,9 @@ class AuthNettyResponseMapper  {
     ): NettyResponseAuth = if (
         user != null && gameSession != null && userRole != null
     ) {
-        NettyResponseAuth(AuthState.SUCCESS)
+        NettyResponseAuth(AuthState.SUCCESS, 0L)
     } else {
-        NettyResponseAuth(AuthState.FAIL)
+        NettyResponseAuth(AuthState.FAIL, 0L)
     }
 
 }

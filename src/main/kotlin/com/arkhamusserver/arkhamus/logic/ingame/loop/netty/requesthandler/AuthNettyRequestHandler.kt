@@ -27,7 +27,7 @@ class AuthNettyRequestHandler(
                 val userOfTheGame = findUserOfGame(account)
                 this.userOfTheGame = userOfTheGame
                 this.userAccount = userOfTheGame?.userAccount
-                this.game = userOfTheGame?.gameSession
+                this.game = databaseDataAccess.findByGameId(userOfTheGame!!.gameSession.id!!)
                 this.message = "Authentication successful"
             }.also { auth ->
                 arkhamusChannel.userAccount = auth.userAccount

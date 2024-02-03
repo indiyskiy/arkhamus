@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.ResponseSendingLoopManager
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -12,9 +13,10 @@ import kotlin.collections.ArrayList
 class GameThreadPool(
     private val gameRepository: RedisGameRepository,
     private val responseSendingLoopManager: ResponseSendingLoopManager,
-    private val gameResponseBuilder: GameResponseBuilder
+    private val gameResponseBuilder: GameResponseBuilder,
+    private val nettyResponseBuilder: NettyResponseBuilder,
 ) {
-    var gameTreads: List<ArkhamusGameThread>? = null
+    private var gameTreads: List<ArkhamusGameThread>? = null
 
     @PostConstruct
     fun initThreads() {
@@ -23,7 +25,8 @@ class GameThreadPool(
                 val runnable = ArkhamusGameThread(
                     gameRepository,
                     responseSendingLoopManager,
-                    gameResponseBuilder
+                    gameResponseBuilder,
+                    nettyResponseBuilder
                 )
                 add(runnable)
                 Thread(runnable).start()
@@ -40,6 +43,21 @@ class GameThreadPool(
         }
         val lessLoadedThread = gameTreads?.minByOrNull { it.size() }
         lessLoadedThread?.addGame(gameSession)
+    }
+
+    fun addTask(task: NettyTickRequestMessageContainer) {
+
+        task.gameSession?.id?.let { id ->
+            if (gameTreads?.any {
+                    it.isThreadOfGame(id)
+                } != true
+            ) {
+                addGame(task.gameSession!!)
+            }
+            gameTreads?.firstOrNull {
+                it.isThreadOfGame(id)
+            }?.addTask(task)
+        }
     }
 
 }

@@ -8,8 +8,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.exception.entity.Chan
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.AuthNettyRequestHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.AuthNettyResponseMapper
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AuthRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyTickRequestMessage
+import com.google.gson.Gson
 import io.netty.channel.ChannelHandler.Sharable
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
@@ -33,6 +34,8 @@ class ProcessingHandler(
     @Autowired
     private lateinit var channelRepository: ChannelRepository
 
+    val gson = Gson()
+
     override fun channelActive(ctx: ChannelHandlerContext) {
         logger.debug("Client joined")
         val arkhamusChannel = ArkhamusChannel(
@@ -42,14 +45,20 @@ class ProcessingHandler(
         channelRepository.put(arkhamusChannel)
     }
 
-    override fun channelRead0(context: ChannelHandlerContext, requestData: NettyRequestMessage) {
+    override fun channelRead0(
+        context: ChannelHandlerContext,
+        requestData: NettyRequestMessage
+    ) {
         val id = context.channel().id().asLongText()
         val arkhamusChannel = channelRepository.get(id) ?: throw ChannelNotFoundException(id)
 
-        if (requestData is NettyTickRequestMessage) {
+        if (requestData is NettyBaseRequestMessage) {
             val nettyTickRequestMessageContainer = NettyTickRequestMessageContainer(
                 requestData,
-                arkhamusChannel
+                arkhamusChannel.channelId,
+                arkhamusChannel.userAccount,
+                arkhamusChannel.gameSession,
+                arkhamusChannel.userRole,
             )
             gameNettyLogic.process(nettyTickRequestMessageContainer)
         } else {
@@ -60,7 +69,8 @@ class ProcessingHandler(
                     auth.game,
                     auth.userOfTheGame
                 )
-                arkhamusChannel.channel.writeAndFlush(authResponse)
+                val responseJson = gson.toJson(authResponse)
+                arkhamusChannel.channel.writeAndFlush(responseJson)
             }
         }
     }

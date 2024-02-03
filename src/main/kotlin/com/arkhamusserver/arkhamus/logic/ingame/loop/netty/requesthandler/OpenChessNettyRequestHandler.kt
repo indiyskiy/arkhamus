@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.G
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.ContainerRedisRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRelatedIdSource
 import com.arkhamusserver.arkhamus.view.dto.netty.request.GetContainerRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyTickRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -16,11 +16,10 @@ class OpenChessNettyRequestHandler(
     private val gameRelatedIdSource: GameRelatedIdSource
 ) : NettyRequestHandler {
 
-    override fun acceptClass(nettyRequestMessage: NettyTickRequestMessage): Boolean =
+    override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
         nettyRequestMessage::class.java == GetContainerRequestMessage::class.java
 
-    override fun accept(nettyRequestMessage: NettyTickRequestMessage): Boolean = true
-
+    override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
     override fun process(
         nettyTickRequestMessageContainer: NettyTickRequestMessageContainer
@@ -28,7 +27,7 @@ class OpenChessNettyRequestHandler(
         val request = nettyTickRequestMessageContainer.nettyRequestMessage
         with(request as GetContainerRequestMessage) {
             val container =
-                nettyTickRequestMessageContainer.arkhamusChannel.gameSession?.id?.let {
+                nettyTickRequestMessageContainer.gameSession?.id?.let {
                     containerRepository.findById(
                         gameRelatedIdSource.getId(
                             it,

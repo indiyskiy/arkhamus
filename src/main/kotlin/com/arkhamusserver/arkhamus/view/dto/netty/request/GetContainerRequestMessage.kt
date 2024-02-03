@@ -4,8 +4,8 @@ data class GetContainerRequestMessage(
     var containerId: Long,
     var type: String,
     var baseRequestData: BaseRequestData
-) : NettyTickRequestMessage {
+) : NettyBaseRequestMessage {
 
-    override fun tick(): Long =
-        baseRequestData.tick
+    override fun baseRequestData(): BaseRequestData =
+        baseRequestData
 }

@@ -13,6 +13,7 @@ class ArkhamusGameThread(
     private val gameRepository: RedisGameRepository,
     private val responseSendingLoopManager: ResponseSendingLoopManager,
     private val gameResponseBuilder: GameResponseBuilder,
+    private val nettyResponseBuilder: NettyResponseBuilder,
     private val gamesMap: ConcurrentMap<Long, GameSession> = ConcurrentHashMap(),
     private val tasksMap: ConcurrentMap<Long, TaskCollection> = ConcurrentHashMap(),
     private var threadLogic: ArkhamusGameThreadLoopLogic? = null
@@ -31,6 +32,7 @@ class ArkhamusGameThread(
                 gamesMap,
                 tasksMap,
                 gameResponseBuilder,
+                nettyResponseBuilder,
                 responseSendingLoopManager
             )
             threadLogic?.run()
