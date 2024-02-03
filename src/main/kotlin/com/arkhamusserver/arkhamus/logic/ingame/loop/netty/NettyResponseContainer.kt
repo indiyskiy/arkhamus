@@ -9,11 +9,11 @@ data class NettyResponseContainer(
     private val tickMap: ConcurrentMap<Long, MutableList<NettyResponseMessageContainer>> = ConcurrentHashMap()
 ) {
     fun get(tickId: Long): MutableList<NettyResponseMessageContainer> {
-        var tickList = tickMap[tickId]
+        val tickList = tickMap[tickId]
         if (tickList == null) {
-            tickList = Collections.synchronizedList(ArrayList())
-            tickMap[tickId] = tickList
-            return tickList
+            val newTickList: MutableList<NettyResponseMessageContainer> = Collections.synchronizedList(ArrayList())
+            tickMap[tickId] = newTickList
+            return newTickList
         } else {
             return tickList
         }
