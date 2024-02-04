@@ -10,12 +10,12 @@ data class NettyResponseContainer(
 ) {
     fun get(tickId: Long): MutableList<NettyResponseMessageContainer> {
         val tickList = tickMap[tickId]
-        if (tickList == null) {
+        return if (tickList == null) {
             val newTickList: MutableList<NettyResponseMessageContainer> = Collections.synchronizedList(ArrayList())
             tickMap[tickId] = newTickList
-            return newTickList
+            newTickList
         } else {
-            return tickList
+            tickList
         }
     }
 
@@ -30,4 +30,20 @@ data class NettyResponseContainer(
             tickList.add(ettyResponseMessageContainer)
         }
     }
+
+    fun remove(tickId: Long) {
+        tickMap.remove(tickId)
+    }
+
+    fun isEmpty() = tickMap.isEmpty()
+    fun size() = tickMap.size
+    fun forEach(function: (NettyResponseMessageContainer) ->Any?): Set<Long> {
+        return tickMap.map {
+            it.value.forEach {
+                function.invoke(it)
+            }
+            it.key
+        }.toSet()
+    }
+
 }
