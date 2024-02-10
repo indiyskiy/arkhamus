@@ -23,7 +23,7 @@ class ContainerNettyResponseMapper : NettyResponseMapper {
     override fun process(
         gameResponseMessage: GameResponseMessage,
         nettyRequestMessage: NettyBaseRequestMessage,
-        user: UserAccount?,
+        user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?
     ): ContainerNettyResponse {
@@ -37,7 +37,8 @@ class ContainerNettyResponseMapper : NettyResponseMapper {
                 }
             }
             return ContainerNettyResponse(
-                tick = nettyRequestMessage.baseRequestData().tick
+                tick = nettyRequestMessage.baseRequestData().tick,
+                userId = user.id!!
             ).apply {
                 this.containerCells = containerCells
             }

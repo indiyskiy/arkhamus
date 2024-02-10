@@ -1,63 +1,98 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.NettyTickRequestMessageContainer
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.ResponseSendingLoopManager
+import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ResponseSendingLoopManager
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
-import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import jakarta.annotation.PostConstruct
+import com.arkhamusserver.arkhamus.model.redis.RedisGame
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.stereotype.Component
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
+import kotlin.jvm.optionals.getOrNull
 
 @Component
 class GameThreadPool(
     private val gameRepository: RedisGameRepository,
     private val responseSendingLoopManager: ResponseSendingLoopManager,
-    private val gameResponseBuilder: GameResponseBuilder,
-    private val nettyResponseBuilder: NettyResponseBuilder,
+    private val tickLogic: ArkhamusOneTickLogic
 ) {
-    private var gameTreads: List<ArkhamusGameThread>? = null
+    private val taskExecutor: ThreadPoolTaskExecutor = ThreadPoolTaskExecutor()
+    private val tasksMap: ConcurrentMap<Long, TaskCollection> = ConcurrentHashMap()
 
-    @PostConstruct
-    fun initThreads() {
-        gameTreads = Collections.synchronizedList(ArrayList<ArkhamusGameThread>()).apply {
-            repeat(5) {
-                val runnable = ArkhamusGameThread(
-                    gameRepository,
-                    responseSendingLoopManager,
-                    gameResponseBuilder,
-                    nettyResponseBuilder
-                )
-                add(runnable)
-                Thread(runnable).start()
-            }
-        }
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(GameThreadPool::class.java)
     }
 
-    fun addGame(gameSession: GameSession) {
-        if (gameTreads?.any {
-                it.isThreadOfGame(gameSession.id ?: 0)
-            } == true
-        ) {
-            return //game already added to thread
-        }
-        val lessLoadedThread = gameTreads?.minByOrNull { it.size() }
-        lessLoadedThread?.addGame(gameSession)
+    init {
+        taskExecutor.corePoolSize = 3
+        taskExecutor.maxPoolSize = 5
+        taskExecutor.initialize()
     }
+
 
     fun addTask(task: NettyTickRequestMessageContainer) {
-
-        task.gameSession?.id?.let { id ->
-            if (gameTreads?.any {
-                    it.isThreadOfGame(id)
-                } != true
-            ) {
-                addGame(task.gameSession!!)
+        val gameId = task.gameSession!!.id!!
+        val taskCollection = tasksMap[gameId]
+        if (taskCollection != null) {
+            tasksMap[gameId]?.add(task)
+            processIfEnoughData(gameId, taskCollection)
+        } else {
+            val createdTaskCollection = (TaskCollection()).apply {
+                init(task.gameSession!!)
+                add(task)
             }
-            gameTreads?.firstOrNull {
-                it.isThreadOfGame(id)
-            }?.addTask(task)
+            tasksMap[gameId] = createdTaskCollection
+            processIfEnoughData(gameId, createdTaskCollection)
         }
+    }
+
+    private fun processIfEnoughData(
+        gameId: Long,
+        taskCollection: TaskCollection
+    ) {
+        if (!taskCollection.isEmpty()) {
+            val ongoingGame = gameRepository.findById(gameId.toString()).getOrNull()
+            if (ongoingGame != null) {
+                processGameTickIfReady(ongoingGame, taskCollection, gameId)
+            } else {
+                logger.error("processing game not found")
+            }
+        }
+    }
+
+    private fun processGameTickIfReady(
+        ongoingGame: RedisGame,
+        taskCollection: TaskCollection,
+        gameId: Long
+    ) {
+        val tick = ongoingGame.currentTick
+        val usersOfGame = taskCollection.userIds()
+        val currentTasks = taskCollection.getByTick(tick)
+        val usersOfCurrentTasks = currentTasks.mapNotNull { it.userAccount.id }.toSet()
+        if (usersOfCurrentTasks == usersOfGame) {
+            taskExecutor.execute {
+                processGameTick(taskCollection.getList(), gameId, tick, ongoingGame)
+            }
+        } else {
+//            logger.info("processing game - NOT ready yet")
+        }
+    }
+
+    private fun processGameTick(
+        tasks: MutableList<NettyTickRequestMessageContainer>,
+        gameId: Long,
+        tick: Long,
+        ongoingGame: RedisGame
+    ) {
+        val responses = tickLogic.processCurrentTasks(
+            tasks,
+            tick,
+            ongoingGame
+        )
+        responseSendingLoopManager.addResponses(responses, gameId)
     }
 
 }

@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.GameNettyLogic
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.exception.entity.ChannelNotFoundException
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.AuthNettyRequestHandler
@@ -56,7 +56,7 @@ class ProcessingHandler(
             val nettyTickRequestMessageContainer = NettyTickRequestMessageContainer(
                 requestData,
                 arkhamusChannel.channelId,
-                arkhamusChannel.userAccount,
+                arkhamusChannel.userAccount!!,
                 arkhamusChannel.gameSession,
                 arkhamusChannel.userRole,
             )

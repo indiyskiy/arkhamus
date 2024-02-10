@@ -18,7 +18,7 @@ class TestContainerController(
         @PathVariable containerId: Long,
         @PathVariable gameId: Long,
     ): ResponseEntity<ContainerNettyResponse> {
-        val items = containerLogic.getContainerById(gameId, containerId)
+        val items = containerLogic.getContainerByUserAndId(gameId, containerId)
         return ResponseEntity.ok(items)
     }
 }

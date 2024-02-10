@@ -8,18 +8,18 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseAuth
 import org.springframework.stereotype.Component
 
 @Component
-class AuthNettyResponseMapper  {
+class AuthNettyResponseMapper {
 
-     fun process(
+    fun process(
         user: UserAccount?,
         gameSession: GameSession?,
         userRole: UserOfGameSession?
     ): NettyResponseAuth = if (
         user != null && gameSession != null && userRole != null
     ) {
-        NettyResponseAuth(AuthState.SUCCESS, 0L)
+        NettyResponseAuth(AuthState.SUCCESS, 0L, user.id!!)
     } else {
-        NettyResponseAuth(AuthState.FAIL, 0L)
+        NettyResponseAuth(AuthState.FAIL, 0L, 0L)
     }
 
 }

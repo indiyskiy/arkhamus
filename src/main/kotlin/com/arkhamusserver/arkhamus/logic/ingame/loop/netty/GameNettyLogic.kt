@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -22,5 +23,4 @@ class GameNettyLogic(
             logger.error("error on processing request", exception)
         }
     }
-
 }

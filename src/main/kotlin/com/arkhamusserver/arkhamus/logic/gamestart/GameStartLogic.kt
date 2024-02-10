@@ -22,7 +22,7 @@ class GameStartLogic(
     private val containerRedisRepository: ContainerRedisRepository,
     private val gameRepository: RedisGameRepository,
     private val containerRepository: ContainerRepository,
-    private val gameRelatedIdSource: GameRelatedIdSource
+    private val gameRelatedIdSource: GameRelatedIdSource,
 ) {
 
     companion object {

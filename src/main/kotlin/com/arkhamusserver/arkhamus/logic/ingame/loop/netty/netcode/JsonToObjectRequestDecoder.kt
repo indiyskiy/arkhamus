@@ -11,8 +11,8 @@ import io.netty.handler.codec.MessageToMessageDecoder
 import java.nio.charset.Charset
 
 class JsonToObjectRequestDecoder : MessageToMessageDecoder<ByteBuf>() {
-    var mapper: ObjectMapper = ObjectMapper()
-    val gson = Gson()
+    private var mapper: ObjectMapper = ObjectMapper()
+    private val gson = Gson()
 
     private val charset: Charset = Charset.forName("UTF-8")
     override fun decode(ctx: ChannelHandlerContext?, msg: ByteBuf, out: MutableList<Any>) {

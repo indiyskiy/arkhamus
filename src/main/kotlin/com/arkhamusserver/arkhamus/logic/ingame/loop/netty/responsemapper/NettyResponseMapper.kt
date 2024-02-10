@@ -13,7 +13,7 @@ interface NettyResponseMapper {
     fun process(
         gameResponseMessage: GameResponseMessage,
         nettyRequestMessage: NettyBaseRequestMessage,
-        user: UserAccount?,
+        user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?
     ): NettyResponseMessage
