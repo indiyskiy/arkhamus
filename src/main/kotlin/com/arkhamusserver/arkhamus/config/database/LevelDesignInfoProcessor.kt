@@ -2,10 +2,14 @@ package com.arkhamusserver.arkhamus.config.database
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ContainerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.LevelRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.database.entity.Container
 import com.arkhamusserver.arkhamus.model.database.entity.Level
+import com.arkhamusserver.arkhamus.model.database.entity.StartMarker
 import com.arkhamusserver.arkhamus.model.enums.LevelState
+import com.arkhamusserver.arkhamus.view.levelDesign.ContainerFromJson
 import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
+import com.arkhamusserver.arkhamus.view.levelDesign.JsonStartMarker
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
@@ -20,7 +24,8 @@ import java.io.FileReader
 @Component
 class LevelDesignInfoProcessor(
     private val levelRepository: LevelRepository,
-    private val containerRepository: ContainerRepository
+    private val containerRepository: ContainerRepository,
+    private val startMarkerRepository: StartMarkerRepository
 ) {
 
     companion object {
@@ -82,20 +87,43 @@ class LevelDesignInfoProcessor(
         val newLevel = Level(
             levelId = levelFromJson.levelId,
             version = levelFromJson.levelVersion,
+            levelWidth = levelFromJson.levelWidth,
+            levelHeight = levelFromJson.levelHeight,
             state = LevelState.ACTIVE
         )
         val savedLevel = levelRepository.save(newLevel)
-        levelFromJson.containers.forEach { container ->
-            logger.info("awesome chest?")
+        processContainers(levelFromJson.containers, savedLevel)
+        processStartMarkers(levelFromJson.startMarkers, savedLevel)
+    }
+
+    private fun processContainers(
+        containers: List<ContainerFromJson>,
+        savedLevel: Level?
+    ) {
+        containers.forEach { container ->
             Container(
-                id = container.id,
+                inGameId = container.id,
                 interactionRadius = container.interactionRadius,
                 x = container.x,
                 y = container.y,
                 level = savedLevel
             ).apply {
-                logger.info("awesome chest! $this")
                 containerRepository.save(this)
+            }
+        }
+    }
+
+    private fun processStartMarkers(
+        containers: List<JsonStartMarker>,
+        savedLevel: Level?
+    ) {
+        containers.forEach { startMarker ->
+            StartMarker(
+                x = startMarker.x,
+                y = startMarker.y,
+                level = savedLevel
+            ).apply {
+                startMarkerRepository.save(this)
             }
         }
     }

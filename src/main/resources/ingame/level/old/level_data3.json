@@ -14,15 +14,7 @@
         "y": 32
       }
     ],
-    "levelHeight": 54,
     "levelId": 1,
-    "levelVersion": 1,
-    "levelWidth": 54,
-    "startMarkers": [
-      {
-        "x": 27.5,
-        "y": 26.5
-      }
-    ]
+    "levelVersion": 1
   }
 ]

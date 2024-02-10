@@ -2,7 +2,9 @@ package com.arkhamusserver.arkhamus.logic.ingame
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.ContainerRedisRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRelatedIdSource
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameUserRedisRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ContainerRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.database.entity.Container
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerAffectModifiers
@@ -10,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.LOOT
 import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.RARE_LOOT
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -18,7 +21,9 @@ import kotlin.random.Random
 @Component
 class GameStartLogic(
     private val containerRedisRepository: ContainerRedisRepository,
+    private val gameUserRedisRepository: GameUserRedisRepository,
     private val containerRepository: ContainerRepository,
+    private val startMarkerRepository: StartMarkerRepository,
     private val gameRelatedIdSource: GameRelatedIdSource
 ) {
 
@@ -29,23 +34,34 @@ class GameStartLogic(
 
     fun startGame(game: GameSession) {
         game.gameSessionSettings.level?.levelId?.let { levelId ->
-            val allLevelContainers = containerRepository.findByLevelId(levelId)
-            logger.info(
-                "creating $allLevelContainers chests for level $levelId"
-            )
-            allLevelContainers.forEach { dbContainer ->
-                logger.info("creating chests ${dbContainer.id}")
-                val modifiers = listOf(ContainerAffectModifiers.FULL_RANDOM)
-                with(createContainer(game, dbContainer, modifiers)) {
-                    containerRedisRepository.save(this)
-                }
-                logger.info(
-                    "created full chest ${
-                        containerRedisRepository.findById(
-                            gameRelatedIdSource.getId(game.id!!, dbContainer.id!!)
-                        ).get()
-                    }"
-                )
+            createContainers(levelId, game)
+            createGameUsers(levelId, game)
+        }
+    }
+
+    private fun createGameUsers(levelId: Long, game: GameSession) {
+        val startMarkers = startMarkerRepository.findByLevelId(levelId)
+        game.usersOfGameSession?.forEach {
+            val marker = startMarkers.random(random)
+            val userGameSession = RedisGameUser().apply {
+                this.id = gameRelatedIdSource.getId(game.id!!, it.userAccount.id!!)
+                this.x = marker.x
+                this.y = marker.y
+            }
+            gameUserRedisRepository.save(userGameSession)
+            logger.info("user placed for $userGameSession")
+        }
+    }
+
+    private fun createContainers(
+        levelId: Long,
+        game: GameSession
+    ) {
+        val allLevelContainers = containerRepository.findByLevelId(levelId)
+        allLevelContainers.forEach { dbContainer ->
+            val modifiers = listOf(ContainerAffectModifiers.FULL_RANDOM)
+            with(createContainer(game, dbContainer, modifiers)) {
+                containerRedisRepository.save(this)
             }
         }
     }
@@ -55,7 +71,7 @@ class GameStartLogic(
         dbContainer: Container,
         modifiers: List<ContainerAffectModifiers>
     ) = RedisContainer().apply {
-        this.id = gameRelatedIdSource.getId(game.id!!, dbContainer.id!!)
+        this.id = gameRelatedIdSource.getId(game.id!!, dbContainer.inGameId!!)
         this.x = dbContainer.x
         this.y = dbContainer.y
         this.interactionRadius = dbContainer.interactionRadius

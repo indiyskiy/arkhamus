@@ -16,5 +16,7 @@ data class Level(
 
     var version: Long? = null,
     var levelId: Long? = null,
+    var levelHeight: Long? = null,
+    var levelWidth: Long? = null,
     var state: LevelState? = null
 )

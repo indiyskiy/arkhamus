@@ -3,12 +3,10 @@ package com.arkhamusserver.arkhamus.model.database.entity
 import jakarta.persistence.*
 
 @Entity
-data class Container(
+data class StartMarker(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
-    var inGameId: Long? = null,
-    var interactionRadius: Double? = null,
     var x: Double? = null,
     var y: Double? = null,
     @ManyToOne
