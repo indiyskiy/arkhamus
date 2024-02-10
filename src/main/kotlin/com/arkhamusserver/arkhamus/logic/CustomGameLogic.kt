@@ -38,6 +38,7 @@ class CustomGameLogic(
         val player = currentUserService.getCurrentUserAccount()
         return gameLogic.findGameNullSafe(gameId).toDto(player)
     }
+
     @Transactional
     fun findGame(token: String): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
@@ -70,15 +71,27 @@ class CustomGameLogic(
 
     @Transactional
     fun connectToGame(gameId: Long): GameSessionDto {
-        val player = currentUserService.getCurrentUserAccount()
         val game = gameLogic.findGameNullSafe(gameId)
-//        val invitedUsers = userOfGameSessionRepository.findByGameSessionId(gameId)
+        return joinToGame(game)
+    }
+
+    @Transactional
+    fun connectToGameByToken(token: String): GameSessionDto {
+        val game = gameLogic.findGameNullSafe(token)
+        return joinToGame(game)
+    }
+
+    private fun joinToGame(
+        game: GameSession
+    ): GameSessionDto {
+        val player = currentUserService.getCurrentUserAccount()
         gameValidator.checkJoinAccess(player, game)
         val connectedUser = gameLogic.connectUserToGame(player, game)
         val usersOfGameSession = game.usersOfGameSession + connectedUser
         game.usersOfGameSession = usersOfGameSession
         return game.toDto(player)
     }
+
 
     @Transactional
     fun updateLobby(gameId: Long, gameSessionSettingsDto: GameSessionSettingsDto): GameSessionDto {

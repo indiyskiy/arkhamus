@@ -52,6 +52,14 @@ class GameController(
         return ResponseEntity.ok(gamesSession)
     }
 
+    @PutMapping("byToken/{token}/connect")
+    fun connect(
+        @PathVariable token: String,
+    ): ResponseEntity<GameSessionDto> {
+        val gamesSession = customGameLogic.connectToGameByToken(token)
+        return ResponseEntity.ok(gamesSession)
+    }
+
     @PutMapping("{gameId}")
     fun update(
         @PathVariable gameId: Long,

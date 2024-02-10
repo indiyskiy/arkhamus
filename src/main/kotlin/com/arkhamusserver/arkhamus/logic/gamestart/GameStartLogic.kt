@@ -55,6 +55,7 @@ class GameStartLogic(
             val marker = startMarkers.random(random)
             val userGameSession = RedisGameUser().apply {
                 this.id = gameRelatedIdSource.getId(game.id!!, it.userAccount.id!!)
+                this.nickName = it.userAccount.nickName
                 this.x = marker.x
                 this.y = marker.y
             }

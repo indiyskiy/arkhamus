@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRelatedIdSource
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameUserRedisRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerNettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.GameUserResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponseMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyContainerCell
 import org.springframework.stereotype.Component
 
@@ -38,11 +38,13 @@ class TestContainerLogic(
         return ContainerNettyResponse(
             tick = game.get().currentTick,
             userId = userId,
-            gameUser = GameUserResponseMessage(
+            myGameUser = MyGameUserResponseMessage(
                 userId,
+                user.nickName!!,
                 user.x!!,
                 user.y!!
-            )
+            ),
+            allGameUser = emptyList()
         ).apply {
             containerCells = container.items.map { (itemId, quantity) ->
                 NettyContainerCell(itemId.toLong(), quantity)

@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.AuthState
-import com.arkhamusserver.arkhamus.view.dto.netty.response.GameUserResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponseMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseAuth
 import org.springframework.stereotype.Component
 
@@ -15,7 +15,6 @@ class AuthNettyResponseMapper(
     private val gameUserRedisRepository: GameUserRedisRepository,
     private val gameRelatedIdSource: GameRelatedIdSource
 ) {
-
     fun process(
         user: UserAccount?,
         gameSession: GameSession?,
@@ -30,14 +29,16 @@ class AuthNettyResponseMapper(
             AuthState.SUCCESS,
             0L,
             user.id!!,
-            GameUserResponseMessage(
+            MyGameUserResponseMessage(
                 user.id!!,
+                gameUser.nickName!!,
                 gameUser.x!!,
                 gameUser.y!!
-            )
+            ),
+            emptyList()
         )
     } else {
-        NettyResponseAuth(AuthState.FAIL, 0L, 0L, GameUserResponseMessage(0, 0.0, 0.0))
+        NettyResponseAuth(AuthState.FAIL, 0L, 0L, MyGameUserResponseMessage(0, "", 0.0, 0.0), emptyList())
     }
 
 }
