@@ -14,7 +14,7 @@ class GameSessionDtoMaker(
 ) {
     fun toDto(gameSession: GameSession, currentPlayer: UserAccount): GameSessionDto {
         val currentUserRole =
-            gameSession.usersOfGameSession?.firstOrNull { it.userAccount.id == currentPlayer.id }?.roleInGame
+            gameSession.usersOfGameSession.firstOrNull { it.userAccount.id == currentPlayer.id }?.roleInGame
         val isCultist = currentUserRole == RoleTypeInGame.CULTIST
         return GameSessionDto().apply {
             id = gameSession.id
@@ -36,7 +36,7 @@ class GameSessionDtoMaker(
     private fun mapRolesByReceiverRole(
         gameSession: GameSession,
         isCultist: Boolean
-    ) = gameSession.usersOfGameSession?.map {
+    ) = gameSession.usersOfGameSession.map {
         RoleDto().apply {
             this.userId = it.userAccount.id
             this.userName = it.userAccount.nickName

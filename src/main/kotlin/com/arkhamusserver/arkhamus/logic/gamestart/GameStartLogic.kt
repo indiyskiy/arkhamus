@@ -28,7 +28,6 @@ class GameStartLogic(
     private val containerRepository: ContainerRepository,
     private val gameRelatedIdSource: GameRelatedIdSource,
     private val startMarkerRepository: StartMarkerRepository,
-    private val gameRelatedIdSource: GameRelatedIdSource
 ) {
 
     companion object {
@@ -39,6 +38,7 @@ class GameStartLogic(
     fun startGame(game: GameSession) {
         game.gameSessionSettings.level?.levelId?.let { levelId ->
             createTheGame(game)
+            createGameUsers(levelId, game)
             createContainers(levelId, game)
         }
     }
@@ -51,7 +51,7 @@ class GameStartLogic(
 
     private fun createGameUsers(levelId: Long, game: GameSession) {
         val startMarkers = startMarkerRepository.findByLevelId(levelId)
-        game.usersOfGameSession?.forEach {
+        game.usersOfGameSession.forEach {
             val marker = startMarkers.random(random)
             val userGameSession = RedisGameUser().apply {
                 this.id = gameRelatedIdSource.getId(game.id!!, it.userAccount.id!!)
@@ -59,7 +59,7 @@ class GameStartLogic(
                 this.y = marker.y
             }
             gameUserRedisRepository.save(userGameSession)
-            logger.info("user placed for $userGameSession")
+            logger.info("user placed to $userGameSession")
         }
     }
 

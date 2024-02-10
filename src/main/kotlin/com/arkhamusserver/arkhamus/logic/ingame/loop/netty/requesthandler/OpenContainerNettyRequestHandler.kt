@@ -6,14 +6,16 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.E
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameResponseMessage
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.ContainerRedisRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRelatedIdSource
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameUserRedisRepository
 import com.arkhamusserver.arkhamus.view.dto.netty.request.GetContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class OpenChessNettyRequestHandler(
+class OpenContainerNettyRequestHandler(
     private val containerRepository: ContainerRedisRepository,
-    private val gameRelatedIdSource: GameRelatedIdSource
+    private val gameRelatedIdSource: GameRelatedIdSource,
+    private val gameUserRedisRepository: GameUserRedisRepository,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -26,18 +28,23 @@ class OpenChessNettyRequestHandler(
     ): GameResponseMessage {
         val request = nettyTickRequestMessageContainer.nettyRequestMessage
         with(request as GetContainerRequestMessage) {
-            val container =
-                nettyTickRequestMessageContainer.gameSession?.id?.let {
+            nettyTickRequestMessageContainer.gameSession?.id?.let {
+                val container =
                     containerRepository.findById(
                         gameRelatedIdSource.getId(
                             it,
                             this.containerId
                         )
                     ).get()
-                }
-            return container?.let {
-                ContainerGameResponse(it)
-            } ?: ErrorGameResponse("container not found")
+
+                val user = gameUserRedisRepository.findById(
+                    gameRelatedIdSource.getId(
+                        it,
+                        nettyTickRequestMessageContainer.userAccount.id!!
+                    )
+                ).get()
+                return ContainerGameResponse(container, user)
+            } ?: return ErrorGameResponse("game session id is null")
         }
     }
 

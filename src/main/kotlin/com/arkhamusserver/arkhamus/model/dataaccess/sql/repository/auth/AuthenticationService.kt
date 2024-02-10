@@ -3,11 +3,13 @@ package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth
 import com.arkhamusserver.arkhamus.config.auth.JwtProperties
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
+import com.arkhamusserver.arkhamus.view.dto.user.UserDto
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.util.*
+
 @Service
 class AuthenticationService(
     private val authManager: AuthenticationManager,
@@ -29,10 +31,12 @@ class AuthenticationService(
         refreshTokenRepository.save(refreshToken, user)
         return AuthenticationResponse(
             accessToken = accessToken,
-            refreshToken = refreshToken
+            refreshToken = refreshToken,
+            UserDto(user.userAccount.id!!, user.userAccount.nickName!!)
         )
     }
-//    fun refreshAccessToken(refreshToken: String): String? {
+
+    //    fun refreshAccessToken(refreshToken: String): String? {
 //        val extractedEmail = tokenService.extractEmail(refreshToken)
 //        return extractedEmail?.let { email ->
 //            val currentUserDetails = userDetailsService.loadUserByUsername(email)
@@ -47,12 +51,15 @@ class AuthenticationService(
         userDetails = user,
         expirationDate = getAccessTokenExpiration()
     )
+
     private fun createRefreshToken(user: UserDetails) = tokenService.generate(
         userDetails = user,
         expirationDate = getRefreshTokenExpiration()
     )
+
     private fun getAccessTokenExpiration(): Date =
         Date(System.currentTimeMillis() + jwtProperties.access)
+
     private fun getRefreshTokenExpiration(): Date =
         Date(System.currentTimeMillis() + jwtProperties.refresh)
 }

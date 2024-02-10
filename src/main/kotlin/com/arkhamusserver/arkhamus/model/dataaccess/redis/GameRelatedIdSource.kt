@@ -11,5 +11,7 @@ class GameRelatedIdSource {
 
     fun getId(gameId: Long, objectId: Long) =
         "${gameId}$DELIMITER${objectId}"
+    fun getId(gameId: String, objectId: Long) =
+        "$gameId$DELIMITER${objectId}"
 
 }

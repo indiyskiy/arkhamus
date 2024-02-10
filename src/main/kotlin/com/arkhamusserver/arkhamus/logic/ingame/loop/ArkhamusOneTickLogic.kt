@@ -3,6 +3,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameResponseBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.NettyResponseBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRelatedIdSource
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameUserRedisRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseMessage
@@ -15,6 +17,8 @@ class ArkhamusOneTickLogic(
     private val gameResponseBuilder: GameResponseBuilder,
     private val nettyResponseBuilder: NettyResponseBuilder,
     private val gameRepository: RedisGameRepository,
+    private val gameUserRedisRepository: GameUserRedisRepository,
+    private val gameRelatedIdSource: GameRelatedIdSource
 ) {
 
     companion object {
@@ -68,7 +72,17 @@ class ArkhamusOneTickLogic(
         tick: Long,
         game: RedisGame
     ) {
-        logger.info("Process ${request.nettyRequestMessage.javaClass.simpleName} of game ${game.id} tick $tick")
+        val nettyRequestMessage = request.nettyRequestMessage
+        logger.info("Process ${nettyRequestMessage.javaClass.simpleName} of game ${game.id} tick $tick")
+         val oldGameUser = gameUserRedisRepository.findById(
+            gameRelatedIdSource.getId(
+                game.id,
+                request.userAccount.id!!
+            )
+        ).get()
+        oldGameUser.x = nettyRequestMessage.baseRequestData().userPosition.x
+        oldGameUser.y = nettyRequestMessage.baseRequestData().userPosition.y
+        gameUserRedisRepository.save(oldGameUser)
     }
 
     private fun updateNextTick(tick: Long, newTime: Long, game: RedisGame) {
