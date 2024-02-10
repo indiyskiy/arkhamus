@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic
 
 import com.arkhamusserver.arkhamus.logic.exception.ArkhamusServerRequestException
-import com.arkhamusserver.arkhamus.logic.ingame.GameStartLogic
+import com.arkhamusserver.arkhamus.logic.gamestart.GameStartLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionSettingsRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
@@ -39,7 +39,7 @@ class GameLogic(
 
     fun start(game: GameSession): GameSessionDto? {
         val player = currentUserService.getCurrentUserAccount()
-        game.usersOfGameSession?.let { invitedUsers ->
+        game.usersOfGameSession.let { invitedUsers ->
             gameValidator.checkStartAccess(player, game, invitedUsers)
             startGame(game)
             val cultistSize = when (game.gameType) {
@@ -49,10 +49,7 @@ class GameLogic(
             }
             updateInvitedUsersInfoOnGameStart(game, invitedUsers, cultistSize)
             return game.toDto(player)
-        } ?: throw ArkhamusServerRequestException(
-            "game has no users ${game.id}",
-            RELATED_ENTITY
-        )
+        }
     }
 
     fun updateInvitedUsersInfoOnGameStart(

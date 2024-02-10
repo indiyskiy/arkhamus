@@ -24,12 +24,12 @@ class GameValidator {
         checkGameTypeCustom(game)
         checkStateNew(game)
         assertTrue(
-            game.usersOfGameSession?.all { it.id != player.id }?:false,
+            game.usersOfGameSession.all { it.id != player.id },
             "this user ${player.nickName} is invited already",
             RELATED_OBJECT
         )
         assertTrue(
-            (game.usersOfGameSession?.size?:0) < (game.gameSessionSettings.lobbySize),
+            (game.usersOfGameSession.size) < (game.gameSessionSettings.lobbySize),
             "lobby is full",
             RELATED_OBJECT
         )

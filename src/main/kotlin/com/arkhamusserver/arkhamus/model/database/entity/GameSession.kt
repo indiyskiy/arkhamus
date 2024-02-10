@@ -16,10 +16,10 @@ data class GameSession(
     @CreationTimestamp
     var creationTimestamp: Timestamp? = null,
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "gameSession")
-    var usersOfGameSession: List<UserOfGameSession>? = null,
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "gameSession")
+    var usersOfGameSession: List<UserOfGameSession> = emptyList(),
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gameSettingsId")
     var gameSessionSettings: GameSessionSettings,
 

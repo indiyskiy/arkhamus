@@ -14,11 +14,11 @@ import java.net.InetSocketAddress
 class TcpNettyServer {
     @Autowired
     lateinit var serverBootstrap: ServerBootstrap
+
     @Autowired
     lateinit var tcpPort: InetSocketAddress
 
     private var channel: Channel? = null
-
 
     companion object {
         var logger: Logger = LoggerFactory.getLogger(TcpNettyServer::class.java)
@@ -31,7 +31,7 @@ class TcpNettyServer {
                 val serverChannelFuture = serverBootstrap.bind(tcpPort).sync()
                 logger.info("Netty is started : port {}", tcpPort.port)
                 channel = serverChannelFuture.channel().closeFuture().sync().channel()
-            } catch (ex: InterruptedException){
+            } catch (ex: InterruptedException) {
                 Thread.currentThread().interrupt()
             }
         }.start()

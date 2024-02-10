@@ -1,7 +1,8 @@
-package com.arkhamusserver.arkhamus.logic.ingame
+package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.ContainerRedisRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRelatedIdSource
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameUserRedisRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ContainerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
@@ -12,6 +13,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.LOOT
 import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.RARE_LOOT
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,8 +23,10 @@ import kotlin.random.Random
 @Component
 class GameStartLogic(
     private val containerRedisRepository: ContainerRedisRepository,
+    private val gameRepository: RedisGameRepository,
     private val gameUserRedisRepository: GameUserRedisRepository,
     private val containerRepository: ContainerRepository,
+    private val gameRelatedIdSource: GameRelatedIdSource,
     private val startMarkerRepository: StartMarkerRepository,
     private val gameRelatedIdSource: GameRelatedIdSource
 ) {
@@ -34,9 +38,15 @@ class GameStartLogic(
 
     fun startGame(game: GameSession) {
         game.gameSessionSettings.level?.levelId?.let { levelId ->
+            createTheGame(game)
             createContainers(levelId, game)
-            createGameUsers(levelId, game)
         }
+    }
+
+    private fun createTheGame(game: GameSession) {
+        gameRepository.save(
+            RedisGame(game.id.toString())
+        )
     }
 
     private fun createGameUsers(levelId: Long, game: GameSession) {

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.request
 
-interface NettyRequestMessage {
 
-}
+data class BaseRequestData(
+    val tick: Long
+)
