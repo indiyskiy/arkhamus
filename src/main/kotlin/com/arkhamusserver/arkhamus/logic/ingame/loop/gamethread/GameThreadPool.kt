@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ResponseSendingLoopManager
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRedisRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -12,7 +11,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
-import kotlin.jvm.optionals.getOrNull
 
 @Component
 class GameThreadPool(
