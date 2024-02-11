@@ -26,14 +26,16 @@ class CorksUsabilityUtils() {
         }
         val itemsUsability =
             recipes
-                .mapNotNull {
+                .asSequence()
+                .map {
                     it.second.ingredients
-                        ?.map { it.item to it.number }
+                        .map { it.item to it.number }
                 }
                 .flatten()
                 .groupBy { it.first }
-                .map { it.key to it.value.mapNotNull { it.second } }
+                .map { it.key to it.value.map { it.second } }
                 .map { it.first to it.second.sumOf { it } }
+                .toList()
         println(Item.values().joinToString("\r\n") { item ->
             with(itemsUsability.firstOrNull { it.first == item }) {
                 this?.let { "$first - $second" } ?: "${item.name} - 0"
@@ -77,7 +79,7 @@ class CorksUsabilityUtils() {
     private fun someItems(god: God): List<Ingredient> {
         val cork = godToCorkResolver.resolve(god)
         val recipe = itemToRecipeResolver.resolve(cork)
-        return recipe.ingredients ?: emptyList()
+        return recipe.ingredients
     }
 
     private fun godsWithItems(
@@ -87,7 +89,7 @@ class CorksUsabilityUtils() {
     ) = CountingCorkRelationsUtil.GodsWithItems(
         firstGod,
         secondGod,
-        firstGod.getTypes().intersect(secondGod.getTypes()).size,
+        firstGod.getTypes().intersect(secondGod.getTypes().toSet()).size,
         ingredientsMap[firstGod]!!.countSimilarity(ingredientsMap[secondGod]!!)
     )
 
@@ -103,22 +105,22 @@ class CorksUsabilityUtils() {
 
     private fun Map<God, List<Ingredient>>.convert(): String {
         return this.map {
-            it.key.name + " - " + it.value.joinToString(",") { it.item?.name ?: " - " }
+            it.key.name + " - " + it.value.joinToString(",") { it.item.name }
         }.joinToString("\r\n") { it }
     }
 
-    private fun List<CountingCorkRelationsUtil.GodsWithItems>?.convert(): String? =
+    private fun List<CountingCorkRelationsUtil.GodsWithItems>.convert(): String =
         this
-            ?.sortedBy { it.items }
-            ?.sortedBy { it.items * it.types }
-            ?.joinToString("\r\n") { it.first.name + " - " + it.second.name + ": " + it.types + ", " + it.items }
+            .sortedBy { it.items }
+            .sortedBy { it.items * it.types }
+            .joinToString("\r\n") { it.first.name + " - " + it.second.name + ": " + it.types + ", " + it.items }
 
     private fun List<Ingredient>.countSimilarity(ingredients: List<Ingredient>): Int {
         var sum = 0
         this.forEach { ingredient1 ->
             ingredients.forEach { ingredient2 ->
                 if (ingredient1.item == ingredient2.item) {
-                    sum += min(ingredient1.number ?: 0, ingredient2.number ?: 0)
+                    sum += min(ingredient1.number, ingredient2.number )
                 }
             }
         }

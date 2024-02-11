@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component
 class IngredientDtoMaker(
     private val itemInformationDtoMaker: ItemInformationDtoMaker
 ) {
-    fun convert(from: List<Ingredient>?): List<IngredientDto> =
-        from?.map { convert(it) } ?: emptyList()
+    fun convert(from: List<Ingredient>): List<IngredientDto> =
+        from.map { convert(it) }
 
     fun convert(from: Ingredient): IngredientDto =
         IngredientDto().apply {
             this.number = from.number
-            this.item = from.item?.let { itemInformationDtoMaker.convert(it) }
+            this.item = itemInformationDtoMaker.convert(from.item)
         }
 
 }

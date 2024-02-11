@@ -34,16 +34,16 @@ class TestContainerLogic(
             userId = userId,
             myGameUser = MyGameUserResponseMessage(
                 userId,
-                user.nickName!!,
-                user.x!!,
-                user.y!!
+                user.nickName,
+                user.x,
+                user.y
             ),
             otherGameUsers = otherUsers.map {
                 NettyGameUserResponseMessage(
-                    id = it.userId!!,
-                    nickName = it.nickName!!,
-                    x = it.x!!,
-                    y = it.y!!
+                    id = it.userId,
+                    nickName = it.nickName,
+                    x = it.x,
+                    y = it.y
                 )
             }
         ).apply {

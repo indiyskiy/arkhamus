@@ -58,7 +58,7 @@ class ProcessingHandler(
                 arkhamusChannel.channelId,
                 arkhamusChannel.userAccount!!,
                 arkhamusChannel.gameSession,
-                arkhamusChannel.userRole,
+                arkhamusChannel.userOfGameSession,
             )
             gameNettyLogic.process(nettyTickRequestMessageContainer)
         } else {

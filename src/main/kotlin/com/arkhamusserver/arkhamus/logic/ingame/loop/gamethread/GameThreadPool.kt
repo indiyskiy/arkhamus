@@ -36,7 +36,7 @@ class GameThreadPool(
         val gameId = task.gameSession!!.id!!
         val taskCollection = tasksMap[gameId]
         if (taskCollection != null) {
-            tasksMap[gameId]?.add(task)
+            taskCollection.add(task)
             processIfEnoughData(gameId, taskCollection)
         } else {
             val createdTaskCollection = (TaskCollection()).apply {

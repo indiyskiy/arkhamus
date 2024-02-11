@@ -9,7 +9,7 @@ class DefaultGameLogic(
     private val gameLogic: GameLogic,
 ) {
     @Transactional
-    fun start(gameId: Long): GameSessionDto? {
+    fun start(gameId: Long): GameSessionDto {
         val game = gameLogic.findGameNullSafe(gameId)
         return gameLogic.start(game)
     }

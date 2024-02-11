@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.item
 
 data class Recipe(
-    var ingredients: List<Ingredient>? = emptyList()
+    var ingredients: List<Ingredient> = emptyList()
 )
 
 fun List<Ingredient>.toRecipe() =

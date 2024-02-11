@@ -23,7 +23,7 @@ class CustomUserDetailsService(
         ArkhamusUserDetails(
             email!!,
             password!!,
-            role?.name!!,
+            role.name,
             this
         )
 

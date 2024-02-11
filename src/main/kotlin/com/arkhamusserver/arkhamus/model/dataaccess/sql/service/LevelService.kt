@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service
 class LevelService(
     private val levelRepository: LevelRepository
 ) {
-    fun latestByLevelIdAndVersion(levelId: Long): Level? =
-        levelRepository.findByLevelId(levelId).maxByOrNull { it.version ?: -1 }
+    fun latestByLevelIdAndVersion(levelId: Long): Level =
+        levelRepository.findByLevelId(levelId).maxBy { it.version ?: -1 }
 }

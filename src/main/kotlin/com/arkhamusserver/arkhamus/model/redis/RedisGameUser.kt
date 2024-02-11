@@ -6,10 +6,10 @@ import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisGameUser")
 data class RedisGameUser(
-    @Id var id: String? = null,
-    @Indexed var userId: Long? = null,
-    @Indexed var gameId: Long? = null,
-    var nickName: String? = null,
-    var x: Double? = null,
-    var y: Double? = null,
+    @Id var id: String,
+    @Indexed var userId: Long,
+    var nickName: String,
+    @Indexed var gameId: Long,
+    var x: Double = 0.0,
+    var y: Double = 0.0,
 )

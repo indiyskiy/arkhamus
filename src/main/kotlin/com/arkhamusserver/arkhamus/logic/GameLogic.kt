@@ -37,19 +37,18 @@ class GameLogic(
         const val TOKEN_LENGTH = 8
     }
 
-    fun start(game: GameSession): GameSessionDto? {
+    fun start(game: GameSession): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
-        game.usersOfGameSession.let { invitedUsers ->
-            gameValidator.checkStartAccess(player, game, invitedUsers)
-            startGame(game)
-            val cultistSize = when (game.gameType) {
-                GameType.DEFAULT -> 0
-                GameType.CUSTOM -> CustomGameLogic.DEFAULT_CULTIST_SIZE
-                GameType.SINGLE -> SingleGameLogic.DEFAULT_CULTIST_SIZE
-            }
-            updateInvitedUsersInfoOnGameStart(game, invitedUsers, cultistSize)
-            return game.toDto(player)
+        val invitedUsers = game.usersOfGameSession
+        gameValidator.checkStartAccess(player, game, invitedUsers)
+        startGame(game)
+        val cultistSize = when (game.gameType) {
+            GameType.DEFAULT -> 0
+            GameType.CUSTOM -> CustomGameLogic.DEFAULT_CULTIST_SIZE
+            GameType.SINGLE -> SingleGameLogic.DEFAULT_CULTIST_SIZE
         }
+        updateInvitedUsersInfoOnGameStart(game, invitedUsers, cultistSize)
+        return game.toDto(player)
     }
 
     fun updateInvitedUsersInfoOnGameStart(

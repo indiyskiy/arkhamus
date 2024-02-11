@@ -44,15 +44,15 @@ class ContainerNettyResponseMapper : NettyResponseMapper {
                 myGameUser = MyGameUserResponseMessage(
                     id = user.id!!,
                     nickName = user.nickName!!,
-                    x = gameResponseMessage.gameUser!!.x!!,
-                    y = gameResponseMessage.gameUser.y!!
+                    x = gameResponseMessage.gameUser!!.x,
+                    y = gameResponseMessage.gameUser.y
                 ),
                 otherGameUsers = gameResponseMessage.otherGameUsers.map {
                     NettyGameUserResponseMessage(
-                        id = it.userId!!,
-                        nickName = it.nickName!!,
-                        x = it.x!!,
-                        y = it.y!!
+                        id = it.userId,
+                        nickName = it.nickName,
+                        x = it.x,
+                        y = it.y
                     )
                 }
             ).apply {

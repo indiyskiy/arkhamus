@@ -13,7 +13,7 @@ class ItemLogic(
     private val recipeDtoMaker: RecipeToRecipeDtoMaker,
     private val itemToRecipeResolver: ItemToRecipeResolver
 ) {
-    fun listAllItems(): List<ItemInformationDto>? =
+    fun listAllItems(): List<ItemInformationDto> =
         itemsDtoMaker.convert(Item.values().toList())
 
     fun listAllRecipes(): List<RecipeDto> =
@@ -24,7 +24,7 @@ class ItemLogic(
                     itemToRecipeResolver.resolve(it)
                 )
             }.filter {
-                it.recipe.ingredients?.isNotEmpty() ?: false
+                it.recipe.ingredients.isNotEmpty()
             }
         )
 }

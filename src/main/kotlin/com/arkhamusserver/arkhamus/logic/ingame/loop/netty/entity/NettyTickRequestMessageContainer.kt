@@ -11,5 +11,4 @@ data class NettyTickRequestMessageContainer(
     var userAccount: UserAccount,
     var gameSession: GameSession? = null,
     var userRole: UserOfGameSession? = null,
-    val registrationTime: Long = System.currentTimeMillis(),
 )

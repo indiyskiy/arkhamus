@@ -26,9 +26,9 @@ class AuthNettyRequestHandler(
     ): AuthGameResponse {
         return nettyAuthService.auth(nettyRequestMessage.token)?.let { account ->
             val userOfTheGame = findUserOfGame(account)
-            val game = databaseDataAccess.findByGameId(userOfTheGame!!.gameSession.id!!)
+            val game = databaseDataAccess.findByGameId(userOfTheGame.gameSession.id!!)
             val gameUser = redisDataAccess.getGameUser(userOfTheGame.userAccount.id!!, userOfTheGame.gameSession.id!!)
-            val otherGameUsers = redisDataAccess.getOtherGameUsers(gameUser.id!!, userOfTheGame.gameSession.id!!)
+            val otherGameUsers = redisDataAccess.getOtherGameUsers(gameUser.id, userOfTheGame.gameSession.id!!)
             AuthGameResponse(gameUser = gameUser, otherGameUsers = otherGameUsers).apply {
                 this.userOfTheGame = userOfTheGame
                 this.userAccount = userOfTheGame.userAccount
@@ -37,16 +37,16 @@ class AuthNettyRequestHandler(
             }.also { auth ->
                 arkhamusChannel.userAccount = auth.userAccount
                 arkhamusChannel.gameSession = auth.game
-                arkhamusChannel.userRole = auth.userOfTheGame
+                arkhamusChannel.userOfGameSession = auth.userOfTheGame
                 channelRepository.update(arkhamusChannel)
             }
         } ?: AuthGameResponse(gameUser = null, otherGameUsers = emptyList())
     }
 
-    private fun findUserOfGame(account: UserAccount): UserOfGameSession? {
-        return account.id?.let {
+    private fun findUserOfGame(account: UserAccount): UserOfGameSession {
+        return account.id!!.let {
             databaseDataAccess.findByUserAccountId(it)
-                .firstOrNull { game ->
+                .first { game ->
                     game.gameSession.state == GameState.IN_PROGRESS
                 }
         }

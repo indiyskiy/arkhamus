@@ -29,7 +29,7 @@ class ChannelRepository {
             val oldArkhamusChannel = arkhamusChannelCache[channelId]
             if (oldArkhamusChannel != null) {
                 oldArkhamusChannel.gameSession = arkhamusChannel.gameSession
-                oldArkhamusChannel.userRole = arkhamusChannel.userRole
+                oldArkhamusChannel.userOfGameSession = arkhamusChannel.userOfGameSession
                 oldArkhamusChannel.userAccount = arkhamusChannel.userAccount
             }
             arkhamusChannel.userAccount?.id?.let {

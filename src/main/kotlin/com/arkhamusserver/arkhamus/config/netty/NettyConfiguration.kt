@@ -17,7 +17,7 @@ import java.net.InetSocketAddress
 @EnableConfigurationProperties(NettyProperties::class)
 class NettyConfiguration(val nettyProperties: ArkhamusNettyProperties) {
     @Bean(name = ["serverBootstrap"])
-    fun bootstrap(initializer: ArkhamusChannelInitializer?,
+    fun bootstrap(initializer: ArkhamusChannelInitializer,
                   bossGroup: NioEventLoopGroup,
                   workerGroup: NioEventLoopGroup
     ): ServerBootstrap {

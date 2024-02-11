@@ -9,10 +9,7 @@ class GameRelatedIdSource {
         const val DELIMITER = "::"
     }
 
-    fun getId(gameId: Long, objectId: Long) =
+    fun getId(gameId: Long?, objectId: Long?) =
         "${gameId}$DELIMITER${objectId}"
-
-    fun getId(gameId: String, objectId: Long) =
-        "$gameId$DELIMITER${objectId}"
 
 }

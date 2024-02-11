@@ -45,7 +45,7 @@ class GameStartLogic(
 
     private fun createTheGame(game: GameSession) {
         gameRepository.save(
-            RedisGame(game.id.toString())
+            RedisGame(game.id.toString(), game.id)
         )
     }
 
@@ -53,13 +53,14 @@ class GameStartLogic(
         val startMarkers = startMarkerRepository.findByLevelId(levelId)
         game.usersOfGameSession.forEach {
             val marker = startMarkers.random(random)
-            val redisGameUser = RedisGameUser().apply {
-                this.id = gameRelatedIdSource.getId(game.id!!, it.userAccount.id!!)
-                this.userId = it.userAccount.id!!
-                this.gameId = game.id
-                this.nickName = it.userAccount.nickName
-                this.x = marker.x
-                this.y = marker.y
+            val redisGameUser = RedisGameUser(
+                id = gameRelatedIdSource.getId(game.id!!, it.userAccount.id!!),
+                userId = it.userAccount.id!!,
+                nickName = it.userAccount.nickName!!,
+                gameId = game.id!!
+            ).apply {
+                this.x = marker.x!!
+                this.y = marker.y!!
             }
             gameUserRedisRepository.save(redisGameUser)
             logger.info("user placed to $redisGameUser")
@@ -83,11 +84,14 @@ class GameStartLogic(
         game: GameSession,
         dbContainer: Container,
         modifiers: List<ContainerAffectModifiers>
-    ) = RedisContainer().apply {
-        this.id = gameRelatedIdSource.getId(game.id!!, dbContainer.inGameId!!)
-        this.x = dbContainer.x
-        this.y = dbContainer.y
-        this.interactionRadius = dbContainer.interactionRadius
+    ) = RedisContainer(
+        id = gameRelatedIdSource.getId(game.id!!, dbContainer.inGameId!!),
+        containerId = dbContainer.inGameId!!,
+        gameId = game.id!!
+    ).apply {
+        this.x = dbContainer.x!!
+        this.y = dbContainer.y!!
+        this.interactionRadius = dbContainer.interactionRadius!!
         this.items = randomizeItems(modifiers)
     }
 

@@ -10,5 +10,5 @@ data class ArkhamusChannel(
     var channel: Channel,
     var userAccount: UserAccount? = null,
     var gameSession: GameSession? = null,
-    var userRole: UserOfGameSession? = null,
+    var userOfGameSession: UserOfGameSession? = null,
 )

@@ -23,21 +23,24 @@ class GlobalExceptionHandler {
     ): ResponseEntity<Map<String, String>> {
         val body: MutableMap<String, String> = LinkedHashMap()
         body["timestamp"] = LocalDateTime.now().toString()
-        body["message"] = e.message?:"no message"
+        body["message"] = e.message ?: "no message"
         body["relatedEntity"] = e.relatedEntity
         return ResponseEntity<Map<String, String>>(body, HttpStatus.BAD_REQUEST)
     }
+
     @ExceptionHandler(ArkhamusServerRequestException::class)
     fun handleArkhamusServerRequestException(
         e: ArkhamusServerRequestException,
         request: WebRequest
     ): ResponseEntity<Map<String, String>> {
-        val body: MutableMap<String, String> = LinkedHashMap()
-        body["timestamp"] = LocalDateTime.now().toString()
-        body["message"] = e.message?:"no message"
-        body["relatedEntity"] = e.relatedEntity
+        val body = mapOf(
+            "timestamp" to LocalDateTime.now().toString(),
+            "message" to (e.message ?: "no message"),
+            "relatedEntity" to e.relatedEntity
+        )
         return ResponseEntity<Map<String, String>>(body, HttpStatus.BAD_REQUEST)
     }
+
     @ExceptionHandler(UsernameNotFoundException::class)
     fun handleUsernameNotFoundException(
         e: UsernameNotFoundException,
@@ -45,7 +48,7 @@ class GlobalExceptionHandler {
     ): ResponseEntity<Map<String, String>> {
         val body: MutableMap<String, String> = LinkedHashMap()
         body["timestamp"] = LocalDateTime.now().toString()
-        body["message"] = e.message?:"no message"
+        body["message"] = e.message ?: "no message"
         return ResponseEntity<Map<String, String>>(body, HttpStatus.FORBIDDEN)
     }
 }

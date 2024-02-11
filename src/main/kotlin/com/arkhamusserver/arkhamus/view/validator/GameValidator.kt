@@ -112,7 +112,7 @@ class GameValidator {
     }
 
     private fun checkIsHost(
-        invitedUsers: List<UserOfGameSession>?,
+        invitedUsers: List<UserOfGameSession>,
         player: UserAccount
     ) {
         assertNotNull(
@@ -121,7 +121,7 @@ class GameValidator {
             RELATED_OBJECT
         )
         assertTrue(
-            invitedUsers?.firstOrNull { it.host }?.userAccount?.id?.let {
+            invitedUsers.firstOrNull { it.host }?.userAccount?.id?.let {
                 it == player.id
             } ?: false,
             "user ${player.id} is not a host of the game",

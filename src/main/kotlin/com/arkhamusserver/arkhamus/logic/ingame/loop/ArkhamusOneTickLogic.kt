@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameResponseBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.NettyResponseBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
@@ -20,9 +21,9 @@ class ArkhamusOneTickLogic(
     private val gameUserRedisRepository: GameUserRedisRepository,
     private val redisDataAccess: RedisDataAccess
 ) {
-
     companion object {
         var logger: Logger = LoggerFactory.getLogger(ArkhamusOneTickLogic::class.java)
+        const val TICK_DELTA = 20 //ms
     }
 
     fun processCurrentTasks(
@@ -30,26 +31,23 @@ class ArkhamusOneTickLogic(
         tick: Long,
         game: RedisGame
     ): List<NettyResponseMessage> {
+        val globalGameData = redisDataAccess.loadGlobalGameData(game)
         currentTasks.forEach {
             if (isCurrentTick(it, tick)) {
-                process(it, tick, game)
+                process(it, tick, globalGameData)
             }
         }
         val responses = mutableListOf<NettyResponseMessage>()
         val iterator = currentTasks.listIterator()
-        var newTime = 0L
         while (iterator.hasNext()) {
             val task = iterator.next()
             if (isCurrentTick(task, tick)) {
-                val response = buildResponse(task, tick, game)
+                val response = buildResponse(task, globalGameData)
                 responses.add(response)
-                if (newTime < task.registrationTime) {
-                    newTime = task.registrationTime
-                }
                 iterator.remove()
             }
         }
-        updateNextTick(tick, newTime, game)
+        updateNextTick(tick, game)
         return responses
     }
 
@@ -60,32 +58,31 @@ class ArkhamusOneTickLogic(
 
     private fun buildResponse(
         request: NettyTickRequestMessageContainer,
-        tick: Long,
-        game: RedisGame,
+        globalGameData: GlobalGameData,
     ): NettyResponseMessage {
-        val gameResponse = gameResponseBuilder.buildResponse(request, tick, game)
-        return nettyResponseBuilder.buildResponse(gameResponse, request, tick, game)
+        val gameResponse = gameResponseBuilder.buildResponse(request, globalGameData)
+        return nettyResponseBuilder.buildResponse(gameResponse, request, globalGameData)
     }
 
     private fun process(
         request: NettyTickRequestMessageContainer,
         tick: Long,
-        game: RedisGame
+        globalGameData: GlobalGameData
     ) {
+        val game = globalGameData.game
         val nettyRequestMessage = request.nettyRequestMessage
         logger.info("Process ${nettyRequestMessage.javaClass.simpleName} of game ${game.id} tick $tick")
-        val oldGameUser = redisDataAccess.getGameUser(
-            request.userAccount.id!!,
-            game.id,
-        )
+
+        val oldGameUser = globalGameData.users[request.userAccount.id]!!
+
         oldGameUser.x = nettyRequestMessage.baseRequestData.userPosition.x
         oldGameUser.y = nettyRequestMessage.baseRequestData.userPosition.y
         gameUserRedisRepository.save(oldGameUser)
     }
 
-    private fun updateNextTick(tick: Long, newTime: Long, game: RedisGame) {
+    private fun updateNextTick(tick: Long, game: RedisGame) {
         game.currentTick = tick + 1
-        game.globalTimer = newTime
+        game.globalTimer += TICK_DELTA
         gameRepository.save(game)
     }
 }

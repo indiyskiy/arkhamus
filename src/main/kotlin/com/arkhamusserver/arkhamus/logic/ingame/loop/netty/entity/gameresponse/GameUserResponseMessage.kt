@@ -5,6 +5,4 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 open class GameUserResponseMessage(
     val gameUser: RedisGameUser?,
     val otherGameUsers: List<RedisGameUser> = emptyList(),
-) : GameResponseMessage {
-
-}
+) : GameResponseMessage

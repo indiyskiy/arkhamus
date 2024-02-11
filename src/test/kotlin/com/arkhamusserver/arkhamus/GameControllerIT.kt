@@ -40,8 +40,8 @@ class GameControllerIT {
         val createdGameSession = gameController.getGame(gameSession.id!!).body!!
 
         assertEquals(GameState.NEW, createdGameSession.state)
-        assertEquals(1, createdGameSession.roleDtos!!.size)
-        assertEquals(hostUser.id, createdGameSession.roleDtos!!.first().userId)
+        assertEquals(1, createdGameSession.usersInGame!!.size)
+        assertEquals(hostUser.id, createdGameSession.usersInGame!!.first().userId)
     }
 
     @Test
@@ -53,14 +53,14 @@ class GameControllerIT {
         val gameById = gameController.getGame(gameSession.id!!).body!!
 
         assertEquals(GameState.NEW, gameById.state)
-        assertEquals(1, gameById.roleDtos!!.size)
-        assertEquals(hostUser.id, gameById.roleDtos!!.first().userId)
+        assertEquals(1, gameById.usersInGame!!.size)
+        assertEquals(hostUser.id, gameById.usersInGame!!.first().userId)
 
         val gameByPlayerId = gameController.findUsersOpenGame(hostUser.id!!).body!!
 
         assertEquals(GameState.NEW, gameByPlayerId.state)
-        assertEquals(1, gameByPlayerId.roleDtos!!.size)
-        assertEquals(hostUser.id, gameByPlayerId.roleDtos!!.first().userId)
+        assertEquals(1, gameByPlayerId.usersInGame!!.size)
+        assertEquals(hostUser.id, gameByPlayerId.usersInGame!!.first().userId)
     }
 
     @Test
@@ -71,15 +71,15 @@ class GameControllerIT {
         val player2 = fakeUserSetupUtil.fakeUser(SITHOID)
         val gameByPlayer2 = gameController.connect(gameSession.id!!).body!!
 
-        assertEquals(2, gameByPlayer2.roleDtos!!.size)
-        assertEquals(1, gameByPlayer2.roleDtos!!.filter { it.userId != host.id }.size)
-        assertEquals(player2.id, gameByPlayer2.roleDtos!!.first { it.userId != host.id }.userId)
+        assertEquals(2, gameByPlayer2.usersInGame!!.size)
+        assertEquals(1, gameByPlayer2.usersInGame!!.filter { it.userId != host.id }.size)
+        assertEquals(player2.id, gameByPlayer2.usersInGame!!.first { it.userId != host.id }.userId)
 
         fakeUserSetupUtil.fakeUser(INDIYSKIY)
         val gameById = gameController.getGame(gameSession.id!!).body!!
-        assertEquals(2, gameById.roleDtos!!.size)
-        assertEquals(1, gameById.roleDtos!!.filter { it.userId != host.id }.size)
-        assertEquals(player2.id, gameById.roleDtos!!.first { it.userId != host.id }.userId)
+        assertEquals(2, gameById.usersInGame!!.size)
+        assertEquals(1, gameById.usersInGame!!.filter { it.userId != host.id }.size)
+        assertEquals(player2.id, gameById.usersInGame!!.first { it.userId != host.id }.userId)
     }
 
     @Test
