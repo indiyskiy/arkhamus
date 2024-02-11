@@ -1,11 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.request
 
-data class GetContainerRequestMessage(
+class GetContainerRequestMessage(
     var containerId: Long,
-    var type: String,
-    var baseRequestData: BaseRequestData
-) : NettyBaseRequestMessage {
-
-    override fun baseRequestData(): BaseRequestData =
-        baseRequestData
-}
+    type: String,
+    baseRequestData: BaseRequestData
+) : NettyBaseRequestMessage(baseRequestData, type)

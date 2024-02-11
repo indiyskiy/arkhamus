@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
+import com.arkhamusserver.arkhamus.view.dto.InGameUserDto
 import com.arkhamusserver.arkhamus.view.dto.RoleDto
 import org.springframework.stereotype.Component
 
@@ -29,7 +30,7 @@ class GameSessionDtoMaker(
                 GameState.IN_PROGRESS -> if (isCultist) gameSession.god else null
                 GameState.FINISHED -> gameSession.god
             }
-            roleDtos = mapRolesByReceiverRole(gameSession, isCultist)
+            usersInGame = mapRolesByReceiverRole(gameSession, isCultist)
         }
     }
 
@@ -37,13 +38,16 @@ class GameSessionDtoMaker(
         gameSession: GameSession,
         isCultist: Boolean
     ) = gameSession.usersOfGameSession.map {
-        RoleDto().apply {
+        InGameUserDto().apply {
             this.userId = it.userAccount.id
             this.userName = it.userAccount.nickName
-            this.userRole = when (gameSession.state) {
-                GameState.NEW -> null
-                GameState.IN_PROGRESS -> if (isCultist) it.roleInGame else RoleTypeInGame.INVESTIGATOR
-                GameState.FINISHED -> it.roleInGame
+            this.isHost = it.host
+            this.role = RoleDto().apply {
+                this.userRole = when (gameSession.state) {
+                    GameState.NEW -> null
+                    GameState.IN_PROGRESS -> if (isCultist) it.roleInGame else RoleTypeInGame.INVESTIGATOR
+                    GameState.FINISHED -> it.roleInGame
+                }
             }
         }
     }

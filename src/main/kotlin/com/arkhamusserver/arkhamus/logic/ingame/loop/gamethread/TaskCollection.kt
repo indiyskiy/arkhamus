@@ -11,7 +11,7 @@ class TaskCollection {
 
     fun isEmpty(): Boolean = taskList.isEmpty()
     fun getByTick(currentTick: Long): List<NettyTickRequestMessageContainer> =
-        taskList.filter { it.nettyRequestMessage.baseRequestData().tick == currentTick }
+        taskList.filter { it.nettyRequestMessage.baseRequestData.tick == currentTick }
 
     fun getList(): MutableList<NettyTickRequestMessageContainer> =
         taskList

@@ -24,7 +24,7 @@ class GameValidator {
         checkGameTypeCustom(game)
         checkStateNew(game)
         assertTrue(
-            game.usersOfGameSession.all { it.id != player.id },
+            game.usersOfGameSession.all { it.userAccount.id != player.id },
             "this user ${player.nickName} is invited already",
             RELATED_OBJECT
         )

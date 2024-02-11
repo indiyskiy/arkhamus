@@ -1,15 +1,11 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
-data class ContainerNettyResponse(
+class ContainerNettyResponse(
     var containerCells: List<NettyContainerCell> = emptyList(),
-    val tick: Long,
-    val userId: Long,
-    val myGameUser: MyGameUserResponseMessage,
-    val allGameUser: List<GameUserResponseMessage>
-) : NettyResponseMessage {
-    override fun tick(): Long = tick
-    override fun userId(): Long = userId
-    override fun myGameUser(): MyGameUserResponseMessage = myGameUser
-    override fun allGameUsers(): List<GameUserResponseMessage> = allGameUser
+    tick: Long,
+    userId: Long,
+    myGameUser: MyGameUserResponseMessage,
+    otherGameUsers: List<NettyGameUserResponseMessage>
+) : NettyResponseMessage(tick, userId, myGameUser, otherGameUsers) {
 
 }

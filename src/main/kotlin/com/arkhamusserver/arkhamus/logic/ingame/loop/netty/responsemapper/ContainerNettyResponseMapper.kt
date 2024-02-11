@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponseMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponseMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyContainerCell
 import org.springframework.stereotype.Component
@@ -38,15 +39,22 @@ class ContainerNettyResponseMapper : NettyResponseMapper {
                 }
             }
             return ContainerNettyResponse(
-                tick = nettyRequestMessage.baseRequestData().tick,
+                tick = nettyRequestMessage.baseRequestData.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponseMessage(
                     id = user.id!!,
                     nickName = user.nickName!!,
-                    x = gameResponseMessage.gameUser.x!!,
+                    x = gameResponseMessage.gameUser!!.x!!,
                     y = gameResponseMessage.gameUser.y!!
                 ),
-                allGameUser = emptyList()
+                otherGameUsers = gameResponseMessage.otherGameUsers.map {
+                    NettyGameUserResponseMessage(
+                        id = it.userId!!,
+                        nickName = it.nickName!!,
+                        x = it.x!!,
+                        y = it.y!!
+                    )
+                }
             ).apply {
                 this.containerCells = containerCells
             }

@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.ContainerRedisRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRelatedIdSource
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRedisRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameUserRedisRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ContainerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
@@ -23,7 +23,7 @@ import kotlin.random.Random
 @Component
 class GameStartLogic(
     private val containerRedisRepository: ContainerRedisRepository,
-    private val gameRepository: RedisGameRepository,
+    private val gameRepository: GameRedisRepository,
     private val gameUserRedisRepository: GameUserRedisRepository,
     private val containerRepository: ContainerRepository,
     private val gameRelatedIdSource: GameRelatedIdSource,
@@ -53,14 +53,16 @@ class GameStartLogic(
         val startMarkers = startMarkerRepository.findByLevelId(levelId)
         game.usersOfGameSession.forEach {
             val marker = startMarkers.random(random)
-            val userGameSession = RedisGameUser().apply {
+            val redisGameUser = RedisGameUser().apply {
                 this.id = gameRelatedIdSource.getId(game.id!!, it.userAccount.id!!)
+                this.userId = it.userAccount.id!!
+                this.gameId = game.id
                 this.nickName = it.userAccount.nickName
                 this.x = marker.x
                 this.y = marker.y
             }
-            gameUserRedisRepository.save(userGameSession)
-            logger.info("user placed to $userGameSession")
+            gameUserRedisRepository.save(redisGameUser)
+            logger.info("user placed to $redisGameUser")
         }
     }
 

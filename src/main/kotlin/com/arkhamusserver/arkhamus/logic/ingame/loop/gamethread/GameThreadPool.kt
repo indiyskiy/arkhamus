@@ -2,8 +2,9 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ResponseSendingLoopManager
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRedisRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -15,7 +16,7 @@ import kotlin.jvm.optionals.getOrNull
 
 @Component
 class GameThreadPool(
-    private val gameRepository: RedisGameRepository,
+    private val redisDataAccess: RedisDataAccess,
     private val responseSendingLoopManager: ResponseSendingLoopManager,
     private val tickLogic: ArkhamusOneTickLogic
 ) {
@@ -54,12 +55,8 @@ class GameThreadPool(
         taskCollection: TaskCollection
     ) {
         if (!taskCollection.isEmpty()) {
-            val ongoingGame = gameRepository.findById(gameId.toString()).getOrNull()
-            if (ongoingGame != null) {
-                processGameTickIfReady(ongoingGame, taskCollection, gameId)
-            } else {
-                logger.error("processing game not found")
-            }
+            val ongoingGame = redisDataAccess.getGame(gameId)
+            processGameTickIfReady(ongoingGame, taskCollection, gameId)
         }
     }
 
@@ -76,8 +73,6 @@ class GameThreadPool(
             taskExecutor.execute {
                 processGameTick(taskCollection.getList(), gameId, tick, ongoingGame)
             }
-        } else {
-//            logger.info("processing game - NOT ready yet")
         }
     }
 

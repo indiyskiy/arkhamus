@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.request
 
-data class AuthRequestMessage(
-    var type: String,
+class AuthRequestMessage(
     var token: String,
-) : NettyRequestMessage
+    type: String,
+) : NettyRequestMessage(type)

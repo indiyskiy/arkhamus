@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
-data class GameUserResponseMessage(
+data class NettyGameUserResponseMessage(
     val id: Long,
     val nickName: String,
     val x: Double,

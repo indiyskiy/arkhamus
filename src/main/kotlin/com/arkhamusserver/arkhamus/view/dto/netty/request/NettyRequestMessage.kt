@@ -1,5 +1,3 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.request
 
-interface NettyRequestMessage {
-
-}
+open class NettyRequestMessage(var type: String)

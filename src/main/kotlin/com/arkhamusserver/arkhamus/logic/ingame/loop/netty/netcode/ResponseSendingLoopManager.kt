@@ -32,7 +32,7 @@ class ResponseSendingLoopManager(
     ) {
         taskExecutor.execute {
             responses.forEach { responseMessage ->
-                val channel = channelRepository.getUserChannel(responseMessage.userId())
+                val channel = channelRepository.getUserChannel(responseMessage.userId)
                 channel?.channel?.writeAndFlush(
                     gson.toJson(responseMessage)
                 )

@@ -5,4 +5,4 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RedisGameRepository: CrudRepository<RedisGame, String>
+interface GameRedisRepository: CrudRepository<RedisGame, String>

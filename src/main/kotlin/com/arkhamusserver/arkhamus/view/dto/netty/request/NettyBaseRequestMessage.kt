@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.request
 
-interface NettyBaseRequestMessage : NettyRequestMessage {
-    fun baseRequestData(): BaseRequestData
+open class NettyBaseRequestMessage(
+    var baseRequestData: BaseRequestData,
+    type: String,
+) : NettyRequestMessage(type) {
 }

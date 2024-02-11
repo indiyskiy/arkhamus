@@ -3,9 +3,9 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameResponseBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.NettyResponseBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRelatedIdSource
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameUserRedisRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRedisRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseMessage
 import org.slf4j.Logger
@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component
 class ArkhamusOneTickLogic(
     private val gameResponseBuilder: GameResponseBuilder,
     private val nettyResponseBuilder: NettyResponseBuilder,
-    private val gameRepository: RedisGameRepository,
+    private val gameRepository: GameRedisRepository,
     private val gameUserRedisRepository: GameUserRedisRepository,
-    private val gameRelatedIdSource: GameRelatedIdSource
+    private val redisDataAccess: RedisDataAccess
 ) {
 
     companion object {
@@ -56,7 +56,7 @@ class ArkhamusOneTickLogic(
     private fun isCurrentTick(
         it: NettyTickRequestMessageContainer,
         tick: Long
-    ) = it.nettyRequestMessage.baseRequestData().tick == tick
+    ) = it.nettyRequestMessage.baseRequestData.tick == tick
 
     private fun buildResponse(
         request: NettyTickRequestMessageContainer,
@@ -74,14 +74,12 @@ class ArkhamusOneTickLogic(
     ) {
         val nettyRequestMessage = request.nettyRequestMessage
         logger.info("Process ${nettyRequestMessage.javaClass.simpleName} of game ${game.id} tick $tick")
-         val oldGameUser = gameUserRedisRepository.findById(
-            gameRelatedIdSource.getId(
-                game.id,
-                request.userAccount.id!!
-            )
-        ).get()
-        oldGameUser.x = nettyRequestMessage.baseRequestData().userPosition.x
-        oldGameUser.y = nettyRequestMessage.baseRequestData().userPosition.y
+        val oldGameUser = redisDataAccess.getGameUser(
+            request.userAccount.id!!,
+            game.id,
+        )
+        oldGameUser.x = nettyRequestMessage.baseRequestData.userPosition.x
+        oldGameUser.y = nettyRequestMessage.baseRequestData.userPosition.y
         gameUserRedisRepository.save(oldGameUser)
     }
 
