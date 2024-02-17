@@ -1,7 +1,8 @@
 package com.arkhamusserver.arkhamus.view.maker.ingame
 
-import com.arkhamusserver.arkhamus.view.dto.ingame.ItemInformationDto
+import com.arkhamusserver.arkhamus.globalutils.capitalizeIfFirstCharIsLowercase
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
+import com.arkhamusserver.arkhamus.view.dto.ingame.ItemInformationDto
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,7 +14,8 @@ class ItemInformationDtoMaker {
         ItemInformationDto().apply {
             id = value.getId()
             name = value
-            title = value.name.lowercase()
+            title = value.name.lowercase().replace("_", " ")
+                .capitalizeIfFirstCharIsLowercase()
             type = value.getItemType()
         }
 

@@ -58,29 +58,34 @@ class ProcessingHandler(
             val id = context.channel().id().asLongText()
             val arkhamusChannel = channelRepository.get(id) ?: throw ChannelNotFoundException(id)
 
-            if (requestData is NettyBaseRequestMessage) {
-                val nettyTickRequestMessageContainer = NettyTickRequestMessageContainer(
-                    requestData,
-                    arkhamusChannel.channelId,
-                    arkhamusChannel.userAccount!!,
-                    arkhamusChannel.gameSession,
-                    arkhamusChannel.userOfGameSession,
+            if (requestData is AuthRequestMessage) {
+                val auth = authHandler.process(requestData, arkhamusChannel)
+                val authResponse = authResponseMapper.process(
+                    auth.userAccount,
+                    auth.game,
+                    auth.userOfTheGame
                 )
-                gameNettyLogic.process(nettyTickRequestMessageContainer)
+                val responseJson = gson.toJson(authResponse)
+                arkhamusChannel.channel.writeAndFlush(responseJson)
+                if (authResponse.message == AuthState.FAIL) {
+                    logger.error("fake auth request - $requestData")
+                    channelRepository.closeAndRemove(arkhamusChannel)
+                }
+            }
+            val account = arkhamusChannel.userAccount
+            if (account == null) {
+                logger.error("not authorised")
+                channelRepository.closeAndRemove(arkhamusChannel)
             } else {
-                if (requestData is AuthRequestMessage) {
-                    val auth = authHandler.process(requestData, arkhamusChannel)
-                    val authResponse = authResponseMapper.process(
-                        auth.userAccount,
-                        auth.game,
-                        auth.userOfTheGame
+                if (requestData is NettyBaseRequestMessage) {
+                    val nettyTickRequestMessageContainer = NettyTickRequestMessageContainer(
+                        requestData,
+                        arkhamusChannel.channelId,
+                        account,
+                        arkhamusChannel.gameSession,
+                        arkhamusChannel.userOfGameSession,
                     )
-                    val responseJson = gson.toJson(authResponse)
-                    arkhamusChannel.channel.writeAndFlush(responseJson)
-                    if (authResponse.message == AuthState.FAIL) {
-                        logger.error("fake auth request - $requestData")
-                        channelRepository.closeAndRemove(arkhamusChannel)
-                    }
+                    gameNettyLogic.process(nettyTickRequestMessageContainer)
                 }
             }
         } catch (e: Exception) {

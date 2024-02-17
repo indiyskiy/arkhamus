@@ -1,21 +1,18 @@
 package com.arkhamusserver.arkhamus.view.controller
 
-import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
-import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.AuthenticationService
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
+import com.arkhamusserver.arkhamus.logic.UserLogic
+import com.arkhamusserver.arkhamus.view.dto.user.UserDto
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/public/auth")
+@RequestMapping("/user")
 class UserController(
-    private val authenticationService: AuthenticationService
+    private val userLogic: UserLogic
 ) {
-    @PostMapping
-    fun authenticate(
-        @RequestBody authRequest: AuthenticationRequest
-    ): AuthenticationResponse =
-        authenticationService.authentication(authRequest)
+    @GetMapping
+    fun whoAmI(
+    ): UserDto =
+        userLogic.whoAmI()
 }
