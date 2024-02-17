@@ -26,15 +26,16 @@ class TcpNettyServer {
 
     fun start() {
         Thread {
-            try {
-                logger.info("Netty try to start : port {}", tcpPort.port)
-                val serverChannelFuture = serverBootstrap.bind(tcpPort).sync()
-                logger.info("Netty is started : port {}", tcpPort.port)
-                channel = serverChannelFuture.channel().closeFuture().sync().channel()
-            } catch (ex: InterruptedException) {
-                Thread.currentThread().interrupt()
-            }
-        }.start()
+                try {
+                    logger.info("Netty try to start : port {}", tcpPort.port)
+                    val serverChannelFuture = serverBootstrap.bind(tcpPort).sync()
+                    logger.info("Netty is started : port {}", tcpPort.port)
+                    channel = serverChannelFuture.channel().closeFuture().sync().channel()
+                } catch (ex: InterruptedException) {
+                    logger.error("Netty server failed to start", ex)
+                    Thread.currentThread().interrupt()
+                }
+            }.start()
     }
 
     @PreDestroy

@@ -31,12 +31,20 @@ class ResponseSendingLoopManager(
         gameId: Long
     ) {
         taskExecutor.execute {
-            responses.forEach { responseMessage ->
-                val channel = channelRepository.getUserChannel(responseMessage.userId)
-                channel?.channel?.writeAndFlush(
-                    gson.toJson(responseMessage)
-                )
-            }
+            sendMessages(responses)
         }
+    }
+
+    private fun sendMessages(responses: List<NettyResponseMessage>) {
+        responses.forEach { responseMessage ->
+            sendOneMessage(responseMessage)
+        }
+    }
+
+    private fun sendOneMessage(responseMessage: NettyResponseMessage) {
+        val channel = channelRepository.getUserChannel(responseMessage.userId)
+        channel?.channel?.writeAndFlush(
+            gson.toJson(responseMessage)
+        )
     }
 }

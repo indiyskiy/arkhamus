@@ -7,11 +7,14 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.dto.InGameUserDto
 import com.arkhamusserver.arkhamus.view.dto.RoleDto
+import com.arkhamusserver.arkhamus.view.dto.ingame.GodDto
+import com.arkhamusserver.arkhamus.view.maker.ingame.GodToGodDtoMaker
 import org.springframework.stereotype.Component
 
 @Component
 class GameSessionDtoMaker(
-    val gameSessionSettingsDtoMaker: GameSessionSettingsDtoMaker
+    val gameSessionSettingsDtoMaker: GameSessionSettingsDtoMaker,
+    val godDtoMaker: GodToGodDtoMaker
 ) {
     fun toDto(gameSession: GameSession, currentPlayer: UserAccount): GameSessionDto {
         val currentUserRole =
@@ -22,15 +25,27 @@ class GameSessionDtoMaker(
             state = gameSession.state
             token = gameSession.token
             gameType = gameSession.gameType
-
             gameSessionSettings = gameSessionSettingsDtoMaker.toDto(gameSession.gameSessionSettings)
-
-            god = when (gameSession.state) {
-                GameState.NEW -> null
-                GameState.IN_PROGRESS -> if (isCultist) gameSession.god else null
-                GameState.FINISHED -> gameSession.god
-            }
+            god = convertGod(gameSession, isCultist)
             usersInGame = mapRolesByReceiverRole(gameSession, isCultist)
+        }
+    }
+
+    private fun convertGod(
+        gameSession: GameSession,
+        isCultist: Boolean
+    ): GodDto? {
+        return gameSession.god?.let { godNotNull ->
+            when (gameSession.state) {
+                GameState.NEW -> null
+                GameState.IN_PROGRESS -> if (isCultist) {
+                    godDtoMaker.convert(godNotNull)
+                } else {
+                    null
+                }
+
+                GameState.FINISHED -> godDtoMaker.convert(godNotNull)
+            }
         }
     }
 

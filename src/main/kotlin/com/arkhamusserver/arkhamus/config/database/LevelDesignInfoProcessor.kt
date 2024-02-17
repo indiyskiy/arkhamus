@@ -40,7 +40,7 @@ class LevelDesignInfoProcessor(
             val levelsFromDb = levelRepository.findByState(LevelState.ACTIVE)
             processLevels(levelsFromJson, levelsFromDb)
         } catch (e: IllegalStateException) {
-            logger.error("failed to load level info")
+            logger.error("failed to load level info", e)
         }
     }
 

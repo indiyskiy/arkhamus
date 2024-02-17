@@ -49,7 +49,7 @@ class CustomGameLogic(
     fun findUsersOpenGame(playerId: Long): GameSessionDto? {
         val player = currentUserService.getCurrentUserAccount()
         val hosted = userOfGameSessionRepository.findByUserAccountId(playerId).filter { it.host }
-        hosted.sortedByDescending { it.gameCreationTimestamp }.forEach {
+        hosted.sortedByDescending { it.gameSession.creationTimestamp }.forEach {
             val game = it.gameSession
             if (game.state == NEW) {
                 return game.toDto(player)

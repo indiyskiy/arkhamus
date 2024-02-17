@@ -5,13 +5,13 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 
-class AuthGameResponse(
+class AuthGameData(
     var message: String? = null,
     var userAccount: UserAccount? = null,
     var game: GameSession? = null,
     var userOfTheGame: UserOfGameSession? = null,
     gameUser: RedisGameUser?,
     otherGameUsers: List<RedisGameUser> = emptyList(),
-) : GameUserResponseMessage(gameUser, otherGameUsers) {
+) : GameUserData(gameUser, otherGameUsers) {
 
 }

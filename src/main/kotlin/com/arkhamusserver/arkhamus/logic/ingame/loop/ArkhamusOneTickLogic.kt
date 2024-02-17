@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameResponseBuilder
+import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.NettyResponseBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ArkhamusOneTickLogic(
-    private val gameResponseBuilder: GameResponseBuilder,
+    private val gameDataBuilder: GameDataBuilder,
     private val nettyResponseBuilder: NettyResponseBuilder,
     private val gameRepository: GameRedisRepository,
     private val gameUserRedisRepository: GameUserRedisRepository,
@@ -31,24 +31,29 @@ class ArkhamusOneTickLogic(
         tick: Long,
         game: RedisGame
     ): List<NettyResponseMessage> {
-        val globalGameData = redisDataAccess.loadGlobalGameData(game)
-        currentTasks.forEach {
-            if (isCurrentTick(it, tick)) {
-                process(it, tick, globalGameData)
+        try {
+            val globalGameData = redisDataAccess.loadGlobalGameData(game)
+            currentTasks.forEach {
+                if (isCurrentTick(it, tick)) {
+                    process(it, tick, globalGameData)
+                }
             }
-        }
-        val responses = mutableListOf<NettyResponseMessage>()
-        val iterator = currentTasks.listIterator()
-        while (iterator.hasNext()) {
-            val task = iterator.next()
-            if (isCurrentTick(task, tick)) {
-                val response = buildResponse(task, globalGameData)
-                responses.add(response)
-                iterator.remove()
+            val responses = mutableListOf<NettyResponseMessage>()
+            val iterator = currentTasks.listIterator()
+            while (iterator.hasNext()) {
+                val task = iterator.next()
+                if (isCurrentTick(task, tick)) {
+                    val response = buildResponse(task, globalGameData)
+                    responses.add(response)
+                    iterator.remove()
+                }
             }
+            updateNextTick(tick, game)
+            return responses
+        } catch (e: Exception){
+            logger.error("Error processing current tasks: ${e.message}", e)
         }
-        updateNextTick(tick, game)
-        return responses
+        return emptyList()
     }
 
     private fun isCurrentTick(
@@ -60,7 +65,7 @@ class ArkhamusOneTickLogic(
         request: NettyTickRequestMessageContainer,
         globalGameData: GlobalGameData,
     ): NettyResponseMessage {
-        val gameResponse = gameResponseBuilder.buildResponse(request, globalGameData)
+        val gameResponse = gameDataBuilder.build(request, globalGameData)
         return nettyResponseBuilder.buildResponse(gameResponse, request, globalGameData)
     }
 

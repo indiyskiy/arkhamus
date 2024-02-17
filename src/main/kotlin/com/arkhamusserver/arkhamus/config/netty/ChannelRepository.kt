@@ -2,6 +2,8 @@ package com.arkhamusserver.arkhamus.config.netty
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
 import io.netty.channel.Channel
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
@@ -12,29 +14,39 @@ class ChannelRepository {
     private val arkhamusChannelCache: ConcurrentMap<String, ArkhamusChannel> = ConcurrentHashMap()
     private val arkhamusUserCache: ConcurrentMap<Long, ArkhamusChannel> = ConcurrentHashMap()
 
-
+    companion object {
+        var logger: Logger = LoggerFactory.getLogger(ChannelRepository::class.java)
+    }
     fun put(arkhamusChannel: ArkhamusChannel) {
-        val channelId = arkhamusChannel.channelId
-        channelCache[channelId] = arkhamusChannel.channel
-        arkhamusChannelCache[channelId] = arkhamusChannel
-        arkhamusChannel.userAccount?.id?.let {
-            arkhamusUserCache[it] = arkhamusChannel
+        try {
+            val channelId = arkhamusChannel.channelId
+            channelCache[channelId] = arkhamusChannel.channel
+            arkhamusChannelCache[channelId] = arkhamusChannel
+            arkhamusChannel.userAccount?.id?.let {
+                arkhamusUserCache[it] = arkhamusChannel
+            }
+        } catch (e: Exception){
+            logger.error("Error occurred while putting ArkhamusChannel into cache", e)
         }
     }
 
     fun update(arkhamusChannel: ArkhamusChannel) {
-        val channelId = arkhamusChannel.channelId
-        val channel = channelCache[channelId]
-        if (channel != null) {
-            val oldArkhamusChannel = arkhamusChannelCache[channelId]
-            if (oldArkhamusChannel != null) {
-                oldArkhamusChannel.gameSession = arkhamusChannel.gameSession
-                oldArkhamusChannel.userOfGameSession = arkhamusChannel.userOfGameSession
-                oldArkhamusChannel.userAccount = arkhamusChannel.userAccount
+        try {
+            val channelId = arkhamusChannel.channelId
+            val channel = channelCache[channelId]
+            if (channel != null) {
+                val oldArkhamusChannel = arkhamusChannelCache[channelId]
+                if (oldArkhamusChannel != null) {
+                    oldArkhamusChannel.gameSession = arkhamusChannel.gameSession
+                    oldArkhamusChannel.userOfGameSession = arkhamusChannel.userOfGameSession
+                    oldArkhamusChannel.userAccount = arkhamusChannel.userAccount
+                }
+                arkhamusChannel.userAccount?.id?.let {
+                    arkhamusUserCache[it] = arkhamusChannel
+                }
             }
-            arkhamusChannel.userAccount?.id?.let {
-                arkhamusUserCache[it] = arkhamusChannel
-            }
+        } catch (e: Exception){
+            logger.error("Error occurred while updating ArkhamusChannel", e)
         }
     }
 
@@ -46,10 +58,20 @@ class ChannelRepository {
         return arkhamusUserCache[key]
     }
 
-    //todo remove when game ends
-//    fun remove(key: String) {
-//        channelCache.remove(key)
-//        val arkhamusChannel = arkhamusChannelCache.remove(key)
-//        arkhamusChannel?.userAccount?.id?.let { arkhamusUserCache.remove(it) }
-//    }
+    fun closeAndRemove(arkhamusChannel: ArkhamusChannel) {
+        val key = arkhamusChannel.channelId
+        remove(key)
+    }
+
+    fun remove(key: String) {
+        try {
+            val channel = channelCache.remove(key)
+            channel?.flush()
+            channel?.close()
+            val arkhamusChannel = arkhamusChannelCache.remove(key)
+            arkhamusChannel?.userAccount?.id?.let { arkhamusUserCache.remove(it) }
+        } catch (e: Exception){
+            logger.error("Error occurred while removing ArkhamusChannel", e)
+        }
+    }
 }

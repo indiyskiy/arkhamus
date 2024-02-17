@@ -41,7 +41,18 @@ class AuthNettyResponseMapper(
             }
         )
     } else {
-        NettyResponseAuth(AuthState.FAIL, 0L, 0L, MyGameUserResponseMessage(0, "", 0.0, 0.0), emptyList())
+        NettyResponseAuth(
+            AuthState.FAIL,
+            0L,
+            0L,
+            MyGameUserResponseMessage(
+                0,
+                "",
+                0.0,
+                0.0
+            ),
+            emptyList()
+        )
     }
 
 }

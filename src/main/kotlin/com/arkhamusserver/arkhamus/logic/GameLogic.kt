@@ -101,7 +101,6 @@ class GameLogic(
             userAccount = player,
             gameSession = game,
             host = host,
-            gameCreationTimestamp = game.creationTimestamp
         )
         userOfGameSessionRepository.save(userOfGameSession)
         return userOfGameSession
