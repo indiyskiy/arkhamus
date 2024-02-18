@@ -25,19 +25,11 @@ class AuthNettyResponseMapper(
         val otherUsers = redisDataAccess.getOtherGameUsers(user.id, gameSession.id)
 
         NettyResponseAuth(
-            AuthState.SUCCESS,
-            0L,
-            user.id!!,
-            MyGameUserResponseMessage(
-                user.id!!,
-                gameUser.nickName,
-                gameUser.x,
-                gameUser.y
-            ),
-            otherUsers.map {
-                NettyGameUserResponseMessage(
-                    it.userId, it.nickName, it.x, it.y
-                )
+            message = AuthState.SUCCESS,
+            userId = user.id!!,
+            myGameUser = MyGameUserResponseMessage(gameUser),
+            allGameUsers = otherUsers.map {
+                NettyGameUserResponseMessage(it)
             }
         )
     } else {

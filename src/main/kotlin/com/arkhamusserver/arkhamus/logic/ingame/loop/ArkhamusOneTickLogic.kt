@@ -23,7 +23,7 @@ class ArkhamusOneTickLogic(
 ) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(ArkhamusOneTickLogic::class.java)
-        const val TICK_DELTA = 20 //ms
+        const val TICK_DELTA = 250 //ms
     }
 
     fun processCurrentTasks(
@@ -40,6 +40,7 @@ class ArkhamusOneTickLogic(
             }
             val responses = mutableListOf<NettyResponseMessage>()
             val iterator = currentTasks.listIterator()
+            updateNextTick(tick, game)
             while (iterator.hasNext()) {
                 val task = iterator.next()
                 if (isCurrentTick(task, tick)) {
@@ -48,7 +49,6 @@ class ArkhamusOneTickLogic(
                     iterator.remove()
                 }
             }
-            updateNextTick(tick, game)
             return responses
         } catch (e: Exception){
             logger.error("Error processing current tasks: ${e.message}", e)

@@ -18,6 +18,4 @@ class ItemInformationDtoMaker {
                 .capitalizeIfFirstCharIsLowercase()
             type = value.getItemType()
         }
-
-
 }

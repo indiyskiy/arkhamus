@@ -60,13 +60,16 @@ class ChannelRepository {
 
     fun closeAndRemove(arkhamusChannel: ArkhamusChannel) {
         val key = arkhamusChannel.channelId
-        remove(key)
+        closeAndRemove(key)
+    }
+    fun closeAndRemove(channelId: String) {
+        remove(channelId)
     }
 
     fun remove(key: String) {
         try {
+            logger.warn("close and remove socket $key")
             val channel = channelCache.remove(key)
-            channel?.flush()
             channel?.close()
             val arkhamusChannel = arkhamusChannelCache.remove(key)
             arkhamusChannel?.userAccount?.id?.let { arkhamusUserCache.remove(it) }
@@ -74,4 +77,8 @@ class ChannelRepository {
             logger.error("Error occurred while removing ArkhamusChannel", e)
         }
     }
+
+    fun getByGameId(gameId: Long): List<ArkhamusChannel> =
+        arkhamusUserCache.values.filter { it.gameSession?.id == gameId }
+
 }

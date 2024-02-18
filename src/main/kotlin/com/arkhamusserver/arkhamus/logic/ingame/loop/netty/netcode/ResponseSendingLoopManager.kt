@@ -44,7 +44,7 @@ class ResponseSendingLoopManager(
     private fun sendOneMessage(responseMessage: NettyResponseMessage) {
         val channel = channelRepository.getUserChannel(responseMessage.userId)
         channel?.channel?.writeAndFlush(
-            gson.toJson(responseMessage)
+            gson.toJson(responseMessage)+"\r\n"
         )
     }
 }

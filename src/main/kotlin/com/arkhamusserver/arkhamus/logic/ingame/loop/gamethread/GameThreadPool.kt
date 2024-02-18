@@ -35,16 +35,23 @@ class GameThreadPool(
     fun addTask(task: NettyTickRequestMessageContainer) {
         val gameId = task.gameSession!!.id!!
         val taskCollection = tasksMap[gameId]
-        if (taskCollection != null) {
-            taskCollection.add(task)
+        val added: Boolean = if (taskCollection != null) {
+            val added = taskCollection.add(task)
             processIfEnoughData(gameId, taskCollection)
+            added
         } else {
             val createdTaskCollection = (TaskCollection()).apply {
                 init(task.gameSession!!)
-                add(task)
             }
+            val added = createdTaskCollection.add(task)
             tasksMap[gameId] = createdTaskCollection
             processIfEnoughData(gameId, createdTaskCollection)
+            added
+        }
+        if(added){
+            logger.debug("task added")
+        } else {
+            logger.debug("task skipped")
         }
     }
 

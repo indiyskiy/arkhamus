@@ -21,9 +21,31 @@ class TaskCollection {
         this.gameSession = gameSession
     }
 
-    fun add(container: NettyTickRequestMessageContainer) {
-        taskList.add(container)
+    fun add(container: NettyTickRequestMessageContainer):Boolean {
+        if (!taskList.any {
+                isCompetingRequest(it, container)
+            }) {
+            taskList.add(container)
+            return true
+        }
+        return false
     }
+
+    private fun isCompetingRequest(
+        it: NettyTickRequestMessageContainer,
+        container: NettyTickRequestMessageContainer
+    ) = sameUser(it, container) &&
+            sameTick(it, container)
+
+    private fun sameTick(
+        it: NettyTickRequestMessageContainer,
+        container: NettyTickRequestMessageContainer
+    ) = it.nettyRequestMessage.baseRequestData.tick == container.nettyRequestMessage.baseRequestData.tick
+
+    private fun sameUser(
+        it: NettyTickRequestMessageContainer,
+        container: NettyTickRequestMessageContainer
+    ) = it.userAccount.id == container.userAccount.id
 
     fun userIds(): Set<Long> {
         return userIds

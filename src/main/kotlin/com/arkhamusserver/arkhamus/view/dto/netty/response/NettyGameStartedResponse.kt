@@ -1,10 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
-
-import com.arkhamusserver.arkhamus.model.enums.AuthState
-
-class NettyResponseAuth(
-    val message: AuthState = AuthState.FAIL,
-    tick: Long = -1,
+class NettyGameStartedResponse(
+    val message: String = "STARTED",
+    tick: Long = 0,
     userId: Long,
     myGameUser: MyGameUserResponseMessage,
     allGameUsers: List<NettyGameUserResponseMessage>,
