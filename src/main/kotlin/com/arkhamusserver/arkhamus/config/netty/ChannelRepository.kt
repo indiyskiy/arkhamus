@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.config.netty
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
+import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import io.netty.channel.Channel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,6 +18,7 @@ class ChannelRepository {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(ChannelRepository::class.java)
     }
+
     fun put(arkhamusChannel: ArkhamusChannel) {
         try {
             val channelId = arkhamusChannel.channelId
@@ -25,7 +27,7 @@ class ChannelRepository {
             arkhamusChannel.userAccount?.id?.let {
                 arkhamusUserCache[it] = arkhamusChannel
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             logger.error("Error occurred while putting ArkhamusChannel into cache", e)
         }
     }
@@ -45,7 +47,7 @@ class ChannelRepository {
                     arkhamusUserCache[it] = arkhamusChannel
                 }
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             logger.error("Error occurred while updating ArkhamusChannel", e)
         }
     }
@@ -62,6 +64,7 @@ class ChannelRepository {
         val key = arkhamusChannel.channelId
         closeAndRemove(key)
     }
+
     fun closeAndRemove(channelId: String) {
         remove(channelId)
     }
@@ -73,12 +76,25 @@ class ChannelRepository {
             channel?.close()
             val arkhamusChannel = arkhamusChannelCache.remove(key)
             arkhamusChannel?.userAccount?.id?.let { arkhamusUserCache.remove(it) }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             logger.error("Error occurred while removing ArkhamusChannel", e)
         }
     }
 
     fun getByGameId(gameId: Long): List<ArkhamusChannel> =
         arkhamusUserCache.values.filter { it.gameSession?.id == gameId }
+
+    fun updateGame(gameSession: GameSession) {
+        arkhamusChannelCache.forEach { (_, value) ->
+            if (value.gameSession != null && value!!.gameSession!!.id == gameSession.id) {
+                value.gameSession = gameSession
+            }
+        }
+        arkhamusUserCache.forEach { (_, value) ->
+            if (value.gameSession != null && value!!.gameSession!!.id == gameSession.id) {
+                value.gameSession = gameSession
+            }
+        }
+    }
 
 }

@@ -98,7 +98,7 @@ class GameControllerIT {
         gameController.start(gameSession.id!!)
 
         val updatedGameSession = gameController.getGame(gameSession.id!!).body!!
-        assertEquals(GameState.IN_PROGRESS, updatedGameSession.state)
+        assertEquals(GameState.PENDING, updatedGameSession.state)
     }
 
     @Test
@@ -107,6 +107,6 @@ class GameControllerIT {
         val gameSession = gameController.createSingle().body!!
 
         val started = gameController.start(gameSession.id!!).body!!
-        assertEquals(GameState.IN_PROGRESS, started.state)
+        assertEquals(GameState.PENDING, started.state)
     }
 }

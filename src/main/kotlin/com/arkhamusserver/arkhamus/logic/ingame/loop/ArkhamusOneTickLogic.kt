@@ -28,29 +28,31 @@ class ArkhamusOneTickLogic(
 
     fun processCurrentTasks(
         currentTasks: MutableList<NettyTickRequestMessageContainer>,
-        tick: Long,
         game: RedisGame
     ): List<NettyResponseMessage> {
         try {
             val globalGameData = redisDataAccess.loadGlobalGameData(game)
+            val currentTick = game.currentTick
+            updateNextTick(game)
+
             currentTasks.forEach {
-                if (isCurrentTick(it, tick)) {
-                    process(it, tick, globalGameData)
+                if (isCurrentTick(it, currentTick)) {
+                    process(it, currentTick, globalGameData)
                 }
             }
             val responses = mutableListOf<NettyResponseMessage>()
             val iterator = currentTasks.listIterator()
-            updateNextTick(tick, game)
+
             while (iterator.hasNext()) {
                 val task = iterator.next()
-                if (isCurrentTick(task, tick)) {
+                if (isCurrentTick(task, currentTick)) {
                     val response = buildResponse(task, globalGameData)
                     responses.add(response)
                     iterator.remove()
                 }
             }
             return responses
-        } catch (e: Exception){
+        } catch (e: Exception) {
             logger.error("Error processing current tasks: ${e.message}", e)
         }
         return emptyList()
@@ -85,8 +87,8 @@ class ArkhamusOneTickLogic(
         gameUserRedisRepository.save(oldGameUser)
     }
 
-    private fun updateNextTick(tick: Long, game: RedisGame) {
-        game.currentTick = tick + 1
+    private fun updateNextTick(game: RedisGame) {
+        game.currentTick += 1
         game.globalTimer += TICK_DELTA
         gameRepository.save(game)
     }

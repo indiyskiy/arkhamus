@@ -75,7 +75,7 @@ class GameLogic(
 
     private fun startGame(game: GameSession) {
         game.god = God.values().random(random)
-        game.state = GameState.IN_PROGRESS
+        game.state = GameState.PENDING
         gameSessionRepository.save(game)
         gameStartLogic.startGame(game)
     }

@@ -35,7 +35,7 @@ class AuthNettyResponseMapper(
     } else {
         NettyResponseAuth(
             AuthState.FAIL,
-            0L,
+            -1L,
             0L,
             MyGameUserResponseMessage(
                 0,

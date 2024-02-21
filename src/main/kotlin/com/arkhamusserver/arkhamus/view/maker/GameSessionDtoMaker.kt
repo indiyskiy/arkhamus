@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.view.maker
 
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
-import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.GameState.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.dto.InGameUserDto
@@ -37,14 +37,14 @@ class GameSessionDtoMaker(
     ): GodDto? {
         return gameSession.god?.let { godNotNull ->
             when (gameSession.state) {
-                GameState.NEW -> null
-                GameState.IN_PROGRESS -> if (isCultist) {
+                NEW -> null
+                IN_PROGRESS, PENDING -> if (isCultist) {
                     godDtoMaker.convert(godNotNull)
                 } else {
                     null
                 }
 
-                GameState.FINISHED -> godDtoMaker.convert(godNotNull)
+                FINISHED -> godDtoMaker.convert(godNotNull)
             }
         }
     }
@@ -59,9 +59,9 @@ class GameSessionDtoMaker(
             this.isHost = it.host
             this.role = RoleDto().apply {
                 this.userRole = when (gameSession.state) {
-                    GameState.NEW -> null
-                    GameState.IN_PROGRESS -> if (isCultist) it.roleInGame else RoleTypeInGame.INVESTIGATOR
-                    GameState.FINISHED -> it.roleInGame
+                    NEW -> null
+                    IN_PROGRESS, PENDING -> if (isCultist) it.roleInGame else RoleTypeInGame.INVESTIGATOR
+                    FINISHED -> it.roleInGame
                 }
             }
         }

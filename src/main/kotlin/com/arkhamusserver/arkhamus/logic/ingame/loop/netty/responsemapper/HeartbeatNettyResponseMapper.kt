@@ -23,22 +23,22 @@ class HeartbeatNettyResponseMapper : NettyResponseMapper {
         gameSession: GameSession?,
         userRole: UserOfGameSession?
     ): HeartbeatNettyResponse {
-        with(gameData as HeartbeatGameData) {
+        (gameData as HeartbeatGameData).let {
             return HeartbeatNettyResponse(
-                tick = nettyRequestMessage.baseRequestData.tick,
+                tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponseMessage(
                     id = user.id!!,
                     nickName = user.nickName!!,
-                    x = gameData.gameUser!!.x,
-                    y = gameData.gameUser.y
+                    x = it.gameUser!!.x,
+                    y = it.gameUser.y
                 ),
-                otherGameUsers = gameData.otherGameUsers.map {
+                otherGameUsers = it.otherGameUsers.map { gameUser ->
                     NettyGameUserResponseMessage(
-                        id = it.userId,
-                        nickName = it.nickName,
-                        x = it.x,
-                        y = it.y
+                        id = gameUser.userId,
+                        nickName = gameUser.nickName,
+                        x = gameUser.x,
+                        y = gameUser.y
                     )
                 }
             )

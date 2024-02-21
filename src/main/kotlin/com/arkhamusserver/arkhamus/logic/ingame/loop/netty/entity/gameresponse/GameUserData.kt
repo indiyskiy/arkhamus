@@ -5,4 +5,5 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 open class GameUserData(
     val gameUser: RedisGameUser?,
     val otherGameUsers: List<RedisGameUser> = emptyList(),
-) : GameData
+    tick: Long
+) : GameData(tick)

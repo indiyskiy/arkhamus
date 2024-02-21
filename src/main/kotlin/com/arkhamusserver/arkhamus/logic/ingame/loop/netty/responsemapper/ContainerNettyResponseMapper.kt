@@ -39,7 +39,7 @@ class ContainerNettyResponseMapper : NettyResponseMapper {
                 }
             }
             return ContainerNettyResponse(
-                tick = nettyRequestMessage.baseRequestData.tick,
+                tick = gameData.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponseMessage(
                     id = user.id!!,

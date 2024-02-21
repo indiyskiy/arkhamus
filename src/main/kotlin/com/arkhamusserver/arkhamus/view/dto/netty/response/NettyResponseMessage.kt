@@ -5,4 +5,5 @@ open class NettyResponseMessage(
     val userId: Long,
     val myGameUser: MyGameUserResponseMessage,
     val otherGameUsers: List<NettyGameUserResponseMessage>,
+    val type: String
 )

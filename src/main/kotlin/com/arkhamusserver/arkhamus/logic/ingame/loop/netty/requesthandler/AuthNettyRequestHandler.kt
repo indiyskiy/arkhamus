@@ -8,7 +8,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAcce
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.NettyAuthService
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.GameState.IN_PROGRESS
+import com.arkhamusserver.arkhamus.model.enums.GameState.PENDING
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AuthRequestMessage
 import org.springframework.stereotype.Component
 
@@ -19,6 +20,10 @@ class AuthNettyRequestHandler(
     private val databaseDataAccess: DatabaseDataAccess,
     private val redisDataAccess: RedisDataAccess
 ) {
+
+    companion object {
+        private val allowedStates = setOf(IN_PROGRESS, PENDING)
+    }
 
     fun process(
         nettyRequestMessage: AuthRequestMessage,
@@ -45,10 +50,9 @@ class AuthNettyRequestHandler(
 
     private fun findUserOfGame(account: UserAccount): UserOfGameSession {
         return databaseDataAccess.findByUserAccountId(account.id!!)
-            .filter { it.gameSession.state == GameState.IN_PROGRESS }
+            .filter { it.gameSession.state in allowedStates }
             .sortedByDescending { it.gameSession.creationTimestamp }
             .first()
     }
-
 
 }

@@ -28,8 +28,8 @@ class OpenContainerNettyRequestHandler : NettyRequestHandler {
                 val container = globalGameData.containers[this.containerId]!!
                 val user = globalGameData.users[userId]!!
                 val users = globalGameData.users.values.filter { it.userId != userId }
-                return ContainerGameData(container, user, users)
-            } ?: return ErrorGameResponse("game session id is null")
+                return ContainerGameData(container, user, users, globalGameData.game.currentTick)
+            } ?: return ErrorGameResponse("game session id is null", globalGameData.game.currentTick)
         }
     }
 }

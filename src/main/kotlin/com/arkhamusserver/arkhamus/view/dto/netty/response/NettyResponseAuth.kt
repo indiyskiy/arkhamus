@@ -8,4 +8,10 @@ class NettyResponseAuth(
     userId: Long,
     myGameUser: MyGameUserResponseMessage,
     allGameUsers: List<NettyGameUserResponseMessage>,
-) : NettyResponseMessage(tick, userId, myGameUser, allGameUsers)
+) : NettyResponseMessage(
+    tick,
+    userId,
+    myGameUser,
+    allGameUsers,
+    NettyResponseAuth::class.java.simpleName
+)

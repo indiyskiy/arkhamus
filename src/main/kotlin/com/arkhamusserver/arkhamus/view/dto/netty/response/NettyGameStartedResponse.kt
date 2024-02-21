@@ -5,4 +5,10 @@ class NettyGameStartedResponse(
     userId: Long,
     myGameUser: MyGameUserResponseMessage,
     allGameUsers: List<NettyGameUserResponseMessage>,
-) : NettyResponseMessage(tick, userId, myGameUser, allGameUsers)
+) : NettyResponseMessage(
+    tick,
+    userId,
+    myGameUser,
+    allGameUsers,
+    NettyGameStartedResponse::class.java.simpleName
+)

@@ -6,5 +6,6 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 class ContainerGameData(
     var container: RedisContainer,
     gameUser: RedisGameUser,
-    otherGameUsers: List<RedisGameUser>
-) : GameUserData(gameUser, otherGameUsers)
+    otherGameUsers: List<RedisGameUser>,
+    tick: Long
+) : GameUserData(gameUser, otherGameUsers, tick)

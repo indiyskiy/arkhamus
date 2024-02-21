@@ -1,3 +1,3 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse
 
-interface GameData
+abstract class GameData(val tick: Long)

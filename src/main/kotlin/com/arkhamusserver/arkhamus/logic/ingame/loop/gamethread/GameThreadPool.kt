@@ -76,7 +76,7 @@ class GameThreadPool(
         val usersOfCurrentTasks = currentTasks.mapNotNull { it.userAccount.id }.toSet()
         if (usersOfCurrentTasks == usersOfGame) {
             taskExecutor.execute {
-                processGameTick(taskCollection.getList(), gameId, tick, ongoingGame)
+                processGameTick(taskCollection.getList(), gameId,ongoingGame)
             }
         }
     }
@@ -84,12 +84,10 @@ class GameThreadPool(
     private fun processGameTick(
         tasks: MutableList<NettyTickRequestMessageContainer>,
         gameId: Long,
-        tick: Long,
         ongoingGame: RedisGame
     ) {
         val responses = tickLogic.processCurrentTasks(
             tasks,
-            tick,
             ongoingGame
         )
         responseSendingLoopManager.addResponses(responses, gameId)

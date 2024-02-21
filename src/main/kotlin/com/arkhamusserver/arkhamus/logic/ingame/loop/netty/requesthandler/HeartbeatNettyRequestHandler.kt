@@ -25,8 +25,8 @@ class HeartbeatNettyRequestHandler : NettyRequestHandler {
             nettyTickRequestMessageContainer.gameSession?.id?.let {
                 val user = globalGameData.users[userId]!!
                 val users = globalGameData.users.values.filter { it.userId != userId }
-                return HeartbeatGameData( user, users)
-            } ?: return ErrorGameResponse("game session id is null")
+                return HeartbeatGameData( user, users, globalGameData.game.currentTick)
+            } ?: return ErrorGameResponse("game session id is null", globalGameData.game.currentTick)
     }
 
 }

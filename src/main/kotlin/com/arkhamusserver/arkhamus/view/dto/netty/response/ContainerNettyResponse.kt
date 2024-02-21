@@ -6,6 +6,10 @@ class ContainerNettyResponse(
     userId: Long,
     myGameUser: MyGameUserResponseMessage,
     otherGameUsers: List<NettyGameUserResponseMessage>
-) : NettyResponseMessage(tick, userId, myGameUser, otherGameUsers) {
-
-}
+) : NettyResponseMessage(
+    tick,
+    userId,
+    myGameUser,
+    otherGameUsers,
+    ContainerNettyResponse::class.java.simpleName
+)
