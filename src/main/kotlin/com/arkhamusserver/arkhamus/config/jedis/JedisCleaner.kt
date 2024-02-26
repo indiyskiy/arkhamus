@@ -1,21 +1,25 @@
 package com.arkhamusserver.arkhamus.config.jedis
 
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.ContainerRedisRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRedisRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameUserRedisRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Component
+
 @Component
 class JedisCleaner(
-    private val userRedisRepository: GameUserRedisRepository,
-    private val containerRedisRepository: ContainerRedisRepository,
-    private val gameRedisRepository: GameRedisRepository,
+    private val userRedisRepository: RedisGameUserRepository,
+    private val containerRedisRepository: RedisContainerRepository,
+    private val redisGameRepository: RedisGameRepository,
+    private val redisTimeEventRepository: RedisTimeEventRepository
 ) {
-        @PostConstruct
-        fun cleanAll() {
-            userRedisRepository.deleteAll()
-            containerRedisRepository.deleteAll()
-            gameRedisRepository.deleteAll()
-        }
+    @PostConstruct
+    fun cleanAll() {
+        userRedisRepository.deleteAll()
+        containerRedisRepository.deleteAll()
+        redisGameRepository.deleteAll()
+        redisTimeEventRepository.deleteAll()
+    }
 
 }

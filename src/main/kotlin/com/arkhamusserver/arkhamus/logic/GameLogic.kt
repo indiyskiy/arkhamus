@@ -11,14 +11,12 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
 import com.arkhamusserver.arkhamus.view.validator.GameValidator
+import jakarta.transaction.Transactional
 import org.apache.commons.lang3.RandomStringUtils
 import org.springframework.stereotype.Component
-import kotlin.random.Random
 
 @Component
 class GameLogic(
@@ -32,51 +30,21 @@ class GameLogic(
 ) {
 
     companion object {
-        private val random: Random = Random(System.currentTimeMillis())
         const val RELATED_ENTITY = "Game"
         const val TOKEN_LENGTH = 8
     }
 
+    @Transactional
     fun start(game: GameSession): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         val invitedUsers = game.usersOfGameSession
         gameValidator.checkStartAccess(player, game, invitedUsers)
         startGame(game)
-        val cultistSize = when (game.gameType) {
-            GameType.DEFAULT -> 0
-            GameType.CUSTOM -> CustomGameLogic.DEFAULT_CULTIST_SIZE
-            GameType.SINGLE -> SingleGameLogic.DEFAULT_CULTIST_SIZE
-        }
-        updateInvitedUsersInfoOnGameStart(game, invitedUsers, cultistSize)
-        return game.toDto(player)
-    }
-
-    fun updateInvitedUsersInfoOnGameStart(
-        game: GameSession,
-        invitedUsers: List<UserOfGameSession>,
-        cultistSize: Int
-    ) {
-        val cultists = invitedUsers
-            .shuffled(random)
-            .subList(
-                0,
-                game.gameSessionSettings.numberOfCultists
-            )
-        val cultistsIds = cultists.map { it.id }.toSet()
-        invitedUsers.forEach {
-            if (it.id in cultistsIds) {
-                it.roleInGame = RoleTypeInGame.CULTIST
-            } else {
-                it.roleInGame = RoleTypeInGame.INVESTIGATOR
-            }
-            userOfGameSessionRepository.save(it)
-        }
+        val gameUpdated = gameSessionRepository.findById(game.id!!).get()
+        return gameUpdated.toDto(player)
     }
 
     private fun startGame(game: GameSession) {
-        game.god = God.values().random(random)
-        game.state = GameState.PENDING
-        gameSessionRepository.save(game)
         gameStartLogic.startGame(game)
     }
 

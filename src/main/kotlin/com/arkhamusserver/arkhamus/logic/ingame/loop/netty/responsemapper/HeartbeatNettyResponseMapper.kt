@@ -40,6 +40,11 @@ class HeartbeatNettyResponseMapper : NettyResponseMapper {
                         x = gameUser.x,
                         y = gameUser.y
                     )
+                },
+                ongoingEffects = gameData.visibleOngoingEffects.map {
+                    OngoingEventResponse(
+                        type = it.event.type
+                    )
                 }
             )
         }

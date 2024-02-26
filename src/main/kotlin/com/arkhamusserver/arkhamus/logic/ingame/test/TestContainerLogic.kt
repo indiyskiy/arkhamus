@@ -2,10 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.test
 
 import com.arkhamusserver.arkhamus.logic.CurrentUserService
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
-import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerNettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponseMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyContainerCell
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -45,7 +42,8 @@ class TestContainerLogic(
                     x = it.x,
                     y = it.y
                 )
-            }
+            },
+            ongoingEffects = emptyList()
         ).apply {
             containerCells = container.items.map { (itemId, quantity) ->
                 NettyContainerCell(itemId.toLong(), quantity)

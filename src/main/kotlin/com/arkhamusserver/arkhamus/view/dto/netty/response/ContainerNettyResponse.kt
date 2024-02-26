@@ -5,11 +5,13 @@ class ContainerNettyResponse(
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponseMessage,
-    otherGameUsers: List<NettyGameUserResponseMessage>
+    otherGameUsers: List<NettyGameUserResponseMessage>,
+    ongoingEffects: List<OngoingEventResponse>,
 ) : NettyResponseMessage(
     tick,
     userId,
     myGameUser,
     otherGameUsers,
+    ongoingEffects,
     ContainerNettyResponse::class.java.simpleName
 )

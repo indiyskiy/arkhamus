@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     implementation("io.netty:netty-all:4.1.101.Final")
-    implementation("org.springframework.boot:spring-boot:3.2.2")
+    implementation("org.springframework.boot:spring-boot:3.2.3")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
@@ -36,7 +36,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-parent:3.2.1")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.postgresql:postgresql:42.6.0")
+    implementation("org.postgresql:postgresql:42.7.2")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE")
     implementation("io.jsonwebtoken:jjwt-api:0.12.3")
     implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
@@ -46,6 +46,7 @@ dependencies {
     implementation("redis.clients:jedis")
     implementation("jakarta.validation:jakarta.validation-api:3.1.0-M1")
     implementation("org.apache.commons:commons-lang3:3.14.0")
+    implementation("com.fasterxml.uuid:java-uuid-generator:4.3.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

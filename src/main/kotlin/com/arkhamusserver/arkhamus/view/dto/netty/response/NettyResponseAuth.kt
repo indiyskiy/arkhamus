@@ -13,5 +13,6 @@ class NettyResponseAuth(
     userId,
     myGameUser,
     allGameUsers,
+    emptyList(),
     NettyResponseAuth::class.java.simpleName
 )

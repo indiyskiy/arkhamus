@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
@@ -12,13 +13,13 @@ class GameDataBuilder(
 ) {
     fun build(
         container: NettyTickRequestMessageContainer,
-        globalGameData: GlobalGameData
+        globalGameData: GlobalGameData,
+        ongoingEffects: List<OngoingEvent>
     ): GameData {
         val nettyRequestMessage = container.nettyRequestMessage
         return requestHandlers.first {
             it.acceptClass(nettyRequestMessage) && it.accept(nettyRequestMessage)
-        }.buildData(container, globalGameData)
+        }.buildData(container, globalGameData, ongoingEffects)
     }
-
 
 }

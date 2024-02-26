@@ -23,7 +23,7 @@ class ArkhamusChannelInitializer : ChannelInitializer<SocketChannel>() {
     lateinit var parsers: List<NettyRequestJsonParser>
 
     companion object {
-        const val MAX_LENGTH = 1024 * 1024
+        const val MAX_LENGTH = 100 * 1024 * 1024
         var logger: Logger = LoggerFactory.getLogger(ArkhamusChannelInitializer::class.java)
     }
 

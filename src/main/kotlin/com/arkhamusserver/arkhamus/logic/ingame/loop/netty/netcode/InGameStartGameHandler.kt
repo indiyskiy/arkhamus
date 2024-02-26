@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.globalutils.toJson
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AuthGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.GameRedisRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component
 @Component
 class InGameStartGameHandler(
     private val channelRepository: ChannelRepository,
-    private val redisGameRedisRepository: GameRedisRepository,
+    private val redisGameRedisRepository: RedisGameRepository,
     private val gameSessionRepository: GameSessionRepository
 ) {
     companion object {

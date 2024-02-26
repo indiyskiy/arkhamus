@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.ContainerGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.ErrorGameResponse
@@ -10,7 +12,9 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessag
 import org.springframework.stereotype.Component
 
 @Component
-class OpenContainerNettyRequestHandler : NettyRequestHandler {
+class OpenContainerNettyRequestHandler(
+    private val eventVisibilityFilter: EventVisibilityFilter
+) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
         nettyRequestMessage::class.java == GetContainerRequestMessage::class.java
@@ -19,7 +23,8 @@ class OpenContainerNettyRequestHandler : NettyRequestHandler {
 
     override fun buildData(
         nettyTickRequestMessageContainer: NettyTickRequestMessageContainer,
-        globalGameData: GlobalGameData
+        globalGameData: GlobalGameData,
+        ongoingEffects: List<OngoingEvent>
     ): GameData {
         val userId = nettyTickRequestMessageContainer.userAccount.id
         val request = nettyTickRequestMessageContainer.nettyRequestMessage
@@ -28,7 +33,13 @@ class OpenContainerNettyRequestHandler : NettyRequestHandler {
                 val container = globalGameData.containers[this.containerId]!!
                 val user = globalGameData.users[userId]!!
                 val users = globalGameData.users.values.filter { it.userId != userId }
-                return ContainerGameData(container, user, users, globalGameData.game.currentTick)
+                return ContainerGameData(
+                    container,
+                    user,
+                    users,
+                    eventVisibilityFilter.filter(user, ongoingEffects),
+                    globalGameData.game.currentTick
+                )
             } ?: return ErrorGameResponse("game session id is null", globalGameData.game.currentTick)
         }
     }

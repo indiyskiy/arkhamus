@@ -7,10 +7,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerNettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponseMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponseMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyContainerCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -54,6 +51,9 @@ class ContainerNettyResponseMapper : NettyResponseMapper {
                         x = it.x,
                         y = it.y
                     )
+                },
+                ongoingEffects = gameData.visibleOngoingEffects.map {
+                    OngoingEventResponse(it.event.type)
                 }
             ).apply {
                 this.containerCells = containerCells

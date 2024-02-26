@@ -12,4 +12,4 @@ class AuthGameData(
     var userOfTheGame: UserOfGameSession? = null,
     gameUser: RedisGameUser?,
     otherGameUsers: List<RedisGameUser> = emptyList(),
-) : GameUserData(gameUser, otherGameUsers, -1L)
+) : GameUserData(gameUser, otherGameUsers, emptyList(), -1L)

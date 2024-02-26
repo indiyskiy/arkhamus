@@ -1,0 +1,20 @@
+package com.arkhamusserver.arkhamus.model.redis
+
+import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import org.springframework.data.redis.core.RedisHash
+import org.springframework.data.annotation.Id
+import org.springframework.data.redis.core.index.Indexed
+
+@RedisHash("RedisTimeEvent")
+data class RedisTimeEvent(
+    @Id var id: String,
+    @Indexed var gameId: Long,
+    @Indexed var sourceUserId: Long?,
+    @Indexed var targetUserId: Long?,
+    var timeStart: Long,
+    var timePast: Long,
+    var timeLeft: Long,
+    var type: RedisTimeEventType,
+    var state: RedisTimeEventState,
+)

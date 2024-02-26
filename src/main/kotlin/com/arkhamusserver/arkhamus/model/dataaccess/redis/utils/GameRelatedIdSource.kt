@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.model.dataaccess.redis
+package com.arkhamusserver.arkhamus.model.dataaccess.redis.utils
 
 import org.springframework.stereotype.Component
 

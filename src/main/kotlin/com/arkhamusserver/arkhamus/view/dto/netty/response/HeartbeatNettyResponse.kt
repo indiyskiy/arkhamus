@@ -4,11 +4,13 @@ class HeartbeatNettyResponse(
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponseMessage,
-    otherGameUsers: List<NettyGameUserResponseMessage>
+    otherGameUsers: List<NettyGameUserResponseMessage>,
+    ongoingEffects: List<OngoingEventResponse>,
 ) : NettyResponseMessage(
     tick,
     userId,
     myGameUser,
     otherGameUsers,
+    ongoingEffects,
     HeartbeatNettyResponse::class.java.simpleName
 )
