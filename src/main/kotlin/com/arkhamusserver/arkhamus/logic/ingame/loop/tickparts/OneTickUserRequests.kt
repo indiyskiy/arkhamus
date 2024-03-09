@@ -5,12 +5,14 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.isCurrentTick
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
 import org.springframework.stereotype.Component
 
 @Component
 class OneTickUserRequests(
     private val gameUserRedisRepository: RedisGameUserRepository,
+    private val nettyRequestProcessors: List<NettyRequestProcessor>
 ) {
     fun processRequests(
         currentTasks: MutableList<NettyTickRequestMessageContainer>,
@@ -35,10 +37,14 @@ class OneTickUserRequests(
         val nettyRequestMessage = request.nettyRequestMessage
         ArkhamusOneTickLogic.logger.info("Process ${nettyRequestMessage.javaClass.simpleName} of game ${game.id} tick $tick")
 
-        val oldGameUser = globalGameData.users[request.userAccount.id]!!
-        oldGameUser.x = nettyRequestMessage.baseRequestData.userPosition.x
-        oldGameUser.y = nettyRequestMessage.baseRequestData.userPosition.y
-        gameUserRedisRepository.save(oldGameUser)
+        nettyRequestProcessors.filter {
+            it.accept(request)
+        }.forEach {
+            it.process(request, globalGameData, ongoingEvents)
+        }
+
+        val gameUser = globalGameData.users[request.userAccount.id]!!
+        gameUserRedisRepository.save(gameUser)
     }
 
 }

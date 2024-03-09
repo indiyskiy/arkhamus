@@ -42,9 +42,7 @@ class HeartbeatNettyResponseMapper : NettyResponseMapper {
                     )
                 },
                 ongoingEffects = gameData.visibleOngoingEffects.map {
-                    OngoingEventResponse(
-                        type = it.event.type
-                    )
+                    OngoingEventResponse(it)
                 }
             )
         }

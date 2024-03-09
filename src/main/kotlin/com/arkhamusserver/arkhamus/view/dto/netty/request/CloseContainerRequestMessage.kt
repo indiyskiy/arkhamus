@@ -1,7 +1,10 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.request
 
-class GetContainerRequestMessage(
+import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+
+class CloseContainerRequestMessage(
     var containerId: Long,
+    var newInventoryContent: List<ContainerCell>,
     type: String,
     baseRequestData: BaseRequestData
 ) : NettyBaseRequestMessage(baseRequestData, type)

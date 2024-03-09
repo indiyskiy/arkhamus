@@ -7,17 +7,17 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.ContainerGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.ErrorGameResponse
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameData
-import com.arkhamusserver.arkhamus.view.dto.netty.request.OpenContainerRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.CloseContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class OpenContainerNettyRequestHandler(
+class CloseContainerNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
-        nettyRequestMessage::class.java == OpenContainerRequestMessage::class.java
+        nettyRequestMessage::class.java == CloseContainerRequestMessage::class.java
 
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
@@ -28,7 +28,7 @@ class OpenContainerNettyRequestHandler(
     ): GameData {
         val userId = nettyTickRequestMessageContainer.userAccount.id
         val request = nettyTickRequestMessageContainer.nettyRequestMessage
-        with(request as OpenContainerRequestMessage) {
+        with(request as CloseContainerRequestMessage) {
             nettyTickRequestMessageContainer.gameSession?.id?.let { gameId ->
                 val container = globalGameData.containers[this.containerId]!!
                 val user = globalGameData.users[userId]!!

@@ -43,11 +43,12 @@ class TestContainerLogic(
                     y = it.y
                 )
             },
-            ongoingEffects = emptyList()
-        ).apply {
+            ongoingEffects = emptyList(),
+            containerState = container.state,
             containerCells = container.items.map { (itemId, quantity) ->
-                NettyContainerCell(itemId.toLong(), quantity)
-            }
-        }
+                ContainerCell(itemId, quantity)
+            },
+            holdingUser = container.holdingUser
+        )
     }
 }

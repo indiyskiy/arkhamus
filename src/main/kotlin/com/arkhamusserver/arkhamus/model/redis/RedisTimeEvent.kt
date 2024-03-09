@@ -17,4 +17,6 @@ data class RedisTimeEvent(
     var timeLeft: Long,
     var type: RedisTimeEventType,
     var state: RedisTimeEventState,
+    var xLocation: Double?,
+    var yLocation: Double?,
 )

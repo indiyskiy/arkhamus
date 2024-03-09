@@ -24,20 +24,22 @@ class DayTimeEventProcessor(
 
     override fun processEnd(event: RedisTimeEvent, currentGameTime: Long) {
         event.state = RedisTimeEventState.PAST
-        startTheNight(event)
+        startTheNight(event, currentGameTime)
     }
 
-    private fun startTheNight(event: RedisTimeEvent) {
+    private fun startTheNight(event: RedisTimeEvent, currentGameTime: Long) {
         val night = RedisTimeEvent(
             id = Generators.timeBasedEpochGenerator().generate().toString(),
             gameId = event.gameId,
             sourceUserId = null,
             targetUserId = null,
-            timeStart = 0L,
+            timeStart = currentGameTime,
             timeLeft = RedisTimeEventType.NIGHT.getDefaultTime(),
             timePast = 0L,
             type = RedisTimeEventType.NIGHT,
-            state = RedisTimeEventState.ACTIVE
+            state = RedisTimeEventState.ACTIVE,
+            xLocation = null,
+            yLocation = null
         )
         timeEventRepository.save(night)
     }

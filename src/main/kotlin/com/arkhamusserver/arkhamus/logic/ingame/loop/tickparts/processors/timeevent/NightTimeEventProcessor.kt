@@ -46,7 +46,9 @@ class NightTimeEventProcessor(
             timeLeft = RedisTimeEventType.DAY.getDefaultTime(),
             timePast = 0L,
             type = RedisTimeEventType.DAY,
-            state = RedisTimeEventState.ACTIVE
+            state = RedisTimeEventState.ACTIVE,
+            xLocation = null,
+            yLocation = null
         )
         timeEventRepository.save(night)
     }

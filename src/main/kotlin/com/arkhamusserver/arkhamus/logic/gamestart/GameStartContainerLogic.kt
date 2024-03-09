@@ -45,13 +45,13 @@ class GameStartContainerLogic(
         this.items = randomizeItems(modifiers)
     }
 
-    private fun randomizeItems(modifiers: List<ContainerAffectModifiers>): Map<String, Long> {
+    private fun randomizeItems(modifiers: List<ContainerAffectModifiers>): MutableMap<Long, Long> {
         return when (modifiers.first()) {
             ContainerAffectModifiers.FULL_RANDOM -> {
                 val items = Item.values().filter {
                     it.getItemType() in setOf(ItemType.LOOT, ItemType.RARE_LOOT)
                 }.shuffled(GameStartLogic.random).subList(0, GameStartLogic.random.nextInt(3) + 1)
-                items.associate { it.getId().toString() to (GameStartLogic.random.nextLong(3) + 1) }
+                items.associate { it.getId() to (GameStartLogic.random.nextLong(3) + 1) }.toMutableMap()
             }
         }
     }
