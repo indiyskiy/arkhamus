@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChanne
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AuthGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.DatabaseDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.getOtherGameUsers
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.NettyAuthService
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession

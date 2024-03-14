@@ -20,4 +20,8 @@ data class UserOfGameSession(
     var host: Boolean,
 
     var roleInGame: RoleTypeInGame? = null
-)
+) {
+    override fun toString(): String {
+        return "UserOfGameSession[id=$id, userAccount=$userAccount, gameSessionId=${gameSession.id}, host=$host, roleInGame='$roleInGame']"
+    }
+}

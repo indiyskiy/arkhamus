@@ -11,13 +11,14 @@ data class GameSessionSettings(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
 
-    @OneToOne(
-        mappedBy = "gameSessionSettings",
-        cascade = [CascadeType.ALL],
-        fetch = FetchType.LAZY,
-        optional = false
-    )
-    private val gameSession: GameSession? = null,
+// TODO we never use this, remove from postgres?
+//    @OneToOne(
+//        mappedBy = "gameSessionSettings",
+//        cascade = [CascadeType.ALL],
+//        fetch = FetchType.LAZY,
+//        optional = false
+//    )
+//    private val gameSession: GameSession? = null,
     var lobbySize: Int,
     var numberOfCultists: Int,
     @ManyToOne

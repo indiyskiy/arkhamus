@@ -23,11 +23,15 @@ class GameThreadPool(
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(GameThreadPool::class.java)
+
+        //TODO read from config?
+        const val CORE_POOL_SIZE = 3
+        const val MAX_POOL_SIZE = 5
     }
 
     init {
-        taskExecutor.corePoolSize = 3
-        taskExecutor.maxPoolSize = 5
+        taskExecutor.corePoolSize = CORE_POOL_SIZE
+        taskExecutor.maxPoolSize = MAX_POOL_SIZE
         taskExecutor.initialize()
     }
 

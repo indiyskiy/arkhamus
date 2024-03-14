@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.getOtherGameUsers
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
