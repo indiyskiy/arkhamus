@@ -1,11 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent.TimeEventProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,18 +18,19 @@ class OneTickTimeEvent(
     private val timeEventProcessors: List<TimeEventProcessor>
 ) {
 
-    companion object{
+    companion object {
         var logger: Logger = LoggerFactory.getLogger(OneTickTimeEvent::class.java)
     }
+
     fun processTimeEvents(
-        game: RedisGame,
+        globalGameData: GlobalGameData,
         timeEvents: List<RedisTimeEvent>,
         currentGameTime: Long
     ): List<OngoingEvent> {
         val redisTimeEvents: List<OngoingEvent> = timeEvents.mapNotNull { event ->
             val timeAdd = min(event.timeLeft, ArkhamusOneTickLogic.TICK_DELTA)
             if (event.state == RedisTimeEventState.ACTIVE) {
-                processActiveEvent(event, timeAdd, currentGameTime)
+                processActiveEvent(event, globalGameData, timeAdd, currentGameTime)
             } else {
                 null
             }
@@ -39,30 +40,32 @@ class OneTickTimeEvent(
 
     private fun processActiveEvent(
         event: RedisTimeEvent,
+        globalGameData: GlobalGameData,
         timeAdd: Long,
         currentGameTime: Long
     ): OngoingEvent {
-        val changedEvent = process(event, timeAdd, currentGameTime)
+        val changedEvent = process(event, globalGameData, timeAdd, currentGameTime)
         return changedEvent
     }
 
     private fun process(
         event: RedisTimeEvent,
+        globalGameData: GlobalGameData,
         timeAdd: Long,
         currentGameTime: Long
     ): OngoingEvent {
         if (event.timePast == 0L) {
-            applyStartProcessors(event, currentGameTime)
+            applyStartProcessors(event, globalGameData, currentGameTime)
         }
         event.timePast += timeAdd
         event.timeLeft -= timeAdd
         if (event.timeLeft > 0) {
             logger.info("process ${event.type}")
-            applyProcessors(event, currentGameTime)
+            applyProcessors(event, globalGameData, currentGameTime)
             timeEventRepository.save(event)
         } else {
             logger.info("end ${event.type}")
-            applyEndProcessors(event, currentGameTime)
+            applyEndProcessors(event, globalGameData, currentGameTime)
             timeEventRepository.delete(event)
         }
         return OngoingEvent(
@@ -70,33 +73,45 @@ class OneTickTimeEvent(
         )
     }
 
-    private fun applyStartProcessors(event: RedisTimeEvent, currentGameTime: Long) {
+    private fun applyStartProcessors(
+        event: RedisTimeEvent,
+        globalGameData: GlobalGameData,
+        currentGameTime: Long
+    ) {
         timeEventProcessors
             .filter {
                 it.accept(event.type)
             }
             .forEach {
-                it.processStart(event, currentGameTime)
+                it.processStart(event, globalGameData, currentGameTime)
             }
     }
 
-    private fun applyEndProcessors(event: RedisTimeEvent, currentGameTime: Long) {
+    private fun applyEndProcessors(
+        event: RedisTimeEvent,
+        globalGameData: GlobalGameData,
+        currentGameTime: Long
+    ) {
         timeEventProcessors
             .filter {
                 it.accept(event.type)
             }
             .forEach {
-                it.processEnd(event, currentGameTime)
+                it.processEnd(event, globalGameData, currentGameTime)
             }
     }
 
-    private fun applyProcessors(event: RedisTimeEvent, currentGameTime: Long) {
+    private fun applyProcessors(
+        event: RedisTimeEvent,
+        globalGameData: GlobalGameData,
+        currentGameTime: Long
+    ) {
         timeEventProcessors
             .filter {
                 it.accept(event.type)
             }
             .forEach {
-                it.process(event, currentGameTime)
+                it.process(event, globalGameData, currentGameTime)
             }
     }
 }

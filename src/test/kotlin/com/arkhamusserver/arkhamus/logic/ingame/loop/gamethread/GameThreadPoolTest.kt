@@ -40,7 +40,7 @@ class GameThreadPoolTest {
     private var userAccountCounter = 0L
 
     @BeforeEach
-    private fun setUp() {
+    fun setUp() {
         redisDataAccess.cleanUp()
     }
 
@@ -59,7 +59,7 @@ class GameThreadPoolTest {
         Thread.sleep(1000)
 
         var i = 0
-        while(responseSendingLoopManager.collectedResponses.size < 2) {
+        while (responseSendingLoopManager.collectedResponses.size < 2) {
             Thread.sleep(500)
             i++
             if (i == 20) break
@@ -99,7 +99,11 @@ class GameThreadPoolTest {
         TODO()
     }
 
-    private fun createMessage(tick: Long, gameSession: GameSession, userOfGameSession: UserOfGameSession): NettyTickRequestMessageContainer {
+    private fun createMessage(
+        tick: Long,
+        gameSession: GameSession,
+        userOfGameSession: UserOfGameSession
+    ): NettyTickRequestMessageContainer {
         return NettyTickRequestMessageContainer(
             HeartbeatRequestMessage(
                 baseRequestData = BaseRequestData(
@@ -150,14 +154,14 @@ class GameThreadPoolTest {
 
         gameSession.usersOfGameSession = usersOfGameSession
 
-        val redisGameUsers = usersOfGameSession.map{ userOfGameSession ->
+        val redisGameUsers = usersOfGameSession.map { userOfGameSession ->
             RedisGameUser(
                 id = gameRelatedIdSource.getId(gameSession.id!!, userOfGameSession.userAccount.id!!),
                 userId = userOfGameSession.id!!,
                 nickName = "user-nickname",
                 role = RoleTypeInGame.INVESTIGATOR,
                 gameId = gameSession.id!!,
-                mind = 100
+                madness = 0.0
             )
         }
 

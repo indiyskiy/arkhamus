@@ -6,11 +6,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class ItemToRecipeResolver {
-    private fun oneOfEach(vararg items: Item): List<Ingredient> {
-        return items.map {
-            Ingredient(it, 1)
-        }
-    }
 
     fun resolve(item: Item): Recipe =
         when (item) {
@@ -96,5 +91,11 @@ class ItemToRecipeResolver {
 
             else -> emptyRecipe()
         }
+
+    private fun oneOfEach(vararg items: Item): List<Ingredient> {
+        return items.map {
+            Ingredient(it, 1)
+        }
+    }
 }
 

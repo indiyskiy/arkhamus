@@ -52,7 +52,7 @@ class GameThreadPool(
             processIfEnoughData(gameId, createdTaskCollection)
             added
         }
-        if(added){
+        if (added) {
             logger.debug("task added")
         } else {
             logger.debug("task skipped")
@@ -80,7 +80,7 @@ class GameThreadPool(
         val usersOfCurrentTasks = currentTasks.mapNotNull { it.userAccount.id }.toSet()
         if (usersOfCurrentTasks == usersOfGame) {
             taskExecutor.execute {
-                processGameTick(taskCollection.getList(), gameId,ongoingGame)
+                processGameTick(taskCollection.getList(), gameId, ongoingGame)
             }
         }
     }

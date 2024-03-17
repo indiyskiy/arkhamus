@@ -42,6 +42,7 @@ class AuthNettyResponseMapper(
                 0,
                 "",
                 0.0,
+                0.0,
                 0.0
             ),
             emptyList()

@@ -4,6 +4,8 @@ enum class RedisTimeEventType(
     private val defaultTime: Long,
     private val visibility: Visibility,
 ) {
+    GOD_AWAKEN((8 + 4) * 60 * 1000 * 2, Visibility.PUBLIC),
+
     DAY(8 * 60 * 1000, Visibility.PUBLIC),
     NIGHT(4 * 60 * 1000, Visibility.PUBLIC),
     SUMMONED_NIGHT(30 * 1000, Visibility.PUBLIC);

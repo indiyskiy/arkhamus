@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 
 data class OngoingEventResponse(
+    var id: String,
     var sourceUserId: Long?,
     var targetUserId: Long?,
     var timeStart: Long,
@@ -16,6 +17,7 @@ data class OngoingEventResponse(
     var yLocation: Double?,
 ) {
     constructor(ongoingEvent: OngoingEvent) : this(
+        id = ongoingEvent.event.id,
         sourceUserId = ongoingEvent.event.sourceUserId,
         targetUserId = ongoingEvent.event.targetUserId,
         timeStart = ongoingEvent.event.timeStart,

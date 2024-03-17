@@ -14,6 +14,6 @@ data class RedisGameUser(
     @Indexed var gameId: Long,
     var x: Double = 0.0,
     var y: Double = 0.0,
-    var mind: Int,
+    var madness: Double,
     var items: MutableMap<Long, Long> = HashMap()
 )

@@ -37,7 +37,7 @@ class GameStartUserLogic(
                 nickName = it.userAccount.nickName!!,
                 gameId = game.id!!,
                 role = it.roleInGame!!,
-                mind = 600
+                madness = 0.0
             ).apply {
                 this.x = marker.x!!
                 this.y = marker.y!!

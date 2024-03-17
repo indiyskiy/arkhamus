@@ -1,19 +1,20 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.UserLocationHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 
 @Component
-class DayTimeEventProcessor(
-    private val timeEventRepository: RedisTimeEventRepository,
+class SummonedNightTimeEventProcessor(
+    private val userLocationHandler: UserLocationHandler,
+    private val userMadnessHandler: UserMadnessHandler,
 ) : TimeEventProcessor {
     override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.DAY
+        type == RedisTimeEventType.SUMMONED_NIGHT
 
     override fun processStart(
         event: RedisTimeEvent,
@@ -28,7 +29,14 @@ class DayTimeEventProcessor(
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
-
+        if (isCommonNight(globalGameData)) {
+            return
+        }
+        globalGameData.users.filter {
+            userLocationHandler.isInDarkness(it.value, globalGameData)
+        }.forEach {
+            userMadnessHandler.applyNightMadness(it.value)
+        }
     }
 
     override fun processEnd(
@@ -37,27 +45,10 @@ class DayTimeEventProcessor(
         currentGameTime: Long
     ) {
         event.state = RedisTimeEventState.PAST
-        startTheNight(event, currentGameTime)
     }
 
-    private fun startTheNight(
-        event: RedisTimeEvent,
-        currentGameTime: Long
-    ) {
-        val night = RedisTimeEvent(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
-            gameId = event.gameId,
-            sourceUserId = null,
-            targetUserId = null,
-            timeStart = currentGameTime,
-            timeLeft = RedisTimeEventType.NIGHT.getDefaultTime(),
-            timePast = 0L,
-            type = RedisTimeEventType.NIGHT,
-            state = RedisTimeEventState.ACTIVE,
-            xLocation = null,
-            yLocation = null
-        )
-        timeEventRepository.save(night)
-    }
-
+    private fun isCommonNight(globalGameData: GlobalGameData) =
+        globalGameData.timeEvents.any {
+            it.state == RedisTimeEventState.ACTIVE && it.type == RedisTimeEventType.NIGHT
+        }
 }

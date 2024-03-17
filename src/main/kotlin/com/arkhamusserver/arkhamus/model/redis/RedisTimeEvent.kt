@@ -10,13 +10,13 @@ import org.springframework.data.redis.core.index.Indexed
 data class RedisTimeEvent(
     @Id var id: String,
     @Indexed var gameId: Long,
-    @Indexed var sourceUserId: Long?,
-    @Indexed var targetUserId: Long?,
+    @Indexed var sourceUserId: Long? = null,
+    @Indexed var targetUserId: Long? = null,
     var timeStart: Long,
     var timePast: Long,
     var timeLeft: Long,
     var type: RedisTimeEventType,
     var state: RedisTimeEventState,
-    var xLocation: Double?,
-    var yLocation: Double?,
+    var xLocation: Double? = null,
+    var yLocation: Double? = null,
 )

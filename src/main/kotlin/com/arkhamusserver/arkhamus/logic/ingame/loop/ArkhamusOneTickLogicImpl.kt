@@ -19,7 +19,7 @@ class ArkhamusOneTickLogicImpl(
     private val oneTickUserRequests: OneTickUserRequests,
     private val oneTickTick: OneTickTick,
     private val oneTickTimeEvent: OneTickTimeEvent
-): ArkhamusOneTickLogic {
+) : ArkhamusOneTickLogic {
 
     override fun processCurrentTasks(
         currentTasks: MutableList<NettyTickRequestMessageContainer>,
@@ -30,7 +30,8 @@ class ArkhamusOneTickLogicImpl(
             val currentTick = game.currentTick
 
             oneTickTick.updateNextTick(game)
-            val ongoingEffect = oneTickTimeEvent.processTimeEvents(game, globalGameData.timeEvents, game.globalTimer)
+            val ongoingEffect =
+                oneTickTimeEvent.processTimeEvents(globalGameData, globalGameData.timeEvents, game.globalTimer)
             oneTickUserRequests.processRequests(currentTasks, currentTick, globalGameData, ongoingEffect)
 
             val responses =
@@ -41,6 +42,8 @@ class ArkhamusOneTickLogicImpl(
         }
         return emptyList()
     }
+
+
 }
 
 fun NettyTickRequestMessageContainer.isCurrentTick(

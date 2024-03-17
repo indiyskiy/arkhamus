@@ -30,12 +30,7 @@ class TestContainerLogic(
         return ContainerNettyResponse(
             tick = game.currentTick,
             userId = userId,
-            myGameUser = MyGameUserResponseMessage(
-                userId,
-                user.nickName,
-                user.x,
-                user.y
-            ),
+            myGameUser = MyGameUserResponseMessage(user),
             otherGameUsers = otherUsers.map {
                 NettyGameUserResponseMessage(
                     id = it.userId,

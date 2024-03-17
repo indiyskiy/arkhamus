@@ -55,12 +55,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
         holdingUser = gameData.container.holdingUser,
         tick = gameData.tick,
         userId = user.id!!,
-        myGameUser = MyGameUserResponseMessage(
-            id = user.id!!,
-            nickName = user.nickName!!,
-            x = gameData.gameUser!!.x,
-            y = gameUser.y
-        ),
+        myGameUser = MyGameUserResponseMessage(gameUser),
         otherGameUsers = gameData.otherGameUsers.map {
             NettyGameUserResponseMessage(
                 id = it.userId,
@@ -83,12 +78,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
         holdingUser = null,
         tick = gameData.tick,
         userId = user.id!!,
-        myGameUser = MyGameUserResponseMessage(
-            id = user.id!!,
-            nickName = user.nickName!!,
-            x = gameData.gameUser!!.x,
-            y = gameUser.y
-        ),
+        myGameUser = MyGameUserResponseMessage(gameUser),
         otherGameUsers = gameData.otherGameUsers.map {
             NettyGameUserResponseMessage(
                 id = it.userId,
