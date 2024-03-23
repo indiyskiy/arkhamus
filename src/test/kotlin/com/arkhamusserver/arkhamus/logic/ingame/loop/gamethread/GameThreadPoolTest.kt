@@ -2,6 +2,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.HeartbeatGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.utils.GameRelatedIdSource
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
@@ -47,14 +49,14 @@ class GameThreadPoolTest {
     // one game, only one player sends messages sequentially
     @Test
     fun testThreadPoolSimple() {
-        val gameSession = setupGameSession(1)
+        val (gameSession, globalGameData) = setupGameSession(1)
         val userOfGameSession = gameSession.usersOfGameSession.first()
 
-        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = userOfGameSession))
+        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = userOfGameSession, globalGameData = globalGameData))
 
         Thread.sleep(1000)
 
-        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = userOfGameSession))
+        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = userOfGameSession, globalGameData = globalGameData))
 
         Thread.sleep(1000)
 
@@ -102,8 +104,12 @@ class GameThreadPoolTest {
     private fun createMessage(
         tick: Long,
         gameSession: GameSession,
-        userOfGameSession: UserOfGameSession
+        userOfGameSession: UserOfGameSession,
+        globalGameData: GlobalGameData
     ): NettyTickRequestMessageContainer {
+        val redisGame = globalGameData.game
+        val redisGameUser = globalGameData.users[userOfGameSession.id]!!
+        val otherGameUsers = globalGameData.users.values.filter{ it.userId != userOfGameSession.id }
         return NettyTickRequestMessageContainer(
             HeartbeatRequestMessage(
                 baseRequestData = BaseRequestData(
@@ -115,11 +121,17 @@ class GameThreadPoolTest {
             "my-channel",
             userAccount = userOfGameSession.userAccount,
             gameSession = gameSession,
-            userRole = userOfGameSession
+            userRole = userOfGameSession,
+            requestProcessData = HeartbeatGameData(
+                gameUser = redisGameUser,
+                otherGameUsers = otherGameUsers,
+                visibleOngoingEvents = emptyList(),
+                tick = tick + 1
+            )
         )
     }
 
-    private fun setupGameSession(usersCount: Int): GameSession {
+    private fun setupGameSession(usersCount: Int): Pair<GameSession, GlobalGameData> {
         val gameSessionSettings = GameSessionSettings(
             id = gameSessionCounter++,
             lobbySize = usersCount,
@@ -178,6 +190,6 @@ class GameThreadPoolTest {
 
         redisDataAccess.setUp(listOf(globalGameData))
 
-        return gameSession
+        return gameSession to globalGameData
     }
 }

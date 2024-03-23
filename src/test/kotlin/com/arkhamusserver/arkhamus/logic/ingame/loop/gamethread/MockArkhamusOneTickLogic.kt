@@ -37,8 +37,7 @@ class MockArkhamusOneTickLogic(
         val responses = oneTickUserResponses.buildResponses(
             currentTick,
             globalGameData,
-            currentTasks,
-            emptyList()
+            currentTasks
         )
         println("Processing $currentId finished: $responses")
         return responses
