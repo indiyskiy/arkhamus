@@ -12,17 +12,17 @@ import org.springframework.stereotype.Component
 @Component
 class OneTickUserRequests(
     private val gameUserRedisRepository: RedisGameUserRepository,
-    private val nettyRequestProcessors: List<NettyRequestProcessor>
+    private val nettyRequestProcessors: List<NettyRequestProcessor>,
 ) {
     fun processRequests(
         currentTasks: MutableList<NettyTickRequestMessageContainer>,
         currentTick: Long,
         globalGameData: GlobalGameData,
-        ongoingEffects: List<OngoingEvent>
+        ongoingEvents: List<OngoingEvent>
     ) {
         currentTasks.forEach {
             if (it.isCurrentTick(currentTick)) {
-                processRequest(it, currentTick, globalGameData, ongoingEffects)
+                processRequest(it, currentTick, globalGameData, ongoingEvents)
             }
         }
     }

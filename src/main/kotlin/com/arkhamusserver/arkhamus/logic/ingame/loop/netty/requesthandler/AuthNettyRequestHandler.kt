@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AuthGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AuthRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.DatabaseDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.getOtherGameUsers
@@ -29,13 +29,13 @@ class AuthNettyRequestHandler(
     fun process(
         nettyRequestMessage: AuthRequestMessage,
         arkhamusChannel: ArkhamusChannel,
-    ): AuthGameData {
+    ): AuthRequestProcessData {
         return nettyAuthService.auth(nettyRequestMessage.token)?.let { account ->
             val userOfTheGame = findUserOfGame(account)
             val game = databaseDataAccess.findByGameId(userOfTheGame.gameSession.id!!)
             val gameUser = redisDataAccess.getGameUser(userOfTheGame.userAccount.id!!, userOfTheGame.gameSession.id!!)
             val otherGameUsers = redisDataAccess.getOtherGameUsers(gameUser.id, userOfTheGame.gameSession.id!!)
-            AuthGameData(gameUser = gameUser, otherGameUsers = otherGameUsers).apply {
+            AuthRequestProcessData(gameUser = gameUser, otherGameUsers = otherGameUsers).apply {
                 this.userOfTheGame = userOfTheGame
                 this.userAccount = userOfTheGame.userAccount
                 this.game = game
@@ -46,7 +46,7 @@ class AuthNettyRequestHandler(
                 arkhamusChannel.userOfGameSession = auth.userOfTheGame
                 channelRepository.update(arkhamusChannel)
             }
-        } ?: AuthGameData(gameUser = null, otherGameUsers = emptyList())
+        } ?: AuthRequestProcessData(gameUser = null, otherGameUsers = emptyList())
     }
 
     private fun findUserOfGame(account: UserAccount): UserOfGameSession {

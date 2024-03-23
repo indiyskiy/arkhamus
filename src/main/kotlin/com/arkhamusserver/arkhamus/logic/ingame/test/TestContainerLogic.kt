@@ -39,7 +39,7 @@ class TestContainerLogic(
                     y = it.y
                 )
             },
-            ongoingEffects = emptyList(),
+            ongoingEvents = emptyList(),
             containerState = container.state,
             containerCells = container.items.map { (itemId, quantity) ->
                 ContainerCell(itemId, quantity)

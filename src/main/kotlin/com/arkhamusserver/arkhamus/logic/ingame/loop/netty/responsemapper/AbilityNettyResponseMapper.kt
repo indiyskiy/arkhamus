@@ -1,9 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AbilityGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.ContainerGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.HeartbeatGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
@@ -16,20 +15,22 @@ import org.springframework.stereotype.Component
 
 @Component
 class AbilityNettyResponseMapper : NettyResponseMapper {
-    override fun acceptClass(gameResponseMessage: GameData): Boolean =
+    override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == ContainerGameData::class.java
 
-    override fun accept(gameResponseMessage: GameData): Boolean = true
+    override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
     override fun process(
-        gameData: GameData,
+        requestProcessData: RequestProcessData,
         nettyRequestMessage: NettyBaseRequestMessage,
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?
     ): AbilityNettyResponse {
-        (gameData as AbilityGameData).let {
+        (requestProcessData as AbilityRequestProcessData).let {
             return AbilityNettyResponse(
+                ability = it.ability,
+                castedSuccessfully = it.castedSuccessfully,
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponseMessage(it.gameUser!!),
@@ -41,7 +42,7 @@ class AbilityNettyResponseMapper : NettyResponseMapper {
                         y = gameUser.y
                     )
                 },
-                ongoingEffects = gameData.visibleOngoingEffects.map {
+                ongoingEvents = requestProcessData.visibleOngoingEvents.map {
                     OngoingEventResponse(it)
                 }
             )

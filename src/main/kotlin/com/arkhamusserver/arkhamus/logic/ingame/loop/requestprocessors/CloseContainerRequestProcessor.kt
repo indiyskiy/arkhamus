@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -31,17 +32,17 @@ class CloseContainerRequestProcessor(
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        val nettyRequestMessage = request.nettyRequestMessage as CloseContainerRequestMessage
+        val closeContainerRequestMessage = request.nettyRequestMessage as CloseContainerRequestMessage
         val oldGameUser = globalGameData.users[request.userAccount.id]!!
-        val container = globalGameData.containers[nettyRequestMessage.containerId]!!
+        val container = globalGameData.containers[closeContainerRequestMessage.containerId]!!
 
         if ((container.state == MapObjectState.HOLD) && (container.holdingUser == oldGameUser.userId)) {
-            takeItems(container, oldGameUser, nettyRequestMessage.newInventoryContent)
+            takeItems(container, oldGameUser, closeContainerRequestMessage.newInventoryContent)
             closeContainer(container)
-            redisContainerRepository.save(container)
+            sortItemsInInventory(closeContainerRequestMessage.newInventoryContent, oldGameUser)
         }
-
     }
+
 
     private fun takeItems(
         oldContainer: RedisContainer,
@@ -84,7 +85,7 @@ class CloseContainerRequestProcessor(
         oldContainer: RedisContainer,
         newInventoryState: List<ContainerCell>,
     ) {
-        oldInventory.items.forEach { oldInventoryItemId, oldInventoryItemsNumber ->
+        oldInventory.items.forEach { (oldInventoryItemId, oldInventoryItemsNumber) ->
             val newStateOfInventory = newInventoryState.firstOrNull { it.itemId == oldInventoryItemId }
             if (newStateOfInventory != null) {
                 if (newStateOfInventory.number != oldInventoryItemsNumber) {
@@ -98,8 +99,21 @@ class CloseContainerRequestProcessor(
         }
     }
 
+    private fun sortItemsInInventory(newInventoryContent: List<ContainerCell>, oldGameUser: RedisGameUser) {
+        val sortedInventory = newInventoryContent.map {
+            val realNumber = oldGameUser.items[it.itemId] ?: 0
+            if (realNumber > 0 && it.itemId != Item.PURE_NOTHING.getId()) {
+                it.itemId to realNumber
+            } else {
+                Item.PURE_NOTHING.getId() to 0L
+            }
+        }
+        oldGameUser.items = sortedInventory.toMap().toMutableMap()
+    }
+
     private fun closeContainer(container: RedisContainer) {
         container.holdingUser = null
         container.state = MapObjectState.ACTIVE
+        redisContainerRepository.save(container)
     }
 }

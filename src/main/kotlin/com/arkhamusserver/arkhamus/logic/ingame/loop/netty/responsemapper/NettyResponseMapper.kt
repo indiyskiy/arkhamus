@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
@@ -8,10 +8,10 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessag
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseMessage
 
 interface NettyResponseMapper {
-    fun acceptClass(gameResponseMessage: GameData): Boolean
-    fun accept(gameResponseMessage: GameData): Boolean
+    fun acceptClass(gameResponseMessage: RequestProcessData): Boolean
+    fun accept(gameResponseMessage: RequestProcessData): Boolean
     fun process(
-        gameData: GameData,
+        requestProcessData: RequestProcessData,
         nettyRequestMessage: NettyBaseRequestMessage,
         user: UserAccount,
         gameSession: GameSession?,

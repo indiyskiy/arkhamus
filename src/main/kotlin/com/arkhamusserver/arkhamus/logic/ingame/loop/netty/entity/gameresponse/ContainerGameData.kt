@@ -8,6 +8,6 @@ class ContainerGameData(
     var container: RedisContainer,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
-    visibleOngoingEffects: List<OngoingEvent>,
+    visibleOngoingEvents: List<OngoingEvent>,
     tick: Long
-) : GameUserData(gameUser, otherGameUsers, visibleOngoingEffects, tick)
+) : GameUserData(gameUser, otherGameUsers, visibleOngoingEvents, tick)

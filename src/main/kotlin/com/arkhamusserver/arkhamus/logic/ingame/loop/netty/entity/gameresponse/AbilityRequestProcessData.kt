@@ -4,10 +4,11 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 
-class AbilityGameData(
-    var ability: Ability,
+class AbilityRequestProcessData(
+    val ability: Ability,
+    val castedSuccessfully: Boolean,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
-    visibleOngoingEffects: List<OngoingEvent>,
+    visibleOngoingEvents: List<OngoingEvent>,
     tick: Long
-) : GameUserData(gameUser, otherGameUsers, visibleOngoingEffects, tick)
+) : GameUserData(gameUser, otherGameUsers, visibleOngoingEvents, tick)

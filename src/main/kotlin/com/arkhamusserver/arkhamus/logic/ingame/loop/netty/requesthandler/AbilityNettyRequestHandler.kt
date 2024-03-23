@@ -4,8 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AbilityGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AbilityRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -24,19 +24,20 @@ class AbilityNettyRequestHandler(
     override fun buildData(
         nettyTickRequestMessageContainer: NettyTickRequestMessageContainer,
         globalGameData: GlobalGameData,
-        ongoingEffects: List<OngoingEvent>
-    ): GameData {
+        ongoingEvents: List<OngoingEvent>
+    ): RequestProcessData {
         val userId = nettyTickRequestMessageContainer.userAccount.id
         val request = nettyTickRequestMessageContainer.nettyRequestMessage
         with(request as AbilityRequestMessage) {
             val ability = Ability.byId(request.abilityId)!!
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
-            return AbilityGameData(
-                ability,
+            return AbilityRequestProcessData(
+                ability = ability,
+                castedSuccessfully = true,
                 user,
                 users,
-                eventVisibilityFilter.filter(user, ongoingEffects),
+                eventVisibilityFilter.filter(user, ongoingEvents),
                 globalGameData.game.currentTick
             )
         }

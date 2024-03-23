@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import org.springframework.stereotype.Component
 
@@ -14,12 +14,12 @@ class GameDataBuilder(
     fun build(
         container: NettyTickRequestMessageContainer,
         globalGameData: GlobalGameData,
-        ongoingEffects: List<OngoingEvent>
-    ): GameData {
+        ongoingEvents: List<OngoingEvent>
+    ): RequestProcessData {
         val nettyRequestMessage = container.nettyRequestMessage
         return requestHandlers.first {
             it.acceptClass(nettyRequestMessage) && it.accept(nettyRequestMessage)
-        }.buildData(container, globalGameData, ongoingEffects)
+        }.buildData(container, globalGameData, ongoingEvents)
     }
 
 }

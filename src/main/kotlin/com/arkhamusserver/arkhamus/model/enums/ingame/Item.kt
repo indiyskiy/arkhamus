@@ -6,6 +6,8 @@ enum class Item(
     private val id: Long,
     private val itemType: ItemType,
 ) {
+    PURE_NOTHING(-1, TECH_TYPE),
+
     //LOOT 1**
     I1(101, LOOT),
     I2(102, LOOT),

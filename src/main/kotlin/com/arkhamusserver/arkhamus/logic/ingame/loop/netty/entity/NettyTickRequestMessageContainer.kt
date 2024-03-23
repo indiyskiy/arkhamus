@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
@@ -11,4 +12,5 @@ data class NettyTickRequestMessageContainer(
     var userAccount: UserAccount,
     var gameSession: GameSession? = null,
     var userRole: UserOfGameSession? = null,
+    var requestProcessData: RequestProcessData? = null
 )

@@ -30,12 +30,16 @@ class ArkhamusOneTickLogicImpl(
             val currentTick = game.currentTick
 
             oneTickTick.updateNextTick(game)
-            val ongoingEffect =
+            val ongoingEvent =
                 oneTickTimeEvent.processTimeEvents(globalGameData, globalGameData.timeEvents, game.globalTimer)
-            oneTickUserRequests.processRequests(currentTasks, currentTick, globalGameData, ongoingEffect)
+            oneTickUserRequests.processRequests(currentTasks, currentTick, globalGameData, ongoingEvent)
 
             val responses =
-                oneTickUserResponses.buildResponses(currentTick, globalGameData, currentTasks, ongoingEffect)
+                oneTickUserResponses.buildResponses(
+                    currentTick,
+                    globalGameData,
+                    currentTasks,
+                )
             return responses
         } catch (e: Exception) {
             logger.error("Error processing current tasks: ${e.message}", e)

@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.ContainerGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
@@ -15,19 +15,19 @@ import org.springframework.stereotype.Component
 class OpenContainerNettyResponseMapper : NettyResponseMapper {
 
     private val itemMap = Item.values().associateBy { it.getId() }
-    override fun acceptClass(gameResponseMessage: GameData): Boolean =
+    override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == ContainerGameData::class.java
 
-    override fun accept(gameResponseMessage: GameData): Boolean = true
+    override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
     override fun process(
-        gameData: GameData,
+        requestProcessData: RequestProcessData,
         nettyRequestMessage: NettyBaseRequestMessage,
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?
     ): ContainerNettyResponse {
-        with(gameData as ContainerGameData) {
+        with(requestProcessData as ContainerGameData) {
             val mappedItem = this.container.items.map {
                 itemMap[it.key]!! to it.value
             }
@@ -36,10 +36,10 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
                     this.number = it.second
                 }
             }
-            if(gameData.container.holdingUser == user.id) {
-                return myContainer(containerCells, gameData, user, gameData.gameUser!!)
+            if(requestProcessData.container.holdingUser == user.id) {
+                return myContainer(containerCells, requestProcessData, user, requestProcessData.gameUser!!)
             } else {
-                return closedContainer(gameData, user, gameData.gameUser!!)
+                return closedContainer(requestProcessData, user, requestProcessData.gameUser!!)
             }
         }
     }
@@ -64,7 +64,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
                 y = it.y
             )
         },
-        ongoingEffects = gameData.visibleOngoingEffects.map {
+        ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         }
     )
@@ -87,7 +87,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
                 y = it.y
             )
         },
-        ongoingEffects = gameData.visibleOngoingEffects.map {
+        ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         }
     )

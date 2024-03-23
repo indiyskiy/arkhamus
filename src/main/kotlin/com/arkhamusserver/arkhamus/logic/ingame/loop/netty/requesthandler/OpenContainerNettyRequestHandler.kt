@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.ContainerGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.OpenContainerRequestMessage
 import org.springframework.stereotype.Component
@@ -23,8 +23,8 @@ class OpenContainerNettyRequestHandler(
     override fun buildData(
         nettyTickRequestMessageContainer: NettyTickRequestMessageContainer,
         globalGameData: GlobalGameData,
-        ongoingEffects: List<OngoingEvent>
-    ): GameData {
+        ongoingEvents: List<OngoingEvent>
+    ): RequestProcessData {
         val userId = nettyTickRequestMessageContainer.userAccount.id
         val request = nettyTickRequestMessageContainer.nettyRequestMessage
         with(request as OpenContainerRequestMessage) {
@@ -35,7 +35,7 @@ class OpenContainerNettyRequestHandler(
                 container,
                 user,
                 users,
-                eventVisibilityFilter.filter(user, ongoingEffects),
+                eventVisibilityFilter.filter(user, ongoingEvents),
                 globalGameData.game.currentTick
             )
         }

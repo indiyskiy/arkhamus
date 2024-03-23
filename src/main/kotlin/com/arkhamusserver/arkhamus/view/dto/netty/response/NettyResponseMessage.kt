@@ -5,6 +5,6 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response
     val userId: Long,
     val myGameUser: MyGameUserResponseMessage,
     val otherGameUsers: List<NettyGameUserResponseMessage>,
-    val ongoingEffects: List<OngoingEventResponse>,
+    val ongoingEvents: List<OngoingEventResponse>,
     val type: String
 )

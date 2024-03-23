@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 
 interface NettyRequestHandler {
@@ -13,7 +13,7 @@ interface NettyRequestHandler {
     fun buildData(
         nettyTickRequestMessageContainer: NettyTickRequestMessageContainer,
         globalGameData: GlobalGameData,
-        ongoingEffects: List<OngoingEvent>
-    ): GameData
+        ongoingEvents: List<OngoingEvent>
+    ): RequestProcessData
 
 }

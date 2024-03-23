@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.GameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.HeartbeatGameData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -11,19 +11,19 @@ import org.springframework.stereotype.Component
 
 @Component
 class HeartbeatNettyResponseMapper : NettyResponseMapper {
-    override fun acceptClass(gameResponseMessage: GameData): Boolean =
+    override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == HeartbeatGameData::class.java
 
-    override fun accept(gameResponseMessage: GameData): Boolean = true
+    override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
     override fun process(
-        gameData: GameData,
+        requestProcessData: RequestProcessData,
         nettyRequestMessage: NettyBaseRequestMessage,
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?
     ): HeartbeatNettyResponse {
-        (gameData as HeartbeatGameData).let {
+        (requestProcessData as HeartbeatGameData).let {
             return HeartbeatNettyResponse(
                 tick = it.tick,
                 userId = user.id!!,
@@ -36,7 +36,7 @@ class HeartbeatNettyResponseMapper : NettyResponseMapper {
                         y = gameUser.y
                     )
                 },
-                ongoingEffects = gameData.visibleOngoingEffects.map {
+                ongoingEvents = requestProcessData.visibleOngoingEvents.map {
                     OngoingEventResponse(it)
                 }
             )

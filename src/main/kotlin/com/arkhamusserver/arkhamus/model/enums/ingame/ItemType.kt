@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
 enum class ItemType {
+    TECH_TYPE,
     //t1
     LOOT,
     RARE_LOOT,

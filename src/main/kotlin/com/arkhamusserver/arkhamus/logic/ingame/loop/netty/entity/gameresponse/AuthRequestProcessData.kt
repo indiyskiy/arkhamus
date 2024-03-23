@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 
-class AuthGameData(
+class AuthRequestProcessData(
     var message: String? = null,
     var userAccount: UserAccount? = null,
     var game: GameSession? = null,
