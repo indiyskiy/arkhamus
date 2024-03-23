@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus
 
 import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.utils.EnvironmentSetupUtil
 import com.arkhamusserver.arkhamus.utils.FakeUserSetupUtil
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.INDIYSKIY
@@ -8,6 +9,7 @@ import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.Q_CHAN
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.SITHOID
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.GRAF_D
 import com.arkhamusserver.arkhamus.view.controller.GameController
+import com.arkhamusserver.arkhamus.view.controller.UserController
 import com.arkhamusserver.arkhamus.view.dto.GameSessionSettingsDto
 import com.arkhamusserver.arkhamus.view.dto.LevelDto
 import org.junit.jupiter.api.BeforeEach
@@ -27,6 +29,9 @@ class GameControllerIT {
 
     @Autowired
     lateinit var fakeUserSetupUtil: FakeUserSetupUtil
+
+    @Autowired
+    lateinit var userController: UserController
 
     @BeforeEach
     fun setup() {
@@ -89,14 +94,6 @@ class GameControllerIT {
 
         fakeUserSetupUtil.fakeUser(INDIYSKIY)
         val gameSession = gameController.createCustom().body!!
-
-        fakeUserSetupUtil.fakeUser(SITHOID)
-        gameController.connect(gameSession.id!!)
-
-        fakeUserSetupUtil.fakeUser(Q_CHAN)
-        gameController.connect(gameSession.id!!)
-
-        fakeUserSetupUtil.fakeUser(INDIYSKIY)
         val gameId = gameSession.id!!
         gameController.update(
             gameId,
@@ -109,10 +106,51 @@ class GameControllerIT {
                 )
             )
         ).body!!
+
+        fakeUserSetupUtil.fakeUser(SITHOID)
+        gameController.connect(gameSession.id!!)
+
+        fakeUserSetupUtil.fakeUser(Q_CHAN)
+        gameController.connect(gameSession.id!!)
+
+        fakeUserSetupUtil.fakeUser(INDIYSKIY)
         gameController.start(gameSession.id!!)
 
-        val updatedGameSession = gameController.getGame(gameSession.id!!).body!!
-        assertEquals(GameState.PENDING, updatedGameSession.state)
+        listOf(SITHOID, Q_CHAN, INDIYSKIY).forEach { nickName ->
+            fakeUserSetupUtil.fakeUser(nickName)
+            val user = userController.whoAmI()
+            val updatedGameSession = gameController.getGame(gameSession.id!!).body!!
+            assertEquals(GameState.PENDING, updatedGameSession.state)
+
+            if (
+                updatedGameSession.usersInGame!!.first {
+                    it.userName == user.nickName
+                }.role!!.userRole == RoleTypeInGame.CULTIST
+                ) {
+                assertEquals(3, updatedGameSession.usersInGame!!.size)
+                assertEquals(1, updatedGameSession.usersInGame!!.filter { it.isHost }.size)
+                assertEquals(
+                    1,
+                    updatedGameSession.usersInGame!!.filter { it.role!!.userRole == RoleTypeInGame.CULTIST }.size
+                )
+                assertEquals(
+                    2,
+                    updatedGameSession.usersInGame!!.filter { it.role!!.userRole == RoleTypeInGame.INVESTIGATOR }.size
+                )
+            } else {
+                assertEquals(3, updatedGameSession.usersInGame!!.size)
+                assertEquals(1, updatedGameSession.usersInGame!!.filter { it.isHost }.size)
+                assertEquals(
+                    0,
+                    updatedGameSession.usersInGame!!.filter { it.role!!.userRole == RoleTypeInGame.CULTIST }.size
+                )
+                assertEquals(
+                    3,
+                    updatedGameSession.usersInGame!!.filter { it.role!!.userRole == RoleTypeInGame.INVESTIGATOR }.size
+                )
+            }
+        }
+
     }
 
     @Test
@@ -134,5 +172,8 @@ class GameControllerIT {
 
         val started = gameController.start(gameSession.id!!).body!!
         assertEquals(GameState.PENDING, started.state)
+        assertEquals(1, started.usersInGame!!.size)
+        assertEquals(1, started.usersInGame!!.filter { it.isHost }.size)
+        assertEquals(1, started.usersInGame!!.filter { it.role!!.userRole == RoleTypeInGame.CULTIST }.size)
     }
 }
