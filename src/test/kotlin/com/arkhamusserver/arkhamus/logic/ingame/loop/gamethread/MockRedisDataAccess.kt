@@ -44,10 +44,10 @@ class MockRedisDataAccess : RedisDataAccess {
     }
 
     fun setUp(globalGameDatas: List<GlobalGameData>) {
-        this.globalGameDatas = globalGameDatas
-        games = globalGameDatas.map { it.game }
-        gameUsers = globalGameDatas.flatMap { it.users.values }
-        containers = globalGameDatas.flatMap { it.containers.values }
+        this.globalGameDatas += globalGameDatas
+        games = this.globalGameDatas.map { it.game }
+        gameUsers = this.globalGameDatas.flatMap { it.users.values }
+        containers = this.globalGameDatas.flatMap { it.containers.values }
     }
 
     fun cleanUp() {

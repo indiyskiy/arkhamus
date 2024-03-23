@@ -11,7 +11,6 @@ class MockResponseSendingLoopManager: ResponseSendingLoopManager {
 
     val collectedResponses = mutableMapOf<Long, List<NettyResponseMessage>>()
 
-
     override fun addResponses(responses: List<NettyResponseMessage>, gameId: Long) {
         // do nothing for now
         collectedResponses[gameId] = collectedResponses.getOrElse(gameId) { emptyList() } + responses

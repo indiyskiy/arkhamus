@@ -3,7 +3,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.HeartbeatGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.utils.GameRelatedIdSource
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
@@ -26,6 +25,11 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class GameThreadPoolTest {
 
+    companion object {
+        private var gameSessionCounter = 0L
+        private var userAccountCounter = 0L
+    }
+
     @Autowired
     private lateinit var threadPool: GameThreadPool;
 
@@ -38,12 +42,10 @@ class GameThreadPoolTest {
     @Autowired
     private lateinit var gameRelatedIdSource: GameRelatedIdSource
 
-    private var gameSessionCounter = 0L
-    private var userAccountCounter = 0L
-
     @BeforeEach
     fun setUp() {
         redisDataAccess.cleanUp()
+        responseSendingLoopManager.cleanUp()
     }
 
     // one game, only one player sends messages sequentially
@@ -54,18 +56,13 @@ class GameThreadPoolTest {
 
         threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = userOfGameSession, globalGameData = globalGameData))
 
-        Thread.sleep(1000)
+        Thread.sleep(500)
 
         threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = userOfGameSession, globalGameData = globalGameData))
 
-        Thread.sleep(1000)
+        Thread.sleep(500)
 
-        var i = 0
-        while (responseSendingLoopManager.collectedResponses.size < 2) {
-            Thread.sleep(500)
-            i++
-            if (i == 20) break
-        }
+        waitUntilMessagesCount(2)
 
         // we generated two responses
         val collectedResponses = responseSendingLoopManager.collectedResponses[gameSession.id]!!
@@ -77,21 +74,94 @@ class GameThreadPoolTest {
     }
 
     // one game, only one player sends messages, but they arrive out of order
+    @Test
     fun testThreadPoolOutOfOrder() {
-        TODO()
+        val (gameSession, globalGameData) = setupGameSession(usersCount = 1, startingTick = 1)
+        val userOfGameSession = gameSession.usersOfGameSession.first()
+
+        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = userOfGameSession, globalGameData = globalGameData))
+
+        Thread.sleep(500)
+
+        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = userOfGameSession, globalGameData = globalGameData))
+
+        Thread.sleep(500)
+
+        waitUntilMessagesCount(1)
+
+        // we generated one response
+        val collectedResponses = responseSendingLoopManager.collectedResponses[gameSession.id]!!
+        assertEquals(1, collectedResponses.size)
+
+        // and only response for the latter tick
+        assertEquals(2, collectedResponses[0].tick)
     }
 
     // one game, there are two players and messages they send arrive out of order
+    @Test
     fun testTwoPlayers() {
-        TODO()
+        val (gameSession, globalGameData) = setupGameSession(usersCount = 2, startingTick = 0)
+        val user1 = gameSession.usersOfGameSession[0]
+        val user2 = gameSession.usersOfGameSession[1]
+
+        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = user1, globalGameData = globalGameData))
+        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = user2, globalGameData = globalGameData))
+
+        Thread.sleep(500)
+
+        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = user1, globalGameData = globalGameData))
+        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = user2, globalGameData = globalGameData))
+
+        Thread.sleep(500)
+
+        waitUntilMessagesCount(4)
+
+        // we generated 4 responses
+        val collectedResponses = responseSendingLoopManager.collectedResponses[gameSession.id]!!
+        assertEquals(4, collectedResponses.size)
+
+        // and they are in proper order
+        assertEquals(1, collectedResponses[0].tick)
+        assertEquals(1, collectedResponses[1].tick)
+        assertEquals(2, collectedResponses[2].tick)
+        assertEquals(2, collectedResponses[3].tick)
     }
 
     // two games, one player in both, both run smoothly
+    @Test
     fun testTwoGames() {
-        TODO()
+        val (gameSession1, globalGameData1) = setupGameSession(1)
+        val (gameSession2, globalGameData2) = setupGameSession(1)
+        val user1 = gameSession1.usersOfGameSession.first()
+        val user2 = gameSession2.usersOfGameSession.first()
+
+        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession1, userOfGameSession = user1, globalGameData = globalGameData1))
+        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession2, userOfGameSession = user2, globalGameData = globalGameData2))
+
+        Thread.sleep(500)
+
+        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession1, userOfGameSession = user1, globalGameData = globalGameData1))
+        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession2, userOfGameSession = user2, globalGameData = globalGameData2))
+
+        Thread.sleep(500)
+
+        waitUntilMessagesCount(4)
+
+        // we generated 2 responses for every game
+        val collectedResponses1 = responseSendingLoopManager.collectedResponses[gameSession1.id]!!
+        assertEquals(2, collectedResponses1.size)
+
+        val collectedResponses2 = responseSendingLoopManager.collectedResponses[gameSession2.id]!!
+        assertEquals(2, collectedResponses2.size)
+
+        // and they are in order in every game
+        assertEquals(1, collectedResponses1[0].tick)
+        assertEquals(2, collectedResponses1[1].tick)
+        assertEquals(1, collectedResponses2[0].tick)
+        assertEquals(2, collectedResponses2[1].tick)
     }
 
-    // two games, one freezes in processing for some reason
+    // one game, two players, one is
     fun testTwoGamesFreeze() {
         TODO()
     }
@@ -101,13 +171,25 @@ class GameThreadPoolTest {
         TODO()
     }
 
+    private fun waitUntilMessagesCount(count: Int) {
+        waitForProcessing { responseSendingLoopManager.collectedResponses.size >= count }
+    }
+
+    private fun waitForProcessing(stopPredicate: () -> Boolean) {
+        var i = 0
+        while (!stopPredicate()) {
+            Thread.sleep(500)
+            i++
+            if (i == 20) break
+        }
+    }
+
     private fun createMessage(
         tick: Long,
         gameSession: GameSession,
         userOfGameSession: UserOfGameSession,
         globalGameData: GlobalGameData
     ): NettyTickRequestMessageContainer {
-        val redisGame = globalGameData.game
         val redisGameUser = globalGameData.users[userOfGameSession.id]!!
         val otherGameUsers = globalGameData.users.values.filter{ it.userId != userOfGameSession.id }
         return NettyTickRequestMessageContainer(
@@ -131,7 +213,7 @@ class GameThreadPoolTest {
         )
     }
 
-    private fun setupGameSession(usersCount: Int): Pair<GameSession, GlobalGameData> {
+    private fun setupGameSession(usersCount: Int, startingTick: Long = 0): Pair<GameSession, GlobalGameData> {
         val gameSessionSettings = GameSessionSettings(
             id = gameSessionCounter++,
             lobbySize = usersCount,
@@ -180,7 +262,7 @@ class GameThreadPoolTest {
         val redisGame = RedisGame(
             gameSession.id.toString(),
             gameSession.id,
-            currentTick = 0
+            currentTick = startingTick
         )
 
         val globalGameData = GlobalGameData(
