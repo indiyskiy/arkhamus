@@ -14,6 +14,8 @@ enum class Item(
     I3(103, LOOT),
     I4(104, LOOT),
     I5(105, LOOT),
+    I6(106, LOOT),
+    I7(107, LOOT),
 
     //RARE_LOOT 2*
     BLACK_STONE(201, RARE_LOOT),

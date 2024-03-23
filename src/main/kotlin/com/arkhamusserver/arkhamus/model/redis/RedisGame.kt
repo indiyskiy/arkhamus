@@ -12,6 +12,5 @@ data class RedisGame(
     var currentTick: Long = -1,
     var globalTimer: Long = 0,
     var gameStart: Long = System.currentTimeMillis(),
-    var godTimer: Long = 0,
     @Indexed var state: String = GameState.PENDING.name
 )

@@ -92,7 +92,7 @@ class CloseContainerRequestProcessor(
                     logger.warn("strange inventory behaviour!")
                 }
             } else {
-                oldInventory.items.remove(oldInventoryItemId)
+                oldInventory.items[oldInventoryItemId] = 0
                 oldContainer.items[oldInventoryItemId] =
                     (oldContainer.items[oldInventoryItemId] ?: 0) + oldInventoryItemsNumber
             }
