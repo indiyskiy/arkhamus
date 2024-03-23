@@ -8,6 +8,8 @@ import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.Q_CHAN
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.SITHOID
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.GRAF_D
 import com.arkhamusserver.arkhamus.view.controller.GameController
+import com.arkhamusserver.arkhamus.view.dto.GameSessionSettingsDto
+import com.arkhamusserver.arkhamus.view.dto.LevelDto
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -95,6 +97,18 @@ class GameControllerIT {
         gameController.connect(gameSession.id!!)
 
         fakeUserSetupUtil.fakeUser(INDIYSKIY)
+        val gameId = gameSession.id!!
+        gameController.update(
+            gameId,
+            GameSessionSettingsDto(
+                lobbySize = 3,
+                numberOfCultists = 1,
+                level = LevelDto(
+                    levelId = 1,
+                    version = 1
+                )
+            )
+        ).body!!
         gameController.start(gameSession.id!!)
 
         val updatedGameSession = gameController.getGame(gameSession.id!!).body!!
@@ -105,6 +119,18 @@ class GameControllerIT {
     fun `start SINGLE game`() {
         fakeUserSetupUtil.fakeUser(INDIYSKIY)
         val gameSession = gameController.createSingle().body!!
+        val gameId = gameSession.id!!
+        gameController.update(
+            gameId,
+            GameSessionSettingsDto(
+                lobbySize = 1,
+                numberOfCultists = 1,
+                level = LevelDto(
+                    levelId = 1,
+                    version = 1
+                )
+            )
+        ).body!!
 
         val started = gameController.start(gameSession.id!!).body!!
         assertEquals(GameState.PENDING, started.state)
