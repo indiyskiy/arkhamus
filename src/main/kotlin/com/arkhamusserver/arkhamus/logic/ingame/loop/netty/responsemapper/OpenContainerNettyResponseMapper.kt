@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.ContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.OpenContainerGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -16,7 +16,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
 
     private val itemMap = Item.values().associateBy { it.getId() }
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == ContainerGameData::class.java
+        gameResponseMessage::class.java == OpenContainerGameData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -26,8 +26,8 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?
-    ): ContainerNettyResponse {
-        with(requestProcessData as ContainerGameData) {
+    ): OpenContainerNettyResponse {
+        with(requestProcessData as OpenContainerGameData) {
             val mappedItem = this.container.items.map {
                 itemMap[it.key]!! to it.value
             }
@@ -46,10 +46,10 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
 
     private fun myContainer(
         containerCells: List<ContainerCell>,
-        gameData: ContainerGameData,
+        gameData: OpenContainerGameData,
         user: UserAccount,
         gameUser: RedisGameUser
-    ) = ContainerNettyResponse(
+    ) = OpenContainerNettyResponse(
         containerCells = containerCells,
         containerState = gameData.container.state,
         holdingUser = gameData.container.holdingUser,
@@ -68,11 +68,12 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
             OngoingEventResponse(it)
         }
     )
+
     private fun closedContainer(
-        gameData: ContainerGameData,
+        gameData: OpenContainerGameData,
         user: UserAccount,
         gameUser: RedisGameUser
-    ) = ContainerNettyResponse(
+    ) = OpenContainerNettyResponse(
         containerCells = emptyList(),
         containerState = gameData.container.state,
         holdingUser = null,

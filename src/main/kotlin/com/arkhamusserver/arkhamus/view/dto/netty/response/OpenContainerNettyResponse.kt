@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 
-class ContainerNettyResponse(
+class OpenContainerNettyResponse(
     var containerCells: List<ContainerCell> = emptyList(),
     var containerState: MapObjectState,
     var holdingUser: Long?,
@@ -17,5 +17,5 @@ class ContainerNettyResponse(
     myGameUser,
     otherGameUsers,
     ongoingEvents,
-    ContainerNettyResponse::class.java.simpleName
+    OpenContainerNettyResponse::class.java.simpleName
 )

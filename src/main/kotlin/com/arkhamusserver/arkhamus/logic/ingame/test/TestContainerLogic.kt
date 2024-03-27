@@ -11,12 +11,12 @@ class TestContainerLogic(
     private val currentUserService: CurrentUserService,
     private val redisDataAccess: RedisDataAccess
 ) {
-    fun getContainerByUserAndId(gameId: Long, containerId: Long): ContainerNettyResponse {
+    fun getContainerByUserAndId(gameId: Long, containerId: Long): OpenContainerNettyResponse {
         val user = currentUserService.getCurrentUserAccount()
         return getContainerByUserAndId(gameId, containerId, user.id!!)
     }
 
-    fun getContainerByUserAndId(gameId: Long, containerId: Long, userId: Long): ContainerNettyResponse {
+    fun getContainerByUserAndId(gameId: Long, containerId: Long, userId: Long): OpenContainerNettyResponse {
         val game = redisDataAccess.getGame(gameId)
         val container = redisDataAccess.getContainer(
             containerId, gameId
@@ -27,7 +27,7 @@ class TestContainerLogic(
         )
         val otherUsers = redisDataAccess.getOtherGameUsers(userId, gameId)
 
-        return ContainerNettyResponse(
+        return OpenContainerNettyResponse(
             tick = game.currentTick,
             userId = userId,
             myGameUser = MyGameUserResponseMessage(user),

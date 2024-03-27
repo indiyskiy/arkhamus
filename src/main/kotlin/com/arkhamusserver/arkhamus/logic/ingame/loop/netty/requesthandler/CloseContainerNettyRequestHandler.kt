@@ -4,7 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.ContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CloseContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.OpenContainerGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.CloseContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -28,16 +29,16 @@ class CloseContainerNettyRequestHandler(
         val userId = nettyTickRequestMessageContainer.userAccount.id
         val request = nettyTickRequestMessageContainer.nettyRequestMessage
         with(request as CloseContainerRequestMessage) {
-                val container = globalGameData.containers[this.containerId]!!
-                val user = globalGameData.users[userId]!!
-                val users = globalGameData.users.values.filter { it.userId != userId }
-                return ContainerGameData(
-                    container,
-                    user,
-                    users,
-                    eventVisibilityFilter.filter(user, ongoingEvents),
-                    globalGameData.game.currentTick
-                )
+            val container = globalGameData.containers[this.containerId]!!
+            val user = globalGameData.users[userId]!!
+            val users = globalGameData.users.values.filter { it.userId != userId }
+            return CloseContainerGameData(
+                container = container,
+                gameUser = user,
+                otherGameUsers = users,
+                visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
+                tick = globalGameData.game.currentTick
+            )
         }
     }
 }

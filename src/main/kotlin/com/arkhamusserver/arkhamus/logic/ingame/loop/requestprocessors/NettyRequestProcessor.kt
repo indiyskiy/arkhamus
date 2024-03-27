@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 interface NettyRequestProcessor {
     fun accept(request: NettyTickRequestMessageContainer): Boolean
     fun process(
-        request: NettyTickRequestMessageContainer,
+        requestContainer: NettyTickRequestMessageContainer,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     )

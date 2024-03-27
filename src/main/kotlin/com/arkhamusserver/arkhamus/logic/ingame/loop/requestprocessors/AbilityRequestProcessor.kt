@@ -16,11 +16,10 @@ class AbilityRequestProcessor(
     }
 
     override fun process(
-        request: NettyTickRequestMessageContainer,
+        requestContainer: NettyTickRequestMessageContainer,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        val requestProcessData = requestProcessDataBuilder.build(request, globalGameData, ongoingEvents)
-        request.requestProcessData = requestProcessData
+        requestContainer.requestProcessData = requestProcessDataBuilder.build(requestContainer, globalGameData, ongoingEvents)
     }
 }

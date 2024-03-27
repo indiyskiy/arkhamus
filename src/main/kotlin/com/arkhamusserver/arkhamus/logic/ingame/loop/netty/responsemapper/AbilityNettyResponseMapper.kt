@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.ContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.OpenContainerGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 @Component
 class AbilityNettyResponseMapper : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == ContainerGameData::class.java
+        gameResponseMessage::class.java == AbilityRequestProcessData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -42,8 +42,8 @@ class AbilityNettyResponseMapper : NettyResponseMapper {
                         y = gameUser.y
                     )
                 },
-                ongoingEvents = requestProcessData.visibleOngoingEvents.map {
-                    OngoingEventResponse(it)
+                ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
+                    OngoingEventResponse(event)
                 }
             )
         }

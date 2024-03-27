@@ -2,7 +2,9 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
+import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CloseContainerGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class CloseContainerRequestProcessor(
+    private val requestProcessDataBuilder: GameDataBuilder,
     private val redisContainerRepository: RedisContainerRepository
 ) : NettyRequestProcessor {
 
@@ -28,19 +31,32 @@ class CloseContainerRequestProcessor(
     }
 
     override fun process(
-        request: NettyTickRequestMessageContainer,
+        requestContainer: NettyTickRequestMessageContainer,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        val closeContainerRequestMessage = request.nettyRequestMessage as CloseContainerRequestMessage
-        val oldGameUser = globalGameData.users[request.userAccount.id]!!
+        val requestProcessData =
+            requestProcessDataBuilder.build(requestContainer, globalGameData, ongoingEvents) as CloseContainerGameData
+        requestContainer.requestProcessData = requestProcessData
+
+        val closeContainerRequestMessage = requestContainer.nettyRequestMessage as CloseContainerRequestMessage
+        val oldGameUser = globalGameData.users[requestContainer.userAccount.id]!!
         val container = globalGameData.containers[closeContainerRequestMessage.containerId]!!
 
         if ((container.state == MapObjectState.HOLD) && (container.holdingUser == oldGameUser.userId)) {
             takeItems(container, oldGameUser, closeContainerRequestMessage.newInventoryContent)
+            clearEmptySlots(container)
             closeContainer(container)
-            sortItemsInInventory(closeContainerRequestMessage.newInventoryContent, oldGameUser)
+            val sortedInventory = sortItemsInInventory(closeContainerRequestMessage.newInventoryContent, oldGameUser)
+            requestProcessData.sortedInventory = sortedInventory
         }
+    }
+
+    private fun clearEmptySlots(container: RedisContainer) {
+        val filtered =
+            container.items.map { (itemId, itemNumber) -> itemId to itemNumber }.filter { it.second > 0 }.toMap()
+                .toMutableMap()
+        container.items = filtered
     }
 
 
@@ -63,7 +79,7 @@ class CloseContainerRequestProcessor(
                 return
             }
             val fromOldContainer = oldContainer.items[newInventoryState.itemId] ?: 0
-            val fromOldUserInventory = oldContainer.items[newInventoryState.itemId] ?: 0
+            val fromOldUserInventory = oldGameUser.items[newInventoryState.itemId] ?: 0
             val itemsToPutInContainer = fromOldUserInventory - newInventoryState.number
             if (itemsToPutInContainer >= 0) {
                 //put to container {itemsToPutInContainer} items
@@ -99,16 +115,19 @@ class CloseContainerRequestProcessor(
         }
     }
 
-    private fun sortItemsInInventory(newInventoryContent: List<ContainerCell>, oldGameUser: RedisGameUser) {
+    private fun sortItemsInInventory(
+        newInventoryContent: List<ContainerCell>,
+        oldGameUser: RedisGameUser
+    ): List<ContainerCell> {
         val sortedInventory = newInventoryContent.map {
             val realNumber = oldGameUser.items[it.itemId] ?: 0
             if (realNumber > 0 && it.itemId != Item.PURE_NOTHING.getId()) {
-                it.itemId to realNumber
+                ContainerCell(it.itemId, realNumber)
             } else {
-                Item.PURE_NOTHING.getId() to 0L
+                ContainerCell(Item.PURE_NOTHING.getId(), 0L)
             }
         }
-        oldGameUser.items = sortedInventory.toMap().toMutableMap()
+        return sortedInventory
     }
 
     private fun closeContainer(container: RedisContainer) {

@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.view.controller.ingame.test
 
 import com.arkhamusserver.arkhamus.logic.ingame.test.TestContainerLogic
-import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.OpenContainerNettyResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -17,7 +17,7 @@ class TestContainerController(
     fun getAllItems(
         @PathVariable containerId: Long,
         @PathVariable gameId: Long,
-    ): ResponseEntity<ContainerNettyResponse> {
+    ): ResponseEntity<OpenContainerNettyResponse> {
         val items = containerLogic.getContainerByUserAndId(gameId, containerId)
         return ResponseEntity.ok(items)
     }
