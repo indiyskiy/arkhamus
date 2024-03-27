@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.R
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class CloseContainerNettyResponseMapper : NettyResponseMapper {
-
-    private val itemMap = Item.values().associateBy { it.getId() }
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == CloseContainerGameData::class.java
 
