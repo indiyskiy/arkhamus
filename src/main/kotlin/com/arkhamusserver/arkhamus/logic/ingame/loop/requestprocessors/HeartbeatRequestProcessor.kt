@@ -2,15 +2,12 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
-import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.request.HeartbeatRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class HeartbeatRequestProcessor(
-    val requestProcessDataBuilder: GameDataBuilder
-) : NettyRequestProcessor {
+class HeartbeatRequestProcessor : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageContainer): Boolean {
         return request.nettyRequestMessage is HeartbeatRequestMessage
     }
@@ -20,6 +17,6 @@ class HeartbeatRequestProcessor(
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        requestContainer.requestProcessData = requestProcessDataBuilder.build(requestContainer, globalGameData, ongoingEvents)
+
     }
 }

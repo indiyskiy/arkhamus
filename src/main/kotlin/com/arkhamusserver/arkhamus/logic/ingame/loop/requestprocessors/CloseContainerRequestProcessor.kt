@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
-import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CloseContainerGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
@@ -15,10 +14,10 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import kotlin.math.min
 
 @Component
 class CloseContainerRequestProcessor(
-    private val requestProcessDataBuilder: GameDataBuilder,
     private val redisContainerRepository: RedisContainerRepository
 ) : NettyRequestProcessor {
 
@@ -35,99 +34,54 @@ class CloseContainerRequestProcessor(
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        val requestProcessData =
-            requestProcessDataBuilder.build(requestContainer, globalGameData, ongoingEvents) as CloseContainerGameData
-        requestContainer.requestProcessData = requestProcessData
+        val requestProcessData = requestContainer.requestProcessData as CloseContainerGameData
 
         val closeContainerRequestMessage = requestContainer.nettyRequestMessage as CloseContainerRequestMessage
         val oldGameUser = globalGameData.users[requestContainer.userAccount.id]!!
         val container = globalGameData.containers[closeContainerRequestMessage.containerId]!!
 
         if ((container.state == MapObjectState.HOLD) && (container.holdingUser == oldGameUser.userId)) {
-            takeItems(container, oldGameUser, closeContainerRequestMessage.newInventoryContent)
-            clearEmptySlots(container)
+            val sortedInventory =
+                getTrueNewInventoryContent(container, oldGameUser, closeContainerRequestMessage.newInventoryContent)
             closeContainer(container)
-            val sortedInventory = sortItemsInInventory(closeContainerRequestMessage.newInventoryContent, oldGameUser)
             requestProcessData.sortedInventory = sortedInventory
         }
     }
 
-    private fun clearEmptySlots(container: RedisContainer) {
-        val filtered =
-            container.items.map { (itemId, itemNumber) -> itemId to itemNumber }.filter { it.second > 0 }.toMap()
-                .toMutableMap()
-        container.items = filtered
-    }
 
-
-    private fun takeItems(
+    private fun getTrueNewInventoryContent(
         oldContainer: RedisContainer,
         oldGameUser: RedisGameUser,
         newInventoryContent: List<ContainerCell>
-    ) {
-        updateItemsByNewStateOfInventory(newInventoryContent, oldContainer, oldGameUser)
-        updateItemsRemovedFromInventory(oldGameUser, oldContainer, newInventoryContent)
-    }
-
-    private fun updateItemsByNewStateOfInventory(
-        newInventoryContent: List<ContainerCell>,
-        oldContainer: RedisContainer,
-        oldGameUser: RedisGameUser
-    ) {
-        newInventoryContent.forEach { newInventoryState ->
-            if (newInventoryState.number < 0) {
-                return
-            }
-            val fromOldContainer = oldContainer.items[newInventoryState.itemId] ?: 0
-            val fromOldUserInventory = oldGameUser.items[newInventoryState.itemId] ?: 0
-            val itemsToPutInContainer = fromOldUserInventory - newInventoryState.number
-            if (itemsToPutInContainer >= 0) {
-                //put to container {itemsToPutInContainer} items
-                oldContainer.items[newInventoryState.itemId] = fromOldContainer + itemsToPutInContainer
-                oldGameUser.items[newInventoryState.itemId] = newInventoryState.number
-            } else {
-                //take from container {itemsToPutInContainer} items
-                val newItemsInContainer = fromOldContainer + itemsToPutInContainer
-                if (newItemsInContainer >= 0) {
-                    oldContainer.items[newInventoryState.itemId] = newItemsInContainer
-                    oldGameUser.items[newInventoryState.itemId] = newInventoryState.number
-                }
-            }
-        }
-    }
-
-    private fun updateItemsRemovedFromInventory(
-        oldInventory: RedisGameUser,
-        oldContainer: RedisContainer,
-        newInventoryState: List<ContainerCell>,
-    ) {
-        oldInventory.items.forEach { (oldInventoryItemId, oldInventoryItemsNumber) ->
-            val newStateOfInventory = newInventoryState.firstOrNull { it.itemId == oldInventoryItemId }
-            if (newStateOfInventory != null) {
-                if (newStateOfInventory.number != oldInventoryItemsNumber) {
-                    logger.warn("strange inventory behaviour!")
-                }
-            } else {
-                oldInventory.items[oldInventoryItemId] = 0
-                oldContainer.items[oldInventoryItemId] =
-                    (oldContainer.items[oldInventoryItemId] ?: 0) + oldInventoryItemsNumber
-            }
-        }
-    }
-
-    private fun sortItemsInInventory(
-        newInventoryContent: List<ContainerCell>,
-        oldGameUser: RedisGameUser
     ): List<ContainerCell> {
-        val sortedInventory = newInventoryContent.map {
-            val realNumber = oldGameUser.items[it.itemId] ?: 0
-            if (realNumber > 0 && it.itemId != Item.PURE_NOTHING.getId()) {
-                ContainerCell(it.itemId, realNumber)
+        val oldContainerItems: List<Long> = oldContainer.items.toList().filter { it.second > 0 }.map { it.first }
+        val oldGameUserItems: List<Long> = oldGameUser.items.toList().filter { it.second > 0 }.map { it.first }
+        val differentItemTypes = (oldContainerItems + oldGameUserItems).distinct()
+        val summarizedItems: MutableMap<Long, Long> = differentItemTypes.associateWith {
+            ((oldContainer.items[it] ?: 0) + (oldGameUser.items[it] ?: 0))
+        }.toMutableMap()
+        val trueNewInventoryContent: List<ContainerCell> = newInventoryContent.map {
+            val itemId = it.itemId
+            val newValue = min(it.number, summarizedItems[itemId] ?: 0)
+            if (newValue > 0) {
+                summarizedItems[itemId] = (summarizedItems[itemId] ?: 0) - newValue
+                ContainerCell(itemId, newValue)
             } else {
-                ContainerCell(Item.PURE_NOTHING.getId(), 0L)
+                ContainerCell(Item.PURE_NOTHING.getId(), 0)
             }
         }
-        return sortedInventory
+        oldContainer.items = summarizedItems
+            .filterNot { it.key == Item.PURE_NOTHING.getId() || it.value <= 0 }
+            .toMap()
+            .toMutableMap()
+        oldGameUser.items =
+            trueNewInventoryContent
+                .filterNot { it.itemId == Item.PURE_NOTHING.getId() || it.number <= 0 }
+                .groupBy { it.itemId }
+                .map { it.key to it.value.sumOf { it.number } }
+                .toMap()
+                .toMutableMap()
+        return trueNewInventoryContent
     }
 
     private fun closeContainer(container: RedisContainer) {

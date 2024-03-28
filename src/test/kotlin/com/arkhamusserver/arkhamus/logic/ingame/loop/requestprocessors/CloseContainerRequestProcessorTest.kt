@@ -16,8 +16,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.CloseContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -46,19 +45,19 @@ class CloseContainerRequestProcessorTest {
         val resultUser = data.globalGameData.users[1L]!!.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
 
-        assertEquals(0, resultUser[Item.I1.getId()])
+        assertNull(resultUser[Item.I1.getId()])
         assertEquals(10, resultContainer[Item.I1.getId()])
 
-        assertEquals(0, resultUser[Item.I2.getId()])
+        assertNull(resultUser[Item.I2.getId()])
         assertEquals(10, resultContainer[Item.I2.getId()])
 
-        assertEquals(0, resultUser[Item.I3.getId()])
+        assertNull(resultUser[Item.I3.getId()])
         assertEquals(10, resultContainer[Item.I3.getId()])
 
-        assertEquals(0, resultUser[Item.I4.getId()])
+        assertNull(resultUser[Item.I4.getId()])
         assertEquals(10, resultContainer[Item.I4.getId()])
 
-        assertEquals(0, resultUser[Item.I5.getId()])
+        assertNull(resultUser[Item.I5.getId()])
         assertEquals(5, resultContainer[Item.I5.getId()])
 
         assertNull(resultUser[Item.I6.getId()])
@@ -119,7 +118,7 @@ class CloseContainerRequestProcessorTest {
         assertEquals(10, resultUser[Item.I1.getId()])
         assertNull(resultContainer[Item.I1.getId()])
 
-        assertEquals(0, resultUser[Item.I2.getId()])
+        assertNull(resultUser[Item.I2.getId()])
         assertEquals(10, resultContainer[Item.I2.getId()])
 
         assertEquals(3, resultUser[Item.I3.getId()])
@@ -136,6 +135,19 @@ class CloseContainerRequestProcessorTest {
     }
 
     @Test
+    fun tryToCheat() {
+        val newInventoryContent = listOf(
+            ContainerCell(Item.MASK.getId(), 3),
+        )
+        val (data, requestContainer) = executeRequest(newInventoryContent)
+        val resultUser = data.globalGameData.users[1L]!!.items
+        val closeContainerGameData = requestContainer.requestProcessData as CloseContainerGameData
+
+        assertEquals(null, resultUser[Item.MASK.getId()])
+        assertFalse(closeContainerGameData.sortedInventory!!.any { it.itemId == Item.MASK.getId() && it.number > 0 })
+    }
+
+    @Test
     fun sortedInventory() {
         val newInventoryContent = listOf(
             ContainerCell(Item.I1.getId(), 10),
@@ -144,7 +156,7 @@ class CloseContainerRequestProcessorTest {
             ContainerCell(Item.I4.getId(), 10),
         )
 
-        val (data, requestContaioner) = executeRequest(newInventoryContent)
+        val (data, requestContainer) = executeRequest(newInventoryContent)
 
         val resultUser = data.globalGameData.users[1L]!!.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
@@ -152,22 +164,22 @@ class CloseContainerRequestProcessorTest {
         assertEquals(10, resultUser[Item.I1.getId()])
         assertNull(resultContainer[Item.I1.getId()])
 
-        assertEquals(0, resultUser[Item.I2.getId()])
+        assertNull(resultUser[Item.I2.getId()])
         assertEquals(10, resultContainer[Item.I2.getId()])
 
-        assertEquals(0, resultUser[Item.I3.getId()])
+        assertNull(resultUser[Item.I3.getId()])
         assertEquals(10, resultContainer[Item.I3.getId()])
 
         assertEquals(10, resultUser[Item.I4.getId()])
         assertNull(resultContainer[Item.I4.getId()])
 
-        assertEquals(0, resultUser[Item.I5.getId()])
+        assertNull(resultUser[Item.I5.getId()])
         assertEquals(5, resultContainer[Item.I5.getId()])
 
         assertNull(resultUser[Item.I6.getId()])
         assertEquals(5, resultContainer[Item.I6.getId()])
 
-        val closeContainerGameData = requestContaioner.requestProcessData as CloseContainerGameData
+        val closeContainerGameData = requestContainer.requestProcessData as CloseContainerGameData
 
         assertEquals(4, closeContainerGameData.sortedInventory!!.size)
 

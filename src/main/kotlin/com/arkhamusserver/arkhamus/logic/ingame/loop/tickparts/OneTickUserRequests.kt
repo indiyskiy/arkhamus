@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
+import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.isCurrentTick
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component
 class OneTickUserRequests(
     private val gameUserRedisRepository: RedisGameUserRepository,
     private val nettyRequestProcessors: List<NettyRequestProcessor>,
+    private val requestProcessDataBuilder: GameDataBuilder,
 ) {
     fun processRequests(
         currentTasks: MutableList<NettyTickRequestMessageContainer>,
@@ -28,22 +30,22 @@ class OneTickUserRequests(
     }
 
     private fun processRequest(
-        request: NettyTickRequestMessageContainer,
+        requestContainer: NettyTickRequestMessageContainer,
         tick: Long,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
         val game = globalGameData.game
-        val nettyRequestMessage = request.nettyRequestMessage
+        val nettyRequestMessage = requestContainer.nettyRequestMessage
         ArkhamusOneTickLogic.logger.info("Process ${nettyRequestMessage.javaClass.simpleName} of game ${game.id} tick $tick")
-
+        requestContainer.requestProcessData =  requestProcessDataBuilder.build(requestContainer, globalGameData, ongoingEvents)
         nettyRequestProcessors.filter {
-            it.accept(request)
+            it.accept(requestContainer)
         }.forEach {
-            it.process(request, globalGameData, ongoingEvents)
+            it.process(requestContainer, globalGameData, ongoingEvents)
         }
 
-        val gameUser = globalGameData.users[request.userAccount.id]!!
+        val gameUser = globalGameData.users[requestContainer.userAccount.id]!!
         gameUserRedisRepository.save(gameUser)
     }
 
