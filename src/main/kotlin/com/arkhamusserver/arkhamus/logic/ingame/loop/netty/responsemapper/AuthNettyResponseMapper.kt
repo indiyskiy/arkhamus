@@ -39,11 +39,12 @@ class AuthNettyResponseMapper(
             -1L,
             0L,
             MyGameUserResponseMessage(
-                0,
-                "",
-                0.0,
-                0.0,
-                0.0
+                id = 0,
+                nickName = "",
+                madness = 0.0,
+                madnessNotches = listOf(100.0, 300.0, 600.0),
+                x = 0.0,
+                y = 0.0,
             ),
             emptyList()
         )

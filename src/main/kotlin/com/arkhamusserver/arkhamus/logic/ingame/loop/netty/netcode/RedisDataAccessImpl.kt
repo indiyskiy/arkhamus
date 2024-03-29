@@ -10,8 +10,9 @@ class RedisDataAccessImpl(
     private val gameUserRepository: RedisGameUserRepository,
     private val gameRepository: RedisGameRepository,
     private val containerRepository: RedisContainerRepository,
+    private val lanternRepository: RedisLanternRepository,
     private val timeEventRepository: RedisTimeEventRepository
-): RedisDataAccess {
+) : RedisDataAccess {
     override fun getGameUser(userId: Long?, gameId: Long?) =
         gameUserRepository.findById(gameRelatedIdSource.getId(gameId, userId)).get()
 
@@ -23,8 +24,14 @@ class RedisDataAccessImpl(
     override fun getContainer(containerId: Long, gameId: Long) =
         containerRepository.findById(gameRelatedIdSource.getId(gameId, containerId)).get()
 
+    override fun getLantern(lanternId: Long, gameId: Long) =
+        lanternRepository.findById(gameRelatedIdSource.getId(gameId, lanternId)).get()
+
     override fun getGameContainers(gameId: Long) =
         containerRepository.findByGameId(gameId)
+
+    override fun getGameLanterns(gameId: Long) =
+        lanternRepository.findByGameId(gameId)
 
     override fun getTimeEvents(gameId: Long) =
         timeEventRepository.findByGameId(gameId)

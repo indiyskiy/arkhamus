@@ -9,6 +9,7 @@ import kotlin.random.Random
 @Component
 class GameStartLogic(
     private val gameStartContainerLogic: GameStartContainerLogic,
+    private val gameStartLanternLogic: GameStartLanternLogic,
     private val gameStartUserLogic: GameStartUserLogic,
     private val gameStartGameLogic: GameStartGameLogic,
     private val gameStartTimeEventLogic: GameStartTimeEventLogic
@@ -24,6 +25,7 @@ class GameStartLogic(
             gameStartGameLogic.createTheGame(game)
             gameStartUserLogic.createGameUsers(levelId, game)
             gameStartContainerLogic.createContainers(levelId, game)
+            gameStartLanternLogic.createLanterns(levelId, game)
             gameStartTimeEventLogic.createStartEvents(game)
         }
     }

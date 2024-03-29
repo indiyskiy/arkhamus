@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 @Component
 class UserMadnessHandler {
     companion object {
-        const val NIGHT_MADNESS_TICK = 1.0 / 1000 * ArkhamusOneTickLogic.TICK_DELTA
+        const val NIGHT_MADNESS_TICK = 1.0 / 1000.0 * ArkhamusOneTickLogic.TICK_DELTA
     }
 
     fun applyNightMadness(gameUser: RedisGameUser) {

@@ -1,15 +1,18 @@
 package com.arkhamusserver.arkhamus.config.database
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ContainerRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.LanternRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.LevelRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.database.entity.Container
+import com.arkhamusserver.arkhamus.model.database.entity.Lantern
 import com.arkhamusserver.arkhamus.model.database.entity.Level
 import com.arkhamusserver.arkhamus.model.database.entity.StartMarker
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import com.arkhamusserver.arkhamus.view.levelDesign.ContainerFromJson
 import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
 import com.arkhamusserver.arkhamus.view.levelDesign.JsonStartMarker
+import com.arkhamusserver.arkhamus.view.levelDesign.LanternFromJson
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
@@ -20,11 +23,11 @@ import org.springframework.stereotype.Component
 import java.io.File
 import java.io.FileReader
 
-
 @Component
 class LevelDesignInfoProcessor(
     private val levelRepository: LevelRepository,
     private val containerRepository: ContainerRepository,
+    private val lanternRepository: LanternRepository,
     private val startMarkerRepository: StartMarkerRepository
 ) {
 
@@ -93,6 +96,7 @@ class LevelDesignInfoProcessor(
         )
         val savedLevel = levelRepository.save(newLevel)
         processContainers(levelFromJson.containers, savedLevel)
+        processLanterns(levelFromJson.lanterns, savedLevel)
         processStartMarkers(levelFromJson.startMarkers, savedLevel)
     }
 
@@ -109,6 +113,23 @@ class LevelDesignInfoProcessor(
                 level = savedLevel
             ).apply {
                 containerRepository.save(this)
+            }
+        }
+    }
+
+    private fun processLanterns(
+        containers: List<LanternFromJson>,
+        savedLevel: Level?
+    ) {
+        containers.forEach { lantern ->
+            Lantern(
+                inGameId = lantern.id,
+                lightRange = lantern.lightRange,
+                x = lantern.x,
+                y = lantern.y,
+                level = savedLevel
+            ).apply {
+                lanternRepository.save(this)
             }
         }
     }
