@@ -16,6 +16,10 @@ class TaskCollection {
     fun getList(): MutableList<NettyTickRequestMessageContainer> =
         taskList
 
+    fun resetList() {
+        taskList = Collections.synchronizedList(ArrayList())
+    }
+
     fun init(gameSession: GameSession) {
         userIds = gameSession.usersOfGameSession.mapNotNull { it.userAccount.id }.toSet()
         this.gameSession = gameSession

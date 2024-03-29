@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -11,7 +12,8 @@ class GameStartLogic(
     private val gameStartContainerLogic: GameStartContainerLogic,
     private val gameStartUserLogic: GameStartUserLogic,
     private val gameStartGameLogic: GameStartGameLogic,
-    private val gameStartTimeEventLogic: GameStartTimeEventLogic
+    private val gameStartTimeEventLogic: GameStartTimeEventLogic,
+    private val gameThreadPool: GameThreadPool
 ) {
 
     companion object {
@@ -26,6 +28,7 @@ class GameStartLogic(
             gameStartContainerLogic.createContainers(levelId, game)
             gameStartTimeEventLogic.createStartEvents(game)
         }
+        gameThreadPool.initTickProcessingLoop(game)
     }
 
 }

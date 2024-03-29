@@ -14,7 +14,7 @@ interface ArkhamusOneTickLogic {
     }
 
     fun processCurrentTasks(
-        currentTasks: MutableList<NettyTickRequestMessageContainer>,
+        currentTasks: List<NettyTickRequestMessageContainer>,
         game: RedisGame
     ): List<NettyResponseMessage>
 }

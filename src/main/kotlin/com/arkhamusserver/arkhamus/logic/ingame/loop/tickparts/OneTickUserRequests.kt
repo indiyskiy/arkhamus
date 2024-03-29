@@ -17,15 +17,14 @@ class OneTickUserRequests(
     private val requestProcessDataBuilder: GameDataBuilder,
 ) {
     fun processRequests(
-        currentTasks: MutableList<NettyTickRequestMessageContainer>,
+        currentTasks: List<NettyTickRequestMessageContainer>,
         currentTick: Long,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
         currentTasks.forEach {
-            if (it.isCurrentTick(currentTick)) {
-                processRequest(it, currentTick, globalGameData, ongoingEvents)
-            }
+            //TODO conflict resolution
+            processRequest(it, currentTick, globalGameData, ongoingEvents)
         }
     }
 

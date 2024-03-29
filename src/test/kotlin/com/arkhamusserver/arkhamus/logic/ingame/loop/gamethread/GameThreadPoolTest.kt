@@ -161,15 +161,56 @@ class GameThreadPoolTest {
         assertEquals(2, collectedResponses2[1].tick)
     }
 
-    // one game, two players, one is
-    fun testTwoGamesFreeze() {
-        TODO()
+    // one game, two players, one is stuck, we would like the processing to continue
+    @Test
+    fun testTwoPlayersFreeze() {
+        val (gameSession, globalGameData) = setupGameSession(usersCount = 2, startingTick = 0)
+        val user1 = gameSession.usersOfGameSession[0]
+        val user2 = gameSession.usersOfGameSession[1]
+
+        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = user1, globalGameData = globalGameData))
+        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = user2, globalGameData = globalGameData))
+
+        Thread.sleep(500)
+
+        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = user1, globalGameData = globalGameData))
+
+        Thread.sleep(500)
+
+        threadPool.addTask(createMessage(tick = 2, gameSession = gameSession, userOfGameSession = user1, globalGameData = globalGameData))
+
+        Thread.sleep(500)
+
+        waitUntilMessagesCount(4)
+
+        // we generated 4 responses
+        val collectedResponses = responseSendingLoopManager.collectedResponses[gameSession.id]!!
+        assertEquals(4, collectedResponses.size)
+
+        // and they are in proper order
+        assertEquals(1, collectedResponses[0].tick)
+        assertEquals(1, collectedResponses[1].tick)
+        assertEquals(2, collectedResponses[2].tick)
+        assertEquals(3, collectedResponses[3].tick)
     }
 
     // over GameThreadPool.MAX_POOL_SIZE games, at least MAX_POOL_SIZE games freeze for some reason
     fun testOverLimitGames() {
         TODO()
     }
+
+    // we'll have a ticker entity that actually handles processing of ticks in time, and timed one will be used for prod, manually triggered one will be used for tests
+    private fun ensureClientState(gameSession: GameSession, tick: Long, clientUserId: Long, expectedState: List<UserPositionData>) {
+        val collectedResponses = responseSendingLoopManager.collectedResponses[gameSession.id]!!
+
+    }
+
+    // subset of NettyGameUserResponseMessage to ensure we don't tangle test data with implementation
+    private data class UserPositionData(
+        val id: Long,
+        val x: Double,
+        val y: Double
+    )
 
     private fun waitUntilMessagesCount(count: Int) {
         waitForProcessing { responseSendingLoopManager.collectedResponses.size >= count }
@@ -271,6 +312,8 @@ class GameThreadPoolTest {
         )
 
         redisDataAccess.setUp(listOf(globalGameData))
+
+        threadPool.initTickProcessingLoop(gameSession)
 
         return gameSession to globalGameData
     }

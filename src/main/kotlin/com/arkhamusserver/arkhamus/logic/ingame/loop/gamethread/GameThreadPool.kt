@@ -1,16 +1,19 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
+import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic.Companion.TICK_DELTA
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ResponseSendingLoopManager
+import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
+import java.util.concurrent.ScheduledThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 @Component
 class GameThreadPool(
@@ -18,7 +21,7 @@ class GameThreadPool(
     private val responseSendingLoopManager: ResponseSendingLoopManager,
     private val tickLogic: ArkhamusOneTickLogic
 ) {
-    private val taskExecutor: ThreadPoolTaskExecutor = ThreadPoolTaskExecutor()
+    private val taskExecutor: ScheduledThreadPoolExecutor = ScheduledThreadPoolExecutor(CORE_POOL_SIZE)
     private val tasksMap: ConcurrentMap<Long, TaskCollection> = ConcurrentHashMap()
 
     companion object {
@@ -26,31 +29,43 @@ class GameThreadPool(
 
         //TODO read from config?
         const val CORE_POOL_SIZE = 3
-        const val MAX_POOL_SIZE = 5
     }
 
     init {
         taskExecutor.corePoolSize = CORE_POOL_SIZE
-        taskExecutor.maxPoolSize = MAX_POOL_SIZE
-        taskExecutor.initialize()
     }
 
+    fun initTickProcessingLoop(gameSession: GameSession) {
+        val taskCollection = (TaskCollection()).apply {
+            init(gameSession)
+        }
+        val gameId = gameSession.id!!
+        tasksMap[gameId] = taskCollection
+        taskExecutor.scheduleAtFixedRate({
+            val taskCollection = tasksMap[gameId]!!
+            val taskList = synchronized(taskCollection) {
+                taskCollection.getList().also { taskCollection.resetList() }
+            }
+            processGameTick(
+                tasks = taskList,
+                gameId = gameId,
+                ongoingGame = redisDataAccess.getGame(gameId)
+            )
+        },
+            0L,
+            TICK_DELTA,
+            TimeUnit.MILLISECONDS)
+    }
 
     fun addTask(task: NettyTickRequestMessageContainer) {
         val gameId = task.gameSession!!.id!!
         val taskCollection = tasksMap[gameId]
         val added: Boolean = if (taskCollection != null) {
-            val added = taskCollection.add(task)
-            processIfEnoughData(gameId, taskCollection)
-            added
-        } else {
-            val createdTaskCollection = (TaskCollection()).apply {
-                init(task.gameSession!!)
+            synchronized(taskCollection) {
+                taskCollection.add(task)
             }
-            val added = createdTaskCollection.add(task)
-            tasksMap[gameId] = createdTaskCollection
-            processIfEnoughData(gameId, createdTaskCollection)
-            added
+        } else {
+            false
         }
         if (added) {
             logger.debug("task added")
@@ -59,34 +74,8 @@ class GameThreadPool(
         }
     }
 
-    private fun processIfEnoughData(
-        gameId: Long,
-        taskCollection: TaskCollection
-    ) {
-        if (!taskCollection.isEmpty()) {
-            val ongoingGame = redisDataAccess.getGame(gameId)
-            processGameTickIfReady(ongoingGame, taskCollection, gameId)
-        }
-    }
-
-    private fun processGameTickIfReady(
-        ongoingGame: RedisGame,
-        taskCollection: TaskCollection,
-        gameId: Long
-    ) {
-        val tick = ongoingGame.currentTick
-        val usersOfGame = taskCollection.userIds()
-        val currentTasks = taskCollection.getByTick(tick)
-        val usersOfCurrentTasks = currentTasks.mapNotNull { it.userAccount.id }.toSet()
-        if (usersOfCurrentTasks == usersOfGame) {
-            taskExecutor.execute {
-                processGameTick(taskCollection.getList(), gameId, ongoingGame)
-            }
-        }
-    }
-
     private fun processGameTick(
-        tasks: MutableList<NettyTickRequestMessageContainer>,
+        tasks: List<NettyTickRequestMessageContainer>,
         gameId: Long,
         ongoingGame: RedisGame
     ) {

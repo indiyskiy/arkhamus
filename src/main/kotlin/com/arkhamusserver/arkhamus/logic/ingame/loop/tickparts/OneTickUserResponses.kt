@@ -14,20 +14,11 @@ class OneTickUserResponses(
     fun buildResponses(
         currentTick: Long,
         globalGameData: GlobalGameData,
-        currentTasks: MutableList<NettyTickRequestMessageContainer>,
-    ): MutableList<NettyResponseMessage> {
-        val responses = mutableListOf<NettyResponseMessage>()
-        val iterator = currentTasks.listIterator()
+        currentTasks: List<NettyTickRequestMessageContainer>,
+    ): List<NettyResponseMessage> {
+        val tasksUniqueByUserAndTick = currentTasks.distinctBy { it.userAccount.id to it.nettyRequestMessage.baseRequestData.tick }
 
-        while (iterator.hasNext()) {
-            val task = iterator.next()
-            if (task.isCurrentTick(currentTick)) {
-                val response = buildResponse(task, globalGameData)
-                responses.add(response)
-                iterator.remove()
-            }
-        }
-        return responses
+        return tasksUniqueByUserAndTick.map{ task -> buildResponse(task, globalGameData) }
     }
 
     private fun buildResponse(

@@ -22,7 +22,7 @@ class MockArkhamusOneTickLogic(
     private var processingId = AtomicInteger(0)
 
     override fun processCurrentTasks(
-        currentTasks: MutableList<NettyTickRequestMessageContainer>,
+        currentTasks: List<NettyTickRequestMessageContainer>,
         game: RedisGame
     ): List<NettyResponseMessage> {
         val currentId = processingId.getAndIncrement()

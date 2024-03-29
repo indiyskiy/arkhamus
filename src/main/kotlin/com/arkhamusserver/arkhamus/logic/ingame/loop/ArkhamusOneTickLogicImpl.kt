@@ -22,7 +22,7 @@ class ArkhamusOneTickLogicImpl(
 ) : ArkhamusOneTickLogic {
 
     override fun processCurrentTasks(
-        currentTasks: MutableList<NettyTickRequestMessageContainer>,
+        currentTasks: List<NettyTickRequestMessageContainer>,
         game: RedisGame
     ): List<NettyResponseMessage> {
         try {
@@ -30,9 +30,9 @@ class ArkhamusOneTickLogicImpl(
             val currentTick = game.currentTick
 
             oneTickTick.updateNextTick(game)
-            val ongoingEvent =
+            val ongoingEvents =
                 oneTickTimeEvent.processTimeEvents(globalGameData, globalGameData.timeEvents, game.globalTimer)
-            oneTickUserRequests.processRequests(currentTasks, currentTick, globalGameData, ongoingEvent)
+            oneTickUserRequests.processRequests(currentTasks, currentTick, globalGameData, ongoingEvents)
 
             val responses =
                 oneTickUserResponses.buildResponses(
