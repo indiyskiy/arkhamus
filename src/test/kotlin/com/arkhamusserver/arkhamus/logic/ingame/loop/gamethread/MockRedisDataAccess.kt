@@ -2,10 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.redis.*
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Service
 
@@ -37,6 +34,14 @@ class MockRedisDataAccess : RedisDataAccess {
 
     override fun getGameContainers(gameId: Long): List<RedisContainer> {
         return containers.filter { it.gameId == gameId }
+    }
+
+    override fun getLantern(lanternId: Long, gameId: Long): RedisLantern {
+        TODO("Not yet implemented")
+    }
+
+    override fun getGameLanterns(gameId: Long): List<RedisLantern> {
+        TODO("Not yet implemented")
     }
 
     override fun getTimeEvents(gameId: Long): List<RedisTimeEvent> {
