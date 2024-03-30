@@ -6,6 +6,7 @@ data class MyGameUserResponseMessage(
     val id: Long,
     val nickName: String,
     val madness: Double,
+    var madnessNotches: List<Double>,
     val x: Double,
     val y: Double
 ) {
@@ -13,6 +14,7 @@ data class MyGameUserResponseMessage(
         id = gameUser.userId,
         nickName = gameUser.nickName,
         madness = gameUser.madness,
+        madnessNotches = gameUser.madnessNotches,
         x = gameUser.x,
         y = gameUser.y
     )

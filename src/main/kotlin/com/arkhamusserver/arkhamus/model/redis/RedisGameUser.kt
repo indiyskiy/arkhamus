@@ -15,5 +15,6 @@ data class RedisGameUser(
     var x: Double = 0.0,
     var y: Double = 0.0,
     var madness: Double,
+    var madnessNotches: List<Double>,
     var items: MutableMap<Long, Long> = HashMap()
 )

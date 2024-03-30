@@ -313,6 +313,7 @@ class CloseContainerRequestProcessorTest {
             x = container.x!!,
             y = container.y!!,
             madness = 20.0,
+            madnessNotches = listOf(100.0, 300.0, 600.0),
             items = oldUserItems
         )
 

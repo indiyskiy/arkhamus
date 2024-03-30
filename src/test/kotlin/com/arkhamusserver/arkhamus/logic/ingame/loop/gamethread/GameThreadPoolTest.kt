@@ -31,7 +31,7 @@ class GameThreadPoolTest {
     }
 
     @Autowired
-    private lateinit var threadPool: GameThreadPool;
+    private lateinit var threadPool: GameThreadPool
 
     @Autowired
     private lateinit var redisDataAccess: MockRedisDataAccess
@@ -54,11 +54,25 @@ class GameThreadPoolTest {
         val (gameSession, globalGameData) = setupGameSession(1)
         val userOfGameSession = gameSession.usersOfGameSession.first()
 
-        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = userOfGameSession, globalGameData = globalGameData))
+        threadPool.addTask(
+            createMessage(
+                tick = 0,
+                gameSession = gameSession,
+                userOfGameSession = userOfGameSession,
+                globalGameData = globalGameData
+            )
+        )
 
         Thread.sleep(500)
 
-        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = userOfGameSession, globalGameData = globalGameData))
+        threadPool.addTask(
+            createMessage(
+                tick = 1,
+                gameSession = gameSession,
+                userOfGameSession = userOfGameSession,
+                globalGameData = globalGameData
+            )
+        )
 
         Thread.sleep(500)
 
@@ -79,11 +93,25 @@ class GameThreadPoolTest {
         val (gameSession, globalGameData) = setupGameSession(usersCount = 1, startingTick = 1)
         val userOfGameSession = gameSession.usersOfGameSession.first()
 
-        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = userOfGameSession, globalGameData = globalGameData))
+        threadPool.addTask(
+            createMessage(
+                tick = 1,
+                gameSession = gameSession,
+                userOfGameSession = userOfGameSession,
+                globalGameData = globalGameData
+            )
+        )
 
         Thread.sleep(500)
 
-        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = userOfGameSession, globalGameData = globalGameData))
+        threadPool.addTask(
+            createMessage(
+                tick = 0,
+                gameSession = gameSession,
+                userOfGameSession = userOfGameSession,
+                globalGameData = globalGameData
+            )
+        )
 
         Thread.sleep(500)
 
@@ -104,13 +132,41 @@ class GameThreadPoolTest {
         val user1 = gameSession.usersOfGameSession[0]
         val user2 = gameSession.usersOfGameSession[1]
 
-        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = user1, globalGameData = globalGameData))
-        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = user2, globalGameData = globalGameData))
+        threadPool.addTask(
+            createMessage(
+                tick = 0,
+                gameSession = gameSession,
+                userOfGameSession = user1,
+                globalGameData = globalGameData
+            )
+        )
+        threadPool.addTask(
+            createMessage(
+                tick = 0,
+                gameSession = gameSession,
+                userOfGameSession = user2,
+                globalGameData = globalGameData
+            )
+        )
 
         Thread.sleep(500)
 
-        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = user1, globalGameData = globalGameData))
-        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = user2, globalGameData = globalGameData))
+        threadPool.addTask(
+            createMessage(
+                tick = 1,
+                gameSession = gameSession,
+                userOfGameSession = user1,
+                globalGameData = globalGameData
+            )
+        )
+        threadPool.addTask(
+            createMessage(
+                tick = 1,
+                gameSession = gameSession,
+                userOfGameSession = user2,
+                globalGameData = globalGameData
+            )
+        )
 
         Thread.sleep(500)
 
@@ -135,13 +191,41 @@ class GameThreadPoolTest {
         val user1 = gameSession1.usersOfGameSession.first()
         val user2 = gameSession2.usersOfGameSession.first()
 
-        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession1, userOfGameSession = user1, globalGameData = globalGameData1))
-        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession2, userOfGameSession = user2, globalGameData = globalGameData2))
+        threadPool.addTask(
+            createMessage(
+                tick = 0,
+                gameSession = gameSession1,
+                userOfGameSession = user1,
+                globalGameData = globalGameData1
+            )
+        )
+        threadPool.addTask(
+            createMessage(
+                tick = 0,
+                gameSession = gameSession2,
+                userOfGameSession = user2,
+                globalGameData = globalGameData2
+            )
+        )
 
         Thread.sleep(500)
 
-        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession1, userOfGameSession = user1, globalGameData = globalGameData1))
-        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession2, userOfGameSession = user2, globalGameData = globalGameData2))
+        threadPool.addTask(
+            createMessage(
+                tick = 1,
+                gameSession = gameSession1,
+                userOfGameSession = user1,
+                globalGameData = globalGameData1
+            )
+        )
+        threadPool.addTask(
+            createMessage(
+                tick = 1,
+                gameSession = gameSession2,
+                userOfGameSession = user2,
+                globalGameData = globalGameData2
+            )
+        )
 
         Thread.sleep(500)
 
@@ -232,7 +316,7 @@ class GameThreadPoolTest {
         globalGameData: GlobalGameData
     ): NettyTickRequestMessageContainer {
         val redisGameUser = globalGameData.users[userOfGameSession.id]!!
-        val otherGameUsers = globalGameData.users.values.filter{ it.userId != userOfGameSession.id }
+        val otherGameUsers = globalGameData.users.values.filter { it.userId != userOfGameSession.id }
         return NettyTickRequestMessageContainer(
             HeartbeatRequestMessage(
                 baseRequestData = BaseRequestData(
@@ -296,7 +380,8 @@ class GameThreadPoolTest {
                 nickName = "user-nickname",
                 role = RoleTypeInGame.INVESTIGATOR,
                 gameId = gameSession.id!!,
-                madness = 0.0
+                madness = 0.0,
+                madnessNotches = listOf(100.0, 300.0, 600.0)
             )
         }
 

@@ -1,9 +1,6 @@
 package com.arkhamusserver.arkhamus.config.jedis
 
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.*
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Component
 
@@ -11,6 +8,7 @@ import org.springframework.stereotype.Component
 class JedisCleaner(
     private val userRedisRepository: RedisGameUserRepository,
     private val containerRedisRepository: RedisContainerRepository,
+    private val redisLanternRepository: RedisLanternRepository,
     private val redisGameRepository: RedisGameRepository,
     private val redisTimeEventRepository: RedisTimeEventRepository
 ) {
@@ -20,6 +18,7 @@ class JedisCleaner(
         containerRedisRepository.deleteAll()
         redisGameRepository.deleteAll()
         redisTimeEventRepository.deleteAll()
+        redisLanternRepository.deleteAll()
     }
 
 }
