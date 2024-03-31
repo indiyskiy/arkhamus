@@ -6,12 +6,15 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ResponseSendingLoopManager
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
+import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.ScheduledThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
@@ -23,6 +26,7 @@ class GameThreadPool(
 ) {
     private val taskExecutor: ScheduledThreadPoolExecutor = ScheduledThreadPoolExecutor(CORE_POOL_SIZE)
     private val tasksMap: ConcurrentMap<Long, TaskCollection> = ConcurrentHashMap()
+    private val loopHandlerFutures: ConcurrentMap<Long, ScheduledFuture<*>> = ConcurrentHashMap()
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(GameThreadPool::class.java)
@@ -36,25 +40,51 @@ class GameThreadPool(
     }
 
     fun initTickProcessingLoop(gameSession: GameSession) {
-        val taskCollection = (TaskCollection()).apply {
+        val newTaskCollection = (TaskCollection()).apply {
             init(gameSession)
         }
         val gameId = gameSession.id!!
-        tasksMap[gameId] = taskCollection
-        taskExecutor.scheduleAtFixedRate({
-            val taskCollection = tasksMap[gameId]!!
-            val taskList = synchronized(taskCollection) {
-                taskCollection.getList().also { taskCollection.resetList() }
-            }
-            processGameTick(
-                tasks = taskList,
-                gameId = gameId,
-                ongoingGame = redisDataAccess.getGame(gameId)
-            )
-        },
+        tasksMap[gameId] = newTaskCollection
+        val scheduledFuture = taskExecutor.scheduleAtFixedRate(
+            {
+                val taskCollection = tasksMap[gameId]!!
+                val taskList = synchronized(taskCollection) {
+                    taskCollection.getList().also { taskCollection.resetList() }
+                }
+                val redisGame = redisDataAccess.getGame(gameId)
+                // TODO better state handling - e.g. we might want to support pause somehow and other stuff later
+                if (redisGame.state == GameState.IN_PROGRESS.name) {
+                    processGameTick(
+                        tasks = taskList,
+                        gameId = gameId,
+                        ongoingGame = redisGame
+                    )
+                }
+            },
             0L,
             TICK_DELTA,
-            TimeUnit.MILLISECONDS)
+            TimeUnit.MILLISECONDS
+        )
+        loopHandlerFutures[gameSession.id] = scheduledFuture
+    }
+
+    @Scheduled(fixedRate = 1000)
+    fun cleanUpHangingFutures() {
+        for (gameSessionId in loopHandlerFutures.keys) {
+            val redisGameSession = redisDataAccess.getGame(gameSessionId)
+            if (redisGameSession.state == GameState.FINISHED.name) {
+                cleanGameLoopFuture(gameSessionId)
+            }
+        }
+    }
+
+    private fun cleanGameLoopFuture(gameSessionId: Long) {
+        if (loopHandlerFutures[gameSessionId]?.isCancelled == true) {
+            loopHandlerFutures.remove(gameSessionId)
+            logger.info("Loop handler stopped for game session $gameSessionId")
+            return
+        }
+        loopHandlerFutures[gameSessionId]?.cancel(false)
     }
 
     fun addTask(task: NettyTickRequestMessageContainer) {

@@ -8,10 +8,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean
+import org.springframework.scheduling.annotation.EnableScheduling
 
 
 @SpringBootApplication
 @EnableConfigurationProperties(JwtProperties::class)
+@EnableScheduling
 class Application : SpringBootServletInitializer() {
 
     @Bean
