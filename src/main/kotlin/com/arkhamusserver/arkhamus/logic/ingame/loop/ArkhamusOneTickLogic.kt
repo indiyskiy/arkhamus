@@ -10,7 +10,7 @@ interface ArkhamusOneTickLogic {
 
     companion object {
         var logger: Logger = LoggerFactory.getLogger(ArkhamusOneTickLogic::class.java)
-        const val TICK_DELTA = 250L //ms
+        const val TICK_DELTA = 50L //ms
     }
 
     fun processCurrentTasks(
