@@ -9,6 +9,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
@@ -252,16 +253,44 @@ class GameThreadPoolTest {
         val user1 = gameSession.usersOfGameSession[0]
         val user2 = gameSession.usersOfGameSession[1]
 
-        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = user1, globalGameData = globalGameData))
-        threadPool.addTask(createMessage(tick = 0, gameSession = gameSession, userOfGameSession = user2, globalGameData = globalGameData))
+        threadPool.addTask(
+            createMessage(
+                tick = 0,
+                gameSession = gameSession,
+                userOfGameSession = user1,
+                globalGameData = globalGameData
+            )
+        )
+        threadPool.addTask(
+            createMessage(
+                tick = 0,
+                gameSession = gameSession,
+                userOfGameSession = user2,
+                globalGameData = globalGameData
+            )
+        )
 
         Thread.sleep(500)
 
-        threadPool.addTask(createMessage(tick = 1, gameSession = gameSession, userOfGameSession = user1, globalGameData = globalGameData))
+        threadPool.addTask(
+            createMessage(
+                tick = 1,
+                gameSession = gameSession,
+                userOfGameSession = user1,
+                globalGameData = globalGameData
+            )
+        )
 
         Thread.sleep(500)
 
-        threadPool.addTask(createMessage(tick = 2, gameSession = gameSession, userOfGameSession = user1, globalGameData = globalGameData))
+        threadPool.addTask(
+            createMessage(
+                tick = 2,
+                gameSession = gameSession,
+                userOfGameSession = user1,
+                globalGameData = globalGameData
+            )
+        )
 
         Thread.sleep(500)
 
@@ -284,7 +313,12 @@ class GameThreadPoolTest {
     }
 
     // we'll have a ticker entity that actually handles processing of ticks in time, and timed one will be used for prod, manually triggered one will be used for tests
-    private fun ensureClientState(gameSession: GameSession, tick: Long, clientUserId: Long, expectedState: List<UserPositionData>) {
+    private fun ensureClientState(
+        gameSession: GameSession,
+        tick: Long,
+        clientUserId: Long,
+        expectedState: List<UserPositionData>
+    ) {
         val collectedResponses = responseSendingLoopManager.collectedResponses[gameSession.id]!!
 
     }
@@ -367,6 +401,7 @@ class GameThreadPoolTest {
                 userAccount = userAccount,
                 host = false,
                 roleInGame = RoleTypeInGame.CULTIST,
+                classInGame = ClassInGame.KING_IN_YELLOW_CULTIST,
                 gameSession = gameSession
             )
         }
@@ -379,6 +414,7 @@ class GameThreadPoolTest {
                 userId = userOfGameSession.id!!,
                 nickName = "user-nickname",
                 role = RoleTypeInGame.INVESTIGATOR,
+                classInGame = ClassInGame.MIND_HEALER,
                 gameId = gameSession.id!!,
                 madness = 0.0,
                 madnessNotches = listOf(100.0, 300.0, 600.0)

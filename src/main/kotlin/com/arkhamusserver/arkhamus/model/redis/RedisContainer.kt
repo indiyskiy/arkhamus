@@ -15,5 +15,5 @@ data class RedisContainer(
     var x: Double = 0.0,
     var y: Double = 0.0,
     var interactionRadius: Double = 0.0,
-    var items: MutableMap<Long, Long> = HashMap()
+    var items: MutableMap<Int, Long> = HashMap()
 )

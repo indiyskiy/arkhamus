@@ -30,7 +30,7 @@ class AbilityRequestProcessor(
             if (canBeCasted) {
                 val item = abilityRequestProcessData.item
                 if (item != null) {
-                    if (ability.isConsumesItem()) {
+                    if (ability.consumesItem) {
                         userInventoryHandler.consumeItem(
                             abilityRequestProcessData.gameUser!!,
                             item

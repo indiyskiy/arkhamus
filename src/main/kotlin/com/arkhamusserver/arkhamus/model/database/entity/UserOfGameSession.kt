@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import jakarta.persistence.*
 
@@ -19,9 +20,18 @@ data class UserOfGameSession(
 
     var host: Boolean,
 
-    var roleInGame: RoleTypeInGame? = null
+    var roleInGame: RoleTypeInGame? = null,
+
+    var classInGame: ClassInGame? = null,
 ) {
     override fun toString(): String {
-        return "UserOfGameSession[id=$id, userAccount=$userAccount, gameSessionId=${gameSession.id}, host=$host, roleInGame='$roleInGame']"
+        return "UserOfGameSession[" +
+                    "id=$id, " +
+                    "userAccount=$userAccount, " +
+                    "gameSessionId=${gameSession.id}, " +
+                    "host=$host, " +
+                    "roleInGame='$roleInGame', " +
+                    "classInGame='$classInGame'" +
+                "]"
     }
 }

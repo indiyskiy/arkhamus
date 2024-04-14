@@ -7,9 +7,11 @@ import com.arkhamusserver.arkhamus.model.database.entity.Container
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerAffectModifiers
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType
+import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.LOOT
+import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.RARE_LOOT
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import org.springframework.stereotype.Component
+import kotlin.random.Random
 
 @Component
 class GameStartContainerLogic(
@@ -17,6 +19,9 @@ class GameStartContainerLogic(
     private val containerRepository: ContainerRepository,
     private val gameRelatedIdSource: GameRelatedIdSource,
 ) {
+
+    private val random: Random = Random(System.currentTimeMillis())
+
     fun createContainers(
         levelId: Long,
         game: GameSession
@@ -45,13 +50,14 @@ class GameStartContainerLogic(
         this.items = randomizeItems(modifiers)
     }
 
-    private fun randomizeItems(modifiers: List<ContainerAffectModifiers>): MutableMap<Long, Long> {
+    private fun randomizeItems(modifiers: List<ContainerAffectModifiers>): MutableMap<Int, Long> {
         return when (modifiers.first()) {
             ContainerAffectModifiers.FULL_RANDOM -> {
                 val items = Item.values().filter {
-                    it.getItemType() in setOf(ItemType.LOOT, ItemType.RARE_LOOT)
-                }.shuffled(GameStartLogic.random).subList(0, GameStartLogic.random.nextInt(3) + 1)
-                items.associate { it.getId() to (GameStartLogic.random.nextLong(3) + 1) }.toMutableMap()
+                    it.itemType in setOf(LOOT, RARE_LOOT)
+                }.shuffled(random)
+                    .subList(0, random.nextInt(3) + 1)
+                items.associate { it.id to (random.nextLong(3) + 1) }.toMutableMap()
             }
         }
     }

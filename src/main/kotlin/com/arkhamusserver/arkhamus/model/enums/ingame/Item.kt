@@ -3,8 +3,8 @@ package com.arkhamusserver.arkhamus.model.enums.ingame
 import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.*
 
 enum class Item(
-    private val id: Long,
-    private val itemType: ItemType,
+    val id: Int,
+    val itemType: ItemType,
 ) {
     PURE_NOTHING(-1, TECH_TYPE),
 
@@ -78,9 +78,4 @@ enum class Item(
     BONE_CHIMES(1001, ADVANCED_CULTIST_ITEM)
     ;
 
-    fun getItemType(): ItemType =
-        itemType
-
-    fun getId(): Long =
-        id
 }

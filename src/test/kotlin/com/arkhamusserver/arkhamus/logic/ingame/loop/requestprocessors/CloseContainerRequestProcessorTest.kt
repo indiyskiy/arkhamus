@@ -45,34 +45,34 @@ class CloseContainerRequestProcessorTest {
         val resultUser = data.globalGameData.users[1L]!!.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
 
-        assertNull(resultUser[Item.I1.getId()])
-        assertEquals(10, resultContainer[Item.I1.getId()])
+        assertNull(resultUser[Item.I1.id])
+        assertEquals(10, resultContainer[Item.I1.id])
 
-        assertNull(resultUser[Item.I2.getId()])
-        assertEquals(10, resultContainer[Item.I2.getId()])
+        assertNull(resultUser[Item.I2.id])
+        assertEquals(10, resultContainer[Item.I2.id])
 
-        assertNull(resultUser[Item.I3.getId()])
-        assertEquals(10, resultContainer[Item.I3.getId()])
+        assertNull(resultUser[Item.I3.id])
+        assertEquals(10, resultContainer[Item.I3.id])
 
-        assertNull(resultUser[Item.I4.getId()])
-        assertEquals(10, resultContainer[Item.I4.getId()])
+        assertNull(resultUser[Item.I4.id])
+        assertEquals(10, resultContainer[Item.I4.id])
 
-        assertNull(resultUser[Item.I5.getId()])
-        assertEquals(5, resultContainer[Item.I5.getId()])
+        assertNull(resultUser[Item.I5.id])
+        assertEquals(5, resultContainer[Item.I5.id])
 
-        assertNull(resultUser[Item.I6.getId()])
-        assertEquals(5, resultContainer[Item.I6.getId()])
+        assertNull(resultUser[Item.I6.id])
+        assertEquals(5, resultContainer[Item.I6.id])
     }
 
     @Test
     fun fullInventory() {
         val newInventoryContent = listOf(
-            ContainerCell(Item.I1.getId(), 10),
-            ContainerCell(Item.I2.getId(), 10),
-            ContainerCell(Item.I3.getId(), 10),
-            ContainerCell(Item.I4.getId(), 10),
-            ContainerCell(Item.I5.getId(), 5),
-            ContainerCell(Item.I6.getId(), 5),
+            ContainerCell(Item.I1.id, 10),
+            ContainerCell(Item.I2.id, 10),
+            ContainerCell(Item.I3.id, 10),
+            ContainerCell(Item.I4.id, 10),
+            ContainerCell(Item.I5.id, 5),
+            ContainerCell(Item.I6.id, 5),
         )
 
         val (data, _) = executeRequest(newInventoryContent)
@@ -80,34 +80,34 @@ class CloseContainerRequestProcessorTest {
         val resultUser = data.globalGameData.users[1L]!!.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
 
-        assertEquals(10, resultUser[Item.I1.getId()])
-        assertNull(resultContainer[Item.I1.getId()])
+        assertEquals(10, resultUser[Item.I1.id])
+        assertNull(resultContainer[Item.I1.id])
 
-        assertEquals(10, resultUser[Item.I2.getId()])
-        assertNull(resultContainer[Item.I2.getId()])
+        assertEquals(10, resultUser[Item.I2.id])
+        assertNull(resultContainer[Item.I2.id])
 
-        assertEquals(10, resultUser[Item.I3.getId()])
-        assertNull(resultContainer[Item.I3.getId()])
+        assertEquals(10, resultUser[Item.I3.id])
+        assertNull(resultContainer[Item.I3.id])
 
-        assertEquals(10, resultUser[Item.I4.getId()])
-        assertNull(resultContainer[Item.I4.getId()])
+        assertEquals(10, resultUser[Item.I4.id])
+        assertNull(resultContainer[Item.I4.id])
 
-        assertEquals(5, resultUser[Item.I5.getId()])
-        assertNull(resultContainer[Item.I5.getId()])
+        assertEquals(5, resultUser[Item.I5.id])
+        assertNull(resultContainer[Item.I5.id])
 
-        assertEquals(5, resultUser[Item.I6.getId()])
-        assertNull(resultContainer[Item.I6.getId()])
+        assertEquals(5, resultUser[Item.I6.id])
+        assertNull(resultContainer[Item.I6.id])
     }
 
     @Test
     fun mixed() {
         val newInventoryContent = listOf(
-            ContainerCell(Item.I1.getId(), 10),
-            ContainerCell(Item.I2.getId(), 0),
-            ContainerCell(Item.I3.getId(), 3),
-            ContainerCell(Item.I4.getId(), 10),
-            ContainerCell(Item.I5.getId(), 3),
-            ContainerCell(Item.I6.getId(), 3),
+            ContainerCell(Item.I1.id, 10),
+            ContainerCell(Item.I2.id, 0),
+            ContainerCell(Item.I3.id, 3),
+            ContainerCell(Item.I4.id, 10),
+            ContainerCell(Item.I5.id, 3),
+            ContainerCell(Item.I6.id, 3),
         )
 
         val (data, _) = executeRequest(newInventoryContent)
@@ -115,45 +115,45 @@ class CloseContainerRequestProcessorTest {
         val resultUser = data.globalGameData.users[1L]!!.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
 
-        assertEquals(10, resultUser[Item.I1.getId()])
-        assertNull(resultContainer[Item.I1.getId()])
+        assertEquals(10, resultUser[Item.I1.id])
+        assertNull(resultContainer[Item.I1.id])
 
-        assertNull(resultUser[Item.I2.getId()])
-        assertEquals(10, resultContainer[Item.I2.getId()])
+        assertNull(resultUser[Item.I2.id])
+        assertEquals(10, resultContainer[Item.I2.id])
 
-        assertEquals(3, resultUser[Item.I3.getId()])
-        assertEquals(7, resultContainer[Item.I3.getId()])
+        assertEquals(3, resultUser[Item.I3.id])
+        assertEquals(7, resultContainer[Item.I3.id])
 
-        assertEquals(10, resultUser[Item.I4.getId()])
-        assertNull(resultContainer[Item.I4.getId()])
+        assertEquals(10, resultUser[Item.I4.id])
+        assertNull(resultContainer[Item.I4.id])
 
-        assertEquals(3, resultUser[Item.I5.getId()])
-        assertEquals(2, resultContainer[Item.I5.getId()])
+        assertEquals(3, resultUser[Item.I5.id])
+        assertEquals(2, resultContainer[Item.I5.id])
 
-        assertEquals(3, resultUser[Item.I6.getId()])
-        assertEquals(2, resultContainer[Item.I6.getId()])
+        assertEquals(3, resultUser[Item.I6.id])
+        assertEquals(2, resultContainer[Item.I6.id])
     }
 
     @Test
     fun tryToCheat() {
         val newInventoryContent = listOf(
-            ContainerCell(Item.MASK.getId(), 3),
+            ContainerCell(Item.MASK.id, 3),
         )
         val (data, requestContainer) = executeRequest(newInventoryContent)
         val resultUser = data.globalGameData.users[1L]!!.items
         val closeContainerGameData = requestContainer.requestProcessData as CloseContainerGameData
 
-        assertEquals(null, resultUser[Item.MASK.getId()])
-        assertFalse(closeContainerGameData.sortedInventory!!.any { it.itemId == Item.MASK.getId() && it.number > 0 })
+        assertEquals(null, resultUser[Item.MASK.id])
+        assertFalse(closeContainerGameData.sortedInventory!!.any { it.itemId == Item.MASK.id && it.number > 0 })
     }
 
     @Test
     fun sortedInventory() {
         val newInventoryContent = listOf(
-            ContainerCell(Item.I1.getId(), 10),
-            ContainerCell(Item.I2.getId(), 0),
-            ContainerCell(Item.I3.getId(), 0),
-            ContainerCell(Item.I4.getId(), 10),
+            ContainerCell(Item.I1.id, 10),
+            ContainerCell(Item.I2.id, 0),
+            ContainerCell(Item.I3.id, 0),
+            ContainerCell(Item.I4.id, 10),
         )
 
         val (data, requestContainer) = executeRequest(newInventoryContent)
@@ -161,39 +161,39 @@ class CloseContainerRequestProcessorTest {
         val resultUser = data.globalGameData.users[1L]!!.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
 
-        assertEquals(10, resultUser[Item.I1.getId()])
-        assertNull(resultContainer[Item.I1.getId()])
+        assertEquals(10, resultUser[Item.I1.id])
+        assertNull(resultContainer[Item.I1.id])
 
-        assertNull(resultUser[Item.I2.getId()])
-        assertEquals(10, resultContainer[Item.I2.getId()])
+        assertNull(resultUser[Item.I2.id])
+        assertEquals(10, resultContainer[Item.I2.id])
 
-        assertNull(resultUser[Item.I3.getId()])
-        assertEquals(10, resultContainer[Item.I3.getId()])
+        assertNull(resultUser[Item.I3.id])
+        assertEquals(10, resultContainer[Item.I3.id])
 
-        assertEquals(10, resultUser[Item.I4.getId()])
-        assertNull(resultContainer[Item.I4.getId()])
+        assertEquals(10, resultUser[Item.I4.id])
+        assertNull(resultContainer[Item.I4.id])
 
-        assertNull(resultUser[Item.I5.getId()])
-        assertEquals(5, resultContainer[Item.I5.getId()])
+        assertNull(resultUser[Item.I5.id])
+        assertEquals(5, resultContainer[Item.I5.id])
 
-        assertNull(resultUser[Item.I6.getId()])
-        assertEquals(5, resultContainer[Item.I6.getId()])
+        assertNull(resultUser[Item.I6.id])
+        assertEquals(5, resultContainer[Item.I6.id])
 
         val closeContainerGameData = requestContainer.requestProcessData as CloseContainerGameData
 
         assertEquals(4, closeContainerGameData.sortedInventory!!.size)
 
         assertEquals(10, closeContainerGameData.sortedInventory!![0].number)
-        assertEquals(Item.I1.getId(), closeContainerGameData.sortedInventory!![0].itemId)
+        assertEquals(Item.I1.id, closeContainerGameData.sortedInventory!![0].itemId)
 
         assertEquals(0, closeContainerGameData.sortedInventory!![1].number)
-        assertEquals(Item.PURE_NOTHING.getId(), closeContainerGameData.sortedInventory!![1].itemId)
+        assertEquals(Item.PURE_NOTHING.id, closeContainerGameData.sortedInventory!![1].itemId)
 
         assertEquals(0, closeContainerGameData.sortedInventory!![2].number)
-        assertEquals(Item.PURE_NOTHING.getId(), closeContainerGameData.sortedInventory!![2].itemId)
+        assertEquals(Item.PURE_NOTHING.id, closeContainerGameData.sortedInventory!![2].itemId)
 
         assertEquals(10, closeContainerGameData.sortedInventory!![3].number)
-        assertEquals(Item.I4.getId(), closeContainerGameData.sortedInventory!![3].itemId)
+        assertEquals(Item.I4.id, closeContainerGameData.sortedInventory!![3].itemId)
     }
 
     private fun executeRequest(newInventoryContent: List<ContainerCell>): Pair<Data, NettyTickRequestMessageContainer> {
@@ -309,6 +309,7 @@ class CloseContainerRequestProcessorTest {
             userId = user.id!!,
             nickName = "test user",
             role = RoleTypeInGame.INVESTIGATOR,
+            classInGame = ClassInGame.MIND_HEALER,
             gameId = gameSession.id!!,
             x = container.x!!,
             y = container.y!!,
@@ -335,23 +336,23 @@ class CloseContainerRequestProcessorTest {
         return data
     }
 
-    private fun createOldUserItems(): MutableMap<Long, Long> {
+    private fun createOldUserItems(): MutableMap<Int, Long> {
         return mutableMapOf(
-            Item.I1.getId() to 5,
-            Item.I2.getId() to 5,
-            Item.I3.getId() to 5,
-            Item.I4.getId() to 5,
-            Item.I5.getId() to 5,
+            Item.I1.id to 5,
+            Item.I2.id to 5,
+            Item.I3.id to 5,
+            Item.I4.id to 5,
+            Item.I5.id to 5,
         )
     }
 
-    private fun createContainersItems(): MutableMap<Long, Long> {
+    private fun createContainersItems(): MutableMap<Int, Long> {
         return mutableMapOf(
-            Item.I1.getId() to 5,
-            Item.I2.getId() to 5,
-            Item.I3.getId() to 5,
-            Item.I4.getId() to 5,
-            Item.I6.getId() to 5,
+            Item.I1.id to 5,
+            Item.I2.id to 5,
+            Item.I3.id to 5,
+            Item.I4.id to 5,
+            Item.I6.id to 5,
         )
     }
 

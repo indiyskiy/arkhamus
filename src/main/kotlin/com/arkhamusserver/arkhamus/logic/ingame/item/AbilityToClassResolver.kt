@@ -1,18 +1,17 @@
 package com.arkhamusserver.arkhamus.logic.ingame.item
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
 import org.springframework.stereotype.Component
 
 @Component
-class AbilityToItemResolver {
-    fun resolve(ability: Ability): Item? =
-        if(!ability.requiresItem){
+class AbilityToClassResolver {
+    fun resolve(ability: Ability): ClassInGame? =
+        if (!ability.classBased) {
             null
         } else {
             when (ability) {
-                Ability.SUMMON_NIGHT -> MOON_STONE
+                Ability.HEAL_MADNESS -> ClassInGame.MIND_HEALER
                 else -> null
             }
         }

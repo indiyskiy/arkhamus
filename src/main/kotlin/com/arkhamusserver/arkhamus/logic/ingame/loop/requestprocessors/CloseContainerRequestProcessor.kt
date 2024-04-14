@@ -54,10 +54,10 @@ class CloseContainerRequestProcessor(
         oldGameUser: RedisGameUser,
         newInventoryContent: List<ContainerCell>
     ): List<ContainerCell> {
-        val oldContainerItems: List<Long> = oldContainer.items.toList().filter { it.second > 0 }.map { it.first }
-        val oldGameUserItems: List<Long> = oldGameUser.items.toList().filter { it.second > 0 }.map { it.first }
+        val oldContainerItems: List<Int> = oldContainer.items.toList().filter { it.second > 0 }.map { it.first }
+        val oldGameUserItems: List<Int> = oldGameUser.items.toList().filter { it.second > 0 }.map { it.first }
         val differentItemTypes = (oldContainerItems + oldGameUserItems).distinct()
-        val summarizedItems: MutableMap<Long, Long> = differentItemTypes.associateWith {
+        val summarizedItems: MutableMap<Int, Long> = differentItemTypes.associateWith {
             ((oldContainer.items[it] ?: 0) + (oldGameUser.items[it] ?: 0))
         }.toMutableMap()
         val trueNewInventoryContent: List<ContainerCell> = newInventoryContent.map {
@@ -67,16 +67,16 @@ class CloseContainerRequestProcessor(
                 summarizedItems[itemId] = (summarizedItems[itemId] ?: 0) - newValue
                 ContainerCell(itemId, newValue)
             } else {
-                ContainerCell(Item.PURE_NOTHING.getId(), 0)
+                ContainerCell(Item.PURE_NOTHING.id, 0)
             }
         }
         oldContainer.items = summarizedItems
-            .filterNot { it.key == Item.PURE_NOTHING.getId() || it.value <= 0 }
+            .filterNot { it.key == Item.PURE_NOTHING.id || it.value <= 0 }
             .toMap()
             .toMutableMap()
         oldGameUser.items =
             trueNewInventoryContent
-                .filterNot { it.itemId == Item.PURE_NOTHING.getId() || it.number <= 0 }
+                .filterNot { it.itemId == Item.PURE_NOTHING.id || it.number <= 0 }
                 .groupBy { it.itemId }
                 .map { it.key to it.value.sumOf { it.number } }
                 .toMap()

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 @Component
 class OpenContainerNettyResponseMapper : NettyResponseMapper {
 
-    private val itemMap = Item.values().associateBy { it.getId() }
+    private val itemMap = Item.values().associateBy { it.id }
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == OpenContainerGameData::class.java
 
@@ -32,7 +32,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
                 itemMap[it.key]!! to it.value
             }
             val containerCells = mappedItem.map {
-                ContainerCell(it.first.getId()).apply {
+                ContainerCell(it.first.id).apply {
                     this.number = it.second
                 }
             }

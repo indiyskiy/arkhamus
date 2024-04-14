@@ -12,10 +12,10 @@ class ItemInformationDtoMaker {
 
     fun convert(value: Item): ItemInformationDto =
         ItemInformationDto().apply {
-            id = value.getId()
+            id = value.id
             name = value
             title = value.name.lowercase().replace("_", " ")
                 .capitalizeIfFirstCharIsLowercase()
-            type = value.getItemType()
+            type = value.itemType
         }
 }

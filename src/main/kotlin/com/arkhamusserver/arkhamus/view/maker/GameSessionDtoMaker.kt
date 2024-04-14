@@ -3,7 +3,8 @@ package com.arkhamusserver.arkhamus.view.maker
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.CULTIST
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.INVESTIGATOR
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.dto.InGameUserDto
 import com.arkhamusserver.arkhamus.view.dto.RoleDto
@@ -19,7 +20,7 @@ class GameSessionDtoMaker(
     fun toDto(gameSession: GameSession, currentPlayer: UserAccount): GameSessionDto {
         val currentUserRole =
             gameSession.usersOfGameSession.firstOrNull { it.userAccount.id == currentPlayer.id }?.roleInGame
-        val isCultist = currentUserRole == RoleTypeInGame.CULTIST
+        val isCultist = currentUserRole == CULTIST
         return GameSessionDto().apply {
             id = gameSession.id
             state = gameSession.state
@@ -27,7 +28,7 @@ class GameSessionDtoMaker(
             gameType = gameSession.gameType
             gameSessionSettings = gameSessionSettingsDtoMaker.toDto(gameSession.gameSessionSettings)
             god = convertGod(gameSession, isCultist)
-            usersInGame = mapRolesByReceiverRole(gameSession, isCultist)
+            usersInGame = mapRolesByReceiverRole(gameSession, isCultist, currentPlayer.id!!)
         }
     }
 
@@ -51,7 +52,8 @@ class GameSessionDtoMaker(
 
     private fun mapRolesByReceiverRole(
         gameSession: GameSession,
-        isCultist: Boolean
+        isCultist: Boolean,
+        userId: Long,
     ) = gameSession.usersOfGameSession.map {
         InGameUserDto().apply {
             this.userId = it.userAccount.id
@@ -60,8 +62,18 @@ class GameSessionDtoMaker(
             this.role = RoleDto().apply {
                 this.userRole = when (gameSession.state) {
                     NEW -> null
-                    IN_PROGRESS, PENDING -> if (isCultist) it.roleInGame else RoleTypeInGame.INVESTIGATOR
+                    IN_PROGRESS, PENDING -> if (isCultist) it.roleInGame else INVESTIGATOR
                     FINISHED -> it.roleInGame
+                }
+                this.userClass = when (gameSession.state) {
+                    NEW -> null
+                    IN_PROGRESS, PENDING -> if (it.id == userId) {
+                        it.classInGame
+                    } else {
+                        null
+                    }
+
+                    FINISHED -> it.classInGame
                 }
             }
         }

@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.model.enums.ingame
 
 enum class Visibility {
     PUBLIC,
-    CULTIST,
+    CULTIST_VISIBILITY,
     NONE,
     SOURCE,
     TARGET,
