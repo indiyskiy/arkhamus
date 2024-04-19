@@ -12,4 +12,6 @@ data class AbilityDto(
     val classBased: Boolean,
     val requiredClassId: Int?,
     val availableFor: List<RoleTypeInGame>,
+    val cooldown: Long?,
+    val globalCooldown: Boolean,
 )
