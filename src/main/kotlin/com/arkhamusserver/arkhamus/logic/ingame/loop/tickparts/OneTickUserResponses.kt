@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.NettyResponseBuilder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.isCurrentTick
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseMessage
 import org.springframework.stereotype.Component

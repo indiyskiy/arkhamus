@@ -44,7 +44,8 @@ class TestContainerLogic(
             containerCells = container.items.map { (itemId, quantity) ->
                 ContainerCell(itemId, quantity)
             },
-            holdingUser = container.holdingUser
+            holdingUser = container.holdingUser,
+            availableAbilities = emptyList()
         )
     }
 }

@@ -47,25 +47,29 @@ class GameThreadPool(
         tasksMap[gameId] = newTaskCollection
         val scheduledFuture = taskExecutor.scheduleAtFixedRate(
             {
-                val taskCollection = tasksMap[gameId]!!
-                val taskList = synchronized(taskCollection) {
-                    taskCollection.getList().also { taskCollection.resetList() }
-                }
-                val redisGame = redisDataAccess.getGame(gameId)
-                // TODO better state handling - e.g. we might want to support pause somehow and other stuff later
-                if (redisGame.state == GameState.IN_PROGRESS.name) {
-                    processGameTick(
-                        tasks = taskList,
-                        gameId = gameId,
-                        ongoingGame = redisGame
-                    )
-                }
+                processGameTasks(gameId)
             },
             0L,
             TICK_DELTA,
             TimeUnit.MILLISECONDS
         )
         loopHandlerFutures[gameSession.id] = scheduledFuture
+    }
+
+    private fun processGameTasks(gameId: Long) {
+        val taskCollection = tasksMap[gameId]!!
+        val taskList = synchronized(taskCollection) {
+            taskCollection.getList().also { taskCollection.resetList() }
+        }
+        val redisGame = redisDataAccess.getGame(gameId)
+        // TODO better state handling - e.g. we might want to support pause somehow and other stuff later
+        if (redisGame.state == GameState.IN_PROGRESS.name) {
+            processGameTick(
+                tasks = taskList,
+                gameId = gameId,
+                ongoingGame = redisGame
+            )
+        }
     }
 
     @Scheduled(fixedRate = 1000)

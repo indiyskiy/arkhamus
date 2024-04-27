@@ -36,10 +36,21 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
                     this.number = it.second
                 }
             }
-            if(requestProcessData.container.holdingUser == user.id) {
-                return myContainer(containerCells, requestProcessData, user, requestProcessData.gameUser!!)
+            if (requestProcessData.container.holdingUser == user.id) {
+                return myContainer(
+                    containerCells,
+                    requestProcessData,
+                    user,
+                    requestProcessData.gameUser!!,
+                    requestProcessData.availableAbilities
+                )
             } else {
-                return closedContainer(requestProcessData, user, requestProcessData.gameUser!!)
+                return closedContainer(
+                    requestProcessData,
+                    user,
+                    requestProcessData.gameUser!!,
+                    requestProcessData.availableAbilities
+                )
             }
         }
     }
@@ -48,7 +59,8 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
         containerCells: List<ContainerCell>,
         gameData: OpenContainerGameData,
         user: UserAccount,
-        gameUser: RedisGameUser
+        gameUser: RedisGameUser,
+        availableAbilities: List<AbilityOfUserResponse>
     ) = OpenContainerNettyResponse(
         containerCells = containerCells,
         containerState = gameData.container.state,
@@ -66,13 +78,15 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
         },
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
-        }
+        },
+        availableAbilities = availableAbilities
     )
 
     private fun closedContainer(
         gameData: OpenContainerGameData,
         user: UserAccount,
-        gameUser: RedisGameUser
+        gameUser: RedisGameUser,
+        availableAbilities: List<AbilityOfUserResponse>
     ) = OpenContainerNettyResponse(
         containerCells = emptyList(),
         containerState = gameData.container.state,
@@ -90,7 +104,8 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
         },
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
-        }
+        },
+        availableAbilities = availableAbilities
     )
 
 }

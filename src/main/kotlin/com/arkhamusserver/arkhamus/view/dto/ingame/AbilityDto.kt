@@ -10,7 +10,7 @@ data class AbilityDto(
     val requireItemId: Int?,
     val consumesItem: Boolean,
     val classBased: Boolean,
-    val requiredClassId: Int?,
+    val requiredClassIds: List<Int>?,
     val availableFor: List<RoleTypeInGame>,
     val cooldown: Long?,
     val globalCooldown: Boolean,

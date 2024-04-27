@@ -44,28 +44,19 @@ class OneTickTimeEvent(
         timeAdd: Long,
         currentGameTime: Long
     ): OngoingEvent {
-        val changedEvent = process(event, globalGameData, timeAdd, currentGameTime)
-        return changedEvent
-    }
-
-    private fun process(
-        event: RedisTimeEvent,
-        globalGameData: GlobalGameData,
-        timeAdd: Long,
-        currentGameTime: Long
-    ): OngoingEvent {
         if (event.timePast == 0L) {
             applyStartProcessors(event, globalGameData, currentGameTime)
         }
         event.timePast += timeAdd
         event.timeLeft -= timeAdd
         if (event.timeLeft > 0) {
-            logger.info("process ${event.type}")
+//            logger.info("process ${event.type}")
             applyProcessors(event, globalGameData, currentGameTime)
             timeEventRepository.save(event)
         } else {
-            logger.info("end ${event.type}")
+//            logger.info("end ${event.type}")
             applyEndProcessors(event, globalGameData, currentGameTime)
+            event.state = RedisTimeEventState.PAST
             timeEventRepository.delete(event)
         }
         return OngoingEvent(

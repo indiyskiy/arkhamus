@@ -29,7 +29,8 @@ class CloseContainerNettyResponseMapper : NettyResponseMapper {
                 requestProcessData.sortedInventory ?: emptyList(),
                 requestProcessData,
                 user,
-                requestProcessData.gameUser!!
+                requestProcessData.gameUser!!,
+                requestProcessData.availableAbilities
             )
         }
     }
@@ -38,7 +39,8 @@ class CloseContainerNettyResponseMapper : NettyResponseMapper {
         sortedInventory: List<ContainerCell>,
         gameData: CloseContainerGameData,
         user: UserAccount,
-        gameUser: RedisGameUser
+        gameUser: RedisGameUser,
+        availableAbilities: List<AbilityOfUserResponse>
     ) = CloseContainerNettyResponse(
         userInventory = sortedInventory,
         tick = gameData.tick,
@@ -54,7 +56,8 @@ class CloseContainerNettyResponseMapper : NettyResponseMapper {
         },
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
-        }
+        },
+        availableAbilities = availableAbilities
     )
 
 }

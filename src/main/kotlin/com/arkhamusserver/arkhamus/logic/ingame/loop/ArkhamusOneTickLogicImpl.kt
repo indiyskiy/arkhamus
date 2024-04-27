@@ -1,13 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic.Companion.logger
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.loadGlobalGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.OneTickTick
-import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.OneTickTimeEvent
-import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.OneTickUserRequests
-import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.OneTickUserResponses
+import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.*
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseMessage
 import org.springframework.stereotype.Component
@@ -18,7 +17,9 @@ class ArkhamusOneTickLogicImpl(
     private val redisDataAccess: RedisDataAccess,
     private val oneTickUserRequests: OneTickUserRequests,
     private val oneTickTick: OneTickTick,
-    private val oneTickTimeEvent: OneTickTimeEvent
+    private val oneTickTimeEvent: OneTickTimeEvent,
+    private val onTickAbilityCast: OnTickAbilityCast,
+    private val gameUserRedisRepository: RedisGameUserRepository
 ) : ArkhamusOneTickLogic {
 
     override fun processCurrentTasks(
@@ -30,10 +31,19 @@ class ArkhamusOneTickLogicImpl(
             val currentTick = game.currentTick
 
             oneTickTick.updateNextTick(game)
-            val ongoingEvents =
-                oneTickTimeEvent.processTimeEvents(globalGameData, globalGameData.timeEvents, game.globalTimer)
-            oneTickUserRequests.processRequests(currentTasks, currentTick, globalGameData, ongoingEvents)
+            val ongoingEvents = oneTickTimeEvent.processTimeEvents(
+                globalGameData,
+                globalGameData.timeEvents,
+                game.globalTimer
+            )
+            onTickAbilityCast.applyAbilityCasts(
+                globalGameData,
+                globalGameData.castedAbilities,
+                game.globalTimer
+            )
 
+            oneTickUserRequests.processRequests(currentTasks, currentTick, globalGameData, ongoingEvents)
+            saveAllUsers(globalGameData)
             val responses =
                 oneTickUserResponses.buildResponses(
                     currentTick,
@@ -47,9 +57,10 @@ class ArkhamusOneTickLogicImpl(
         return emptyList()
     }
 
+    private fun saveAllUsers(globalGameData: GlobalGameData) {
+        globalGameData.users.forEach { gameUser ->
+            gameUserRedisRepository.save(gameUser.value)
+        }
+    }
 
 }
-
-fun NettyTickRequestMessageContainer.isCurrentTick(
-    tick: Long
-) = nettyRequestMessage.baseRequestData.tick == tick

@@ -7,11 +7,13 @@ class CloseContainerNettyResponse(
     myGameUser: MyGameUserResponseMessage,
     otherGameUsers: List<NettyGameUserResponseMessage>,
     ongoingEvents: List<OngoingEventResponse>,
+    availableAbilities: List<AbilityOfUserResponse>
 ) : NettyResponseMessage(
     tick,
     userId,
     myGameUser,
     otherGameUsers,
     ongoingEvents,
+    availableAbilities,
     CloseContainerNettyResponse::class.java.simpleName
 )

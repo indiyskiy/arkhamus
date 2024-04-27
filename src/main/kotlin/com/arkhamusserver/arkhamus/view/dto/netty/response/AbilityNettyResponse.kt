@@ -1,20 +1,20 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-
 class AbilityNettyResponse(
-    private val ability: Ability?,
+    private val abilityId: Int?,
     private val castedSuccessfully: Boolean,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponseMessage,
     otherGameUsers: List<NettyGameUserResponseMessage>,
     ongoingEvents: List<OngoingEventResponse>,
+    availableAbilities: List<AbilityOfUserResponse>
 ) : NettyResponseMessage(
     tick,
     userId,
     myGameUser,
     otherGameUsers,
     ongoingEvents,
+    availableAbilities,
     AbilityNettyResponse::class.java.simpleName
 )

@@ -61,6 +61,10 @@ class CustomGameLogic(
     @Transactional
     fun createGame(): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
+        val oldGame = gameLogic.findCurrentUserGame(player, GameType.CUSTOM)
+        if(oldGame != null){
+            return oldGame.toDto(player)
+        }
         return gameLogic.createNewGameSession(
             DEFAULT_LOBBY_SIZE,
             DEFAULT_CULTIST_SIZE,

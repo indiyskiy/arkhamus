@@ -11,5 +11,6 @@ class NettyGameStartedResponse(
     myGameUser,
     allGameUsers,
     emptyList(),
+    emptyList(),
     NettyGameStartedResponse::class.java.simpleName
 )

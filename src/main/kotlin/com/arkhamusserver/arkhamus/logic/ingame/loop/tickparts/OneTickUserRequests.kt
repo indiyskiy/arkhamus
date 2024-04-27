@@ -4,15 +4,12 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.isCurrentTick
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
 import org.springframework.stereotype.Component
 
 @Component
 class OneTickUserRequests(
-    private val gameUserRedisRepository: RedisGameUserRepository,
     private val nettyRequestProcessors: List<NettyRequestProcessor>,
     private val requestProcessDataBuilder: GameDataBuilder,
 ) {
@@ -43,9 +40,6 @@ class OneTickUserRequests(
         }.forEach {
             it.process(requestContainer, globalGameData, ongoingEvents)
         }
-
-        val gameUser = globalGameData.users[requestContainer.userAccount.id]!!
-        gameUserRedisRepository.save(gameUser)
     }
 
 }

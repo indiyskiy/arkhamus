@@ -5,6 +5,7 @@ import kotlin.math.hypot
 
 @Component
 class DistanceHandler {
+
     fun distance(point1X: Double, point1Y: Double, point2X: Double, point2Y: Double): Double {
         return hypot(point1X - point2X, point1Y - point2Y)
     }

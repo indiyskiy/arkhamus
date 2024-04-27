@@ -26,8 +26,8 @@ class AbilityDtoMaker(
             } else null,
             consumesItem = value.consumesItem,
             classBased = value.classBased,
-            requiredClassId = if (value.classBased) {
-                abilityToClassResolver.resolve(value)?.id
+            requiredClassIds = if (value.classBased) {
+                abilityToClassResolver.resolve(value)?.map { it.id }
             } else null,
             availableFor = value.availableFor.toList(),
             cooldown = value.cooldown,

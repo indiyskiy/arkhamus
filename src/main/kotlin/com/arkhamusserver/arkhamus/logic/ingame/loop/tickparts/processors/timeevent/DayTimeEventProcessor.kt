@@ -36,7 +36,6 @@ class DayTimeEventProcessor(
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
-        event.state = RedisTimeEventState.PAST
         startTheNight(event, currentGameTime)
     }
 

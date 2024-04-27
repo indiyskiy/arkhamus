@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
+import com.arkhamusserver.arkhamus.logic.ingame.logic.CanAbilityBeCastedHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.RelatedAbilityCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.UserInventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
@@ -16,8 +18,9 @@ import org.springframework.stereotype.Component
 @Component
 class AbilityNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
-    private val userInventoryHandler: UserInventoryHandler,
-    private val abilityToItemResolver: AbilityToItemResolver
+    private val abilityToItemResolver: AbilityToItemResolver,
+    private val relatedAbilityCastHandler: RelatedAbilityCastHandler,
+    private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -37,39 +40,34 @@ class AbilityNettyRequestHandler(
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
             return ability?.let {
+                val relatedAbility =
+                    relatedAbilityCastHandler.findForUser(user, ability, globalGameData.castedAbilities)
                 val requiredItem = abilityToItemResolver.resolve(it)
-                if (requiredItem != null) {
-                    val haveItem = userInventoryHandler.userHaveItem(user, requiredItem)
-                    AbilityRequestProcessData(
-                        ability = ability,
-                        canBeCasted = haveItem,
-                        item = requiredItem,
-                        castedSuccessfully = false,
-                        gameUser = user,
-                        otherGameUsers = users,
-                        visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
-                        tick = globalGameData.game.currentTick
-                    )
-                } else {
-                    AbilityRequestProcessData(
-                        ability = ability,
-                        canBeCasted = true,
-                        item = null,
-                        castedSuccessfully = false,
-                        gameUser = user,
-                        otherGameUsers = users,
-                        visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
-                        tick = globalGameData.game.currentTick
-                    )
-                }
+                val canBeCasted = canAbilityBeCastedHandler.canUserCast(user, ability, requiredItem)
+                AbilityRequestProcessData(
+                    ability = ability,
+                    canBeCasted = canBeCasted,
+                    cooldown = relatedAbility?.timeLeft,
+                    cooldownOf = ability.cooldown,
+                    item = requiredItem,
+                    castedSuccessfully = false,
+                    gameUser = user,
+                    otherGameUsers = users,
+                    visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
+                    availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+                    tick = globalGameData.game.currentTick
+                )
             } ?: AbilityRequestProcessData(
                 ability = null,
                 canBeCasted = false,
+                cooldown = null,
+                cooldownOf = null,
                 item = null,
                 castedSuccessfully = false,
                 gameUser = user,
                 otherGameUsers = users,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
+                availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
                 tick = globalGameData.game.currentTick
             )
         }

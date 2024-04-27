@@ -38,7 +38,8 @@ class HeartbeatNettyResponseMapper : NettyResponseMapper {
                 },
                 ongoingEvents = requestProcessData.visibleOngoingEvents.map {
                     OngoingEventResponse(it)
-                }
+                },
+                availableAbilities = requestProcessData.availableAbilities
             )
         }
     }

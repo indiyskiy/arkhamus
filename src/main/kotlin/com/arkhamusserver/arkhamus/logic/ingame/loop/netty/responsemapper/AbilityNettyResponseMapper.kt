@@ -28,7 +28,7 @@ class AbilityNettyResponseMapper : NettyResponseMapper {
     ): AbilityNettyResponse {
         (requestProcessData as AbilityRequestProcessData).let {
             return AbilityNettyResponse(
-                ability = it.ability,
+                abilityId = it.ability?.id,
                 castedSuccessfully = it.castedSuccessfully,
                 tick = it.tick,
                 userId = user.id!!,
@@ -43,7 +43,8 @@ class AbilityNettyResponseMapper : NettyResponseMapper {
                 },
                 ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
                     OngoingEventResponse(event)
-                }
+                },
+                availableAbilities = requestProcessData.availableAbilities
             )
         }
     }

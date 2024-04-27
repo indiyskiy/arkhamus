@@ -57,7 +57,9 @@ class GameStartContainerLogic(
                     it.itemType in setOf(LOOT, RARE_LOOT)
                 }.shuffled(random)
                     .subList(0, random.nextInt(3) + 1)
-                items.associate { it.id to (random.nextLong(3) + 1) }.toMutableMap()
+               val chest = items.associate { it.id to (random.nextLong(3) + 1) }.toMutableMap()
+                chest[Item.MOON_STONE.id] = 5
+                chest
             }
         }
     }

@@ -7,5 +7,6 @@ data class GlobalGameData(
     var users: Map<Long, RedisGameUser> = emptyMap(),
     var containers: Map<Long, RedisContainer> = emptyMap(),
     var lanterns: Map<Long, RedisLantern> = emptyMap(),
-    var timeEvents: List<RedisTimeEvent> = emptyList()
+    var timeEvents: List<RedisTimeEvent> = emptyList(),
+    var castedAbilities: List<RedisAbilityCast> = emptyList()
 )

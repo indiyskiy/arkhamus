@@ -35,6 +35,16 @@ class GameLogic(
     }
 
     @Transactional
+    fun findCurrentUserGame(player: UserAccount, gameType: GameType): GameSession? {
+        val userOfGames = userOfGameSessionRepository.findByUserAccountId(player.id!!)
+        return userOfGames.firstOrNull {
+            it.gameSession.state == GameState.NEW &&
+                    it.gameSession.gameType == gameType &&
+                    it.host
+        }?.gameSession
+    }
+
+    @Transactional
     fun start(game: GameSession): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         val invitedUsers = game.usersOfGameSession
@@ -103,5 +113,6 @@ class GameLogic(
 
     fun GameSession.toDto(currentPlayer: UserAccount): GameSessionDto =
         gameSessionDtoMaker.toDto(this, currentPlayer)
+
 
 }

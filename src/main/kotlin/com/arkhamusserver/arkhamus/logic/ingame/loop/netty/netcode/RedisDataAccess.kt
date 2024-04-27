@@ -12,6 +12,7 @@ interface RedisDataAccess {
     fun getLantern(lanternId: Long, gameId: Long): RedisLantern
     fun getGameLanterns(gameId: Long): List<RedisLantern>
     fun getTimeEvents(gameId: Long): List<RedisTimeEvent>
+    fun getCastedAbilities(gameId: Long): List<RedisAbilityCast>
 }
 
 fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
@@ -19,11 +20,13 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     val allUsers = getGameUsers(gameId)
     val allContainers = getGameContainers(gameId)
     val allEvents = getTimeEvents(gameId)
+    val castedAbilities = getCastedAbilities(gameId)
     val allLanterns = getGameLanterns(gameId)
     return GlobalGameData(game).apply {
         this.users = allUsers.associateBy { it.userId }
         this.containers = allContainers.associateBy { it.containerId }
         this.timeEvents = allEvents
+        this.castedAbilities = castedAbilities
         this.lanterns = allLanterns.associateBy { it.lanternId }
     }
 }

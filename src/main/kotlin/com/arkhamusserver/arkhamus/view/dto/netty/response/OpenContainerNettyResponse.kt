@@ -11,11 +11,13 @@ class OpenContainerNettyResponse(
     myGameUser: MyGameUserResponseMessage,
     otherGameUsers: List<NettyGameUserResponseMessage>,
     ongoingEvents: List<OngoingEventResponse>,
+    availableAbilities: List<AbilityOfUserResponse>
 ) : NettyResponseMessage(
     tick,
     userId,
     myGameUser,
     otherGameUsers,
     ongoingEvents,
+    availableAbilities,
     OpenContainerNettyResponse::class.java.simpleName
 )

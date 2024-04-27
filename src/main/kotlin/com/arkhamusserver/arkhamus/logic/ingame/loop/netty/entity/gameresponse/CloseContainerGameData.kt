@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
 
 class CloseContainerGameData(
@@ -11,5 +12,6 @@ class CloseContainerGameData(
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
+    availableAbilities: List<AbilityOfUserResponse>,
     tick: Long
-) : GameUserData(gameUser, otherGameUsers, visibleOngoingEvents, tick)
+) : GameUserData(gameUser, otherGameUsers, visibleOngoingEvents, availableAbilities, tick)
