@@ -1,10 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
 import org.springframework.stereotype.Component
 
 @Component

@@ -8,8 +8,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import com.fasterxml.uuid.Generators
-import org.springframework.data.annotation.Id
-import org.springframework.data.redis.core.index.Indexed
 import org.springframework.stereotype.Component
 
 @Component

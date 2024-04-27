@@ -3,7 +3,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.CanAbilityBeCastedHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.RelatedAbilityCastHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.UserInventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter

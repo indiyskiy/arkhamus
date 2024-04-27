@@ -2,11 +2,9 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAbilityCastRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
