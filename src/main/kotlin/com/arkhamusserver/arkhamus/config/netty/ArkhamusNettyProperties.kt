@@ -1,9 +1,9 @@
 package com.arkhamusserver.arkhamus.config.netty
 
-import org.springframework.boot.context.properties.ConfigurationProperties
 import jakarta.validation.constraints.Min
-import jakarta.validation.constraints.Size
 import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Size
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 
 @Component

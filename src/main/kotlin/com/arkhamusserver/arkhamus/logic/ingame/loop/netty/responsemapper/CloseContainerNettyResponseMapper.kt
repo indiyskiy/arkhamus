@@ -26,11 +26,11 @@ class CloseContainerNettyResponseMapper : NettyResponseMapper {
     ): CloseContainerNettyResponse {
         with(requestProcessData as CloseContainerGameData) {
             return myInventory(
-                requestProcessData.sortedInventory ?: emptyList(),
-                requestProcessData,
-                user,
-                requestProcessData.gameUser!!,
-                requestProcessData.availableAbilities
+                sortedInventory = requestProcessData.sortedInventory ?: emptyList(),
+                gameData = requestProcessData,
+                user = user,
+                gameUser = requestProcessData.gameUser!!,
+                availableAbilities = requestProcessData.availableAbilities
             )
         }
     }
@@ -42,6 +42,7 @@ class CloseContainerNettyResponseMapper : NettyResponseMapper {
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>
     ) = CloseContainerNettyResponse(
+        sortedUserInventory = sortedInventory,
         userInventory = sortedInventory,
         tick = gameData.tick,
         userId = user.id!!,

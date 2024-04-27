@@ -18,7 +18,7 @@ import kotlin.math.min
 
 @Component
 class CloseContainerRequestProcessor(
-    private val redisContainerRepository: RedisContainerRepository
+    private val redisContainerRepository: RedisContainerRepository,
 ) : NettyRequestProcessor {
 
     companion object {
@@ -45,6 +45,7 @@ class CloseContainerRequestProcessor(
                 getTrueNewInventoryContent(container, oldGameUser, closeContainerRequestMessage.newInventoryContent)
             closeContainer(container)
             requestProcessData.sortedInventory = sortedInventory
+            requestProcessData.visibleItems = sortedInventory
         }
     }
 

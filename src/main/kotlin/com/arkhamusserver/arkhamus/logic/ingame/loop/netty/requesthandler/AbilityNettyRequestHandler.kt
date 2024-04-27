@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.CanAbilityBeCastedHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.RelatedAbilityCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.UserInventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -19,7 +20,8 @@ class AbilityNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val abilityToItemResolver: AbilityToItemResolver,
     private val relatedAbilityCastHandler: RelatedAbilityCastHandler,
-    private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler
+    private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
+    private val inventoryHandler: UserInventoryHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -54,6 +56,7 @@ class AbilityNettyRequestHandler(
                     otherGameUsers = users,
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                     availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+                    visibleItems = inventoryHandler.mapUsersItems(user.items),
                     tick = globalGameData.game.currentTick
                 )
             } ?: AbilityRequestProcessData(
@@ -67,6 +70,7 @@ class AbilityNettyRequestHandler(
                 otherGameUsers = users,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                 availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+                visibleItems = inventoryHandler.mapUsersItems(user.items),
                 tick = globalGameData.game.currentTick
             )
         }

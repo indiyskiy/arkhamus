@@ -1,10 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame
 
+import com.arkhamusserver.arkhamus.logic.ingame.item.GodToCorkResolver
+import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.view.dto.ingame.GodDto
 import com.arkhamusserver.arkhamus.view.dto.ingame.GodWithCorksDto
-import com.arkhamusserver.arkhamus.logic.ingame.item.GodToCorkResolver
 import com.arkhamusserver.arkhamus.view.maker.ingame.GodToGodDtoMaker
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.view.maker.ingame.GodWithCorksDtoMaker
 import org.springframework.stereotype.Component
 

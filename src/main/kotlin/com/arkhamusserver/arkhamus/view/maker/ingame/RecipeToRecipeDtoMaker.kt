@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.view.maker.ingame
 
-import com.arkhamusserver.arkhamus.view.dto.ingame.RecipeDto
 import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
+import com.arkhamusserver.arkhamus.view.dto.ingame.RecipeDto
 import org.springframework.stereotype.Component
 
 @Component

@@ -1,12 +1,15 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.HeartbeatGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.HeartbeatNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.OngoingEventResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -39,7 +42,8 @@ class HeartbeatNettyResponseMapper : NettyResponseMapper {
                 ongoingEvents = requestProcessData.visibleOngoingEvents.map {
                     OngoingEventResponse(it)
                 },
-                availableAbilities = requestProcessData.availableAbilities
+                availableAbilities = requestProcessData.availableAbilities,
+                userInventory = requestProcessData.visibleItems
             )
         }
     }

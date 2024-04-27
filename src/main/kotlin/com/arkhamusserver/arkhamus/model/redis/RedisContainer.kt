@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
-import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.annotation.Id
+import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisContainer")

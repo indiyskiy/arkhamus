@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.CULTIST
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.INVESTIGATOR
 
 enum class ClassInGame(val id: Int, val roleType: RoleTypeInGame) {
     MIND_HEALER(101, INVESTIGATOR),

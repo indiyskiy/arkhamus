@@ -12,4 +12,11 @@ class AuthRequestProcessData(
     var userOfTheGame: UserOfGameSession? = null,
     gameUser: RedisGameUser?,
     otherGameUsers: List<RedisGameUser> = emptyList(),
-) : GameUserData(gameUser, otherGameUsers, emptyList(), emptyList(), -1L)
+) : GameUserData(
+    gameUser = gameUser,
+    otherGameUsers = otherGameUsers,
+    visibleOngoingEvents = emptyList(),
+    availableAbilities = emptyList(),
+    visibleItems = emptyList(),
+    tick = -1L
+)

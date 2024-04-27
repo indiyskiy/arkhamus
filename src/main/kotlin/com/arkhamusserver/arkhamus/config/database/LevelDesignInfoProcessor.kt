@@ -10,9 +10,9 @@ import com.arkhamusserver.arkhamus.model.database.entity.Level
 import com.arkhamusserver.arkhamus.model.database.entity.StartMarker
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import com.arkhamusserver.arkhamus.view.levelDesign.ContainerFromJson
-import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
 import com.arkhamusserver.arkhamus.view.levelDesign.JsonStartMarker
 import com.arkhamusserver.arkhamus.view.levelDesign.LanternFromJson
+import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader

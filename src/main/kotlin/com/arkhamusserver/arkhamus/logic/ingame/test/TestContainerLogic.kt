@@ -3,7 +3,10 @@ package com.arkhamusserver.arkhamus.logic.ingame.test
 import com.arkhamusserver.arkhamus.logic.CurrentUserService
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.getOtherGameUsers
-import com.arkhamusserver.arkhamus.view.dto.netty.response.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.OpenContainerNettyResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -45,7 +48,8 @@ class TestContainerLogic(
                 ContainerCell(itemId, quantity)
             },
             holdingUser = container.holdingUser,
-            availableAbilities = emptyList()
+            availableAbilities = emptyList(),
+            userInventory = emptyList()
         )
     }
 }

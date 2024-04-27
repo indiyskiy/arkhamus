@@ -9,11 +9,12 @@ class NettyResponseAuth(
     myGameUser: MyGameUserResponseMessage,
     allGameUsers: List<NettyGameUserResponseMessage>,
 ) : NettyResponseMessage(
-    tick,
-    userId,
-    myGameUser,
-    allGameUsers,
-    emptyList(),
-    emptyList(),
-    NettyResponseAuth::class.java.simpleName
+    tick = tick,
+    userId = userId,
+    myGameUser = myGameUser,
+    otherGameUsers = allGameUsers,
+    ongoingEvents = emptyList(),
+    availableAbilities = emptyList(),
+    userInventory = emptyList(),
+    type = NettyResponseAuth::class.java.simpleName
 )

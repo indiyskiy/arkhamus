@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.annotation.Id
+import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisTimeEvent")

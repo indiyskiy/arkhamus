@@ -1,7 +1,10 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
 import com.arkhamusserver.arkhamus.model.enums.LevelState
-import jakarta.persistence.*
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 import org.hibernate.annotations.CreationTimestamp
 import java.sql.Timestamp
 

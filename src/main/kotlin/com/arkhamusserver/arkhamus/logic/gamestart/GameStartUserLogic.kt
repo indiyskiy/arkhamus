@@ -8,7 +8,8 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSes
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.CULTIST
+import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.INVESTIGATOR
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component
 import kotlin.random.Random

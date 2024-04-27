@@ -1,13 +1,13 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
+import com.arkhamusserver.arkhamus.globalutils.toJson
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AuthRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.AuthNettyRequestHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.AuthNettyResponseMapper
 import com.arkhamusserver.arkhamus.model.enums.AuthState
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AuthRequestMessage
-import  com.arkhamusserver.arkhamus.globalutils.toJson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component

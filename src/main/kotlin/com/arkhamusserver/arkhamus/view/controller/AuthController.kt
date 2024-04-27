@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.view.controller
 
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.AuthenticationService
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.AuthenticationService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping

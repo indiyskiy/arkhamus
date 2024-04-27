@@ -1,4 +1,5 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
+
 class NettyGameStartedResponse(
     val message: String = "STARTED",
     tick: Long = 0,
@@ -6,11 +7,12 @@ class NettyGameStartedResponse(
     myGameUser: MyGameUserResponseMessage,
     allGameUsers: List<NettyGameUserResponseMessage>,
 ) : NettyResponseMessage(
-    tick,
-    userId,
-    myGameUser,
-    allGameUsers,
-    emptyList(),
-    emptyList(),
-    NettyGameStartedResponse::class.java.simpleName
+    tick = tick,
+    userId = userId,
+    myGameUser = myGameUser,
+    otherGameUsers = allGameUsers,
+    ongoingEvents = emptyList(),
+    availableAbilities = emptyList(),
+    userInventory = emptyList(),
+    type = NettyGameStartedResponse::class.java.simpleName
 )

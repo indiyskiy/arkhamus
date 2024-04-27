@@ -6,13 +6,15 @@ class HeartbeatNettyResponse(
     myGameUser: MyGameUserResponseMessage,
     otherGameUsers: List<NettyGameUserResponseMessage>,
     ongoingEvents: List<OngoingEventResponse>,
-    availableAbilities: List<AbilityOfUserResponse>
+    availableAbilities: List<AbilityOfUserResponse>,
+    userInventory: List<ContainerCell>,
 ) : NettyResponseMessage(
-    tick,
-    userId,
-    myGameUser,
-    otherGameUsers,
-    ongoingEvents,
-    availableAbilities,
-    HeartbeatNettyResponse::class.java.simpleName
+    tick = tick,
+    userId = userId,
+    myGameUser = myGameUser,
+    otherGameUsers = otherGameUsers,
+    ongoingEvents = ongoingEvents,
+    availableAbilities = availableAbilities,
+    userInventory = userInventory,
+    type = HeartbeatNettyResponse::class.java.simpleName
 )

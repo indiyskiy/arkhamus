@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.config.auth
 
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.CustomUserDetailsService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.CustomUserDetailsService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

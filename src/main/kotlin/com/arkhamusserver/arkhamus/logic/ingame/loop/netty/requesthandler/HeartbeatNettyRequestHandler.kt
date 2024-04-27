@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.CanAbilityBeCastedHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.UserInventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component
 class HeartbeatNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
+    private val inventoryHandler: UserInventoryHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -38,9 +40,9 @@ class HeartbeatNettyRequestHandler(
                 otherGameUsers = users,
                 visibleOngoingEvents = visibleOngoingEvents,
                 availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+                visibleItems = inventoryHandler.mapUsersItems(user.items),
                 tick = globalGameData.game.currentTick,
-
-                )
+            )
         } ?: return ErrorGameResponse("game session id is null", globalGameData.game.currentTick)
     }
 

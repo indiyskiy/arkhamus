@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.UserInventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -13,7 +14,9 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.OngoingEventResponse
 import org.springframework.stereotype.Component
 
 @Component
-class AbilityNettyResponseMapper : NettyResponseMapper {
+class AbilityNettyResponseMapper(
+    private val inventoryHandler: UserInventoryHandler
+) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == AbilityRequestProcessData::class.java
 
@@ -44,7 +47,8 @@ class AbilityNettyResponseMapper : NettyResponseMapper {
                 ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
                     OngoingEventResponse(event)
                 },
-                availableAbilities = requestProcessData.availableAbilities
+                availableAbilities = requestProcessData.availableAbilities,
+                userInventory = requestProcessData.visibleItems
             )
         }
     }

@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.jsonparser
 
-import com.arkhamusserver.arkhamus.view.dto.netty.request.OpenContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.OpenContainerRequestMessage
 import org.springframework.stereotype.Component
 
 @Component

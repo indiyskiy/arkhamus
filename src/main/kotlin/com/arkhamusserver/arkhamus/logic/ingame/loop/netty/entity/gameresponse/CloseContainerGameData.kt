@@ -13,5 +13,13 @@ class CloseContainerGameData(
     otherGameUsers: List<RedisGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
+    visibleItems: List<ContainerCell>,
     tick: Long
-) : GameUserData(gameUser, otherGameUsers, visibleOngoingEvents, availableAbilities, tick)
+) : GameUserData(
+    gameUser = gameUser,
+    otherGameUsers = otherGameUsers,
+    visibleOngoingEvents = visibleOngoingEvents,
+    availableAbilities = availableAbilities,
+    visibleItems = visibleItems,
+    tick = tick
+)
