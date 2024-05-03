@@ -7,8 +7,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.Container
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerAffectModifiers
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.LOOT
-import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.RARE_LOOT
+import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.*
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import org.springframework.stereotype.Component
 import kotlin.random.Random
@@ -27,8 +26,12 @@ class GameStartContainerLogic(
         game: GameSession
     ) {
         val allLevelContainers = containerRepository.findByLevelId(levelId)
-        allLevelContainers.forEach { dbContainer ->
-            val modifiers = listOf(ContainerAffectModifiers.FULL_RANDOM)
+        allLevelContainers.forEachIndexed { i, dbContainer ->
+            val modifiers = if (i == 0)
+                listOf(ContainerAffectModifiers.GOD_MODE_CHEST)
+            else
+                listOf(ContainerAffectModifiers.FULL_RANDOM)
+
             with(createContainer(game, dbContainer, modifiers)) {
                 redisContainerRepository.save(this)
             }
@@ -53,14 +56,36 @@ class GameStartContainerLogic(
     private fun randomizeItems(modifiers: List<ContainerAffectModifiers>): MutableMap<Int, Long> {
         return when (modifiers.first()) {
             ContainerAffectModifiers.FULL_RANDOM -> {
-                val items = Item.values().filter {
-                    it.itemType in setOf(LOOT, RARE_LOOT)
-                }.shuffled(random)
-                    .subList(0, random.nextInt(3) + 1)
-               val chest = items.associate { it.id to (random.nextLong(3) + 1) }.toMutableMap()
-                chest[Item.MOON_STONE.id] = 5
-                chest
+                fullRandom()
+            }
+            ContainerAffectModifiers.GOD_MODE_CHEST -> {
+                godMode()
             }
         }
+    }
+
+    private fun godMode(): MutableMap<Int, Long> {
+        val items = Item.values().filter {
+            it.itemType in setOf(
+                LOOT,
+                RARE_LOOT,
+                CULTIST_LOOT,
+                CRAFT_T2,
+                INVESTIGATION,
+                USEFUL_ITEM,
+                CULTIST_ITEM,
+                ADVANCED_USEFUL_ITEM,
+                ADVANCED_CULTIST_ITEM
+            )
+        }
+        return items.associate { it.id to 100L }.toMutableMap()
+    }
+
+    private fun fullRandom(): MutableMap<Int, Long> {
+        val items = Item.values().filter {
+            it.itemType in setOf(LOOT, RARE_LOOT)
+        }.shuffled(random)
+            .subList(0, random.nextInt(3) + 1)
+        return items.associate { it.id to (random.nextLong(3) + 1) }.toMutableMap()
     }
 }

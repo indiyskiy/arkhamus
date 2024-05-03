@@ -9,7 +9,7 @@ enum class Item(
     PURE_NOTHING(-1, TECH_TYPE),
 
     //LOOT 1**
-    I1(101, LOOT),
+    SAINT_QUARTZ(101, LOOT),
     I2(102, LOOT),
     I3(103, LOOT),
     I4(104, LOOT),
@@ -30,6 +30,7 @@ enum class Item(
 
     //CULTIST_LOOT 3**
     SOUL_STONE(301, CULTIST_LOOT),
+    DARK_ESSENCE(302, CULTIST_LOOT),
 
     //CRAFT_T2 4**
     VIOLET_SCROLL(401, CRAFT_T2),

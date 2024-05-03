@@ -367,6 +367,8 @@ class GameThreadPoolTest {
                 gameUser = redisGameUser,
                 otherGameUsers = otherGameUsers,
                 visibleOngoingEvents = emptyList(),
+                availableAbilities = emptyList(),
+                visibleItems = emptyList(),
                 tick = tick + 1
             )
         )

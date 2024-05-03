@@ -29,7 +29,7 @@ class CountingCorkRelationsUtil {
         var minAvg = Double.MAX_VALUE
         var minUsabilityDiff = Int.MAX_VALUE
         val possibleItems =
-            Item.values().filter { it.getItemType() == ItemType.RARE_LOOT }.toList()
+            Item.values().filter { it.itemType == ItemType.RARE_LOOT }.toList()
         val maxValue = howManySameItemsPossible(possibleItems)
         //start counting
         repeat(50_000_000) { iterationNumber ->

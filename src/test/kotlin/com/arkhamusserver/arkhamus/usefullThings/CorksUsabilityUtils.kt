@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.usefullThings
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.GodToCorkResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.Ingredient
-import com.arkhamusserver.arkhamus.logic.ingame.item.ItemToRecipeResolver
+import com.arkhamusserver.arkhamus.logic.ingame.item.ItemToRecipesSource
 import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
@@ -14,21 +14,20 @@ import kotlin.math.min
 @SpringBootTest
 class CorksUsabilityUtils() {
     @Autowired
-    lateinit var itemToRecipeResolver: ItemToRecipeResolver
+    lateinit var itemToRecipesSource: ItemToRecipesSource
 
     @Autowired
     lateinit var godToCorkResolver: GodToCorkResolver
 
     @Test
     fun countItemsUsability() {
-        val recipes: List<Pair<Item, Recipe>> = Item.values().map {
-            it to itemToRecipeResolver.resolve(it)
-        }
+        val recipes: List< Recipe> =  itemToRecipesSource.all()
+
         val itemsUsability =
             recipes
                 .asSequence()
-                .map {
-                    it.second.ingredients
+                .map { recipe ->
+                    recipe.ingredients
                         .map { it.item to it.number }
                 }
                 .flatten()
@@ -78,7 +77,7 @@ class CorksUsabilityUtils() {
 
     private fun someItems(god: God): List<Ingredient> {
         val cork = godToCorkResolver.resolve(god)
-        val recipe = itemToRecipeResolver.resolve(cork)
+        val recipe = itemToRecipesSource.all().first{it.item == cork}
         return recipe.ingredients
     }
 

@@ -11,20 +11,15 @@ import org.springframework.stereotype.Component
 class ItemLogic(
     private val itemsDtoMaker: ItemInformationDtoMaker,
     private val recipeDtoMaker: RecipeToRecipeDtoMaker,
-    private val itemToRecipeResolver: ItemToRecipeResolver
+    private val itemToRecipesSource: ItemToRecipesSource
 ) {
     fun listAllItems(): List<ItemInformationDto> =
         itemsDtoMaker.convert(Item.values().toList())
 
-    fun listAllRecipes(): List<RecipeDto> =
-        recipeDtoMaker.convert(
-            Item.values().map {
-                RecipeToRecipeDtoMaker.Data(
-                    it,
-                    itemToRecipeResolver.resolve(it)
-                )
-            }.filter {
-                it.recipe.ingredients.isNotEmpty()
-            }
-        )
+    fun listAllRecipes(): List<RecipeDto> {
+                return itemToRecipesSource.all()
+        .filter {
+            it.ingredients.isNotEmpty()
+        }.let { recipeDtoMaker.convert(it) }
+    }
 }

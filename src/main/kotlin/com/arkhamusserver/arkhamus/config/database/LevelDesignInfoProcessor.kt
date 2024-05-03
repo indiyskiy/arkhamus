@@ -1,18 +1,9 @@
 package com.arkhamusserver.arkhamus.config.database
 
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ContainerRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.LanternRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.LevelRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
-import com.arkhamusserver.arkhamus.model.database.entity.Container
-import com.arkhamusserver.arkhamus.model.database.entity.Lantern
-import com.arkhamusserver.arkhamus.model.database.entity.Level
-import com.arkhamusserver.arkhamus.model.database.entity.StartMarker
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.*
+import com.arkhamusserver.arkhamus.model.database.entity.*
 import com.arkhamusserver.arkhamus.model.enums.LevelState
-import com.arkhamusserver.arkhamus.view.levelDesign.ContainerFromJson
-import com.arkhamusserver.arkhamus.view.levelDesign.JsonStartMarker
-import com.arkhamusserver.arkhamus.view.levelDesign.LanternFromJson
-import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
+import com.arkhamusserver.arkhamus.view.levelDesign.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
@@ -28,6 +19,7 @@ class LevelDesignInfoProcessor(
     private val levelRepository: LevelRepository,
     private val containerRepository: ContainerRepository,
     private val lanternRepository: LanternRepository,
+    private val crafterRepository: CrafterRepository,
     private val startMarkerRepository: StartMarkerRepository
 ) {
 
@@ -97,6 +89,7 @@ class LevelDesignInfoProcessor(
         val savedLevel = levelRepository.save(newLevel)
         processContainers(levelFromJson.containers, savedLevel)
         processLanterns(levelFromJson.lanterns, savedLevel)
+        processCrafters(levelFromJson.crafters, savedLevel)
         processStartMarkers(levelFromJson.startMarkers, savedLevel)
     }
 
@@ -130,6 +123,24 @@ class LevelDesignInfoProcessor(
                 level = savedLevel
             ).apply {
                 lanternRepository.save(this)
+            }
+        }
+    }
+
+    private fun processCrafters(
+        containers: List<CrafterFromJson>,
+        savedLevel: Level?,
+    ) {
+        containers.forEach { crafter ->
+            Crafter(
+                inGameId = crafter.id,
+                interactionRadius = crafter.interactionRadius,
+                x = crafter.x,
+                y = crafter.y,
+                level = savedLevel,
+                crafterType = crafter.crafterType,
+            ).apply {
+                crafterRepository.save(this)
             }
         }
     }
