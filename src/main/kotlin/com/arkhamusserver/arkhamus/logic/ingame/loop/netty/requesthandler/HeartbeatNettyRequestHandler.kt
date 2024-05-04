@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.UserInventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.ErrorGameResponse
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.HeartbeatGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
@@ -26,12 +26,12 @@ class HeartbeatNettyRequestHandler(
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
     override fun buildData(
-        nettyTickRequestMessageContainer: NettyTickRequestMessageContainer,
+        requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ): RequestProcessData {
-        val userId = nettyTickRequestMessageContainer.userAccount.id
-        nettyTickRequestMessageContainer.gameSession?.id?.let {
+        val userId = requestDataHolder.userAccount.id
+        requestDataHolder.gameSession?.id?.let {
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
             val visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents)

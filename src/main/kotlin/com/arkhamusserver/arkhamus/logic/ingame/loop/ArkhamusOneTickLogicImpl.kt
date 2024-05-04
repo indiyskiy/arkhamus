@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic.Companion.logger
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.loadGlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.*
@@ -23,7 +23,7 @@ class ArkhamusOneTickLogicImpl(
 ) : ArkhamusOneTickLogic {
 
     override fun processCurrentTasks(
-        currentTasks: List<NettyTickRequestMessageContainer>,
+        currentTasks: List<NettyTickRequestMessageDataHolder>,
         game: RedisGame
     ): List<NettyResponseMessage> {
         try {

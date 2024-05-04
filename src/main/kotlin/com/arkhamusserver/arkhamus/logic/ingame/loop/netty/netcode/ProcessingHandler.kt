@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.GameNettyLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.exception.entity.ChannelNotFoundException
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState
@@ -76,14 +76,14 @@ class ProcessingHandler(
             (requestData is NettyBaseRequestMessage) &&
             (arkhamusChannel.gameSession?.state == GameState.IN_PROGRESS)
         ) {
-            val nettyTickRequestMessageContainer = NettyTickRequestMessageContainer(
+            val nettyTickRequestMessageDataHolder = NettyTickRequestMessageDataHolder(
                 requestData,
                 arkhamusChannel.channelId,
                 account,
                 arkhamusChannel.gameSession,
                 arkhamusChannel.userOfGameSession,
             )
-            gameNettyLogic.process(nettyTickRequestMessageContainer)
+            gameNettyLogic.process(nettyTickRequestMessageDataHolder)
         }
     }
 

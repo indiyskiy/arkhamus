@@ -1,11 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLanternRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.utils.GameRelatedIdSource
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.LanternRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.Lantern
 import com.arkhamusserver.arkhamus.model.redis.RedisLantern
+import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -13,7 +13,6 @@ import kotlin.random.Random
 class GameStartLanternLogic(
     private val redisLanternRepository: RedisLanternRepository,
     private val lanternRepository: LanternRepository,
-    private val gameRelatedIdSource: GameRelatedIdSource,
 ) {
     private val random: Random = Random(System.currentTimeMillis())
 
@@ -34,7 +33,7 @@ class GameStartLanternLogic(
         dbLantern: Lantern,
         filled: Boolean
     ) = RedisLantern(
-        id = gameRelatedIdSource.getId(game.id!!, dbLantern.inGameId!!),
+        id = Generators.timeBasedEpochGenerator().generate().toString(),
         lanternId = dbLantern.inGameId!!,
         gameId = game.id!!,
         x = dbLantern.x!!,

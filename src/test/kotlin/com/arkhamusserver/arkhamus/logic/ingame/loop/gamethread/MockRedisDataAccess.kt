@@ -13,6 +13,7 @@ class MockRedisDataAccess : RedisDataAccess {
     private var gameUsers = listOf<RedisGameUser>()
     private var games = listOf<RedisGame>()
     private var containers = listOf<RedisContainer>()
+    private var crafters = listOf<RedisCrafter>()
     private var globalGameDatas = listOf<GlobalGameData>()
     private var timeEvents = mutableMapOf<Long, List<RedisTimeEvent>>()
 
@@ -32,8 +33,16 @@ class MockRedisDataAccess : RedisDataAccess {
         return containers.find { it.containerId == containerId && it.gameId == gameId }!!
     }
 
+    override fun getCrafter(crafterId: Long, gameId: Long): RedisCrafter {
+        return crafters.find { it.crafterId == crafterId && it.gameId == gameId }!!
+    }
+
     override fun getGameContainers(gameId: Long): List<RedisContainer> {
         return containers.filter { it.gameId == gameId }
+    }
+
+    override fun getGameCrafters(gameId: Long): List<RedisCrafter> {
+        return crafters.filter { it.gameId == gameId }
     }
 
     override fun getLantern(lanternId: Long, gameId: Long): RedisLantern {

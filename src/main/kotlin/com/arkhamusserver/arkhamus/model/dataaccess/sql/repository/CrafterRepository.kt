@@ -6,4 +6,5 @@ import java.util.*
 
 interface CrafterRepository : CrudRepository<Crafter, Long> {
     override fun findById(id: Long): Optional<Crafter>
+    fun findByLevelId(levelId: Long): List<Crafter>
 }

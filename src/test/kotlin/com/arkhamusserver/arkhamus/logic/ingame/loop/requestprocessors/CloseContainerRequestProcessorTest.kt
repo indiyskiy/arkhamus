@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.MockRedisDataAccess
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CloseContainerGameData
 import com.arkhamusserver.arkhamus.model.database.entity.*
 import com.arkhamusserver.arkhamus.model.enums.GameState
@@ -16,6 +16,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.CloseContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+import com.fasterxml.uuid.Generators
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -196,7 +197,7 @@ class CloseContainerRequestProcessorTest {
         assertEquals(Item.I4.id, closeContainerGameData.sortedInventory!![3].itemId)
     }
 
-    private fun executeRequest(newInventoryContent: List<ContainerCell>): Pair<Data, NettyTickRequestMessageContainer> {
+    private fun executeRequest(newInventoryContent: List<ContainerCell>): Pair<Data, NettyTickRequestMessageDataHolder> {
         val data = prepareDefaultData()
 
         val requestMessage = CloseContainerRequestMessage(
@@ -212,7 +213,7 @@ class CloseContainerRequestProcessorTest {
             )
         )
 
-        val request = NettyTickRequestMessageContainer(
+        val request = NettyTickRequestMessageDataHolder(
             nettyRequestMessage = requestMessage,
             channelId = "channel_id",
             userAccount = data.requestUserAccount,
@@ -305,7 +306,7 @@ class CloseContainerRequestProcessorTest {
         val oldUserItems = createOldUserItems()
 
         val gameUser = RedisGameUser(
-            id = "${gameSession.id}::${user.id}",
+            id = Generators.timeBasedEpochGenerator().generate().toString(),
             userId = user.id!!,
             nickName = "test user",
             role = RoleTypeInGame.INVESTIGATOR,

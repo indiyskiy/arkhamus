@@ -1,9 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.HeartbeatGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.utils.GameRelatedIdSource
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -17,6 +16,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.HeartbeatRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
+import com.fasterxml.uuid.Generators
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -39,9 +39,6 @@ class GameThreadPoolTest {
 
     @Autowired
     private lateinit var responseSendingLoopManager: MockResponseSendingLoopManager
-
-    @Autowired
-    private lateinit var gameRelatedIdSource: GameRelatedIdSource
 
     @BeforeEach
     fun setUp() {
@@ -348,10 +345,10 @@ class GameThreadPoolTest {
         gameSession: GameSession,
         userOfGameSession: UserOfGameSession,
         globalGameData: GlobalGameData
-    ): NettyTickRequestMessageContainer {
+    ): NettyTickRequestMessageDataHolder {
         val redisGameUser = globalGameData.users[userOfGameSession.id]!!
         val otherGameUsers = globalGameData.users.values.filter { it.userId != userOfGameSession.id }
-        return NettyTickRequestMessageContainer(
+        return NettyTickRequestMessageDataHolder(
             HeartbeatRequestMessage(
                 baseRequestData = BaseRequestData(
                     tick,
@@ -412,7 +409,7 @@ class GameThreadPoolTest {
 
         val redisGameUsers = usersOfGameSession.map { userOfGameSession ->
             RedisGameUser(
-                id = gameRelatedIdSource.getId(gameSession.id!!, userOfGameSession.userAccount.id!!),
+                id = Generators.timeBasedEpochGenerator().generate().toString(),
                 userId = userOfGameSession.id!!,
                 nickName = "user-nickname",
                 role = RoleTypeInGame.INVESTIGATOR,

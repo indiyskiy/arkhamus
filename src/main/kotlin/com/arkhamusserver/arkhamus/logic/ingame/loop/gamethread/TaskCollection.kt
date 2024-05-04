@@ -1,19 +1,17 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import java.util.*
 
 class TaskCollection {
-    private var taskList: MutableList<NettyTickRequestMessageContainer> = Collections.synchronizedList(ArrayList())
+    private var taskList: MutableList<NettyTickRequestMessageDataHolder> = Collections.synchronizedList(ArrayList())
     private var userIds: Set<Long> = emptySet()
     private var gameSession: GameSession? = null
 
     fun isEmpty(): Boolean = taskList.isEmpty()
-    fun getByTick(currentTick: Long): List<NettyTickRequestMessageContainer> =
-        taskList.filter { it.nettyRequestMessage.baseRequestData.tick == currentTick }
 
-    fun getList(): MutableList<NettyTickRequestMessageContainer> =
+    fun getList(): MutableList<NettyTickRequestMessageDataHolder> =
         taskList
 
     fun resetList() {
@@ -25,7 +23,7 @@ class TaskCollection {
         this.gameSession = gameSession
     }
 
-    fun add(container: NettyTickRequestMessageContainer):Boolean {
+    fun add(container: NettyTickRequestMessageDataHolder):Boolean {
         if (!taskList.any {
                 isCompetingRequest(it, container)
             }) {
@@ -36,22 +34,19 @@ class TaskCollection {
     }
 
     private fun isCompetingRequest(
-        it: NettyTickRequestMessageContainer,
-        container: NettyTickRequestMessageContainer
+        it: NettyTickRequestMessageDataHolder,
+        container: NettyTickRequestMessageDataHolder
     ) = sameUser(it, container) &&
             sameTick(it, container)
 
     private fun sameTick(
-        it: NettyTickRequestMessageContainer,
-        container: NettyTickRequestMessageContainer
+        it: NettyTickRequestMessageDataHolder,
+        container: NettyTickRequestMessageDataHolder
     ) = it.nettyRequestMessage.baseRequestData.tick == container.nettyRequestMessage.baseRequestData.tick
 
     private fun sameUser(
-        it: NettyTickRequestMessageContainer,
-        container: NettyTickRequestMessageContainer
+        it: NettyTickRequestMessageDataHolder,
+        container: NettyTickRequestMessageDataHolder
     ) = it.userAccount.id == container.userAccount.id
 
-    fun userIds(): Set<Long> {
-        return userIds
-    }
 }

@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.AbilityCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.UserInventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
@@ -16,16 +16,16 @@ class AbilityRequestProcessor(
     private val userInventoryHandler: UserInventoryHandler,
     private val abilityCastHandler: AbilityCastHandler,
 ) : NettyRequestProcessor {
-    override fun accept(request: NettyTickRequestMessageContainer): Boolean {
+    override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.nettyRequestMessage is AbilityRequestMessage
     }
 
     override fun process(
-        requestContainer: NettyTickRequestMessageContainer,
+        requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        val abilityRequestProcessData = requestContainer.requestProcessData as AbilityRequestProcessData
+        val abilityRequestProcessData = requestDataHolder.requestProcessData as AbilityRequestProcessData
         val ability = abilityRequestProcessData.ability
         if (ability != null) {
             val canBeCasted =
@@ -38,8 +38,8 @@ class AbilityRequestProcessor(
                     createCastAbility(
                         ability,
                         abilityRequestProcessData,
-                        requestContainer.userAccount.id!!,
-                        requestContainer.gameSession!!.id!!,
+                        requestDataHolder.userAccount.id!!,
+                        requestDataHolder.gameSession!!.id!!,
                         globalGameData.game.globalTimer
                     )
                     abilityRequestProcessData.castedSuccessfully = true

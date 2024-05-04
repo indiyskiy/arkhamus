@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.view.dto.netty.request.OpenContainerRequestMessage
@@ -12,17 +12,17 @@ import org.springframework.stereotype.Component
 class OpenContainerRequestProcessor(
     private val redisContainerRepository: RedisContainerRepository
 ) : NettyRequestProcessor {
-    override fun accept(request: NettyTickRequestMessageContainer): Boolean {
+    override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.nettyRequestMessage is OpenContainerRequestMessage
     }
 
     override fun process(
-        requestContainer: NettyTickRequestMessageContainer,
+        requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        val nettyRequestMessage = requestContainer.nettyRequestMessage as OpenContainerRequestMessage
-        val oldGameUser = globalGameData.users[requestContainer.userAccount.id]!!
+        val nettyRequestMessage = requestDataHolder.nettyRequestMessage as OpenContainerRequestMessage
+        val oldGameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
         val container = globalGameData.containers[nettyRequestMessage.containerId]!!
         if ((container.state == MapObjectState.ACTIVE) && (container.holdingUser == null)) {
             container.holdingUser = oldGameUser.userId

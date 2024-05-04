@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface RedisContainerRepository: CrudRepository<RedisContainer, String> {
     fun findByGameId(gameId: Long): List<RedisContainer>
+    fun findByGameIdAndContainerId(gameId: Long, containerId: Long): List<RedisContainer>
 }

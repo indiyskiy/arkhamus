@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseMessage
 import org.slf4j.Logger
@@ -14,7 +14,7 @@ interface ArkhamusOneTickLogic {
     }
 
     fun processCurrentTasks(
-        currentTasks: List<NettyTickRequestMessageContainer>,
+        currentTasks: List<NettyTickRequestMessageDataHolder>,
         game: RedisGame
     ): List<NettyResponseMessage>
 }

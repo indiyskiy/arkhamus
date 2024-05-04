@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 
-data class NettyTickRequestMessageContainer(
+data class NettyTickRequestMessageDataHolder(
     val nettyRequestMessage: NettyBaseRequestMessage,
     var channelId: String,
     var userAccount: UserAccount,

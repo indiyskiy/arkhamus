@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.NettyResponseBuilder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseMessage
 import org.springframework.stereotype.Component
 
@@ -13,7 +13,7 @@ class OneTickUserResponses(
     fun buildResponses(
         currentTick: Long,
         globalGameData: GlobalGameData,
-        currentTasks: List<NettyTickRequestMessageContainer>,
+        currentTasks: List<NettyTickRequestMessageDataHolder>,
     ): List<NettyResponseMessage> {
         val tasksUniqueByUserAndTick = currentTasks.distinctBy { it.userAccount.id to it.nettyRequestMessage.baseRequestData.tick }
 
@@ -21,7 +21,7 @@ class OneTickUserResponses(
     }
 
     private fun buildResponse(
-        request: NettyTickRequestMessageContainer,
+        request: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
     ): NettyResponseMessage {
         return nettyResponseBuilder.buildResponse(request, globalGameData)

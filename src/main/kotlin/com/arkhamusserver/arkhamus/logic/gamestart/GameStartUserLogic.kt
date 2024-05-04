@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.CultistClassByGodResolver
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.utils.GameRelatedIdSource
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -11,13 +10,13 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.CULTIST
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.INVESTIGATOR
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
 @Component
 class GameStartUserLogic(
     private val redisGameUserRepository: RedisGameUserRepository,
-    private val gameRelatedIdSource: GameRelatedIdSource,
     private val startMarkerRepository: StartMarkerRepository,
     private val userOfGameSessionRepository: UserOfGameSessionRepository,
     private val cultistClassByGodResolver: CultistClassByGodResolver
@@ -37,7 +36,7 @@ class GameStartUserLogic(
         game.usersOfGameSession.forEach {
             val marker = startMarkers.random(GameStartLogic.random)
             val redisGameUser = RedisGameUser(
-                id = gameRelatedIdSource.getId(game.id!!, it.userAccount.id!!),
+                id = Generators.timeBasedEpochGenerator().generate().toString(),
                 userId = it.userAccount.id!!,
                 nickName = it.userAccount.nickName!!,
                 gameId = game.id!!,

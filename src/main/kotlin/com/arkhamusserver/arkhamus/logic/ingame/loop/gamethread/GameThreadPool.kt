@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic.Companion.TICK_DELTA
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ResponseSendingLoopManager
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -87,7 +87,7 @@ class GameThreadPool(
         loopHandlerFutures[gameSessionId]?.cancel(false)
     }
 
-    fun addTask(task: NettyTickRequestMessageContainer) {
+    fun addTask(task: NettyTickRequestMessageDataHolder) {
         val gameId = task.gameSession!!.id!!
         val taskCollection = tasksMap[gameId]
         val added: Boolean = if (taskCollection != null) {
@@ -105,7 +105,7 @@ class GameThreadPool(
     }
 
     private fun processGameTick(
-        tasks: List<NettyTickRequestMessageContainer>,
+        tasks: List<NettyTickRequestMessageDataHolder>,
         gameId: Long,
         ongoingGame: RedisGame
     ) {

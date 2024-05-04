@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.utils.GameRelatedIdSource
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ContainerRepository
 import com.arkhamusserver.arkhamus.model.database.entity.Container
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -9,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerAffectModifiers
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.*
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -16,7 +16,6 @@ import kotlin.random.Random
 class GameStartContainerLogic(
     private val redisContainerRepository: RedisContainerRepository,
     private val containerRepository: ContainerRepository,
-    private val gameRelatedIdSource: GameRelatedIdSource,
 ) {
 
     private val random: Random = Random(System.currentTimeMillis())
@@ -43,7 +42,7 @@ class GameStartContainerLogic(
         dbContainer: Container,
         modifiers: List<ContainerAffectModifiers>
     ) = RedisContainer(
-        id = gameRelatedIdSource.getId(game.id!!, dbContainer.inGameId!!),
+        id = Generators.timeBasedEpochGenerator().generate().toString(),
         containerId = dbContainer.inGameId!!,
         gameId = game.id!!
     ).apply {
