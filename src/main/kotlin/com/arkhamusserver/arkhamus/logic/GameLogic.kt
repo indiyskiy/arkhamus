@@ -5,10 +5,7 @@ import com.arkhamusserver.arkhamus.logic.gamestart.GameStartLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionSettingsRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
-import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
-import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
-import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.model.database.entity.*
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
@@ -24,6 +21,7 @@ class GameLogic(
     private val gameSessionSettingsRepository: GameSessionSettingsRepository,
     private val userOfGameSessionRepository: UserOfGameSessionRepository,
     private val gameStartLogic: GameStartLogic,
+    private val userSkinLogic: UserSkinLogic,
     private val currentUserService: CurrentUserService,
     private val gameValidator: GameValidator,
     private val gameSessionDtoMaker: GameSessionDtoMaker
@@ -49,12 +47,18 @@ class GameLogic(
         val player = currentUserService.getCurrentUserAccount()
         val invitedUsers = game.usersOfGameSession
         gameValidator.checkStartAccess(player, game, invitedUsers)
-        startGame(game)
+        val skins = userSkinLogic.allSkinsOf(game)
+        startGame(game, skins.values)
+
         val gameUpdated = gameSessionRepository.findById(game.id!!).get()
         return gameUpdated.toDto(player)
     }
 
-    private fun startGame(game: GameSession) {
+    private fun startGame(
+        game: GameSession,
+        skins: Collection<UserSkinSettings>
+    ) {
+        userSkinLogic.reshuffleSkins(skins)
         gameStartLogic.startGame(game)
     }
 
@@ -111,8 +115,15 @@ class GameLogic(
         }
     }
 
-    fun GameSession.toDto(currentPlayer: UserAccount): GameSessionDto =
-        gameSessionDtoMaker.toDto(this, currentPlayer)
+    fun GameSession.toDto(
+        currentPlayer: UserAccount,
+        skins: Map<Long, UserSkinSettings>? = null
+    ): GameSessionDto =
+        gameSessionDtoMaker.toDto(
+            this,
+            skins ?: userSkinLogic.allSkinsOf(this),
+            currentPlayer
+        )
 
 
 }

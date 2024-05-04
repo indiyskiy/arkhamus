@@ -14,6 +14,7 @@ class SingleGameLogic(
     private val gameLogic: GameLogic,
     private val currentUserService: CurrentUserService,
     private val gameSessionDtoMaker: GameSessionDtoMaker,
+    private val userSkinLogic: UserSkinLogic,
 ) {
     companion object {
         private const val DEFAULT_LOBBY_SIZE = 1
@@ -24,7 +25,7 @@ class SingleGameLogic(
     fun createGame(): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         val oldGame = gameLogic.findCurrentUserGame(player, GameType.SINGLE)
-        if(oldGame != null){
+        if (oldGame != null) {
             return oldGame.toDto(player)
         }
         return gameLogic.createNewGameSession(
@@ -36,7 +37,7 @@ class SingleGameLogic(
     }
 
     fun GameSession.toDto(currentPlayer: UserAccount): GameSessionDto =
-        gameSessionDtoMaker.toDto(this, currentPlayer)
+        gameSessionDtoMaker.toDto(this, userSkinLogic.allSkinsOf(this), currentPlayer)
 
 }
 

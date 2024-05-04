@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.view.maker
 
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
 import com.arkhamusserver.arkhamus.model.enums.GameState.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.CULTIST
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.INVESTIGATOR
@@ -14,10 +15,15 @@ import org.springframework.stereotype.Component
 
 @Component
 class GameSessionDtoMaker(
-    val gameSessionSettingsDtoMaker: GameSessionSettingsDtoMaker,
-    val godDtoMaker: GodToGodDtoMaker
+    private val gameSessionSettingsDtoMaker: GameSessionSettingsDtoMaker,
+    private val userSkinDtoMaker: UserSkinDtoMaker,
+    private val godDtoMaker: GodToGodDtoMaker
 ) {
-    fun toDto(gameSession: GameSession, currentPlayer: UserAccount): GameSessionDto {
+    fun toDto(
+        gameSession: GameSession,
+        userSkins: Map<Long, UserSkinSettings>,
+        currentPlayer: UserAccount
+    ): GameSessionDto {
         val currentUserRole =
             gameSession.usersOfGameSession.firstOrNull { it.userAccount.id == currentPlayer.id }?.roleInGame
         val isCultist = currentUserRole == CULTIST
@@ -28,7 +34,7 @@ class GameSessionDtoMaker(
             gameType = gameSession.gameType
             gameSessionSettings = gameSessionSettingsDtoMaker.toDto(gameSession.gameSessionSettings)
             god = convertGod(gameSession, isCultist)
-            usersInGame = mapRolesByReceiverRole(gameSession, isCultist, currentPlayer.id!!)
+            usersInGame = mapRolesByReceiverRole(gameSession, userSkins, isCultist, currentPlayer.id!!)
         }
     }
 
@@ -52,6 +58,7 @@ class GameSessionDtoMaker(
 
     private fun mapRolesByReceiverRole(
         gameSession: GameSession,
+        userSkins: Map<Long, UserSkinSettings>,
         isCultist: Boolean,
         userId: Long,
     ) = gameSession.usersOfGameSession.map {
@@ -76,6 +83,7 @@ class GameSessionDtoMaker(
                     FINISHED -> it.classInGame
                 }
             }
+            this.gameSkin = userSkinDtoMaker.toDto(userSkins[it.userAccount.id]!!)
         }
     }
 }
