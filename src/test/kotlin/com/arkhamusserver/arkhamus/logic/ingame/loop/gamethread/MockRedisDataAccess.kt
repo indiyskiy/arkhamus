@@ -57,6 +57,10 @@ class MockRedisDataAccess : RedisDataAccess {
         TODO("Not yet implemented")
     }
 
+    override fun getCraftProcess(gameId: Long): List<RedisCraftProcess> {
+        TODO("Not yet implemented")
+    }
+
     override fun getTimeEvents(gameId: Long): List<RedisTimeEvent> {
         return timeEvents[gameId] ?: emptyList()
     }

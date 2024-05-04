@@ -9,5 +9,6 @@ data class GlobalGameData(
     var crafters: Map<Long, RedisCrafter> = emptyMap(),
     var lanterns: Map<Long, RedisLantern> = emptyMap(),
     var timeEvents: List<RedisTimeEvent> = emptyList(),
-    var castedAbilities: List<RedisAbilityCast> = emptyList()
+    var castedAbilities: List<RedisAbilityCast> = emptyList(),
+    var craftProcess: List<RedisCraftProcess> = emptyList(),
 )

@@ -7,91 +7,97 @@ import org.springframework.stereotype.Component
 import kotlin.math.roundToLong
 
 @Component
-class ItemToRecipesSource {
+class RecipesSource {
+
+    private val allRecipes = buildAll()
 
     companion object {
         const val SECOND_IN_MILIS: Long = 1 * 1000
         const val MINUTE_IN_MILIS: Long = SECOND_IN_MILIS * 60
     }
 
-    fun all(): List<Recipe> {
+    fun getAllRecipes() = allRecipes
+
+    private fun buildAll(): List<Recipe> {
         return listOf(
-// CULTIST ITEMS
+// CULTIST ITEMS 7***
             listOf(Ingredient(SAINT_QUARTZ, 1), Ingredient(DARK_ESSENCE, 1))
                 .toRecipe(
+                    7001,
                     item = MOON_STONE,
-                    timeToCraft = SECOND_IN_MILIS,
+                    timeToCraft = MINUTE_IN_MILIS,
                     numberOfItems = 1,
                     crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
                 ),
 
             listOf(Ingredient(SAINT_QUARTZ, 2), Ingredient(DARK_ESSENCE, 2))
                 .toRecipe(
+                    7002,
                     item = MOON_STONE,
-                    timeToCraft = (1.5 * SECOND_IN_MILIS).roundToLong(),
+                    timeToCraft = (0.5 * MINUTE_IN_MILIS).roundToLong(),
                     numberOfItems = 3,
                     crafterTypes = listOf(CrafterType.ADVANCED)
                 ),
-// CORKS
+// CORKS 8***
             (oneOfEach(BOOK, CLOCK, MASK) + Ingredient(SAINT_QUARTZ, 10))
-                .toRecipe(item = CORK_AAMON),
+                .toRecipe(8001, item = CORK_AAMON),
 
             (oneOfEach(EYE, PLATE, SCYTHE) + Ingredient(SAINT_QUARTZ, 10))
-                .toRecipe(item = CORK_BELETH),
+                .toRecipe(8002, item = CORK_BELETH),
 
             (oneOfEach(MASK, PLATE, TEAR) + Ingredient(SAINT_QUARTZ, 10))
-                .toRecipe(item = CORK_BHOLES),
+                .toRecipe(8003, item = CORK_BHOLES),
 
             (oneOfEach(CLOCK, EYE, TEAR) + Ingredient(SAINT_QUARTZ, 10))
-                .toRecipe(item = CORK_COLOUR_OUT_OF_SPACE),
+                .toRecipe(8004, item = CORK_COLOUR_OUT_OF_SPACE),
 
             (oneOfEach(CLOCK, MASK, PLATE) + Ingredient(I2, 10))
-                .toRecipe(item = CORK_CTHULHU),
+                .toRecipe(8005, item = CORK_CTHULHU),
 
             (oneOfEach(BLACK_STONE, BOOK, PLATE) + Ingredient(I7, 10))
-                .toRecipe(item = CORK_CYBELE),
+                .toRecipe(8006, item = CORK_CYBELE),
 
             (oneOfEach(BLACK_STONE, PLATE, RING) + Ingredient(I6, 10))
-                .toRecipe(item = CORK_CZEOTHOQUA),
+                .toRecipe(8007, item = CORK_CZEOTHOQUA),
 
             (oneOfEach(BLACK_STONE, MASK, SCYTHE) + Ingredient(I7, 10))
-                .toRecipe(item = CORK_DAGON),
+                .toRecipe(8008, item = CORK_DAGON),
 
             (oneOfEach(BLACK_STONE, EYE, SCYTHE) + Ingredient(I6, 10))
-                .toRecipe(item = CORK_GREEN_FLAME),
+                .toRecipe(8009, item = CORK_GREEN_FLAME),
 
             (oneOfEach(BOOK, EYE, MASK) + Ingredient(I5, 10))
-                .toRecipe(item = CORK_KING_IN_YELLOW),
+                .toRecipe(8010, item = CORK_KING_IN_YELLOW),
 
             (oneOfEach(BOOK, CLOCK, EYE) + Ingredient(I3, 10))
-                .toRecipe(item = CORK_MI_GO),
+                .toRecipe(8011, item = CORK_MI_GO),
 
             (oneOfEach(RING, SCYTHE, TEAR) + Ingredient(I4, 10))
-                .toRecipe(item = CORK_NAMELESS_WINDS),
+                .toRecipe(8012, item = CORK_NAMELESS_WINDS),
 
             (oneOfEach(BLACK_STONE, SCYTHE, TEAR) + Ingredient(I5, 10))
-                .toRecipe(item = CORK_NINGISHZIDA),
+                .toRecipe(8013, item = CORK_NINGISHZIDA),
 
             (oneOfEach(BOOK, MASK, TEAR) + Ingredient(I4, 10))
-                .toRecipe(item = CORK_NYARLATHOTEP),
+                .toRecipe(8014, item = CORK_NYARLATHOTEP),
 
             (oneOfEach(EYE, PLATE, RING) + Ingredient(I2, 10))
-                .toRecipe(item = CORK_PNAKOTIC_HORRORS),
+                .toRecipe(8015, item = CORK_PNAKOTIC_HORRORS),
 
             (oneOfEach(BOOK, MASK, RING) + Ingredient(I6, 10))
-                .toRecipe(item = CORK_RED_MASK),
+                .toRecipe(8016, item = CORK_RED_MASK),
 
             (oneOfEach(BLACK_STONE, CLOCK, TEAR) + Ingredient(I2, 10))
-                .toRecipe(item = CORK_SHUB_NIGGURATH),
+                .toRecipe(8017, item = CORK_SHUB_NIGGURATH),
 
             (oneOfEach(CLOCK, PLATE, SCYTHE) + Ingredient(I3, 10))
-                .toRecipe(item = CORK_TZONTEMOC),
+                .toRecipe(8018, item = CORK_TZONTEMOC),
 
             (oneOfEach(BOOK, CLOCK, RING) + Ingredient(I5, 10))
-                .toRecipe(item = CORK_YERLEG),
+                .toRecipe(8019, item = CORK_YERLEG),
 
             (oneOfEach(EYE, RING, TEAR) + Ingredient(I4, 10))
-                .toRecipe(item = CORK_YOG_SOTHOTH),
+                .toRecipe(8020, item = CORK_YOG_SOTHOTH),
         )
     }
 

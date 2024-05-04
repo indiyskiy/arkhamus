@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.*
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
+import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,7 +13,8 @@ class RedisDataAccessImpl(
     private val crafterRepository: RedisCrafterRepository,
     private val lanternRepository: RedisLanternRepository,
     private val timeEventRepository: RedisTimeEventRepository,
-    private val abilityCastRepository: RedisAbilityCastRepository
+    private val abilityCastRepository: RedisAbilityCastRepository,
+    private val craftProcessRepository: RedisCraftProcessRepository
 ) : RedisDataAccess {
     override fun getGameUser(userId: Long?, gameId: Long?) =
         gameUserRepository.findByUserIdAndGameId(userId!!, gameId!!).first()
@@ -45,5 +47,8 @@ class RedisDataAccessImpl(
 
     override fun getCastedAbilities(gameId: Long): List<RedisAbilityCast> =
         abilityCastRepository.findByGameId(gameId)
+
+    override fun getCraftProcess(gameId: Long): List<RedisCraftProcess> =
+        craftProcessRepository.findByGameId(gameId)
 
 }

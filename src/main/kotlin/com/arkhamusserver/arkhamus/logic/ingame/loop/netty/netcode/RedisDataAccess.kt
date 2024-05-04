@@ -16,6 +16,7 @@ interface RedisDataAccess {
     fun getGameLanterns(gameId: Long): List<RedisLantern>
     fun getTimeEvents(gameId: Long): List<RedisTimeEvent>
     fun getCastedAbilities(gameId: Long): List<RedisAbilityCast>
+    fun getCraftProcess(gameId: Long): List<RedisCraftProcess>
 }
 
 fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
