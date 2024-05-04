@@ -78,7 +78,7 @@ class GameStartContainerLogic(
                 ADVANCED_CULTIST_ITEM
             )
         }
-        return items.associate { it.id to 100L }.toMutableMap()
+        return items.associate { it.id to 99L }.toMutableMap()
     }
 
     private fun fullRandom(): MutableMap<Int, Long> {
