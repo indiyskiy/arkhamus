@@ -28,7 +28,7 @@ class MockArkhamusOneTickLogic(
         val currentId = processingId.getAndIncrement()
         println("Processing $currentId: received tasks $currentTasks for processing")
         if (processingDelay > 0) {
-            Thread.sleep(processingDelay);
+            Thread.sleep(processingDelay)
         }
 
         val currentTick = game.currentTick

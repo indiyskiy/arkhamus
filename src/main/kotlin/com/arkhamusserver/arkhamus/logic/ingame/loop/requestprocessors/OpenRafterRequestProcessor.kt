@@ -17,12 +17,12 @@ class OpenRafterRequestProcessor(
     }
 
     override fun process(
-        requestCrafter: NettyTickRequestMessageDataHolder,
+        requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        val nettyRequestMessage = requestCrafter.nettyRequestMessage as OpenCrafterRequestMessage
-        val oldGameUser = globalGameData.users[requestCrafter.userAccount.id]!!
+        val nettyRequestMessage = requestDataHolder.nettyRequestMessage as OpenCrafterRequestMessage
+        val oldGameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
         val crafter = globalGameData.crafters[nettyRequestMessage.crafterId]!!
         if ((crafter.state == MapObjectState.ACTIVE) && (crafter.holdingUser == null)) {
             crafter.holdingUser = oldGameUser.userId
