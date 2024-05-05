@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.AbilityCastHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.UserInventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class AbilityRequestProcessor(
-    private val userInventoryHandler: UserInventoryHandler,
+    private val inventoryHandler: InventoryHandler,
     private val abilityCastHandler: AbilityCastHandler,
 ) : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
@@ -64,7 +64,7 @@ class AbilityRequestProcessor(
         item: Item
     ) {
         if (ability.consumesItem) {
-            userInventoryHandler.consumeItem(
+            inventoryHandler.consumeItem(
                 abilityRequestProcessData.gameUser!!,
                 item
             )

@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.CanAbilityBeCastedHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.RelatedAbilityCastHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.UserInventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -21,7 +21,7 @@ class AbilityNettyRequestHandler(
     private val abilityToItemResolver: AbilityToItemResolver,
     private val relatedAbilityCastHandler: RelatedAbilityCastHandler,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
-    private val inventoryHandler: UserInventoryHandler
+    private val inventoryHandler: InventoryHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 @Component
 class CanAbilityBeCastedHandler(
     private val abilityToClassResolver: AbilityToClassResolver,
-    private val userInventoryHandler: UserInventoryHandler,
+    private val userInventoryHandler: InventoryHandler,
     private val abilityToItemResolver: AbilityToItemResolver,
     private val relatedAbilityCastHandler: RelatedAbilityCastHandler,
 ) {

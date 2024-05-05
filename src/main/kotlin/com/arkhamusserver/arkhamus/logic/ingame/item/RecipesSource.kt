@@ -10,6 +10,7 @@ import kotlin.math.roundToLong
 class RecipesSource {
 
     private val allRecipes = buildAll()
+    private val allRecipesMap = allRecipes.associateBy { it.recipeId }
 
     companion object {
         const val SECOND_IN_MILIS: Long = 1 * 1000
@@ -17,6 +18,7 @@ class RecipesSource {
     }
 
     fun getAllRecipes() = allRecipes
+    fun byId(id: Int) = allRecipesMap[id]
 
     private fun buildAll(): List<Recipe> {
         return listOf(
