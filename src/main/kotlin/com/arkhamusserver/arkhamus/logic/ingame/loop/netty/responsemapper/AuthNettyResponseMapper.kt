@@ -19,35 +19,37 @@ class AuthNettyResponseMapper(
         user: UserAccount?,
         gameSession: GameSession?,
         userRole: UserOfGameSession?
-    ): NettyResponseAuth = if (
-        user?.id != null && gameSession != null && userRole != null
-    ) {
-        val gameUser = redisDataAccess.getGameUser(user.id, gameSession.id)
-        val otherUsers = redisDataAccess.getOtherGameUsers(user.id, gameSession.id)
+    ): NettyResponseAuth? {
+        if (
+            user?.id != null && gameSession != null && userRole != null
+        ) {
+            val gameUser = redisDataAccess.getGameUser(user.id, gameSession.id) ?: return null
+            val otherUsers = redisDataAccess.getOtherGameUsers(user.id, gameSession.id)
 
-        NettyResponseAuth(
-            message = AuthState.SUCCESS,
-            userId = user.id!!,
-            myGameUser = MyGameUserResponseMessage(gameUser),
-            allGameUsers = otherUsers.map {
-                NettyGameUserResponseMessage(it)
-            }
-        )
-    } else {
-        NettyResponseAuth(
-            AuthState.FAIL,
-            -1L,
-            0L,
-            MyGameUserResponseMessage(
-                id = 0,
-                nickName = "",
-                madness = 0.0,
-                madnessNotches = listOf(100.0, 300.0, 600.0),
-                x = 0.0,
-                y = 0.0,
-            ),
-            emptyList()
-        )
+            return NettyResponseAuth(
+                message = AuthState.SUCCESS,
+                userId = user.id!!,
+                myGameUser = MyGameUserResponseMessage(gameUser),
+                allGameUsers = otherUsers.map {
+                    NettyGameUserResponseMessage(it)
+                }
+            )
+        } else {
+            return NettyResponseAuth(
+                AuthState.FAIL,
+                -1L,
+                0L,
+                MyGameUserResponseMessage(
+                    id = 0,
+                    nickName = "",
+                    madness = 0.0,
+                    madnessNotches = listOf(100.0, 300.0, 600.0),
+                    x = 0.0,
+                    y = 0.0,
+                ),
+                emptyList()
+            )
+        }
     }
 
 }

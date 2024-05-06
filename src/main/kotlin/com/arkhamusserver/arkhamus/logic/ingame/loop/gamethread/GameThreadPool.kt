@@ -59,7 +59,7 @@ class GameThreadPool(
         }
         val redisGame = redisDataAccess.getGame(gameId)
         // TODO better state handling - e.g. we might want to support pause somehow and other stuff later
-        if (redisGame.state == GameState.IN_PROGRESS.name) {
+        if (redisGame != null && redisGame.state == GameState.IN_PROGRESS.name) {
             processGameTick(
                 tasks = taskList,
                 gameId = gameId,
@@ -72,7 +72,7 @@ class GameThreadPool(
     fun cleanUpHangingFutures() {
         for (gameSessionId in loopHandlerFutures.keys) {
             val redisGameSession = redisDataAccess.getGame(gameSessionId)
-            if (redisGameSession.state == GameState.FINISHED.name) {
+            if (redisGameSession?.state == GameState.FINISHED.name) {
                 cleanGameLoopFuture(gameSessionId)
             }
         }
@@ -81,10 +81,21 @@ class GameThreadPool(
     private fun cleanGameLoopFuture(gameSessionId: Long) {
         if (loopHandlerFutures[gameSessionId]?.isCancelled == true) {
             loopHandlerFutures.remove(gameSessionId)
+            tasksMap.remove(gameSessionId)
+            cleanUpRedisGame(gameSessionId)
             logger.info("Loop handler stopped for game session $gameSessionId")
             return
         }
         loopHandlerFutures[gameSessionId]?.cancel(false)
+    }
+
+    // TODO maybe extract somewhere from the thread pool?
+    private fun cleanUpRedisGame(gameSessionId: Long) {
+        redisDataAccess.deleteTimeEvents(gameSessionId)
+        redisDataAccess.deleteLanterns(gameSessionId)
+        redisDataAccess.deleteContainers(gameSessionId)
+        redisDataAccess.deleteGameUsers(gameSessionId)
+        redisDataAccess.deleteGame(gameSessionId)
     }
 
     fun addTask(task: NettyTickRequestMessageDataHolder) {

@@ -18,11 +18,17 @@ class OneTickUserRequests(
         currentTick: Long,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
-    ) {
-        currentTasks.forEach {
-            //TODO conflict resolution
-            processRequest(it, currentTick, globalGameData, ongoingEvents)
+    ): List<NettyTickRequestMessageDataHolder> {
+        val tasksByUser = currentTasks.groupBy { it.userAccount.id }
+        return tasksByUser.map{ entry ->
+            val taskToProcess = chooseTaskToProcess(entry.value)
+            processRequest(taskToProcess, currentTick, globalGameData, ongoingEvents)
+            taskToProcess
         }
+    }
+
+    private fun chooseTaskToProcess(userTasks: List<NettyTickRequestMessageDataHolder>): NettyTickRequestMessageDataHolder {
+        return userTasks.sortedByDescending { it.nettyRequestMessage.baseRequestData.tick }.first()
     }
 
     private fun processRequest(

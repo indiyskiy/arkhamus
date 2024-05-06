@@ -4,12 +4,11 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.redis.*
 
 interface RedisDataAccess {
-    fun getGameUser(userId: Long?, gameId: Long?): RedisGameUser
+    fun getGameUser(userId: Long?, gameId: Long?): RedisGameUser?
     fun getGameUsers(gameId: Long?): List<RedisGameUser>
-    fun getGame(gameId: Long): RedisGame
-    fun getContainer(containerId: Long, gameId: Long): RedisContainer
+    fun getGame(gameId: Long): RedisGame?
+    fun getContainer(containerId: Long, gameId: Long): RedisContainer?
     fun getCrafter(crafterId: Long, gameId: Long): RedisCrafter
-
     fun getGameContainers(gameId: Long): List<RedisContainer>
     fun getGameCrafters(gameId: Long): List<RedisCrafter>
     fun getLantern(lanternId: Long, gameId: Long): RedisLantern
@@ -17,6 +16,12 @@ interface RedisDataAccess {
     fun getTimeEvents(gameId: Long): List<RedisTimeEvent>
     fun getCastedAbilities(gameId: Long): List<RedisAbilityCast>
     fun getCraftProcess(gameId: Long): List<RedisCraftProcess>
+
+    fun deleteGame(gameId: Long)
+    fun deleteGameUsers(gameId: Long)
+    fun deleteContainers(gameId: Long)
+    fun deleteLanterns(gameId: Long)
+    fun deleteTimeEvents(gameId: Long)
 }
 
 fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {

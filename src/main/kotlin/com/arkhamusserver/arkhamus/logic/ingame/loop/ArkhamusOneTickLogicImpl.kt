@@ -42,13 +42,13 @@ class ArkhamusOneTickLogicImpl(
                 game.globalTimer
             )
 
-            oneTickUserRequests.processRequests(currentTasks, currentTick, globalGameData, ongoingEvents)
+            val processedTasks = oneTickUserRequests.processRequests(currentTasks, currentTick, globalGameData, ongoingEvents)
             saveAllUsers(globalGameData)
             val responses =
                 oneTickUserResponses.buildResponses(
                     currentTick,
                     globalGameData,
-                    currentTasks,
+                    processedTasks,
                 )
             return responses
         } catch (e: Exception) {

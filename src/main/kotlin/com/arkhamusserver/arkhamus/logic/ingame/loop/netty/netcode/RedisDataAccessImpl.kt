@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.*
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
 import org.springframework.stereotype.Service
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class RedisDataAccessImpl(
@@ -22,7 +23,7 @@ class RedisDataAccessImpl(
     override fun getGameUsers(gameId: Long?) =
         gameUserRepository.findByGameId(gameId!!)
 
-    override fun getGame(gameId: Long) = gameRepository.findById(gameId.toString()).get()
+    override fun getGame(gameId: Long) = gameRepository.findById(gameId.toString()).getOrNull()
 
     override fun getContainer(containerId: Long, gameId: Long) =
         containerRepository.findByGameIdAndContainerId(gameId, containerId).first()
@@ -51,4 +52,28 @@ class RedisDataAccessImpl(
     override fun getCraftProcess(gameId: Long): List<RedisCraftProcess> =
         craftProcessRepository.findByGameId(gameId)
 
+
+    override fun deleteGame(gameId: Long) {
+        gameRepository.deleteById(gameId.toString())
+    }
+
+    override fun deleteGameUsers(gameId: Long) {
+        val gameUserIds = gameUserRepository.findByGameId(gameId).map { it.id }
+        gameUserRepository.deleteAllById(gameUserIds)
+    }
+
+    override fun deleteContainers(gameId: Long) {
+        val containerIds = containerRepository.findByGameId(gameId).map { it.id }
+        containerRepository.deleteAllById(containerIds)
+    }
+
+    override fun deleteLanterns(gameId: Long) {
+        val lanternIds = lanternRepository.findByGameId(gameId).map { it.id }
+        lanternRepository.deleteAllById(lanternIds)
+    }
+
+    override fun deleteTimeEvents(gameId: Long) {
+        val timeEventIds = timeEventRepository.findByGameId(gameId).map { it.id }
+        timeEventRepository.deleteAllById(timeEventIds)
+    }
 }

@@ -25,12 +25,12 @@ class InGameAuthHandler(
         requestData: AuthRequestMessage,
         arkhamusChannel: ArkhamusChannel
     ): AuthRequestProcessData? {
-        val auth = authHandler.process(requestData, arkhamusChannel)
+        val auth = authHandler.process(requestData, arkhamusChannel) ?: return null
         val authResponse = authResponseMapper.process(
             auth.userAccount,
             auth.game,
             auth.userOfTheGame
-        )
+        ) ?: return null
         val responseJson = authResponse.toJson()
         arkhamusChannel.channel.writeAndFlush(responseJson)
         return if (authResponse.message == AuthState.FAIL) {
