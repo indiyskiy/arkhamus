@@ -20,6 +20,7 @@ class OneTickUserRequests(
         ongoingEvents: List<OngoingEvent>
     ): List<NettyTickRequestMessageDataHolder> {
         val tasksByUser = currentTasks.groupBy { it.userAccount.id }
+        ArkhamusOneTickLogic.logger.info("Process tasks of game ${globalGameData.game.id} tick $currentTick")
         return tasksByUser.map{ entry ->
             val taskToProcess = chooseTaskToProcess(entry.value)
             processRequest(taskToProcess, currentTick, globalGameData, ongoingEvents)
