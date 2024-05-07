@@ -19,6 +19,7 @@ class ArkhamusOneTickLogicImpl(
     private val oneTickTick: OneTickTick,
     private val oneTickTimeEvent: OneTickTimeEvent,
     private val onTickAbilityCast: OnTickAbilityCast,
+    private val onTickCraftProcess: OnTickCraftProcess,
     private val gameUserRedisRepository: RedisGameUserRepository
 ) : ArkhamusOneTickLogic {
 
@@ -39,6 +40,11 @@ class ArkhamusOneTickLogicImpl(
             onTickAbilityCast.applyAbilityCasts(
                 globalGameData,
                 globalGameData.castedAbilities,
+                game.globalTimer
+            )
+            onTickCraftProcess.applyCraftProcess(
+                globalGameData,
+                globalGameData.craftProcess,
                 game.globalTimer
             )
 

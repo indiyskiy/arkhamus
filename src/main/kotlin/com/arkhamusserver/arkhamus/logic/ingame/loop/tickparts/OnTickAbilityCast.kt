@@ -24,27 +24,30 @@ class OnTickAbilityCast(
         castedAbilities: List<RedisAbilityCast>,
         currentGameTime: Long
     ) {
-        castedAbilities.mapNotNull { castedAbility ->
-            if (castedAbility.state == RedisTimeEventState.ACTIVE && castedAbility.timeLeft > 0) {
-                val timeAdd = min(castedAbility.timeLeft, ArkhamusOneTickLogic.TICK_DELTA)
-                processActiveEvent(castedAbility, timeAdd)
-            } else {
-                null
+        castedAbilities.forEach { castedAbility ->
+            if (castedAbility.state == RedisTimeEventState.ACTIVE) {
+                if (castedAbility.timeLeft > 0) {
+                    val timeAdd = min(castedAbility.timeLeft, ArkhamusOneTickLogic.TICK_DELTA)
+                    processActiveEvent(castedAbility, timeAdd)
+                } else {
+                    castedAbility.state = RedisTimeEventState.PAST
+                    redisAbilityCastRepository.save(castedAbility)
+                }
             }
         }
     }
 
     private fun processActiveEvent(
-        event: RedisAbilityCast,
+        abilityCast: RedisAbilityCast,
         timeAdd: Long,
     ) {
-        if (event.timeLeft > 0) {
-            event.timePast += timeAdd
-            event.timeLeft -= timeAdd
+        if (abilityCast.timeLeft > 0) {
+            abilityCast.timePast += timeAdd
+            abilityCast.timeLeft -= timeAdd
         }
-        if (event.timeLeft <= 0) {
-            event.state = RedisTimeEventState.PAST
+        if (abilityCast.timeLeft <= 0) {
+            abilityCast.state = RedisTimeEventState.PAST
         }
-        redisAbilityCastRepository.save(event)
+        redisAbilityCastRepository.save(abilityCast)
     }
 }
