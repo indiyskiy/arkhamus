@@ -31,8 +31,8 @@ class OnTickAbilityCast(
                     processActiveEvent(castedAbility, timeAdd)
                 } else {
                     castedAbility.state = RedisTimeEventState.PAST
-                    redisAbilityCastRepository.save(castedAbility)
                 }
+                redisAbilityCastRepository.save(castedAbility)
             }
         }
     }
@@ -48,6 +48,5 @@ class OnTickAbilityCast(
         if (abilityCast.timeLeft <= 0) {
             abilityCast.state = RedisTimeEventState.PAST
         }
-        redisAbilityCastRepository.save(abilityCast)
     }
 }

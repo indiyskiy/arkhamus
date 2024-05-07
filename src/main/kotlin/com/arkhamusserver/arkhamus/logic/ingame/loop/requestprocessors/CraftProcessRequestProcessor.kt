@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CraftProcessRequestProcessData
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.CraftProcessRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,7 +18,7 @@ class CraftProcessRequestProcessor(
     private val inventoryHandler: InventoryHandler
 ) : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
-        return request.nettyRequestMessage is AbilityRequestMessage
+        return request.nettyRequestMessage is CraftProcessRequestMessage
     }
 
     override fun process(
