@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
 
-class CloseCrafterGameData(
+class UpdateCrafterGameData(
     var crafter: RedisCrafter,
     var sortedInventory: List<ContainerCell>? = null,
     gameUser: RedisGameUser,

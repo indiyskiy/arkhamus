@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
-class CloseCrafterNettyResponse(
+class UpdateContainerNettyResponse(
     var sortedUserInventory: List<ContainerCell>,
     tick: Long,
     userId: Long,
@@ -17,5 +17,5 @@ class CloseCrafterNettyResponse(
     ongoingEvents = ongoingEvents,
     availableAbilities = availableAbilities,
     userInventory = userInventory,
-    type = CloseCrafterNettyResponse::class.java.simpleName
+    type = UpdateContainerNettyResponse::class.java.simpleName
 )

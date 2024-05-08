@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CloseCrafterGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateCrafterGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -11,9 +11,9 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import org.springframework.stereotype.Component
 
 @Component
-class CloseCrafterNettyResponseMapper : NettyResponseMapper {
+class UpdateCrafterNettyResponseMapper : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == CloseCrafterGameData::class.java
+        gameResponseMessage::class.java == UpdateCrafterGameData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -23,8 +23,8 @@ class CloseCrafterNettyResponseMapper : NettyResponseMapper {
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?
-    ): CloseCrafterNettyResponse {
-        with(requestProcessData as CloseCrafterGameData) {
+    ): UpdateCrafterNettyResponse {
+        with(requestProcessData as UpdateCrafterGameData) {
             return myInventory(
                 sortedInventory = requestProcessData.sortedInventory ?: emptyList(),
                 gameData = requestProcessData,
@@ -37,11 +37,11 @@ class CloseCrafterNettyResponseMapper : NettyResponseMapper {
 
     private fun myInventory(
         sortedInventory: List<ContainerCell>,
-        gameData: CloseCrafterGameData,
+        gameData: UpdateCrafterGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>
-    ) = CloseCrafterNettyResponse(
+    ) = UpdateCrafterNettyResponse(
         sortedUserInventory = sortedInventory,
         userInventory = sortedInventory,
         tick = gameData.tick,

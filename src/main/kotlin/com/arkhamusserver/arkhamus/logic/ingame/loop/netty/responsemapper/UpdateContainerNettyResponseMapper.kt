@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CloseContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateContainerGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -11,9 +11,9 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import org.springframework.stereotype.Component
 
 @Component
-class CloseContainerNettyResponseMapper : NettyResponseMapper {
+class UpdateContainerNettyResponseMapper : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == CloseContainerGameData::class.java
+        gameResponseMessage::class.java == UpdateContainerGameData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -23,8 +23,8 @@ class CloseContainerNettyResponseMapper : NettyResponseMapper {
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?
-    ): CloseContainerNettyResponse {
-        with(requestProcessData as CloseContainerGameData) {
+    ): UpdateContainerNettyResponse {
+        with(requestProcessData as UpdateContainerGameData) {
             return myInventory(
                 sortedInventory = requestProcessData.sortedInventory ?: emptyList(),
                 gameData = requestProcessData,
@@ -37,11 +37,11 @@ class CloseContainerNettyResponseMapper : NettyResponseMapper {
 
     private fun myInventory(
         sortedInventory: List<ContainerCell>,
-        gameData: CloseContainerGameData,
+        gameData: UpdateContainerGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>
-    ) = CloseContainerNettyResponse(
+    ) = UpdateContainerNettyResponse(
         sortedUserInventory = sortedInventory,
         userInventory = sortedInventory,
         tick = gameData.tick,

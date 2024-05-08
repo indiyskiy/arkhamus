@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.MockRedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CloseContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateContainerGameData
 import com.arkhamusserver.arkhamus.model.database.entity.*
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.LevelState
@@ -13,7 +13,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
-import com.arkhamusserver.arkhamus.view.dto.netty.request.CloseContainerRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.UpdateContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
 import com.fasterxml.uuid.Generators
@@ -25,12 +25,12 @@ import org.springframework.boot.test.context.SpringBootTest
 import java.sql.Timestamp
 
 @SpringBootTest
-class CloseContainerRequestProcessorTest {
+class UpdateContainerRequestProcessorTest {
     @Autowired
     private lateinit var redisDataAccess: MockRedisDataAccess
 
     @Autowired
-    private lateinit var closeContainerRequestProcessor: CloseContainerRequestProcessor
+    private lateinit var updateContainerRequestProcessor: UpdateContainerRequestProcessor
 
     @BeforeEach
     fun setUp() {
@@ -142,10 +142,10 @@ class CloseContainerRequestProcessorTest {
         )
         val (data, requestContainer) = executeRequest(newInventoryContent)
         val resultUser = data.globalGameData.users[1L]!!.items
-        val closeContainerGameData = requestContainer.requestProcessData as CloseContainerGameData
+        val updateContainerGameData = requestContainer.requestProcessData as UpdateContainerGameData
 
         assertEquals(null, resultUser[Item.MASK.id])
-        assertFalse(closeContainerGameData.sortedInventory!!.any { it.itemId == Item.MASK.id && it.number > 0 })
+        assertFalse(updateContainerGameData.sortedInventory!!.any { it.itemId == Item.MASK.id && it.number > 0 })
     }
 
     @Test
@@ -180,30 +180,31 @@ class CloseContainerRequestProcessorTest {
         assertNull(resultUser[Item.I6.id])
         assertEquals(5, resultContainer[Item.I6.id])
 
-        val closeContainerGameData = requestContainer.requestProcessData as CloseContainerGameData
+        val updateContainerGameData = requestContainer.requestProcessData as UpdateContainerGameData
 
-        assertEquals(4, closeContainerGameData.sortedInventory!!.size)
+        assertEquals(4, updateContainerGameData.sortedInventory!!.size)
 
-        assertEquals(10, closeContainerGameData.sortedInventory!![0].number)
-        assertEquals(Item.SAINT_QUARTZ.id, closeContainerGameData.sortedInventory!![0].itemId)
+        assertEquals(10, updateContainerGameData.sortedInventory!![0].number)
+        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedInventory!![0].itemId)
 
-        assertEquals(0, closeContainerGameData.sortedInventory!![1].number)
-        assertEquals(Item.PURE_NOTHING.id, closeContainerGameData.sortedInventory!![1].itemId)
+        assertEquals(0, updateContainerGameData.sortedInventory!![1].number)
+        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedInventory!![1].itemId)
 
-        assertEquals(0, closeContainerGameData.sortedInventory!![2].number)
-        assertEquals(Item.PURE_NOTHING.id, closeContainerGameData.sortedInventory!![2].itemId)
+        assertEquals(0, updateContainerGameData.sortedInventory!![2].number)
+        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedInventory!![2].itemId)
 
-        assertEquals(10, closeContainerGameData.sortedInventory!![3].number)
-        assertEquals(Item.I4.id, closeContainerGameData.sortedInventory!![3].itemId)
+        assertEquals(10, updateContainerGameData.sortedInventory!![3].number)
+        assertEquals(Item.I4.id, updateContainerGameData.sortedInventory!![3].itemId)
     }
 
     private fun executeRequest(newInventoryContent: List<ContainerCell>): Pair<Data, NettyTickRequestMessageDataHolder> {
         val data = prepareDefaultData()
 
-        val requestMessage = CloseContainerRequestMessage(
+        val requestMessage = UpdateContainerRequestMessage(
             containerId = data.redisContainer.containerId,
             newInventoryContent = newInventoryContent,
             type = "CloseContainerRequestMessage",
+            close = true,
             baseRequestData = BaseRequestData(
                 100L,
                 UserPosition(
@@ -222,7 +223,7 @@ class CloseContainerRequestProcessorTest {
             requestProcessData = data.oldContainer
         )
 
-        closeContainerRequestProcessor.process(
+        updateContainerRequestProcessor.process(
             request,
             data.globalGameData,
             emptyList()
@@ -319,7 +320,7 @@ class CloseContainerRequestProcessorTest {
             items = oldUserItems
         )
 
-        val oldContainer = CloseContainerGameData(
+        val oldContainer = UpdateContainerGameData(
             container = redisContainer,
             gameUser = gameUser,
             otherGameUsers = emptyList(),
@@ -365,7 +366,7 @@ class CloseContainerRequestProcessorTest {
         val requestUserAccount: UserAccount,
         val gameSession: GameSession,
         val user: UserOfGameSession,
-        val oldContainer: CloseContainerGameData,
+        val oldContainer: UpdateContainerGameData,
         val globalGameData: GlobalGameData
     )
 }

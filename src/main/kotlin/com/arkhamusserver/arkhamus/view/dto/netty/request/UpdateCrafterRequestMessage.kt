@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.view.dto.netty.request
 
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
 
-class CloseCrafterRequestMessage(
+class UpdateCrafterRequestMessage(
     var crafterId: Long,
     var newInventoryContent: List<ContainerCell>,
     type: String,

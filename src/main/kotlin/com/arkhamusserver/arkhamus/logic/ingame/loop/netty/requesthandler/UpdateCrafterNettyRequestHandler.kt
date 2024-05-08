@@ -6,21 +6,21 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CloseContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateCrafterGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
-import com.arkhamusserver.arkhamus.view.dto.netty.request.CloseContainerRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.UpdateCrafterRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class CloseContainerNettyRequestHandler(
+class UpdateCrafterNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
-        nettyRequestMessage::class.java == CloseContainerRequestMessage::class.java
+        nettyRequestMessage::class.java == UpdateCrafterRequestMessage::class.java
 
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
@@ -31,12 +31,12 @@ class CloseContainerNettyRequestHandler(
     ): RequestProcessData {
         val userId = requestDataHolder.userAccount.id
         val request = requestDataHolder.nettyRequestMessage
-        with(request as CloseContainerRequestMessage) {
-            val container = globalGameData.containers[this.containerId]!!
+        with(request as UpdateCrafterRequestMessage) {
+            val crafter = globalGameData.crafters[this.crafterId]!!
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
-            return CloseContainerGameData(
-                container = container,
+            return UpdateCrafterGameData(
+                crafter = crafter,
                 gameUser = user,
                 otherGameUsers = users,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
