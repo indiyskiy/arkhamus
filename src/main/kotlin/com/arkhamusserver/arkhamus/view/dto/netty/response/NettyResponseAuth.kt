@@ -15,6 +15,7 @@ class NettyResponseAuth(
     otherGameUsers = allGameUsers,
     ongoingEvents = emptyList(),
     availableAbilities = emptyList(),
+    ongoingCraftingProcess = emptyList(),
     userInventory = emptyList(),
     type = NettyResponseAuth::class.java.simpleName
 )

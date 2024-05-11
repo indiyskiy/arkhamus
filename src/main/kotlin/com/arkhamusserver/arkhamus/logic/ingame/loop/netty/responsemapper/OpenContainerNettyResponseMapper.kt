@@ -43,6 +43,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
                     user,
                     requestProcessData.gameUser!!,
                     requestProcessData.availableAbilities,
+                    requestProcessData.ongoingCraftingProcess,
                     requestProcessData.visibleItems
                 )
             } else {
@@ -51,6 +52,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
                     user,
                     requestProcessData.gameUser!!,
                     requestProcessData.availableAbilities,
+                    requestProcessData.ongoingCraftingProcess,
                     requestProcessData.visibleItems
                 )
             }
@@ -63,6 +65,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
+        ongoingCraftingProcess: List<CraftProcessResponse>,
         visibleItems: List<ContainerCell>,
     ) = OpenContainerNettyResponse(
         containerCells = containerCells,
@@ -83,6 +86,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
             OngoingEventResponse(it)
         },
         availableAbilities = availableAbilities,
+        ongoingCraftingProcess = ongoingCraftingProcess,
         userInventory = visibleItems
     )
 
@@ -91,6 +95,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
+        ongoingCraftingProcess: List<CraftProcessResponse>,
         visibleItems: List<ContainerCell>,
     ) = OpenContainerNettyResponse(
         containerCells = emptyList(),
@@ -111,6 +116,7 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
             OngoingEventResponse(it)
         },
         availableAbilities = availableAbilities,
+        ongoingCraftingProcess = ongoingCraftingProcess,
         userInventory = visibleItems
     )
 

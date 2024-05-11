@@ -7,6 +7,7 @@ class HeartbeatNettyResponse(
     otherGameUsers: List<NettyGameUserResponseMessage>,
     ongoingEvents: List<OngoingEventResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
+    ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<ContainerCell>,
 ) : NettyResponseMessage(
     tick = tick,
@@ -15,6 +16,7 @@ class HeartbeatNettyResponse(
     otherGameUsers = otherGameUsers,
     ongoingEvents = ongoingEvents,
     availableAbilities = availableAbilities,
+    ongoingCraftingProcess = ongoingCraftingProcess,
     userInventory = userInventory,
     type = HeartbeatNettyResponse::class.java.simpleName
 )

@@ -43,6 +43,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
                     user,
                     requestProcessData.gameUser!!,
                     requestProcessData.availableAbilities,
+                    requestProcessData.ongoingCraftingProcess,
                     requestProcessData.visibleItems
                 )
             } else {
@@ -51,6 +52,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
                     user,
                     requestProcessData.gameUser!!,
                     requestProcessData.availableAbilities,
+                    requestProcessData.ongoingCraftingProcess,
                     requestProcessData.visibleItems
                 )
             }
@@ -63,6 +65,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
+        ongoingCraftingProcess: List<CraftProcessResponse>,
         visibleItems: List<ContainerCell>,
     ) = OpenCrafterNettyResponse(
         crafterCells = crafterCells,
@@ -84,6 +87,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
             OngoingEventResponse(it)
         },
         availableAbilities = availableAbilities,
+        ongoingCraftingProcess = ongoingCraftingProcess,
         userInventory = visibleItems
     )
 
@@ -92,6 +96,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
+        ongoingCraftingProcess: List<CraftProcessResponse>,
         visibleItems: List<ContainerCell>,
     ) = OpenCrafterNettyResponse(
         crafterCells = emptyList(),
@@ -113,6 +118,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
             OngoingEventResponse(it)
         },
         availableAbilities = availableAbilities,
+        ongoingCraftingProcess = ongoingCraftingProcess,
         userInventory = visibleItems
     )
 

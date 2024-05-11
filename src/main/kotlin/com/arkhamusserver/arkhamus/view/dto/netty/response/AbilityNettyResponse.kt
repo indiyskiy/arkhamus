@@ -8,6 +8,7 @@ class AbilityNettyResponse(
     myGameUser: MyGameUserResponseMessage,
     otherGameUsers: List<NettyGameUserResponseMessage>,
     ongoingEvents: List<OngoingEventResponse>,
+    ongoingCraftingProcess: List<CraftProcessResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     userInventory: List<ContainerCell>,
 ) : NettyResponseMessage(
@@ -16,6 +17,7 @@ class AbilityNettyResponse(
     myGameUser = myGameUser,
     otherGameUsers = otherGameUsers,
     ongoingEvents = ongoingEvents,
+    ongoingCraftingProcess = ongoingCraftingProcess,
     availableAbilities = availableAbilities,
     userInventory = userInventory,
     type = AbilityNettyResponse::class.java.simpleName

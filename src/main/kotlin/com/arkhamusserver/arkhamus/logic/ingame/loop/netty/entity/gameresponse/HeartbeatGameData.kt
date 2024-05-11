@@ -4,12 +4,14 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 
 class HeartbeatGameData(
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
+    ongoingCraftingProcess: List<CraftProcessResponse>,
     visibleItems: List<ContainerCell>,
     tick: Long
 ) : GameUserData(
@@ -17,6 +19,7 @@ class HeartbeatGameData(
     otherGameUsers = otherGameUsers,
     visibleOngoingEvents = visibleOngoingEvents,
     availableAbilities = availableAbilities,
+    ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     tick = tick
 )

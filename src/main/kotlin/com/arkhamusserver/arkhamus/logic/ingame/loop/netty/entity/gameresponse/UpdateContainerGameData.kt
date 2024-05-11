@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 
 class UpdateContainerGameData(
     var container: RedisContainer,
@@ -13,6 +14,7 @@ class UpdateContainerGameData(
     otherGameUsers: List<RedisGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
+    ongoingCraftingProcess: List<CraftProcessResponse>,
     visibleItems: List<ContainerCell>,
     tick: Long
 ) : GameUserData(
@@ -20,6 +22,7 @@ class UpdateContainerGameData(
     otherGameUsers = otherGameUsers,
     visibleOngoingEvents = visibleOngoingEvents,
     availableAbilities = availableAbilities,
+    ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     tick = tick
 )

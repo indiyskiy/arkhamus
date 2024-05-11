@@ -39,11 +39,12 @@ class HeartbeatNettyResponseMapper : NettyResponseMapper {
                         y = gameUser.y
                     )
                 },
-                ongoingEvents = requestProcessData.visibleOngoingEvents.map {
-                    OngoingEventResponse(it)
+                ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
+                    OngoingEventResponse(event)
                 },
                 availableAbilities = requestProcessData.availableAbilities,
-                userInventory = requestProcessData.visibleItems
+                ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
+                userInventory = requestProcessData.visibleItems,
             )
         }
     }

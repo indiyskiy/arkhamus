@@ -12,6 +12,7 @@ class OpenContainerNettyResponse(
     otherGameUsers: List<NettyGameUserResponseMessage>,
     ongoingEvents: List<OngoingEventResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
+    ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<ContainerCell>,
 ) : NettyResponseMessage(
     tick = tick,
@@ -20,6 +21,7 @@ class OpenContainerNettyResponse(
     otherGameUsers = otherGameUsers,
     ongoingEvents = ongoingEvents,
     availableAbilities = availableAbilities,
+    ongoingCraftingProcess = ongoingCraftingProcess,
     userInventory = userInventory,
     type = OpenContainerNettyResponse::class.java.simpleName
 )

@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 
 class AbilityRequestProcessData(
     val ability: Ability?,
@@ -14,6 +15,7 @@ class AbilityRequestProcessData(
     val cooldownOf: Long?,
     var castedSuccessfully: Boolean,
     val item: Item?,
+    ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
@@ -21,10 +23,11 @@ class AbilityRequestProcessData(
     visibleItems: List<ContainerCell>,
     tick: Long
 ) : GameUserData(
-    gameUser,
-    otherGameUsers,
-    visibleOngoingEvents,
-    availableAbilities,
-    visibleItems,
-    tick
+    gameUser = gameUser,
+    otherGameUsers = otherGameUsers,
+    visibleOngoingEvents = visibleOngoingEvents,
+    availableAbilities = availableAbilities,
+    ongoingCraftingProcess = ongoingCraftingProcess,
+    visibleItems = visibleItems,
+    tick = tick
 )

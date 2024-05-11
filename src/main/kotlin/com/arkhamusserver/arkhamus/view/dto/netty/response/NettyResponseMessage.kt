@@ -6,6 +6,7 @@ abstract class NettyResponseMessage(
     val myGameUser: MyGameUserResponseMessage,
     val otherGameUsers: List<NettyGameUserResponseMessage>,
     val ongoingEvents: List<OngoingEventResponse>,
+    val ongoingCraftingProcess: List<CraftProcessResponse>,
     val availableAbilities: List<AbilityOfUserResponse>,
     var userInventory: List<ContainerCell>,
     val type: String

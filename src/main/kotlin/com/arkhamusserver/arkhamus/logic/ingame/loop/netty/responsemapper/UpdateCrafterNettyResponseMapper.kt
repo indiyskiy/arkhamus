@@ -25,24 +25,36 @@ class UpdateCrafterNettyResponseMapper : NettyResponseMapper {
         userRole: UserOfGameSession?
     ): UpdateCrafterNettyResponse {
         with(requestProcessData as UpdateCrafterGameData) {
-            return myInventory(
-                sortedInventory = requestProcessData.sortedInventory ?: emptyList(),
-                gameData = requestProcessData,
+            return build(
+                sortedInventory = sortedInventory ?: emptyList(),
+                gameData = this,
                 user = user,
-                gameUser = requestProcessData.gameUser!!,
-                availableAbilities = requestProcessData.availableAbilities
+                gameUser = gameUser!!,
+                availableAbilities = availableAbilities,
+                ongoingCraftingProcess = ongoingCraftingProcess,
+                containerCells = crafter.items.map {
+                    ContainerCell().apply {
+                        number = it.value
+                        itemId = it.key
+                    }
+                }
             )
         }
     }
 
-    private fun myInventory(
+    private fun build(
         sortedInventory: List<ContainerCell>,
         gameData: UpdateCrafterGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
-        availableAbilities: List<AbilityOfUserResponse>
+        availableAbilities: List<AbilityOfUserResponse>,
+        ongoingCraftingProcess: List<CraftProcessResponse>,
+        containerCells: List<ContainerCell>
     ) = UpdateCrafterNettyResponse(
         sortedUserInventory = sortedInventory,
+        containerCells = containerCells,
+        containerState = gameData.crafter.state,
+        holdingUser = gameData.crafter.holdingUser,
         userInventory = sortedInventory,
         tick = gameData.tick,
         userId = user.id!!,
@@ -58,6 +70,7 @@ class UpdateCrafterNettyResponseMapper : NettyResponseMapper {
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         },
+        ongoingCraftingProcess = ongoingCraftingProcess,
         availableAbilities = availableAbilities
     )
 

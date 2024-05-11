@@ -49,6 +49,7 @@ class TestContainerLogic(
             },
             holdingUser = container.holdingUser,
             availableAbilities = emptyList(),
+            ongoingCraftingProcess = emptyList(),
             userInventory = emptyList()
         )
     }

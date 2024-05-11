@@ -10,6 +10,7 @@ class CraftProcessNettyResponse(
     otherGameUsers: List<NettyGameUserResponseMessage>,
     ongoingEvents: List<OngoingEventResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
+    ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<ContainerCell>,
 ) : NettyResponseMessage(
     tick = tick,
@@ -18,6 +19,7 @@ class CraftProcessNettyResponse(
     otherGameUsers = otherGameUsers,
     ongoingEvents = ongoingEvents,
     availableAbilities = availableAbilities,
+    ongoingCraftingProcess = ongoingCraftingProcess,
     userInventory = userInventory,
     type = CraftProcessNettyResponse::class.java.simpleName
 )

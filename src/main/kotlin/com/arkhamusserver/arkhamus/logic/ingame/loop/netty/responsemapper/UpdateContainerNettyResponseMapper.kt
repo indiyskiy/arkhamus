@@ -25,24 +25,36 @@ class UpdateContainerNettyResponseMapper : NettyResponseMapper {
         userRole: UserOfGameSession?
     ): UpdateContainerNettyResponse {
         with(requestProcessData as UpdateContainerGameData) {
-            return myInventory(
-                sortedInventory = requestProcessData.sortedInventory ?: emptyList(),
-                gameData = requestProcessData,
+            return build(
+                sortedInventory = sortedInventory ?: emptyList(),
+                gameData = this,
                 user = user,
-                gameUser = requestProcessData.gameUser!!,
-                availableAbilities = requestProcessData.availableAbilities
+                gameUser = gameUser!!,
+                availableAbilities = availableAbilities,
+                ongoingCraftingProcess = ongoingCraftingProcess,
+                containerCells = container.items.map {
+                    ContainerCell().apply {
+                        number = it.value
+                        itemId = it.key
+                    }
+                }
             )
         }
     }
 
-    private fun myInventory(
+    private fun build(
         sortedInventory: List<ContainerCell>,
         gameData: UpdateContainerGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
-        availableAbilities: List<AbilityOfUserResponse>
+        availableAbilities: List<AbilityOfUserResponse>,
+        ongoingCraftingProcess: List<CraftProcessResponse>,
+        containerCells: List<ContainerCell>
     ) = UpdateContainerNettyResponse(
         sortedUserInventory = sortedInventory,
+        containerCells = containerCells,
+        containerState = gameData.container.state,
+        holdingUser = gameData.container.holdingUser,
         userInventory = sortedInventory,
         tick = gameData.tick,
         userId = user.id!!,
@@ -58,6 +70,7 @@ class UpdateContainerNettyResponseMapper : NettyResponseMapper {
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         },
+        ongoingCraftingProcess = ongoingCraftingProcess,
         availableAbilities = availableAbilities
     )
 

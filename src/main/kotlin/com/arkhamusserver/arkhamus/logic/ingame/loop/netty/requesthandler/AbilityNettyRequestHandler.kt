@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.CanAbilityBeCastedHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.RelatedAbilityCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -21,7 +22,8 @@ class AbilityNettyRequestHandler(
     private val abilityToItemResolver: AbilityToItemResolver,
     private val relatedAbilityCastHandler: RelatedAbilityCastHandler,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
-    private val inventoryHandler: InventoryHandler
+    private val inventoryHandler: InventoryHandler,
+    private val crafterProcessHandler: CrafterProcessHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -57,6 +59,11 @@ class AbilityNettyRequestHandler(
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                     availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
                     visibleItems = inventoryHandler.mapUsersItems(user.items),
+                    ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
+                        user,
+                        globalGameData.crafters,
+                        globalGameData.craftProcess
+                    ),
                     tick = globalGameData.game.currentTick
                 )
             } ?: AbilityRequestProcessData(
@@ -70,6 +77,11 @@ class AbilityNettyRequestHandler(
                 otherGameUsers = users,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                 availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+                ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
+                    user,
+                    globalGameData.crafters,
+                    globalGameData.craftProcess
+                ),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),
                 tick = globalGameData.game.currentTick
             )

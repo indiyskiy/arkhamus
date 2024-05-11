@@ -46,6 +46,7 @@ class CraftProcessNettyResponseMapper : NettyResponseMapper {
                     OngoingEventResponse(event)
                 },
                 availableAbilities = requestProcessData.availableAbilities,
+                ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 userInventory = requestProcessData.visibleItems
             )
         }

@@ -13,6 +13,7 @@ class OpenCrafterNettyResponse(
     myGameUser: MyGameUserResponseMessage,
     otherGameUsers: List<NettyGameUserResponseMessage>,
     ongoingEvents: List<OngoingEventResponse>,
+    ongoingCraftingProcess: List<CraftProcessResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     userInventory: List<ContainerCell>,
 ) : NettyResponseMessage(
@@ -21,6 +22,7 @@ class OpenCrafterNettyResponse(
     myGameUser = myGameUser,
     otherGameUsers = otherGameUsers,
     ongoingEvents = ongoingEvents,
+    ongoingCraftingProcess = ongoingCraftingProcess,
     availableAbilities = availableAbilities,
     userInventory = userInventory,
     type = OpenCrafterNettyResponse::class.java.simpleName
