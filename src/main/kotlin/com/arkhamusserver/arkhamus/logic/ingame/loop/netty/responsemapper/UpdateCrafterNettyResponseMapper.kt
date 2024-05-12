@@ -1,7 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateCrafterGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateCrafterGameData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
@@ -11,7 +13,9 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import org.springframework.stereotype.Component
 
 @Component
-class UpdateCrafterNettyResponseMapper : NettyResponseMapper {
+class UpdateCrafterNettyResponseMapper(
+    val itemsInBetweenHandler: ItemsInBetweenHandler
+) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == UpdateCrafterGameData::class.java
 
@@ -22,11 +26,15 @@ class UpdateCrafterNettyResponseMapper : NettyResponseMapper {
         nettyRequestMessage: NettyBaseRequestMessage,
         user: UserAccount,
         gameSession: GameSession?,
-        userRole: UserOfGameSession?
+        userRole: UserOfGameSession?,
+        inBetweenEventHolder: InBetweenEventHolder
     ): UpdateCrafterNettyResponse {
         with(requestProcessData as UpdateCrafterGameData) {
             return build(
-                sortedInventory = sortedInventory ?: emptyList(),
+                sortedInventory = (sortedInventory ?: emptyList()).applyInBetween(
+                    inBetweenEventHolder.inBetweenItemHolderChanges,
+                    user.id!!
+                ),
                 gameData = this,
                 user = user,
                 gameUser = gameUser!!,
@@ -74,4 +82,12 @@ class UpdateCrafterNettyResponseMapper : NettyResponseMapper {
         availableAbilities = availableAbilities
     )
 
+    private fun List<ContainerCell>.applyInBetween(
+        inBetweenItemHolderChanges: MutableList<InBetweenItemHolderChanges>,
+        userId: Long
+    ): List<ContainerCell> {
+        return itemsInBetweenHandler.applyInBetween(this, inBetweenItemHolderChanges, userId)
+    }
 }
+
+

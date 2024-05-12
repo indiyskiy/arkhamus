@@ -25,7 +25,7 @@ class AbilityCastHandler(
             .cast(ability, abilityRequestProcessData, globalGameData)
     }
 
-    fun castAbility(
+    fun createCastAbilityEvent(
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         sourceUserId: Long,

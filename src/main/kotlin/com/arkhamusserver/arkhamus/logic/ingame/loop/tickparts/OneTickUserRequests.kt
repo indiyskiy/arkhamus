@@ -1,11 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,6 +14,11 @@ class OneTickUserRequests(
     private val nettyRequestProcessors: List<NettyRequestProcessor>,
     private val requestProcessDataBuilder: GameDataBuilder,
 ) {
+
+    companion object {
+        var logger: Logger = LoggerFactory.getLogger(OneTickUserRequests::class.java)
+    }
+
     fun processRequests(
         currentTasks: List<NettyTickRequestMessageDataHolder>,
         currentTick: Long,
@@ -20,16 +26,18 @@ class OneTickUserRequests(
         ongoingEvents: List<OngoingEvent>
     ): List<NettyTickRequestMessageDataHolder> {
         val tasksByUser = currentTasks.groupBy { it.userAccount.id }
-        ArkhamusOneTickLogic.logger.info("Process tasks of game ${globalGameData.game.id} tick $currentTick")
-        return tasksByUser.map{ entry ->
+        logger.info("Process tasks of game ${globalGameData.game.id} tick $currentTick")
+        return tasksByUser.map { entry ->
             val taskToProcess = chooseTaskToProcess(entry.value)
             processRequest(taskToProcess, currentTick, globalGameData, ongoingEvents)
             taskToProcess
         }
     }
 
-    private fun chooseTaskToProcess(userTasks: List<NettyTickRequestMessageDataHolder>): NettyTickRequestMessageDataHolder {
-        return userTasks.sortedByDescending { it.nettyRequestMessage.baseRequestData.tick }.first()
+    private fun chooseTaskToProcess(
+        userTasks: List<NettyTickRequestMessageDataHolder>
+    ): NettyTickRequestMessageDataHolder {
+        return userTasks.maxByOrNull { it.nettyRequestMessage.baseRequestData.tick }!!
     }
 
     private fun processRequest(
@@ -40,8 +48,9 @@ class OneTickUserRequests(
     ) {
         val game = globalGameData.game
         val nettyRequestMessage = requestContainer.nettyRequestMessage
-        ArkhamusOneTickLogic.logger.info("Process ${nettyRequestMessage.javaClass.simpleName} of game ${game.id} tick $tick")
-        requestContainer.requestProcessData =  requestProcessDataBuilder.build(requestContainer, globalGameData, ongoingEvents)
+        logger.info("Process ${nettyRequestMessage.type} of game ${game.id} tick $tick")
+        requestContainer.requestProcessData =
+            requestProcessDataBuilder.build(requestContainer, globalGameData, ongoingEvents)
         nettyRequestProcessors.filter {
             it.accept(requestContainer)
         }.forEach {

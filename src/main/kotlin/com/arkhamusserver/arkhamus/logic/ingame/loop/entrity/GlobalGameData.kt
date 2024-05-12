@@ -11,4 +11,6 @@ data class GlobalGameData(
     var timeEvents: List<RedisTimeEvent> = emptyList(),
     var castedAbilities: List<RedisAbilityCast> = emptyList(),
     var craftProcess: List<RedisCraftProcess> = emptyList(),
+
+    var inBetweenEvents: InBetweenEventHolder = InBetweenEventHolder()
 )

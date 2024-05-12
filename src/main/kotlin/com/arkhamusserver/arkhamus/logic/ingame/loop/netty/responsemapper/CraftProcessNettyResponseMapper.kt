@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CraftProcessRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -24,7 +25,8 @@ class CraftProcessNettyResponseMapper : NettyResponseMapper {
         nettyRequestMessage: NettyBaseRequestMessage,
         user: UserAccount,
         gameSession: GameSession?,
-        userRole: UserOfGameSession?
+        userRole: UserOfGameSession?,
+        inBetweenEventHolder: InBetweenEventHolder
     ): CraftProcessNettyResponse {
         (requestProcessData as CraftProcessRequestProcessData).let {
             return CraftProcessNettyResponse(

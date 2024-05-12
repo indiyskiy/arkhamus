@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.OpenCrafterGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -25,7 +26,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         nettyRequestMessage: NettyBaseRequestMessage,
         user: UserAccount,
         gameSession: GameSession?,
-        userRole: UserOfGameSession?
+        userRole: UserOfGameSession?,
+        inBetweenEventHolder: InBetweenEventHolder
     ): OpenCrafterNettyResponse {
         with(requestProcessData as OpenCrafterGameData) {
             val mappedItem = this.crafter.items.map {

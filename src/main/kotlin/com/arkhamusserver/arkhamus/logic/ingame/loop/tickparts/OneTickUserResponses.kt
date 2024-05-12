@@ -15,9 +15,14 @@ class OneTickUserResponses(
         globalGameData: GlobalGameData,
         currentTasks: List<NettyTickRequestMessageDataHolder>,
     ): List<NettyResponseMessage> {
-        val tasksUniqueByUserAndTick = currentTasks.distinctBy { it.userAccount.id to it.nettyRequestMessage.baseRequestData.tick }
+        val tasksUniqueByUserAndTick =
+            currentTasks.distinctBy {
+                it.userAccount.id to it.nettyRequestMessage.baseRequestData.tick
+            }
 
-        return tasksUniqueByUserAndTick.map{ task -> buildResponse(task, globalGameData) }
+        return tasksUniqueByUserAndTick.map { task ->
+            buildResponse(task, globalGameData)
+        }
     }
 
     private fun buildResponse(

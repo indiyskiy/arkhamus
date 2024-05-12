@@ -11,6 +11,12 @@ import java.lang.Long.min
 
 @Component
 class InventoryHandler {
+
+    fun addItem(user: RedisGameUser, addedItem: Item)  {
+        val howManyItems = howManyItems(user, addedItem)
+        user.items[addedItem.id] = howManyItems + 1
+    }
+
     fun userHaveItem(user: RedisGameUser, requiredItem: Item): Boolean {
         return (user.items[requiredItem.id] ?: 0) > 0
     }

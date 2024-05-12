@@ -20,6 +20,13 @@ enum class Ability(
         classBased = true,
         cooldown = MINUTE_IN_MILIS
     ),
+    THROW_POTATO(
+        id = 102,
+        requiresItem = true,
+        consumesItem = true,
+        cooldown = SECOND_IN_MILIS * 30,
+        globalCooldown = true
+    ),
     SUMMON_NIGHT(
         id = 201,
         requiresItem = true,

@@ -2,16 +2,18 @@ package com.arkhamusserver.arkhamus.logic.ingame.item
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.Item.CURSED_POTATO
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item.MOON_STONE
 import org.springframework.stereotype.Component
 
 @Component
 class AbilityToItemResolver {
     fun resolve(ability: Ability): Item? =
-        if(!ability.requiresItem){
+        if (!ability.requiresItem) {
             null
         } else {
             when (ability) {
+                Ability.THROW_POTATO -> CURSED_POTATO
                 Ability.SUMMON_NIGHT -> MOON_STONE
                 else -> null
             }
