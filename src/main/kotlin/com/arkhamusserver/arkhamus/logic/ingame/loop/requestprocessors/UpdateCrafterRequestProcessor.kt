@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateCrafterGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ContainerTypeThingsHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ContainerLikeThingsHandler
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 @Component
 class UpdateCrafterRequestProcessor(
     private val redisCrafterRepository: RedisCrafterRepository,
-    private val containerTypeThingsHandler: ContainerTypeThingsHandler
+    private val crafterTypeThingsHandler: ContainerLikeThingsHandler
 ) : NettyRequestProcessor {
 
     companion object {
@@ -40,8 +40,15 @@ class UpdateCrafterRequestProcessor(
 
         if ((crafter.state == MapObjectState.HOLD) && (crafter.holdingUser == oldGameUser.userId)) {
             val sortedInventory =
-               containerTypeThingsHandler.getTrueNewInventoryContent(crafter, oldGameUser, updateCrafterRequestMessage.newInventoryContent)
-            closeCrafter(crafter)
+                crafterTypeThingsHandler.getTrueNewInventoryContent(
+                    crafter,
+                    oldGameUser,
+                    updateCrafterRequestMessage.newInventoryContent
+                )
+            if (updateCrafterRequestMessage.close) {
+                closeCrafter(crafter)
+            }
+            redisCrafterRepository.save(crafter)
             requestProcessData.sortedInventory = sortedInventory
             requestProcessData.visibleItems = sortedInventory
         }
@@ -50,6 +57,5 @@ class UpdateCrafterRequestProcessor(
     private fun closeCrafter(crafter: RedisCrafter) {
         crafter.holdingUser = null
         crafter.state = MapObjectState.ACTIVE
-        redisCrafterRepository.save(crafter)
     }
 }

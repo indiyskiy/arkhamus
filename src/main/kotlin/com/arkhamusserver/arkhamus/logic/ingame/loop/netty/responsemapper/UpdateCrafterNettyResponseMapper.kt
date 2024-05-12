@@ -40,8 +40,8 @@ class UpdateCrafterNettyResponseMapper(
                 gameUser = gameUser!!,
                 availableAbilities = availableAbilities,
                 ongoingCraftingProcess = ongoingCraftingProcess,
-                containerCells = crafter.items.map {
-                    ContainerCell().apply {
+                itemsInside = crafter.items.map {
+                    InventoryCell().apply {
                         number = it.value
                         itemId = it.key
                     }
@@ -51,17 +51,17 @@ class UpdateCrafterNettyResponseMapper(
     }
 
     private fun build(
-        sortedInventory: List<ContainerCell>,
+        sortedInventory: List<InventoryCell>,
         gameData: UpdateCrafterGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
         ongoingCraftingProcess: List<CraftProcessResponse>,
-        containerCells: List<ContainerCell>
+        itemsInside: List<InventoryCell>
     ) = UpdateCrafterNettyResponse(
         sortedUserInventory = sortedInventory,
-        containerCells = containerCells,
-        containerState = gameData.crafter.state,
+        itemsInside = itemsInside,
+        state = gameData.crafter.state,
         holdingUser = gameData.crafter.holdingUser,
         userInventory = sortedInventory,
         tick = gameData.tick,
@@ -82,10 +82,10 @@ class UpdateCrafterNettyResponseMapper(
         availableAbilities = availableAbilities
     )
 
-    private fun List<ContainerCell>.applyInBetween(
+    private fun List<InventoryCell>.applyInBetween(
         inBetweenItemHolderChanges: MutableList<InBetweenItemHolderChanges>,
         userId: Long
-    ): List<ContainerCell> {
+    ): List<InventoryCell> {
         return itemsInBetweenHandler.applyInBetween(this, inBetweenItemHolderChanges, userId)
     }
 }

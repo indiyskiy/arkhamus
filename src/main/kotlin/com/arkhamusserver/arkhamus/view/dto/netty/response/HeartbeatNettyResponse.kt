@@ -8,7 +8,7 @@ class HeartbeatNettyResponse(
     ongoingEvents: List<OngoingEventResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    userInventory: List<ContainerCell>,
+    userInventory: List<InventoryCell>,
 ) : NettyResponseMessage(
     tick = tick,
     userId = userId,

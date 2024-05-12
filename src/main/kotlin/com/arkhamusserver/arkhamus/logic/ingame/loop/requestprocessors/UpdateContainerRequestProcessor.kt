@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateContainerGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ContainerTypeThingsHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ContainerLikeThingsHandler
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 @Component
 class UpdateContainerRequestProcessor(
     private val redisContainerRepository: RedisContainerRepository,
-    private val containerTypeThingsHandler: ContainerTypeThingsHandler
+    private val containerLikeThingsHandler: ContainerLikeThingsHandler
 ) : NettyRequestProcessor {
 
     companion object {
@@ -40,7 +40,7 @@ class UpdateContainerRequestProcessor(
 
         if ((container.state == MapObjectState.HOLD) && (container.holdingUser == oldGameUser.userId)) {
             val sortedInventory =
-                containerTypeThingsHandler.getTrueNewInventoryContent(
+                containerLikeThingsHandler.getTrueNewInventoryContent(
                     container,
                     oldGameUser,
                     updateContainerRequestMessage.newInventoryContent

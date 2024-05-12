@@ -15,7 +15,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UpdateContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
-import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 import com.fasterxml.uuid.Generators
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -39,7 +39,7 @@ class UpdateContainerRequestProcessorTest {
 
     @Test
     fun emptyInventory() {
-        val newInventoryContent = emptyList<ContainerCell>()
+        val newInventoryContent = emptyList<InventoryCell>()
 
         val (data, _) = executeRequest(newInventoryContent)
 
@@ -68,12 +68,12 @@ class UpdateContainerRequestProcessorTest {
     @Test
     fun fullInventory() {
         val newInventoryContent = listOf(
-            ContainerCell(Item.SAINT_QUARTZ.id, 10),
-            ContainerCell(Item.I2.id, 10),
-            ContainerCell(Item.I3.id, 10),
-            ContainerCell(Item.I4.id, 10),
-            ContainerCell(Item.I5.id, 5),
-            ContainerCell(Item.I6.id, 5),
+            InventoryCell(Item.SAINT_QUARTZ.id, 10),
+            InventoryCell(Item.I2.id, 10),
+            InventoryCell(Item.I3.id, 10),
+            InventoryCell(Item.I4.id, 10),
+            InventoryCell(Item.I5.id, 5),
+            InventoryCell(Item.I6.id, 5),
         )
 
         val (data, _) = executeRequest(newInventoryContent)
@@ -103,12 +103,12 @@ class UpdateContainerRequestProcessorTest {
     @Test
     fun mixed() {
         val newInventoryContent = listOf(
-            ContainerCell(Item.SAINT_QUARTZ.id, 10),
-            ContainerCell(Item.I2.id, 0),
-            ContainerCell(Item.I3.id, 3),
-            ContainerCell(Item.I4.id, 10),
-            ContainerCell(Item.I5.id, 3),
-            ContainerCell(Item.I6.id, 3),
+            InventoryCell(Item.SAINT_QUARTZ.id, 10),
+            InventoryCell(Item.I2.id, 0),
+            InventoryCell(Item.I3.id, 3),
+            InventoryCell(Item.I4.id, 10),
+            InventoryCell(Item.I5.id, 3),
+            InventoryCell(Item.I6.id, 3),
         )
 
         val (data, _) = executeRequest(newInventoryContent)
@@ -138,7 +138,7 @@ class UpdateContainerRequestProcessorTest {
     @Test
     fun tryToCheat() {
         val newInventoryContent = listOf(
-            ContainerCell(Item.MASK.id, 3),
+            InventoryCell(Item.MASK.id, 3),
         )
         val (data, requestContainer) = executeRequest(newInventoryContent)
         val resultUser = data.globalGameData.users[1L]!!.items
@@ -155,7 +155,7 @@ class UpdateContainerRequestProcessorTest {
     @Test
     fun tryToCheat2() {
         val newInventoryContent = listOf(
-            ContainerCell(Item.SAINT_QUARTZ.id, 100),
+            InventoryCell(Item.SAINT_QUARTZ.id, 100),
         )
         val (data, requestContainer) = executeRequest(newInventoryContent)
         val resultUser = data.globalGameData.users[1L]!!.items
@@ -174,10 +174,10 @@ class UpdateContainerRequestProcessorTest {
     @Test
     fun sortedInventory() {
         val newInventoryContent = listOf(
-            ContainerCell(Item.SAINT_QUARTZ.id, 10),
-            ContainerCell(Item.I2.id, 0),
-            ContainerCell(Item.I3.id, 0),
-            ContainerCell(Item.I4.id, 10),
+            InventoryCell(Item.SAINT_QUARTZ.id, 10),
+            InventoryCell(Item.I2.id, 0),
+            InventoryCell(Item.I3.id, 0),
+            InventoryCell(Item.I4.id, 10),
         )
 
         val (data, requestContainer) = executeRequest(newInventoryContent)
@@ -223,12 +223,12 @@ class UpdateContainerRequestProcessorTest {
     @Test
     fun sortedInventory2() {
         val newInventoryContent = listOf(
-            ContainerCell(Item.SAINT_QUARTZ.id, 3),
-            ContainerCell(Item.I2.id, 0),
-            ContainerCell(Item.SAINT_QUARTZ.id, 6),
-            ContainerCell(Item.I3.id, 0),
-            ContainerCell(Item.I4.id, 10),
-            ContainerCell(Item.SAINT_QUARTZ.id, 1),
+            InventoryCell(Item.SAINT_QUARTZ.id, 3),
+            InventoryCell(Item.I2.id, 0),
+            InventoryCell(Item.SAINT_QUARTZ.id, 6),
+            InventoryCell(Item.I3.id, 0),
+            InventoryCell(Item.I4.id, 10),
+            InventoryCell(Item.SAINT_QUARTZ.id, 1),
         )
 
         val (data, requestContainer) = executeRequest(newInventoryContent)
@@ -280,12 +280,12 @@ class UpdateContainerRequestProcessorTest {
     @Test
     fun sortedInventoryTryToCheat() {
         val newInventoryContent = listOf(
-            ContainerCell(Item.SAINT_QUARTZ.id, 2),
-            ContainerCell(Item.SAINT_QUARTZ.id, 2),
-            ContainerCell(Item.SAINT_QUARTZ.id, 2),
-            ContainerCell(Item.SAINT_QUARTZ.id, 2),
-            ContainerCell(Item.SAINT_QUARTZ.id, 2),
-            ContainerCell(Item.SAINT_QUARTZ.id, 2), //2*6 = 12, so it is more then in container (10)
+            InventoryCell(Item.SAINT_QUARTZ.id, 2),
+            InventoryCell(Item.SAINT_QUARTZ.id, 2),
+            InventoryCell(Item.SAINT_QUARTZ.id, 2),
+            InventoryCell(Item.SAINT_QUARTZ.id, 2),
+            InventoryCell(Item.SAINT_QUARTZ.id, 2),
+            InventoryCell(Item.SAINT_QUARTZ.id, 2), //2*6 = 12, so it is more then in container (10)
         )
 
         val (data, requestContainer) = executeRequest(newInventoryContent)
@@ -319,7 +319,7 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedInventory!![5].itemId) //nothing here
     }
 
-    private fun executeRequest(newInventoryContent: List<ContainerCell>): Pair<Data, NettyTickRequestMessageDataHolder> {
+    private fun executeRequest(newInventoryContent: List<InventoryCell>): Pair<Data, NettyTickRequestMessageDataHolder> {
         val data = prepareDefaultData()
 
         val requestMessage = UpdateContainerRequestMessage(

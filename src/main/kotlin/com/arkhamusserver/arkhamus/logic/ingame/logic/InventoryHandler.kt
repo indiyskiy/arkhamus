@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 import org.springframework.stereotype.Component
 import java.lang.Long.min
 
@@ -31,9 +31,9 @@ class InventoryHandler {
         }
     }
 
-    fun mapUsersItems(items: MutableMap<Int, Long>): List<ContainerCell> {
+    fun mapUsersItems(items: MutableMap<Int, Long>): List<InventoryCell> {
         return items.map {
-            ContainerCell(
+            InventoryCell(
                 itemId = it.key,
                 number = it.value
             )

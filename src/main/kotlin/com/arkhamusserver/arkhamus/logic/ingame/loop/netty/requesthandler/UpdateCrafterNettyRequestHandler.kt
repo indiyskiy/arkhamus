@@ -7,10 +7,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateCrafterGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
-import com.arkhamusserver.arkhamus.view.dto.netty.request.UpdateCrafterRequestMessage
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateCrafterGameData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.UpdateCrafterRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -44,12 +44,12 @@ class UpdateCrafterNettyRequestHandler(
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                 availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),
-                tick = globalGameData.game.currentTick,
                 ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
                     user,
                     globalGameData.crafters,
                     globalGameData.craftProcess
                 ),
+                tick = globalGameData.game.currentTick,
             )
         }
     }

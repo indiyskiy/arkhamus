@@ -28,12 +28,14 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     val gameId = game.id.toLong()
     val allUsers = getGameUsers(gameId)
     val allContainers = getGameContainers(gameId)
+    val allCrafters = getGameCrafters(gameId)
     val allEvents = getTimeEvents(gameId)
     val castedAbilities = getCastedAbilities(gameId)
     val allLanterns = getGameLanterns(gameId)
     return GlobalGameData(game).apply {
         this.users = allUsers.associateBy { it.userId }
         this.containers = allContainers.associateBy { it.containerId }
+        this.crafters = allCrafters.associateBy { it.crafterId }
         this.timeEvents = allEvents
         this.castedAbilities = castedAbilities
         this.lanterns = allLanterns.associateBy { it.lanternId }

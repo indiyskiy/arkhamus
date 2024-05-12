@@ -33,14 +33,14 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
             val mappedItem = this.container.items.map {
                 itemMap[it.key]!! to it.value
             }
-            val containerCells = mappedItem.map {
-                ContainerCell(it.first.id).apply {
+            val itemsInside = mappedItem.map {
+                InventoryCell(it.first.id).apply {
                     this.number = it.second
                 }
             }
             if (requestProcessData.container.holdingUser == user.id) {
                 return myContainer(
-                    containerCells,
+                    itemsInside,
                     requestProcessData,
                     user,
                     requestProcessData.gameUser!!,
@@ -62,16 +62,16 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
     }
 
     private fun myContainer(
-        containerCells: List<ContainerCell>,
+        itemsInside: List<InventoryCell>,
         gameData: OpenContainerGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
         ongoingCraftingProcess: List<CraftProcessResponse>,
-        visibleItems: List<ContainerCell>,
+        visibleItems: List<InventoryCell>,
     ) = OpenContainerNettyResponse(
-        containerCells = containerCells,
-        containerState = gameData.container.state,
+        itemsInside = itemsInside,
+        state = gameData.container.state,
         holdingUser = gameData.container.holdingUser,
         tick = gameData.tick,
         userId = user.id!!,
@@ -98,10 +98,10 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
         ongoingCraftingProcess: List<CraftProcessResponse>,
-        visibleItems: List<ContainerCell>,
+        visibleItems: List<InventoryCell>,
     ) = OpenContainerNettyResponse(
-        containerCells = emptyList(),
-        containerState = gameData.container.state,
+        itemsInside = emptyList(),
+        state = gameData.container.state,
         holdingUser = null,
         tick = gameData.tick,
         userId = user.id!!,

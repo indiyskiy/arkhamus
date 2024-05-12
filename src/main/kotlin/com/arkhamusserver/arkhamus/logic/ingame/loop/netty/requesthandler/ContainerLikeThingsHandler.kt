@@ -4,21 +4,21 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 import org.springframework.stereotype.Component
 import kotlin.math.min
 
 @Component
-class ContainerTypeThingsHandler {
+class ContainerLikeThingsHandler {
     fun getTrueNewInventoryContent(
         oldCrafter: RedisCrafter,
         oldGameUser: RedisGameUser,
-        newInventoryContent: List<ContainerCell>
-    ): List<ContainerCell> {
+        newInventoryContent: List<InventoryCell>
+    ): List<InventoryCell> {
         val oldCrafterItemsList = oldCrafter.items
         val oldGameUserItemsList = oldGameUser.items
 
-        val (summarizedItems: MutableMap<Int, Long>, trueNewInventoryContent: List<ContainerCell>) = calculateInventory(
+        val (summarizedItems: MutableMap<Int, Long>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
             oldCrafterItemsList,
             oldGameUserItemsList,
             oldGameUser,
@@ -36,12 +36,12 @@ class ContainerTypeThingsHandler {
     fun getTrueNewInventoryContent(
         oldContainer: RedisContainer,
         oldGameUser: RedisGameUser,
-        newInventoryContent: List<ContainerCell>
-    ): List<ContainerCell> {
+        newInventoryContent: List<InventoryCell>
+    ): List<InventoryCell> {
         val oldContainerItemsList = oldContainer.items
         val oldGameUserItemsList = oldGameUser.items
 
-        val (summarizedItems: MutableMap<Int, Long>, trueNewInventoryContent: List<ContainerCell>) = calculateInventory(
+        val (summarizedItems: MutableMap<Int, Long>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
             oldContainerItemsList,
             oldGameUserItemsList,
             oldGameUser,
@@ -57,7 +57,7 @@ class ContainerTypeThingsHandler {
         return trueNewInventoryContent
     }
 
-    private fun mapSimpleInventory(trueNewInventoryContent: List<ContainerCell>) =
+    private fun mapSimpleInventory(trueNewInventoryContent: List<InventoryCell>) =
         trueNewInventoryContent
             .filterNot { it.itemId == Item.PURE_NOTHING.id || it.number <= 0 }
             .groupBy { it.itemId }
@@ -69,22 +69,22 @@ class ContainerTypeThingsHandler {
         oldContainerItemsList: MutableMap<Int, Long>,
         oldGameUserItemsList: MutableMap<Int, Long>,
         oldGameUser: RedisGameUser,
-        newInventoryContent: List<ContainerCell>
-    ): Pair<MutableMap<Int, Long>, List<ContainerCell>> {
+        newInventoryContent: List<InventoryCell>
+    ): Pair<MutableMap<Int, Long>, List<InventoryCell>> {
         val oldContainerItems: List<Int> = oldContainerItemsList.toList().filter { it.second > 0 }.map { it.first }
         val oldGameUserItems: List<Int> = oldGameUserItemsList.toList().filter { it.second > 0 }.map { it.first }
         val differentItemTypes = (oldContainerItems + oldGameUserItems).distinct()
         val summarizedItems: MutableMap<Int, Long> = differentItemTypes.associateWith {
             ((oldContainerItemsList[it] ?: 0) + (oldGameUser.items[it] ?: 0))
         }.toMutableMap()
-        val trueNewInventoryContent: List<ContainerCell> = newInventoryContent.map {
+        val trueNewInventoryContent: List<InventoryCell> = newInventoryContent.map {
             val itemId = it.itemId
             val newValue = min(it.number, summarizedItems[itemId] ?: 0)
             if (newValue > 0) {
                 summarizedItems[itemId] = (summarizedItems[itemId] ?: 0) - newValue
-                ContainerCell(itemId, newValue)
+                InventoryCell(itemId, newValue)
             } else {
-                ContainerCell(Item.PURE_NOTHING.id, 0)
+                InventoryCell(Item.PURE_NOTHING.id, 0)
             }
         }
         return Pair(summarizedItems, trueNewInventoryContent)

@@ -8,6 +8,6 @@ abstract class NettyResponseMessage(
     val ongoingEvents: List<OngoingEventResponse>,
     val ongoingCraftingProcess: List<CraftProcessResponse>,
     val availableAbilities: List<AbilityOfUserResponse>,
-    var userInventory: List<ContainerCell>,
+    var userInventory: List<InventoryCell>,
     val type: String
 )

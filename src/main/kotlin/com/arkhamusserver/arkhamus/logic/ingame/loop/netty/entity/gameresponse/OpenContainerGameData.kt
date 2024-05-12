@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 
 class OpenContainerGameData(
@@ -14,7 +14,7 @@ class OpenContainerGameData(
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    visibleItems: List<ContainerCell>,
+    visibleItems: List<InventoryCell>,
     tick: Long
 ) : GameUserData(
     gameUser = gameUser,

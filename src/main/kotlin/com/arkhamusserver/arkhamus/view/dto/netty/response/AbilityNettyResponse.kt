@@ -10,7 +10,7 @@ class AbilityNettyResponse(
     ongoingEvents: List<OngoingEventResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
-    userInventory: List<ContainerCell>,
+    userInventory: List<InventoryCell>,
 ) : NettyResponseMessage(
     tick = tick,
     userId = userId,

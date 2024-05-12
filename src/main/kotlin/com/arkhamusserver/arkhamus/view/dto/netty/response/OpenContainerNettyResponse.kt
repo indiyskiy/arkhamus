@@ -3,8 +3,8 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 
 class OpenContainerNettyResponse(
-    var containerCells: List<ContainerCell> = emptyList(),
-    var containerState: MapObjectState,
+    var itemsInside: List<InventoryCell> = emptyList(),
+    var state: MapObjectState,
     var holdingUser: Long?,
     tick: Long,
     userId: Long,
@@ -13,7 +13,7 @@ class OpenContainerNettyResponse(
     ongoingEvents: List<OngoingEventResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    userInventory: List<ContainerCell>,
+    userInventory: List<InventoryCell>,
 ) : NettyResponseMessage(
     tick = tick,
     userId = userId,

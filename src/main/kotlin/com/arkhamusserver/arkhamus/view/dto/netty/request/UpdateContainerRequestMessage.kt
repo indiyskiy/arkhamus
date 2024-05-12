@@ -1,10 +1,10 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.request
 
-import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 
 class UpdateContainerRequestMessage(
     var containerId: Long,
-    var newInventoryContent: List<ContainerCell>,
+    var newInventoryContent: List<InventoryCell>,
     var close: Boolean,
     type: String,
     baseRequestData: BaseRequestData

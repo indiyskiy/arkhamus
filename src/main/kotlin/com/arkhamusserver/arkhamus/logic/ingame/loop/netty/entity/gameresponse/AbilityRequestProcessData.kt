@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.ContainerCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 
 class AbilityRequestProcessData(
@@ -20,7 +20,7 @@ class AbilityRequestProcessData(
     otherGameUsers: List<RedisGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
-    visibleItems: List<ContainerCell>,
+    visibleItems: List<InventoryCell>,
     tick: Long
 ) : GameUserData(
     gameUser = gameUser,

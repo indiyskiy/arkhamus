@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component
 @Component
 class OpenCrafterNettyResponseMapper : NettyResponseMapper {
 
-    private val itemMap = Item.values().associateBy { it.id }
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == OpenCrafterGameData::class.java
 
@@ -33,14 +32,14 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
             val mappedItem = this.crafter.items.map {
                 itemMap[it.key]!! to it.value
             }
-            val crafterCells = mappedItem.map {
-                ContainerCell(it.first.id).apply {
+            val itemsInside = mappedItem.map {
+                InventoryCell(it.first.id).apply {
                     this.number = it.second
                 }
             }
             if (requestProcessData.crafter.holdingUser == user.id) {
                 return myCrafter(
-                    crafterCells,
+                    itemsInside,
                     requestProcessData,
                     user,
                     requestProcessData.gameUser!!,
@@ -62,16 +61,16 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
     }
 
     private fun myCrafter(
-        crafterCells: List<ContainerCell>,
+        itemsInside: List<InventoryCell>,
         gameData: OpenCrafterGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
         ongoingCraftingProcess: List<CraftProcessResponse>,
-        visibleItems: List<ContainerCell>,
+        visibleItems: List<InventoryCell>,
     ) = OpenCrafterNettyResponse(
-        crafterCells = crafterCells,
-        crafterState = gameData.crafter.state,
+        itemsInside = itemsInside,
+        state = gameData.crafter.state,
         crafterType = gameData.crafter.crafterType,
         holdingUser = gameData.crafter.holdingUser,
         tick = gameData.tick,
@@ -99,10 +98,10 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
         ongoingCraftingProcess: List<CraftProcessResponse>,
-        visibleItems: List<ContainerCell>,
+        visibleItems: List<InventoryCell>,
     ) = OpenCrafterNettyResponse(
-        crafterCells = emptyList(),
-        crafterState = gameData.crafter.state,
+        itemsInside = emptyList(),
+        state = gameData.crafter.state,
         crafterType = gameData.crafter.crafterType,
         holdingUser = null,
         tick = gameData.tick,
@@ -123,5 +122,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         ongoingCraftingProcess = ongoingCraftingProcess,
         userInventory = visibleItems
     )
+
+    private val itemMap = Item.values().associateBy { it.id }
 
 }
