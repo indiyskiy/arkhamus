@@ -365,6 +365,7 @@ class GameThreadPoolTest {
                 otherGameUsers = otherGameUsers,
                 visibleOngoingEvents = emptyList(),
                 availableAbilities = emptyList(),
+                ongoingCraftingProcess = emptyList(),
                 visibleItems = emptyList(),
                 tick = tick + 1
             )

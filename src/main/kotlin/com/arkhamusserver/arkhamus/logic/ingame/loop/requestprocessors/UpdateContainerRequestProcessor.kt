@@ -46,6 +46,7 @@ class UpdateContainerRequestProcessor(
             if (updateContainerRequestMessage.close) {
                 closeContainer(container)
             }
+            redisContainerRepository.save(container)
             requestProcessData.sortedInventory = sortedInventory
             requestProcessData.visibleItems = sortedInventory
         }
@@ -90,6 +91,5 @@ class UpdateContainerRequestProcessor(
     private fun closeContainer(container: RedisContainer) {
         container.holdingUser = null
         container.state = MapObjectState.ACTIVE
-        redisContainerRepository.save(container)
     }
 }
