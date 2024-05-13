@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 class CraftProcessRequestProcessData(
     val recipe: Recipe?,
     val crafter: RedisCrafter?,
+    var sortedUserInventory: List<InventoryCell>,
     val canBeStarted: Boolean,
     var startedSuccessfully: Boolean,
     gameUser: RedisGameUser,

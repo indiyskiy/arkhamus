@@ -42,6 +42,7 @@ class CraftProcessNettyRequestHandler(
             val crafter = globalGameData.crafters[crafterId]
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
+            val sortedUserInventory = request.newInventoryContent
 
             return if (recipe != null && crafter != null) {
                 val canBeCasted = canRecipeBeCraftedHandler.canUserCraft(user, recipe, crafter)
@@ -49,6 +50,7 @@ class CraftProcessNettyRequestHandler(
                     recipe = recipe,
                     crafter = crafter,
                     canBeStarted = canBeCasted,
+                    sortedUserInventory = sortedUserInventory,
                     startedSuccessfully = false,
                     gameUser = user,
                     otherGameUsers = users,
@@ -70,6 +72,7 @@ class CraftProcessNettyRequestHandler(
                     startedSuccessfully = false,
                     gameUser = user,
                     otherGameUsers = users,
+                    sortedUserInventory = sortedUserInventory,
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                     availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
                     visibleItems = inventoryHandler.mapUsersItems(user.items),

@@ -146,7 +146,7 @@ class UpdateContainerRequestProcessorTest {
 
         assertEquals(null, resultUser[Item.MASK.id])
         assertFalse(
-            updateContainerGameData.sortedInventory!!.any {
+            updateContainerGameData.sortedUserInventory.any {
                 it.itemId == Item.MASK.id && it.number > 0
             }
         )
@@ -163,7 +163,7 @@ class UpdateContainerRequestProcessorTest {
 
         assertEquals(10, resultUser[Item.SAINT_QUARTZ.id])
         assertEquals(10,
-            updateContainerGameData.sortedInventory!!.filter {
+            updateContainerGameData.sortedUserInventory.filter {
                 it.itemId == Item.SAINT_QUARTZ.id
             }.sumOf {
                 it.number
@@ -172,7 +172,7 @@ class UpdateContainerRequestProcessorTest {
     }
 
     @Test
-    fun sortedInventory() {
+    fun sortedUserInventory() {
         val newInventoryContent = listOf(
             InventoryCell(Item.SAINT_QUARTZ.id, 10),
             InventoryCell(Item.I2.id, 0),
@@ -205,23 +205,23 @@ class UpdateContainerRequestProcessorTest {
 
         val updateContainerGameData = requestContainer.requestProcessData as UpdateContainerGameData
 
-        assertEquals(4, updateContainerGameData.sortedInventory!!.size)
+        assertEquals(4, updateContainerGameData.sortedUserInventory.size)
 
-        assertEquals(10, updateContainerGameData.sortedInventory!![0].number)
-        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedInventory!![0].itemId)
+        assertEquals(10, updateContainerGameData.sortedUserInventory[0].number)
+        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedUserInventory[0].itemId)
 
-        assertEquals(0, updateContainerGameData.sortedInventory!![1].number)
-        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedInventory!![1].itemId)
+        assertEquals(0, updateContainerGameData.sortedUserInventory[1].number)
+        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedUserInventory[1].itemId)
 
-        assertEquals(0, updateContainerGameData.sortedInventory!![2].number)
-        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedInventory!![2].itemId)
+        assertEquals(0, updateContainerGameData.sortedUserInventory[2].number)
+        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedUserInventory[2].itemId)
 
-        assertEquals(10, updateContainerGameData.sortedInventory!![3].number)
-        assertEquals(Item.I4.id, updateContainerGameData.sortedInventory!![3].itemId)
+        assertEquals(10, updateContainerGameData.sortedUserInventory[3].number)
+        assertEquals(Item.I4.id, updateContainerGameData.sortedUserInventory[3].itemId)
     }
 
     @Test
-    fun sortedInventory2() {
+    fun sortedUserInventory2() {
         val newInventoryContent = listOf(
             InventoryCell(Item.SAINT_QUARTZ.id, 3),
             InventoryCell(Item.I2.id, 0),
@@ -256,29 +256,29 @@ class UpdateContainerRequestProcessorTest {
 
         val updateContainerGameData = requestContainer.requestProcessData as UpdateContainerGameData
 
-        assertEquals(6, updateContainerGameData.sortedInventory!!.size)
+        assertEquals(6, updateContainerGameData.sortedUserInventory.size)
 
-        assertEquals(3, updateContainerGameData.sortedInventory!![0].number)
-        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedInventory!![0].itemId)
+        assertEquals(3, updateContainerGameData.sortedUserInventory[0].number)
+        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedUserInventory[0].itemId)
 
-        assertEquals(0, updateContainerGameData.sortedInventory!![1].number)
-        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedInventory!![1].itemId)
+        assertEquals(0, updateContainerGameData.sortedUserInventory[1].number)
+        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedUserInventory[1].itemId)
 
-        assertEquals(6, updateContainerGameData.sortedInventory!![2].number)
-        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedInventory!![2].itemId)
+        assertEquals(6, updateContainerGameData.sortedUserInventory[2].number)
+        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedUserInventory[2].itemId)
 
-        assertEquals(0, updateContainerGameData.sortedInventory!![3].number)
-        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedInventory!![3].itemId)
+        assertEquals(0, updateContainerGameData.sortedUserInventory[3].number)
+        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedUserInventory[3].itemId)
 
-        assertEquals(10, updateContainerGameData.sortedInventory!![4].number)
-        assertEquals(Item.I4.id, updateContainerGameData.sortedInventory!![4].itemId)
+        assertEquals(10, updateContainerGameData.sortedUserInventory[4].number)
+        assertEquals(Item.I4.id, updateContainerGameData.sortedUserInventory[4].itemId)
 
-        assertEquals(1, updateContainerGameData.sortedInventory!![5].number)
-        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedInventory!![5].itemId)
+        assertEquals(1, updateContainerGameData.sortedUserInventory[5].number)
+        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedUserInventory[5].itemId)
     }
 
     @Test
-    fun sortedInventoryTryToCheat() {
+    fun sortedUserInventoryTryToCheat() {
         val newInventoryContent = listOf(
             InventoryCell(Item.SAINT_QUARTZ.id, 2),
             InventoryCell(Item.SAINT_QUARTZ.id, 2),
@@ -298,29 +298,29 @@ class UpdateContainerRequestProcessorTest {
 
         val updateContainerGameData = requestContainer.requestProcessData as UpdateContainerGameData
 
-        assertEquals(6, updateContainerGameData.sortedInventory!!.size)
+        assertEquals(6, updateContainerGameData.sortedUserInventory.size)
 
-        assertEquals(2, updateContainerGameData.sortedInventory!![0].number)
-        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedInventory!![0].itemId)
+        assertEquals(2, updateContainerGameData.sortedUserInventory[0].number)
+        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedUserInventory[0].itemId)
 
-        assertEquals(2, updateContainerGameData.sortedInventory!![1].number)
-        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedInventory!![1].itemId)
+        assertEquals(2, updateContainerGameData.sortedUserInventory[1].number)
+        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedUserInventory[1].itemId)
 
-        assertEquals(2, updateContainerGameData.sortedInventory!![2].number)
-        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedInventory!![2].itemId)
+        assertEquals(2, updateContainerGameData.sortedUserInventory[2].number)
+        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedUserInventory[2].itemId)
 
-        assertEquals(2, updateContainerGameData.sortedInventory!![3].number)
-        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedInventory!![3].itemId)
+        assertEquals(2, updateContainerGameData.sortedUserInventory[3].number)
+        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedUserInventory[3].itemId)
 
-        assertEquals(2, updateContainerGameData.sortedInventory!![4].number)
-        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedInventory!![4].itemId)
+        assertEquals(2, updateContainerGameData.sortedUserInventory[4].number)
+        assertEquals(Item.SAINT_QUARTZ.id, updateContainerGameData.sortedUserInventory[4].itemId)
 
-        assertEquals(0, updateContainerGameData.sortedInventory!![5].number)
-        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedInventory!![5].itemId) //nothing here
+        assertEquals(0, updateContainerGameData.sortedUserInventory[5].number)
+        assertEquals(Item.PURE_NOTHING.id, updateContainerGameData.sortedUserInventory[5].itemId) //nothing here
     }
 
     private fun executeRequest(newInventoryContent: List<InventoryCell>): Pair<Data, NettyTickRequestMessageDataHolder> {
-        val data = prepareDefaultData()
+        val data = prepareDefaultData(newInventoryContent)
 
         val requestMessage = UpdateContainerRequestMessage(
             containerId = data.redisContainer.containerId,
@@ -353,7 +353,7 @@ class UpdateContainerRequestProcessorTest {
         return data to request
     }
 
-    private fun prepareDefaultData(): Data {
+    private fun prepareDefaultData(newInventoryContent: List<InventoryCell>): Data {
         val requestUserAccount = UserAccount().apply {
             id = 1L
             nickName = "user"
@@ -450,6 +450,7 @@ class UpdateContainerRequestProcessorTest {
             visibleItems = emptyList(),
             ongoingCraftingProcess = emptyList(),
             availableAbilities = emptyList(),
+            sortedUserInventory = newInventoryContent,
             tick = 100L
         )
 

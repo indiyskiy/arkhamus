@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 
 class UpdateCrafterNettyResponse(
     var sortedUserInventory: List<InventoryCell>,
-    var itemsInside: List<InventoryCell> = emptyList(),
+    var itemsInside: List<InventoryCell>,
     var state: MapObjectState,
     var holdingUser: Long?,
     tick: Long,

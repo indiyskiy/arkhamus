@@ -31,27 +31,27 @@ class UpdateCrafterNettyResponseMapper(
     ): UpdateCrafterNettyResponse {
         with(requestProcessData as UpdateCrafterGameData) {
             return build(
-                sortedInventory = (sortedInventory ?: emptyList()).applyInBetween(
+                sortedUserInventory = sortedUserInventory.applyInBetween(
                     inBetweenEventHolder.inBetweenItemHolderChanges,
                     user.id!!
                 ),
-                gameData = this,
-                user = user,
-                gameUser = gameUser!!,
-                availableAbilities = availableAbilities,
-                ongoingCraftingProcess = ongoingCraftingProcess,
                 itemsInside = crafter.items.map {
                     InventoryCell().apply {
                         number = it.value
                         itemId = it.key
                     }
-                }
+                },
+                gameData = this,
+                user = user,
+                gameUser = gameUser!!,
+                availableAbilities = availableAbilities,
+                ongoingCraftingProcess = ongoingCraftingProcess,
             )
         }
     }
 
     private fun build(
-        sortedInventory: List<InventoryCell>,
+        sortedUserInventory: List<InventoryCell>,
         gameData: UpdateCrafterGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
@@ -59,11 +59,11 @@ class UpdateCrafterNettyResponseMapper(
         ongoingCraftingProcess: List<CraftProcessResponse>,
         itemsInside: List<InventoryCell>
     ) = UpdateCrafterNettyResponse(
-        sortedUserInventory = sortedInventory,
+        sortedUserInventory = sortedUserInventory,
         itemsInside = itemsInside,
         state = gameData.crafter.state,
         holdingUser = gameData.crafter.holdingUser,
-        userInventory = sortedInventory,
+        userInventory = sortedUserInventory,
         tick = gameData.tick,
         userId = user.id!!,
         myGameUser = MyGameUserResponseMessage(gameUser),

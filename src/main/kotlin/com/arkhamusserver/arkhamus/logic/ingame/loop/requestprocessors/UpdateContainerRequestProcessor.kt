@@ -39,18 +39,18 @@ class UpdateContainerRequestProcessor(
         val container = globalGameData.containers[updateContainerRequestMessage.containerId]!!
 
         if ((container.state == MapObjectState.HOLD) && (container.holdingUser == oldGameUser.userId)) {
-            val sortedInventory =
+            val sortedUserInventory =
                 containerLikeThingsHandler.getTrueNewInventoryContent(
                     container,
                     oldGameUser,
-                    updateContainerRequestMessage.newInventoryContent
+                    requestProcessData.sortedUserInventory
                 )
             if (updateContainerRequestMessage.close) {
                 closeContainer(container)
             }
             redisContainerRepository.save(container)
-            requestProcessData.sortedInventory = sortedInventory
-            requestProcessData.visibleItems = sortedInventory
+            requestProcessData.sortedUserInventory = sortedUserInventory
+            requestProcessData.visibleItems = sortedUserInventory
         }
     }
 

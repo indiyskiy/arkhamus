@@ -1,9 +1,11 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 class CraftProcessNettyResponse(
-    private val recipeId: Int?,
-    private val crafterId: Long?,
-    private val startedSuccessfully: Boolean,
+    var recipeId: Int?,
+    var crafterId: Long?,
+    var startedSuccessfully: Boolean,
+    var sortedUserInventory: List<InventoryCell>,
+    var itemsInside: List<InventoryCell>,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponseMessage,

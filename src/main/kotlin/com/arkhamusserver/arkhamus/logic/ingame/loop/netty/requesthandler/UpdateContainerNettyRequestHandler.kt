@@ -39,6 +39,7 @@ class UpdateContainerNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.userId != userId }
             return UpdateContainerGameData(
                 container = container,
+                sortedUserInventory = request.newInventoryContent,
                 gameUser = user,
                 otherGameUsers = users,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),

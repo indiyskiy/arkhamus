@@ -31,7 +31,7 @@ class UpdateContainerNettyResponseMapper(
     ): UpdateContainerNettyResponse {
         with(requestProcessData as UpdateContainerGameData) {
             return build(
-                sortedInventory = (sortedInventory ?: emptyList()).applyInBetween(
+                sortedUserInventory = sortedUserInventory.applyInBetween(
                     inBetweenEventHolder.inBetweenItemHolderChanges,
                     user.id!!
                 ),
@@ -51,7 +51,7 @@ class UpdateContainerNettyResponseMapper(
     }
 
     private fun build(
-        sortedInventory: List<InventoryCell>,
+        sortedUserInventory: List<InventoryCell>,
         gameData: UpdateContainerGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
@@ -59,11 +59,11 @@ class UpdateContainerNettyResponseMapper(
         ongoingCraftingProcess: List<CraftProcessResponse>,
         itemsInside: List<InventoryCell>
     ) = UpdateContainerNettyResponse(
-        sortedUserInventory = sortedInventory,
+        sortedUserInventory = sortedUserInventory,
         itemsInside = itemsInside,
         state = gameData.container.state,
         holdingUser = gameData.container.holdingUser,
-        userInventory = sortedInventory,
+        userInventory = sortedUserInventory,
         tick = gameData.tick,
         userId = user.id!!,
         myGameUser = MyGameUserResponseMessage(gameUser),

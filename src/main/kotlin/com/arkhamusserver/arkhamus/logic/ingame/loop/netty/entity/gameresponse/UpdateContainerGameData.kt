@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 
 class UpdateContainerGameData(
     var container: RedisContainer,
-    var sortedInventory: List<InventoryCell>? = null,
+    var sortedUserInventory: List<InventoryCell>,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,

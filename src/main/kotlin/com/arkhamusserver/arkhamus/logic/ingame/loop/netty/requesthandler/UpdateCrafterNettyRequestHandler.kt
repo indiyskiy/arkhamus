@@ -37,10 +37,12 @@ class UpdateCrafterNettyRequestHandler(
             val crafter = globalGameData.crafters[this.crafterId]!!
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
+            val sortedUserInventory = request.newInventoryContent
             return UpdateCrafterGameData(
                 crafter = crafter,
                 gameUser = user,
                 otherGameUsers = users,
+                sortedUserInventory = sortedUserInventory,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                 availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),

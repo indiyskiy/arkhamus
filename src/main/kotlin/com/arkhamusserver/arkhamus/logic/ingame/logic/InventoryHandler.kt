@@ -6,13 +6,19 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.lang.Long.min
 
 @Component
 class InventoryHandler {
 
-    fun addItem(user: RedisGameUser, addedItem: Item)  {
+    companion object {
+        var logger: Logger = LoggerFactory.getLogger(InventoryHandler::class.java)
+    }
+
+    fun addItem(user: RedisGameUser, addedItem: Item) {
         val howManyItems = howManyItems(user, addedItem)
         user.items[addedItem.id] = howManyItems + 1
     }
@@ -40,24 +46,31 @@ class InventoryHandler {
         }
     }
 
-    fun consumeItems(recipe: Recipe, gameUser: RedisGameUser, crafter: RedisCrafter) {
-        recipe.ingredients.forEach { ingredient: Ingredient ->
+    fun consumeItems(recipe: Recipe, gameUser: RedisGameUser, crafter: RedisCrafter): List<ConsumedItem> {
+        logger.info("consuming items for recipe ${recipe.recipeId} to create ${recipe.item.name}")
+        return recipe.ingredients.map { ingredient: Ingredient ->
             consumeItem(ingredient, gameUser, crafter)
         }
     }
 
-    private fun consumeItem(ingredient: Ingredient, user: RedisGameUser, crafter: RedisCrafter) {
-        val itemToConsume = ingredient.item
+    private fun consumeItem(ingredient: Ingredient, user: RedisGameUser, crafter: RedisCrafter): ConsumedItem {
+        logger.info("consuming ${ingredient.number} of ${ingredient.item.name}")
+        val itemToConsume = ingredient.item.id
         val toConsumeBefore = ingredient.number.toLong()
 
-        val itemsInCrafter = crafter.items[itemToConsume.id] ?: 0
+        val itemsInCrafter = crafter.items[itemToConsume] ?: 0
         val canBeConsumedFromCrafter = min(toConsumeBefore, itemsInCrafter)
-        crafter.items[itemToConsume.id] = itemsInCrafter - canBeConsumedFromCrafter
+        crafter.items[itemToConsume] = itemsInCrafter - canBeConsumedFromCrafter
+        logger.info("consumed $canBeConsumedFromCrafter from crafter. New value in crafter is ${crafter.items[itemToConsume]}, was $itemsInCrafter before")
 
         val toConsumeFromUser = toConsumeBefore - canBeConsumedFromCrafter
-        val itemsFromUser = user.items[itemToConsume.id] ?: 0
+        val itemsFromUser = user.items[itemToConsume] ?: 0
         val canBeConsumedFromUser = min(itemsFromUser, toConsumeFromUser)
-        user.items[itemToConsume.id] = itemsFromUser - canBeConsumedFromUser
+        user.items[itemToConsume] = itemsFromUser - canBeConsumedFromUser
+        logger.info("consumed $canBeConsumedFromUser from user. New value in user inventory is ${user.items[itemToConsume]}, was $itemsFromUser before")
+        return ConsumedItem(itemToConsume, canBeConsumedFromUser)
     }
+
+    data class ConsumedItem(var itemId: Int, var number: Long)
 
 }

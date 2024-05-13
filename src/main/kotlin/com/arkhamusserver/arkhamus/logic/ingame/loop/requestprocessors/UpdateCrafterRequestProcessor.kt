@@ -39,18 +39,18 @@ class UpdateCrafterRequestProcessor(
         val crafter = globalGameData.crafters[updateCrafterRequestMessage.crafterId]!!
 
         if ((crafter.state == MapObjectState.HOLD) && (crafter.holdingUser == oldGameUser.userId)) {
-            val sortedInventory =
+            val sortedUserInventory =
                 crafterTypeThingsHandler.getTrueNewInventoryContent(
                     crafter,
                     oldGameUser,
-                    updateCrafterRequestMessage.newInventoryContent
+                    requestProcessData.sortedUserInventory
                 )
             if (updateCrafterRequestMessage.close) {
                 closeCrafter(crafter)
             }
             redisCrafterRepository.save(crafter)
-            requestProcessData.sortedInventory = sortedInventory
-            requestProcessData.visibleItems = sortedInventory
+            requestProcessData.sortedUserInventory = sortedUserInventory
+            requestProcessData.visibleItems = sortedUserInventory
         }
     }
 
