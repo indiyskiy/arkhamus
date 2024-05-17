@@ -23,7 +23,7 @@ class OpenContainerRequestProcessor(
     ) {
         val nettyRequestMessage = requestDataHolder.nettyRequestMessage as OpenContainerRequestMessage
         val oldGameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
-        val container = globalGameData.containers[nettyRequestMessage.containerId]!!
+        val container = globalGameData.containers[nettyRequestMessage.externalInventoryId]!!
         if ((container.state == MapObjectState.ACTIVE) && (container.holdingUser == null)) {
             container.holdingUser = oldGameUser.userId
             container.state = MapObjectState.HOLD

@@ -23,7 +23,7 @@ class OpenRafterRequestProcessor(
     ) {
         val nettyRequestMessage = requestDataHolder.nettyRequestMessage as OpenCrafterRequestMessage
         val oldGameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
-        val crafter = globalGameData.crafters[nettyRequestMessage.crafterId]!!
+        val crafter = globalGameData.crafters[nettyRequestMessage.externalInventoryId]!!
         if ((crafter.state == MapObjectState.ACTIVE) && (crafter.holdingUser == null)) {
             crafter.holdingUser = oldGameUser.userId
             crafter.state = MapObjectState.HOLD
