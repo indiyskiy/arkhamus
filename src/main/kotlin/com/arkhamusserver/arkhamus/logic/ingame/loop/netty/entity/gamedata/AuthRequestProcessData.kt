@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata
 
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount

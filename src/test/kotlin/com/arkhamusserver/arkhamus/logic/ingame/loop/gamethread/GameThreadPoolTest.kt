@@ -1,8 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ExecutedAction
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.HeartbeatGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.HeartbeatGameData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -368,7 +369,8 @@ class GameThreadPoolTest {
                 ongoingCraftingProcess = emptyList(),
                 visibleItems = emptyList(),
                 tick = tick + 1
-            )
+            ),
+            lastExecutedAction = ExecutedAction(-1, true, "")
         )
     }
 

@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 class UpdateCrafterGameData(
     var crafter: RedisCrafter,
     var sortedUserInventory: List<InventoryCell>,
+    var executedSuccessfully: Boolean,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
@@ -25,4 +26,12 @@ class UpdateCrafterGameData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     tick = tick
-)
+), ActionProcessData {
+    override fun executedSuccessfully(): Boolean {
+        return executedSuccessfully
+    }
+
+    override fun updateExecutedSuccessfully(executedSuccessfully: Boolean) {
+        this.executedSuccessfully = executedSuccessfully
+    }
+}

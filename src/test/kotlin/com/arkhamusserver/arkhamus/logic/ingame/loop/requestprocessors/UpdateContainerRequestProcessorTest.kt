@@ -2,8 +2,9 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.MockRedisDataAccess
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ExecutedAction
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateContainerGameData
 import com.arkhamusserver.arkhamus.model.database.entity.*
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.LevelState
@@ -323,7 +324,8 @@ class UpdateContainerRequestProcessorTest {
         val data = prepareDefaultData(newInventoryContent)
 
         val requestMessage = UpdateContainerRequestMessage(
-            containerId = data.redisContainer.containerId,
+            actionId = 1000,
+            externalInventoryId = data.redisContainer.containerId,
             newInventoryContent = newInventoryContent,
             type = "CloseContainerRequestMessage",
             close = true,
@@ -342,7 +344,8 @@ class UpdateContainerRequestProcessorTest {
             userAccount = data.requestUserAccount,
             gameSession = data.gameSession,
             userRole = data.user,
-            requestProcessData = data.oldContainer
+            requestProcessData = data.oldContainer,
+            lastExecutedAction = ExecutedAction(1000, true, "")
         )
 
         updateContainerRequestProcessor.process(
@@ -451,7 +454,8 @@ class UpdateContainerRequestProcessorTest {
             ongoingCraftingProcess = emptyList(),
             availableAbilities = emptyList(),
             sortedUserInventory = newInventoryContent,
-            tick = 100L
+            tick = 100L,
+            executedSuccessfully = true
         )
 
         val globalGameData = GlobalGameData(

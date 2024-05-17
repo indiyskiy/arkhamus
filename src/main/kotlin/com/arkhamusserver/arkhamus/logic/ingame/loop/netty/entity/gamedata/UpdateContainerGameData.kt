@@ -1,19 +1,16 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata
 
-import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
+import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 
-class CraftProcessRequestProcessData(
-    val recipe: Recipe?,
-    val crafter: RedisCrafter?,
+class UpdateContainerGameData(
+    var container: RedisContainer,
     var sortedUserInventory: List<InventoryCell>,
-    val canBeStarted: Boolean,
-    var startedSuccessfully: Boolean,
+    var executedSuccessfully: Boolean,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
@@ -29,4 +26,12 @@ class CraftProcessRequestProcessData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     tick = tick
-)
+), ActionProcessData {
+    override fun executedSuccessfully(): Boolean {
+        return executedSuccessfully
+    }
+
+    override fun updateExecutedSuccessfully(executedSuccessfully: Boolean) {
+        this.executedSuccessfully = executedSuccessfully
+    }
+}

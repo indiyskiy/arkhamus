@@ -4,8 +4,23 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 
 class CraftProcessRequestMessage(
     var recipeId: Int,
-    var newInventoryContent: List<InventoryCell>,
-    var crafterId: Long,
+    var actionId: Long,
+    externalInventoryId: Long,
+    newInventoryContent: List<InventoryCell>,
     type: String,
     baseRequestData: BaseRequestData
-) : NettyBaseRequestMessage(baseRequestData, type)
+) : ExternalInventoryRequestMessage(
+    externalInventoryId = externalInventoryId,
+    newInventoryContent = newInventoryContent,
+    close = false,
+    type = type,
+    baseRequestData = baseRequestData
+), ActionRequestMessage {
+    override fun actionId(): Long {
+        return actionId
+    }
+
+    override fun updateActionId(actionId: Long) {
+        this.actionId = actionId
+    }
+}

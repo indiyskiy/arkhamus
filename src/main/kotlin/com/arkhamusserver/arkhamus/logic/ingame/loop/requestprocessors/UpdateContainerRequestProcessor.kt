@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateContainerGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ContainerLikeThingsHandler
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
@@ -36,7 +36,7 @@ class UpdateContainerRequestProcessor(
 
         val updateContainerRequestMessage = requestDataHolder.nettyRequestMessage as UpdateContainerRequestMessage
         val oldGameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
-        val container = globalGameData.containers[updateContainerRequestMessage.containerId]!!
+        val container = globalGameData.containers[updateContainerRequestMessage.externalInventoryId]!!
 
         if ((container.state == MapObjectState.HOLD) && (container.holdingUser == oldGameUser.userId)) {
             val sortedUserInventory =

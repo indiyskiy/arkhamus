@@ -11,4 +11,9 @@ data class ArkhamusChannel(
     var userAccount: UserAccount? = null,
     var gameSession: GameSession? = null,
     var userOfGameSession: UserOfGameSession? = null,
+    val lastExecutedAction: ExecutedAction = ExecutedAction(
+        actionId = -1L,
+        executedSuccessfully = false,
+        requestType = ""
+    )
 )

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
@@ -10,6 +10,7 @@ data class NettyTickRequestMessageDataHolder(
     val nettyRequestMessage: NettyBaseRequestMessage,
     var channelId: String,
     var userAccount: UserAccount,
+    val lastExecutedAction: ExecutedAction,
     var gameSession: GameSession? = null,
     var userRole: UserOfGameSession? = null,
     var requestProcessData: RequestProcessData? = null

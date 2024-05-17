@@ -47,8 +47,12 @@ class ArkhamusOneTickLogicImpl(
                 globalGameData.craftProcess,
                 game.globalTimer
             )
-
-            val processedTasks = oneTickUserRequests.processRequests(currentTasks, currentTick, globalGameData, ongoingEvents)
+            val processedTasks = oneTickUserRequests.processRequests(
+                currentTasks,
+                currentTick,
+                globalGameData,
+                ongoingEvents
+            )
             saveAllUsers(globalGameData)
             val responses =
                 oneTickUserResponses.buildResponses(

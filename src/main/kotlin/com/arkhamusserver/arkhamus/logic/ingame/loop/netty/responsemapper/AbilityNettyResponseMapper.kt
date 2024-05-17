@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
@@ -31,7 +31,8 @@ class AbilityNettyResponseMapper : NettyResponseMapper {
         (requestProcessData as AbilityRequestProcessData).let {
             return AbilityNettyResponse(
                 abilityId = it.ability?.id,
-                castedSuccessfully = it.castedSuccessfully,
+                executedSuccessfully = it.executedSuccessfully,
+                firstTime = true,
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponseMessage(it.gameUser!!),

@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.config.jedis
 
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.*
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Component
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.*
 
 @Component
 class JedisCleaner(
@@ -13,7 +13,7 @@ class JedisCleaner(
     private val redisGameRepository: RedisGameRepository,
     private val redisTimeEventRepository: RedisTimeEventRepository,
     private val redisCraftProcessRepository: RedisCraftProcessRepository,
-    private val redisAbilityCastRepository: RedisAbilityCastRepository
+    private val redisAbilityCastRepository: RedisAbilityCastRepository,
 ) {
     @PostConstruct
     fun cleanAll() {

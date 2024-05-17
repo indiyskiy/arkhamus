@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CraftProcessRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.CraftProcessRequestProcessData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -58,7 +58,7 @@ class CraftProcessRequestProcessor(
                     requestDataHolder.gameSession!!.id!!,
                     globalGameData.game.globalTimer
                 )
-                craftProcessRequestProcessData.startedSuccessfully = true
+                craftProcessRequestProcessData.executedSuccessfully = true
                 crafterRepository.save(crafter)
             }
             logger.info("craft process for ${recipe.recipeId} end")

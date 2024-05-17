@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AbilityRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
@@ -42,7 +42,7 @@ class AbilityRequestProcessor(
                         requestDataHolder.gameSession!!.id!!,
                         globalGameData.game.globalTimer
                     )
-                    abilityRequestProcessData.castedSuccessfully = true
+                    abilityRequestProcessData.executedSuccessfully = true
                 }
             }
         }

@@ -9,8 +9,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -53,7 +53,7 @@ class AbilityNettyRequestHandler(
                     cooldown = relatedAbility?.timeLeft,
                     cooldownOf = ability.cooldown,
                     item = requiredItem,
-                    castedSuccessfully = false,
+                    executedSuccessfully = false,
                     gameUser = user,
                     otherGameUsers = users,
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
@@ -72,7 +72,7 @@ class AbilityNettyRequestHandler(
                 cooldown = null,
                 cooldownOf = null,
                 item = null,
-                castedSuccessfully = false,
+                executedSuccessfully = false,
                 gameUser = user,
                 otherGameUsers = users,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),

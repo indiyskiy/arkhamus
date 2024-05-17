@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CraftProcessRequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.CraftProcessRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
@@ -32,7 +32,8 @@ class CraftProcessNettyResponseMapper(
             return CraftProcessNettyResponse(
                 recipeId = it.recipe?.recipeId,
                 crafterId = it.crafter?.crafterId,
-                startedSuccessfully = it.startedSuccessfully,
+                executedSuccessfully = it.executedSuccessfully,
+                firstTime = true,
                 sortedUserInventory = (it.sortedUserInventory).applyInBetween(
                     inBetweenEventHolder.inBetweenItemHolderChanges,
                     user.id!!
@@ -42,7 +43,7 @@ class CraftProcessNettyResponseMapper(
                         number = it.value
                         itemId = it.key
                     }
-                }?: emptyList(),
+                } ?: emptyList(),
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponseMessage(it.gameUser!!),
@@ -59,6 +60,8 @@ class CraftProcessNettyResponseMapper(
                 },
                 availableAbilities = requestProcessData.availableAbilities,
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
+                holdingUser = it.crafter!!.holdingUser,
+                state = it.crafter.state,
                 userInventory = requestProcessData.visibleItems
             )
         }

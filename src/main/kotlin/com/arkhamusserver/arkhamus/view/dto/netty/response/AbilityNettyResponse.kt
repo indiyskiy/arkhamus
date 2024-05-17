@@ -2,7 +2,8 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 class AbilityNettyResponse(
     private val abilityId: Int?,
-    private val castedSuccessfully: Boolean,
+    private val executedSuccessfully: Boolean,
+    private val firstTime: Boolean,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponseMessage,
@@ -21,4 +22,10 @@ class AbilityNettyResponse(
     availableAbilities = availableAbilities,
     userInventory = userInventory,
     type = AbilityNettyResponse::class.java.simpleName
-)
+), ActionResponse {
+    override fun isExecutedSuccessfully(): Boolean =
+        executedSuccessfully
+
+    override fun isFirstTime(): Boolean =
+        firstTime
+}

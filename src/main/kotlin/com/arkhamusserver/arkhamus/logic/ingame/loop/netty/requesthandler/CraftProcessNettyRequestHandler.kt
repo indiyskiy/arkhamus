@@ -9,8 +9,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.CraftProcessRequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.CraftProcessRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.CraftProcessRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.springframework.stereotype.Component
@@ -39,7 +39,7 @@ class CraftProcessNettyRequestHandler(
         val request = requestDataHolder.nettyRequestMessage
         with(request as CraftProcessRequestMessage) {
             val recipe = recipesSource.byId(this.recipeId)
-            val crafter = globalGameData.crafters[crafterId]
+            val crafter = globalGameData.crafters[externalInventoryId]
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
             val sortedUserInventory = request.newInventoryContent
@@ -51,7 +51,7 @@ class CraftProcessNettyRequestHandler(
                     crafter = crafter,
                     canBeStarted = canBeCasted,
                     sortedUserInventory = sortedUserInventory,
-                    startedSuccessfully = false,
+                    executedSuccessfully = false,
                     gameUser = user,
                     otherGameUsers = users,
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
@@ -69,7 +69,7 @@ class CraftProcessNettyRequestHandler(
                     recipe = recipe,
                     crafter = crafter,
                     canBeStarted = false,
-                    startedSuccessfully = false,
+                    executedSuccessfully = false,
                     gameUser = user,
                     otherGameUsers = users,
                     sortedUserInventory = sortedUserInventory,

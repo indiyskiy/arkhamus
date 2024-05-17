@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ActionProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component
 class OneTickUserRequests(
     private val nettyRequestProcessors: List<NettyRequestProcessor>,
     private val requestProcessDataBuilder: GameDataBuilder,
+    private val actionCacheHandler: ActionCacheHandler
 ) {
 
     companion object {
@@ -49,13 +51,40 @@ class OneTickUserRequests(
         val game = globalGameData.game
         val nettyRequestMessage = requestContainer.nettyRequestMessage
         logger.info("Process ${nettyRequestMessage.type} of game ${game.id} tick $tick")
+
         requestContainer.requestProcessData =
             requestProcessDataBuilder.build(requestContainer, globalGameData, ongoingEvents)
-        nettyRequestProcessors.filter {
-            it.accept(requestContainer)
-        }.forEach {
-            it.process(requestContainer, globalGameData, ongoingEvents)
+
+        val isAction = actionCacheHandler.isAction(requestContainer)
+        val isOldAction = isAction && actionCacheHandler.isOldAction(requestContainer)
+
+        if (!isOldAction) {
+            nettyRequestProcessors.filter {
+                it.accept(requestContainer)
+            }.forEach {
+                it.process(requestContainer, globalGameData, ongoingEvents)
+            }
+            if (isAction) {
+                applyNewestAction(requestContainer)
+            }
+        } else {
+            logger.info("Request is duplicated and skipped")
+            updateCurrentGameDataWithOldAction(requestContainer)
         }
+    }
+
+    private fun applyNewestAction(requestContainer: NettyTickRequestMessageDataHolder) {
+        val action =  actionCacheHandler.getAction(requestContainer)
+        val requestProcessData = requestContainer.requestProcessData
+        val actionProcessData = requestProcessData as ActionProcessData
+        requestContainer.lastExecutedAction.executedSuccessfully = actionProcessData.executedSuccessfully()
+        requestContainer.lastExecutedAction.actionId = action.actionId()
+        requestContainer.lastExecutedAction.requestType = requestContainer.nettyRequestMessage.type
+    }
+
+    private fun updateCurrentGameDataWithOldAction(requestContainer: NettyTickRequestMessageDataHolder) {
+        val actionProcessData = requestContainer.requestProcessData as ActionProcessData
+        actionProcessData.updateExecutedSuccessfully(requestContainer.lastExecutedAction.executedSuccessfully)
     }
 
 }

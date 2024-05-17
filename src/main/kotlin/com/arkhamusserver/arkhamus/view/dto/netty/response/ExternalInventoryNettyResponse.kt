@@ -2,15 +2,11 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 
-class CraftProcessNettyResponse(
-    var recipeId: Int?,
-    var crafterId: Long?,
-    val executedSuccessfully: Boolean,
-    val firstTime: Boolean,
-    sortedUserInventory: List<InventoryCell>,
-    itemsInside: List<InventoryCell>,
-    state: MapObjectState,
-    holdingUser: Long?,
+abstract class ExternalInventoryNettyResponse(
+    var sortedUserInventory: List<InventoryCell>,
+    var itemsInside: List<InventoryCell>,
+    var state: MapObjectState,
+    var holdingUser: Long?,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponseMessage,
@@ -19,11 +15,8 @@ class CraftProcessNettyResponse(
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<InventoryCell>,
-) : ExternalInventoryNettyResponse(
-    sortedUserInventory = sortedUserInventory,
-    itemsInside = itemsInside,
-    state = state,
-    holdingUser = holdingUser,
+    type: String
+) : NettyResponseMessage(
     tick = tick,
     userId = userId,
     myGameUser = myGameUser,
@@ -32,11 +25,5 @@ class CraftProcessNettyResponse(
     availableAbilities = availableAbilities,
     ongoingCraftingProcess = ongoingCraftingProcess,
     userInventory = userInventory,
-    type = CraftProcessNettyResponse::class.java.simpleName
-), ActionResponse {
-    override fun isExecutedSuccessfully(): Boolean =
-        executedSuccessfully
-
-    override fun isFirstTime(): Boolean =
-        firstTime
-}
+    type = type
+)

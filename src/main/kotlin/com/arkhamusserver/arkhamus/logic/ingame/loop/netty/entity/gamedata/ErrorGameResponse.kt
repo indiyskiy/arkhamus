@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata
 
 class ErrorGameResponse(
     var error: String,

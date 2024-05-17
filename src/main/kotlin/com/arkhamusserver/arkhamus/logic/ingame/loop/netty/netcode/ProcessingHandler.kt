@@ -70,18 +70,19 @@ class ProcessingHandler(
     private fun process(
         requestData: NettyRequestMessage,
         arkhamusChannel: ArkhamusChannel,
-        account: UserAccount
+        account: UserAccount,
     ) {
         if (
             (requestData is NettyBaseRequestMessage) &&
             (arkhamusChannel.gameSession?.state == GameState.IN_PROGRESS)
         ) {
             val nettyTickRequestMessageDataHolder = NettyTickRequestMessageDataHolder(
-                requestData,
-                arkhamusChannel.channelId,
-                account,
-                arkhamusChannel.gameSession,
-                arkhamusChannel.userOfGameSession,
+                nettyRequestMessage = requestData,
+                channelId = arkhamusChannel.channelId,
+                userAccount = account,
+                lastExecutedAction = arkhamusChannel.lastExecutedAction,
+                gameSession = arkhamusChannel.gameSession,
+                userRole = arkhamusChannel.userOfGameSession,
             )
             gameNettyLogic.process(nettyTickRequestMessageDataHolder)
         }

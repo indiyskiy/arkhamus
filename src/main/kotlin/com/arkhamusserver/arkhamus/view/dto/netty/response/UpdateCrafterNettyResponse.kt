@@ -3,10 +3,12 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 
 class UpdateCrafterNettyResponse(
-    var sortedUserInventory: List<InventoryCell>,
-    var itemsInside: List<InventoryCell>,
-    var state: MapObjectState,
-    var holdingUser: Long?,
+    sortedUserInventory: List<InventoryCell>,
+    itemsInside: List<InventoryCell>,
+    state: MapObjectState,
+    holdingUser: Long?,
+    val executedSuccessfully: Boolean,
+    val firstTime: Boolean,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponseMessage,
@@ -15,7 +17,11 @@ class UpdateCrafterNettyResponse(
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<InventoryCell>,
-) : NettyResponseMessage(
+) : ExternalInventoryNettyResponse(
+    sortedUserInventory = sortedUserInventory,
+    itemsInside = itemsInside,
+    state = state,
+    holdingUser = holdingUser,
     tick = tick,
     userId = userId,
     myGameUser = myGameUser,
@@ -25,4 +31,10 @@ class UpdateCrafterNettyResponse(
     ongoingCraftingProcess = ongoingCraftingProcess,
     userInventory = userInventory,
     type = UpdateCrafterNettyResponse::class.java.simpleName
-)
+), ActionResponse {
+    override fun isExecutedSuccessfully(): Boolean =
+        executedSuccessfully
+
+    override fun isFirstTime(): Boolean =
+        firstTime
+}

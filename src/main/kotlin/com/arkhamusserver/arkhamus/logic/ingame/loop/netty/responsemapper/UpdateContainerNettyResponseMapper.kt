@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.UpdateContainerGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
@@ -79,7 +79,9 @@ class UpdateContainerNettyResponseMapper(
             OngoingEventResponse(it)
         },
         ongoingCraftingProcess = ongoingCraftingProcess,
-        availableAbilities = availableAbilities
+        availableAbilities = availableAbilities,
+        executedSuccessfully = true,
+        firstTime = true
     )
 
     private fun List<InventoryCell>.applyInBetween(
