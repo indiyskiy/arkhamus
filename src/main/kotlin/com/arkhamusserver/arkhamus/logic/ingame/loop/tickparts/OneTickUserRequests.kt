@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ActionProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -74,17 +73,11 @@ class OneTickUserRequests(
     }
 
     private fun applyNewestAction(requestContainer: NettyTickRequestMessageDataHolder) {
-        val action =  actionCacheHandler.getAction(requestContainer)
-        val requestProcessData = requestContainer.requestProcessData
-        val actionProcessData = requestProcessData as ActionProcessData
-        requestContainer.lastExecutedAction.executedSuccessfully = actionProcessData.executedSuccessfully()
-        requestContainer.lastExecutedAction.actionId = action.actionId()
-        requestContainer.lastExecutedAction.requestType = requestContainer.nettyRequestMessage.type
+        actionCacheHandler.applyNewestAction(requestContainer)
     }
 
     private fun updateCurrentGameDataWithOldAction(requestContainer: NettyTickRequestMessageDataHolder) {
-        val actionProcessData = requestContainer.requestProcessData as ActionProcessData
-        actionProcessData.updateExecutedSuccessfully(requestContainer.lastExecutedAction.executedSuccessfully)
+        actionCacheHandler.updateCurrentGameDataWithOldAction(requestContainer)
     }
 
 }

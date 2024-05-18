@@ -9,10 +9,10 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 
 class CraftProcessRequestProcessData(
-    val recipe: Recipe?,
-    val crafter: RedisCrafter?,
+    var recipe: Recipe?,
+    var crafter: RedisCrafter?,
     var sortedUserInventory: List<InventoryCell>,
-    val canBeStarted: Boolean,
+    var canBeStarted: Boolean,
     var executedSuccessfully: Boolean,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,

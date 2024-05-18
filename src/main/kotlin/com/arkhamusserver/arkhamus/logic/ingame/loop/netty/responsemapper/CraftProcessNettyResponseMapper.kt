@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Reque
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import org.springframework.stereotype.Component
@@ -61,7 +62,7 @@ class CraftProcessNettyResponseMapper(
                 availableAbilities = requestProcessData.availableAbilities,
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 holdingUser = it.crafter!!.holdingUser,
-                state = it.crafter.state,
+                state = it.crafter?.state ?: MapObjectState.DISABLED,
                 userInventory = requestProcessData.visibleItems
             )
         }

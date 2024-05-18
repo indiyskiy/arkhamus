@@ -9,12 +9,12 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 
 class AbilityRequestProcessData(
-    val ability: Ability?,
-    val canBeCasted: Boolean,
-    val cooldown: Long?,
-    val cooldownOf: Long?,
+    var ability: Ability?,
+    var canBeCasted: Boolean,
+    var cooldown: Long?,
+    var cooldownOf: Long?,
     var executedSuccessfully: Boolean,
-    val item: Item?,
+    var item: Item?,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
