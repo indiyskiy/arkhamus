@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.item.RecipesSource
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCraftProcessRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
@@ -16,6 +17,7 @@ import kotlin.math.min
 @Component
 class OnTickCraftProcess(
     private val redisCraftProcessRepository: RedisCraftProcessRepository,
+    private val redisCrafterRepository: RedisCrafterRepository,
     private val recipesSource: RecipesSource
 ) {
     companion object {
@@ -52,6 +54,7 @@ class OnTickCraftProcess(
     ) {
         val before = crafter.items[produced.id] ?: 0
         crafter.items[produced.id] = before + numberOfItems
+        redisCrafterRepository.save(crafter)
     }
 
     private fun processActiveCraftProcess(
