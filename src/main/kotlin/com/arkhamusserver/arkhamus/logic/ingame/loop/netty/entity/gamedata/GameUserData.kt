@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponseMessage
 
 open class GameUserData(
     val gameUser: RedisGameUser?,
@@ -17,3 +18,12 @@ open class GameUserData(
 ) : RequestProcessData(
     tick = tick
 )
+
+fun GameUserData.otherGameUsersResponseMessage() = otherGameUsers.map {
+    NettyGameUserResponseMessage(
+        id = it.userId,
+        nickName = it.nickName,
+        x = it.x,
+        y = it.y
+    )
+}

@@ -67,14 +67,7 @@ class UpdateContainerNettyResponseMapper(
         tick = gameData.tick,
         userId = user.id!!,
         myGameUser = MyGameUserResponseMessage(gameUser),
-        otherGameUsers = gameData.otherGameUsers.map {
-            NettyGameUserResponseMessage(
-                id = it.userId,
-                nickName = it.nickName,
-                x = it.x,
-                y = it.y
-            )
-        },
+        otherGameUsers = gameData.otherGameUsersResponseMessage(),
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         },
