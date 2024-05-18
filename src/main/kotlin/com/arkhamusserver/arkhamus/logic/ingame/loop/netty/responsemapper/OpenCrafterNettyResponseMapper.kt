@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.OpenCrafterGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gameresponse.otherGameUsersResponseMessage
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
@@ -76,14 +77,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         tick = gameData.tick,
         userId = user.id!!,
         myGameUser = MyGameUserResponseMessage(gameUser),
-        otherGameUsers = gameData.otherGameUsers.map {
-            NettyGameUserResponseMessage(
-                id = it.userId,
-                nickName = it.nickName,
-                x = it.x,
-                y = it.y
-            )
-        },
+        otherGameUsers = gameData.otherGameUsersResponseMessage(),
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         },
@@ -107,14 +101,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         tick = gameData.tick,
         userId = user.id!!,
         myGameUser = MyGameUserResponseMessage(gameUser),
-        otherGameUsers = gameData.otherGameUsers.map {
-            NettyGameUserResponseMessage(
-                id = it.userId,
-                nickName = it.nickName,
-                x = it.x,
-                y = it.y
-            )
-        },
+        otherGameUsers = gameData.otherGameUsersResponseMessage(),
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         },
