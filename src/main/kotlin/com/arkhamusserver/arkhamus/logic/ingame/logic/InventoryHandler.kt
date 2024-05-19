@@ -37,13 +37,22 @@ class InventoryHandler {
         }
     }
 
-    fun mapUsersItems(items: MutableMap<Int, Long>): List<InventoryCell> {
+    fun mapUsersItems(items: Map<Int, Long>): List<InventoryCell> {
         return items.map {
             InventoryCell(
                 itemId = it.key,
                 number = it.value
             )
-        }
+        }.sortedByDescending { it.itemId }
+    }
+
+    fun mapUsersItems(items: List<Pair<Int, Long>>): List<InventoryCell> {
+        return items.map {
+            InventoryCell(
+                itemId = it.first,
+                number = it.second
+            )
+        }.sortedByDescending { it.itemId }
     }
 
     fun consumeItems(recipe: Recipe, gameUser: RedisGameUser, crafter: RedisCrafter): List<ConsumedItem> {

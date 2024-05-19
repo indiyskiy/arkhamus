@@ -20,13 +20,17 @@ class SecurityConfiguration(
         http: HttpSecurity,
         jwtAuthenticationFilter: JwtAuthenticationFilter
     ): DefaultSecurityFilterChain {
+        val customizer = MyCustomizer()
         http
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
+                    .requestMatchers(AntPathRequestMatcher("/")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/public/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                     .anyRequest().authenticated()
-            }
+            }.exceptionHandling(customizer)
+
 //                it
 //                    .requestMatchers("/auth", "/error")
 //                    .permitAll()

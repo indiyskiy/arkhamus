@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>arkhamus project</title>
+    <style>
+        body {
+            font-size: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="text-container">
+    <p id="text" th:text="'arkhamus'">cthulhu fhtagn</p>
+</div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const textContainer = document.getElementById('text-container');
+        const textElement = document.getElementById('text');
+        const fonts = [
+            'Courier',
+            'Verdana',
+            'Georgia',
+            'Palatino',
+            'Garamond',
+            'Bookman',
+            'Arial Black',
+            'Comic Sans MS',
+            'Impact',
+            'Lucida Console',
+            // 'Symbol',
+            // 'Webdings',
+            'Times New Roman',
+            'Wide Latin',
+            'Ravie',
+            'Copperplate Gothic'
+        ];
+
+        // Split every letter into a separate span and remove the original text
+        let letters = [...textElement.textContent];
+        textElement.innerHTML = '';
+        letters.forEach(letter => {
+            const span = document.createElement('span');
+            span.textContent = letter;
+            textContainer.appendChild(span);
+        });
+
+        // Get all the created spans
+        let spans = Array.from(document.querySelectorAll('#text-container span'));
+
+        // A function to get a random shade of grey or green
+        var getRandomColor = function() {
+            let val = Math.round(Math.random() * 255);
+            let choice = Math.round(Math.random()); // random number between 0 and 1
+            return choice ? `rgb(${val},${val},${val})` : `rgb(0,${val},0)`;
+        }
+
+        // For every span, change properties in random intervals
+        spans.forEach(span => {
+            setInterval(() => {
+                const randomFontSize = Math.round(Math.random() * 20) + 100;
+                span.style.fontSize = `${randomFontSize}px`;
+                span.style.color = getRandomColor();
+                span.style.fontFamily = fonts[Math.floor(Math.random()*fonts.length)];
+            }, Math.random() * 2000 + 500); // Random interval between 500ms and 2500ms
+        });
+    });
+</script>
+
+</body>
+</html>

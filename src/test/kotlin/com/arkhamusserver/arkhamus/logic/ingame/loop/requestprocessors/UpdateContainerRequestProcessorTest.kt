@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Updat
 import com.arkhamusserver.arkhamus.model.database.entity.*
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.LevelState
-import com.arkhamusserver.arkhamus.model.enums.Role
+import com.arkhamusserver.arkhamus.model.enums.RoleName
 import com.arkhamusserver.arkhamus.model.enums.ingame.*
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
@@ -362,7 +362,12 @@ class UpdateContainerRequestProcessorTest {
             nickName = "user"
             email = "email"
             password = "password"
-            role = Role.USER
+            role = setOf(
+                Role().apply {
+                    id = 1
+                    name = RoleName.USER.securityValue
+                }
+            )
         }
 
         val level = Level(

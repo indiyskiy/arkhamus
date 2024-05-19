@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Admin Users</title>
+</head>
+<body>
+<h1>Admin Users</h1>
+<table>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.userId}"></td>
+        <td th:text="${user.nickName}"></td>
+        <td th:text="${user.email}"></td>
+        <!-- Add other fields of the AdminUserDto here -->
+    </tr>
+</table>
+</body>
+</html>

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.sql.service
 
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.LevelRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
 import com.arkhamusserver.arkhamus.model.database.entity.Level
 import org.springframework.stereotype.Service
 

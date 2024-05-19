@@ -45,8 +45,8 @@ class HeartbeatNettyRequestHandler(
                 visibleItems = inventoryHandler.mapUsersItems(user.items),
                 tick = globalGameData.game.currentTick,
                 ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
-                    user,
-                    globalGameData.crafters,
+                    user = user,
+                    crafters = globalGameData.crafters,
                     globalGameData.craftProcess
                 ),
             )

@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+import jakarta.servlet.http.Cookie
 
 @Component
 class JwtAuthenticationFilter(
@@ -24,12 +25,43 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+        try {
+            val cookies: Array<Cookie>? = request.cookies
+            val jwtToken: String? =
+                cookies?.firstOrNull { cookie ->
+                    cookie.name.equals("token")
+                }?.value
+            if (jwtToken != null) {
+                processToken(jwtToken, request, filterChain, response)
+            } else {
+                tryBearer(request, filterChain, response)
+            }
+        } catch (e: Exception) {
+            logger.error(e)
+            throw e
+        }
+    }
+
+    private fun tryBearer(
+        request: HttpServletRequest,
+        filterChain: FilterChain,
+        response: HttpServletResponse
+    ) {
         val authHeader: String? = request.getHeader("Authorization")
         if (authHeader.doesNotContainBearerToken()) {
             filterChain.doFilter(request, response)
-            return
+        } else {
+            val jwtToken = authHeader!!.extractTokenValue()
+            processToken(jwtToken, request, filterChain, response)
         }
-        val jwtToken = authHeader!!.extractTokenValue()
+    }
+
+    private fun processToken(
+        jwtToken: String,
+        request: HttpServletRequest,
+        filterChain: FilterChain,
+        response: HttpServletResponse
+    ) {
         val email = tokenService.extractEmail(jwtToken)
         if (email != null && SecurityContextHolder.getContext().authentication == null) {
             val player = userAccountRepository.findByEmail(email)

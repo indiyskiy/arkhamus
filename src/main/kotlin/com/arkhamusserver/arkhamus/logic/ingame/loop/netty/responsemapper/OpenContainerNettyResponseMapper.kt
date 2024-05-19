@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.OpenContainerGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
@@ -7,16 +8,16 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.other
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import org.springframework.stereotype.Component
 
 @Component
-class OpenContainerNettyResponseMapper : NettyResponseMapper {
+class OpenContainerNettyResponseMapper(
+    private val inventoryHandler: InventoryHandler,
+) : NettyResponseMapper {
 
-    private val itemMap = Item.values().associateBy { it.id }
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == OpenContainerGameData::class.java
 
@@ -32,13 +33,9 @@ class OpenContainerNettyResponseMapper : NettyResponseMapper {
     ): OpenContainerNettyResponse {
         with(requestProcessData as OpenContainerGameData) {
             val mappedItem = this.container.items.map {
-                itemMap[it.key]!! to it.value
+                it.key to it.value
             }
-            val itemsInside = mappedItem.map {
-                InventoryCell(it.first.id).apply {
-                    this.number = it.second
-                }
-            }
+            val itemsInside = inventoryHandler.mapUsersItems(mappedItem)
             if (requestProcessData.container.holdingUser == user.id) {
                 return myContainer(
                     itemsInside,

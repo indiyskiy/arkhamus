@@ -1,6 +1,10 @@
 package com.arkhamusserver.arkhamus.config.database
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.*
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.ContainerRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.CrafterRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LanternRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
 import com.arkhamusserver.arkhamus.model.database.entity.*
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import com.arkhamusserver.arkhamus.view.levelDesign.*

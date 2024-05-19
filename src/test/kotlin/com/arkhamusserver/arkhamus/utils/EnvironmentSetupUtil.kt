@@ -1,8 +1,9 @@
 package com.arkhamusserver.arkhamus.utils
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
+import com.arkhamusserver.arkhamus.model.database.entity.Role
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
-import com.arkhamusserver.arkhamus.model.enums.Role
+import com.arkhamusserver.arkhamus.model.enums.RoleName
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -26,7 +27,12 @@ class EnvironmentSetupUtil {
                 nickName = "Player $it"
                 email = "player$it@example.com"
                 password = "${it}omgCoolPassword${it}"
-                role = Role.USER
+                role = setOf(
+                    Role().apply {
+                        id = 1
+                        name = RoleName.USER.securityValue
+                    }
+                )
                 userAccountRepository.save(this)
             }
         }

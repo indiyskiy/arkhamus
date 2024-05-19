@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     implementation("io.netty:netty-all:4.1.101.Final")
-    implementation("org.springframework.boot:spring-boot:3.2.3")
+    implementation("org.springframework.boot:spring-boot:3.2.5")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
@@ -47,6 +47,7 @@ dependencies {
     implementation("jakarta.validation:jakarta.validation-api:3.1.0-M1")
     implementation("org.apache.commons:commons-lang3:3.14.0")
     implementation("com.fasterxml.uuid:java-uuid-generator:4.3.0")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf:3.2.5")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

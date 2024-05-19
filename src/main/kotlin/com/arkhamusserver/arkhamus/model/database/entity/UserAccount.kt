@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
-import com.arkhamusserver.arkhamus.model.enums.Role
 import jakarta.persistence.*
 
 @Entity
@@ -11,7 +10,9 @@ class UserAccount {
     var nickName: String? = null
     var email: String? = null
     var password: String? = null
-    var role: Role = Role.NONE
+
+    @ManyToMany(cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
+    var role: Set<Role> = emptySet()
 
     override fun toString(): String {
         return String.format(

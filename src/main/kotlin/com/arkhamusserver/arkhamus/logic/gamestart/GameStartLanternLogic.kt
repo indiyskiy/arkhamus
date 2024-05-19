@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLanternRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.LanternRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LanternRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.Lantern
 import com.arkhamusserver.arkhamus.model.redis.RedisLantern

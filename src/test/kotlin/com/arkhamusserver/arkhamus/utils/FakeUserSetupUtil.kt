@@ -20,12 +20,12 @@ class FakeUserSetupUtil(
         return fakeUser(user)
     }
 
-   private fun fakeUser(fakeUser: UserAccount): UserAccount {
+    private fun fakeUser(fakeUser: UserAccount): UserAccount {
         // create a mock user
         val fakeUserAccount = User(
             fakeUser.nickName,
             fakeUser.password,
-            AuthorityUtils.createAuthorityList(fakeUser.role.name)
+            AuthorityUtils.createAuthorityList(fakeUser.role.first().name)
         )
         val request: HttpServletRequest = Mockito.mock(HttpServletRequest::class.java)
         Mockito.`when`(request.remoteAddr).thenReturn("127.0.0.1")
