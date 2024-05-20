@@ -27,22 +27,27 @@ class JsonToObjectRequestDecoder(
         try {
             val jsonString = msg.toString(charset)
             val mainNode: JsonNode = mapper.readTree(jsonString)
-            val type: String = mainNode.get("type").asText()
-
-            val parsed = parsers.firstOrNull {
-                it.acceptType(type)
-            }
-                ?.getDecodeClass()
-                ?.let {
-                    gson.fromJson(jsonString, it)
+            val type: String? = mainNode.get("type")?.asText()
+            type?.let {
+                val parsed = parsers.firstOrNull {
+                    it.acceptType(type)
                 }
-            if (parsed != null) {
-                out.add(parsed)
-            } else {
-                logger.error("did not parse request $jsonString")
-            }
+                    ?.getDecodeClass()
+                    ?.let {
+                        gson.fromJson(jsonString, it)
+                    }
+                if (parsed != null) {
+                    out.add(parsed)
+                } else {
+                    logger.error("did not parse request $jsonString")
+                }
+            }?: logger.error("can't parse type from $jsonString")
         } catch (e: Exception) {
-            logger.error("Error decoding JSON message", e)
+            try {
+                logger.error("Error decoding JSON message ${msg.toString(charset)}", e)
+            } catch (e: Exception){
+                logger.error("Error decoding JSON message", e)
+            }
         }
     }
 
