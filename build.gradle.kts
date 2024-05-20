@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     implementation("io.netty:netty-all:4.1.101.Final")
-    implementation("org.springframework.boot:spring-boot:3.2.5")
+    implementation("org.springframework:spring-core:6.1.7")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
