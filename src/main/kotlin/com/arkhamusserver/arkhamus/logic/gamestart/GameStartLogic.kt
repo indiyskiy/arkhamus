@@ -12,6 +12,7 @@ class GameStartLogic(
     private val gameStartContainerLogic: GameStartContainerLogic,
     private val gameStartCrafterLogic: GameStartCrafterLogic,
     private val gameStartLanternLogic: GameStartLanternLogic,
+    private val gameStartAltarLogic: GameStartAltarLogic,
     private val gameStartUserLogic: GameStartUserLogic,
     private val gameStartGameLogic: GameStartGameLogic,
     private val gameStartTimeEventLogic: GameStartTimeEventLogic,
@@ -30,6 +31,7 @@ class GameStartLogic(
             gameStartContainerLogic.createContainers(levelId, game)
             gameStartCrafterLogic.createCrafters(levelId, game)
             gameStartLanternLogic.createLanterns(levelId, game)
+            gameStartAltarLogic.createAltars(levelId, game)
             gameStartTimeEventLogic.createStartEvents(game)
         }
         gameThreadPool.initTickProcessingLoop(game)

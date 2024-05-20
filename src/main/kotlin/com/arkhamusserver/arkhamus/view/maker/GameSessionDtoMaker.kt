@@ -38,6 +38,21 @@ class GameSessionDtoMaker(
         }
     }
 
+    fun toDtoAsAdmin(
+        gameSession: GameSession,
+        userSkins: Map<Long, UserSkinSettings>,
+    ): GameSessionDto {
+        return GameSessionDto().apply {
+            id = gameSession.id
+            state = gameSession.state
+            token = gameSession.token
+            gameType = gameSession.gameType
+            gameSessionSettings = gameSessionSettingsDtoMaker.toDto(gameSession.gameSessionSettings)
+            god = convertGodAsAdmin(gameSession)
+            usersInGame = mapRolesByReceiverRoleAsAdmin(gameSession, userSkins)
+        }
+    }
+
     private fun convertGod(
         gameSession: GameSession,
         isCultist: Boolean
@@ -52,6 +67,17 @@ class GameSessionDtoMaker(
                 }
 
                 FINISHED -> godDtoMaker.convert(godNotNull)
+            }
+        }
+    }
+
+    private fun convertGodAsAdmin(
+        gameSession: GameSession,
+    ): GodDto? {
+        return gameSession.god?.let { godNotNull ->
+            when (gameSession.state) {
+                NEW -> null
+                IN_PROGRESS, PENDING, FINISHED -> godDtoMaker.convert(godNotNull)
             }
         }
     }
@@ -81,6 +107,29 @@ class GameSessionDtoMaker(
                     }
 
                     FINISHED -> it.classInGame
+                }
+            }
+            this.gameSkin = userSkinDtoMaker.toDto(userSkins[it.userAccount.id]!!)
+        }
+    }
+
+    private fun mapRolesByReceiverRoleAsAdmin(
+        gameSession: GameSession,
+        userSkins: Map<Long, UserSkinSettings>,
+    ) = gameSession.usersOfGameSession.map {
+        InGameUserDto().apply {
+            this.userId = it.userAccount.id
+            this.userName = it.userAccount.nickName
+            this.isHost = it.host
+            this.role = RoleDto().apply {
+                this.userRole = when (gameSession.state) {
+                    NEW -> null
+                    IN_PROGRESS, PENDING -> it.roleInGame
+                    FINISHED -> it.roleInGame
+                }
+                this.userClass = when (gameSession.state) {
+                    NEW -> null
+                    IN_PROGRESS, PENDING, FINISHED -> it.classInGame
                 }
             }
             this.gameSkin = userSkinDtoMaker.toDto(userSkins[it.userAccount.id]!!)

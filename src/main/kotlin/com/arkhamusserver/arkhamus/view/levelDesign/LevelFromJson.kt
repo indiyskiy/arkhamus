@@ -9,6 +9,7 @@ data class LevelFromJson(
     var levelWidth: Long? = null,
     var containers: List<ContainerFromJson> = emptyList(),
     var lanterns: List<LanternFromJson> = emptyList(),
+    var altars: List<AltarFromJson> = emptyList(),
     var startMarkers: List<JsonStartMarker> = emptyList(),
     var crafters: List<CrafterFromJson> = emptyList()
 )
@@ -23,6 +24,13 @@ data class ContainerFromJson(
 data class LanternFromJson(
     var id: Long? = null,
     var lightRange: Double? = null,
+    var x: Double? = null,
+    var y: Double? = null
+)
+
+data class AltarFromJson(
+    var id: Long? = null,
+    var interactionRadius: Double? = null,
     var x: Double? = null,
     var y: Double? = null
 )

@@ -48,6 +48,13 @@ class MockRedisDataAccess : RedisDataAccess {
     override fun getLantern(lanternId: Long, gameId: Long): RedisLantern {
         TODO("Not yet implemented")
     }
+    override fun getAltar(altarId: Long, gameId: Long): RedisAltar {
+        TODO("Not yet implemented")
+    }
+
+    override fun getGameAltars(gameId: Long): List<RedisAltar> {
+        TODO("Not yet implemented")
+    }
 
     override fun getGameLanterns(gameId: Long): List<RedisLantern> {
         TODO("Not yet implemented")

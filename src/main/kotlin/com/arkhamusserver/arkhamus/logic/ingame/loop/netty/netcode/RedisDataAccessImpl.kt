@@ -13,6 +13,7 @@ class RedisDataAccessImpl(
     private val containerRepository: RedisContainerRepository,
     private val crafterRepository: RedisCrafterRepository,
     private val lanternRepository: RedisLanternRepository,
+    private val altarRepository: RedisAltarRepository,
     private val timeEventRepository: RedisTimeEventRepository,
     private val abilityCastRepository: RedisAbilityCastRepository,
     private val craftProcessRepository: RedisCraftProcessRepository
@@ -33,6 +34,12 @@ class RedisDataAccessImpl(
 
     override fun getLantern(lanternId: Long, gameId: Long) =
         lanternRepository.findByGameIdAndLanternId(gameId, lanternId).first()
+
+    override fun getAltar(altarId: Long, gameId: Long) =
+        altarRepository.findByGameIdAndAltarId(gameId, altarId).first()
+
+    override fun getGameAltars(gameId: Long) =
+        altarRepository.findByGameId(gameId)
 
     override fun getGameContainers(gameId: Long) =
         containerRepository.findByGameId(gameId)

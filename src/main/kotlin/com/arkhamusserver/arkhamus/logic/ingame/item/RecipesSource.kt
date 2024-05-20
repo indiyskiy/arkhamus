@@ -41,64 +41,64 @@ class RecipesSource {
                     crafterTypes = listOf(CrafterType.ADVANCED)
                 ),
 // CORKS 8***
-            (oneOfEach(BOOK, CLOCK, MASK) + Ingredient(SAINT_QUARTZ, 10))
+            (oneOfEach(BOOK, CLOCK, MASK) + Ingredient(VIOLET_SCROLL, 10))
                 .toRecipe(8001, item = CORK_AAMON),
 
-            (oneOfEach(EYE, PLATE, SCYTHE) + Ingredient(SAINT_QUARTZ, 10))
+            (oneOfEach(EYE, PLATE, SCYTHE) + Ingredient(GREEN_SCROLL, 10))
                 .toRecipe(8002, item = CORK_BELETH),
 
-            (oneOfEach(MASK, PLATE, TEAR) + Ingredient(SAINT_QUARTZ, 10))
+            (oneOfEach(MASK, PLATE, TEAR) + Ingredient(BLUE_EGG, 10))
                 .toRecipe(8003, item = CORK_BHOLES),
 
-            (oneOfEach(CLOCK, EYE, TEAR) + Ingredient(SAINT_QUARTZ, 10))
+            (oneOfEach(CLOCK, EYE, TEAR) + Ingredient(ORANGE_EGG, 10))
                 .toRecipe(8004, item = CORK_COLOUR_OUT_OF_SPACE),
 
-            (oneOfEach(CLOCK, MASK, PLATE) + Ingredient(I2, 10))
+            (oneOfEach(CLOCK, MASK, PLATE) + Ingredient(GREEN_EGG, 10))
                 .toRecipe(8005, item = CORK_CTHULHU),
 
-            (oneOfEach(BLACK_STONE, BOOK, PLATE) + Ingredient(I7, 10))
+            (oneOfEach(BLACK_STONE, BOOK, PLATE) + Ingredient(VIOLET_SCROLL, 10))
                 .toRecipe(8006, item = CORK_CYBELE),
 
-            (oneOfEach(BLACK_STONE, PLATE, RING) + Ingredient(I6, 10))
+            (oneOfEach(BLACK_STONE, PLATE, RING) + Ingredient(GREEN_SCROLL, 10))
                 .toRecipe(8007, item = CORK_CZEOTHOQUA),
 
-            (oneOfEach(BLACK_STONE, MASK, SCYTHE) + Ingredient(I7, 10))
+            (oneOfEach(BLACK_STONE, MASK, SCYTHE) + Ingredient(BLUE_EGG, 10))
                 .toRecipe(8008, item = CORK_DAGON),
 
-            (oneOfEach(BLACK_STONE, EYE, SCYTHE) + Ingredient(I6, 10))
+            (oneOfEach(BLACK_STONE, EYE, SCYTHE) + Ingredient(ORANGE_EGG, 10))
                 .toRecipe(8009, item = CORK_GREEN_FLAME),
 
-            (oneOfEach(BOOK, EYE, MASK) + Ingredient(I5, 10))
+            (oneOfEach(BOOK, EYE, MASK) + Ingredient(GREEN_EGG, 10))
                 .toRecipe(8010, item = CORK_KING_IN_YELLOW),
 
-            (oneOfEach(BOOK, CLOCK, EYE) + Ingredient(I3, 10))
+            (oneOfEach(BOOK, CLOCK, EYE) + Ingredient(VIOLET_SCROLL, 10))
                 .toRecipe(8011, item = CORK_MI_GO),
 
-            (oneOfEach(RING, SCYTHE, TEAR) + Ingredient(I4, 10))
+            (oneOfEach(RING, SCYTHE, TEAR) + Ingredient(GREEN_SCROLL, 10))
                 .toRecipe(8012, item = CORK_NAMELESS_WINDS),
 
-            (oneOfEach(BLACK_STONE, SCYTHE, TEAR) + Ingredient(I5, 10))
+            (oneOfEach(BLACK_STONE, SCYTHE, TEAR) + Ingredient(BLUE_EGG, 10))
                 .toRecipe(8013, item = CORK_NINGISHZIDA),
 
-            (oneOfEach(BOOK, MASK, TEAR) + Ingredient(I4, 10))
+            (oneOfEach(BOOK, MASK, TEAR) + Ingredient(ORANGE_EGG, 10))
                 .toRecipe(8014, item = CORK_NYARLATHOTEP),
 
-            (oneOfEach(EYE, PLATE, RING) + Ingredient(I2, 10))
+            (oneOfEach(EYE, PLATE, RING) + Ingredient(GREEN_EGG, 10))
                 .toRecipe(8015, item = CORK_PNAKOTIC_HORRORS),
 
-            (oneOfEach(BOOK, MASK, RING) + Ingredient(I6, 10))
+            (oneOfEach(BOOK, MASK, RING) + Ingredient(VIOLET_SCROLL, 10))
                 .toRecipe(8016, item = CORK_RED_MASK),
 
-            (oneOfEach(BLACK_STONE, CLOCK, TEAR) + Ingredient(I2, 10))
+            (oneOfEach(BLACK_STONE, CLOCK, TEAR) + Ingredient(GREEN_SCROLL, 10))
                 .toRecipe(8017, item = CORK_SHUB_NIGGURATH),
 
-            (oneOfEach(CLOCK, PLATE, SCYTHE) + Ingredient(I3, 10))
+            (oneOfEach(CLOCK, PLATE, SCYTHE) + Ingredient(BLUE_EGG, 10))
                 .toRecipe(8018, item = CORK_TZONTEMOC),
 
-            (oneOfEach(BOOK, CLOCK, RING) + Ingredient(I5, 10))
+            (oneOfEach(BOOK, CLOCK, RING) + Ingredient(ORANGE_EGG, 10))
                 .toRecipe(8019, item = CORK_YERLEG),
 
-            (oneOfEach(EYE, RING, TEAR) + Ingredient(I4, 10))
+            (oneOfEach(EYE, RING, TEAR) + Ingredient(GREEN_EGG, 10))
                 .toRecipe(8020, item = CORK_YOG_SOTHOTH),
         )
     }

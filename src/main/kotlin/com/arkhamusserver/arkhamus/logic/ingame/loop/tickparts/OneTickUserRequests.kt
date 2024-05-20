@@ -27,7 +27,7 @@ class OneTickUserRequests(
         ongoingEvents: List<OngoingEvent>
     ): List<NettyTickRequestMessageDataHolder> {
         val tasksByUser = currentTasks.groupBy { it.userAccount.id }
-        logger.info("Process tasks of game ${globalGameData.game.id} tick $currentTick")
+        logger.info("Process tasks of game ${globalGameData.game.gameId} tick $currentTick")
         return tasksByUser.map { entry ->
             val taskToProcess = chooseTaskToProcess(entry.value)
             processRequest(taskToProcess, currentTick, globalGameData, ongoingEvents)
@@ -49,7 +49,7 @@ class OneTickUserRequests(
     ) {
         val game = globalGameData.game
         val nettyRequestMessage = requestContainer.nettyRequestMessage
-        logger.info("Process ${nettyRequestMessage.type} of game ${game.id} tick $tick")
+        logger.info("Process ${nettyRequestMessage.type} of game ${game.gameId} tick $tick")
 
         requestContainer.requestProcessData =
             requestProcessDataBuilder.build(requestContainer, globalGameData, ongoingEvents)

@@ -1,10 +1,7 @@
 package com.arkhamusserver.arkhamus.config.database
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.*
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.ContainerRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.CrafterRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LanternRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.*
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import com.arkhamusserver.arkhamus.view.levelDesign.*
@@ -23,10 +20,10 @@ class LevelDesignInfoProcessor(
     private val levelRepository: LevelRepository,
     private val containerRepository: ContainerRepository,
     private val lanternRepository: LanternRepository,
+    private val altarRepository: AltarRepository,
     private val crafterRepository: CrafterRepository,
     private val startMarkerRepository: StartMarkerRepository
 ) {
-
     companion object {
         var logger: Logger = LoggerFactory.getLogger(LevelDesignInfoProcessor::class.java)
         var gson: Gson = Gson()
@@ -93,6 +90,7 @@ class LevelDesignInfoProcessor(
         val savedLevel = levelRepository.save(newLevel)
         processContainers(levelFromJson.containers, savedLevel)
         processLanterns(levelFromJson.lanterns, savedLevel)
+        processAltars(levelFromJson.altars, savedLevel)
         processCrafters(levelFromJson.crafters, savedLevel)
         processStartMarkers(levelFromJson.startMarkers, savedLevel)
     }
@@ -127,6 +125,23 @@ class LevelDesignInfoProcessor(
                 level = savedLevel
             ).apply {
                 lanternRepository.save(this)
+            }
+        }
+    }
+
+    private fun processAltars(
+        containers: List<AltarFromJson>,
+        savedLevel: Level?
+    ) {
+        containers.forEach { altar ->
+            Altar(
+                inGameId = altar.id,
+                interactionRadius = altar.interactionRadius,
+                x = altar.x,
+                y = altar.y,
+                level = savedLevel
+            ).apply {
+                altarRepository.save(this)
             }
         }
     }

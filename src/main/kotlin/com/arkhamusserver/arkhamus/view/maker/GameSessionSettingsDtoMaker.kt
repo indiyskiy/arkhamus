@@ -3,21 +3,19 @@ package com.arkhamusserver.arkhamus.view.maker
 import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
 import com.arkhamusserver.arkhamus.model.database.entity.Level
 import com.arkhamusserver.arkhamus.view.dto.GameSessionSettingsDto
-import com.arkhamusserver.arkhamus.view.dto.LevelDto
 import org.springframework.stereotype.Component
 
 @Component
-class GameSessionSettingsDtoMaker {
+class GameSessionSettingsDtoMaker(
+    val levelDtoMaker: LevelDtoMaker
+) {
     fun toDto(gameSessionSettings: GameSessionSettings): GameSessionSettingsDto {
         return GameSessionSettingsDto(
             lobbySize = gameSessionSettings.lobbySize,
             numberOfCultists = gameSessionSettings.numberOfCultists
         ).apply {
             gameSessionSettings.level?.let { level ->
-                this.level = LevelDto().apply {
-                    this.levelId = level.id
-                    this.version = level.version
-                }
+                this.level = levelDtoMaker.mapLevelToDto(level)
             }
         }
     }

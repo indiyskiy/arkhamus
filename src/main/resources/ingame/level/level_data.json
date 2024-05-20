@@ -1,5 +1,31 @@
 [
   {
+    "altars": [
+      {
+        "id": 12,
+        "interactionRadius": 3.5,
+        "x": 48,
+        "y": 48
+      },
+      {
+        "id": 13,
+        "interactionRadius": 3.5,
+        "x": 48,
+        "y": 52
+      },
+      {
+        "id": 14,
+        "interactionRadius": 3.5,
+        "x": 52,
+        "y": 48
+      },
+      {
+        "id": 15,
+        "interactionRadius": 3.5,
+        "x": 52,
+        "y": 52
+      }
+    ],
     "containers": [
       {
         "id": 1,
@@ -19,8 +45,8 @@
         "crafterType": "REGULAR",
         "id": 9,
         "interactionRadius": 3.5,
-        "x": 50,
-        "y": 50
+        "x": 65,
+        "y": 28
       },
       {
         "crafterType": "ADVANCED",
@@ -41,14 +67,12 @@
       {
         "id": 7,
         "lightRange": 12,
-        "state": false,
         "x": 47,
         "y": 27
       },
       {
         "id": 8,
         "lightRange": 12,
-        "state": false,
         "x": 37,
         "y": 38
       }

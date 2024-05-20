@@ -51,7 +51,7 @@ class GameLogic(
         startGame(game, skins.values)
 
         val gameUpdated = gameSessionRepository.findById(game.id!!).get()
-        return gameUpdated.toDto(player)
+        return gameUpdated.toDto(player, skins)
     }
 
     private fun startGame(
@@ -117,11 +117,11 @@ class GameLogic(
 
     fun GameSession.toDto(
         currentPlayer: UserAccount,
-        skins: Map<Long, UserSkinSettings>? = null
+        skins: Map<Long, UserSkinSettings>
     ): GameSessionDto =
         gameSessionDtoMaker.toDto(
             this,
-            skins ?: userSkinLogic.allSkinsOf(this),
+            skins ,
             currentPlayer
         )
 

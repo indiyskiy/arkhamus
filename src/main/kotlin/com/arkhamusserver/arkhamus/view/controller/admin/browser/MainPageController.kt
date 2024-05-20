@@ -22,4 +22,12 @@ class MainPageController {
         logger.info("some one is here")
         return "main"
     }
+
+    @GetMapping("/public/browser/menu")
+    fun menu(
+        response: HttpServletResponse,
+        model: Model
+    ): String {
+        return "menu"
+    }
 }
