@@ -6,4 +6,8 @@ data class InGameUserDto(
     var userName: String? = null,
     var isHost: Boolean = false,
     var gameSkin: UserSkinDto? = null
-)
+){
+    override fun toString(): String {
+        return userName?:"-"
+    }
+}
