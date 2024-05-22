@@ -45,13 +45,16 @@ class UsersConfig {
         RoleName.values().associateWith { getOrCreate(it) }
 
     private fun getOrCreate(roleName: RoleName): Role {
-        return roleRepository.findByName(roleName.securityValue).orElse(
+        val old = roleRepository.findByName(roleName.securityValue).orElse(null)
+        if (old != null) {
+            return old
+        } else {
             Role().apply {
                 name = roleName.securityValue
             }.also { role ->
-                roleRepository.save(role)
+                return roleRepository.save(role)
             }
-        )
+        }
     }
 
 

@@ -14,6 +14,9 @@ class AdminUserLogic(
             makeUserDto(it)
         }
     }
+    fun user(userId: Long): AdminUserDto {
+        return makeUserDto(userAccountRepository.findById(userId).orElse(UserAccount()))
+    }
 
     private fun makeUserDto(userAccount: UserAccount) = AdminUserDto(
         userAccount.id!!,
