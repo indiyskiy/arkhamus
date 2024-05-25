@@ -13,5 +13,8 @@ data class AdminGameSessionDto(
     var god: GodDto? = null,
     var usersInGame: List<InGameUserDto>? = emptyList(),
     var gameSessionSettings: GameSessionSettingsDto? = null,
-    var token: String? = null
+    var token: String? = null,
+    var creation: String? = null,
+    var started: String? = null,
+    var finished: String? = null,
 )

@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class TokenService( jwtProperties: JwtProperties) {
+class TokenService(jwtProperties: JwtProperties) {
+
     private val secretKey = Keys.hmacShaKeyFor(
         jwtProperties.key.toByteArray()
     )
@@ -28,17 +29,21 @@ class TokenService( jwtProperties: JwtProperties) {
             .and()
             .signWith(secretKey)
             .compact()
+
     fun isValid(token: String, userDetails: UserDetails): Boolean {
         val email = extractEmail(token)
         return userDetails.username == email && !isExpired(token)
     }
+
     fun extractEmail(token: String): String? =
         getAllClaims(token)
             .subject
+
     fun isExpired(token: String): Boolean =
         getAllClaims(token)
             .expiration
             .before(Date(System.currentTimeMillis()))
+
     private fun getAllClaims(token: String): Claims {
         val parser = Jwts.parser()
             .verifyWith(secretKey)
@@ -47,4 +52,5 @@ class TokenService( jwtProperties: JwtProperties) {
             .parseSignedClaims(token)
             .payload
     }
+
 }

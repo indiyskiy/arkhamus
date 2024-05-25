@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import org.springframework.stereotype.Component
+import java.sql.Timestamp
 
 @Component
 class GameEndLogic(
@@ -18,6 +19,7 @@ class GameEndLogic(
 
         val gameSession = gameSessionRepository.findById(game.gameId!!).get()
         gameSession.state = GameState.FINISHED
+        gameSession.finishedTimestamp = Timestamp(System.currentTimeMillis())
         gameSessionRepository.save(gameSession)
     }
 }

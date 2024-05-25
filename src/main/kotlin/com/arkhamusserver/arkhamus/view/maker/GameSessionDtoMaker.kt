@@ -9,9 +9,12 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.INVESTIGATO
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.dto.InGameUserDto
 import com.arkhamusserver.arkhamus.view.dto.RoleDto
+import com.arkhamusserver.arkhamus.view.dto.admin.AdminGameSessionDto
 import com.arkhamusserver.arkhamus.view.dto.ingame.GodDto
 import com.arkhamusserver.arkhamus.view.maker.ingame.GodToGodDtoMaker
 import org.springframework.stereotype.Component
+import java.sql.Timestamp
+import java.time.format.DateTimeFormatter
 
 @Component
 class GameSessionDtoMaker(
@@ -19,6 +22,12 @@ class GameSessionDtoMaker(
     private val userSkinDtoMaker: UserSkinDtoMaker,
     private val godDtoMaker: GodToGodDtoMaker
 ) {
+
+    companion object {
+        private const val pattern = "dd.MM.yyyy HH:mm:ss"
+        val formatter = DateTimeFormatter.ofPattern(pattern)
+    }
+
     fun toDto(
         gameSession: GameSession,
         userSkins: Map<Long, UserSkinSettings>,
@@ -41,8 +50,8 @@ class GameSessionDtoMaker(
     fun toDtoAsAdmin(
         gameSession: GameSession,
         userSkins: Map<Long, UserSkinSettings>,
-    ): GameSessionDto {
-        return GameSessionDto().apply {
+    ): AdminGameSessionDto {
+        return AdminGameSessionDto().apply {
             id = gameSession.id
             state = gameSession.state
             token = gameSession.token
@@ -50,8 +59,17 @@ class GameSessionDtoMaker(
             gameSessionSettings = gameSessionSettingsDtoMaker.toDto(gameSession.gameSessionSettings)
             god = convertGodAsAdmin(gameSession)
             usersInGame = mapRolesByReceiverRoleAsAdmin(gameSession, userSkins)
+            creation = dateToString(gameSession.creationTimestamp)
+            started = dateToString(gameSession.startedTimestamp)
+            finished = dateToString(gameSession.finishedTimestamp)
         }
     }
+
+    private fun dateToString(date: Timestamp?) =
+        date?.let {
+            formatter.format(it.toLocalDateTime())
+        } ?: ""
+
 
     private fun convertGod(
         gameSession: GameSession,

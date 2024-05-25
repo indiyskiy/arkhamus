@@ -9,6 +9,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import java.sql.Timestamp
 import kotlin.random.Random
 
 @Component
@@ -24,6 +25,7 @@ class GameStartGameLogic(
     fun createTheGame(game: GameSession) {
         game.god = God.values().random(random)
         game.state = GameState.PENDING
+        game.startedTimestamp = Timestamp(System.currentTimeMillis())
         gameSessionRepository.save(game)
 
         gameRepository.save(

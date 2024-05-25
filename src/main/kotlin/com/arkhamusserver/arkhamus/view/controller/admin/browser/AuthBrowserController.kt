@@ -33,11 +33,10 @@ class AuthBrowserController(
         logger.info("gogo authenticate!")
         val authResponse = authenticationService.authentication(loginInfo)
         val cookie = Cookie("token", authResponse.accessToken)
-        cookie.maxAge = 7 * 24 * 60 * 60
+        cookie.maxAge = 1 * 24 * 60 * 60
         cookie.isHttpOnly = true
         cookie.path = "/"
         response.addCookie(cookie)
-        model.addAttribute("login", AuthenticationRequest(loginInfo.login, "authorized"))
-        return "login"
+        return "menu"
     }
 }

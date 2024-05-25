@@ -15,6 +15,8 @@ data class GameSession(
 
     @CreationTimestamp
     var creationTimestamp: Timestamp? = null,
+    var startedTimestamp: Timestamp? = null,
+    var finishedTimestamp: Timestamp? = null,
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "gameSession")
     var usersOfGameSession: List<UserOfGameSession> = emptyList(),

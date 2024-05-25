@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.view.controller.admin.browser
 
 import com.arkhamusserver.arkhamus.logic.admin.AdminGameLogic
-import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminGameSessionDto
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -14,7 +13,7 @@ class BrowserAdminGameController(
 ) {
     @GetMapping("/admin/browser/game")
     fun adminGameDashboard(model: Model): String {
-        val games: List<GameSessionDto> = adminGameLogic.all()
+        val games: List<AdminGameSessionDto> = adminGameLogic.all()
         model.addAttribute("games", games)
         return "gameList"
     }

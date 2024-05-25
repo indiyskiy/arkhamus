@@ -21,18 +21,28 @@ class JwtAuthenticationFilter(
     private val userAccountRepository: UserAccountRepository
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        filterChain: FilterChain
+        request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain
     ) {
         try {
             val cookies: Array<Cookie>? = request.cookies
-            val jwtToken: String? =
-                cookies?.firstOrNull { cookie ->
-                    cookie.name.equals("token")
-                }?.value
-            if (jwtToken != null) {
-                processToken(jwtToken, request, filterChain, response)
+            val tokenCookie = cookies?.firstOrNull { cookie -> cookie.name.equals("token") }
+            if (tokenCookie != null) {
+                val jwtToken: String? = tokenCookie.value
+                if (jwtToken != null) {
+                    try {
+                        processToken(jwtToken, request, filterChain, response)
+                    } catch (e: Exception) {
+                        response.addCookie(
+                            tokenCookie.apply {
+                                this.value = ""
+                                this.maxAge = -1
+                            }
+                        )
+                        throw e
+                    }
+                } else {
+                    tryBearer(request, filterChain, response)
+                }
             } else {
                 tryBearer(request, filterChain, response)
             }
@@ -43,9 +53,7 @@ class JwtAuthenticationFilter(
     }
 
     private fun tryBearer(
-        request: HttpServletRequest,
-        filterChain: FilterChain,
-        response: HttpServletResponse
+        request: HttpServletRequest, filterChain: FilterChain, response: HttpServletResponse
     ) {
         val authHeader: String? = request.getHeader("Authorization")
         if (authHeader.doesNotContainBearerToken()) {
@@ -57,32 +65,25 @@ class JwtAuthenticationFilter(
     }
 
     private fun processToken(
-        jwtToken: String,
-        request: HttpServletRequest,
-        filterChain: FilterChain,
-        response: HttpServletResponse
+        jwtToken: String, request: HttpServletRequest, filterChain: FilterChain, response: HttpServletResponse
     ) {
         val email = tokenService.extractEmail(jwtToken)
         if (email != null && SecurityContextHolder.getContext().authentication == null) {
             val player = userAccountRepository.findByEmail(email)
             val foundUser = userDetailsService.mapToUserDetails(player)
-            if (tokenService.isValid(jwtToken, foundUser))
-                updateContext(player.get(), foundUser, request)
+            if (tokenService.isValid(jwtToken, foundUser)) updateContext(player.get(), foundUser, request)
             filterChain.doFilter(request, response)
         }
     }
 
-    private fun String?.doesNotContainBearerToken() =
-        this == null || !this.startsWith("Bearer ")
+    private fun String?.doesNotContainBearerToken() = this == null || !this.startsWith("Bearer ")
 
-    private fun String.extractTokenValue() =
-        this.substringAfter("Bearer ")
+    private fun String.extractTokenValue() = this.substringAfter("Bearer ")
 
     private fun updateContext(player: UserAccount, foundUser: UserDetails, request: HttpServletRequest) {
         val authToken = UsernamePasswordAuthenticationToken(foundUser, null, foundUser.authorities)
         authToken.details = ArkhamusWebAuthenticationDetails(
-            userAccount = player,
-            context = request
+            userAccount = player, context = request
         )
         SecurityContextHolder.getContext().authentication = authToken
     }
