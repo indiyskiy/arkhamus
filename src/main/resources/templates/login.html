@@ -2,12 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body>
-<form method="post" th:action="@{/public/browser/auth}" th:object="${login}">
-    <label for="login">login</label><input id="login" placeholder="login" required type="text" th:field="*{login}"/>
-    <label for="password">password</label><input id="password" placeholder="password" required type="text" th:field="*{password}"/>
-    <input type="submit" value="LogIn">
-</form>
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}">Menu</a>
+    </footer>
+</div>
+
+<div class="main">
+    <h1>Login</h1>
+    <form method="post" th:action="@{/public/browser/auth}" th:object="${login}">
+        <label for="login">login</label><input id="login" placeholder="login" required type="text" th:field="*{login}"/>
+        <label for="password">password</label><input id="password" placeholder="password" required type="text"
+                                                     th:field="*{password}"/>
+        <input type="submit" value="LogIn">
+    </form>
+</div>
+
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
+</div>
+
 </body>
 </html>

@@ -4,7 +4,9 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRe
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.CustomUserDetailsService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.TokenService
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
+import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -12,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
-import jakarta.servlet.http.Cookie
 
 @Component
 class JwtAuthenticationFilter(
@@ -28,17 +29,17 @@ class JwtAuthenticationFilter(
             val tokenCookie = cookies?.firstOrNull { cookie -> cookie.name.equals("token") }
             if (tokenCookie != null) {
                 val jwtToken: String? = tokenCookie.value
-                if (jwtToken != null) {
+                if (!jwtToken.isNullOrEmpty()) {
                     try {
                         processToken(jwtToken, request, filterChain, response)
-                    } catch (e: Exception) {
+                    } catch (e: ExpiredJwtException) {
                         response.addCookie(
-                            tokenCookie.apply {
-                                this.value = ""
-                                this.maxAge = -1
+                            Cookie("token", null).apply {
+                                maxAge = 0
+                                isHttpOnly = true
+                                path = "/"
                             }
                         )
-                        throw e
                     }
                 } else {
                     tryBearer(request, filterChain, response)

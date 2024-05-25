@@ -6,17 +6,20 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.UpdateCrafterRequestMe
 import org.springframework.stereotype.Component
 
 @Component
-class UpdateCrafterMergeHandler : ActionMergeHandler {
+class UpdateCrafterMergeHandler(
+    private val itemsMergingHandler: ItemsMergingHandler
+) : ActionMergeHandler {
 
     override fun accepts(type: String): Boolean = type == UpdateCrafterRequestMessage::class.java.simpleName
 
     override fun merge(newRequestProcessData: GameUserData, cachedRequestProcessData: GameUserData) {
         if (newRequestProcessData is UpdateCrafterGameData) {
             if (cachedRequestProcessData is UpdateCrafterGameData) {
-                newRequestProcessData.crafter = cachedRequestProcessData.crafter
-                newRequestProcessData.sortedUserInventory = cachedRequestProcessData.sortedUserInventory
+                newRequestProcessData.sortedUserInventory = itemsMergingHandler.mergeItems(
+                    newRequestProcessData.sortedUserInventory,
+                    newRequestProcessData.visibleItems
+                )
                 newRequestProcessData.executedSuccessfully = cachedRequestProcessData.executedSuccessfully
-                newRequestProcessData.visibleItems = cachedRequestProcessData.visibleItems
             }
         }
     }

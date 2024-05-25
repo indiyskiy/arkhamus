@@ -4,18 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-    <!-- Add here any necessary CSS and JavaScript files -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body>
-<div id="menu">
-    <h1>Admin Panel</h1>
-    <ul>
-        <li><a th:href="@{/public/browser/login}">Auth</a></li>
-        <li><a th:href="@{/admin/browser/game}">Games List</a></li>
-        <li><a th:href="@{/admin/browser/user}">Users List</a></li>
-        <!-- Continue adding the new list items here as you add more pages -->
-    </ul>
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
 </div>
-<!-- Add here your footer and any other necessary HTML elements -->
+<div class="main">
+    <div id="menu">
+        <h1>Admin Panel</h1>
+        <ul>
+            <li><a th:href="@{/public/browser/login}">Auth</a></li>
+            <li><a th:href="@{/admin/browser/game}">Games List</a></li>
+            <li><a th:href="@{/admin/browser/user}">Users List</a></li>
+            <!-- Continue adding the new list items here as you add more pages -->
+        </ul>
+    </div>
+</div>
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
+</div>
 </body>
 </html>

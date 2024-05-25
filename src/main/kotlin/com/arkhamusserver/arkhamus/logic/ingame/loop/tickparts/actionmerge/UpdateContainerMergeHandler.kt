@@ -6,7 +6,9 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.UpdateContainerRequest
 import org.springframework.stereotype.Component
 
 @Component
-class UpdateContainerMergeHandler : ActionMergeHandler {
+class UpdateContainerMergeHandler(
+    private val itemsMergingHandler: ItemsMergingHandler
+) : ActionMergeHandler {
 
     override fun accepts(type: String) =
         type == UpdateContainerRequestMessage::class.java.simpleName
@@ -14,10 +16,11 @@ class UpdateContainerMergeHandler : ActionMergeHandler {
     override fun merge(newRequestProcessData: GameUserData, cachedRequestProcessData: GameUserData) {
         if (newRequestProcessData is UpdateContainerGameData) {
             if (cachedRequestProcessData is UpdateContainerGameData) {
-                newRequestProcessData.container = cachedRequestProcessData.container
-                newRequestProcessData.sortedUserInventory = cachedRequestProcessData.sortedUserInventory
+                newRequestProcessData.sortedUserInventory = itemsMergingHandler.mergeItems(
+                    newRequestProcessData.sortedUserInventory,
+                    newRequestProcessData.visibleItems
+                )
                 newRequestProcessData.executedSuccessfully = cachedRequestProcessData.executedSuccessfully
-                newRequestProcessData.visibleItems = cachedRequestProcessData.visibleItems
             }
         }
     }
