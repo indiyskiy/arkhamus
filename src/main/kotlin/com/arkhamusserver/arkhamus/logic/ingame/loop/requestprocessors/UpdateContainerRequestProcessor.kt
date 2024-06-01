@@ -24,7 +24,7 @@ class UpdateContainerRequestProcessor(
     }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
-        return request.nettyRequestMessage is UpdateContainerRequestMessage
+        return request.requestProcessData is UpdateContainerGameData
     }
 
     override fun process(

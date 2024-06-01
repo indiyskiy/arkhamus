@@ -24,7 +24,7 @@ class UpdateCrafterRequestProcessor(
     }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
-        return request.nettyRequestMessage is UpdateCrafterRequestMessage
+        return request.requestProcessData is UpdateCrafterGameData
     }
 
     override fun process(

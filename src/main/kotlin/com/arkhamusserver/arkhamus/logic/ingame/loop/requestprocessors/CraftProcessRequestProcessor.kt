@@ -10,7 +10,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Craft
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.request.CraftProcessRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -29,7 +28,7 @@ class CraftProcessRequestProcessor(
     }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
-        return request.nettyRequestMessage is CraftProcessRequestMessage
+        return request.requestProcessData is CraftProcessRequestProcessData
     }
 
     override fun process(

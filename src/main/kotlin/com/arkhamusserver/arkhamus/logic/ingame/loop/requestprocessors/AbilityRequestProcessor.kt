@@ -8,7 +8,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -17,7 +16,7 @@ class AbilityRequestProcessor(
     private val abilityCastHandler: AbilityCastHandler,
 ) : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
-        return request.nettyRequestMessage is AbilityRequestMessage
+        return request.requestProcessData is AbilityRequestProcessData
     }
 
     override fun process(

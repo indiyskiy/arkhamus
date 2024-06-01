@@ -3,17 +3,17 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.OpenCrafterGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
-import com.arkhamusserver.arkhamus.view.dto.netty.request.OpenCrafterRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class OpenRafterRequestProcessor(
+class OpenCrafterRequestProcessor(
     private val redisCrafterRepository: RedisCrafterRepository
 ) : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
-        return request.nettyRequestMessage is OpenCrafterRequestMessage
+        return request.requestProcessData is OpenCrafterGameData
     }
 
     override fun process(
@@ -21,9 +21,9 @@ class OpenRafterRequestProcessor(
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        val nettyRequestMessage = requestDataHolder.nettyRequestMessage as OpenCrafterRequestMessage
+        val gameData = requestDataHolder.requestProcessData as OpenCrafterGameData
         val oldGameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
-        val crafter = globalGameData.crafters[nettyRequestMessage.externalInventoryId]!!
+        val crafter = gameData.crafter
         if ((crafter.state == MapObjectState.ACTIVE) && (crafter.holdingUser == null)) {
             crafter.holdingUser = oldGameUser.userId
             crafter.state = MapObjectState.HOLD

@@ -1,16 +1,20 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.AltarRepository
 import com.arkhamusserver.arkhamus.model.database.entity.Altar
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
+import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 
 @Component
 class GameStartAltarLogic(
     private val redisAltarRepository: RedisAltarRepository,
+    private val redisAltarHolderRepository: RedisAltarHolderRepository,
     private val altarRepository: AltarRepository,
 ) {
 
@@ -22,6 +26,13 @@ class GameStartAltarLogic(
         allLevelAltars.forEach { dbAltar ->
             redisAltarRepository.save(createAltar(game, dbAltar))
         }
+        redisAltarHolderRepository.save(
+            RedisAltarHolder(
+                id = Generators.timeBasedEpochGenerator().generate().toString(),
+                gameId = game.id!!,
+                state = MapAltarState.OPEN
+            )
+        )
     }
 
     private fun createAltar(

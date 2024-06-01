@@ -52,6 +52,14 @@ class MockRedisDataAccess : RedisDataAccess {
         TODO("Not yet implemented")
     }
 
+    override fun getAltarHolder(gameId: Long): RedisAltarHolder {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAltarPolling(gameId: Long): RedisAltarPolling? {
+        TODO("Not yet implemented")
+    }
+
     override fun getGameAltars(gameId: Long): List<RedisAltar> {
         TODO("Not yet implemented")
     }

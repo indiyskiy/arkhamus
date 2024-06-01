@@ -14,6 +14,8 @@ class RedisDataAccessImpl(
     private val crafterRepository: RedisCrafterRepository,
     private val lanternRepository: RedisLanternRepository,
     private val altarRepository: RedisAltarRepository,
+    private val altarHolderRepository: RedisAltarHolderRepository,
+    private val altarPollingRepository: RedisAltarPollingRepository,
     private val timeEventRepository: RedisTimeEventRepository,
     private val abilityCastRepository: RedisAbilityCastRepository,
     private val craftProcessRepository: RedisCraftProcessRepository
@@ -37,6 +39,12 @@ class RedisDataAccessImpl(
 
     override fun getAltar(altarId: Long, gameId: Long) =
         altarRepository.findByGameIdAndAltarId(gameId, altarId).first()
+
+    override fun getAltarHolder(gameId: Long) =
+        altarHolderRepository.findByGameId(gameId).first()
+
+    override fun getAltarPolling(gameId: Long) =
+        altarPollingRepository.findByGameId(gameId).maxByOrNull { it.started }
 
     override fun getGameAltars(gameId: Long) =
         altarRepository.findByGameId(gameId)

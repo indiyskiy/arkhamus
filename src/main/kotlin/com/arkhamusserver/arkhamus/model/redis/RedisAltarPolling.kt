@@ -8,9 +8,10 @@ import org.springframework.data.redis.core.index.Indexed
 @RedisHash("RedisAltar")
 data class RedisAltarPolling(
     @Id var id: String,
-    @Indexed var altarId: Long,
     @Indexed var gameId: Long,
-    @Indexed var startedUserId: Long,
-    @Indexed var userVotes: MutableMap<Long, Long> = HashMap(),
     @Indexed var state: MapAltarPollingState = MapAltarPollingState.ONGOING,
+    var altarId: Long,
+    var startedUserId: Long,
+    var userVotes: MutableMap<Long, Long> = HashMap(),
+    var started: Long,
 )

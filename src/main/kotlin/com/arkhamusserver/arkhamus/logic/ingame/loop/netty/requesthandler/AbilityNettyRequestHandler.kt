@@ -12,6 +12,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.Item
+import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.springframework.stereotype.Component
@@ -47,46 +50,74 @@ class AbilityNettyRequestHandler(
                     relatedAbilityCastHandler.findForUser(user, ability, globalGameData.castedAbilities)
                 val requiredItem = abilityToItemResolver.resolve(it)
                 val canBeCasted = canAbilityBeCastedHandler.canUserCast(user, ability, requiredItem)
-                AbilityRequestProcessData(
-                    ability = ability,
-                    canBeCasted = canBeCasted,
-                    cooldown = relatedAbility?.timeLeft,
-                    cooldownOf = ability.cooldown,
-                    item = requiredItem,
-                    executedSuccessfully = false,
-                    gameUser = user,
-                    otherGameUsers = users,
-                    visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
-                    availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
-                    visibleItems = inventoryHandler.mapUsersItems(user.items),
-                    ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
-                        user,
-                        globalGameData.crafters,
-                        globalGameData.craftProcess
-                    ),
-                    containers = globalGameData.containers.values.toList(),
-                    tick = globalGameData.game.currentTick
-                )
-            } ?: AbilityRequestProcessData(
-                ability = null,
-                canBeCasted = false,
-                cooldown = null,
-                cooldownOf = null,
-                item = null,
-                executedSuccessfully = false,
-                gameUser = user,
-                otherGameUsers = users,
-                visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
-                availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
-                ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
+                buildAbilityGameData(
+                    ability,
+                    canBeCasted,
+                    relatedAbility,
+                    requiredItem,
                     user,
-                    globalGameData.crafters,
-                    globalGameData.craftProcess
-                ),
-                visibleItems = inventoryHandler.mapUsersItems(user.items),
-                containers = globalGameData.containers.values.toList(),
-                tick = globalGameData.game.currentTick
-            )
+                    users,
+                    ongoingEvents,
+                    globalGameData
+                )
+            } ?: buildWrongAbilityGameData(user, users, ongoingEvents, globalGameData)
         }
     }
+
+    private fun buildAbilityGameData(
+        ability: Ability,
+        canBeCasted: Boolean,
+        relatedAbility: RedisAbilityCast?,
+        requiredItem: Item?,
+        user: RedisGameUser,
+        users: List<RedisGameUser>,
+        ongoingEvents: List<OngoingEvent>,
+        globalGameData: GlobalGameData
+    ) = AbilityRequestProcessData(
+        ability = ability,
+        canBeCasted = canBeCasted,
+        cooldown = relatedAbility?.timeLeft,
+        cooldownOf = ability.cooldown,
+        item = requiredItem,
+        executedSuccessfully = false,
+        gameUser = user,
+        otherGameUsers = users,
+        visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
+        availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+        visibleItems = inventoryHandler.mapUsersItems(user.items),
+        ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
+            user,
+            globalGameData.crafters,
+            globalGameData.craftProcess
+        ),
+        containers = globalGameData.containers.values.toList(),
+        tick = globalGameData.game.currentTick
+    )
+
+
+    private fun buildWrongAbilityGameData(
+        user: RedisGameUser,
+        users: List<RedisGameUser>,
+        ongoingEvents: List<OngoingEvent>,
+        globalGameData: GlobalGameData
+    ) = AbilityRequestProcessData(
+        ability = null,
+        canBeCasted = false,
+        cooldown = null,
+        cooldownOf = null,
+        item = null,
+        executedSuccessfully = false,
+        gameUser = user,
+        otherGameUsers = users,
+        visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
+        availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+        ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
+            user,
+            globalGameData.crafters,
+            globalGameData.craftProcess
+        ),
+        visibleItems = inventoryHandler.mapUsersItems(user.items),
+        containers = globalGameData.containers.values.toList(),
+        tick = globalGameData.game.currentTick
+    )
 }
