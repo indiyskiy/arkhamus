@@ -63,6 +63,7 @@ class CraftProcessNettyRequestHandler(
                         globalGameData.crafters,
                         globalGameData.craftProcess
                     ),
+                    containers = globalGameData.containers.values.toList(),
                 )
             } else {
                 CraftProcessRequestProcessData(
@@ -82,6 +83,7 @@ class CraftProcessNettyRequestHandler(
                         globalGameData.crafters,
                         globalGameData.craftProcess
                     ),
+                    containers = globalGameData.containers.values.toList(),
                 )
             }
         }

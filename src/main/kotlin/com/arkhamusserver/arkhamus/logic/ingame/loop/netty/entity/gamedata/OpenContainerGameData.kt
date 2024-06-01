@@ -15,6 +15,7 @@ class OpenContainerGameData(
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     visibleItems: List<InventoryCell>,
+    containers: List<RedisContainer>,
     tick: Long
 ) : GameUserData(
     gameUser = gameUser,
@@ -23,5 +24,6 @@ class OpenContainerGameData(
     availableAbilities = availableAbilities,
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
+    containers = containers,
     tick = tick
 )

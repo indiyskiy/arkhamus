@@ -76,6 +76,11 @@ class UsersConfig {
             role = roles[RoleName.ADMIN]!!
         )
         addUser(
+            "mars@gmail.com",
+            "mars",
+            role = roles[RoleName.ADMIN]!!
+        )
+        addUser(
             "evans@gmail.com",
             "evans",
             role = roles[RoleName.ADMIN]!!

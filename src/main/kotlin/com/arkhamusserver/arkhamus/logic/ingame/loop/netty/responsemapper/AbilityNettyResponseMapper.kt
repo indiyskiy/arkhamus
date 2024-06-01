@@ -49,7 +49,8 @@ class AbilityNettyResponseMapper : NettyResponseMapper {
                 },
                 availableAbilities = requestProcessData.availableAbilities,
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
-                userInventory = requestProcessData.visibleItems
+                userInventory = requestProcessData.visibleItems,
+                containers = requestProcessData.containers
             )
         }
     }

@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
+import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+
 class AbilityNettyResponse(
     private val abilityId: Int?,
     private val executedSuccessfully: Boolean,
@@ -12,6 +14,7 @@ class AbilityNettyResponse(
     ongoingCraftingProcess: List<CraftProcessResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     userInventory: List<InventoryCell>,
+    containers: List<RedisContainer>
 ) : NettyResponseMessage(
     tick = tick,
     userId = userId,
@@ -21,7 +24,8 @@ class AbilityNettyResponse(
     ongoingCraftingProcess = ongoingCraftingProcess,
     availableAbilities = availableAbilities,
     userInventory = userInventory,
-    type = AbilityNettyResponse::class.java.simpleName
+    containers = containers.convertToContainerInfo(),
+    type = AbilityNettyResponse::class.java.simpleName,
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =
         executedSuccessfully

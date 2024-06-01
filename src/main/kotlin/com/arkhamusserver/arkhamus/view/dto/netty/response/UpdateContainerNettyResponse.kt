@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 
 class UpdateContainerNettyResponse(
     sortedUserInventory: List<InventoryCell>,
@@ -17,6 +18,7 @@ class UpdateContainerNettyResponse(
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<InventoryCell>,
+    containers: List<RedisContainer>
 ) : ExternalInventoryNettyResponse(
     sortedUserInventory = sortedUserInventory,
     itemsInside = itemsInside,
@@ -30,6 +32,7 @@ class UpdateContainerNettyResponse(
     availableAbilities = availableAbilities,
     ongoingCraftingProcess = ongoingCraftingProcess,
     userInventory = userInventory,
+    containers = containers,
     type = UpdateContainerNettyResponse::class.java.simpleName
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

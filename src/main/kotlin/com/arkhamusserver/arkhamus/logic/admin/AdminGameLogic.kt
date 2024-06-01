@@ -17,14 +17,18 @@ class AdminGameLogic(
     private val userSkinLogic: UserSkinLogic,
 ) {
     fun all(): List<AdminGameSessionDto> {
-        return gameSessionRepository.findAll().map { game ->
-            gameSessionDto(game)
-        }
+        return gameSessionRepository
+            .findAll()
+            .sortedBy { it.creationTimestamp?.time ?: 0 }
+            .map { game ->
+                gameSessionDto(game)
+            }
     }
 
     fun allForUser(userId: Long): List<AdminUserGameSessionDto> {
         val userGameSessions = userOfGameSessionRepository
             .findByUserAccountId(userId)
+            .sortedBy { it.gameSession.creationTimestamp?.time ?: 0 }
         return userGameSessions.map {
             AdminUserGameSessionDto().apply {
                 this.classInGame = it.classInGame

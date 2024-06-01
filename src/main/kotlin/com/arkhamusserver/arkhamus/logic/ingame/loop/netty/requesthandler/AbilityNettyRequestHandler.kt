@@ -64,6 +64,7 @@ class AbilityNettyRequestHandler(
                         globalGameData.crafters,
                         globalGameData.craftProcess
                     ),
+                    containers = globalGameData.containers.values.toList(),
                     tick = globalGameData.game.currentTick
                 )
             } ?: AbilityRequestProcessData(
@@ -83,6 +84,7 @@ class AbilityNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),
+                containers = globalGameData.containers.values.toList(),
                 tick = globalGameData.game.currentTick
             )
         }

@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.other
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
@@ -46,7 +47,8 @@ class UpdateContainerNettyResponseMapper(
                         number = it.value
                         itemId = it.key
                     }
-                }
+                },
+                containers = requestProcessData.containers
             )
         }
     }
@@ -58,7 +60,8 @@ class UpdateContainerNettyResponseMapper(
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
         ongoingCraftingProcess: List<CraftProcessResponse>,
-        itemsInside: List<InventoryCell>
+        itemsInside: List<InventoryCell>,
+        containers: List<RedisContainer>
     ) = UpdateContainerNettyResponse(
         sortedUserInventory = sortedUserInventory,
         itemsInside = itemsInside,
@@ -72,6 +75,7 @@ class UpdateContainerNettyResponseMapper(
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         },
+        containers = containers,
         ongoingCraftingProcess = ongoingCraftingProcess,
         availableAbilities = availableAbilities,
         executedSuccessfully = true,

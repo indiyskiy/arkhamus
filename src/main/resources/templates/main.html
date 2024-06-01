@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <title>arkhamus project</title>
+    <title>CulTprits</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
     <style>
         body {
@@ -13,7 +13,7 @@
 <body>
 <div class="main">
     <div id="text-container">
-        <p id="text" th:text="'arkhamus'">cthulhu fhtagn</p>
+        <p id="text" th:text="'CulTprits'">CulTprits</p>
     </div>
 
     <script>
@@ -31,8 +31,6 @@
                 'Comic Sans MS',
                 'Impact',
                 'Lucida Console',
-                // 'Symbol',
-                // 'Webdings',
                 'Times New Roman',
                 'Wide Latin',
                 'Ravie',
@@ -52,11 +50,11 @@
             let spans = Array.from(document.querySelectorAll('#text-container span'));
 
             // A function to get a random shade of grey or green
-            var getRandomColor = function () {
-                let val = Math.round(Math.random() * 255);
-                let choice = Math.round(Math.random()); // random number between 0 and 1
+            const getRandomColor = function () {
+                let val = Math.round(Math.random() * 200);
+                let choice = Math.round(Math.random() * 2); // random number between 0 and 1
                 return choice ? `rgb(${val},${val},${val})` : `rgb(0,${val},0)`;
-            }
+            };
 
             // For every span, change properties in random intervals
             spans.forEach(span => {
@@ -65,7 +63,7 @@
                     span.style.fontSize = `${randomFontSize}px`;
                     span.style.color = getRandomColor();
                     span.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-                }, Math.random() * 2000 + 500); // Random interval between 500ms and 2500ms
+                }, Math.random() * 1000 + 500);
             });
         });
     </script>

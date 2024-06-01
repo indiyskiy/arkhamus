@@ -63,7 +63,8 @@ class CraftProcessNettyResponseMapper(
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 holdingUser = it.crafter!!.holdingUser,
                 state = it.crafter?.state ?: MapObjectState.DISABLED,
-                userInventory = requestProcessData.visibleItems
+                userInventory = requestProcessData.visibleItems,
+                containers = requestProcessData.containers
             )
         }
     }

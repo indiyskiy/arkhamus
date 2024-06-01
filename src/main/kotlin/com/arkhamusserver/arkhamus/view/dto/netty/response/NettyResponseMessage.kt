@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
+import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+
 abstract class NettyResponseMessage(
     val tick: Long,
     val userId: Long,
@@ -9,5 +11,16 @@ abstract class NettyResponseMessage(
     val ongoingCraftingProcess: List<CraftProcessResponse>,
     val availableAbilities: List<AbilityOfUserResponse>,
     var userInventory: List<InventoryCell>,
+    var containers: List<ContainerState>,
     val type: String
 )
+
+fun List<RedisContainer>.convertToContainerInfo(): List<ContainerState> {
+    return this.map { container ->
+        ContainerState(
+            containerId = container.containerId,
+            state = container.state,
+            holdingUserId = container.holdingUser
+        )
+    }
+}

@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 
 abstract class ExternalInventoryNettyResponse(
     var sortedUserInventory: List<InventoryCell>,
@@ -15,6 +16,7 @@ abstract class ExternalInventoryNettyResponse(
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<InventoryCell>,
+    containers: List<RedisContainer>,
     type: String
 ) : NettyResponseMessage(
     tick = tick,
@@ -25,5 +27,6 @@ abstract class ExternalInventoryNettyResponse(
     availableAbilities = availableAbilities,
     ongoingCraftingProcess = ongoingCraftingProcess,
     userInventory = userInventory,
+    containers = containers.convertToContainerInfo(),
     type = type
 )

@@ -49,6 +49,7 @@ class OpenCrafterNettyRequestHandler(
                     globalGameData.crafters,
                     globalGameData.craftProcess
                 ),
+                containers = globalGameData.containers.values.toList(),
                 tick = globalGameData.game.currentTick,
             )
         }

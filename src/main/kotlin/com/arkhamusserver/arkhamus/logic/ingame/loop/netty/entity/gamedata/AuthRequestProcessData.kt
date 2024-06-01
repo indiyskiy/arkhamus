@@ -19,5 +19,6 @@ class AuthRequestProcessData(
     availableAbilities = emptyList(),
     visibleItems = emptyList(),
     ongoingCraftingProcess = emptyList(),
+    containers = emptyList(),
     tick = -1L
 )

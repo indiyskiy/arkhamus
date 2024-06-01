@@ -49,6 +49,7 @@ class HeartbeatNettyRequestHandler(
                     crafters = globalGameData.crafters,
                     globalGameData.craftProcess
                 ),
+                containers = globalGameData.containers.values.toList(),
             )
         } ?: return ErrorGameResponse("game session id is null", globalGameData.game.currentTick)
     }

@@ -8,6 +8,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.other
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
@@ -35,31 +37,41 @@ class OpenContainerNettyResponseMapper(
             val mappedItem = this.container.items.map {
                 it.key to it.value
             }
-            val itemsInside = inventoryHandler.mapUsersItems(mappedItem)
-            if (requestProcessData.container.holdingUser == user.id) {
-                return myContainer(
-                    itemsInside,
-                    requestProcessData,
-                    user,
-                    requestProcessData.gameUser!!,
-                    requestProcessData.availableAbilities,
-                    requestProcessData.ongoingCraftingProcess,
-                    requestProcessData.visibleItems
+            val containerState = requestProcessData.container.state
+            val containerHoldingUserId = requestProcessData.container.holdingUser
+
+            if (containerState == MapObjectState.HOLD && containerHoldingUserId == user.id) {
+                val itemsInside = inventoryHandler.mapUsersItems(mappedItem)
+                return buildContainer(
+                    itemsInside = itemsInside,
+                    gameData = requestProcessData,
+                    user = user,
+                    gameUser = requestProcessData.gameUser!!,
+                    availableAbilities = requestProcessData.availableAbilities,
+                    ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
+                    visibleItems = requestProcessData.visibleItems,
+                    state = containerState,
+                    containerHoldingUserId = containerHoldingUserId,
+                    containers = requestProcessData.containers
                 )
             } else {
-                return closedContainer(
-                    requestProcessData,
-                    user,
-                    requestProcessData.gameUser!!,
-                    requestProcessData.availableAbilities,
-                    requestProcessData.ongoingCraftingProcess,
-                    requestProcessData.visibleItems
+                return buildContainer(
+                    itemsInside = emptyList(),
+                    gameData = requestProcessData,
+                    user = user,
+                    gameUser = requestProcessData.gameUser!!,
+                    availableAbilities = requestProcessData.availableAbilities,
+                    ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
+                    visibleItems = requestProcessData.visibleItems,
+                    state = containerState,
+                    containerHoldingUserId = containerHoldingUserId,
+                    containers = requestProcessData.containers
                 )
             }
         }
     }
 
-    private fun myContainer(
+    private fun buildContainer(
         itemsInside: List<InventoryCell>,
         gameData: OpenContainerGameData,
         user: UserAccount,
@@ -67,10 +79,13 @@ class OpenContainerNettyResponseMapper(
         availableAbilities: List<AbilityOfUserResponse>,
         ongoingCraftingProcess: List<CraftProcessResponse>,
         visibleItems: List<InventoryCell>,
+        state: MapObjectState,
+        containerHoldingUserId: Long?,
+        containers: List<RedisContainer>
     ) = OpenContainerNettyResponse(
         itemsInside = itemsInside,
-        state = gameData.container.state,
-        holdingUser = gameData.container.holdingUser,
+        state = state,
+        holdingUser = containerHoldingUserId,
         tick = gameData.tick,
         userId = user.id!!,
         myGameUser = MyGameUserResponseMessage(gameUser),
@@ -80,30 +95,9 @@ class OpenContainerNettyResponseMapper(
         },
         availableAbilities = availableAbilities,
         ongoingCraftingProcess = ongoingCraftingProcess,
-        userInventory = visibleItems
+        userInventory = visibleItems,
+        containers = containers
     )
 
-    private fun closedContainer(
-        gameData: OpenContainerGameData,
-        user: UserAccount,
-        gameUser: RedisGameUser,
-        availableAbilities: List<AbilityOfUserResponse>,
-        ongoingCraftingProcess: List<CraftProcessResponse>,
-        visibleItems: List<InventoryCell>,
-    ) = OpenContainerNettyResponse(
-        itemsInside = emptyList(),
-        state = gameData.container.state,
-        holdingUser = null,
-        tick = gameData.tick,
-        userId = user.id!!,
-        myGameUser = MyGameUserResponseMessage(gameUser),
-        otherGameUsers = gameData.otherGameUsersResponseMessage(),
-        ongoingEvents = gameData.visibleOngoingEvents.map {
-            OngoingEventResponse(it)
-        },
-        availableAbilities = availableAbilities,
-        ongoingCraftingProcess = ongoingCraftingProcess,
-        userInventory = visibleItems
-    )
 
 }

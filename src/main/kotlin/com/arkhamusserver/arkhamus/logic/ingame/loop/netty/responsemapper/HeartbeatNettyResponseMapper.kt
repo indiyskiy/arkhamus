@@ -47,6 +47,7 @@ class HeartbeatNettyResponseMapper : NettyResponseMapper {
                 availableAbilities = requestProcessData.availableAbilities,
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 userInventory = requestProcessData.visibleItems,
+                containers = requestProcessData.containers,
             )
         }
     }

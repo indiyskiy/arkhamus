@@ -66,7 +66,6 @@ class ActionCacheHandler(
         if (newRequestProcessData == null) {
             return
         }
-        newRequestProcessData.tick = cachedRequestProcessData.tick
         if (newRequestProcessData is GameUserData) {
             if (cachedRequestProcessData is GameUserData) {
                 actionMergeHandlers

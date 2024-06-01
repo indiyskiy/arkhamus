@@ -17,5 +17,6 @@ class NettyResponseAuth(
     availableAbilities = emptyList(),
     ongoingCraftingProcess = emptyList(),
     userInventory = emptyList(),
+    containers = emptyList(),
     type = NettyResponseAuth::class.java.simpleName
 )
