@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,7 +13,7 @@ class NettyResponseBuilder(
     fun buildResponse(
         requestContainer: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData
-    ): NettyResponseMessage {
+    ): NettyResponse {
         return responseMapper.first {
             it.acceptClass(requestContainer.requestProcessData!!) && it.accept(requestContainer.requestProcessData!!)
         }.process(

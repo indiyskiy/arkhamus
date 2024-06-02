@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.view.dto.netty.response
+package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
 data class AbilityOfUserResponse(
     val abilityId: Int? = null,

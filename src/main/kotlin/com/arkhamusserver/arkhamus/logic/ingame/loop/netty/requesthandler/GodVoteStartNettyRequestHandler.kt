@@ -10,6 +10,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GodVoteStartRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
+import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.redis.RedisAltar
+import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.view.dto.netty.request.GodVoteStartRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.springframework.stereotype.Component
@@ -39,10 +43,11 @@ class GodVoteStartNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.userId != userId }
             val altarHolder = globalGameData.altarHolder
             val altar = globalGameData.altars[request.altarId]
+            val canBeStarted = canBeStarted(altarHolder, altar, ongoingEvents)
             return GodVoteStartRequestProcessData(
                 starterGod = request.godId.toGod(),
                 altar = altar,
-                canBeStarted = altarHolder.state == MapAltarState.OPEN,
+                canBeStarted = canBeStarted,
                 executedSuccessfully = false,
                 gameUser = user,
                 otherGameUsers = users,
@@ -59,6 +64,23 @@ class GodVoteStartNettyRequestHandler(
             )
         }
     }
+
+    private fun canBeStarted(
+        altarHolder: RedisAltarHolder,
+        altar: RedisAltar?,
+        ongoingEvents: List<OngoingEvent>
+    ): Boolean {
+        return (altarHolder.state == MapAltarState.OPEN) &&
+                altar != null &&
+                !ongoingEvents.any {
+                    it.event.type in listOf(
+                        RedisTimeEventType.ALTAR_VOTING,
+                        RedisTimeEventType.RITUAL_GOING,
+                        RedisTimeEventType.ALTAR_VOTING_COOLDOWN
+                    ) && it.event.state == RedisTimeEventState.ACTIVE
+                }
+    }
+
 
     private fun Long.toGod(): God? = God.values().firstOrNull { it.getId() == this }
 }

@@ -10,7 +10,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Craft
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component

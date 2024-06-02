@@ -7,14 +7,13 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.OpenCrafterRequestGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AltarOpenRequestProcessData
+import com.arkhamusserver.arkhamus.view.dto.netty.request.AltarOpenRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.request.OpenCrafterRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class OpenCrafterNettyRequestHandler(
+class AltarOpenNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
@@ -22,23 +21,27 @@ class OpenCrafterNettyRequestHandler(
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
-        nettyRequestMessage::class.java == OpenCrafterRequestMessage::class.java
+        nettyRequestMessage::class.java == AltarOpenRequestMessage::class.java
 
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
     override fun buildData(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
-        ongoingEvents: List<OngoingEvent>,
-    ): RequestProcessData {
-        val userId = requestDataHolder.userAccount.id
+        ongoingEvents: List<OngoingEvent>
+    ): AltarOpenRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
-        with(request as OpenCrafterRequestMessage) {
-            val crafter = globalGameData.crafters[this.externalInventoryId]!!
+        with(request as AltarOpenRequestMessage) {
+            val userId = requestDataHolder.userAccount.id
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
-            return OpenCrafterRequestGameData(
-                crafter = crafter,
+            val altarHolder = globalGameData.altarHolder
+            val altarPolling = globalGameData.altarPolling
+            val altar = globalGameData.altars[request.altarId]
+            return AltarOpenRequestProcessData(
+                altar = altar,
+                altarPolling = altarPolling,
+                altarHolder = altarHolder,
                 gameUser = user,
                 otherGameUsers = users,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
@@ -50,8 +53,9 @@ class OpenCrafterNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
-                tick = globalGameData.game.currentTick,
+                tick = globalGameData.game.currentTick
             )
         }
     }
+
 }

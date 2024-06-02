@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateCrafterGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateCrafterRequestGameData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UpdateCrafterRequestMessage
 import org.springframework.stereotype.Component
@@ -38,7 +38,7 @@ class UpdateCrafterNettyRequestHandler(
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
             val sortedUserInventory = request.newInventoryContent
-            return UpdateCrafterGameData(
+            return UpdateCrafterRequestGameData(
                 crafter = crafter,
                 gameUser = user,
                 otherGameUsers = users,

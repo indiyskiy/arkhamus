@@ -5,8 +5,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 
 class AbilityRequestProcessData(

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.request
 
-import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
 class UpdateCrafterRequestMessage(
     var actionId: Long,

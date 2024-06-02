@@ -6,9 +6,9 @@ class NettyResponseAuth(
     val message: AuthState = AuthState.FAIL,
     tick: Long = -1,
     userId: Long,
-    myGameUser: MyGameUserResponseMessage,
-    allGameUsers: List<NettyGameUserResponseMessage>,
-) : NettyResponseMessage(
+    myGameUser: MyGameUserResponse,
+    allGameUsers: List<NettyGameUserResponse>,
+) : NettyResponse(
     tick = tick,
     userId = userId,
     myGameUser = myGameUser,

@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityOfUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import org.springframework.stereotype.Component
 
 @Component

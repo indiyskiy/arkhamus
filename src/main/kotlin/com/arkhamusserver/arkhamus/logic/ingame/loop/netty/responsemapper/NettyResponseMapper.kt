@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 
 interface NettyResponseMapper {
     fun acceptClass(gameResponseMessage: RequestProcessData): Boolean
@@ -18,5 +18,5 @@ interface NettyResponseMapper {
         gameSession: GameSession?,
         userRole: UserOfGameSession?,
         inBetweenEventHolder: InBetweenEventHolder
-    ): NettyResponseMessage
+    ): NettyResponse
 }

@@ -3,13 +3,14 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.HeartbeatRequestGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AltarOpenRequestProcessData
 import org.springframework.stereotype.Component
 
 @Component
-class HeartbeatRequestProcessor : NettyRequestProcessor {
+class AltarOpenRequestProcessor(
+) : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
-        return request.requestProcessData is HeartbeatRequestGameData
+        return request.requestProcessData is AltarOpenRequestProcessData
     }
 
     override fun process(

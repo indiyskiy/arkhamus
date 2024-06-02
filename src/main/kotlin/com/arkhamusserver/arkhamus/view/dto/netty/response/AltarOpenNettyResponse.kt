@@ -1,16 +1,13 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.CrafterType
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarPolling
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
-class OpenCrafterNettyResponse(
-    var itemsInside: List<InventoryCell> = emptyList(),
-    var state: MapObjectState,
-    var crafterType: CrafterType,
-    var holdingUser: Long?,
+class AltarOpenNettyResponse(
+    val altarPollingProgress: AltarPolling?,
+    val canIVote: Boolean,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,
@@ -30,5 +27,5 @@ class OpenCrafterNettyResponse(
     availableAbilities = availableAbilities,
     userInventory = userInventory,
     containers = containers.convertToContainerInfo(),
-    type = OpenCrafterNettyResponse::class.java.simpleName
+    type = AltarOpenNettyResponse::class.java.simpleName,
 )

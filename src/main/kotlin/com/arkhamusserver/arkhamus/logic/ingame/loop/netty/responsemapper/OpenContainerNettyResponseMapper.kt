@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.OpenContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.OpenContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.otherGameUsersResponseMessage
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -13,6 +13,8 @@ import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.springframework.stereotype.Component
 
 @Component
@@ -21,7 +23,7 @@ class OpenContainerNettyResponseMapper(
 ) : NettyResponseMapper {
 
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == OpenContainerGameData::class.java
+        gameResponseMessage::class.java == OpenContainerRequestGameData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -33,7 +35,7 @@ class OpenContainerNettyResponseMapper(
         userRole: UserOfGameSession?,
         inBetweenEventHolder: InBetweenEventHolder
     ): OpenContainerNettyResponse {
-        with(requestProcessData as OpenContainerGameData) {
+        with(requestProcessData as OpenContainerRequestGameData) {
             val mappedItem = this.container.items.map {
                 it.key to it.value
             }
@@ -73,7 +75,7 @@ class OpenContainerNettyResponseMapper(
 
     private fun buildContainer(
         itemsInside: List<InventoryCell>,
-        gameData: OpenContainerGameData,
+        gameData: OpenContainerRequestGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
@@ -88,7 +90,7 @@ class OpenContainerNettyResponseMapper(
         holdingUser = containerHoldingUserId,
         tick = gameData.tick,
         userId = user.id!!,
-        myGameUser = MyGameUserResponseMessage(gameUser),
+        myGameUser = MyGameUserResponse(gameUser),
         otherGameUsers = gameData.otherGameUsersResponseMessage(),
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)

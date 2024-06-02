@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.ItemHolderChangeType
-import com.arkhamusserver.arkhamus.view.dto.netty.response.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.springframework.stereotype.Component
 
 @Component

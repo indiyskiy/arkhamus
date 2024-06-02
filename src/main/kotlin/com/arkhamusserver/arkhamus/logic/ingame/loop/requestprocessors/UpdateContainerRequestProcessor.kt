@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ContainerLikeThingsHandler
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
@@ -24,7 +24,7 @@ class UpdateContainerRequestProcessor(
     }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
-        return request.requestProcessData is UpdateContainerGameData
+        return request.requestProcessData is UpdateContainerRequestGameData
     }
 
     override fun process(
@@ -32,7 +32,7 @@ class UpdateContainerRequestProcessor(
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        val requestProcessData = requestDataHolder.requestProcessData as UpdateContainerGameData
+        val requestProcessData = requestDataHolder.requestProcessData as UpdateContainerRequestGameData
 
         val updateContainerRequestMessage = requestDataHolder.nettyRequestMessage as UpdateContainerRequestMessage
         val oldGameUser = globalGameData.users[requestDataHolder.userAccount.id]!!

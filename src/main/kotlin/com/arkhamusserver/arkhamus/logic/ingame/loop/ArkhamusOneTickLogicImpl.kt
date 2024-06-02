@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.loadGlobalGam
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.*
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -26,7 +26,7 @@ class ArkhamusOneTickLogicImpl(
     override fun processCurrentTasks(
         currentTasks: List<NettyTickRequestMessageDataHolder>,
         game: RedisGame
-    ): List<NettyResponseMessage> {
+    ): List<NettyResponse> {
         try {
             val globalGameData = redisDataAccess.loadGlobalGameData(game)
             val currentTick = game.currentTick

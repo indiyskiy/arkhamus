@@ -6,8 +6,8 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.AuthState
-import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponseMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseAuth
 import org.springframework.stereotype.Component
 
@@ -29,9 +29,9 @@ class AuthNettyResponseMapper(
             return NettyResponseAuth(
                 message = AuthState.SUCCESS,
                 userId = user.id!!,
-                myGameUser = MyGameUserResponseMessage(gameUser),
+                myGameUser = MyGameUserResponse(gameUser),
                 allGameUsers = otherUsers.map {
-                    NettyGameUserResponseMessage(it)
+                    NettyGameUserResponse(it)
                 }
             )
         } else {
@@ -39,7 +39,7 @@ class AuthNettyResponseMapper(
                 AuthState.FAIL,
                 -1L,
                 0L,
-                MyGameUserResponseMessage(
+                MyGameUserResponse(
                     id = 0,
                     nickName = "",
                     madness = 0.0,

@@ -2,6 +2,8 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
 class UpdateContainerNettyResponse(
     sortedUserInventory: List<InventoryCell>,
@@ -12,8 +14,8 @@ class UpdateContainerNettyResponse(
     val firstTime: Boolean,
     tick: Long,
     userId: Long,
-    myGameUser: MyGameUserResponseMessage,
-    otherGameUsers: List<NettyGameUserResponseMessage>,
+    myGameUser: MyGameUserResponse,
+    otherGameUsers: List<NettyGameUserResponse>,
     ongoingEvents: List<OngoingEventResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,

@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.globalutils.toJson
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
@@ -25,7 +25,7 @@ class ResponseSendingLoopManagerImpl(
     }
 
     override fun addResponses(
-        responses: List<NettyResponseMessage>,
+        responses: List<NettyResponse>,
         gameId: Long
     ) {
         taskExecutor.execute {
@@ -33,13 +33,13 @@ class ResponseSendingLoopManagerImpl(
         }
     }
 
-    private fun sendMessages(responses: List<NettyResponseMessage>) {
+    private fun sendMessages(responses: List<NettyResponse>) {
         responses.forEach { responseMessage ->
             sendOneMessage(responseMessage)
         }
     }
 
-    private fun sendOneMessage(responseMessage: NettyResponseMessage) {
+    private fun sendOneMessage(responseMessage: NettyResponse) {
         val channel = channelRepository.getUserChannel(responseMessage.userId)
         channel?.channel?.writeAndFlush(
             responseMessage.toJson()

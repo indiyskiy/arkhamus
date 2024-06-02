@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.OpenCrafterGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.OpenCrafterRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.otherGameUsersResponseMessage
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -13,13 +13,15 @@ import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.springframework.stereotype.Component
 
 @Component
 class OpenCrafterNettyResponseMapper : NettyResponseMapper {
 
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == OpenCrafterGameData::class.java
+        gameResponseMessage::class.java == OpenCrafterRequestGameData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -31,7 +33,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         userRole: UserOfGameSession?,
         inBetweenEventHolder: InBetweenEventHolder
     ): OpenCrafterNettyResponse {
-        with(requestProcessData as OpenCrafterGameData) {
+        with(requestProcessData as OpenCrafterRequestGameData) {
             val mappedItem = this.crafter.items.map {
                 itemMap[it.key]!! to it.value
             }
@@ -77,7 +79,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
 
     private fun buildCrafter(
         itemsInside: List<InventoryCell> = emptyList(),
-        gameData: OpenCrafterGameData,
+        gameData: OpenCrafterRequestGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
@@ -93,7 +95,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         holdingUser = containerHoldingUserId,
         tick = gameData.tick,
         userId = user.id!!,
-        myGameUser = MyGameUserResponseMessage(gameUser),
+        myGameUser = MyGameUserResponse(gameUser),
         otherGameUsers = gameData.otherGameUsersResponseMessage(),
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)

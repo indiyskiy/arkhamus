@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateCrafterGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateCrafterRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.otherGameUsersResponseMessage
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -12,6 +12,8 @@ import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,7 +21,7 @@ class UpdateCrafterNettyResponseMapper(
     val itemsInBetweenHandler: ItemsInBetweenHandler
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == UpdateCrafterGameData::class.java
+        gameResponseMessage::class.java == UpdateCrafterRequestGameData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -31,7 +33,7 @@ class UpdateCrafterNettyResponseMapper(
         userRole: UserOfGameSession?,
         inBetweenEventHolder: InBetweenEventHolder
     ): UpdateCrafterNettyResponse {
-        with(requestProcessData as UpdateCrafterGameData) {
+        with(requestProcessData as UpdateCrafterRequestGameData) {
             return build(
                 sortedUserInventory = sortedUserInventory.applyInBetween(
                     inBetweenEventHolder.inBetweenItemHolderChanges,
@@ -55,7 +57,7 @@ class UpdateCrafterNettyResponseMapper(
 
     private fun build(
         sortedUserInventory: List<InventoryCell>,
-        gameData: UpdateCrafterGameData,
+        gameData: UpdateCrafterRequestGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
@@ -70,7 +72,7 @@ class UpdateCrafterNettyResponseMapper(
         userInventory = sortedUserInventory,
         tick = gameData.tick,
         userId = user.id!!,
-        myGameUser = MyGameUserResponseMessage(gameUser),
+        myGameUser = MyGameUserResponse(gameUser),
         otherGameUsers = gameData.otherGameUsersResponseMessage(),
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)

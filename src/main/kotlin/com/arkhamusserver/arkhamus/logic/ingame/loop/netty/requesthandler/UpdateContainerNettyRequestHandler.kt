@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateContainerGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UpdateContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -37,7 +37,7 @@ class UpdateContainerNettyRequestHandler(
             val container = globalGameData.containers[this.externalInventoryId]!!
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
-            return UpdateContainerGameData(
+            return UpdateContainerRequestGameData(
                 container = container,
                 sortedUserInventory = request.newInventoryContent,
                 executedSuccessfully = true,

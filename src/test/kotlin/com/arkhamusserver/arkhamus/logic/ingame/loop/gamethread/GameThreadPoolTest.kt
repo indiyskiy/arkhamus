@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ExecutedAction
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.HeartbeatGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.HeartbeatRequestGameData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
@@ -361,13 +362,14 @@ class GameThreadPoolTest {
             userAccount = userOfGameSession.userAccount,
             gameSession = gameSession,
             userRole = userOfGameSession,
-            requestProcessData = HeartbeatGameData(
+            requestProcessData = HeartbeatRequestGameData(
                 gameUser = redisGameUser,
                 otherGameUsers = otherGameUsers,
                 visibleOngoingEvents = emptyList(),
                 availableAbilities = emptyList(),
                 ongoingCraftingProcess = emptyList(),
                 visibleItems = emptyList(),
+                containers = emptyList(),
                 tick = tick + 1
             ),
             lastExecutedAction = ExecutedAction(-1, true, "")
@@ -431,6 +433,7 @@ class GameThreadPoolTest {
 
         val globalGameData = GlobalGameData(
             game = redisGame,
+            altarHolder = RedisAltarHolder("altar holder", redisGame.gameId!!),
             users = redisGameUsers.associateBy { user -> user.userId }
         )
 

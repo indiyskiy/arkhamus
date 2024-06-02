@@ -8,9 +8,9 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameStartedResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -74,9 +74,9 @@ class InGameStartGameHandler(
         channels.map {
             it.channel to NettyGameStartedResponse(
                 userId = it.userAccount!!.id!!,
-                myGameUser = MyGameUserResponseMessage(user!!),
+                myGameUser = MyGameUserResponse(user!!),
                 allGameUsers = users.map {
-                    NettyGameUserResponseMessage(it)
+                    NettyGameUserResponse(it)
                 }
             ).toJson()
         }.forEach {

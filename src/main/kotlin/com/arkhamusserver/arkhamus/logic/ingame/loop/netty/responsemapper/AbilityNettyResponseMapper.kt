@@ -8,8 +8,8 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.AbilityNettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponseMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponseMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.OngoingEventResponse
 import org.springframework.stereotype.Component
 
@@ -35,9 +35,9 @@ class AbilityNettyResponseMapper : NettyResponseMapper {
                 firstTime = true,
                 tick = it.tick,
                 userId = user.id!!,
-                myGameUser = MyGameUserResponseMessage(it.gameUser!!),
+                myGameUser = MyGameUserResponse(it.gameUser!!),
                 otherGameUsers = it.otherGameUsers.map { gameUser ->
-                    NettyGameUserResponseMessage(
+                    NettyGameUserResponse(
                         id = gameUser.userId,
                         nickName = gameUser.nickName,
                         x = gameUser.x,
