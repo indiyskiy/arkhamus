@@ -6,11 +6,12 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Reque
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.AltarOpenNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.OngoingEventResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarPolling
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.VoteForGod
 import org.springframework.stereotype.Component
@@ -31,10 +32,10 @@ class AltarOpenNettyResponseMapper : NettyResponseMapper {
         inBetweenEventHolder: InBetweenEventHolder
     ): AltarOpenNettyResponse {
         (requestProcessData as AltarOpenRequestProcessData).let {
-            val voteProcessOpen = isVoteProcessOpen(requestProcessData)
             return AltarOpenNettyResponse(
-                altarPollingProgress = (requestProcessData.altarPolling?.mapVotes(voteProcessOpen)),
-                canIVote = canIVote(voteProcessOpen, requestProcessData, user),
+                altarPollingProgress = (requestProcessData.altarPolling?.mapVotes(requestProcessData.voteProcessOpen)),
+                canVote = requestProcessData.canVote,
+                canStartVote = requestProcessData.canStartVote,
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!),
@@ -56,17 +57,6 @@ class AltarOpenNettyResponseMapper : NettyResponseMapper {
             )
         }
     }
-
-    private fun canIVote(
-        voteProcessOpen: Boolean,
-        requestProcessData: AltarOpenRequestProcessData,
-        user: UserAccount
-    ) = voteProcessOpen &&
-            ((requestProcessData.altarPolling?.userVotes?.get(user.id)) == null)
-
-    private fun isVoteProcessOpen(requestProcessData: AltarOpenRequestProcessData) =
-        (requestProcessData.altarPolling?.state == MapAltarPollingState.ONGOING) &&
-                (requestProcessData.altarHolder?.state == MapAltarState.VOTING)
 
 
 }

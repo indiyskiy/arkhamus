@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.CanAbilityBeCastedHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.CrafterProcessHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.GodVoteHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
@@ -17,7 +18,8 @@ class AltarOpenNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
-    private val crafterProcessHandler: CrafterProcessHandler
+    private val crafterProcessHandler: CrafterProcessHandler,
+    private val godVoteHandler: GodVoteHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -42,6 +44,9 @@ class AltarOpenNettyRequestHandler(
                 altar = altar,
                 altarPolling = altarPolling,
                 altarHolder = altarHolder,
+                voteProcessOpen = godVoteHandler.isVoteProcessOpen(altarPolling, altarHolder),
+                canVote = godVoteHandler.canIVote(altarPolling, altarHolder, requestDataHolder.userAccount),
+                canStartVote = godVoteHandler.canBeStarted(altarHolder, altar, ongoingEvents),
                 gameUser = user,
                 otherGameUsers = users,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),

@@ -7,7 +7,8 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
 class AltarOpenNettyResponse(
     val altarPollingProgress: AltarPolling?,
-    val canIVote: Boolean,
+    val canVote: Boolean,
+    val canStartVote: Boolean,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,
