@@ -10,12 +10,16 @@ class JedisCleaner(
     private val containerRedisRepository: RedisContainerRepository,
     private val crafterRedisRepository: RedisCrafterRepository,
     private val redisLanternRepository: RedisLanternRepository,
-    private val redisAltarRepository: RedisAltarRepository,
     private val redisGameRepository: RedisGameRepository,
     private val redisTimeEventRepository: RedisTimeEventRepository,
     private val redisCraftProcessRepository: RedisCraftProcessRepository,
     private val redisAbilityCastRepository: RedisAbilityCastRepository,
-) {
+
+    private val redisAltarRepository: RedisAltarRepository,
+    private val redisAltarHolderRepository: RedisAltarHolderRepository,
+    private val redisAltarPollingRepository: RedisAltarPollingRepository,
+
+    ) {
     @PostConstruct
     fun cleanAll() {
         userRedisRepository.deleteAll()
@@ -23,10 +27,13 @@ class JedisCleaner(
         redisGameRepository.deleteAll()
         redisTimeEventRepository.deleteAll()
         redisLanternRepository.deleteAll()
-        redisAltarRepository.deleteAll()
         crafterRedisRepository.deleteAll()
         redisCraftProcessRepository.deleteAll()
         redisAbilityCastRepository.deleteAll()
+
+        redisAltarRepository.deleteAll()
+        redisAltarHolderRepository.deleteAll()
+        redisAltarPollingRepository.deleteAll()
     }
 
 }

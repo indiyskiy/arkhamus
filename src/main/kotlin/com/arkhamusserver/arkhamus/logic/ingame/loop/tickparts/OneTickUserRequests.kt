@@ -27,7 +27,7 @@ class OneTickUserRequests(
         ongoingEvents: List<OngoingEvent>
     ): List<NettyTickRequestMessageDataHolder> {
         val tasksByUser = currentTasks.groupBy { it.userAccount.id }
-        logger.info("Process tasks of game ${globalGameData.game.gameId} tick $currentTick")
+//        logger.debug("Process tasks of game ${globalGameData.game.gameId} tick $currentTick")
         return tasksByUser.map { entry ->
             val taskToProcess = chooseTaskToProcess(entry.value)
             processRequest(taskToProcess, currentTick, globalGameData, ongoingEvents)
@@ -47,9 +47,9 @@ class OneTickUserRequests(
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        val game = globalGameData.game
-        val nettyRequestMessage = requestContainer.nettyRequestMessage
-        logger.info("Process ${nettyRequestMessage.type} of game ${game.gameId} tick $tick")
+//        val game = globalGameData.game
+//        val nettyRequestMessage = requestContainer.nettyRequestMessage
+//        logger.debug("Process ${nettyRequestMessage.type} of game ${game.gameId} tick $tick")
 
         requestContainer.requestProcessData =
             requestProcessDataBuilder.build(requestContainer, globalGameData, ongoingEvents)
@@ -67,7 +67,7 @@ class OneTickUserRequests(
                 applyNewestAction(requestContainer)
             }
         } else {
-            logger.info("Request is duplicated and skipped")
+//            logger.info("Request is duplicated and skipped")
             updateCurrentGameDataWithOldAction(requestContainer)
         }
     }
