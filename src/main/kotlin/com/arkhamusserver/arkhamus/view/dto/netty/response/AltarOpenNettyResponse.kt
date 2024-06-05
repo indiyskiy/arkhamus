@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarPolling
@@ -9,6 +10,8 @@ class AltarOpenNettyResponse(
     val altarPollingProgress: AltarPolling?,
     val canVote: Boolean,
     val canStartVote: Boolean,
+    val voteState: MapAltarPollingState,
+    val votedForGod: Long?,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,

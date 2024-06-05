@@ -36,6 +36,8 @@ class AltarOpenNettyResponseMapper : NettyResponseMapper {
                 altarPollingProgress = (requestProcessData.altarPolling?.mapVotes(requestProcessData.voteProcessOpen)),
                 canVote = requestProcessData.canVote,
                 canStartVote = requestProcessData.canStartVote,
+                voteState = requestProcessData.voteState,
+                votedForGod = requestProcessData.votedForGod?.getId(),
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!),

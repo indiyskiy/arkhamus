@@ -1,5 +1,15 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
 enum class ContainerAffectModifiers {
-    FULL_RANDOM, GOD_MODE_CHEST
+    FULL_RANDOM,
+    LOOT_RANDOM,
+    RARE_LOOT_RANDOM,
+    CULTIST_LOOT_RANDOM,
+    CRAFT_T2_RANDOM,
+    INVESTIGATION_RANDOM,
+    USEFUL_ITEM_RANDOM,
+    CULTIST_ITEM_RANDOM,
+    ADVANCED_USEFUL_ITEM_RANDOM,
+    ADVANCED_CULTIST_ITEM_RANDOM,
+    GOD_MODE_CHEST
 }
