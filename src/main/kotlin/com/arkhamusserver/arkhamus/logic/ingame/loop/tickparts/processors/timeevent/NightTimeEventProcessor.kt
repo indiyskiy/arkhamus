@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.UserLocationHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.UserMadnessHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession

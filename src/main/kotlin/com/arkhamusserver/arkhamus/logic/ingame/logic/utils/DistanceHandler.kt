@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import org.springframework.stereotype.Component
 import kotlin.math.hypot

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.RitualHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent

@@ -47,7 +47,7 @@ class RedisDataAccessImpl(
         altarPollingRepository.findByGameId(gameId).maxByOrNull { it.started }
 
     override fun getGameAltars(gameId: Long) =
-        altarRepository.findByGameId(gameId)
+        altarRepository.findByGameId(gameId).associateBy { it.altarId }
 
     override fun getGameContainers(gameId: Long) =
         containerRepository.findByGameId(gameId)

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.OpenContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData

@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.DistanceHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.DistanceHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.ItemHolderChangeType

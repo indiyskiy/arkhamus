@@ -16,7 +16,7 @@ interface RedisDataAccess {
     fun getAltar(altarId: Long, gameId: Long): RedisAltar
     fun getAltarHolder(gameId: Long): RedisAltarHolder
     fun getAltarPolling(gameId: Long): RedisAltarPolling?
-    fun getGameAltars(gameId: Long): List<RedisAltar>
+    fun getGameAltars(gameId: Long): Map<Long, RedisAltar>
     fun getTimeEvents(gameId: Long): List<RedisTimeEvent>
     fun getCastedAbilities(gameId: Long): List<RedisAbilityCast>
     fun getCraftProcess(gameId: Long): List<RedisCraftProcess>
@@ -37,6 +37,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     val castedAbilities = getCastedAbilities(gameId)
     val allLanterns = getGameLanterns(gameId)
     val craftProcess = getCraftProcess(gameId)
+    val altars = getGameAltars(gameId)
     val altarHolder = getAltarHolder(gameId)
     val altarPolling = getAltarPolling(gameId)
 
@@ -44,6 +45,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         game = game,
         altarHolder = altarHolder
     ).apply {
+        this.altars = altars
         this.altarPolling = altarPolling
         this.users = allUsers.associateBy { it.userId }
         this.containers = allContainers.associateBy { it.containerId }

@@ -1,9 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.CanAbilityBeCastedHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.CrafterProcessHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.GodVoteHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastedHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GodVoteHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -45,7 +45,7 @@ class AltarOpenNettyRequestHandler(
                 altarPolling = altarPolling,
                 altarHolder = altarHolder,
                 voteProcessOpen = godVoteHandler.isVoteProcessOpen(altarPolling, altarHolder),
-                canVote = godVoteHandler.canIVote(altarPolling, altarHolder, requestDataHolder.userAccount),
+                canVote = godVoteHandler.canVote(altarPolling, altarHolder, requestDataHolder.userAccount),
                 canStartVote = godVoteHandler.canBeStarted(altarHolder, altar, ongoingEvents),
                 gameUser = user,
                 otherGameUsers = users,

@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.CanAbilityBeCastedHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.CrafterProcessHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastedHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter

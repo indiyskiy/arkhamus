@@ -60,7 +60,7 @@ class MockRedisDataAccess : RedisDataAccess {
         TODO("Not yet implemented")
     }
 
-    override fun getGameAltars(gameId: Long): List<RedisAltar> {
+    override fun getGameAltars(gameId: Long): Map<Long, RedisAltar> {
         TODO("Not yet implemented")
     }
 

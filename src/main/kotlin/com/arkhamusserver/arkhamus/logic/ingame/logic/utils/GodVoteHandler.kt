@@ -1,36 +1,33 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState.ONGOING
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState.VOTING
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState.ACTIVE
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType.*
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class GodVoteHandler {
+
+    companion object {
+        var logger: Logger = LoggerFactory.getLogger(InventoryHandler::class.java)
+    }
+
     fun canBeStarted(
         altarHolder: RedisAltarHolder,
         altar: RedisAltar?,
         ongoingEvents: List<OngoingEvent>
     ): Boolean {
-        return (altarHolder.state == MapAltarState.OPEN) &&
-                altar != null &&
-                !ongoingEvents.any {
-                    it.event.type in listOf(
-                        ALTAR_VOTING,
-                        RITUAL_GOING,
-                        ALTAR_VOTING_COOLDOWN
-                    ) && it.event.state == ACTIVE
-                }
+        return getAltarIsOpen(altarHolder) &&  getAltarExist(altar)
     }
 
-    fun canIVote(
+    fun canVote(
         altarPolling: RedisAltarPolling?,
         altarHolder: RedisAltarHolder?,
         user: UserAccount
@@ -43,4 +40,10 @@ class GodVoteHandler {
     ) =
         (altarPolling?.state == ONGOING) &&
                 (altarHolder?.state == VOTING)
+
+    private fun getAltarExist(altar: RedisAltar?) = altar != null
+
+    private fun getAltarIsOpen(altarHolder: RedisAltarHolder) =
+        altarHolder.state == MapAltarState.OPEN
+
 }

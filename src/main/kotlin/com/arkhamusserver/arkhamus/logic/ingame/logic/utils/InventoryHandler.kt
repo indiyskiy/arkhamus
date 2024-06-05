@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.Ingredient
 import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe

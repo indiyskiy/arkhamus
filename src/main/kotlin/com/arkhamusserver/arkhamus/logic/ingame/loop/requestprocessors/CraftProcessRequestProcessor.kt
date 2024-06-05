@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
-import com.arkhamusserver.arkhamus.logic.ingame.logic.CraftProcessHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CraftProcessHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder

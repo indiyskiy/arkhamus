@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
