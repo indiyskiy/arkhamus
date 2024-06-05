@@ -31,7 +31,7 @@ class GodVoteStartRequestProcessor(
         ongoingEvents: List<OngoingEvent>
     ) {
         val godVoteStartRequestProcessData = requestDataHolder.requestProcessData as GodVoteStartRequestProcessData
-        val god = godVoteStartRequestProcessData.starterGod
+        val god = godVoteStartRequestProcessData.votedGod
         val altar = godVoteStartRequestProcessData.altar
         if (god != null && altar != null) {
             val canBeStarted = godVoteStartRequestProcessData.canBeStarted

@@ -1,20 +1,20 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.actionmerge
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GodVoteStartRequestProcessData
-import com.arkhamusserver.arkhamus.view.dto.netty.request.GodVoteStartRequestMessage
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GodVoteCastRequestProcessData
+import com.arkhamusserver.arkhamus.view.dto.netty.request.GodVoteCastRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class GodVoteStartMergeHandler : ActionMergeHandler {
+class GodVoteCastMergeHandler : ActionMergeHandler {
 
-    override fun accepts(type: String): Boolean = type == GodVoteStartRequestMessage::class.java.simpleName
+    override fun accepts(type: String): Boolean = type == GodVoteCastRequestMessage::class.java.simpleName
 
     override fun merge(newRequestProcessData: GameUserData, cachedRequestProcessData: GameUserData) {
-        if (newRequestProcessData is GodVoteStartRequestProcessData) {
-            if (cachedRequestProcessData is GodVoteStartRequestProcessData) {
+        if (newRequestProcessData is GodVoteCastRequestProcessData) {
+            if (cachedRequestProcessData is GodVoteCastRequestProcessData) {
                 newRequestProcessData.votedGod = cachedRequestProcessData.votedGod
-                newRequestProcessData.canBeStarted = cachedRequestProcessData.canBeStarted
+                newRequestProcessData.canVote = cachedRequestProcessData.canVote
                 newRequestProcessData.executedSuccessfully = cachedRequestProcessData.executedSuccessfully
                 newRequestProcessData.visibleItems = cachedRequestProcessData.visibleItems
             }

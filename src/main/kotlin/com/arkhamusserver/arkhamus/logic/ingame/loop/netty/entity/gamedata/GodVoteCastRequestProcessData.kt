@@ -9,10 +9,10 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserRe
 import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
-class GodVoteStartRequestProcessData(
+class GodVoteCastRequestProcessData(
     var votedGod: God?,
     var altar: RedisAltar?,
-    var canBeStarted: Boolean,
+    var canVote: Boolean,
     var executedSuccessfully: Boolean,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,

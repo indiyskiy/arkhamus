@@ -8,13 +8,15 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AltarOpenRequestProcessData
-import com.arkhamusserver.arkhamus.view.dto.netty.request.AltarOpenRequestMessage
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GodVoteCastRequestProcessData
+import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.view.dto.netty.request.GodVoteCastRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.GodVoteStartRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class AltarOpenNettyRequestHandler(
+class GodVoteCastNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
@@ -23,7 +25,7 @@ class AltarOpenNettyRequestHandler(
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
-        nettyRequestMessage::class.java == AltarOpenRequestMessage::class.java
+        nettyRequestMessage::class.java == GodVoteStartRequestMessage::class.java
 
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
@@ -31,22 +33,21 @@ class AltarOpenNettyRequestHandler(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
-    ): AltarOpenRequestProcessData {
+    ): GodVoteCastRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
-        with(request as AltarOpenRequestMessage) {
+        with(request as GodVoteCastRequestMessage) {
             val userId = requestDataHolder.userAccount.id
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
             val altarHolder = globalGameData.altarHolder
             val altarPolling = globalGameData.altarPolling
             val altar = globalGameData.altars[request.altarId]
-            return AltarOpenRequestProcessData(
+            val canVote = godVoteHandler.canVote(altarPolling, altarHolder, user)
+            return GodVoteCastRequestProcessData(
+                votedGod = request.godId.toGod(),
                 altar = altar,
-                altarPolling = altarPolling,
-                altarHolder = altarHolder,
-                voteProcessOpen = godVoteHandler.isVoteProcessOpen(altarPolling, altarHolder),
-                canVote = godVoteHandler.canVote(altarPolling, altarHolder, user),
-                canStartVote = godVoteHandler.canBeStarted(altarHolder, altar, ongoingEvents),
+                canVote = canVote,
+                executedSuccessfully = false,
                 gameUser = user,
                 otherGameUsers = users,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
@@ -63,4 +64,5 @@ class AltarOpenNettyRequestHandler(
         }
     }
 
+    private fun Long.toGod(): God? = God.values().firstOrNull { it.getId() == this }
 }
