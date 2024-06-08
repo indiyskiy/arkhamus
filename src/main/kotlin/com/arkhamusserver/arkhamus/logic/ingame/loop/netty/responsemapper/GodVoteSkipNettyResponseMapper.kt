@@ -1,25 +1,22 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AltarOpenRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GodVoteSkipRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.AltarOpenNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.GodVoteSkipNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.OngoingEventResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarPolling
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.VoteForGod
 import org.springframework.stereotype.Component
 
 @Component
-class AltarOpenNettyResponseMapper : NettyResponseMapper {
+class GodVoteSkipNettyResponseMapper : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == AltarOpenRequestProcessData::class.java
+        gameResponseMessage::class.java == GodVoteSkipRequestProcessData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -30,15 +27,11 @@ class AltarOpenNettyResponseMapper : NettyResponseMapper {
         gameSession: GameSession?,
         userRole: UserOfGameSession?,
         inBetweenEventHolder: InBetweenEventHolder
-    ): AltarOpenNettyResponse {
-        (requestProcessData as AltarOpenRequestProcessData).let {
-            return AltarOpenNettyResponse(
-                altarPollingProgress = (requestProcessData.altarPolling?.mapVotes(requestProcessData.voteProcessOpen)),
-                canVote = requestProcessData.canVote,
-                canStartVote = requestProcessData.canStartVote,
-                voteState = requestProcessData.voteState,
-                votedForGod = requestProcessData.votedForGod?.getId(),
-                godLocked = requestProcessData.godLocked?.getId(),
+    ): GodVoteSkipNettyResponse {
+        (requestProcessData as GodVoteSkipRequestProcessData).let {
+            return GodVoteSkipNettyResponse(
+                executedSuccessfully = it.executedSuccessfully,
+                firstTime = true,
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!),
@@ -60,26 +53,4 @@ class AltarOpenNettyResponseMapper : NettyResponseMapper {
             )
         }
     }
-
-
 }
-
-private fun RedisAltarPolling?.mapVotes(
-    isVoteProcessOpen: Boolean
-): AltarPolling? =
-    if (isVoteProcessOpen) {
-        this?.userVotes
-            ?.map { it }
-            ?.groupBy { it.value }
-            ?.map {
-                VoteForGod(
-                    godId = it.key,
-                    voteCount = it.value.size
-                )
-            }?.let {
-                AltarPolling(it, )
-            }
-    } else {
-        null
-    }
-

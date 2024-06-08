@@ -1,5 +1,5 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
 enum class MapAltarState {
-    OPEN, VOTING, GOD_SET, ON_HOLD
+    OPEN, VOTING, GOD_LOCKED, LOCKED
 }

@@ -4,13 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.enums.ingame.*
+import com.arkhamusserver.arkhamus.model.redis.*
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 
@@ -19,15 +14,49 @@ class RitualHandler(
     private val timeEventRepository: RedisTimeEventRepository,
     private val redisAltarPollingRepository: RedisAltarPollingRepository,
     private val redisAltarHolderRepository: RedisAltarHolderRepository,
+    private val godVoteHandler: GodVoteHandler,
 ) {
-     fun failRitual(
+    fun gotQuorum(
+        allUsers: Collection<RedisGameUser>,
+        altarPolling: RedisAltarPolling
+    ): God? {
+        val canVote = godVoteHandler.usersCanPossiblyVote(allUsers)
+        val canVoteIdsSet = canVote.map { it.userId }.toSet()
+        val votesStillRelevant = altarPolling.userVotes.filter { it.key in canVoteIdsSet }
+        val votedUserIdsSet = votesStillRelevant.map { it.key }.toSet()
+
+        val skipped = altarPolling.skippedUsers.filter { it in canVoteIdsSet }.toSet()
+        val notVoted = canVoteIdsSet.filter {
+            it !in votedUserIdsSet &&
+                    it !in skipped
+        }
+
+        val votesCounter = votesStillRelevant
+            .map { it.key to it.value }
+            .groupBy { it.second }
+            .map { it.key to it.value.size }
+        val maxVoteCounter = votesCounter.maxBy { it.second }.second
+        if (notVoted.size > maxVoteCounter) {
+            return null
+        }
+        val godsWithMaxVotes = votesCounter
+            .filter { it.second == maxVoteCounter }
+            .map { vote -> God.values().first { it.getId() == vote.first } }
+        return if (godsWithMaxVotes.size > 1) {
+            null
+        } else {
+            godsWithMaxVotes.first()
+        }
+    }
+
+    fun failRitual(
         globalGameData: GlobalGameData,
-        it: RedisAltarPolling
+        altarPolling: RedisAltarPolling
     ): RedisTimeEvent {
         globalGameData.altarPolling?.state = MapAltarPollingState.FAILED
-        redisAltarPollingRepository.save(it)
+        redisAltarPollingRepository.save(altarPolling)
 
-        globalGameData.altarHolder.state = MapAltarState.ON_HOLD
+        globalGameData.altarHolder.state = MapAltarState.LOCKED
         redisAltarHolderRepository.save(globalGameData.altarHolder)
 
         val cooldownEvent = RedisTimeEvent(
@@ -48,12 +77,40 @@ class RitualHandler(
 
 
     fun finishAltarPolling(
-        it: RedisAltarPolling,
+        altarPolling: RedisAltarPolling,
         globalGameData: GlobalGameData
     ): RedisAltarHolder {
-        redisAltarPollingRepository.delete(it)
+        redisAltarPollingRepository.delete(altarPolling)
 
         globalGameData.altarHolder.state = MapAltarState.OPEN
         return redisAltarHolderRepository.save(globalGameData.altarHolder)
+    }
+
+    fun lockTheGod(
+        quorum: God,
+        altarPolling: RedisAltarPolling,
+        altarHolder: RedisAltarHolder,
+        game: RedisGame
+    ): RedisTimeEvent {
+        altarHolder.lockedGodId = quorum.getId()
+        altarHolder.state = MapAltarState.GOD_LOCKED
+        redisAltarHolderRepository.save(altarHolder)
+
+        redisAltarPollingRepository.delete(altarPolling)
+
+        val cooldownEvent = RedisTimeEvent(
+            id = Generators.timeBasedEpochGenerator().generate().toString(),
+            gameId = game.gameId!!,
+            sourceUserId = null,
+            targetUserId = null,
+            timeStart = game.globalTimer,
+            timePast = 0L,
+            timeLeft = RedisTimeEventType.RITUAL_GOING.getDefaultTime(),
+            type = RedisTimeEventType.RITUAL_GOING,
+            state = RedisTimeEventState.ACTIVE,
+            xLocation = null,
+            yLocation = null,
+        )
+        return timeEventRepository.save(cooldownEvent)
     }
 }

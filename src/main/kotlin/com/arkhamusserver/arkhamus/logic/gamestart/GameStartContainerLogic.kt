@@ -31,19 +31,18 @@ class GameStartContainerLogic(
         levelId: Long, game: GameSession
     ) {
         val allLevelContainers = containerRepository.findByLevelId(levelId)
-        allLevelContainers.forEach { dbContainer ->
+        allLevelContainers.forEachIndexed { i, dbContainer ->
             val modifiers = listOf(
-                when (((dbContainer.inGameId?.toInt() ?: 0) % 10)) {
-                    0 -> FULL_RANDOM
-                    1 -> LOOT_RANDOM
-                    2 -> RARE_LOOT_RANDOM
-                    3 -> CULTIST_LOOT_RANDOM
-                    4 -> CRAFT_T2_RANDOM
-                    5 -> INVESTIGATION_RANDOM
-                    6 -> USEFUL_ITEM_RANDOM
-                    7 -> CULTIST_ITEM_RANDOM
-                    8 -> ADVANCED_USEFUL_ITEM_RANDOM
-                    9 -> ADVANCED_CULTIST_ITEM_RANDOM
+                when (i % 9) {
+                    0 -> LOOT_RANDOM
+                    1 -> RARE_LOOT_RANDOM
+                    2 -> CULTIST_LOOT_RANDOM
+                    3 -> CRAFT_T2_RANDOM
+                    4 -> INVESTIGATION_RANDOM
+                    5 -> USEFUL_ITEM_RANDOM
+                    6 -> CULTIST_ITEM_RANDOM
+                    7 -> ADVANCED_USEFUL_ITEM_RANDOM
+                    8 -> ADVANCED_CULTIST_ITEM_RANDOM
                     else -> FULL_RANDOM
                 }
             )

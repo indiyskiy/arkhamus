@@ -8,17 +8,13 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AltarOpenRequestProcessData
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.request.AltarOpenRequestMessage
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GodVoteSkipRequestProcessData
+import com.arkhamusserver.arkhamus.view.dto.netty.request.GodVoteSkipRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class AltarOpenNettyRequestHandler(
+class GodVoteSkipNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
@@ -27,7 +23,7 @@ class AltarOpenNettyRequestHandler(
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
-        nettyRequestMessage::class.java == AltarOpenRequestMessage::class.java
+        nettyRequestMessage::class.java == GodVoteSkipRequestMessage::class.java
 
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
@@ -35,25 +31,20 @@ class AltarOpenNettyRequestHandler(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
-    ): AltarOpenRequestProcessData {
+    ): GodVoteSkipRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
-        with(request as AltarOpenRequestMessage) {
+        with(request as GodVoteSkipRequestMessage) {
             val userId = requestDataHolder.userAccount.id
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
             val altarHolder = globalGameData.altarHolder
             val altarPolling = globalGameData.altarPolling
-            val altar = globalGameData.altars[this.altarId]
-            return AltarOpenRequestProcessData(
+            val altar = globalGameData.altars[request.altarId]
+            val canSkip = godVoteHandler.canVote(altarPolling, altarHolder, user)
+            return GodVoteSkipRequestProcessData(
                 altar = altar,
-                altarPolling = altarPolling,
-                altarHolder = altarHolder,
-                voteState = altarPolling?.state ?: MapAltarPollingState.NOT_STARTED,
-                votedForGod = votedForGod(altarPolling, user),
-                godLocked = globalGameData.altarHolder.lockedGodId?.toGod(),
-                voteProcessOpen = godVoteHandler.isVoteProcessOpen(altarPolling, altarHolder),
-                canVote = godVoteHandler.canVote(altarPolling, altarHolder, user),
-                canStartVote = godVoteHandler.canBeStarted(altarHolder, altar, ongoingEvents),
+                canSkip = canSkip,
+                executedSuccessfully = false,
                 gameUser = user,
                 otherGameUsers = users,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
@@ -70,14 +61,4 @@ class AltarOpenNettyRequestHandler(
         }
     }
 
-    private fun votedForGod(
-        altarPolling: RedisAltarPolling?,
-        user: RedisGameUser
-    ) = altarPolling?.userVotes?.get(user.userId)?.toGod()
-
-    private fun Long.toGod() =
-        God.values().firstOrNull { it.getId() == this }
 }
-
-
-

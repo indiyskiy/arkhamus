@@ -9,5 +9,6 @@ import org.springframework.data.redis.core.index.Indexed
 data class RedisAltarHolder(
     @Id var id: String,
     @Indexed var gameId: Long,
+    var lockedGodId: Long? = null,
     var state: MapAltarState = MapAltarState.OPEN,
 )

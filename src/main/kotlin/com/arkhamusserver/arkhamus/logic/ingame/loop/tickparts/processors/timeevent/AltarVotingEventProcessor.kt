@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class AltarVotingEventProcessor(
-    private val ritualHandler: RitualHandler
+    private val ritualHandler: RitualHandler,
 ) : TimeEventProcessor {
     override fun accept(type: RedisTimeEventType): Boolean =
         type == RedisTimeEventType.ALTAR_VOTING
@@ -34,10 +34,14 @@ class AltarVotingEventProcessor(
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
-        globalGameData.altarPolling?.let {
-            ritualHandler.failRitual(globalGameData, it)
+        globalGameData.altarPolling?.let { altarPolling ->
+            val quorum = ritualHandler.gotQuorum(globalGameData.users.values, altarPolling)
+            if (quorum != null) {
+                ritualHandler.lockTheGod(quorum, altarPolling, globalGameData.altarHolder, globalGameData.game)
+            } else {
+                ritualHandler.failRitual(globalGameData, altarPolling)
+            }
         }
     }
-
 
 }

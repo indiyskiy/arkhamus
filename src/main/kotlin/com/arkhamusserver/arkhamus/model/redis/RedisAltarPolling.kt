@@ -13,5 +13,6 @@ data class RedisAltarPolling(
     var altarId: Long,
     var startedUserId: Long,
     var userVotes: MutableMap<Long, Long> = HashMap(),
+    var skippedUsers: List<Long> = ArrayList(),
     var started: Long,
 )

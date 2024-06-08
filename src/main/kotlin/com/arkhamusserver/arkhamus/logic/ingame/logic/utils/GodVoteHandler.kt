@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class GodVoteHandler {
+class GodVoteHandler(
+    private val madnessHandler: UserMadnessHandler
+) {
 
     companion object {
         var logger: Logger = LoggerFactory.getLogger(InventoryHandler::class.java)
@@ -23,23 +25,19 @@ class GodVoteHandler {
         altarHolder: RedisAltarHolder,
         altar: RedisAltar?,
         ongoingEvents: List<OngoingEvent>
-    ): Boolean {
-        return getAltarIsOpen(altarHolder) && getAltarExist(altar)
-    }
+    ): Boolean =
+        getAltarIsOpen(altarHolder) && getAltarExist(altar)
 
     fun canVote(
         altarPolling: RedisAltarPolling?,
         altarHolder: RedisAltarHolder?,
         user: RedisGameUser
-    ) = canVote(altarPolling, altarHolder, user.userId)
-
-    fun canVote(
-        altarPolling: RedisAltarPolling?,
-        altarHolder: RedisAltarHolder?,
-        userId: Long?
-    ) = userId != null &&
+    ) = altarPolling != null &&
+            altarHolder != null &&
             isVoteProcessOpen(altarPolling, altarHolder) &&
-            ((altarPolling?.userVotes?.get(userId)) == null)
+            ((altarPolling.userVotes[user.userId]) == null) &&
+            usersCanPossiblyVote(user) &&
+            !skipped(altarPolling, user.userId)
 
     fun isVoteProcessOpen(
         altarPolling: RedisAltarPolling?,
@@ -47,6 +45,15 @@ class GodVoteHandler {
     ) =
         (altarPolling?.state == ONGOING) &&
                 (altarHolder?.state == VOTING)
+
+    fun usersCanPossiblyVote(allUsers: Collection<RedisGameUser>) =
+        madnessHandler.filterNotMad(allUsers)
+
+    fun usersCanPossiblyVote(users: RedisGameUser) =
+        !madnessHandler.isCompletelyMad(users)
+
+    private fun skipped(altarPolling: RedisAltarPolling, userId: Long): Boolean =
+        altarPolling.skippedUsers.contains(userId)
 
     private fun getAltarExist(altar: RedisAltar?) = altar != null
 
