@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.actionmerge
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GodVoteCastRequestProcessData
-import com.arkhamusserver.arkhamus.view.dto.netty.request.GodVoteCastRequestMessage
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteCastRequestProcessData
+import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.GodVoteCastRequestMessage
 import org.springframework.stereotype.Component
 
 @Component

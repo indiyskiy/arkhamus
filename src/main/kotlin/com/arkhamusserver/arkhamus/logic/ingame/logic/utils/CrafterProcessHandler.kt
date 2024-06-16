@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.response.CraftProcessResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import org.springframework.stereotype.Component
 
 @Component

@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.actionmerge
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.UpdateCrafterRequestGameData
-import com.arkhamusserver.arkhamus.view.dto.netty.request.UpdateCrafterRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.crafter.UpdateCrafterRequestMessage
 import org.springframework.stereotype.Component
 
 @Component

@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.logic.ingame.item.GodToCorkResolver
+import com.arkhamusserver.arkhamus.logic.ingame.item.RecipesSource
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
@@ -15,6 +17,8 @@ class RitualHandler(
     private val redisAltarPollingRepository: RedisAltarPollingRepository,
     private val redisAltarHolderRepository: RedisAltarHolderRepository,
     private val godVoteHandler: GodVoteHandler,
+    private val godToCorkResolver: GodToCorkResolver,
+    private val recipesSource: RecipesSource
 ) {
     fun gotQuorum(
         allUsers: Collection<RedisGameUser>,
@@ -78,21 +82,34 @@ class RitualHandler(
 
     fun finishAltarPolling(
         altarPolling: RedisAltarPolling,
-        globalGameData: GlobalGameData
+        altarHolder: RedisAltarHolder
     ): RedisAltarHolder {
         redisAltarPollingRepository.delete(altarPolling)
-
-        globalGameData.altarHolder.state = MapAltarState.OPEN
-        return redisAltarHolderRepository.save(globalGameData.altarHolder)
+        unlockTheGod(altarHolder)
+        altarHolder.state = MapAltarState.OPEN
+        return redisAltarHolderRepository.save(altarHolder)
     }
 
     fun lockTheGod(
         quorum: God,
+        altars: List<RedisAltar>,
         altarPolling: RedisAltarPolling,
         altarHolder: RedisAltarHolder,
         game: RedisGame
     ): RedisTimeEvent {
+        val cork = godToCorkResolver.resolve(quorum)
+        val recipe = recipesSource.byId(cork.id)
         altarHolder.lockedGodId = quorum.getId()
+        altarHolder.itemsForRitual = recipe?.ingredients?.associate {
+            it.item.id to it.number
+        } ?: emptyMap()
+        altarHolder.itemsOnAltars = recipe?.ingredients?.associate {
+            it.item.id to 0
+        } ?: emptyMap()
+        altarHolder.itemsIdToAltarId = recipe?.ingredients?.mapIndexed { index, ingredient ->
+            ingredient.item.id to altars[index].altarId
+        }?.toMap() ?: emptyMap()
+
         altarHolder.state = MapAltarState.GOD_LOCKED
         redisAltarHolderRepository.save(altarHolder)
 
@@ -112,5 +129,12 @@ class RitualHandler(
             yLocation = null,
         )
         return timeEventRepository.save(cooldownEvent)
+    }
+
+    fun unlockTheGod(altarHolder: RedisAltarHolder) {
+        altarHolder.lockedGodId = null
+        altarHolder.itemsForRitual = emptyMap()
+        altarHolder.itemsIdToAltarId = emptyMap()
+        altarHolder.itemsOnAltars = emptyMap()
     }
 }

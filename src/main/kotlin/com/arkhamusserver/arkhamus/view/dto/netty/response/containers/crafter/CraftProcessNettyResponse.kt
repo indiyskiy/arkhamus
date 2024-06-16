@@ -1,0 +1,49 @@
+package com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter
+
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.view.dto.netty.response.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+
+class CraftProcessNettyResponse(
+    var recipeId: Int?,
+    var crafterId: Long?,
+    val executedSuccessfully: Boolean,
+    val firstTime: Boolean,
+    sortedUserInventory: List<InventoryCell>,
+    itemsInside: List<InventoryCell>,
+    state: MapObjectState,
+    holdingUser: Long?,
+    tick: Long,
+    userId: Long,
+    myGameUser: MyGameUserResponse,
+    otherGameUsers: List<NettyGameUserResponse>,
+    ongoingEvents: List<OngoingEventResponse>,
+    availableAbilities: List<AbilityOfUserResponse>,
+    ongoingCraftingProcess: List<CraftProcessResponse>,
+    userInventory: List<InventoryCell>,
+    containers: List<RedisContainer>
+) : ExternalInventoryNettyResponse(
+    sortedUserInventory = sortedUserInventory,
+    itemsInside = itemsInside,
+    state = state,
+    holdingUser = holdingUser,
+    tick = tick,
+    userId = userId,
+    myGameUser = myGameUser,
+    otherGameUsers = otherGameUsers,
+    ongoingEvents = ongoingEvents,
+    availableAbilities = availableAbilities,
+    ongoingCraftingProcess = ongoingCraftingProcess,
+    userInventory = userInventory,
+    containers = containers,
+    type = CraftProcessNettyResponse::class.java.simpleName
+), ActionResponse {
+    override fun isExecutedSuccessfully(): Boolean =
+        executedSuccessfully
+
+    override fun isFirstTime(): Boolean =
+        firstTime
+}
