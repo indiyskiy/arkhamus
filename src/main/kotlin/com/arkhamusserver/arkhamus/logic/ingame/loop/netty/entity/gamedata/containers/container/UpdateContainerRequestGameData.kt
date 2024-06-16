@@ -1,6 +1,8 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.container
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ActionProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse

@@ -1,7 +1,8 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.actionmerge
+package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.actionmerge.ritual
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteSkipRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.actionmerge.ActionMergeHandler
 import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.GodVoteSkipRequestMessage
 import org.springframework.stereotype.Component
 

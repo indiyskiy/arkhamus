@@ -37,7 +37,13 @@ class AltarVotingEventProcessor(
         globalGameData.altarPolling?.let { altarPolling ->
             val quorum = ritualHandler.gotQuorum(globalGameData.users.values, altarPolling)
             if (quorum != null) {
-                ritualHandler.lockTheGod(quorum, altarPolling, globalGameData.altarHolder, globalGameData.game)
+                ritualHandler.lockTheGod(
+                    quorum,
+                    globalGameData.altars.values.toList(),
+                    altarPolling,
+                    globalGameData.altarHolder,
+                    globalGameData.game
+                )
             } else {
                 ritualHandler.failRitual(globalGameData, altarPolling)
             }

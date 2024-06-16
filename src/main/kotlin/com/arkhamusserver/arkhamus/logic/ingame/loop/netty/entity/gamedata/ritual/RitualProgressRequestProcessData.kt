@@ -1,25 +1,24 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual
 
-import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
+import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
-class CraftProcessRequestProcessData(
-    var recipe: Recipe?,
-    var crafter: RedisCrafter?,
-    var sortedUserInventory: List<InventoryCell>,
-    var canBeStarted: Boolean,
-    var executedSuccessfully: Boolean,
+class RitualProgressRequestProcessData(
+    var currentGameTime: Long,
+    var ritualEvent: RedisTimeEvent?,
+    var altarHolder: RedisAltarHolder?,
+    ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
-    ongoingCraftingProcess: List<CraftProcessResponse>,
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
     tick: Long
@@ -32,12 +31,4 @@ class CraftProcessRequestProcessData(
     visibleItems = visibleItems,
     containers = containers,
     tick = tick
-), ActionProcessData {
-    override fun executedSuccessfully(): Boolean {
-        return executedSuccessfully
-    }
-
-    override fun updateExecutedSuccessfully(executedSuccessfully: Boolean) {
-        this.executedSuccessfully = executedSuccessfully
-    }
-}
+)

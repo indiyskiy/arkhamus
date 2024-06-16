@@ -7,7 +7,6 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessag
 class RitualPutItemRequestMessage(
     var itemId: Int,
     var itemNumber: Int,
-    var altarId: Long,
     var actionId: Long,
     type: String,
     baseRequestData: BaseRequestData
