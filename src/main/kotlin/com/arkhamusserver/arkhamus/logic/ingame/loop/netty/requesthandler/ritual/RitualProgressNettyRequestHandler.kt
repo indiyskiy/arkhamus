@@ -45,6 +45,7 @@ class RitualProgressNettyRequestHandler(
                     it.event.type == RedisTimeEventType.RITUAL_GOING &&
                             it.event.state == RedisTimeEventState.ACTIVE
                 }?.event,
+                usersInRitual = emptyList(),
                 altarHolder = altarHolder,
                 gameUser = user,
                 otherGameUsers = users,

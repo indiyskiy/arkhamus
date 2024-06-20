@@ -37,9 +37,8 @@ class RitualProgressNettyResponseMapper(
                 ritualGoingData = ritualGoingDataHandler.build(
                     requestProcessData.currentGameTime,
                     requestProcessData.ritualEvent,
-                    requestProcessData.altarHolder,
-                    emptyList() //todo fill users of ritual
-//                    requestProcessData.usersInRitual
+                    requestProcessData.altarHolder!!,
+                    requestProcessData.usersInRitual
                 ),
                 tick = it.tick,
                 userId = user.id!!,

@@ -14,6 +14,7 @@ class RitualProgressRequestProcessData(
     var currentGameTime: Long,
     var ritualEvent: RedisTimeEvent?,
     var altarHolder: RedisAltarHolder?,
+    var usersInRitual: List<RedisGameUser>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,

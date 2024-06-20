@@ -15,16 +15,17 @@ class RitualGoingDataHandler {
     fun build(
         currentGameTime: Long,
         ritualEvent: RedisTimeEvent?,
-        altarHolder: RedisAltarHolder?,
+        altarHolder: RedisAltarHolder,
         usersInRitual: List<RedisGameUser>
     ): RitualGoingDataResponse {
         return RitualGoingDataResponse().apply {
             val gameTimeItemsNotches = countItemsNotches(ritualEvent, altarHolder)
             val currentItemId = countCurrentItem(gameTimeItemsNotches, currentGameTime)
+            this.godId = altarHolder.lockedGodId
             this.altarsContent = mapAltarsContent(altarHolder)
             this.currentItemId = currentItemId
-            this.currentItemMax = altarHolder?.itemsForRitual?.get(currentItemId) ?: 0
-            this.currentItemInside = altarHolder?.itemsOnAltars?.get(currentItemId) ?: 0
+            this.currentItemMax = altarHolder.itemsForRitual[currentItemId] ?: 0
+            this.currentItemInside = altarHolder.itemsOnAltars[currentItemId] ?: 0
             this.gameTimeStart = ritualEvent?.timeStart ?: 0
             this.gameTimeEnd = (ritualEvent?.timeStart ?: 0) + RedisTimeEventType.RITUAL_GOING.getDefaultTime()
             this.gameTimeNow = currentGameTime
