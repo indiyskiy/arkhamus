@@ -19,6 +19,7 @@ class RitualPutItemRequestProcessData(
     var currentGameTime: Long,
     var ritualEvent: RedisTimeEvent?,
     var altarHolder: RedisAltarHolder?,
+    var usersInRitual: List<RedisGameUser>,
     var executedSuccessfully: Boolean,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,

@@ -39,9 +39,8 @@ class RitualPutItemNettyResponseMapper(
                 ritualGoingData = ritualGoingDataHandler.build(
                     requestProcessData.currentGameTime,
                     requestProcessData.ritualEvent,
-                    requestProcessData.altarHolder,
-                    emptyList() //todo fill users of ritual
-//                    requestProcessData.usersInRitual
+                    requestProcessData.altarHolder!!,
+                    requestProcessData.usersInRitual
                 ),
                 executedSuccessfully = it.executedSuccessfully,
                 firstTime = true,

@@ -45,6 +45,7 @@ class RitualPutItemNettyRequestHandler(
             return RitualPutItemRequestProcessData(
                 item = item,
                 itemNumber = request.itemNumber,
+                usersInRitual = emptyList(),
                 currentGameTime = globalGameData.game.globalTimer,
                 canPut = userCanPutItemOnAltar(request, user, item, globalGameData),
                 ritualEvent = ongoingEvents.firstOrNull {
@@ -78,7 +79,7 @@ class RitualPutItemNettyRequestHandler(
             request.itemNumber <= inventoryHandler.howManyItems(user, item) &&
             globalGameData.altarHolder.itemsForRitual.containsKey(item.id) &&
             ((globalGameData.altarHolder.itemsForRitual[item.id] ?: 0) >
-                            (globalGameData.altarHolder.itemsOnAltars[item.id] ?: 0))
+                    (globalGameData.altarHolder.itemsOnAltars[item.id] ?: 0))
 
     private fun Int?.toItem(): Item? = Item.values().firstOrNull { it.id == this }
 }
