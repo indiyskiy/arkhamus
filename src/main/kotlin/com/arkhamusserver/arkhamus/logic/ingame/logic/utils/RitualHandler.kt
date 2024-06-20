@@ -9,6 +9,8 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventReposito
 import com.arkhamusserver.arkhamus.model.enums.ingame.*
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.fasterxml.uuid.Generators
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -20,6 +22,10 @@ class RitualHandler(
     private val godToCorkResolver: GodToCorkResolver,
     private val recipesSource: RecipesSource
 ) {
+    companion object {
+        var logger: Logger = LoggerFactory.getLogger(RitualHandler::class.java)
+    }
+
     fun gotQuorum(
         allUsers: Collection<RedisGameUser>,
         altarPolling: RedisAltarPolling
@@ -97,25 +103,30 @@ class RitualHandler(
         altarHolder: RedisAltarHolder,
         game: RedisGame
     ): RedisTimeEvent {
+        logger.info("locking the god $quorum")
         val cork = godToCorkResolver.resolve(quorum)
-        val recipe = recipesSource.byId(cork.id)
+        logger.info("creating altars for  $cork")
+        val recipe = recipesSource.getAllRecipes().first { it.item==cork }
+        logger.info("recipe for $cork has id ${recipe.recipeId}")
         altarHolder.lockedGodId = quorum.getId()
-        altarHolder.itemsForRitual = recipe?.ingredients?.associate {
+        altarHolder.itemsForRitual = recipe.ingredients.associate {
             it.item.id to it.number
-        } ?: emptyMap()
-        altarHolder.itemsOnAltars = recipe?.ingredients?.associate {
+        }
+        logger.info("items for ritual ${altarHolder.itemsForRitual.size}")
+        altarHolder.itemsOnAltars = recipe.ingredients.associate {
             it.item.id to 0
-        } ?: emptyMap()
-        altarHolder.itemsIdToAltarId = recipe?.ingredients?.mapIndexed { index, ingredient ->
+        }
+        altarHolder.itemsIdToAltarId = recipe.ingredients.mapIndexed { index, ingredient ->
             ingredient.item.id to altars[index].altarId
-        }?.toMap() ?: emptyMap()
+        }.toMap()
 
         altarHolder.state = MapAltarState.GOD_LOCKED
         redisAltarHolderRepository.save(altarHolder)
+        logger.info("god lock finished")
 
         redisAltarPollingRepository.delete(altarPolling)
 
-        val cooldownEvent = RedisTimeEvent(
+        val ritualGoingEvent = RedisTimeEvent(
             id = Generators.timeBasedEpochGenerator().generate().toString(),
             gameId = game.gameId!!,
             sourceUserId = null,
@@ -128,7 +139,7 @@ class RitualHandler(
             xLocation = null,
             yLocation = null,
         )
-        return timeEventRepository.save(cooldownEvent)
+        return timeEventRepository.save(ritualGoingEvent)
     }
 
     fun unlockTheGod(altarHolder: RedisAltarHolder) {
