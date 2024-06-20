@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.GodToCorkResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.RecipesSource
+import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual.GodVoteCastRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
@@ -96,6 +97,36 @@ class RitualHandler(
         unlockTheGod(altarHolder)
         altarHolder.state = MapAltarState.OPEN
         return redisAltarHolderRepository.save(altarHolder)
+    }
+
+    fun tryToForceStartRitual(
+        allUsers: Collection<RedisGameUser>,
+        altarPolling: RedisAltarPolling,
+        altars: Map<Long, RedisAltar>,
+        altarHolder: RedisAltarHolder,
+        events: List<RedisTimeEvent>,
+        game: RedisGame
+    ) {
+        GodVoteCastRequestProcessor.logger.info("tryToForceStart")
+        if (godVoteHandler.everybodyVoted(allUsers, altarPolling)) {
+            val quorum = gotQuorum(allUsers, altarPolling)
+            if (quorum != null) {
+                lockTheGod(
+                    quorum = quorum,
+                    altars = altars.values.toList(),
+                    altarHolder = altarHolder,
+                    events = events,
+                    game = game
+                )
+            } else {
+                failRitual(
+                    altarHolder,
+                    altarPolling,
+                    events,
+                    game
+                )
+            }
+        }
     }
 
     fun lockTheGod(

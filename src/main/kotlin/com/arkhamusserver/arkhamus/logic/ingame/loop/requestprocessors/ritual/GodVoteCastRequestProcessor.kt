@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GodVoteHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
@@ -9,15 +8,20 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritua
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
+import com.arkhamusserver.arkhamus.model.redis.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class GodVoteCastRequestProcessor(
     private val redisAltarPollingRepository: RedisAltarPollingRepository,
-    private val ritualHandler: RitualHandler,
-    private val godVoteHandler: GodVoteHandler
+    private val ritualHandler: RitualHandler
 ) : NettyRequestProcessor {
+
+    companion object {
+        var logger: Logger = LoggerFactory.getLogger(GodVoteCastRequestProcessor::class.java)
+    }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is GodVoteCastRequestProcessData
@@ -28,6 +32,7 @@ class GodVoteCastRequestProcessor(
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
+        logger.info("GodVoteCast process")
         val godVoteCastRequestProcessData = requestDataHolder.requestProcessData as GodVoteCastRequestProcessData
         val god = godVoteCastRequestProcessData.votedGod
         val altarPolling = globalGameData.altarPolling
@@ -44,29 +49,13 @@ class GodVoteCastRequestProcessor(
                     altarPolling = altarPolling,
                     gameData = godVoteCastRequestProcessData
                 )
-                if (godVoteHandler.everybodyVoted(allUsers, altarPolling)) {
-                    val quorum = ritualHandler.gotQuorum(allUsers, altarPolling)
-                    if (quorum != null) {
-                        ritualHandler.lockTheGod(
-                            quorum = quorum,
-                            altars = altars.values.toList(),
-                            altarHolder = altarHolder,
-                            events = events,
-                            game = game
-                        )
-                    } else {
-                        ritualHandler.failRitual(
-                            altarHolder,
-                            altarPolling,
-                            events,
-                            game
-                        )
-                    }
-                }
+                ritualHandler.tryToForceStartRitual(allUsers, altarPolling, altars, altarHolder, events, game)
                 godVoteCastRequestProcessData.executedSuccessfully = true
             }
         }
     }
+
+
 
     private fun castGodVote(
         god: God,

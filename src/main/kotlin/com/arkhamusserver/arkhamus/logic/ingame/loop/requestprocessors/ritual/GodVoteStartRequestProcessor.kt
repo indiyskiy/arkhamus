@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
@@ -19,7 +20,8 @@ import org.springframework.stereotype.Component
 class GodVoteStartRequestProcessor(
     private val timeEventRepository: RedisTimeEventRepository,
     private val redisAltarPollingRepository: RedisAltarPollingRepository,
-    private val redisAltarHolderRepository: RedisAltarHolderRepository
+    private val redisAltarHolderRepository: RedisAltarHolderRepository,
+    private val ritualHandler: RitualHandler
 ) : NettyRequestProcessor {
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
@@ -36,6 +38,11 @@ class GodVoteStartRequestProcessor(
         val altar = godVoteStartRequestProcessData.altar
         if (god != null && altar != null) {
             val canBeStarted = godVoteStartRequestProcessData.canBeStarted
+            val events = globalGameData.timeEvents
+            val allUsers = globalGameData.users.values
+            val altars = globalGameData.altars
+            val altarHolder = globalGameData.altarHolder
+            val game = globalGameData.game
             if (canBeStarted) {
                 createGodVoteStartProcess(
                     gameId = requestDataHolder.gameSession!!.id!!,
@@ -43,7 +50,7 @@ class GodVoteStartRequestProcessor(
                     sourceUserId = requestDataHolder.userAccount.id!!,
                     altar = altar
                 )
-                createGodVote(
+                val altarPolling = createGodVote(
                     god = god,
                     altar = altar,
                     globalGameData = globalGameData,
@@ -51,6 +58,8 @@ class GodVoteStartRequestProcessor(
                 )
                 globalGameData.altarHolder.state = MapAltarState.VOTING
                 redisAltarHolderRepository.save(globalGameData.altarHolder)
+
+                ritualHandler.tryToForceStartRitual(allUsers, altarPolling, altars, altarHolder, events, game)
 
                 godVoteStartRequestProcessData.executedSuccessfully = true
             }
@@ -62,7 +71,7 @@ class GodVoteStartRequestProcessor(
         altar: RedisAltar,
         globalGameData: GlobalGameData,
         gameData: GodVoteStartRequestProcessData
-    ) {
+    ): RedisAltarPolling {
         val userId: Long = gameData.gameUser!!.userId
         val godId = god.getId()
         val altarPolling = RedisAltarPolling(
@@ -75,6 +84,7 @@ class GodVoteStartRequestProcessor(
             state = MapAltarPollingState.ONGOING
         )
         redisAltarPollingRepository.save(altarPolling)
+        return altarPolling
     }
 
     private fun createGodVoteStartProcess(

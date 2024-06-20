@@ -56,17 +56,22 @@ class GodVoteHandler(
         allUsers: Collection<RedisGameUser>,
         altarPolling: RedisAltarPolling
     ): Boolean {
+        logger.info("everybodyVoted?")
         val canVote = usersCanPossiblyVote(allUsers)
         val canVoteIdsSet = canVote.map { it.userId }.toSet()
         val votesStillRelevant = altarPolling.userVotes.filter { it.key in canVoteIdsSet }
         val votedUserIdsSet = votesStillRelevant.map { it.key }.toSet()
-
+        logger.info("voted - ${votedUserIdsSet.size}")
         val skipped = altarPolling.skippedUsers.filter { it in canVoteIdsSet }.toSet()
+        logger.info("skipped ${skipped.size}")
         val notVoted = canVoteIdsSet.filter {
             it !in votedUserIdsSet &&
                     it !in skipped
         }
-        return notVoted.isEmpty()
+        logger.info("not voted ${notVoted.size}")
+        val result = notVoted.isEmpty()
+        logger.info("result $result")
+        return result
     }
 
     private fun skipped(altarPolling: RedisAltarPolling, userId: Long): Boolean =
