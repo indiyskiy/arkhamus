@@ -35,7 +35,12 @@ class RitualGoingEventProcessor(
         currentGameTime: Long
     ) {
         globalGameData.altarPolling?.let {
-            ritualHandler.failRitual(globalGameData, it)
+            ritualHandler.failRitual(
+                globalGameData.altarHolder,
+                it,
+                globalGameData.timeEvents,
+                globalGameData.game
+            )
         }
     }
 

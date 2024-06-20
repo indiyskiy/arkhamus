@@ -52,6 +52,23 @@ class GodVoteHandler(
     fun usersCanPossiblyVote(users: RedisGameUser) =
         !madnessHandler.isCompletelyMad(users)
 
+    fun everybodyVoted(
+        allUsers: Collection<RedisGameUser>,
+        altarPolling: RedisAltarPolling
+    ): Boolean {
+        val canVote = usersCanPossiblyVote(allUsers)
+        val canVoteIdsSet = canVote.map { it.userId }.toSet()
+        val votesStillRelevant = altarPolling.userVotes.filter { it.key in canVoteIdsSet }
+        val votedUserIdsSet = votesStillRelevant.map { it.key }.toSet()
+
+        val skipped = altarPolling.skippedUsers.filter { it in canVoteIdsSet }.toSet()
+        val notVoted = canVoteIdsSet.filter {
+            it !in votedUserIdsSet &&
+                    it !in skipped
+        }
+        return notVoted.isEmpty()
+    }
+
     private fun skipped(altarPolling: RedisAltarPolling, userId: Long): Boolean =
         altarPolling.skippedUsers.contains(userId)
 
@@ -59,5 +76,6 @@ class GodVoteHandler(
 
     private fun getAltarIsOpen(altarHolder: RedisAltarHolder) =
         altarHolder.state == MapAltarState.OPEN
+
 
 }
