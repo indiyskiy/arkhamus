@@ -182,7 +182,8 @@ class RitualHandler(
         allEvents.filter {
             it.type == eventType
         }.forEach {
-            timeEventRepository.save(it)
+            it.state = RedisTimeEventState.PAST
+            timeEventRepository.delete(it)
         }
     }
 

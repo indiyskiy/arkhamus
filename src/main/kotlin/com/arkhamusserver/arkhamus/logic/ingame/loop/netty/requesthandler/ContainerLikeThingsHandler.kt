@@ -18,7 +18,7 @@ class ContainerLikeThingsHandler {
         val oldCrafterItemsList = oldCrafter.items
         val oldGameUserItemsList = oldGameUser.items
 
-        val (summarizedItems: MutableMap<Int, Long>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
+        val (summarizedItems: MutableMap<Int, Int>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
             oldCrafterItemsList,
             oldGameUserItemsList,
             oldGameUser,
@@ -41,7 +41,7 @@ class ContainerLikeThingsHandler {
         val oldContainerItemsList = oldContainer.items
         val oldGameUserItemsList = oldGameUser.items
 
-        val (summarizedItems: MutableMap<Int, Long>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
+        val (summarizedItems: MutableMap<Int, Int>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
             oldContainerItemsList,
             oldGameUserItemsList,
             oldGameUser,
@@ -66,15 +66,15 @@ class ContainerLikeThingsHandler {
             .toMutableMap()
 
     private fun calculateInventory(
-        oldContainerItemsList: MutableMap<Int, Long>,
-        oldGameUserItemsList: MutableMap<Int, Long>,
+        oldContainerItemsList: MutableMap<Int, Int>,
+        oldGameUserItemsList: MutableMap<Int, Int>,
         oldGameUser: RedisGameUser,
         newInventoryContent: List<InventoryCell>
-    ): Pair<MutableMap<Int, Long>, List<InventoryCell>> {
+    ): Pair<MutableMap<Int, Int>, List<InventoryCell>> {
         val oldContainerItems: List<Int> = oldContainerItemsList.toList().filter { it.second > 0 }.map { it.first }
         val oldGameUserItems: List<Int> = oldGameUserItemsList.toList().filter { it.second > 0 }.map { it.first }
         val differentItemTypes = (oldContainerItems + oldGameUserItems).distinct()
-        val summarizedItems: MutableMap<Int, Long> = differentItemTypes.associateWith {
+        val summarizedItems: MutableMap<Int, Int> = differentItemTypes.associateWith {
             ((oldContainerItemsList[it] ?: 0) + (oldGameUser.items[it] ?: 0))
         }.toMutableMap()
         val trueNewInventoryContent: List<InventoryCell> = newInventoryContent.map {

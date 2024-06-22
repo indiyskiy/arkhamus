@@ -59,7 +59,7 @@ class CanAbilityBeCastedHandler(
     private fun haveRequiredItem(ability: Ability, requiredItem: Item?, user: RedisGameUser): Boolean =
         !ability.requiresItem || requiredItem == null || userInventoryHandler.userHaveItem(user, requiredItem)
 
-    private fun numberOfRequiredItems(ability: Ability, requiredItem: Item?, user: RedisGameUser): Long? {
+    private fun numberOfRequiredItems(ability: Ability, requiredItem: Item?, user: RedisGameUser): Int? {
         if (!ability.requiresItem) {
             return null
         }

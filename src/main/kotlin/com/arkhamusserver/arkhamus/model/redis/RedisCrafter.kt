@@ -16,6 +16,6 @@ data class RedisCrafter(
     var x: Double = 0.0,
     var y: Double = 0.0,
     var interactionRadius: Double = 0.0,
-    var items: MutableMap<Int, Long> = HashMap(),
+    var items: MutableMap<Int, Int> = HashMap(),
     var crafterType: CrafterType,
 )

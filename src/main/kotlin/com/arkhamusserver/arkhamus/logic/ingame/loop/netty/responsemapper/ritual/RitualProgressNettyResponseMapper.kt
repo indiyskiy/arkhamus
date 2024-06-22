@@ -35,7 +35,6 @@ class RitualProgressNettyResponseMapper(
         (requestProcessData as RitualProgressRequestProcessData).let {
             return RitualProgressNettyResponse(
                 ritualGoingData = ritualGoingDataHandler.build(
-                    requestProcessData.currentGameTime,
                     requestProcessData.ritualEvent,
                     requestProcessData.altarHolder!!,
                     requestProcessData.usersInRitual

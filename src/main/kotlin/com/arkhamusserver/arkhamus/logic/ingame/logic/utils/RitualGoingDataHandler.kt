@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component
 class RitualGoingDataHandler {
 
     fun build(
-        currentGameTime: Long,
         ritualEvent: RedisTimeEvent?,
         altarHolder: RedisAltarHolder,
         usersInRitual: List<RedisGameUser>
     ): RitualGoingDataResponse {
         return RitualGoingDataResponse().apply {
+            val currentGameTime = ritualEvent?.let { it.timeStart + it.timePast }?:0
             val gameTimeItemsNotches = countItemsNotches(ritualEvent, altarHolder)
             val currentItemId = countCurrentItem(gameTimeItemsNotches, currentGameTime)
             this.godId = altarHolder.lockedGodId
@@ -41,7 +41,7 @@ class RitualGoingDataHandler {
         }?.itemId ?: 0
     }
 
-    private fun countItemsNotches(
+    fun countItemsNotches(
         ritualEvent: RedisTimeEvent?,
         altarHolder: RedisAltarHolder?,
     ): List<ItemNotch> {
@@ -49,16 +49,19 @@ class RitualGoingDataHandler {
         if (altarHolder == null) return emptyList()
         val start = ritualEvent.timeStart
         val size = altarHolder.itemsForRitual.size
-        val step = ritualEvent.type.getDefaultTime() / size
-        return altarHolder.itemsForRitual.map {
-            it
-        }.mapIndexed { index, (item, _) ->
-            ItemNotch().apply {
-                itemId = item
-                gameTimeStart = start + (step * index)
-                gameTimeEnd = start + (step * (index + 1))
+        val step = (ritualEvent.timePast + ritualEvent.timeLeft) / size
+        return altarHolder.itemsForRitual
+            .toList()
+            .sortedBy { it.first }
+            .map {
+                it
+            }.mapIndexed { index, (item, _) ->
+                ItemNotch().apply {
+                    itemId = item
+                    gameTimeStart = start + (step * index)
+                    gameTimeEnd = start + (step * (index + 1))
+                }
             }
-        }
     }
 
     private fun mapAltarsContent(altarHolder: RedisAltarHolder?): List<AltarContent> {

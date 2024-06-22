@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-import java.lang.Long.min
+import kotlin.math.min
 
 @Component
 class InventoryHandler {
@@ -27,7 +27,7 @@ class InventoryHandler {
         return (user.items[requiredItem.id] ?: 0) > 0
     }
 
-    fun howManyItems(user: RedisGameUser, requiredItem: Item?): Long {
+    fun howManyItems(user: RedisGameUser, requiredItem: Item?): Int {
         return requiredItem?.let { user.items[it.id] } ?: 0
     }
 
@@ -37,7 +37,7 @@ class InventoryHandler {
         }
     }
 
-    fun mapUsersItems(items: Map<Int, Long>): List<InventoryCell> {
+    fun mapUsersItems(items: Map<Int, Int>): List<InventoryCell> {
         return items.map {
             InventoryCell(
                 itemId = it.key,
@@ -46,7 +46,7 @@ class InventoryHandler {
         }.sortedByDescending { it.itemId }
     }
 
-    fun mapUsersItems(items: List<Pair<Int, Long>>): List<InventoryCell> {
+    fun mapUsersItems(items: List<Pair<Int, Int>>): List<InventoryCell> {
         return items.map {
             InventoryCell(
                 itemId = it.first,
@@ -65,7 +65,7 @@ class InventoryHandler {
     private fun consumeItem(ingredient: Ingredient, user: RedisGameUser, crafter: RedisCrafter): ConsumedItem {
         logger.info("consuming ${ingredient.number} of ${ingredient.item.name}")
         val itemToConsume = ingredient.item.id
-        val toConsumeBefore = ingredient.number.toLong()
+        val toConsumeBefore = ingredient.number
 
         val itemsInCrafter = crafter.items[itemToConsume] ?: 0
         val canBeConsumedFromCrafter = min(toConsumeBefore, itemsInCrafter)
@@ -80,6 +80,6 @@ class InventoryHandler {
         return ConsumedItem(itemToConsume, canBeConsumedFromUser)
     }
 
-    data class ConsumedItem(var itemId: Int, var number: Long)
+    data class ConsumedItem(var itemId: Int, var number: Int)
 
 }

@@ -67,7 +67,7 @@ class GameStartContainerLogic(
         this.items = randomizeItems(modifiers)
     }
 
-    private fun randomizeItems(modifiers: List<ContainerAffectModifiers>): MutableMap<Int, Long> {
+    private fun randomizeItems(modifiers: List<ContainerAffectModifiers>): MutableMap<Int, Int> {
         return when (modifiers.first()) {
             FULL_RANDOM -> {
                 fullRandom()
@@ -90,9 +90,9 @@ class GameStartContainerLogic(
     }
 
     private fun mapOfType(type: ItemType) =
-        Item.values().filter { it.itemType == type }.associate { it.id to 99L }.toMutableMap()
+        Item.values().filter { it.itemType == type }.associate { it.id to 99 }.toMutableMap()
 
-    private fun godMode(): MutableMap<Int, Long> {
+    private fun godMode(): MutableMap<Int, Int> {
         val items = Item.values().filter {
             it.itemType in setOf(
                 LOOT,
@@ -106,13 +106,13 @@ class GameStartContainerLogic(
                 ADVANCED_CULTIST_ITEM
             )
         }
-        return items.associate { it.id to 99L }.toMutableMap()
+        return items.associate { it.id to 99 }.toMutableMap()
     }
 
-    private fun fullRandom(): MutableMap<Int, Long> {
+    private fun fullRandom(): MutableMap<Int, Int> {
         val items = Item.values().filter {
             it.itemType in setOf(LOOT, RARE_LOOT)
         }.shuffled(random).subList(0, random.nextInt(3) + 1)
-        return items.associate { it.id to (random.nextLong(3) + 1) }.toMutableMap()
+        return items.associate { it.id to (random.nextInt(3) + 1) }.toMutableMap()
     }
 }

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
+import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
@@ -26,6 +27,7 @@ data class GameSession(
     var gameSessionSettings: GameSessionSettings,
 
     var state: GameState,
+    var gameEndReason: GameEndReason? = null,
     var gameType: GameType,
     var god: God? = null,
     var token: String? = null

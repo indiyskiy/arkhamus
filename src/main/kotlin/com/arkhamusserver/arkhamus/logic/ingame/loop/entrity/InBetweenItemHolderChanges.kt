@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 
 data class InBetweenItemHolderChanges(
     val item: Item,
-    val number: Long,
+    val number: Int,
     val userId: Long,
     val itemHolderChangeType: ItemHolderChangeType
 )

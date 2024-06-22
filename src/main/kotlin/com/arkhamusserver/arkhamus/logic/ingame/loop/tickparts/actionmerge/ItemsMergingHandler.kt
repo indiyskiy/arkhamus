@@ -27,7 +27,7 @@ class ItemsMergingHandler {
         val sumAfterMapping = sum.filter { it.value > 0 }
         sumAfterMapping.forEach { notMappedValue ->
             val firstEmptySlot =
-                preMappedInventory.indexOfFirst { it.itemId == Item.PURE_NOTHING.id || it.number == 0L }
+                preMappedInventory.indexOfFirst { it.itemId == Item.PURE_NOTHING.id || it.number == 0 }
             if (firstEmptySlot != -1) {
                 preMappedInventory[firstEmptySlot] = InventoryCell().apply {
                     this.itemId = notMappedValue.key
@@ -44,11 +44,11 @@ class ItemsMergingHandler {
     }
 
     private fun newValueForMapping(
-        mappingNumber: Long,
-        trustfullNumber: Long,
-        sum: MutableMap<Int, Long>,
+        mappingNumber: Int,
+        trustfullNumber: Int,
+        sum: MutableMap<Int, Int>,
         currentItem: Int
-    ): Long {
+    ): Int {
         if (currentItem == Item.PURE_NOTHING.id) {
             return 0
         }

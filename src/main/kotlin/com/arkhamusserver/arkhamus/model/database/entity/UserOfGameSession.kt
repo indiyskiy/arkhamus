@@ -23,6 +23,8 @@ data class UserOfGameSession(
     var roleInGame: RoleTypeInGame? = null,
 
     var classInGame: ClassInGame? = null,
+
+    var won: Boolean? = null,
 ) {
     override fun toString(): String {
         return "UserOfGameSession[" +

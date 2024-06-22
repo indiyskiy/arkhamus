@@ -49,7 +49,7 @@ class OnTickCraftProcess(
 
     private fun addItemToCrafter(
         produced: Item,
-        numberOfItems: Long,
+        numberOfItems: Int,
         crafter: RedisCrafter
     ) {
         val before = crafter.items[produced.id] ?: 0

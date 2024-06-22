@@ -37,6 +37,6 @@ class GameStartCrafterLogic(
         this.x = dbCrafter.x!!
         this.y = dbCrafter.y!!
         this.interactionRadius = dbCrafter.interactionRadius!!
-        this.items = emptyMap<Int, Long>().toMutableMap()
+        this.items = emptyMap<Int, Int>().toMutableMap()
     }
 }

@@ -8,7 +8,7 @@ data class Recipe(
     var item: Item,
     var ingredients: List<Ingredient> = emptyList(),
     var timeToCraft: Long = 0L,
-    var numberOfItems: Long = 1L,
+    var numberOfItems: Int = 1,
     var crafterTypes: List<CrafterType> = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
 )
 
@@ -16,7 +16,7 @@ fun List<Ingredient>.toRecipe(
     recipeId: Int,
     item: Item,
     timeToCraft: Long = 0L,
-    numberOfItems: Long = 1L,
+    numberOfItems: Int = 1,
     crafterTypes: List<CrafterType> = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
 ) =
     this.let {

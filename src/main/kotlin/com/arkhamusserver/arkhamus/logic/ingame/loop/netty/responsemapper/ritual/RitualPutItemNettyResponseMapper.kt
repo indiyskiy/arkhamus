@@ -37,7 +37,6 @@ class RitualPutItemNettyResponseMapper(
                 itemId = requestProcessData.item?.id,
                 itemNumber = requestProcessData.itemNumber,
                 ritualGoingData = ritualGoingDataHandler.build(
-                    requestProcessData.currentGameTime,
                     requestProcessData.ritualEvent,
                     requestProcessData.altarHolder!!,
                     requestProcessData.usersInRitual
