@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyR
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.RitualPutItemRequestMessage
@@ -45,7 +46,7 @@ class RitualPutItemNettyRequestHandler(
             return RitualPutItemRequestProcessData(
                 item = item,
                 itemNumber = request.itemNumber,
-                usersInRitual = emptyList(),
+                usersInRitual = users.filter { it.stateTags.contains(UserStateTag.IN_RITUAL.name) },
                 currentGameTime = globalGameData.game.globalTimer,
                 canPut = userCanPutItemOnAltar(request, user, item, globalGameData),
                 ritualEvent = ongoingEvents.firstOrNull {

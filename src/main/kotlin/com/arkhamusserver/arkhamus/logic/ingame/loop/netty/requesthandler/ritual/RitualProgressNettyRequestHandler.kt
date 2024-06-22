@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritua
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.RitualProgressRequestMessage
 import org.springframework.stereotype.Component
@@ -45,7 +46,7 @@ class RitualProgressNettyRequestHandler(
                     it.event.type == RedisTimeEventType.RITUAL_GOING &&
                             it.event.state == RedisTimeEventState.ACTIVE
                 }?.event,
-                usersInRitual = emptyList(),
+                usersInRitual = users.filter { it.stateTags.contains(UserStateTag.IN_RITUAL.name) },
                 altarHolder = altarHolder,
                 gameUser = user,
                 otherGameUsers = users,
