@@ -6,8 +6,8 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.AuthState
-import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponseAuth
 import org.springframework.stereotype.Component
 
@@ -31,7 +31,7 @@ class AuthNettyResponseMapper(
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(gameUser),
                 allGameUsers = otherUsers.map {
-                    NettyGameUserResponse(it)
+                    GameUserResponse(it)
                 }
             )
         } else {

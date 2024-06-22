@@ -3,9 +3,7 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.containers.container
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class OpenContainerNettyResponse(
     var itemsInside: List<InventoryCell> = emptyList(),
@@ -14,7 +12,7 @@ class OpenContainerNettyResponse(
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,
-    otherGameUsers: List<NettyGameUserResponse>,
+    otherGameUsers: List<GameUserResponse>,
     ongoingEvents: List<OngoingEventResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,

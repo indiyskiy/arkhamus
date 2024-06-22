@@ -9,8 +9,8 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ritual.GodVoteSkipNettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.MyGameUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.OngoingEventResponse
 import org.springframework.stereotype.Component
 
@@ -37,12 +37,7 @@ class GodVoteSkipNettyResponseMapper : NettyResponseMapper {
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!),
                 otherGameUsers = it.otherGameUsers.map { gameUser ->
-                    NettyGameUserResponse(
-                        id = gameUser.userId,
-                        nickName = gameUser.nickName,
-                        x = gameUser.x,
-                        y = gameUser.y
-                    )
+                    GameUserResponse(gameUser)
                 },
                 ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
                     OngoingEventResponse(event)

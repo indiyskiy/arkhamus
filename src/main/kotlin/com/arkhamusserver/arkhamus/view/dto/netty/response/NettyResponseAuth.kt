@@ -1,13 +1,15 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.model.enums.AuthState
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 
 class NettyResponseAuth(
     val message: AuthState = AuthState.FAIL,
     tick: Long = -1,
     userId: Long,
     myGameUser: MyGameUserResponse,
-    allGameUsers: List<NettyGameUserResponse>,
+    allGameUsers: List<GameUserResponse>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,

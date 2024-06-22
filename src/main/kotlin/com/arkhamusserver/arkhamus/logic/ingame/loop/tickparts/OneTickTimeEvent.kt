@@ -50,11 +50,11 @@ class OneTickTimeEvent(
         event.timePast += timeAdd
         event.timeLeft -= timeAdd
         if (event.timeLeft > 0) {
-//            logger.info("process ${event.type}")
+//            logger.debug("process ${event.type}")
             applyProcessors(event, globalGameData, currentGameTime)
             timeEventRepository.save(event)
         } else {
-//            logger.info("end ${event.type}")
+//            logger.debug("end ${event.type}")
             applyEndProcessors(event, globalGameData, currentGameTime)
             event.state = RedisTimeEventState.PAST
             timeEventRepository.delete(event)

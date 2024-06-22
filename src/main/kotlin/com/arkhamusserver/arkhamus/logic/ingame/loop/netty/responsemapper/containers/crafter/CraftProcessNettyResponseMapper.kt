@@ -14,6 +14,8 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessag
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.CraftProcessNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -53,12 +55,7 @@ class CraftProcessNettyResponseMapper(
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!),
                 otherGameUsers = it.otherGameUsers.map { gameUser ->
-                    NettyGameUserResponse(
-                        id = gameUser.userId,
-                        nickName = gameUser.nickName,
-                        x = gameUser.x,
-                        y = gameUser.y
-                    )
+                    GameUserResponse(gameUser)
                 },
                 ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
                     OngoingEventResponse(event)

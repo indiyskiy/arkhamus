@@ -18,6 +18,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessRes
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.OpenCrafterNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import org.springframework.stereotype.Component
 
 @Component
