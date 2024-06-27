@@ -421,7 +421,8 @@ class GameThreadPoolTest {
                 classInGame = ClassInGame.MIND_HEALER,
                 gameId = gameSession.id!!,
                 madness = 0.0,
-                madnessNotches = listOf(100.0, 300.0, 600.0)
+                madnessNotches = listOf(100.0, 300.0, 600.0),
+                connected = true
             )
         }
 

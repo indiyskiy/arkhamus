@@ -2,13 +2,16 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
+import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class GameNettyLogic(
-    val gameThreadPool: GameThreadPool
+    val gameThreadPool: GameThreadPool,
+    val userRepository: RedisGameUserRepository
 ) {
     companion object {
         val logger: Logger = LoggerFactory.getLogger(GameNettyLogic::class.java)
@@ -21,6 +24,20 @@ class GameNettyLogic(
             gameThreadPool.addTask(nettyTickRequestMessageContainer)
         } catch (exception: Exception) {
             logger.error("error on processing request", exception)
+        }
+    }
+
+    fun markPlayerDisconnected(user: UserOfGameSession) {
+        userRepository.findByUserIdAndGameId(user.id!!, user.gameSession.id!!).firstOrNull()?.let{ redisUser ->
+            redisUser.connected = false
+            userRepository.save(redisUser)
+        }
+    }
+
+    fun markPlayerConnected(user: UserOfGameSession) {
+        userRepository.findByUserIdAndGameId(user.id!!, user.gameSession.id!!).firstOrNull()?.let{ redisUser ->
+            redisUser.connected = true
+            userRepository.save(redisUser)
         }
     }
 }

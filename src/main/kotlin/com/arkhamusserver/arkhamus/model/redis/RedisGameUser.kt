@@ -19,5 +19,6 @@ data class RedisGameUser(
     var madness: Double,
     var madnessNotches: List<Double>,
     var items: MutableMap<Int, Int> = HashMap(),
-    var stateTags: MutableSet<String> = mutableSetOf()
+    var stateTags: MutableSet<String> = mutableSetOf(),
+    var connected: Boolean
 )

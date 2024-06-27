@@ -32,7 +32,11 @@ class InGameStartGameHandler(
         authData.game?.id?.let { gameId ->
             val channels = channelRepository.getByGameId(gameId)
             if (allUsersAuthorised(channels, authData)) {
-                startTheGame(authData, channels)
+                if (gamePending(authData)) {
+                    startTheGame(authData, channels)
+                } else {
+                    logger.info("Non-pending game state ${authData.game?.state} when user account ${authData.userAccount?.id} connected")
+                }
             } else {
                 logger.info("not all users authorised, still waiting")
             }
@@ -90,4 +94,5 @@ class InGameStartGameHandler(
     ) = (channels.mapNotNull { it.userAccount?.id }
         .toSet() == authData.game?.usersOfGameSession?.mapNotNull { it.userAccount.id }?.toSet())
 
+    private fun gamePending(authData: AuthRequestProcessData) = authData.game?.state == GameState.PENDING
 }

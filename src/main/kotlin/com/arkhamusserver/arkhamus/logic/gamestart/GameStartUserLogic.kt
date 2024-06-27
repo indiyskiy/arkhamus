@@ -43,7 +43,8 @@ class GameStartUserLogic(
                 role = it.roleInGame!!,
                 classInGame = it.classInGame!!,
                 madness = 0.0,
-                madnessNotches = listOf(100.0, 300.0, 600.0)
+                madnessNotches = listOf(100.0, 300.0, 600.0),
+                connected = true
             ).apply {
                 this.x = marker.x!!
                 this.y = marker.y!!

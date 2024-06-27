@@ -13,6 +13,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
 import io.netty.channel.ChannelHandler.Sharable
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
+import io.netty.handler.timeout.ReadTimeoutException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -35,7 +36,7 @@ class ProcessingHandler(
             logger.info("Client joined")
             val arkhamusChannel = ArkhamusChannel(
                 channel = ctx.channel(),
-                channelId = ctx.channel().id().asLongText()
+                channelId = ctx.channelId()
             )
             channelRepository.put(arkhamusChannel)
         } catch (e: Exception) {
@@ -48,12 +49,18 @@ class ProcessingHandler(
         requestData: NettyRequestMessage
     ) {
         try {
-            val id = context.channel().id().asLongText()
+            val id = context.channelId()
             val arkhamusChannel = channelRepository.get(id) ?: throw ChannelNotFoundException(id)
 
             if (requestData is AuthRequestMessage) {
                 val authData = inGameAuthHandler.auth(requestData, arkhamusChannel)
-                authData?.let { inGameStartGameHandler.tryToStartGame(it) }
+                authData?.let {
+                    if (it.game?.state == GameState.PENDING) {
+                        inGameStartGameHandler.tryToStartGame(it)
+                    }
+                    // TODO maybe else branch to avoid redundancy?
+                    it.userOfTheGame?.let { user -> gameNettyLogic.markPlayerConnected(user) }
+                }
             }
             val account = arkhamusChannel.userAccount
             if (account == null) {
@@ -97,8 +104,29 @@ class ProcessingHandler(
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
         logger.error("Closing connection for client - $ctx")
         logger.error("Closing connection exception", cause)
-        channelRepository.closeAndRemove(ctx.channel().id().asLongText())
+        // we may have already disabled the channel in channelInactive
+        channelRepository.get(ctx.channelId())?.let{ markChannelInactive(it) }
+        if (cause is ReadTimeoutException) {
+            //TODO handle read timeout exception differently maybe?
+        }
+    }
+
+    override fun channelInactive(ctx: ChannelHandlerContext) {
+        super.channelInactive(ctx)
+        // we may have already disabled the channel in exceptionCaught
+        channelRepository.get(ctx.channelId())?.let{ markChannelInactive(it) }
+    }
+
+    private fun markChannelInactive(arkhamusChannel: ArkhamusChannel) {
+        channelRepository.closeAndRemove(arkhamusChannel.channelId)
+        val user = arkhamusChannel.userOfGameSession
+        if (user == null) {
+            logger.warn("channel.userOfGameSession is null, channel = $arkhamusChannel")
+        } else {
+            gameNettyLogic.markPlayerDisconnected(user)
+        }
     }
 
 }
 
+fun ChannelHandlerContext.channelId(): String = channel().id().asLongText()
