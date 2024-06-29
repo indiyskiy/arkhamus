@@ -399,6 +399,7 @@ class UpdateContainerRequestProcessorTest {
         val redisGame = RedisGame(
             id = gameSession.id.toString(),
             gameId = gameSession.id,
+            godId = 1L,
             currentTick = 100L,
             globalTimer = 10000L,
             gameStart = System.currentTimeMillis(),
@@ -478,7 +479,7 @@ class UpdateContainerRequestProcessorTest {
         return data
     }
 
-    private fun createOldUserItems(): MutableMap<Int, Long> {
+    private fun createOldUserItems(): MutableMap<Int, Int> {
         return mutableMapOf(
             Item.SAINT_QUARTZ.id to 5,
             Item.I2.id to 5,
@@ -488,7 +489,7 @@ class UpdateContainerRequestProcessorTest {
         )
     }
 
-    private fun createContainersItems(): MutableMap<Int, Long> {
+    private fun createContainersItems(): MutableMap<Int, Int> {
         return mutableMapOf(
             Item.SAINT_QUARTZ.id to 5,
             Item.I2.id to 5,

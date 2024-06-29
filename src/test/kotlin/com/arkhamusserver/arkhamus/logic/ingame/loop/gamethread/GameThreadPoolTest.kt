@@ -429,6 +429,7 @@ class GameThreadPoolTest {
         val redisGame = RedisGame(
             gameSession.id.toString(),
             gameSession.id,
+            1,
             currentTick = startingTick
         )
 
