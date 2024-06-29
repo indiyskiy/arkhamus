@@ -73,6 +73,7 @@ class GameThreadPool(
         for (gameSessionId in loopHandlerFutures.keys) {
             val redisGameSession = redisDataAccess.getGame(gameSessionId)
             if (redisGameSession?.state == GameState.FINISHED.name) {
+                logger.info("Trying to end $gameSessionId")
                 cleanGameLoopFuture(gameSessionId)
             }
         }

@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChanne
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.exception.entity.ChannelNotFoundException
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
-import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.GameState.*
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AuthRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
@@ -29,6 +29,7 @@ class ProcessingHandler(
 
     companion object {
         var logger: Logger = LoggerFactory.getLogger(ProcessingHandler::class.java)
+        private val allowedStates = setOf(IN_PROGRESS, GAME_END_SCREEN)
     }
 
     override fun channelActive(ctx: ChannelHandlerContext) {
@@ -53,14 +54,7 @@ class ProcessingHandler(
             val arkhamusChannel = channelRepository.get(id) ?: throw ChannelNotFoundException(id)
 
             if (requestData is AuthRequestMessage) {
-                val authData = inGameAuthHandler.auth(requestData, arkhamusChannel)
-                authData?.let {
-                    if (it.game?.state == GameState.PENDING) {
-                        inGameStartGameHandler.tryToStartGame(it)
-                    }
-                    // TODO maybe else branch to avoid redundancy?
-                    it.userOfTheGame?.let { user -> gameNettyLogic.markPlayerConnected(user) }
-                }
+                auth(requestData, arkhamusChannel)
             }
             val account = arkhamusChannel.userAccount
             if (account == null) {
@@ -74,6 +68,20 @@ class ProcessingHandler(
         }
     }
 
+    private fun auth(
+        requestData: AuthRequestMessage,
+        arkhamusChannel: ArkhamusChannel
+    ) {
+        val authData = inGameAuthHandler.auth(requestData, arkhamusChannel)
+        authData?.let {
+            if (it.game?.state == PENDING) {
+                inGameStartGameHandler.tryToStartGame(it)
+            }
+            // TODO maybe else branch to avoid redundancy?
+            it.userOfTheGame?.let { user -> gameNettyLogic.markPlayerConnected(user) }
+        }
+    }
+
     private fun process(
         requestData: NettyRequestMessage,
         arkhamusChannel: ArkhamusChannel,
@@ -81,7 +89,7 @@ class ProcessingHandler(
     ) {
         if (
             (requestData is NettyBaseRequestMessage) &&
-            (arkhamusChannel.gameSession?.state == GameState.IN_PROGRESS)
+            (arkhamusChannel.gameSession?.state in allowedStates)
         ) {
             val nettyTickRequestMessageDataHolder = NettyTickRequestMessageDataHolder(
                 nettyRequestMessage = requestData,
@@ -105,7 +113,7 @@ class ProcessingHandler(
         logger.error("Closing connection for client - $ctx")
         logger.error("Closing connection exception", cause)
         // we may have already disabled the channel in channelInactive
-        channelRepository.get(ctx.channelId())?.let{ markChannelInactive(it) }
+        channelRepository.get(ctx.channelId())?.let { markChannelInactive(it) }
         if (cause is ReadTimeoutException) {
             //TODO handle read timeout exception differently maybe?
         }
@@ -114,7 +122,7 @@ class ProcessingHandler(
     override fun channelInactive(ctx: ChannelHandlerContext) {
         super.channelInactive(ctx)
         // we may have already disabled the channel in exceptionCaught
-        channelRepository.get(ctx.channelId())?.let{ markChannelInactive(it) }
+        channelRepository.get(ctx.channelId())?.let { markChannelInactive(it) }
     }
 
     private fun markChannelInactive(arkhamusChannel: ArkhamusChannel) {

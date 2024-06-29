@@ -42,7 +42,7 @@ class GameEndLogic(
     }
 
     private fun createEndOfGameTimeEvent(game: RedisGame) {
-        logger.info("creating ond of the game event")
+        logger.info("creating end of the game event")
         timeEventHandler.createDefaultEvent(
             game,
             RedisTimeEventType.GAME_END
@@ -64,7 +64,7 @@ class GameEndLogic(
         game: RedisGame,
         gameEndReason: GameEndReason
     ) {
-        logger.info("saving game state")
+        logger.info("saving end game state")
         game.state = GameState.GAME_END_SCREEN.name
         game.gameEndReason = gameEndReason.name
         redisGameRepository.save(game)
@@ -121,6 +121,7 @@ class GameEndLogic(
     }
 
     fun endTheGameCompletely(game: RedisGame) {
+        logger.info("ending the game completely ${game.gameId}")
         game.state = GameState.FINISHED.name
         redisGameRepository.save(game)
 

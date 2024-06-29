@@ -4,12 +4,19 @@ import com.arkhamusserver.arkhamus.logic.ingame.GameEndLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class GameEndEventProcessor(
     private val gameEndLogic: GameEndLogic
 ) : TimeEventProcessor {
+
+    companion object {
+        var logger: Logger = LoggerFactory.getLogger(GameEndLogic::class.java)
+    }
+
     override fun accept(type: RedisTimeEventType): Boolean =
         type == RedisTimeEventType.GAME_END
 
@@ -18,7 +25,7 @@ class GameEndEventProcessor(
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
-
+        logger.info("starting the end of game event")
     }
 
     override fun process(
@@ -27,6 +34,7 @@ class GameEndEventProcessor(
         currentGameTime: Long
     ) {
         if (globalGameData.users.values.all { it.sawTheEndOfTimes }) {
+            logger.info("all users saw the end")
             gameEndLogic.endTheGameCompletely(globalGameData.game)
         }
     }
@@ -36,6 +44,7 @@ class GameEndEventProcessor(
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
+        logger.info("end of game event ends")
         gameEndLogic.endTheGameCompletely(globalGameData.game)
     }
 
