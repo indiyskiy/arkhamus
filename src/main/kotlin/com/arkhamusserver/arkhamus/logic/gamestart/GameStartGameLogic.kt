@@ -29,7 +29,11 @@ class GameStartGameLogic(
         gameSessionRepository.save(game)
 
         gameRepository.save(
-            RedisGame(game.id.toString(), game.id)
+            RedisGame(
+                id = game.id.toString(),
+                gameId = game.id,
+                godId = game.god!!.getId()
+            )
         )
     }
 

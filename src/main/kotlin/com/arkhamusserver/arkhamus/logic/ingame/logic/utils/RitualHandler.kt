@@ -5,17 +5,18 @@ import com.arkhamusserver.arkhamus.logic.ingame.item.RecipesSource
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual.GodVoteCastRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
+import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.*
-import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class RitualHandler(
-    private val timeEventRepository: RedisTimeEventRepository,
+    private val eventHandler: RedisTimeEventHandler,
     private val redisAltarPollingRepository: RedisAltarPollingRepository,
     private val redisAltarHolderRepository: RedisAltarHolderRepository,
     private val godVoteHandler: GodVoteHandler,
@@ -64,28 +65,20 @@ class RitualHandler(
         altarPolling: RedisAltarPolling,
         events: List<RedisTimeEvent>,
         game: RedisGame
-    ): RedisTimeEvent {
+    ) {
+        logger.info("failing ritual")
         altarPolling.state = MapAltarPollingState.FAILED
         redisAltarPollingRepository.save(altarPolling)
 
         altarHolder.state = MapAltarState.LOCKED
         redisAltarHolderRepository.save(altarHolder)
-
-        val cooldownEvent = RedisTimeEvent(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
-            gameId = game.gameId!!,
-            sourceUserId = null,
-            targetUserId = null,
-            timeStart = game.globalTimer,
-            timePast = 0L,
-            timeLeft = RedisTimeEventType.ALTAR_VOTING_COOLDOWN.getDefaultTime(),
-            type = RedisTimeEventType.ALTAR_VOTING_COOLDOWN,
-            state = RedisTimeEventState.ACTIVE,
-            xLocation = null,
-            yLocation = null,
+        logger.info("creating COOLDOWN event")
+        eventHandler.createDefaultEvent(
+            game,
+            RedisTimeEventType.ALTAR_VOTING_COOLDOWN,
         )
-        tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
-        return timeEventRepository.save(cooldownEvent)
+        logger.info("deliting ALTAR_VOTING event")
+        eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
     }
 
 
@@ -135,17 +128,13 @@ class RitualHandler(
         altarHolder: RedisAltarHolder,
         events: List<RedisTimeEvent>,
         game: RedisGame
-    ): RedisTimeEvent {
-        logger.info("locking the god $quorum")
+    ) {
         val cork = godToCorkResolver.resolve(quorum)
-        logger.info("creating altars for  $cork")
         val recipe = recipesSource.getAllRecipes().first { it.item == cork }
-        logger.info("recipe for $cork has id ${recipe.recipeId}")
         altarHolder.lockedGodId = quorum.getId()
         altarHolder.itemsForRitual = recipe.ingredients.associate {
             it.item.id to it.number
         }
-        logger.info("items for ritual ${altarHolder.itemsForRitual.size}")
         altarHolder.itemsOnAltars = recipe.ingredients.associate {
             it.item.id to 0
         }
@@ -155,37 +144,14 @@ class RitualHandler(
 
         altarHolder.state = MapAltarState.GOD_LOCKED
         redisAltarHolderRepository.save(altarHolder)
-        logger.info("god lock finished")
 
-        tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
+        eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
 
-        val ritualGoingEvent = RedisTimeEvent(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
-            gameId = game.gameId!!,
-            sourceUserId = null,
-            targetUserId = null,
-            timeStart = game.globalTimer,
-            timePast = 0L,
-            timeLeft = RedisTimeEventType.RITUAL_GOING.getDefaultTime(),
-            type = RedisTimeEventType.RITUAL_GOING,
-            state = RedisTimeEventState.ACTIVE,
-            xLocation = null,
-            yLocation = null,
+        eventHandler.createDefaultEvent(
+            game, RedisTimeEventType.RITUAL_GOING
         )
-        return timeEventRepository.save(ritualGoingEvent)
     }
 
-    private fun tryToDeleteEvent(
-        eventType: RedisTimeEventType,
-        allEvents: List<RedisTimeEvent>
-    ) {
-        allEvents.filter {
-            it.type == eventType
-        }.forEach {
-            it.state = RedisTimeEventState.PAST
-            timeEventRepository.delete(it)
-        }
-    }
 
     fun unlockTheGod(altarHolder: RedisAltarHolder) {
         altarHolder.lockedGodId = null

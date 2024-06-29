@@ -1,21 +1,20 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RedisTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 
 @Component
 class NightTimeEventProcessor(
-    private val timeEventRepository: RedisTimeEventRepository,
     private val userLocationHandler: UserLocationHandler,
     private val userMadnessHandler: UserMadnessHandler,
+    private val redisTimeEventHandler: RedisTimeEventHandler,
 ) : TimeEventProcessor {
     override fun accept(type: RedisTimeEventType): Boolean =
         type == RedisTimeEventType.NIGHT
@@ -58,20 +57,12 @@ class NightTimeEventProcessor(
     }
 
     private fun createDay(gameId: Long, currentGameTime: Long) {
-        val night = RedisTimeEvent(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
-            gameId = gameId,
-            sourceUserId = null,
-            targetUserId = null,
-            timeStart = currentGameTime,
-            timeLeft = RedisTimeEventType.DAY.getDefaultTime(),
-            timePast = 0L,
-            type = RedisTimeEventType.DAY,
-            state = RedisTimeEventState.ACTIVE,
-            xLocation = null,
-            yLocation = null
+        redisTimeEventHandler.createDefaultEvent(
+            gameId,
+            RedisTimeEventType.DAY,
+            currentGameTime,
+            sourceUser = null
         )
-        timeEventRepository.save(night)
     }
 
 }

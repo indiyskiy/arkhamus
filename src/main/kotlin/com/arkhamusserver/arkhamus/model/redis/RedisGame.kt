@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.index.Indexed
 data class RedisGame(
     @Id var id: String,
     @Indexed var gameId: Long?,
+    var godId: Long,
     var currentTick: Long = -1,
     var globalTimer: Long = 0,
     var gameStart: Long = System.currentTimeMillis(),

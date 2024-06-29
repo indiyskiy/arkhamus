@@ -1,19 +1,17 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RedisTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 
 @Component
 class SummonNightAbilityCast(
-    private val timeEventRepository: RedisTimeEventRepository,
+    private val redisTimeEventHandler: RedisTimeEventHandler
 ) : AbilityCast {
     override fun accept(ability: Ability): Boolean {
         return ability == Ability.SUMMON_NIGHT
@@ -25,30 +23,19 @@ class SummonNightAbilityCast(
         globalGameData: GlobalGameData
     ) {
         createSummonedNightEvent(
-            globalGameData.game.gameId!!,
-            globalGameData.game.globalTimer,
+            globalGameData.game,
             abilityRequestProcessData.gameUser!!
         )
     }
 
     private fun createSummonedNightEvent(
-        gameId: Long,
-        currentGameTime: Long,
+        game: RedisGame,
         sourceUser: RedisGameUser
     ) {
-        val night = RedisTimeEvent(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
-            gameId = gameId,
-            sourceUserId = sourceUser.userId,
-            targetUserId = null,
-            timeStart = currentGameTime,
-            timeLeft = RedisTimeEventType.NIGHT.getDefaultTime(),
-            timePast = 0L,
-            type = RedisTimeEventType.SUMMONED_NIGHT,
-            state = RedisTimeEventState.ACTIVE,
-            xLocation = sourceUser.x,
-            yLocation = sourceUser.y
+        redisTimeEventHandler.createDefaultEvent(
+            game,
+            RedisTimeEventType.SUMMONED_NIGHT,
+            sourceUser
         )
-        timeEventRepository.save(night)
     }
 }

@@ -37,7 +37,7 @@ class GodAwakenEventProcessor(
         currentGameTime: Long
     ) {
         event.state = RedisTimeEventState.PAST
-        gameEndLogic.endTheGame(globalGameData.game, GameEndReason.GOD_AWAKEN)
+        gameEndLogic.endTheGame(globalGameData.game, globalGameData.users, GameEndReason.GOD_AWAKEN)
     }
 
 }

@@ -8,6 +8,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag.IN_RITUAL
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.cos
 import kotlin.math.sin
@@ -17,6 +19,11 @@ class RitualGoingEventProcessor(
     private val ritualHandler: RitualHandler,
     private val distanceHandler: DistanceHandler
 ) : TimeEventProcessor {
+
+    companion object {
+        var logger: Logger = LoggerFactory.getLogger(RitualGoingEventProcessor::class.java)
+    }
+
     override fun accept(type: RedisTimeEventType): Boolean =
         type == RedisTimeEventType.RITUAL_GOING
 
@@ -25,6 +32,7 @@ class RitualGoingEventProcessor(
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
+        logger.info("RITUAL_GOING process started")
         addUsersToRitual(globalGameData)
     }
 
@@ -49,6 +57,7 @@ class RitualGoingEventProcessor(
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
+        logger.info("RITUAL_GOING process ending")
         globalGameData.altarPolling?.let {
             ritualHandler.failRitual(
                 globalGameData.altarHolder,
@@ -57,9 +66,18 @@ class RitualGoingEventProcessor(
                 globalGameData.game
             )
         }
-        globalGameData.users.values.forEach { user ->
-            user.stateTags.remove(IN_RITUAL.name)
-        }
+        logger.info("ritual failed")
+        globalGameData
+            .users
+            .values
+            .filter { user ->
+                user.stateTags.contains(IN_RITUAL.name)
+            }
+            .forEach { user ->
+                user.stateTags.remove(IN_RITUAL.name)
+            }
+        logger.info("users from ritual removed")
+        logger.info("RITUAL_GOING process ended")
     }
 
 

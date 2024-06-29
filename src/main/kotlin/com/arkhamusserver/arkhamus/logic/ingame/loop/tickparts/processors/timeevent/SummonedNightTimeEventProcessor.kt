@@ -49,6 +49,7 @@ class SummonedNightTimeEventProcessor(
 
     private fun isCommonNight(globalGameData: GlobalGameData) =
         globalGameData.timeEvents.any {
-            it.state == RedisTimeEventState.ACTIVE && it.type == RedisTimeEventType.NIGHT
+            it.state == RedisTimeEventState.ACTIVE &&
+                    it.type == RedisTimeEventType.NIGHT
         }
 }

@@ -9,6 +9,7 @@ enum class RedisTimeEventType(
 ) {
 
     //global
+    GAME_END(Long.MAX_VALUE, Visibility.PUBLIC), //as long as possible
     GOD_AWAKEN((DAY_LENGTH + NIGHT_LENGTH) * 60 * 1000 * 5, Visibility.PUBLIC), //5 day-night cycles
     DAY(DAY_LENGTH * 60 * 1000, Visibility.PUBLIC),
     NIGHT(NIGHT_LENGTH * 60 * 1000, Visibility.PUBLIC),

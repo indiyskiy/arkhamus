@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RedisTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
@@ -8,20 +9,21 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritua
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
+import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 
 @Component
 class GodVoteStartRequestProcessor(
-    private val timeEventRepository: RedisTimeEventRepository,
     private val redisAltarPollingRepository: RedisAltarPollingRepository,
     private val redisAltarHolderRepository: RedisAltarHolderRepository,
-    private val ritualHandler: RitualHandler
+    private val ritualHandler: RitualHandler,
+    private val redisTimeEventHandler: RedisTimeEventHandler,
 ) : NettyRequestProcessor {
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
@@ -93,20 +95,13 @@ class GodVoteStartRequestProcessor(
         sourceUserId: Long,
         altar: RedisAltar
     ) {
-        val godVoteStartProcess = RedisTimeEvent(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
-            gameId = gameId,
-            sourceUserId = sourceUserId,
-            targetUserId = null,
-            timeStart = globalTimer,
-            timeLeft = RedisTimeEventType.ALTAR_VOTING.getDefaultTime(),
-            timePast = 0L,
-            type = RedisTimeEventType.ALTAR_VOTING,
-            state = RedisTimeEventState.ACTIVE,
-            xLocation = altar.x,
-            yLocation = altar.y
+        redisTimeEventHandler.createDefaultEvent(
+            gameId,
+            RedisTimeEventType.ALTAR_VOTING,
+            globalTimer,
+            sourceUserId,
+            altar.x to altar.y
         )
-        timeEventRepository.save(godVoteStartProcess)
     }
 
 }
