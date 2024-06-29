@@ -21,5 +21,6 @@ data class RedisGameUser(
     var items: MutableMap<Int, Int> = HashMap(),
     var stateTags: MutableSet<String> = mutableSetOf(),
     var won: Boolean? = null,
+    var sawTheEndOfTimes: Boolean = false,
     var connected: Boolean,
 )

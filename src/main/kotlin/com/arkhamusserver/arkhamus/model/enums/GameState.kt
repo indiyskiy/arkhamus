@@ -4,5 +4,6 @@ enum class GameState {
     NEW,
     PENDING,
     IN_PROGRESS,
+    GAME_END_SCREEN,
     FINISHED
 }

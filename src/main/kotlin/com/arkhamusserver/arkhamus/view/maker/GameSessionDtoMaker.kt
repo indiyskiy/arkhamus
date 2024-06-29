@@ -84,7 +84,7 @@ class GameSessionDtoMaker(
                     null
                 }
 
-                FINISHED -> godDtoMaker.convert(godNotNull)
+                GAME_END_SCREEN, FINISHED -> godDtoMaker.convert(godNotNull)
             }
         }
     }
@@ -95,7 +95,7 @@ class GameSessionDtoMaker(
         return gameSession.god?.let { godNotNull ->
             when (gameSession.state) {
                 NEW -> null
-                IN_PROGRESS, PENDING, FINISHED -> godDtoMaker.convert(godNotNull)
+                IN_PROGRESS, PENDING, GAME_END_SCREEN, FINISHED -> godDtoMaker.convert(godNotNull)
             }
         }
     }
@@ -114,7 +114,7 @@ class GameSessionDtoMaker(
                 this.userRole = when (gameSession.state) {
                     NEW -> null
                     IN_PROGRESS, PENDING -> if (isCultist) it.roleInGame else INVESTIGATOR
-                    FINISHED -> it.roleInGame
+                    GAME_END_SCREEN, FINISHED -> it.roleInGame
                 }
                 this.userClass = when (gameSession.state) {
                     NEW -> null
@@ -124,7 +124,7 @@ class GameSessionDtoMaker(
                         null
                     }
 
-                    FINISHED -> it.classInGame
+                    GAME_END_SCREEN, FINISHED -> it.classInGame
                 }
             }
             this.gameSkin = userSkinDtoMaker.toDto(userSkins[it.userAccount.id]!!)
@@ -143,11 +143,11 @@ class GameSessionDtoMaker(
                 this.userRole = when (gameSession.state) {
                     NEW -> null
                     IN_PROGRESS, PENDING -> it.roleInGame
-                    FINISHED -> it.roleInGame
+                    GAME_END_SCREEN, FINISHED -> it.roleInGame
                 }
                 this.userClass = when (gameSession.state) {
                     NEW -> null
-                    IN_PROGRESS, PENDING, FINISHED -> it.classInGame
+                    IN_PROGRESS, PENDING, GAME_END_SCREEN, FINISHED -> it.classInGame
                 }
             }
             this.gameSkin = userSkinDtoMaker.toDto(userSkins[it.userAccount.id]!!)

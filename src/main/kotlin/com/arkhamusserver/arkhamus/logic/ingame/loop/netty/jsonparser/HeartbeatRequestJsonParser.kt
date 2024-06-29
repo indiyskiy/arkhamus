@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class NettyHeartbeatRequestJsonParser : NettyRequestJsonParser {
+class HeartbeatRequestJsonParser : NettyRequestJsonParser {
     override fun getDecodeClass(): Class<out NettyRequestMessage> =
         HeartbeatRequestMessage::class.java
 }

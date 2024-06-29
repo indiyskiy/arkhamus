@@ -31,13 +31,13 @@ class GameEndLogic(
     fun endTheGame(
         game: RedisGame, users: Map<Long, RedisGameUser>, gameEndReason: GameEndReason
     ) {
-        if (game.state == GameState.FINISHED.name) {
+        if (game.state == GameState.FINISHED.name || game.state == GameState.GAME_END_SCREEN.name) {
             logger.info("already finished")
             return
         }
         saveGameState(game, gameEndReason)
         val gameSession = endGameSession(game, gameEndReason)
-        setWinersLoosers(gameSession, gameEndReason, users)
+        setWinnersLosers(gameSession, gameEndReason, users)
         createEndOfGameTimeEvent(game)
     }
 
@@ -49,7 +49,7 @@ class GameEndLogic(
         )
     }
 
-    private fun setWinersLoosers(
+    private fun setWinnersLosers(
         gameSession: GameSession,
         gameEndReason: GameEndReason,
         users: Map<Long, RedisGameUser>
@@ -65,7 +65,7 @@ class GameEndLogic(
         gameEndReason: GameEndReason
     ) {
         logger.info("saving game state")
-        game.state = GameState.FINISHED.name
+        game.state = GameState.GAME_END_SCREEN.name
         game.gameEndReason = gameEndReason.name
         redisGameRepository.save(game)
     }
@@ -76,10 +76,11 @@ class GameEndLogic(
     ): GameSession {
         logger.info("ending game session")
         val gameSession = gameSessionRepository.findById(game.gameId!!).get()
-        gameSession.state = GameState.FINISHED
+        gameSession.state = GameState.GAME_END_SCREEN
         gameSession.gameEndReason = gameEndReason
         gameSession.finishedTimestamp = Timestamp(System.currentTimeMillis())
         gameSessionRepository.save(gameSession)
+
         return gameSession
     }
 
@@ -117,5 +118,14 @@ class GameEndLogic(
                 null -> user.won = false
             }
         }
+    }
+
+    fun endTheGameCompletely(game: RedisGame) {
+        game.state = GameState.FINISHED.name
+        redisGameRepository.save(game)
+
+        val gameSession = gameSessionRepository.findById(game.gameId!!).get()
+        gameSession.state = GameState.FINISHED
+        gameSessionRepository.save(gameSession)
     }
 }
