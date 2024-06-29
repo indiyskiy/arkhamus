@@ -59,7 +59,7 @@ class GameThreadPool(
         }
         val redisGame = redisDataAccess.getGame(gameId)
         // TODO better state handling - e.g. we might want to support pause somehow and other stuff later
-        if (redisGame != null && redisGame.state == GameState.IN_PROGRESS.name) {
+        if (redisGame != null && redisGame.state in GameState.gameInProgressStateStrings) {
             processGameTick(
                 tasks = taskList,
                 gameId = gameId,

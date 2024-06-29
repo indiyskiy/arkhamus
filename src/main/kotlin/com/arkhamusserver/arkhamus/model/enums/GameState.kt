@@ -5,5 +5,10 @@ enum class GameState {
     PENDING,
     IN_PROGRESS,
     GAME_END_SCREEN,
-    FINISHED
+    FINISHED;
+
+    companion object {
+        val gameInProgressStates = setOf(IN_PROGRESS, GAME_END_SCREEN)
+        val gameInProgressStateStrings = gameInProgressStates.map { it.name }.toSet()
+    }
 }

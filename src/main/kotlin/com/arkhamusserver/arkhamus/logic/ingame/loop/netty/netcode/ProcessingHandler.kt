@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChanne
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.exception.entity.ChannelNotFoundException
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.GameState.*
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AuthRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -29,7 +30,6 @@ class ProcessingHandler(
 
     companion object {
         var logger: Logger = LoggerFactory.getLogger(ProcessingHandler::class.java)
-        private val allowedStates = setOf(IN_PROGRESS, GAME_END_SCREEN)
     }
 
     override fun channelActive(ctx: ChannelHandlerContext) {
@@ -89,7 +89,7 @@ class ProcessingHandler(
     ) {
         if (
             (requestData is NettyBaseRequestMessage) &&
-            (arkhamusChannel.gameSession?.state in allowedStates)
+            (arkhamusChannel.gameSession?.state in GameState.gameInProgressStates)
         ) {
             val nettyTickRequestMessageDataHolder = NettyTickRequestMessageDataHolder(
                 nettyRequestMessage = requestData,
@@ -100,6 +100,8 @@ class ProcessingHandler(
                 userRole = arkhamusChannel.userOfGameSession,
             )
             gameNettyLogic.process(nettyTickRequestMessageDataHolder)
+        } else {
+            logger.error("game ended or ${account.id} sent shit")
         }
     }
 
