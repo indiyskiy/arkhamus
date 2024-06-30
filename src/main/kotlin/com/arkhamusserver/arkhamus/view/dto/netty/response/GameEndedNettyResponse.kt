@@ -6,8 +6,9 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 class GameEndedNettyResponse(
     gameEnded: Boolean,
     gameEndReason: String?,
-    winners: List<Long>?,
-    losers: List<Long>?,
+    winners: List<EndOfGameUserResponse>?,
+    losers: List<EndOfGameUserResponse>?,
+    godId: Int,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,

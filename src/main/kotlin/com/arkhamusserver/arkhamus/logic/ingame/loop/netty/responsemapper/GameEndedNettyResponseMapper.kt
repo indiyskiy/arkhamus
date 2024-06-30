@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.GameEndedNettyRespons
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.OngoingEventResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.EndOfGameUserResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -32,8 +33,9 @@ class GameEndedNettyResponseMapper : NettyResponseMapper {
             return GameEndedNettyResponse(
                 gameEnded = it.gameEnded,
                 gameEndReason = it.gameEndReason?.name,
-                winners = it.winners?.map { it.userId },
-                losers = it.losers?.map { it.userId },
+                winners = it.winners?.map { EndOfGameUserResponse(it) },
+                losers = it.losers?.map { EndOfGameUserResponse(it) },
+                godId = it.god.getId(),
 
                 tick = it.tick,
                 userId = user.id!!,

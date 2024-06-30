@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
 data class VoteForGod(
-    var godId: Long,
+    var godId: Int,
     var voteCount: Int,
 )

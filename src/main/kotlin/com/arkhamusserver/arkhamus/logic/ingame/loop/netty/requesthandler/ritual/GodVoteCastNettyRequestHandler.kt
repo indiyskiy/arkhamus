@@ -11,8 +11,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteCastRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
-import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.GodVoteCastRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.GodVoteCastRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -64,5 +64,5 @@ class GodVoteCastNettyRequestHandler(
         }
     }
 
-    private fun Long.toGod(): God? = God.values().firstOrNull { it.getId() == this }
+    private fun Int.toGod(): God? = God.values().firstOrNull { it.getId() == this }
 }

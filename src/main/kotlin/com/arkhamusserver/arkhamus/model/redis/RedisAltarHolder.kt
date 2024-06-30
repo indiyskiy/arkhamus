@@ -10,7 +10,7 @@ data class RedisAltarHolder(
     @Id var id: String,
     @Indexed var gameId: Long,
 
-    var lockedGodId: Long? = null,
+    var lockedGodId: Int? = null,
     var itemsForRitual: Map<Int, Int> = emptyMap(),
     var itemsIdToAltarId: Map<Int, Long> = emptyMap(),
     var itemsOnAltars: Map<Int, Int> = emptyMap(),

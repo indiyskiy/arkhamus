@@ -12,6 +12,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameE
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.God.values
 import com.arkhamusserver.arkhamus.view.dto.netty.request.GameEndedRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.springframework.stereotype.Component
@@ -21,7 +23,7 @@ class GameEndedNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
-    private val crafterProcessHandler: CrafterProcessHandler
+    private val crafterProcessHandler: CrafterProcessHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -52,6 +54,7 @@ class GameEndedNettyRequestHandler(
                 losers = losers,
                 gameUser = user,
                 otherGameUsers = users,
+                god = globalGameData.game.godId.toGod()!!,
                 visibleOngoingEvents = visibleOngoingEvents,
                 availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),
@@ -66,4 +69,7 @@ class GameEndedNettyRequestHandler(
         } ?: return ErrorGameResponse("game session id is null", globalGameData.game.currentTick)
     }
 
+    fun Int.toGod(): God? {
+        return values().firstOrNull { this == it.getId() }
+    }
 }

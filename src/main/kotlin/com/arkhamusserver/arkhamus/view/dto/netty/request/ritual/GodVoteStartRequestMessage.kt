@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 
 class GodVoteStartRequestMessage(
-    var godId: Long,
+    var godId: Int,
     var altarId: Long,
     var actionId: Long,
     type: String,

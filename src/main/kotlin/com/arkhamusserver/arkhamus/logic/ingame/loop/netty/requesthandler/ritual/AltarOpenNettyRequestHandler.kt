@@ -76,7 +76,7 @@ class AltarOpenNettyRequestHandler(
         user: RedisGameUser
     ) = altarPolling?.userVotes?.get(user.userId)?.toGod()
 
-    private fun Long.toGod() =
+    private fun Int.toGod() =
         God.values().firstOrNull { it.getId() == this }
 }
 

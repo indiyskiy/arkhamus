@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.model.enums.ingame
 import com.arkhamusserver.arkhamus.model.enums.ingame.GodType.*
 
 enum class God(
-    private val id: Long,
+    private val id: Int,
     private val godTypes: List<GodType>
 ) {
     AAMON(
@@ -91,6 +91,7 @@ enum class God(
         godTypes
 
 
-    fun getId(): Long =
+    fun getId(): Int =
         id
+
 }

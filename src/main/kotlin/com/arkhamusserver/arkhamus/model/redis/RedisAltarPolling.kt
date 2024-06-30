@@ -12,7 +12,7 @@ data class RedisAltarPolling(
     @Indexed var state: MapAltarPollingState = MapAltarPollingState.ONGOING,
     var altarId: Long,
     var startedUserId: Long,
-    var userVotes: MutableMap<Long, Long> = HashMap(),
+    var userVotes: MutableMap<Long, Int> = HashMap(), //user ID to God ID
     var skippedUsers: List<Long> = ArrayList(),
     var started: Long,
 )

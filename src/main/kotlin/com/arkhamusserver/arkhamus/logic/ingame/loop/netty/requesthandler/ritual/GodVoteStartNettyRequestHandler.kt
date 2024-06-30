@@ -66,5 +66,5 @@ class GodVoteStartNettyRequestHandler(
 
 
 
-    private fun Long.toGod(): God? = God.values().firstOrNull { it.getId() == this }
+    private fun Int.toGod(): God? = God.values().firstOrNull { it.getId() == this }
 }
