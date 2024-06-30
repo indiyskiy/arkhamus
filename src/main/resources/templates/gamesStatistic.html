@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Dashboard</title>
+    <!-- import chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <style>
+        #winRateChart {
+            width: 400px !important;
+            max-width: 400px;
+            max-height: 400px;
+            height: 400px !important;
+            border: 3px solid blue;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/game}" title="All games">All games</a>
+    </footer>
+</div>
+
+<div class="main">
+    <h2>Dashboard</h2>
+    <canvas id="winRateChart"></canvas>
+</div>
+
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/game}" title="All games">All games</a>
+    </footer>
+</div>
+
+<script th:inline="javascript">
+    // <![CDATA[
+    var ctx = document.getElementById('winRateChart');
+    var winRateChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: [[${gameStatisticHolder.labelList}]], // x-axis labels, should be a JavaScript array
+            datasets: [{
+                label: 'Win rate',
+                data: [[${gameStatisticHolder.dataList}]], // y-axis data, should be a JavaScript array
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    // 'rgba(75, 192, 192, 0.6)',
+                    // 'rgba(153, 102, 255, 0.6)'
+                ],
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            // scales: {
+            //     yAxes: [{
+            //         ticks: {
+            //             beginAtZero: true
+            //         }
+            //     }]
+            // }
+        }
+    });
+    // ]]>
+</script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class ISawTheEndOfTimesNettyResponse(
-    gameEnded: Boolean,
+    val gameEnded: Boolean,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,

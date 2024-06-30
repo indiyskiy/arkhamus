@@ -62,7 +62,11 @@ class RitualPutItemRequestProcessor(
             if (altarHolder.isAllItemsPut()) {
                 logger.info("put all item")
                 if (globalGameData.game.godId == altarHolder.lockedGodId) {
-                    gameEndLogic.endTheGame(globalGameData.game, globalGameData.users, GameEndReason.RITUAL_SUCCESS)
+                    gameEndLogic.endTheGame(
+                        globalGameData.game,
+                        globalGameData.users,
+                        GameEndReason.RITUAL_SUCCESS
+                    )
                 } else {
                     justFinishRitual(ongoingEvents)
                 }

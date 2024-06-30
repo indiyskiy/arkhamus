@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import jakarta.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -28,8 +29,11 @@ class GameEndLogic(
         var logger: Logger = LoggerFactory.getLogger(GameEndLogic::class.java)
     }
 
+    @Transactional
     fun endTheGame(
-        game: RedisGame, users: Map<Long, RedisGameUser>, gameEndReason: GameEndReason
+        game: RedisGame,
+        users: Map<Long, RedisGameUser>,
+        gameEndReason: GameEndReason
     ) {
         if (game.state == GameState.FINISHED.name || game.state == GameState.GAME_END_SCREEN.name) {
             logger.info("already finished")
@@ -56,6 +60,7 @@ class GameEndLogic(
     ) {
         logger.info("set winners and losers")
         val databaseUsers = userOfGameSessionRepository.findByGameSessionId(gameSession.id!!)
+        logger.info("found ${databaseUsers.size} users of the game")
         setWonOrLoose(gameEndReason, users, databaseUsers)
         userOfGameSessionRepository.saveAll(databaseUsers)
     }
@@ -85,39 +90,69 @@ class GameEndLogic(
     }
 
     private fun setWonOrLoose(
-        gameEndReason: GameEndReason, users: Map<Long, RedisGameUser>, databaseUsers: List<UserOfGameSession>
+        gameEndReason: GameEndReason, redisUsers: Map<Long, RedisGameUser>, databaseUsers: List<UserOfGameSession>
     ) {
         when (gameEndReason) {
             GameEndReason.GOD_AWAKEN -> cultistsWon(databaseUsers)
             GameEndReason.EVERYBODY_MAD -> cultistsWon(databaseUsers)
             GameEndReason.RITUAL_SUCCESS -> investigatorsWon(databaseUsers)
         }
-        databaseUsers.forEach {
-            val user = users[it.id]
-            user?.let { userNullSafe -> userNullSafe.won = it.won }
+        databaseUsers.forEach { databaseUser ->
+            val redisUser = redisUsers[databaseUser.userAccount.id]
+            redisUser?.let { userNullSafe -> userNullSafe.won = databaseUser.won }
+            logger.info("redis user ${redisUser?.id ?: "null"} won? ${redisUser?.won ?: "null"}")
         }
     }
 
     private fun cultistsWon(users: List<UserOfGameSession>) {
         users.forEach { user ->
             when (user.roleInGame) {
-                RoleTypeInGame.CULTIST -> user.won = true
-                RoleTypeInGame.INVESTIGATOR -> user.won = false
-                RoleTypeInGame.NEUTRAL -> user.won = false
-                null -> user.won = false
+                RoleTypeInGame.CULTIST -> {
+                    user.won = true
+                }
+
+                RoleTypeInGame.INVESTIGATOR -> {
+                    user.won = false
+                }
+
+                RoleTypeInGame.NEUTRAL -> {
+                    user.won = false
+                }
+
+                null -> {
+                    user.won = false
+                }
             }
+            logUserWinStatus(user)
         }
     }
 
     private fun investigatorsWon(users: List<UserOfGameSession>) {
         users.forEach { user ->
             when (user.roleInGame) {
-                RoleTypeInGame.CULTIST -> user.won = false
-                RoleTypeInGame.INVESTIGATOR -> user.won = true
-                RoleTypeInGame.NEUTRAL -> user.won = false
-                null -> user.won = false
+                RoleTypeInGame.CULTIST -> {
+                    user.won = false
+                }
+
+                RoleTypeInGame.INVESTIGATOR -> {
+                    user.won = true
+                }
+
+                RoleTypeInGame.NEUTRAL -> {
+                    user.won = false
+                }
+
+                null -> {
+                    user.won = false
+                }
             }
+            logUserWinStatus(user)
         }
+    }
+
+
+    private fun logUserWinStatus(user: UserOfGameSession) {
+        logger.info("user ${user.userAccount.id} won? ${user.won ?: "null"}")
     }
 
     fun endTheGameCompletely(game: RedisGame) {
