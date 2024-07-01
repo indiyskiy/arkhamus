@@ -108,7 +108,7 @@ class GameSessionDtoMaker(
     ) = gameSession.usersOfGameSession.map {
         InGameUserDto().apply {
             this.userId = it.userAccount.id
-            this.userName = it.userAccount.nickName
+            this.nickName = it.userAccount.nickName
             this.isHost = it.host
             this.role = RoleDto().apply {
                 this.userRole = when (gameSession.state) {
@@ -137,7 +137,7 @@ class GameSessionDtoMaker(
     ) = gameSession.usersOfGameSession.map {
         InGameUserDto().apply {
             this.userId = it.userAccount.id
-            this.userName = it.userAccount.nickName
+            this.nickName = it.userAccount.nickName
             this.isHost = it.host
             this.role = RoleDto().apply {
                 this.userRole = when (gameSession.state) {

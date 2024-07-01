@@ -124,7 +124,7 @@ class GameControllerIT {
 
             if (
                 updatedGameSession.usersInGame!!.first {
-                    it.userName == user.nickName
+                    it.nickName == user.nickName
                 }.role!!.userRole == RoleTypeInGame.CULTIST
                 ) {
                 assertEquals(3, updatedGameSession.usersInGame!!.size)
