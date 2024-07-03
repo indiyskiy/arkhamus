@@ -18,6 +18,7 @@ class JedisCleaner(
     private val redisAltarRepository: RedisAltarRepository,
     private val redisAltarHolderRepository: RedisAltarHolderRepository,
     private val redisAltarPollingRepository: RedisAltarPollingRepository,
+    private val redisLevelZoneRepository: RedisLevelZoneRepository
 
     ) {
     @PostConstruct
@@ -34,6 +35,7 @@ class JedisCleaner(
         redisAltarRepository.deleteAll()
         redisAltarHolderRepository.deleteAll()
         redisAltarPollingRepository.deleteAll()
+        redisLevelZoneRepository.deleteAll()
     }
 
 }
