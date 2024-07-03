@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class UserLocationHandler(
-    private val distanceHandler: DistanceHandler
+    private val geometryUtils: GeometryUtils
 ) {
     fun isInDarkness(user: RedisGameUser, globalGameData: GlobalGameData): Boolean {
         return !nearLantern(user, globalGameData.lanterns.values)
@@ -15,7 +15,7 @@ class UserLocationHandler(
 
     private fun nearLantern(user: RedisGameUser, lanterns: Collection<RedisLantern>): Boolean {
         return lanterns.any {
-            distanceHandler.distanceLessOrEquals(
+            geometryUtils.distanceLessOrEquals(
                 point1X = user.x,
                 point1Y = user.y,
                 point2X = it.x,

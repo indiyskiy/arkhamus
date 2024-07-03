@@ -1,10 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import org.springframework.stereotype.Component
-import kotlin.math.hypot
+import java.awt.geom.Point2D
 
 @Component
-class DistanceHandler {
+class GeometryUtils {
 
     fun distance(
         point1X: Double,
@@ -12,7 +12,7 @@ class DistanceHandler {
         point2X: Double,
         point2Y: Double
     ): Double {
-        return hypot(point1X - point2X, point1Y - point2Y)
+        return Point2D.Double(point1X, point1Y).distance(Point2D.Double(point2X, point2Y))
     }
 
     fun distanceLessOrEquals(

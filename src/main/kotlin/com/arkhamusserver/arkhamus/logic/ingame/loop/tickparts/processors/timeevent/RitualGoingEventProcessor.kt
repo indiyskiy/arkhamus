@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.DistanceHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
@@ -17,7 +17,7 @@ import kotlin.math.sin
 @Component
 class RitualGoingEventProcessor(
     private val ritualHandler: RitualHandler,
-    private val distanceHandler: DistanceHandler
+    private val geometryUtils: GeometryUtils
 ) : TimeEventProcessor {
 
     companion object {
@@ -45,7 +45,7 @@ class RitualGoingEventProcessor(
     }
 
     private fun addUsersToRitual(globalGameData: GlobalGameData) {
-        val center = countCenter(globalGameData.altars.values)
+        val center = globalGameData.altarHolder.x to globalGameData.altarHolder.y
         val altar = globalGameData.altars.values.first()
         val radius = distance(altar, center) + altar.interactionRadius
         addUsersToRitual(globalGameData.users.values, center, radius)
@@ -101,7 +101,7 @@ class RitualGoingEventProcessor(
         radius: Double
     ) {
         users.filterNot { user -> user.inRitual() }.forEach { user ->
-            if (distanceHandler.distanceLessOrEquals(
+            if (geometryUtils.distanceLessOrEquals(
                     center.first, center.second, user.x, user.y, radius
                 )
             ) {
@@ -114,15 +114,9 @@ class RitualGoingEventProcessor(
         altar: RedisAltar,
         center: Pair<Double, Double>
     ): Double {
-        return distanceHandler.distance(
+        return geometryUtils.distance(
             altar.x, altar.y, center.first, center.second
         )
-    }
-
-    private fun countCenter(values: Collection<RedisAltar>): Pair<Double, Double> {
-        val x = values.sumOf { it.x } / values.size
-        val y = values.sumOf { it.y } / values.size
-        return Pair(x, y)
     }
 
     private fun RedisGameUser.inRitual(): Boolean =

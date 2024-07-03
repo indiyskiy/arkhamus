@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.DistanceHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 @Component
 class ThrowPotatoAbilityCast(
     private val inventoryHandler: InventoryHandler,
-    private val distanceHandler: DistanceHandler
+    private val geometryUtils: GeometryUtils
 ) : AbilityCast {
     override fun accept(ability: Ability): Boolean {
         return ability == Ability.THROW_POTATO
@@ -37,7 +37,7 @@ class ThrowPotatoAbilityCast(
             val user = globalGameData.users.values.filter {
                 it.userId != abilityRequestProcessData.gameUser.userId
             }.minByOrNull { user ->
-                distanceHandler.distance(
+                geometryUtils.distance(
                     currentUserNotNull.x,
                     currentUserNotNull.y,
                     user.x,
