@@ -17,9 +17,9 @@ data class Level(
     @CreationTimestamp
     var creationTimestamp: Timestamp? = null,
 
-    var version: Long? = null,
-    var levelId: Long? = null,
-    var levelHeight: Long? = null,
-    var levelWidth: Long? = null,
-    var state: LevelState? = null
+    var version: Long,
+    var levelId: Long,
+    var levelHeight: Long,
+    var levelWidth: Long,
+    var state: LevelState
 )

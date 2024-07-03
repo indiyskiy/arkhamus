@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.model.enums.ingame
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.*
 
-private const val SECOND_IN_MILIS: Long = 1 * 1000
-private const val MINUTE_IN_MILIS: Long = SECOND_IN_MILIS * 60
+private const val SECOND_IN_MILLIS: Long = 1 * 1000
+private const val MINUTE_IN_MILLIS: Long = SECOND_IN_MILLIS * 60
 
 enum class Ability(
     val id: Int,
@@ -18,13 +18,13 @@ enum class Ability(
     HEAL_MADNESS(
         id = 101,
         classBased = true,
-        cooldown = MINUTE_IN_MILIS
+        cooldown = MINUTE_IN_MILLIS
     ),
     THROW_POTATO(
         id = 102,
         requiresItem = true,
         consumesItem = true,
-        cooldown = SECOND_IN_MILIS * 30,
+        cooldown = SECOND_IN_MILLIS * 30,
         globalCooldown = true
     ),
     SUMMON_NIGHT(
@@ -32,7 +32,7 @@ enum class Ability(
         requiresItem = true,
         consumesItem = true,
         availableFor = setOf(CULTIST),
-        cooldown = MINUTE_IN_MILIS * 5,
+        cooldown = MINUTE_IN_MILLIS * 5,
         globalCooldown = true
     ), ;
 

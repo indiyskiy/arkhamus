@@ -42,13 +42,13 @@ class RitualPutItemNettyRequestHandler(
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
             val altarHolder = globalGameData.altarHolder
-            val item = request.itemId.toItem()
+            val item = this.itemId.toItem()
             return RitualPutItemRequestProcessData(
                 item = item,
-                itemNumber = request.itemNumber,
+                itemNumber = this.itemNumber,
                 usersInRitual = users.filter { it.stateTags.contains(UserStateTag.IN_RITUAL.name) },
                 currentGameTime = globalGameData.game.globalTimer,
-                canPut = userCanPutItemOnAltar(request, user, item, globalGameData),
+                canPut = userCanPutItemOnAltar(this, user, item, globalGameData),
                 ritualEvent = ongoingEvents.firstOrNull {
                     it.event.type == RedisTimeEventType.RITUAL_GOING &&
                             it.event.state == RedisTimeEventState.ACTIVE

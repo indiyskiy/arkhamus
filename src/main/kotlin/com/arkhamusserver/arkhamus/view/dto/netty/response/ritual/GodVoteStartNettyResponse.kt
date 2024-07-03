@@ -5,9 +5,9 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class GodVoteStartNettyResponse(
-    private val godId: Int?,
-    private val executedSuccessfully: Boolean,
-    private val firstTime: Boolean,
+    val godId: Int?,
+    val executedSuccessfully: Boolean,
+    val firstTime: Boolean,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,

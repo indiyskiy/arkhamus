@@ -1,14 +1,17 @@
 package com.arkhamusserver.arkhamus.config.database
 
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.*
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.*
 import com.arkhamusserver.arkhamus.model.enums.LevelState
+import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.view.levelDesign.*
+import com.arkhamusserver.arkhamus.view.validator.utils.assertTrue
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import jakarta.annotation.PostConstruct
+import org.postgresql.geometric.PGpoint
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -21,9 +24,14 @@ class LevelDesignInfoProcessor(
     private val containerRepository: ContainerRepository,
     private val lanternRepository: LanternRepository,
     private val altarRepository: AltarRepository,
+    private val ritualAreaRepository: RitualAreaRepository,
+    private val levelZoneRepository: LevelZoneRepository,
+    private val tetragonRepository: TetragonRepository,
+    private val ellipseRepository: EllipseRepository,
     private val crafterRepository: CrafterRepository,
-    private val startMarkerRepository: StartMarkerRepository
-) {
+    private val startMarkerRepository: StartMarkerRepository,
+
+    ) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(LevelDesignInfoProcessor::class.java)
         var gson: Gson = Gson()
@@ -66,7 +74,7 @@ class LevelDesignInfoProcessor(
                 levelsFromDb
                     .filter {
                         (it.levelId == id) &&
-                                (version > (it.version ?: 0)) &&
+                                (version > (it.version)) &&
                                 (it.state != LevelState.INACTIVE)
                     }
                     .forEach {
@@ -81,18 +89,74 @@ class LevelDesignInfoProcessor(
     private fun createAndSaveLevel(levelFromJson: LevelFromJson) {
         logger.info("create level ${levelFromJson.levelId} v.${levelFromJson.levelVersion}")
         val newLevel = Level(
-            levelId = levelFromJson.levelId,
-            version = levelFromJson.levelVersion,
-            levelWidth = levelFromJson.levelWidth,
-            levelHeight = levelFromJson.levelHeight,
+            levelId = levelFromJson.levelId!!,
+            version = levelFromJson.levelVersion!!,
+            levelWidth = levelFromJson.levelWidth!!,
+            levelHeight = levelFromJson.levelHeight!!,
             state = LevelState.ACTIVE
         )
         val savedLevel = levelRepository.save(newLevel)
         processContainers(levelFromJson.containers, savedLevel)
         processLanterns(levelFromJson.lanterns, savedLevel)
         processAltars(levelFromJson.altars, savedLevel)
+        processRitualArea(levelFromJson.ritualAreas, savedLevel)
         processCrafters(levelFromJson.crafters, savedLevel)
         processStartMarkers(levelFromJson.startMarkers, savedLevel)
+        processClueZones(levelFromJson.clueZones, savedLevel)
+    }
+
+    private fun processClueZones(clueZones: List<ClueZoneFromJson>, savedLevel: Level) {
+        clueZones.forEach { clueZone ->
+            val levelZone = LevelZone(
+                inGameId = clueZone.zoneId!!,
+                zoneType = ZoneType.CLUE,
+                level = savedLevel,
+            ).apply {
+                levelZoneRepository.save(this)
+            }
+            processClueTetragons(clueZone.tetragons, levelZone)
+            processClueEllipses(clueZone.ellipses, levelZone)
+        }
+    }
+
+    private fun processClueTetragons(
+        tetragons: List<TetragonFromJson>,
+        levelZone: LevelZone,
+    ) {
+        tetragons.forEach { tetragon ->
+            assertTrue(
+                tetragon.points.size == 4,
+                "Size of tetragon ${tetragon.id} is not 4",
+                TetragonFromJson::class.simpleName!!
+            )
+            Tetragon(
+                inGameId = tetragon.id!!,
+                levelZone = levelZone,
+                point0 = PGpoint(tetragon.points[0].x!!, tetragon.points[0].y!!),
+                point1 = PGpoint(tetragon.points[1].x!!, tetragon.points[1].y!!),
+                point2 = PGpoint(tetragon.points[2].x!!, tetragon.points[2].y!!),
+                point3 = PGpoint(tetragon.points[3].x!!, tetragon.points[3].y!!),
+            ).apply {
+                tetragonRepository.save(this)
+            }
+        }
+    }
+
+    private fun processClueEllipses(
+        ellipses: List<EllipseFromJson>,
+        levelZone: LevelZone,
+    ) {
+        ellipses.forEach { ellipse ->
+            Ellipse(
+                inGameId = ellipse.id!!,
+                levelZone = levelZone,
+                point = PGpoint(ellipse.center!!.x!!, ellipse.center!!.y!!),
+                height = ellipse.height!!,
+                width = ellipse.width!!,
+            ).apply {
+                ellipseRepository.save(this)
+            }
+        }
     }
 
     private fun processContainers(
@@ -101,10 +165,9 @@ class LevelDesignInfoProcessor(
     ) {
         containers.forEach { container ->
             Container(
-                inGameId = container.id,
-                interactionRadius = container.interactionRadius,
-                x = container.x,
-                y = container.y,
+                inGameId = container.id!!,
+                interactionRadius = container.interactionRadius!!,
+                point = PGpoint(container.x!!, container.y!!),
                 level = savedLevel
             ).apply {
                 containerRepository.save(this)
@@ -118,11 +181,10 @@ class LevelDesignInfoProcessor(
     ) {
         containers.forEach { lantern ->
             Lantern(
-                inGameId = lantern.id,
+                inGameId = lantern.id!!,
                 lightRange = lantern.lightRange,
-                x = lantern.x,
-                y = lantern.y,
-                level = savedLevel
+                point = PGpoint(lantern.x!!, lantern.y!!),
+                level = savedLevel!!
             ).apply {
                 lanternRepository.save(this)
             }
@@ -130,18 +192,33 @@ class LevelDesignInfoProcessor(
     }
 
     private fun processAltars(
-        containers: List<AltarFromJson>,
+        altars: List<AltarFromJson>,
         savedLevel: Level?
     ) {
-        containers.forEach { altar ->
+        altars.forEach { altar ->
             Altar(
                 inGameId = altar.id,
                 interactionRadius = altar.interactionRadius,
-                x = altar.x,
-                y = altar.y,
+                point = PGpoint(altar.x!!, altar.y!!),
                 level = savedLevel
             ).apply {
                 altarRepository.save(this)
+            }
+        }
+    }
+
+    private fun processRitualArea(
+        ritualAreas: List<RitualAreaFromJson>,
+        savedLevel: Level?
+    ) {
+        ritualAreas.first().let { ritualArea ->
+            RitualArea(
+                inGameId = ritualArea.id!!,
+                radius = ritualArea.radius!!,
+                point = PGpoint(ritualArea.x!!, ritualArea.y!!),
+                level = savedLevel!!
+            ).apply {
+                ritualAreaRepository.save(this)
             }
         }
     }
@@ -152,12 +229,11 @@ class LevelDesignInfoProcessor(
     ) {
         containers.forEach { crafter ->
             Crafter(
-                inGameId = crafter.id,
-                interactionRadius = crafter.interactionRadius,
-                x = crafter.x,
-                y = crafter.y,
-                level = savedLevel,
-                crafterType = crafter.crafterType,
+                inGameId = crafter.id!!,
+                interactionRadius = crafter.interactionRadius!!,
+                point = PGpoint(crafter.x!!, crafter.y!!),
+                level = savedLevel!!,
+                crafterType = crafter.crafterType!!,
             ).apply {
                 crafterRepository.save(this)
             }
@@ -170,9 +246,8 @@ class LevelDesignInfoProcessor(
     ) {
         containers.forEach { startMarker ->
             StartMarker(
-                x = startMarker.x,
-                y = startMarker.y,
-                level = savedLevel
+                point = PGpoint(startMarker.x!!, startMarker.y!!),
+                level = savedLevel!!
             ).apply {
                 startMarkerRepository.save(this)
             }

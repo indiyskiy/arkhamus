@@ -41,10 +41,10 @@ class GodVoteCastNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.userId != userId }
             val altarHolder = globalGameData.altarHolder
             val altarPolling = globalGameData.altarPolling
-            val altar = globalGameData.altars[request.altarId]
+            val altar = globalGameData.altars[this.altarId]
             val canVote = godVoteHandler.canVote(altarPolling, altarHolder, user)
             return GodVoteCastRequestProcessData(
-                votedGod = request.godId.toGod(),
+                votedGod = this.godId.toGod(),
                 altar = altar,
                 canVote = canVote,
                 executedSuccessfully = false,

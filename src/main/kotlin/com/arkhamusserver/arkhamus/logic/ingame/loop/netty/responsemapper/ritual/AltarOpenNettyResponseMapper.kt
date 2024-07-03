@@ -73,7 +73,7 @@ private fun RedisAltarPolling?.mapVotes(
                     voteCount = it.value.size
                 )
             }?.let {
-                AltarPolling(it, )
+                AltarPolling(it)
             }
     } else {
         null

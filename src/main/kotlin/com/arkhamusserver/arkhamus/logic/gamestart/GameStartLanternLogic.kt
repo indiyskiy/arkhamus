@@ -34,10 +34,10 @@ class GameStartLanternLogic(
         filled: Boolean
     ) = RedisLantern(
         id = Generators.timeBasedEpochGenerator().generate().toString(),
-        lanternId = dbLantern.inGameId!!,
+        lanternId = dbLantern.inGameId,
         gameId = game.id!!,
-        x = dbLantern.x!!,
-        y = dbLantern.y!!,
+        x = dbLantern.point.x,
+        y = dbLantern.point.y,
         lightRange = dbLantern.lightRange!!,
         filled = filled,
         activated = false

@@ -9,5 +9,5 @@ class LevelService(
     private val levelRepository: LevelRepository
 ) {
     fun latestByLevelIdAndVersion(levelId: Long): Level =
-        levelRepository.findByLevelId(levelId).maxBy { it.version ?: -1 }
+        levelRepository.findByLevelId(levelId).maxBy { it.version }
 }

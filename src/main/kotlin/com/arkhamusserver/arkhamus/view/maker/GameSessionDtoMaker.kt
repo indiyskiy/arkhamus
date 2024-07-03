@@ -24,8 +24,8 @@ class GameSessionDtoMaker(
 ) {
 
     companion object {
-        private const val pattern = "dd.MM.yyyy HH:mm:ss"
-        val formatter = DateTimeFormatter.ofPattern(pattern)
+        private const val PATTERN = "dd.MM.yyyy HH:mm:ss"
+        private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern(PATTERN)
     }
 
     fun toDto(

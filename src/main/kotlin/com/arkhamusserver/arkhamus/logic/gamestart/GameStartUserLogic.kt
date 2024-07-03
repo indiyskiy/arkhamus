@@ -38,7 +38,7 @@ class GameStartUserLogic(
             val redisGameUser = RedisGameUser(
                 id = Generators.timeBasedEpochGenerator().generate().toString(),
                 userId = it.userAccount.id!!,
-                nickName = it.userAccount.nickName!!,
+                nickName = it.userAccount.nickName,
                 gameId = game.id!!,
                 role = it.roleInGame!!,
                 classInGame = it.classInGame!!,
@@ -46,8 +46,8 @@ class GameStartUserLogic(
                 madnessNotches = listOf(100.0, 300.0, 600.0),
                 connected = true
             ).apply {
-                this.x = marker.x!!
-                this.y = marker.y!!
+                this.x = marker.point.x
+                this.y = marker.point.y
             }
             redisGameUserRepository.save(redisGameUser)
             GameStartLogic.logger.info("user placed to $redisGameUser")

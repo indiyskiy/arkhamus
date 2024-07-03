@@ -40,10 +40,10 @@ class GodVoteStartNettyRequestHandler(
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
             val altarHolder = globalGameData.altarHolder
-            val altar = globalGameData.altars[request.altarId]
+            val altar = globalGameData.altars[this.altarId]
             val canBeStarted = godVoteHandler.canBeStarted(altarHolder, altar, ongoingEvents)
             return GodVoteStartRequestProcessData(
-                votedGod = request.godId.toGod(),
+                votedGod = this.godId.toGod(),
                 altar = altar,
                 canBeStarted = canBeStarted,
                 executedSuccessfully = false,

@@ -8,8 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequ
 import org.springframework.stereotype.Component
 
 @Component
-class AltarOpenRequestProcessor(
-) : NettyRequestProcessor {
+class AltarOpenRequestProcessor : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is AltarOpenRequestProcessData
     }

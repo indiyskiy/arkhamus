@@ -12,7 +12,11 @@ class ItemsMergingHandler {
         visibleItemsNew: List<InventoryCell>,
     ): List<InventoryCell> {
         val sum =
-            visibleItemsNew.groupBy { it.itemId }.map { it.key to it.value.sumOf { it.number } }.toMap().toMutableMap()
+            visibleItemsNew
+                .groupBy { it.itemId }
+                .map { cell -> cell.key to cell.value.sumOf { it.number } }
+                .toMap()
+                .toMutableMap()
         val preMappedInventory: MutableList<InventoryCell> = sortedUserInventoryNew.map {
             val currentItem = it.itemId
             val mappingNumber = it.number

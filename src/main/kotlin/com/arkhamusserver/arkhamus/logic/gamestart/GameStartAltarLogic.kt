@@ -42,8 +42,8 @@ class GameStartAltarLogic(
         id = Generators.timeBasedEpochGenerator().generate().toString(),
         altarId = dbAltar.inGameId!!,
         gameId = game.id!!,
-        x = dbAltar.x!!,
-        y = dbAltar.y!!,
+        x = dbAltar.point.x,
+        y = dbAltar.point.y,
         interactionRadius = dbAltar.interactionRadius!!,
     )
 

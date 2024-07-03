@@ -30,13 +30,13 @@ class GameStartCrafterLogic(
         dbCrafter: Crafter,
     ) = RedisCrafter(
         id = Generators.timeBasedEpochGenerator().generate().toString(),
-        crafterId = dbCrafter.inGameId!!,
+        crafterId = dbCrafter.inGameId,
         gameId = game.id!!,
-        crafterType = dbCrafter.crafterType!!
+        crafterType = dbCrafter.crafterType
     ).apply {
-        this.x = dbCrafter.x!!
-        this.y = dbCrafter.y!!
-        this.interactionRadius = dbCrafter.interactionRadius!!
+        this.x = dbCrafter.point.x
+        this.y = dbCrafter.point.y
+        this.interactionRadius = dbCrafter.interactionRadius
         this.items = emptyMap<Int, Int>().toMutableMap()
     }
 }

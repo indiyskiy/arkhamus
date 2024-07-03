@@ -38,8 +38,8 @@
 
 <script th:inline="javascript">
     // <![CDATA[
-    var ctx = document.getElementById('winRateChart');
-    var winRateChart = new Chart(ctx, {
+    const ctx = document.getElementById('winRateChart');
+    const winRateChart = new Chart(ctx, {
         type: 'pie',
         data: {
             labels: [[${gameStatisticHolder.labelList}]], // x-axis labels, should be a JavaScript array

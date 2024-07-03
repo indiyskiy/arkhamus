@@ -11,6 +11,6 @@ class LevelDtoMaker {
             levelId = it.levelId
             version = it.version
             name = "tbd"
-            state = it.state?.name ?: "-"
+            state = it.state.name
         }
 }

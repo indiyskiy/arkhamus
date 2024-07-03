@@ -49,9 +49,9 @@ class UsersConfig {
         if (old != null) {
             return old
         } else {
-            Role().apply {
+            Role(
                 name = roleName.securityValue
-            }.also { role ->
+            ).also { role ->
                 return roleRepository.save(role)
             }
         }
@@ -103,12 +103,12 @@ class UsersConfig {
     ) {
         if (!userAccountRepository.findByEmail(email).isPresent) {
             val userAccount = userAccountRepository.save(
-                UserAccount().apply {
-                    this.nickName = nickName
-                    this.email = email
-                    this.password = encoder.encode(password)
-                    this.role = setOf(role)
-                }
+                UserAccount(
+                    nickName = nickName,
+                    email = email,
+                    password = encoder.encode(password),
+                    role = setOf(role),
+                )
             )
             userSkinRepository.save(
                 generateSkin(userAccount)
@@ -117,10 +117,10 @@ class UsersConfig {
     }
 
     private fun generateSkin(userAccount: UserAccount): UserSkinSettings {
-        return UserSkinSettings().apply {
-            this.skinColor = randomSkinColor()
-            this.userAccount = userAccount
-        }
+        return UserSkinSettings(
+            skinColor = randomSkinColor(),
+            userAccount = userAccount
+        )
     }
 
     private fun randomSkinColor(): SkinColor {

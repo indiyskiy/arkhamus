@@ -26,6 +26,45 @@
         "y": 52
       }
     ],
+    "clueZones": [
+      {
+        "ellipses": [
+          {
+            "center": {
+              "x": 15,
+              "y": 56
+            },
+            "height": 28,
+            "id": 401,
+            "width": 28
+          }
+        ],
+        "tetragons": [
+          {
+            "id": 400,
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 33,
+                "y": 0
+              },
+              {
+                "x": 33,
+                "y": 42
+              },
+              {
+                "x": 0,
+                "y": 42
+              }
+            ]
+          }
+        ],
+        "zoneId": 300
+      }
+    ],
     "containers": [
       {
         "id": 1,
@@ -119,10 +158,18 @@
         "y": 38
       }
     ],
-    "levelHeight": 54,
+    "levelHeight": 104,
     "levelId": 1,
     "levelVersion": 1,
-    "levelWidth": 54,
+    "levelWidth": 104,
+    "ritualAreas": [
+      {
+        "id": 666,
+        "radius": 10,
+        "x": 50,
+        "y": 50
+      }
+    ],
     "startMarkers": [
       {
         "x": 39.5,

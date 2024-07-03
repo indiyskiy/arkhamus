@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping
 
 
 @Controller
-class BrowserAdminLoginController() {
+class BrowserAdminLoginController {
     @GetMapping("/public/browser/login")
     fun login(model: Model): String {
         model.addAttribute("login", AuthenticationRequest("", ""))

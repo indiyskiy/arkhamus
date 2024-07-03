@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessRes
 import org.springframework.stereotype.Component
 
 @Component
-class CrafterProcessHandler() {
+class CrafterProcessHandler {
 
     fun filterAndMap(
         user: RedisGameUser,

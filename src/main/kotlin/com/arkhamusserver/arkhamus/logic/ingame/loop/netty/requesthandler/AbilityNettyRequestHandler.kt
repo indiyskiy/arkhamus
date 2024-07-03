@@ -42,7 +42,7 @@ class AbilityNettyRequestHandler(
         val userId = requestDataHolder.userAccount.id
         val request = requestDataHolder.nettyRequestMessage
         with(request as AbilityRequestMessage) {
-            val ability = Ability.byId(request.abilityId)
+            val ability = Ability.byId(this.abilityId)
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
             return ability?.let {

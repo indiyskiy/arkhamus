@@ -40,7 +40,7 @@ class GodVoteSkipNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.userId != userId }
             val altarHolder = globalGameData.altarHolder
             val altarPolling = globalGameData.altarPolling
-            val altar = globalGameData.altars[request.altarId]
+            val altar = globalGameData.altars[this.altarId]
             val canSkip = godVoteHandler.canVote(altarPolling, altarHolder, user)
             return GodVoteSkipRequestProcessData(
                 altar = altar,

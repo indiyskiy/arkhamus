@@ -37,14 +37,14 @@ class UserSkinLogic(
     }
 
     private fun skin(user: UserAccount): UserSkinSettings {
-        return UserSkinSettings().apply {
-            skinColor = SkinColor.values().random(random)
+        return UserSkinSettings(
+            skinColor = SkinColor.values().random(random),
             userAccount = user
-        }
+        )
     }
 
     private fun UserSkinSettings.mergeSkin(userSkin: UserSkinDto): UserSkinSettings {
-        this.skinColor = userSkin.skinColor
+        this.skinColor = userSkin.skinColor!!
         return this
     }
 
@@ -64,7 +64,7 @@ class UserSkinLogic(
 
     fun reshuffleSkins(skins: Collection<UserSkinSettings>) {
         skins.forEach { skin ->
-            if (skin.skinColor!!.isInUseMoreThenOnce(skins)) {
+            if (skin.skinColor.isInUseMoreThenOnce(skins)) {
                 val colorNotInUse = findColorNotInUse(skins)
                 skin.skinColor = colorNotInUse
             }

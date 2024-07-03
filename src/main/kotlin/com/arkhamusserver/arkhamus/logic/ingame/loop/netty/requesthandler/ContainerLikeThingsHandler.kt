@@ -61,7 +61,7 @@ class ContainerLikeThingsHandler {
         trueNewInventoryContent
             .filterNot { it.itemId == Item.PURE_NOTHING.id || it.number <= 0 }
             .groupBy { it.itemId }
-            .map { it.key to it.value.sumOf { it.number } }
+            .map { cell -> cell.key to cell.value.sumOf { it.number } }
             .toMap()
             .toMutableMap()
 

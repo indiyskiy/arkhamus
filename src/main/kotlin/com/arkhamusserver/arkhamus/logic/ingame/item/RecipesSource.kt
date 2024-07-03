@@ -13,8 +13,8 @@ class RecipesSource {
     private val allRecipesMap = allRecipes.associateBy { it.recipeId }
 
     companion object {
-        const val SECOND_IN_MILIS: Long = 1 * 1000
-        const val MINUTE_IN_MILIS: Long = SECOND_IN_MILIS * 60
+        private const val SECOND_IN_MILIS: Long = 1 * 1000
+        private const val MINUTE_IN_MILIS: Long = SECOND_IN_MILIS * 60
     }
 
     fun getAllRecipes() = allRecipes

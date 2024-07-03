@@ -9,5 +9,5 @@ data class Role(
     var id: Int? = null,
 
     @Column(nullable = false, unique = true)
-    var name: String? = null
+    var name: String
 )

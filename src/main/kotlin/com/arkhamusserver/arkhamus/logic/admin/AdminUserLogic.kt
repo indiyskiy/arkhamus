@@ -12,8 +12,8 @@ class AdminUserLogic(
     private val userAccountRepository: UserAccountRepository
 ) {
     companion object {
-        private const val pattern = "dd.MM.yyyy HH:mm:ss"
-        private val formatter = DateTimeFormatter.ofPattern(pattern)
+        private const val PATTERN = "dd.MM.yyyy HH:mm:ss"
+        private val formatter = DateTimeFormatter.ofPattern(PATTERN)
     }
 
     fun all(): List<AdminUserDto> {
@@ -25,12 +25,17 @@ class AdminUserLogic(
     }
 
     fun user(userId: Long): AdminUserDto {
-        return makeUserDto(userAccountRepository.findById(userId).orElse(UserAccount()))
+        return makeUserDto(userAccountRepository.findById(userId).orElse(
+            UserAccount(
+                nickName = ""
+            )
+        )
+        )
     }
 
     private fun makeUserDto(userAccount: UserAccount) = AdminUserDto(
         userId = userAccount.id!!,
-        nickName = userAccount.nickName!!,
+        nickName = userAccount.nickName,
         email = userAccount.email!!,
         creation = dateToString(userAccount.creationTimestamp)
     )
