@@ -8,6 +8,8 @@ import com.arkhamusserver.arkhamus.view.dto.admin.PointDto
 import com.arkhamusserver.arkhamus.view.dto.admin.PolygonDto
 import org.springframework.stereotype.Component
 
+private const val SCREEN_ZOOM = 10
+
 @Component
 class AdminLevelPreviewLogic(
     private val levelRepository: LevelRepository,
@@ -30,8 +32,8 @@ class AdminLevelPreviewLogic(
         val lanterns = lanternRepository.findByLevelId(levelId)
 
         return AdminGameLevelGeometryDto(
-            height = level.levelHeight.toInt(),
-            width = level.levelWidth.toInt(),
+            height = level.levelHeight.toInt() * SCREEN_ZOOM,
+            width = level.levelWidth.toInt() * SCREEN_ZOOM,
             polygons = mapPolygons(tetragons),
             ellipses = mapEllipses(ellipses),
             keyPoints = mapKeyPoints(containers, altars, crafters, lanterns),
@@ -51,8 +53,8 @@ class AdminLevelPreviewLogic(
     private fun mapContainers(containers: List<Container>): List<PointDto> {
         return containers.map {
             PointDto(
-                it.point.x.toFloat(),
-                it.point.y.toFloat(),
+                it.point.x.toFloat() * SCREEN_ZOOM,
+                it.point.y.toFloat() * SCREEN_ZOOM,
                 27L.toColor()
             )
         }
@@ -61,8 +63,8 @@ class AdminLevelPreviewLogic(
     private fun mapCrafters(crafters: List<Crafter>): List<PointDto> {
         return crafters.map {
             PointDto(
-                it.point.x.toFloat(),
-                it.point.y.toFloat(),
+                it.point.x.toFloat() * SCREEN_ZOOM,
+                it.point.y.toFloat() * SCREEN_ZOOM,
                 28L.toColor()
             )
         }
@@ -71,8 +73,8 @@ class AdminLevelPreviewLogic(
     private fun mapAltars(altars: List<Altar>): List<PointDto> {
         return altars.map {
             PointDto(
-                it.point.x.toFloat(),
-                it.point.y.toFloat(),
+                it.point.x.toFloat() * SCREEN_ZOOM,
+                it.point.y.toFloat() * SCREEN_ZOOM,
                 29L.toColor()
             )
         }
@@ -81,8 +83,8 @@ class AdminLevelPreviewLogic(
     private fun mapLanterns(lanterns: List<Lantern>): List<PointDto> {
         return lanterns.map {
             PointDto(
-                it.point.x.toFloat(),
-                it.point.y.toFloat(),
+                it.point.x.toFloat() * SCREEN_ZOOM,
+                it.point.y.toFloat() * SCREEN_ZOOM,
                 30L.toColor()
             )
         }
@@ -93,23 +95,23 @@ class AdminLevelPreviewLogic(
             PolygonDto(
                 listOf(
                     PointDto(
-                        tetragon.point0.x.toFloat(),
-                        tetragon.point0.y.toFloat(),
+                        tetragon.point0.x.toFloat() * SCREEN_ZOOM,
+                        tetragon.point0.y.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.id!!.toColor()
                     ),
                     PointDto(
-                        tetragon.point1.x.toFloat(),
-                        tetragon.point1.y.toFloat(),
+                        tetragon.point1.x.toFloat() * SCREEN_ZOOM,
+                        tetragon.point1.y.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.id!!.toColor()
                     ),
                     PointDto(
-                        tetragon.point2.x.toFloat(),
-                        tetragon.point2.y.toFloat(),
+                        tetragon.point2.x.toFloat() * SCREEN_ZOOM,
+                        tetragon.point2.y.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.id!!.toColor()
                     ),
                     PointDto(
-                        tetragon.point3.x.toFloat(),
-                        tetragon.point3.y.toFloat(),
+                        tetragon.point3.x.toFloat() * SCREEN_ZOOM,
+                        tetragon.point3.y.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.id!!.toColor()
                     ),
                 ),
@@ -121,10 +123,10 @@ class AdminLevelPreviewLogic(
     private fun mapEllipses(ellipses: List<Ellipse>): List<EllipseDto> {
         return ellipses.map { ellipse ->
             EllipseDto(
-                cx = ellipse.point.x.toFloat(),
-                cy = ellipse.point.y.toFloat(),
-                rx = ellipse.width.toFloat() / 2,
-                ry = ellipse.height.toFloat() / 2,
+                cx = ellipse.point.x.toFloat() * SCREEN_ZOOM,
+                cy = ellipse.point.y.toFloat() * SCREEN_ZOOM,
+                rx = ellipse.width.toFloat() / 2 * SCREEN_ZOOM,
+                ry = ellipse.height.toFloat() / 2 * SCREEN_ZOOM,
                 color = ellipse.levelZone.id!!.toColor()
             )
         }

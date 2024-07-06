@@ -19,7 +19,7 @@
     </th:block>
     <!--Processing keypoint-->
     <th:block th:each="point : ${levelGeometry.keyPoints}">
-        <circle th:attr="cx=${point.pointX},cy=${point.pointY}" r="2" th:fill="${point.color.getCode()}" stroke="black" stroke-width="1"/>
+        <circle th:attr="cx=${point.pointX},cy=${point.pointY}" r="10" th:fill="${point.color.getCode()}" stroke="black" stroke-width="1"/>
     </th:block>
 </svg>
 </body>
