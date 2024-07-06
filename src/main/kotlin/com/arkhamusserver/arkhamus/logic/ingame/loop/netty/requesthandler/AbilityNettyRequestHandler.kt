@@ -1,15 +1,13 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastedHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RelatedAbilityCastHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
@@ -26,6 +24,7 @@ class AbilityNettyRequestHandler(
     private val relatedAbilityCastHandler: RelatedAbilityCastHandler,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
+    private val zonesHandler: ZonesHandler,
     private val crafterProcessHandler: CrafterProcessHandler
 ) : NettyRequestHandler {
 
@@ -42,6 +41,10 @@ class AbilityNettyRequestHandler(
         val userId = requestDataHolder.userAccount.id
         val request = requestDataHolder.nettyRequestMessage
         with(request as AbilityRequestMessage) {
+            val inZones = zonesHandler.filterByUserPosition(
+                requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
+                globalGameData.levelGeometryData
+            )
             val ability = Ability.byId(this.abilityId)
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
@@ -57,10 +60,11 @@ class AbilityNettyRequestHandler(
                     requiredItem,
                     user,
                     users,
+                    inZones,
                     ongoingEvents,
                     globalGameData
                 )
-            } ?: buildWrongAbilityGameData(user, users, ongoingEvents, globalGameData)
+            } ?: buildWrongAbilityGameData(user, users, ongoingEvents, inZones, globalGameData)
         }
     }
 
@@ -71,6 +75,7 @@ class AbilityNettyRequestHandler(
         requiredItem: Item?,
         user: RedisGameUser,
         users: List<RedisGameUser>,
+        inZones: List<LevelZone>,
         ongoingEvents: List<OngoingEvent>,
         globalGameData: GlobalGameData
     ) = AbilityRequestProcessData(
@@ -82,6 +87,7 @@ class AbilityNettyRequestHandler(
         executedSuccessfully = false,
         gameUser = user,
         otherGameUsers = users,
+        inZones = inZones,
         visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
         availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
         visibleItems = inventoryHandler.mapUsersItems(user.items),
@@ -99,6 +105,7 @@ class AbilityNettyRequestHandler(
         user: RedisGameUser,
         users: List<RedisGameUser>,
         ongoingEvents: List<OngoingEvent>,
+        inZones: List<LevelZone>,
         globalGameData: GlobalGameData
     ) = AbilityRequestProcessData(
         ability = null,
@@ -109,6 +116,7 @@ class AbilityNettyRequestHandler(
         executedSuccessfully = false,
         gameUser = user,
         otherGameUsers = users,
+        inZones = inZones,
         visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
         availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
         ongoingCraftingProcess = crafterProcessHandler.filterAndMap(

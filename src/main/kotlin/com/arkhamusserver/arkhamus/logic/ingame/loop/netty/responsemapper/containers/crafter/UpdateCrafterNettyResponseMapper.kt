@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter.UpdateCrafterRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.otherGameUsersResponseMessage
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.ItemsInBetweenHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -13,12 +14,8 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.*
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.UpdateCrafterNettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -55,7 +52,8 @@ class UpdateCrafterNettyResponseMapper(
                 gameUser = gameUser!!,
                 availableAbilities = availableAbilities,
                 ongoingCraftingProcess = ongoingCraftingProcess,
-                containers = requestProcessData.containers
+                containers = requestProcessData.containers,
+                inZones = requestProcessData.inZones
             )
         }
     }
@@ -68,7 +66,8 @@ class UpdateCrafterNettyResponseMapper(
         availableAbilities: List<AbilityOfUserResponse>,
         ongoingCraftingProcess: List<CraftProcessResponse>,
         itemsInside: List<InventoryCell>,
-        containers: List<RedisContainer>
+        containers: List<RedisContainer>,
+        inZones: List<LevelZone>
     ) = UpdateCrafterNettyResponse(
         sortedUserInventory = sortedUserInventory,
         itemsInside = itemsInside,
@@ -86,7 +85,8 @@ class UpdateCrafterNettyResponseMapper(
         ongoingCraftingProcess = ongoingCraftingProcess,
         availableAbilities = availableAbilities,
         executedSuccessfully = true,
-        firstTime = true
+        firstTime = true,
+        inZones = inZones
     )
 
     private fun List<InventoryCell>.applyInBetween(

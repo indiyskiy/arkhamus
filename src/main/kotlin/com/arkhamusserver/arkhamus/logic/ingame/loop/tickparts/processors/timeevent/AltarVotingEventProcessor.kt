@@ -40,6 +40,7 @@ class AltarVotingEventProcessor(
                 ritualHandler.lockTheGod(
                     quorum,
                     globalGameData.altars.values.toList(),
+                    altarPolling,
                     globalGameData.altarHolder,
                     globalGameData.timeEvents,
                     globalGameData.game

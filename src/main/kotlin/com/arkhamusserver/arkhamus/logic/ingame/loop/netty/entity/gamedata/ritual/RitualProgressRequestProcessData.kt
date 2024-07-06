@@ -2,10 +2,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritu
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
+import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -15,6 +13,7 @@ class RitualProgressRequestProcessData(
     var ritualEvent: RedisTimeEvent?,
     var altarHolder: RedisAltarHolder?,
     var usersInRitual: List<RedisGameUser>,
+    inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
@@ -26,6 +25,7 @@ class RitualProgressRequestProcessData(
 ) : GameUserData(
     gameUser = gameUser,
     otherGameUsers = otherGameUsers,
+    inZones = inZones,
     visibleOngoingEvents = visibleOngoingEvents,
     availableAbilities = availableAbilities,
     ongoingCraftingProcess = ongoingCraftingProcess,

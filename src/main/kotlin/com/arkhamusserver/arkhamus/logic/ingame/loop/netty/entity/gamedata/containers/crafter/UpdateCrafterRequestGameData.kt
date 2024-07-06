@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.cont
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ActionProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -14,6 +15,7 @@ class UpdateCrafterRequestGameData(
     var crafter: RedisCrafter,
     var sortedUserInventory: List<InventoryCell>,
     var executedSuccessfully: Boolean,
+    inZones: List<LevelZone>,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
@@ -25,6 +27,7 @@ class UpdateCrafterRequestGameData(
 ) : GameUserData(
     gameUser = gameUser,
     otherGameUsers = otherGameUsers,
+    inZones = inZones,
     visibleOngoingEvents = visibleOngoingEvents,
     availableAbilities = availableAbilities,
     ongoingCraftingProcess = ongoingCraftingProcess,

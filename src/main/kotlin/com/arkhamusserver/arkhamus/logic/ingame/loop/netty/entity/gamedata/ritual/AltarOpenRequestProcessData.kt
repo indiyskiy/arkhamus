@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritu
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.redis.*
@@ -19,6 +20,7 @@ class AltarOpenRequestProcessData(
     var voteState: MapAltarPollingState,
     var votedForGod: God?,
     var godLocked: God?,
+    inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
@@ -30,6 +32,7 @@ class AltarOpenRequestProcessData(
 ) : GameUserData(
     gameUser = gameUser,
     otherGameUsers = otherGameUsers,
+    inZones = inZones,
     visibleOngoingEvents = visibleOngoingEvents,
     availableAbilities = availableAbilities,
     ongoingCraftingProcess = ongoingCraftingProcess,

@@ -15,6 +15,7 @@ class AuthRequestProcessData(
 ) : GameUserData(
     gameUser = gameUser,
     otherGameUsers = otherGameUsers,
+    inZones = emptyList(),
     visibleOngoingEvents = emptyList(),
     availableAbilities = emptyList(),
     visibleItems = emptyList(),

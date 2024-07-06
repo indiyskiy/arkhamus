@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.CrafterType
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
@@ -19,7 +20,8 @@ class OpenCrafterNettyResponse(
     ongoingCraftingProcess: List<CraftProcessResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     userInventory: List<InventoryCell>,
-    containers: List<RedisContainer>
+    containers: List<RedisContainer>,
+    inZones: List<LevelZone>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -30,5 +32,6 @@ class OpenCrafterNettyResponse(
     availableAbilities = availableAbilities,
     userInventory = userInventory,
     containers = containers.convertToContainerInfo(),
+    inZones = inZones.convertToLevelZoneResponses(),
     type = OpenCrafterNettyResponse::class.java.simpleName
 )

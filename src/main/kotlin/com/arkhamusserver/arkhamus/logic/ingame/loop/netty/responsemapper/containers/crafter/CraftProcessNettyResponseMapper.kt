@@ -11,11 +11,11 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.CraftProcessNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -65,7 +65,8 @@ class CraftProcessNettyResponseMapper(
                 holdingUser = it.crafter!!.holdingUser,
                 state = it.crafter?.state ?: MapObjectState.DISABLED,
                 userInventory = requestProcessData.visibleItems,
-                containers = requestProcessData.containers
+                containers = requestProcessData.containers,
+                inZones = requestProcessData.inZones
             )
         }
     }

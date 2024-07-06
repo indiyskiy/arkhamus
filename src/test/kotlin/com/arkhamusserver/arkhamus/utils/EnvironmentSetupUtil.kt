@@ -23,14 +23,12 @@ class EnvironmentSetupUtil {
 
     private fun addSomePlayers(playerCount: Int = PLAYERS_NUMBER_TO_ADD) {
         repeat(playerCount) {
-            UserAccount().apply {
-                nickName = "Player $it"
+            UserAccount(nickName = "Player $it").apply {
                 email = "player$it@example.com"
                 password = "${it}omgCoolPassword${it}"
                 role = setOf(
-                    Role().apply {
+                    Role(name = RoleName.USER.securityValue).apply {
                         id = 1
-                        name = RoleName.USER.securityValue
                     }
                 )
                 userAccountRepository.save(this)

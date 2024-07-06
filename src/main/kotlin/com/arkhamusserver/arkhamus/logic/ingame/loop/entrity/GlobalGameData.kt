@@ -33,9 +33,7 @@ data class GlobalGameData(
                 tetragons = mapTetragons(tetragonsMap[zone.levelZoneId] ?: emptyList()),
                 ellipses = mapEllipses(ellipsesMap[zone.levelZoneId] ?: emptyList())
             )
-        }.groupBy {
-            it.zoneType
-        }.toMap()
+        }
         return LevelGeometryData().apply {
             this.zones = zonesMap
         }
@@ -69,7 +67,7 @@ data class GlobalGameData(
 }
 
 data class LevelGeometryData(
-    var zones: Map<ZoneType, List<GameDataLevelZone>> = emptyMap()
+    var zones:List<GameDataLevelZone> = emptyList()
 )
 
 data class GameDataLevelZone(

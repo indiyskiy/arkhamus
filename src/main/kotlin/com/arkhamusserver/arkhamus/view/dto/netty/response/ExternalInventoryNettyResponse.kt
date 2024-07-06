@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
@@ -18,6 +19,7 @@ abstract class ExternalInventoryNettyResponse(
     ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<InventoryCell>,
     containers: List<RedisContainer>,
+    inZones: List<LevelZone>,
     type: String
 ) : NettyResponse(
     tick = tick,
@@ -29,5 +31,6 @@ abstract class ExternalInventoryNettyResponse(
     ongoingCraftingProcess = ongoingCraftingProcess,
     userInventory = userInventory,
     containers = containers.convertToContainerInfo(),
-    type = type
+    inZones = inZones.convertToLevelZoneResponses(),
+    type =type
 )

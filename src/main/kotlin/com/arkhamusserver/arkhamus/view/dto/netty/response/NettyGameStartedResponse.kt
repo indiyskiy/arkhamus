@@ -19,5 +19,6 @@ class NettyGameStartedResponse(
     availableAbilities = emptyList(),
     userInventory = emptyList(),
     containers = emptyList(),
+    inZones = emptyList(),
     type = NettyGameStartedResponse::class.java.simpleName
 )

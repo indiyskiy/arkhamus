@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.view.dto.netty.response
+package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState

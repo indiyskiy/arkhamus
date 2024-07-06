@@ -1,10 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.containers.crafter
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.RecipesSource
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastedHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanRecipeBeCraftedHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -23,7 +20,8 @@ class CraftProcessNettyRequestHandler(
     private val recipesSource: RecipesSource,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val canRecipeBeCraftedHandler: CanRecipeBeCraftedHandler,
-    private val crafterProcessHandler: CrafterProcessHandler
+    private val crafterProcessHandler: CrafterProcessHandler,
+    private val zonesHandler: ZonesHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -36,6 +34,10 @@ class CraftProcessNettyRequestHandler(
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ): RequestProcessData {
+        val inZones = zonesHandler.filterByUserPosition(
+            requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
+            globalGameData.levelGeometryData
+        )
         val userId = requestDataHolder.userAccount.id
         val request = requestDataHolder.nettyRequestMessage
         with(request as CraftProcessRequestMessage) {
@@ -55,6 +57,7 @@ class CraftProcessNettyRequestHandler(
                     executedSuccessfully = false,
                     gameUser = user,
                     otherGameUsers = users,
+                    inZones = inZones,
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                     availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
                     visibleItems = inventoryHandler.mapUsersItems(user.items),
@@ -74,6 +77,7 @@ class CraftProcessNettyRequestHandler(
                     executedSuccessfully = false,
                     gameUser = user,
                     otherGameUsers = users,
+                    inZones = inZones,
                     sortedUserInventory = sortedUserInventory,
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                     availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),

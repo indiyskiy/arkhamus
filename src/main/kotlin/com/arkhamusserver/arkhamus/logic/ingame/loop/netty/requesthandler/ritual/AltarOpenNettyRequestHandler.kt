@@ -1,9 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ritual
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastedHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GodVoteHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -24,7 +21,8 @@ class AltarOpenNettyRequestHandler(
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
-    private val godVoteHandler: GodVoteHandler
+    private val godVoteHandler: GodVoteHandler,
+    private val zonesHandler: ZonesHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -39,6 +37,10 @@ class AltarOpenNettyRequestHandler(
     ): AltarOpenRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
         with(request as AltarOpenRequestMessage) {
+            val inZones = zonesHandler.filterByUserPosition(
+                requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
+                globalGameData.levelGeometryData
+            )
             val userId = requestDataHolder.userAccount.id
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
@@ -57,6 +59,7 @@ class AltarOpenNettyRequestHandler(
                 canStartVote = godVoteHandler.canBeStarted(altarHolder, altar, ongoingEvents),
                 gameUser = user,
                 otherGameUsers = users,
+                inZones = inZones,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                 availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),

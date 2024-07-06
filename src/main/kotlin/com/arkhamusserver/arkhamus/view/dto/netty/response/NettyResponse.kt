@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
@@ -13,6 +14,7 @@ abstract class NettyResponse(
     val availableAbilities: List<AbilityOfUserResponse>,
     var userInventory: List<InventoryCell>,
     var containers: List<ContainerState>,
+    var inZones: List<LevelZoneResponse>,
     val type: String
 )
 
@@ -23,5 +25,10 @@ fun List<RedisContainer>.convertToContainerInfo(): List<ContainerState> {
             state = container.state,
             holdingUserId = container.holdingUser
         )
+    }
+}
+fun List<LevelZone>.convertToLevelZoneResponses(): List<LevelZoneResponse> {
+    return this.map { levelZone ->
+        LevelZoneResponse(levelZone)
     }
 }

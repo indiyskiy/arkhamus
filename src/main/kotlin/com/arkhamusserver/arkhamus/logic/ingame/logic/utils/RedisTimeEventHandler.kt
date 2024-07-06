@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualHandler.Companion.logger
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
@@ -69,9 +70,12 @@ class RedisTimeEventHandler(
         eventType: RedisTimeEventType,
         allEvents: List<RedisTimeEvent>
     ) {
+        logger.info("deleting ${eventType.name} event")
         allEvents.filter {
             it.type == eventType
         }.forEach {
+            it.timePast += it.timeLeft
+            it.timeLeft = 0
             it.state = RedisTimeEventState.PAST
             redisTimeEventRepository.delete(it)
         }

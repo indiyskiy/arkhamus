@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ritua
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastedHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ZonesHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -24,6 +25,7 @@ class RitualPutItemNettyRequestHandler(
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
+    private val zonesHandler: ZonesHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -38,6 +40,10 @@ class RitualPutItemNettyRequestHandler(
     ): RitualPutItemRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
         with(request as RitualPutItemRequestMessage) {
+            val inZones = zonesHandler.filterByUserPosition(
+                requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
+                globalGameData.levelGeometryData
+            )
             val userId = requestDataHolder.userAccount.id
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
@@ -57,6 +63,7 @@ class RitualPutItemNettyRequestHandler(
                 executedSuccessfully = false,
                 gameUser = user,
                 otherGameUsers = users,
+                inZones = inZones,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                 availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),

@@ -10,7 +10,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessag
 import com.arkhamusserver.arkhamus.view.dto.netty.response.GameEndedNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.OngoingEventResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.EndOfGameUserResponse
 import org.springframework.stereotype.Component
 
@@ -50,6 +50,7 @@ class GameEndedNettyResponseMapper : NettyResponseMapper {
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 userInventory = requestProcessData.visibleItems,
                 containers = requestProcessData.containers,
+                inZones = requestProcessData.inZones
             )
         }
     }

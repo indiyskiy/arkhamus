@@ -66,9 +66,11 @@ class RitualHandler(
         events: List<RedisTimeEvent>,
         game: RedisGame
     ) {
-        logger.info("failing ritual")
+        eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
+
+        logger.info("removing polling")
         altarPolling.state = MapAltarPollingState.FAILED
-        redisAltarPollingRepository.save(altarPolling)
+        redisAltarPollingRepository.delete(altarPolling)
 
         altarHolder.state = MapAltarState.LOCKED
         redisAltarHolderRepository.save(altarHolder)
@@ -77,8 +79,6 @@ class RitualHandler(
             game,
             RedisTimeEventType.ALTAR_VOTING_COOLDOWN,
         )
-        logger.info("deliting ALTAR_VOTING event")
-        eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
     }
 
 
@@ -107,6 +107,7 @@ class RitualHandler(
                 lockTheGod(
                     quorum = quorum,
                     altars = altars.values.toList(),
+                    altarPolling = altarPolling,
                     altarHolder = altarHolder,
                     events = events,
                     game = game
@@ -125,10 +126,17 @@ class RitualHandler(
     fun lockTheGod(
         quorum: God,
         altars: List<RedisAltar>,
+        altarPolling: RedisAltarPolling,
         altarHolder: RedisAltarHolder,
         events: List<RedisTimeEvent>,
         game: RedisGame
     ) {
+        eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
+
+        logger.info("removing polling")
+        altarPolling.state = MapAltarPollingState.FIXED
+        redisAltarPollingRepository.delete(altarPolling)
+
         val cork = godToCorkResolver.resolve(quorum)
         val recipe = recipesSource.getAllRecipes().first { it.item == cork }
         altarHolder.lockedGodId = quorum.getId()
@@ -144,8 +152,6 @@ class RitualHandler(
 
         altarHolder.state = MapAltarState.GOD_LOCKED
         redisAltarHolderRepository.save(altarHolder)
-
-        eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
 
         eventHandler.createDefaultEvent(
             game, RedisTimeEventType.RITUAL_GOING

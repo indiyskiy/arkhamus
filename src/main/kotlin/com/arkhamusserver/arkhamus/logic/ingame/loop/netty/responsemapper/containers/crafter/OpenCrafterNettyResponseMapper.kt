@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolde
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter.OpenCrafterRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.otherGameUsersResponseMessage
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -13,12 +14,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.*
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.OpenCrafterNettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -62,7 +59,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
                     visibleItems = requestProcessData.visibleItems,
                     state = containerState,
                     containerHoldingUserId = containerHoldingUserId,
-                    containers = requestProcessData.containers
+                    containers = requestProcessData.containers,
+                    inZones = requestProcessData.inZones
                 )
             } else {
                 return buildCrafter(
@@ -75,7 +73,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
                     visibleItems = requestProcessData.visibleItems,
                     state = containerState,
                     containerHoldingUserId = containerHoldingUserId,
-                    containers = requestProcessData.containers
+                    containers = requestProcessData.containers,
+                    inZones = requestProcessData.inZones
                 )
             }
         }
@@ -91,7 +90,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         visibleItems: List<InventoryCell>,
         state: MapObjectState,
         containerHoldingUserId: Long?,
-        containers: List<RedisContainer>
+        containers: List<RedisContainer>,
+        inZones: List<LevelZone>
     ) = OpenCrafterNettyResponse(
         itemsInside = itemsInside,
         state = state,
@@ -107,7 +107,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         availableAbilities = availableAbilities,
         ongoingCraftingProcess = ongoingCraftingProcess,
         userInventory = visibleItems,
-        containers = containers
+        containers = containers,
+        inZones = inZones
     )
 
 
