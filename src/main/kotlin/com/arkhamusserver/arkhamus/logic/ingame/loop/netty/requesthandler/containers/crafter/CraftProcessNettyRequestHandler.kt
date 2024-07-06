@@ -46,11 +46,11 @@ class CraftProcessNettyRequestHandler(
             val sortedUserInventory = request.newInventoryContent
 
             return if (recipe != null && crafter != null) {
-                val canBeCasted = canRecipeBeCraftedHandler.canUserCraft(user, recipe, crafter)
+                val canBeCrafted = canRecipeBeCraftedHandler.canUserCraft(user, recipe, crafter)
                 CraftProcessRequestProcessData(
                     recipe = recipe,
                     crafter = crafter,
-                    canBeStarted = canBeCasted,
+                    canBeStarted = canBeCrafted,
                     sortedUserInventory = sortedUserInventory,
                     executedSuccessfully = false,
                     gameUser = user,

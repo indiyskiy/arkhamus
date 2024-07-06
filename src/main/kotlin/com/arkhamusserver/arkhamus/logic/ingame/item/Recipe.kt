@@ -17,7 +17,7 @@ fun List<Ingredient>.toRecipe(
     item: Item,
     timeToCraft: Long = 0L,
     numberOfItems: Int = 1,
-    crafterTypes: List<CrafterType> = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
+    crafterTypes: List<CrafterType> = emptyList()
 ) =
     this.let {
         Recipe(recipeId, item).apply {
