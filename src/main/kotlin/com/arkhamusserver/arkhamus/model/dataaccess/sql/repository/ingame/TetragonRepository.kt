@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository
 interface TetragonRepository : CrudRepository<Tetragon, Long> {
     fun findByLevelZone(levelZone: LevelZone): List<Tetragon>
     fun findByLevelZoneId(levelZoneId: Long): List<Tetragon>
+    fun findByLevelZoneLevelId(levelId: Long): List<Tetragon>
 }

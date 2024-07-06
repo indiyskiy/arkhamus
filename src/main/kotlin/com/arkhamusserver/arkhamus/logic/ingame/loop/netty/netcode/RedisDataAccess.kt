@@ -20,6 +20,10 @@ interface RedisDataAccess {
     fun getTimeEvents(gameId: Long): List<RedisTimeEvent>
     fun getCastedAbilities(gameId: Long): List<RedisAbilityCast>
     fun getCraftProcess(gameId: Long): List<RedisCraftProcess>
+    fun getZones(gameId: Long): List<RedisLevelZone>
+    fun getTetragons(gameId: Long): List<RedisLevelZoneTetragon>
+    fun getEllipses(gameId: Long): List<RedisLevelZoneEllipse>
+//    fun getEllipses(gameId: Long): List<RedisE>
 
     fun deleteGame(gameId: Long)
     fun deleteGameUsers(gameId: Long)
@@ -41,6 +45,10 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     val altarHolder = getAltarHolder(gameId)
     val altarPolling = getAltarPolling(gameId)
 
+    val zones = getZones(gameId)
+    val tetragons = getTetragons(gameId)
+    val ellipses = getEllipses(gameId)
+
     return GlobalGameData(
         game = game,
         altarHolder = altarHolder
@@ -54,6 +62,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.castedAbilities = castedAbilities
         this.craftProcess = craftProcess
         this.lanterns = allLanterns.associateBy { it.lanternId }
+        this.levelGeometryData = buildGeometryData(zones, tetragons, ellipses)
     }
 }
 

@@ -48,6 +48,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.14.0")
     implementation("com.fasterxml.uuid:java-uuid-generator:4.3.0")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf:3.2.5")
+    implementation("org.locationtech.jts:jts-core:1.19.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

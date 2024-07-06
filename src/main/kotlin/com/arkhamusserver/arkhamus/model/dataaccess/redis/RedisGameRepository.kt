@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RedisGameRepository: CrudRepository<RedisGame, String>
+interface RedisGameRepository: CrudRepository<RedisGame, String>{
+    fun findByGameId(gameId: Long): RedisGame
+}

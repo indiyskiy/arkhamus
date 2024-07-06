@@ -1,8 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.*
-import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
-import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
+import com.arkhamusserver.arkhamus.model.redis.*
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
 
@@ -18,7 +17,10 @@ class RedisDataAccessImpl(
     private val altarPollingRepository: RedisAltarPollingRepository,
     private val timeEventRepository: RedisTimeEventRepository,
     private val abilityCastRepository: RedisAbilityCastRepository,
-    private val craftProcessRepository: RedisCraftProcessRepository
+    private val craftProcessRepository: RedisCraftProcessRepository,
+    private val redisLevelZoneRepository: RedisLevelZoneRepository,
+    private val redisLevelTetragonRepository: RedisLevelTetragonRepository,
+    private val redisLevelEllipseRepository: RedisLevelEllipseRepository
 ) : RedisDataAccess {
     override fun getGameUser(userId: Long?, gameId: Long?) =
         gameUserRepository.findByUserIdAndGameId(userId!!, gameId!!).first()
@@ -66,6 +68,18 @@ class RedisDataAccessImpl(
 
     override fun getCraftProcess(gameId: Long): List<RedisCraftProcess> =
         craftProcessRepository.findByGameId(gameId)
+
+    override fun getZones(gameId: Long): List<RedisLevelZone> {
+        return redisLevelZoneRepository.findByGameId(gameId)
+    }
+
+    override fun getTetragons(gameId: Long): List<RedisLevelZoneTetragon> {
+        return redisLevelTetragonRepository.findByGameId(gameId)
+    }
+
+    override fun getEllipses(gameId: Long): List<RedisLevelZoneEllipse> {
+        return redisLevelEllipseRepository.findByGameId(gameId)
+    }
 
 
     override fun deleteGame(gameId: Long) {

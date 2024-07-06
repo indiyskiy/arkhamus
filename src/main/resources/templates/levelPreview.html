@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LevelPreview</title>
+    <link rel="stylesheet" th:href="@{/css/mapPreviewStyle.css}"/>
+</head>
+<body>
+<svg th:width="${levelGeometry.width}" th:height="${levelGeometry.height}">
+    <!-- Processing tetragons -->
+    <th:block th:each="poly : ${levelGeometry.polygons}">
+        <polygon th:attr="points=${poly.polygonPoints}"
+                 th:style="'fill:' + ${poly.color.getCode()} + ';stroke:black;stroke-width:1'"/>
+    </th:block>
+    <!-- Processing ellipses -->
+    <th:block th:each="ellipse : ${levelGeometry.ellipses}">
+        <ellipse th:attr="cx=${ellipse.cx},cy=${ellipse.cy},rx=${ellipse.rx},ry=${ellipse.ry}"
+                 th:style="'fill:' + ${ellipse.color.getCode()} + ';stroke:black;stroke-width:1'"/>
+    </th:block>
+    <!--Processing keypoint-->
+    <th:block th:each="point : ${levelGeometry.keyPoints}">
+        <circle th:attr="cx=${point.pointX},cy=${point.pointY}" r="2" th:fill="${point.color.getCode()}" stroke="black" stroke-width="1"/>
+    </th:block>
+</svg>
+</body>
+
+</html>
+

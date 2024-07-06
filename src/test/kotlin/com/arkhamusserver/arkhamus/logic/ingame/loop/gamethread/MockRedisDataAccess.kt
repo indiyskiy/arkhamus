@@ -48,6 +48,7 @@ class MockRedisDataAccess : RedisDataAccess {
     override fun getLantern(lanternId: Long, gameId: Long): RedisLantern {
         TODO("Not yet implemented")
     }
+
     override fun getAltar(altarId: Long, gameId: Long): RedisAltar {
         TODO("Not yet implemented")
     }
@@ -97,6 +98,18 @@ class MockRedisDataAccess : RedisDataAccess {
     }
 
     override fun deleteTimeEvents(gameId: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getZones(gameId: Long): List<RedisLevelZone> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getTetragons(gameId: Long): List<RedisLevelZoneTetragon> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getEllipses(gameId: Long): List<RedisLevelZoneEllipse> {
         TODO("Not yet implemented")
     }
 

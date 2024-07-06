@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository
 interface EllipseRepository : CrudRepository<Ellipse, Long> {
     fun findByLevelZone(levelZone: LevelZone): List<Ellipse>
     fun findByLevelZoneId(levelZoneId: Long): List<Ellipse>
+    fun findByLevelZoneLevelId(levelZoneId: Long): List<Ellipse>
 }
