@@ -32,12 +32,12 @@ class AdminLevelPreviewLogic(
         val lanterns = lanternRepository.findByLevelId(levelId)
 
         return AdminGameLevelGeometryDto(
+            levelId = level.levelId,
             height = level.levelHeight.toInt() * SCREEN_ZOOM,
             width = level.levelWidth.toInt() * SCREEN_ZOOM,
             polygons = mapPolygons(tetragons),
             ellipses = mapEllipses(ellipses),
             keyPoints = mapKeyPoints(containers, altars, crafters, lanterns),
-
             )
     }
 

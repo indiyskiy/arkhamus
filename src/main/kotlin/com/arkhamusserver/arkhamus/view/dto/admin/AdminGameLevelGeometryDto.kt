@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.admin.NiceColor
 
 
 data class AdminGameLevelGeometryDto(
+    var levelId: Long,
     var height: Int,
     var width: Int,
     var polygons: List<PolygonDto>,

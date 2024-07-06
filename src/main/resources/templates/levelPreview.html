@@ -6,6 +6,15 @@
     <link rel="stylesheet" th:href="@{/css/mapPreviewStyle.css}"/>
 </head>
 <body>
+
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/levels}" title="Levels">Levels</a>
+        <a th:href="@{/admin/browser/level/{levelId}(levelId=${levelGeometry.levelId})}" title="Level">Level</a>
+    </footer>
+</div>
+
 <svg th:width="${levelGeometry.width}" th:height="${levelGeometry.height}">
     <!-- Processing tetragons -->
     <th:block th:each="poly : ${levelGeometry.polygons}">
@@ -22,6 +31,14 @@
         <circle th:attr="cx=${point.pointX},cy=${point.pointY}" r="10" th:fill="${point.color.getCode()}" stroke="black" stroke-width="1"/>
     </th:block>
 </svg>
+
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/levels}" title="Levels">Levels</a>
+    </footer>
+</div>
+
 </body>
 
 </html>
