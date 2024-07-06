@@ -73,7 +73,7 @@ class ChannelRepository {
         try {
             logger.warn("close and remove socket $key")
             val channel = channelCache.remove(key)
-            channel?.close()
+            channel?.close()?.sync()
             val arkhamusChannel = arkhamusChannelCache.remove(key)
             arkhamusChannel?.userAccount?.id?.let { arkhamusUserCache.remove(it) }
         } catch (e: Exception) {

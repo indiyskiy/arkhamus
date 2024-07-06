@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
+import com.arkhamusserver.arkhamus.config.jedis.JedisCleaner
+import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic.Companion.TICK_DELTA
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
@@ -18,7 +20,9 @@ import java.util.concurrent.*
 class GameThreadPool(
     private val redisDataAccess: RedisDataAccess,
     private val responseSendingLoopManager: ResponseSendingLoopManager,
-    private val tickLogic: ArkhamusOneTickLogic
+    private val tickLogic: ArkhamusOneTickLogic,
+    private val jedisCleaner: JedisCleaner,
+    private val channelRepository: ChannelRepository
 ) {
     private val taskExecutor: ScheduledThreadPoolExecutor = ScheduledThreadPoolExecutor(CORE_POOL_SIZE)
     private val tasksMap: ConcurrentMap<Long, TaskCollection> = ConcurrentHashMap()
@@ -68,13 +72,22 @@ class GameThreadPool(
         }
     }
 
-    @Scheduled(fixedRate = 1000)
-    fun cleanUpHangingFutures() {
+    @Scheduled(fixedRate = 10_000)
+    fun cleanUpGames() {
         for (gameSessionId in loopHandlerFutures.keys) {
             val redisGameSession = redisDataAccess.getGame(gameSessionId)
             if (redisGameSession?.state == GameState.FINISHED.name) {
                 logger.info("Trying to end $gameSessionId")
                 cleanGameLoopFuture(gameSessionId)
+                logger.info("close all connections")
+                redisGameSession.gameId?.let {
+                    val channels = channelRepository.getByGameId(it)
+                    channels.forEach {
+                        channelRepository.closeAndRemove(it)
+                    }
+                }
+                logger.info("cleaning redis database")
+                redisGameSession.gameId?.let { jedisCleaner.cleanGame(it) }?:jedisCleaner.cleanGameWithoutGameId(redisGameSession)
             }
         }
     }
@@ -83,20 +96,10 @@ class GameThreadPool(
         if (loopHandlerFutures[gameSessionId]?.isCancelled == true) {
             loopHandlerFutures.remove(gameSessionId)
             tasksMap.remove(gameSessionId)
-            cleanUpRedisGame(gameSessionId)
             logger.info("Loop handler stopped for game session $gameSessionId")
             return
         }
         loopHandlerFutures[gameSessionId]?.cancel(false)
-    }
-
-    // TODO maybe extract somewhere from the thread pool?
-    private fun cleanUpRedisGame(gameSessionId: Long) {
-        redisDataAccess.deleteTimeEvents(gameSessionId)
-        redisDataAccess.deleteLanterns(gameSessionId)
-        redisDataAccess.deleteContainers(gameSessionId)
-        redisDataAccess.deleteGameUsers(gameSessionId)
-        redisDataAccess.deleteGame(gameSessionId)
     }
 
     fun addTask(task: NettyTickRequestMessageDataHolder) {

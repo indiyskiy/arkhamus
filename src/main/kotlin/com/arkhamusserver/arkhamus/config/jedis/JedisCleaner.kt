@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.config.jedis
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.*
+import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Component
 
@@ -18,14 +19,17 @@ class JedisCleaner(
     private val redisAltarRepository: RedisAltarRepository,
     private val redisAltarHolderRepository: RedisAltarHolderRepository,
     private val redisAltarPollingRepository: RedisAltarPollingRepository,
-    private val redisLevelZoneRepository: RedisLevelZoneRepository
+    private val redisLevelZoneRepository: RedisLevelZoneRepository,
+    private val redisLevelTetragonRepository: RedisLevelTetragonRepository,
+    private val redisLevelEllipseRepository: RedisLevelEllipseRepository,
+
 
     ) {
     @PostConstruct
     fun cleanAll() {
+        redisGameRepository.deleteAll()
         userRedisRepository.deleteAll()
         containerRedisRepository.deleteAll()
-        redisGameRepository.deleteAll()
         redisTimeEventRepository.deleteAll()
         redisLanternRepository.deleteAll()
         crafterRedisRepository.deleteAll()
@@ -36,6 +40,31 @@ class JedisCleaner(
         redisAltarHolderRepository.deleteAll()
         redisAltarPollingRepository.deleteAll()
         redisLevelZoneRepository.deleteAll()
+        redisLevelTetragonRepository.deleteAll()
+        redisLevelEllipseRepository.deleteAll()
+    }
+
+    fun cleanGame(gameId: Long) {
+        redisGameRepository.delete(redisGameRepository.findByGameId(gameId))
+
+        userRedisRepository.deleteAll(userRedisRepository.findByGameId(gameId))
+        containerRedisRepository.deleteAll(containerRedisRepository.findByGameId(gameId))
+        redisTimeEventRepository.deleteAll(redisTimeEventRepository.findByGameId(gameId))
+        redisLanternRepository.deleteAll(redisLanternRepository.findByGameId(gameId))
+        crafterRedisRepository.deleteAll(crafterRedisRepository.findByGameId(gameId))
+        redisCraftProcessRepository.deleteAll(redisCraftProcessRepository.findByGameId(gameId))
+        redisAbilityCastRepository.deleteAll(redisAbilityCastRepository.findByGameId(gameId))
+
+        redisAltarRepository.deleteAll(redisAltarRepository.findByGameId(gameId))
+        redisAltarHolderRepository.deleteAll(redisAltarHolderRepository.findByGameId(gameId))
+        redisAltarPollingRepository.deleteAll(redisAltarPollingRepository.findByGameId(gameId))
+        redisLevelZoneRepository.deleteAll(redisLevelZoneRepository.findByGameId(gameId))
+        redisLevelTetragonRepository.deleteAll(redisLevelTetragonRepository.findByGameId(gameId))
+        redisLevelEllipseRepository.deleteAll(redisLevelEllipseRepository.findByGameId(gameId))
+    }
+
+    fun cleanGameWithoutGameId(redisGameSession: RedisGame) {
+        redisGameRepository.delete(redisGameSession)
     }
 
 }
