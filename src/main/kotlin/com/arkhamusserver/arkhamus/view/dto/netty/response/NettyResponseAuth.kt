@@ -21,5 +21,6 @@ class NettyResponseAuth(
     userInventory = emptyList(),
     containers = emptyList(),
     inZones = emptyList(),
+    clues = emptyList(),
     type = NettyResponseAuth::class.java.simpleName
 )

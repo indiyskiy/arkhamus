@@ -1,5 +1,6 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.searchclue
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
@@ -8,14 +9,14 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class SearchForAuraAbilityCast : AbilityCast {
+class SearchForScentAbilityCast : AbilityCast {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(SearchForAuraAbilityCast::class.java)
+        var logger: Logger = LoggerFactory.getLogger(SearchForScentAbilityCast::class.java)
     }
 
     override fun accept(ability: Ability): Boolean {
-        return ability == Ability.SEARCH_FOR_AURA
+        return ability == Ability.SEARCH_FOR_SCENT
     }
 
     override fun cast(

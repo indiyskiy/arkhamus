@@ -1,9 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ritual
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastedHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ZonesHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -23,7 +20,8 @@ class RitualProgressNettyRequestHandler(
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
-    private val zonesHandler: ZonesHandler
+    private val zonesHandler: ZonesHandler,
+    private val clueHandler: ClueHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -46,6 +44,12 @@ class RitualProgressNettyRequestHandler(
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
             val altarHolder = globalGameData.altarHolder
+            val clues = clueHandler.filterClues(
+                globalGameData.clues,
+                inZones,
+                globalGameData.castedAbilities,
+                userId!!
+            )
             return RitualProgressRequestProcessData(
                 currentGameTime = globalGameData.game.globalTimer,
                 ritualEvent = ongoingEvents.firstOrNull {
@@ -66,7 +70,8 @@ class RitualProgressNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
-                tick = globalGameData.game.currentTick
+                tick = globalGameData.game.currentTick,
+                clues = clues
             )
         }
     }

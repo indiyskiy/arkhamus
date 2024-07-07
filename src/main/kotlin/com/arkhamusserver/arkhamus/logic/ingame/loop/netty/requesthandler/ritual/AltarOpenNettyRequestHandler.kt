@@ -22,7 +22,8 @@ class AltarOpenNettyRequestHandler(
     private val inventoryHandler: InventoryHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
     private val godVoteHandler: GodVoteHandler,
-    private val zonesHandler: ZonesHandler
+    private val zonesHandler: ZonesHandler,
+    private val clueHandler: ClueHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -47,6 +48,12 @@ class AltarOpenNettyRequestHandler(
             val altarHolder = globalGameData.altarHolder
             val altarPolling = globalGameData.altarPolling
             val altar = globalGameData.altars[this.altarId]
+            val clues = clueHandler.filterClues(
+                globalGameData.clues,
+                inZones,
+                globalGameData.castedAbilities,
+                userId!!
+            )
             return AltarOpenRequestProcessData(
                 altar = altar,
                 altarPolling = altarPolling,
@@ -69,7 +76,8 @@ class AltarOpenNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
-                tick = globalGameData.game.currentTick
+                tick = globalGameData.game.currentTick,
+                clues = clues
             )
         }
     }

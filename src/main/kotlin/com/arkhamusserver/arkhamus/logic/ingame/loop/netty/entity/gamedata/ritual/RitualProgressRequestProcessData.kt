@@ -21,6 +21,7 @@ class RitualProgressRequestProcessData(
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
+    clues: List<RedisClue>,
     tick: Long
 ) : GameUserData(
     gameUser = gameUser,
@@ -31,5 +32,6 @@ class RitualProgressRequestProcessData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     containers = containers,
+    clues = clues,
     tick = tick
 )

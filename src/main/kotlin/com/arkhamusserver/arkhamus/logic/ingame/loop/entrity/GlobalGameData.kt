@@ -10,6 +10,7 @@ data class GlobalGameData(
     var altarPolling: RedisAltarPolling? = null,
     var altars: Map<Long, RedisAltar> = emptyMap(),
     var users: Map<Long, RedisGameUser> = emptyMap(),
+    var clues: List<RedisClue> = emptyList(),
     var containers: Map<Long, RedisContainer> = emptyMap(),
     var crafters: Map<Long, RedisCrafter> = emptyMap(),
     var lanterns: Map<Long, RedisLantern> = emptyMap(),

@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.ritual
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
+import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
@@ -23,6 +24,7 @@ class AltarOpenNettyResponse(
     userInventory: List<InventoryCell>,
     containers: List<RedisContainer>,
     inZones: List<LevelZone>,
+    clues: List<RedisClue>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -34,5 +36,6 @@ class AltarOpenNettyResponse(
     userInventory = userInventory,
     containers = containers.convertToContainerInfo(),
     inZones = inZones.convertToLevelZoneResponses(),
+    clues = clues.convertToClueResponses(),
     type = AltarOpenNettyResponse::class.java.simpleName,
 )

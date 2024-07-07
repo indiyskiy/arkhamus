@@ -47,7 +47,8 @@ class GodVoteCastNettyResponseMapper : NettyResponseMapper {
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 userInventory = requestProcessData.visibleItems,
                 containers = requestProcessData.containers,
-                inZones = requestProcessData.inZones
+                inZones = requestProcessData.inZones,
+                clues = requestProcessData.clues
             )
         }
     }

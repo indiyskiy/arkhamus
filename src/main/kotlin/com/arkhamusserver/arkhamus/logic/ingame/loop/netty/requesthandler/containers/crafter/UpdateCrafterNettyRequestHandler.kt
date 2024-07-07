@@ -1,9 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.containers.crafter
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastedHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ZonesHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -21,7 +18,8 @@ class UpdateCrafterNettyRequestHandler(
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
-    private val zonesHandler: ZonesHandler
+    private val zonesHandler: ZonesHandler,
+    private val clueHandler: ClueHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -44,6 +42,12 @@ class UpdateCrafterNettyRequestHandler(
             val crafter = globalGameData.crafters[this.externalInventoryId]!!
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
+            val clues = clueHandler.filterClues(
+                globalGameData.clues,
+                inZones,
+                globalGameData.castedAbilities,
+                userId!!
+            )
             val sortedUserInventory = request.newInventoryContent
             return UpdateCrafterRequestGameData(
                 crafter = crafter,
@@ -62,6 +66,7 @@ class UpdateCrafterNettyRequestHandler(
                 ),
                 containers = globalGameData.containers.values.toList(),
                 tick = globalGameData.game.currentTick,
+                clues = clues
             )
         }
     }

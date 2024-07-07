@@ -26,5 +26,6 @@ class ISawTheEndOfTimesRequestGameData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     containers = containers,
+    clues = emptyList(),
     tick = tick
 )

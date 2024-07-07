@@ -1,9 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.containers.container
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastedHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ZonesHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -21,7 +18,8 @@ class OpenContainerNettyRequestHandler(
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
-    private val zonesHandler: ZonesHandler
+    private val zonesHandler: ZonesHandler,
+    private val clueHandler: ClueHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -37,13 +35,19 @@ class OpenContainerNettyRequestHandler(
         val userId = requestDataHolder.userAccount.id
         val request = requestDataHolder.nettyRequestMessage
         with(request as OpenContainerRequestMessage) {
+            val container = globalGameData.containers[this.externalInventoryId]!!
+            val user = globalGameData.users[userId]!!
+            val users = globalGameData.users.values.filter { it.userId != userId }
             val inZones = zonesHandler.filterByUserPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
             )
-            val container = globalGameData.containers[this.externalInventoryId]!!
-            val user = globalGameData.users[userId]!!
-            val users = globalGameData.users.values.filter { it.userId != userId }
+            val clues = clueHandler.filterClues(
+                globalGameData.clues,
+                inZones,
+                globalGameData.castedAbilities,
+                userId!!
+            )
             return OpenContainerRequestGameData(
                 container = container,
                 gameUser = user,
@@ -58,6 +62,7 @@ class OpenContainerNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
+                clues = clues,
                 tick = globalGameData.game.currentTick,
             )
         }

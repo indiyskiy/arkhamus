@@ -21,5 +21,6 @@ class AuthRequestProcessData(
     visibleItems = emptyList(),
     ongoingCraftingProcess = emptyList(),
     containers = emptyList(),
+    clues = emptyList(),
     tick = -1L
 )

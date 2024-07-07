@@ -22,8 +22,8 @@ interface RedisDataAccess {
     fun getCraftProcess(gameId: Long): List<RedisCraftProcess>
     fun getZones(gameId: Long): List<RedisLevelZone>
     fun getTetragons(gameId: Long): List<RedisLevelZoneTetragon>
+    fun getClues(gameId: Long): List<RedisClue>
     fun getEllipses(gameId: Long): List<RedisLevelZoneEllipse>
-//    fun getEllipses(gameId: Long): List<RedisE>
 
     fun deleteGame(gameId: Long)
     fun deleteGameUsers(gameId: Long)

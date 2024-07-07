@@ -21,7 +21,8 @@ class CraftProcessNettyRequestHandler(
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val canRecipeBeCraftedHandler: CanRecipeBeCraftedHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
-    private val zonesHandler: ZonesHandler
+    private val zonesHandler: ZonesHandler,
+    private val clueHandler: ClueHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -45,6 +46,12 @@ class CraftProcessNettyRequestHandler(
             val crafter = globalGameData.crafters[externalInventoryId]
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
+            val clues = clueHandler.filterClues(
+                globalGameData.clues,
+                inZones,
+                globalGameData.castedAbilities,
+                userId!!
+            )
             val sortedUserInventory = request.newInventoryContent
 
             return if (recipe != null && crafter != null) {
@@ -68,6 +75,7 @@ class CraftProcessNettyRequestHandler(
                         globalGameData.craftProcess
                     ),
                     containers = globalGameData.containers.values.toList(),
+                    clues = clues
                 )
             } else {
                 CraftProcessRequestProcessData(
@@ -89,6 +97,7 @@ class CraftProcessNettyRequestHandler(
                         globalGameData.craftProcess
                     ),
                     containers = globalGameData.containers.values.toList(),
+                    clues = clues
                 )
             }
         }

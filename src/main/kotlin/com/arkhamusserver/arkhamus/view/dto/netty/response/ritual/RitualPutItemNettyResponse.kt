@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.ritual
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
+import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
@@ -21,6 +22,7 @@ class RitualPutItemNettyResponse(
     userInventory: List<InventoryCell>,
     containers: List<RedisContainer>,
     inZones: List<LevelZone>,
+    clues: List<RedisClue>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -32,6 +34,7 @@ class RitualPutItemNettyResponse(
     userInventory = userInventory,
     containers = containers.convertToContainerInfo(),
     inZones = inZones.convertToLevelZoneResponses(),
+    clues = clues.convertToClueResponses(),
     type = RitualPutItemNettyResponse::class.java.simpleName,
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

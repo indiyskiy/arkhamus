@@ -27,6 +27,7 @@ class RitualPutItemRequestProcessData(
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
+    clues: List<RedisClue>,
     tick: Long
 ) : GameUserData(
     gameUser = gameUser,
@@ -37,6 +38,7 @@ class RitualPutItemRequestProcessData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     containers = containers,
+    clues = clues,
     tick = tick
 ), ActionProcessData {
     override fun executedSuccessfully(): Boolean {

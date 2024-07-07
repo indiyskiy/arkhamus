@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
+import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
@@ -15,6 +16,7 @@ abstract class NettyResponse(
     var userInventory: List<InventoryCell>,
     var containers: List<ContainerState>,
     var inZones: List<LevelZoneResponse>,
+    var clues: List<ClueResponse>,
     val type: String
 )
 
@@ -27,8 +29,15 @@ fun List<RedisContainer>.convertToContainerInfo(): List<ContainerState> {
         )
     }
 }
+
 fun List<LevelZone>.convertToLevelZoneResponses(): List<LevelZoneResponse> {
     return this.map { levelZone ->
         LevelZoneResponse(levelZone)
+    }
+}
+
+fun List<RedisClue>.convertToClueResponses(): List<ClueResponse> {
+    return this.map { redisClue ->
+        ClueResponse(redisClue)
     }
 }

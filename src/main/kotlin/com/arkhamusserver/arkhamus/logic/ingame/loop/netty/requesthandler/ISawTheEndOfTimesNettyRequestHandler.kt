@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastedHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -20,7 +21,8 @@ class ISawTheEndOfTimesNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
-    private val crafterProcessHandler: CrafterProcessHandler
+    private val crafterProcessHandler: CrafterProcessHandler,
+    private val clueHandler: ClueHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -39,6 +41,7 @@ class ISawTheEndOfTimesNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.userId != userId }
             val visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents)
             val gameEnded = globalGameData.game.state in setOf(GameState.GAME_END_SCREEN.name, GameState.FINISHED.name)
+
             return ISawTheEndOfTimesRequestGameData(
                 gameEnded = gameEnded,
                 gameUser = user,

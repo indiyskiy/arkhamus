@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Actio
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
+import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
@@ -23,6 +24,7 @@ class GodVoteSkipRequestProcessData(
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
+    clues: List<RedisClue>,
     tick: Long
 ) : GameUserData(
     gameUser = gameUser,
@@ -33,6 +35,7 @@ class GodVoteSkipRequestProcessData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     containers = containers,
+    clues = clues,
     tick = tick
 ), ActionProcessData {
     override fun executedSuccessfully(): Boolean {

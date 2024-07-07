@@ -109,6 +109,10 @@ class MockRedisDataAccess : RedisDataAccess {
         TODO("Not yet implemented")
     }
 
+    override fun getClues(gameId: Long): List<RedisClue> {
+        TODO("Not yet implemented")
+    }
+
     override fun getEllipses(gameId: Long): List<RedisLevelZoneEllipse> {
         TODO("Not yet implemented")
     }

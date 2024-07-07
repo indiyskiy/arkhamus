@@ -19,7 +19,8 @@ class GodVoteStartNettyRequestHandler(
     private val inventoryHandler: InventoryHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
     private val godVoteHandler: GodVoteHandler,
-    private val zonesHandler: ZonesHandler
+    private val zonesHandler: ZonesHandler,
+    private val clueHandler: ClueHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -44,6 +45,12 @@ class GodVoteStartNettyRequestHandler(
             val altarHolder = globalGameData.altarHolder
             val altar = globalGameData.altars[this.altarId]
             val canBeStarted = godVoteHandler.canBeStarted(altarHolder, altar, ongoingEvents)
+            val clues = clueHandler.filterClues(
+                globalGameData.clues,
+                inZones,
+                globalGameData.castedAbilities,
+                userId!!
+            )
             return GodVoteStartRequestProcessData(
                 votedGod = this.godId.toGod(),
                 altar = altar,
@@ -61,7 +68,8 @@ class GodVoteStartNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
-                tick = globalGameData.game.currentTick
+                tick = globalGameData.game.currentTick,
+                clues = clues
             )
         }
     }

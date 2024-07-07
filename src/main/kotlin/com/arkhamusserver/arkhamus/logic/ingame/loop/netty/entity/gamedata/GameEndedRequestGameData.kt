@@ -6,8 +6,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
 class GameEndedRequestGameData(
     val gameEnded: Boolean,
@@ -32,5 +32,6 @@ class GameEndedRequestGameData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     containers = containers,
+    clues = emptyList(),
     tick = tick
 )

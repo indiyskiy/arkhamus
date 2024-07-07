@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ActionProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
+import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -23,6 +24,7 @@ class UpdateCrafterRequestGameData(
     ongoingCraftingProcess: List<CraftProcessResponse>,
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
+    clues: List<RedisClue>,
     tick: Long
 ) : GameUserData(
     gameUser = gameUser,
@@ -33,6 +35,7 @@ class UpdateCrafterRequestGameData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     containers = containers,
+    clues = clues,
     tick = tick
 ), ActionProcessData {
     override fun executedSuccessfully(): Boolean {

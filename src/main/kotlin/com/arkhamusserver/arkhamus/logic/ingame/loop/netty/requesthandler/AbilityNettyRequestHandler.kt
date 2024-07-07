@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Reque
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
+import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -25,7 +26,8 @@ class AbilityNettyRequestHandler(
     private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
     private val inventoryHandler: InventoryHandler,
     private val zonesHandler: ZonesHandler,
-    private val crafterProcessHandler: CrafterProcessHandler
+    private val crafterProcessHandler: CrafterProcessHandler,
+    private val clueHandler: ClueHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -48,6 +50,12 @@ class AbilityNettyRequestHandler(
             val ability = Ability.byId(this.abilityId)
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
+            val clues = clueHandler.filterClues(
+                globalGameData.clues,
+                inZones,
+                globalGameData.castedAbilities,
+                userId!!
+            )
             return ability?.let {
                 val relatedAbility =
                     relatedAbilityCastHandler.findForUser(user, ability, globalGameData.castedAbilities)
@@ -62,9 +70,10 @@ class AbilityNettyRequestHandler(
                     users,
                     inZones,
                     ongoingEvents,
-                    globalGameData
+                    globalGameData,
+                    clues
                 )
-            } ?: buildWrongAbilityGameData(user, users, ongoingEvents, inZones, globalGameData)
+            } ?: buildWrongAbilityGameData(user, users, ongoingEvents, inZones, globalGameData, clues)
         }
     }
 
@@ -77,7 +86,8 @@ class AbilityNettyRequestHandler(
         users: List<RedisGameUser>,
         inZones: List<LevelZone>,
         ongoingEvents: List<OngoingEvent>,
-        globalGameData: GlobalGameData
+        globalGameData: GlobalGameData,
+        clues: List<RedisClue>
     ) = AbilityRequestProcessData(
         ability = ability,
         canBeCasted = canBeCasted,
@@ -97,6 +107,7 @@ class AbilityNettyRequestHandler(
             globalGameData.craftProcess
         ),
         containers = globalGameData.containers.values.toList(),
+        clues = clues,
         tick = globalGameData.game.currentTick
     )
 
@@ -106,7 +117,8 @@ class AbilityNettyRequestHandler(
         users: List<RedisGameUser>,
         ongoingEvents: List<OngoingEvent>,
         inZones: List<LevelZone>,
-        globalGameData: GlobalGameData
+        globalGameData: GlobalGameData,
+        clues: List<RedisClue>
     ) = AbilityRequestProcessData(
         ability = null,
         canBeCasted = false,
@@ -126,6 +138,7 @@ class AbilityNettyRequestHandler(
         ),
         visibleItems = inventoryHandler.mapUsersItems(user.items),
         containers = globalGameData.containers.values.toList(),
+        clues = clues,
         tick = globalGameData.game.currentTick
     )
 }

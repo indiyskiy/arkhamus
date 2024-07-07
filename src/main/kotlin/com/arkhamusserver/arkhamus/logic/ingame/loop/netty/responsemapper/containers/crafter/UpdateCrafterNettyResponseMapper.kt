@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyR
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -53,7 +54,8 @@ class UpdateCrafterNettyResponseMapper(
                 availableAbilities = availableAbilities,
                 ongoingCraftingProcess = ongoingCraftingProcess,
                 containers = requestProcessData.containers,
-                inZones = requestProcessData.inZones
+                inZones = requestProcessData.inZones,
+                clues = requestProcessData.clues
             )
         }
     }
@@ -67,7 +69,8 @@ class UpdateCrafterNettyResponseMapper(
         ongoingCraftingProcess: List<CraftProcessResponse>,
         itemsInside: List<InventoryCell>,
         containers: List<RedisContainer>,
-        inZones: List<LevelZone>
+        inZones: List<LevelZone>,
+        clues: List<RedisClue>
     ) = UpdateCrafterNettyResponse(
         sortedUserInventory = sortedUserInventory,
         itemsInside = itemsInside,
@@ -86,7 +89,8 @@ class UpdateCrafterNettyResponseMapper(
         availableAbilities = availableAbilities,
         executedSuccessfully = true,
         firstTime = true,
-        inZones = inZones
+        inZones = inZones,
+        clues = clues
     )
 
     private fun List<InventoryCell>.applyInBetween(

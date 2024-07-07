@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
+import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
@@ -15,6 +16,7 @@ class ISawTheEndOfTimesNettyResponse(
     ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<InventoryCell>,
     containers: List<RedisContainer>,
+    clues: List<RedisClue>,
     inZones: List<LevelZone>
 ) : NettyResponse(
     tick = tick,
@@ -27,5 +29,6 @@ class ISawTheEndOfTimesNettyResponse(
     userInventory = userInventory,
     containers = containers.convertToContainerInfo(),
     inZones = inZones.convertToLevelZoneResponses(),
+    clues = clues.convertToClueResponses(),
     type = ISawTheEndOfTimesNettyResponse::class.java.simpleName
 )

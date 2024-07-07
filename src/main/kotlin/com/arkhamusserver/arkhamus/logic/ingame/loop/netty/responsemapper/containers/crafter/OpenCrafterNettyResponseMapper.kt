@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -60,7 +61,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
                     state = containerState,
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
-                    inZones = requestProcessData.inZones
+                    inZones = requestProcessData.inZones,
+                    clues = requestProcessData.clues
                 )
             } else {
                 return buildCrafter(
@@ -74,7 +76,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
                     state = containerState,
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
-                    inZones = requestProcessData.inZones
+                    inZones = requestProcessData.inZones,
+                    clues = requestProcessData.clues
                 )
             }
         }
@@ -91,6 +94,7 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         state: MapObjectState,
         containerHoldingUserId: Long?,
         containers: List<RedisContainer>,
+        clues: List<RedisClue>,
         inZones: List<LevelZone>
     ) = OpenCrafterNettyResponse(
         itemsInside = itemsInside,
@@ -108,7 +112,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         ongoingCraftingProcess = ongoingCraftingProcess,
         userInventory = visibleItems,
         containers = containers,
-        inZones = inZones
+        inZones = inZones,
+        clues = clues
     )
 
 

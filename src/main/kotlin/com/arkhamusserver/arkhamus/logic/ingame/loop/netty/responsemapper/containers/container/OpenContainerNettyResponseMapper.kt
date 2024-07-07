@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -56,7 +57,8 @@ class OpenContainerNettyResponseMapper(
                     state = containerState,
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
-                    inZones = requestProcessData.inZones
+                    inZones = requestProcessData.inZones,
+                    clues = requestProcessData.clues
                 )
             } else {
                 return buildContainer(
@@ -70,7 +72,8 @@ class OpenContainerNettyResponseMapper(
                     state = containerState,
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
-                    inZones = requestProcessData.inZones
+                    inZones = requestProcessData.inZones,
+                    clues = requestProcessData.clues
                 )
             }
         }
@@ -87,6 +90,7 @@ class OpenContainerNettyResponseMapper(
         state: MapObjectState,
         containerHoldingUserId: Long?,
         containers: List<RedisContainer>,
+        clues: List<RedisClue>,
         inZones: List<LevelZone>
     ) = OpenContainerNettyResponse(
         itemsInside = itemsInside,
@@ -103,7 +107,8 @@ class OpenContainerNettyResponseMapper(
         ongoingCraftingProcess = ongoingCraftingProcess,
         userInventory = visibleItems,
         containers = containers,
-        inZones = inZones
+        inZones = inZones,
+        clues = clues
     )
 
 

@@ -26,7 +26,7 @@ class HeartbeatNettyResponseMapper : NettyResponseMapper {
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?,
-        inBetweenEventHolder: InBetweenEventHolder
+        inBetweenEventHolder: InBetweenEventHolder,
     ): HeartbeatNettyResponse {
         (requestProcessData as HeartbeatRequestGameData).let {
             return HeartbeatNettyResponse(
@@ -36,14 +36,15 @@ class HeartbeatNettyResponseMapper : NettyResponseMapper {
                 otherGameUsers = it.otherGameUsers.map { gameUser ->
                     GameUserResponse(gameUser)
                 },
-                ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
+                ongoingEvents = it.visibleOngoingEvents.map { event ->
                     OngoingEventResponse(event)
                 },
-                availableAbilities = requestProcessData.availableAbilities,
-                ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
-                userInventory = requestProcessData.visibleItems,
-                containers = requestProcessData.containers,
-                inZones = requestProcessData.inZones
+                availableAbilities = it.availableAbilities,
+                ongoingCraftingProcess = it.ongoingCraftingProcess,
+                userInventory = it.visibleItems,
+                containers = it.containers,
+                inZones = it.inZones,
+                clues = it.clues
             )
         }
     }
