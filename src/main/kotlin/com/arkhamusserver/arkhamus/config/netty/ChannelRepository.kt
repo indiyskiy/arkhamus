@@ -97,4 +97,6 @@ class ChannelRepository {
         }
     }
 
+    fun allArkhamusChannels() = arkhamusChannelCache.values
+
 }
