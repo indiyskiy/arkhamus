@@ -97,25 +97,25 @@ class AdminLevelPreviewLogic(
                     PointDto(
                         tetragon.point0.x.toFloat() * SCREEN_ZOOM,
                         tetragon.point0.y.toFloat() * SCREEN_ZOOM,
-                        tetragon.levelZone.id!!.toColor()
+                        tetragon.levelZone.inGameId.toColor()
                     ),
                     PointDto(
                         tetragon.point1.x.toFloat() * SCREEN_ZOOM,
                         tetragon.point1.y.toFloat() * SCREEN_ZOOM,
-                        tetragon.levelZone.id!!.toColor()
+                        tetragon.levelZone.inGameId.toColor()
                     ),
                     PointDto(
                         tetragon.point2.x.toFloat() * SCREEN_ZOOM,
                         tetragon.point2.y.toFloat() * SCREEN_ZOOM,
-                        tetragon.levelZone.id!!.toColor()
+                        tetragon.levelZone.inGameId.toColor()
                     ),
                     PointDto(
                         tetragon.point3.x.toFloat() * SCREEN_ZOOM,
                         tetragon.point3.y.toFloat() * SCREEN_ZOOM,
-                        tetragon.levelZone.id!!.toColor()
+                        tetragon.levelZone.inGameId.toColor()
                     ),
                 ),
-                color = tetragon.levelZone.id!!.toColor()
+                color = tetragon.levelZone.inGameId.toColor()
             )
         }
     }
@@ -127,7 +127,7 @@ class AdminLevelPreviewLogic(
                 cy = ellipse.point.y.toFloat() * SCREEN_ZOOM,
                 rx = ellipse.width.toFloat() / 2 * SCREEN_ZOOM,
                 ry = ellipse.height.toFloat() / 2 * SCREEN_ZOOM,
-                color = ellipse.levelZone.id!!.toColor()
+                color = ellipse.levelZone.inGameId.toColor()
             )
         }
     }
