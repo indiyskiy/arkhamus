@@ -91,7 +91,7 @@ class AbilityNettyRequestHandler(
     ) = AbilityRequestProcessData(
         ability = ability,
         canBeCasted = canBeCasted,
-        cooldown = relatedAbility?.timeLeft,
+        cooldown = relatedAbility?.timeLeftCooldown,
         cooldownOf = ability.cooldown,
         item = requiredItem,
         executedSuccessfully = false,

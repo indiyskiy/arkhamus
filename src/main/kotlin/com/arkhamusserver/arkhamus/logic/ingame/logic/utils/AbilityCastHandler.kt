@@ -40,12 +40,20 @@ class AbilityCastHandler(
             targetUserId = null,
             timeStart = currentGameTime,
             timePast = 0,
-            timeLeft = ability.cooldown ?: 0L,
-            state = if (ability.cooldown != null) RedisTimeEventState.ACTIVE else RedisTimeEventState.PAST,
+            timeLeftCooldown = ability.cooldown,
+            timeLeftActive = ability.active ?: 0L,
+            state = setState(ability),
             xLocation = null,
             yLocation = null,
         )
         redisAbilityCastRepository.save(abilityCast)
     }
+
+    private fun setState(ability: Ability) =
+        if ((ability.active ?: 0L) > 0) {
+            RedisTimeEventState.ACTIVE
+        } else {
+            RedisTimeEventState.ON_COOLDOWN
+        }
 
 }

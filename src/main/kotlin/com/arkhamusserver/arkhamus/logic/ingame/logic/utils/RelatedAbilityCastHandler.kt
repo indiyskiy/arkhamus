@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component
 class RelatedAbilityCastHandler {
     fun findForUser(user: RedisGameUser, ability: Ability, castedAbilities: List<RedisAbilityCast>) =
          if (ability.globalCooldown) {
-            castedAbilities.firstOrNull { it.abilityId == ability.id && it.timeLeft > 0 }
+            castedAbilities.firstOrNull { it.abilityId == ability.id && it.timeLeftCooldown > 0 }
         } else {
             castedAbilities.firstOrNull {
                 it.abilityId == ability.id &&
                         it.sourceUserId == user.userId &&
-                        it.timeLeft > 0
+                        it.timeLeftCooldown > 0
             }
         }
 }

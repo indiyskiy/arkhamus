@@ -43,7 +43,7 @@ class CanAbilityBeCastedHandler(
             AbilityOfUserResponse(
                 abilityId = it.id,
                 maxCooldown = it.cooldown,
-                cooldown = relatedAbilityCastMap[it.id]?.timeLeft ?: 0,
+                cooldown = relatedAbilityCastMap[it.id]?.timeLeftCooldown ?: 0,
                 charges = numberOfRequiredItems(it, abilityToItemResolver.resolve(it), user)
             )
         }

@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.*
 
 private const val SECOND_IN_MILLIS: Long = 1 * 1000
 private const val MINUTE_IN_MILLIS: Long = SECOND_IN_MILLIS * 60
+private const val MINIMUM_COOLDOWN: Long = SECOND_IN_MILLIS
 
 enum class Ability(
     val id: Int,
@@ -11,7 +12,8 @@ enum class Ability(
     val consumesItem: Boolean = false,
     val classBased: Boolean = false,
     val availableFor: Set<RoleTypeInGame> = setOf(CULTIST, INVESTIGATOR, NEUTRAL),
-    val cooldown: Long? = null,
+    val cooldown: Long = MINIMUM_COOLDOWN,
+    val active: Long? = null,
     val globalCooldown: Boolean = false
 ) {
     // investigator ability 1***
