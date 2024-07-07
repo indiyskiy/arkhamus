@@ -49,6 +49,8 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     val tetragons = getTetragons(gameId)
     val ellipses = getEllipses(gameId)
 
+    val allClues = getClues(gameId)
+
     return GlobalGameData(
         game = game,
         altarHolder = altarHolder
@@ -62,6 +64,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.castedAbilities = castedAbilities
         this.craftProcess = craftProcess
         this.lanterns = allLanterns.associateBy { it.lanternId }
+        this.clues = allClues
         this.levelGeometryData = buildGeometryData(zones, tetragons, ellipses)
     }
 }
