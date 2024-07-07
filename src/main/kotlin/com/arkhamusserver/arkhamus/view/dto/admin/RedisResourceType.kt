@@ -15,5 +15,5 @@ enum class RedisResourceType {
     LEVEL_ZONE,
     TETRAGON,
     ELLIPSE,
-
+    CLUE,
 }

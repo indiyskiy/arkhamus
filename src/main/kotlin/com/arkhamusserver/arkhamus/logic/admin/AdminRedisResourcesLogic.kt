@@ -22,7 +22,8 @@ class AdminRedisResourcesLogic(
     private val craftProcessRepository: RedisCraftProcessRepository,
     private val redisLevelZoneRepository: RedisLevelZoneRepository,
     private val redisLevelTetragonRepository: RedisLevelTetragonRepository,
-    private val redisLevelEllipseRepository: RedisLevelEllipseRepository
+    private val redisLevelEllipseRepository: RedisLevelEllipseRepository,
+    private val redisClueRepository: RedisClueRepository,
 ) {
     fun info(): AdminRedisResourcesInfoDto {
         return AdminRedisResourcesInfoDto(
@@ -40,7 +41,8 @@ class AdminRedisResourcesLogic(
                 craftProcessRepository.findAll().mapInfo(CRAFT_PROCESS),
                 redisLevelZoneRepository.findAll().mapInfo(LEVEL_ZONE),
                 redisLevelTetragonRepository.findAll().mapInfo(TETRAGON),
-                redisLevelEllipseRepository.findAll().mapInfo(ELLIPSE)
+                redisLevelEllipseRepository.findAll().mapInfo(ELLIPSE),
+                redisClueRepository.findAll().mapInfo(CLUE)
             )
         )
     }
