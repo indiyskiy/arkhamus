@@ -18,7 +18,6 @@ class OnTickAbilityCast(
         var logger: Logger = LoggerFactory.getLogger(OnTickAbilityCast::class.java)
     }
 
-
     fun applyAbilityCasts(
         globalGameData: GlobalGameData,
         castedAbilities: List<RedisAbilityCast>,

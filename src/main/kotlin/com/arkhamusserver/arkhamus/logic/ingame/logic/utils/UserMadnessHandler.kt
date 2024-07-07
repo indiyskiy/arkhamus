@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component
+import kotlin.math.max
 
 @Component
 class UserMadnessHandler {
@@ -19,5 +20,19 @@ class UserMadnessHandler {
 
     fun isCompletelyMad(gameUser: RedisGameUser): Boolean =
         gameUser.madness >= gameUser.madnessNotches.max()
+
+    fun reduceMadness(user: RedisGameUser, reduceValue: Double) {
+        val notch = currentMinNotch(user)
+        notch?.let{
+            val afterReduced = max(user.madness - reduceValue, notch)
+            user.madness = afterReduced
+        }
+    }
+
+    private fun currentMinNotch(user: RedisGameUser): Double? {
+        val madness = user.madness
+        val notch = user.madnessNotches.sorted().firstOrNull { it >= madness }
+       return notch
+    }
 
 }
