@@ -101,7 +101,7 @@ class ProcessingHandler(
             )
             gameNettyLogic.process(nettyTickRequestMessageDataHolder)
         } else {
-            logger.error("game ended or ${account.id} sent shit")
+            logger.warn("game not started/already ended or ${account.id} sent shit")
         }
     }
 
