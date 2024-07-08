@@ -16,28 +16,28 @@
     <h1>Games</h1>
     <table style="border-collapse: collapse; width: 100%;">
         <tr>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Id</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">State</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Game Type</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">God</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Users</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Created</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Started</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Finished</th>
+            <th >Id</th>
+            <th >State</th>
+            <th >Game Type</th>
+            <th >God</th>
+            <th >Users</th>
+            <th >Created</th>
+            <th >Started</th>
+            <th >Finished</th>
         </tr>
         <tr th:each="game : ${games}">
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;">
+            <td >
                 <a th:href="@{/admin/browser/game/{gameId}(gameId=${game.id})}" th:text="${game.id}"></a>
             </td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${game.state}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${game.gameType}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${game.god?.title}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td  th:text="${game.state}"></td>
+            <td  th:text="${game.gameType}"></td>
+            <td  th:text="${game.god?.title}"></td>
+            <td
                 th:text="${#strings.arrayJoin(game?.usersInGame, ', ')}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${game?.creation ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td  th:text="${game?.creation ?: ''}"></td>
+            <td
                 th:text="${game?.started ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.finished ?: ''}"></td>
         </tr>
     </table>

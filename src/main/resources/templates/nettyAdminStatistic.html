@@ -16,16 +16,16 @@
     <h1>Connections <span th:text="${nettyInfo.size}"></span></h1>
     <table style="border-collapse: collapse; width: 100%;">
         <tr>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">key</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">game ID</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">user</th>
+            <th >key</th>
+            <th >game ID</th>
+            <th >user</th>
         </tr>
         <tr th:each="info : ${nettyInfo.nettyInfos}">
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${info.channelId}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;">
+            <td  th:text="${info.channelId}"></td>
+            <td >
                 <a th:href="@{/admin/browser/game/{gameId}(gameId=${info.gameSessionId})}" th:text="${info.gameSessionId}"></a>
             </td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;">
+            <td >
                 <a th:href="@{/admin/browser/user/{userId}(userId=${info.userId})}"
                    th:text="${info.userId} + ' ' + ${info.userNickname}">
                 </a>

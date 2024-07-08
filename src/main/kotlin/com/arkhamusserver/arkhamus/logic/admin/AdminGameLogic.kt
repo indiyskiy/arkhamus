@@ -6,9 +6,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSes
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.view.dto.admin.AdminGameSessionDto
-import com.arkhamusserver.arkhamus.view.dto.admin.AdminUserGameSessionDto
-import com.arkhamusserver.arkhamus.view.dto.admin.GameStatisticHolder
+import com.arkhamusserver.arkhamus.view.dto.admin.*
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
 import org.springframework.stereotype.Component
 
@@ -28,17 +26,31 @@ class AdminGameLogic(
             }
     }
 
-    fun allForUser(userId: Long): List<AdminUserGameSessionDto> {
+    fun allForUser(userId: Long): AdminUserGameDataDto {
         val userGameSessions = userOfGameSessionRepository
             .findByUserAccountId(userId)
             .sortedBy { it.gameSession.creationTimestamp?.time ?: 0 }
-        return userGameSessions.map {
+        val games = userGameSessions.map {
             AdminUserGameSessionDto().apply {
                 this.classInGame = it.classInGame
                 this.roleInGame = it.roleInGame
+                this.winOrLoose = it.won?.let { if (it) "win" else "loose" } ?: "not yet"
                 this.gameSession = adminGameSessionDto(it.gameSession)
             }
         }
+        val losses = userGameSessions.filter { it.won != null && it.won == false }.size
+        val wins = userGameSessions.filter { it.won != null && it.won == true }.size
+        val winrate = if (wins == 0) {
+            0
+        } else {
+            100 * wins / (wins + losses)
+        }
+        return AdminUserGameDataDto(
+            games = games,
+            losses = losses,
+            wins = wins,
+            winrate = winrate
+        )
     }
 
     fun statisticWinRate(): GameStatisticHolder {

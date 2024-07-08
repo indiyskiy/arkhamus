@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.view.controller.admin.browser
 
 import com.arkhamusserver.arkhamus.logic.admin.AdminGameLogic
 import com.arkhamusserver.arkhamus.logic.admin.AdminUserLogic
-import com.arkhamusserver.arkhamus.view.dto.admin.AdminUserGameSessionDto
+import com.arkhamusserver.arkhamus.view.dto.admin.AdminUserGameDataDto
 import com.arkhamusserver.arkhamus.view.dto.user.AdminUserDto
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -27,9 +27,9 @@ class BrowserAdminUserController(
         model: Model
     ): String {
         val user: AdminUserDto = adminUserLogic.user(userId)
-        val games: List<AdminUserGameSessionDto> = adminGameLogic.allForUser(userId)
+        val data: AdminUserGameDataDto = adminGameLogic.allForUser(userId)
         model.addAttribute("user", user)
-        model.addAttribute("games", games)
+        model.addAttribute("data", data)
         return "user"
     }
 }

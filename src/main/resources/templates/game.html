@@ -17,31 +17,31 @@
 
     <table>
         <tr>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">ID</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">State</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Game Type</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">God</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Token</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Created</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Started</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Finished</th>
+            <th >ID</th>
+            <th >State</th>
+            <th >Game Type</th>
+            <th >God</th>
+            <th >Token</th>
+            <th >Created</th>
+            <th >Started</th>
+            <th >Finished</th>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.id ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.state ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.gameType ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.god?.title ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.token ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.creation ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.started ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.finished ?: ''}"></td>
         </tr>
     </table>
@@ -50,19 +50,19 @@
 
     <table>
         <tr>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">level Id</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">level</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">lobby size</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">number of cultists</th>
+            <th >level Id</th>
+            <th >level</th>
+            <th >lobby size</th>
+            <th >number of cultists</th>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.gameSessionSettings?.level?.levelId ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.gameSessionSettings?.level?.name ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.gameSessionSettings?.lobbySize ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${game?.gameSessionSettings?.numberOfCultists ?: ''}"></td>
         </tr>
     </table>
@@ -71,26 +71,26 @@
 
     <table>
         <tr>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">User ID</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Role</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Class</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">User Name</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Is Host</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Game Skin</th>
+            <th >User ID</th>
+            <th >Role</th>
+            <th >Class</th>
+            <th >User Name</th>
+            <th >Is Host</th>
+            <th >Game Skin</th>
         </tr>
         <tr th:if="${game?.usersInGame != null}" th:each="user : ${game.usersInGame}">
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;">
+            <td >
                 <a th:href="@{/admin/browser/user/{userId}(userId=${user?.userId ?: ''})}"
                    th:text="${user?.userId ?: ''}">
                 </a>
             </td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${user?.role?.userRole ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td
                 th:text="${user?.role?.userClass ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${user?.nickName ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${user?.isHost ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
+            <td  th:text="${user?.nickName ?: ''}"></td>
+            <td  th:text="${user?.isHost ?: ''}"></td>
+            <td
                 th:text="${user?.gameSkin?.skinColor ?: ''}"></td>
         </tr>
     </table>

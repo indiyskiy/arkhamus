@@ -23,6 +23,7 @@ import com.fasterxml.uuid.Generators
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.postgresql.geometric.PGpoint
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.sql.Timestamp
@@ -52,31 +53,31 @@ class UpdateContainerRequestProcessorTest {
         assertNull(resultUser[Item.SAINT_QUARTZ.id])
         assertEquals(10, resultContainer[Item.SAINT_QUARTZ.id])
 
-        assertNull(resultUser[Item.I2.id])
-        assertEquals(10, resultContainer[Item.I2.id])
+        assertNull(resultUser[Item.CRYSTALLIZED_BLOOD.id])
+        assertEquals(10, resultContainer[Item.CRYSTALLIZED_BLOOD.id])
 
-        assertNull(resultUser[Item.I3.id])
-        assertEquals(10, resultContainer[Item.I3.id])
+        assertNull(resultUser[Item.ELDER_SIGN.id])
+        assertEquals(10, resultContainer[Item.ELDER_SIGN.id])
 
-        assertNull(resultUser[Item.I4.id])
-        assertEquals(10, resultContainer[Item.I4.id])
+        assertNull(resultUser[Item.CORRUPTED_TOPAZ.id])
+        assertEquals(10, resultContainer[Item.CORRUPTED_TOPAZ.id])
 
-        assertNull(resultUser[Item.I5.id])
-        assertEquals(5, resultContainer[Item.I5.id])
+        assertNull(resultUser[Item.CLOUDY_FLASK.id])
+        assertEquals(5, resultContainer[Item.CLOUDY_FLASK.id])
 
-        assertNull(resultUser[Item.I6.id])
-        assertEquals(5, resultContainer[Item.I6.id])
+        assertNull(resultUser[Item.INNSMOUTH_WATER.id])
+        assertEquals(5, resultContainer[Item.INNSMOUTH_WATER.id])
     }
 
     @Test
     fun fullInventory() {
         val newInventoryContent = listOf(
             InventoryCell(Item.SAINT_QUARTZ.id, 10),
-            InventoryCell(Item.I2.id, 10),
-            InventoryCell(Item.I3.id, 10),
-            InventoryCell(Item.I4.id, 10),
-            InventoryCell(Item.I5.id, 5),
-            InventoryCell(Item.I6.id, 5),
+            InventoryCell(Item.CRYSTALLIZED_BLOOD.id, 10),
+            InventoryCell(Item.ELDER_SIGN.id, 10),
+            InventoryCell(Item.CORRUPTED_TOPAZ.id, 10),
+            InventoryCell(Item.CLOUDY_FLASK.id, 5),
+            InventoryCell(Item.INNSMOUTH_WATER.id, 5),
         )
 
         val (data, _) = executeRequest(newInventoryContent)
@@ -87,31 +88,31 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(10, resultUser[Item.SAINT_QUARTZ.id])
         assertNull(resultContainer[Item.SAINT_QUARTZ.id])
 
-        assertEquals(10, resultUser[Item.I2.id])
-        assertNull(resultContainer[Item.I2.id])
+        assertEquals(10, resultUser[Item.CRYSTALLIZED_BLOOD.id])
+        assertNull(resultContainer[Item.CRYSTALLIZED_BLOOD.id])
 
-        assertEquals(10, resultUser[Item.I3.id])
-        assertNull(resultContainer[Item.I3.id])
+        assertEquals(10, resultUser[Item.ELDER_SIGN.id])
+        assertNull(resultContainer[Item.ELDER_SIGN.id])
 
-        assertEquals(10, resultUser[Item.I4.id])
-        assertNull(resultContainer[Item.I4.id])
+        assertEquals(10, resultUser[Item.CORRUPTED_TOPAZ.id])
+        assertNull(resultContainer[Item.CORRUPTED_TOPAZ.id])
 
-        assertEquals(5, resultUser[Item.I5.id])
-        assertNull(resultContainer[Item.I5.id])
+        assertEquals(5, resultUser[Item.CLOUDY_FLASK.id])
+        assertNull(resultContainer[Item.CLOUDY_FLASK.id])
 
-        assertEquals(5, resultUser[Item.I6.id])
-        assertNull(resultContainer[Item.I6.id])
+        assertEquals(5, resultUser[Item.INNSMOUTH_WATER.id])
+        assertNull(resultContainer[Item.INNSMOUTH_WATER.id])
     }
 
     @Test
     fun mixed() {
         val newInventoryContent = listOf(
             InventoryCell(Item.SAINT_QUARTZ.id, 10),
-            InventoryCell(Item.I2.id, 0),
-            InventoryCell(Item.I3.id, 3),
-            InventoryCell(Item.I4.id, 10),
-            InventoryCell(Item.I5.id, 3),
-            InventoryCell(Item.I6.id, 3),
+            InventoryCell(Item.CRYSTALLIZED_BLOOD.id, 0),
+            InventoryCell(Item.ELDER_SIGN.id, 3),
+            InventoryCell(Item.CORRUPTED_TOPAZ.id, 10),
+            InventoryCell(Item.CLOUDY_FLASK.id, 3),
+            InventoryCell(Item.INNSMOUTH_WATER.id, 3),
         )
 
         val (data, _) = executeRequest(newInventoryContent)
@@ -122,20 +123,20 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(10, resultUser[Item.SAINT_QUARTZ.id])
         assertNull(resultContainer[Item.SAINT_QUARTZ.id])
 
-        assertNull(resultUser[Item.I2.id])
-        assertEquals(10, resultContainer[Item.I2.id])
+        assertNull(resultUser[Item.CRYSTALLIZED_BLOOD.id])
+        assertEquals(10, resultContainer[Item.CRYSTALLIZED_BLOOD.id])
 
-        assertEquals(3, resultUser[Item.I3.id])
-        assertEquals(7, resultContainer[Item.I3.id])
+        assertEquals(3, resultUser[Item.ELDER_SIGN.id])
+        assertEquals(7, resultContainer[Item.ELDER_SIGN.id])
 
-        assertEquals(10, resultUser[Item.I4.id])
-        assertNull(resultContainer[Item.I4.id])
+        assertEquals(10, resultUser[Item.CORRUPTED_TOPAZ.id])
+        assertNull(resultContainer[Item.CORRUPTED_TOPAZ.id])
 
-        assertEquals(3, resultUser[Item.I5.id])
-        assertEquals(2, resultContainer[Item.I5.id])
+        assertEquals(3, resultUser[Item.CLOUDY_FLASK.id])
+        assertEquals(2, resultContainer[Item.CLOUDY_FLASK.id])
 
-        assertEquals(3, resultUser[Item.I6.id])
-        assertEquals(2, resultContainer[Item.I6.id])
+        assertEquals(3, resultUser[Item.INNSMOUTH_WATER.id])
+        assertEquals(2, resultContainer[Item.INNSMOUTH_WATER.id])
     }
 
     @Test
@@ -178,9 +179,9 @@ class UpdateContainerRequestProcessorTest {
     fun sortedUserInventory() {
         val newInventoryContent = listOf(
             InventoryCell(Item.SAINT_QUARTZ.id, 10),
-            InventoryCell(Item.I2.id, 0),
-            InventoryCell(Item.I3.id, 0),
-            InventoryCell(Item.I4.id, 10),
+            InventoryCell(Item.CRYSTALLIZED_BLOOD.id, 0),
+            InventoryCell(Item.ELDER_SIGN.id, 0),
+            InventoryCell(Item.CORRUPTED_TOPAZ.id, 10),
         )
 
         val (data, requestContainer) = executeRequest(newInventoryContent)
@@ -191,20 +192,20 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(10, resultUser[Item.SAINT_QUARTZ.id])
         assertNull(resultContainer[Item.SAINT_QUARTZ.id])
 
-        assertNull(resultUser[Item.I2.id])
-        assertEquals(10, resultContainer[Item.I2.id])
+        assertNull(resultUser[Item.CRYSTALLIZED_BLOOD.id])
+        assertEquals(10, resultContainer[Item.CRYSTALLIZED_BLOOD.id])
 
-        assertNull(resultUser[Item.I3.id])
-        assertEquals(10, resultContainer[Item.I3.id])
+        assertNull(resultUser[Item.ELDER_SIGN.id])
+        assertEquals(10, resultContainer[Item.ELDER_SIGN.id])
 
-        assertEquals(10, resultUser[Item.I4.id])
-        assertNull(resultContainer[Item.I4.id])
+        assertEquals(10, resultUser[Item.CORRUPTED_TOPAZ.id])
+        assertNull(resultContainer[Item.CORRUPTED_TOPAZ.id])
 
-        assertNull(resultUser[Item.I5.id])
-        assertEquals(5, resultContainer[Item.I5.id])
+        assertNull(resultUser[Item.CLOUDY_FLASK.id])
+        assertEquals(5, resultContainer[Item.CLOUDY_FLASK.id])
 
-        assertNull(resultUser[Item.I6.id])
-        assertEquals(5, resultContainer[Item.I6.id])
+        assertNull(resultUser[Item.INNSMOUTH_WATER.id])
+        assertEquals(5, resultContainer[Item.INNSMOUTH_WATER.id])
 
         val updateContainerRequestGameData = requestContainer.requestProcessData as UpdateContainerRequestGameData
 
@@ -220,17 +221,17 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(Item.PURE_NOTHING.id, updateContainerRequestGameData.sortedUserInventory[2].itemId)
 
         assertEquals(10, updateContainerRequestGameData.sortedUserInventory[3].number)
-        assertEquals(Item.I4.id, updateContainerRequestGameData.sortedUserInventory[3].itemId)
+        assertEquals(Item.CORRUPTED_TOPAZ.id, updateContainerRequestGameData.sortedUserInventory[3].itemId)
     }
 
     @Test
     fun sortedUserInventory2() {
         val newInventoryContent = listOf(
             InventoryCell(Item.SAINT_QUARTZ.id, 3),
-            InventoryCell(Item.I2.id, 0),
+            InventoryCell(Item.CRYSTALLIZED_BLOOD.id, 0),
             InventoryCell(Item.SAINT_QUARTZ.id, 6),
-            InventoryCell(Item.I3.id, 0),
-            InventoryCell(Item.I4.id, 10),
+            InventoryCell(Item.ELDER_SIGN.id, 0),
+            InventoryCell(Item.CORRUPTED_TOPAZ.id, 10),
             InventoryCell(Item.SAINT_QUARTZ.id, 1),
         )
 
@@ -242,20 +243,20 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(10, resultUser[Item.SAINT_QUARTZ.id])
         assertNull(resultContainer[Item.SAINT_QUARTZ.id])
 
-        assertNull(resultUser[Item.I2.id])
-        assertEquals(10, resultContainer[Item.I2.id])
+        assertNull(resultUser[Item.CRYSTALLIZED_BLOOD.id])
+        assertEquals(10, resultContainer[Item.CRYSTALLIZED_BLOOD.id])
 
-        assertNull(resultUser[Item.I3.id])
-        assertEquals(10, resultContainer[Item.I3.id])
+        assertNull(resultUser[Item.ELDER_SIGN.id])
+        assertEquals(10, resultContainer[Item.ELDER_SIGN.id])
 
-        assertEquals(10, resultUser[Item.I4.id])
-        assertNull(resultContainer[Item.I4.id])
+        assertEquals(10, resultUser[Item.CORRUPTED_TOPAZ.id])
+        assertNull(resultContainer[Item.CORRUPTED_TOPAZ.id])
 
-        assertNull(resultUser[Item.I5.id])
-        assertEquals(5, resultContainer[Item.I5.id])
+        assertNull(resultUser[Item.CLOUDY_FLASK.id])
+        assertEquals(5, resultContainer[Item.CLOUDY_FLASK.id])
 
-        assertNull(resultUser[Item.I6.id])
-        assertEquals(5, resultContainer[Item.I6.id])
+        assertNull(resultUser[Item.INNSMOUTH_WATER.id])
+        assertEquals(5, resultContainer[Item.INNSMOUTH_WATER.id])
 
         val updateContainerRequestGameData = requestContainer.requestProcessData as UpdateContainerRequestGameData
 
@@ -274,7 +275,7 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(Item.PURE_NOTHING.id, updateContainerRequestGameData.sortedUserInventory[3].itemId)
 
         assertEquals(10, updateContainerRequestGameData.sortedUserInventory[4].number)
-        assertEquals(Item.I4.id, updateContainerRequestGameData.sortedUserInventory[4].itemId)
+        assertEquals(Item.CORRUPTED_TOPAZ.id, updateContainerRequestGameData.sortedUserInventory[4].itemId)
 
         assertEquals(1, updateContainerRequestGameData.sortedUserInventory[5].number)
         assertEquals(Item.SAINT_QUARTZ.id, updateContainerRequestGameData.sortedUserInventory[5].itemId)
@@ -359,16 +360,16 @@ class UpdateContainerRequestProcessorTest {
     }
 
     private fun prepareDefaultData(newInventoryContent: List<InventoryCell>): Data {
-        val requestUserAccount = UserAccount().apply {
+        val requestUserAccount = UserAccount(nickName = "test").apply {
             id = 1L
             nickName = "user"
             email = "email"
             password = "password"
             role = setOf(
-                Role().apply {
-                    id = 1
+                Role(
+                    id = 1,
                     name = RoleName.USER.securityValue
-                }
+                )
             )
         }
 
@@ -399,7 +400,7 @@ class UpdateContainerRequestProcessorTest {
         val redisGame = RedisGame(
             id = gameSession.id.toString(),
             gameId = gameSession.id,
-            godId = 1L,
+            godId = 1,
             currentTick = 100L,
             globalTimer = 10000L,
             gameStart = System.currentTimeMillis(),
@@ -420,8 +421,7 @@ class UpdateContainerRequestProcessorTest {
             id = 1L,
             inGameId = 1L,
             interactionRadius = 200.0,
-            x = 50.0,
-            y = 50.0
+            point = PGpoint(50.0, 50.0)
         )
         val inContainerItems = createContainersItems()
 
@@ -431,9 +431,9 @@ class UpdateContainerRequestProcessorTest {
             gameId = gameSession.id!!,
             holdingUser = 1,
             state = MapObjectState.HOLD,
-            x = container.x!!,
-            y = container.y!!,
-            interactionRadius = container.interactionRadius!!,
+            x = container.point.x,
+            y = container.point.y,
+            interactionRadius = container.interactionRadius,
             items = inContainerItems
         )
 
@@ -446,8 +446,8 @@ class UpdateContainerRequestProcessorTest {
             role = RoleTypeInGame.INVESTIGATOR,
             classInGame = ClassInGame.MIND_HEALER,
             gameId = gameSession.id!!,
-            x = container.x!!,
-            y = container.y!!,
+            x = container.point.x,
+            y = container.point.y,
             madness = 20.0,
             madnessNotches = listOf(100.0, 300.0, 600.0),
             items = oldUserItems,
@@ -465,12 +465,18 @@ class UpdateContainerRequestProcessorTest {
             ongoingCraftingProcess = emptyList(),
             availableAbilities = emptyList(),
             tick = 100L,
-            containers = emptyList()
+            containers = emptyList(),
+            clues = emptyList(),
+            inZones = emptyList()
         )
 
         val globalGameData = GlobalGameData(
             game = redisGame,
-            altarHolder = RedisAltarHolder("altarHolder", redisGame.gameId!!),
+            altarHolder = RedisAltarHolder(
+                id = "altarHolder",
+                gameId = redisGame.gameId!!,
+                altarHolderId = 0L
+            ),
             users = mapOf(gameUser.userId to gameUser),
             containers = mapOf(redisContainer.containerId to redisContainer),
             timeEvents = emptyList(),
@@ -482,20 +488,20 @@ class UpdateContainerRequestProcessorTest {
     private fun createOldUserItems(): MutableMap<Int, Int> {
         return mutableMapOf(
             Item.SAINT_QUARTZ.id to 5,
-            Item.I2.id to 5,
-            Item.I3.id to 5,
-            Item.I4.id to 5,
-            Item.I5.id to 5,
+            Item.CRYSTALLIZED_BLOOD.id to 5,
+            Item.ELDER_SIGN.id to 5,
+            Item.CORRUPTED_TOPAZ.id to 5,
+            Item.CLOUDY_FLASK.id to 5,
         )
     }
 
     private fun createContainersItems(): MutableMap<Int, Int> {
         return mutableMapOf(
             Item.SAINT_QUARTZ.id to 5,
-            Item.I2.id to 5,
-            Item.I3.id to 5,
-            Item.I4.id to 5,
-            Item.I6.id to 5,
+            Item.CRYSTALLIZED_BLOOD.id to 5,
+            Item.ELDER_SIGN.id to 5,
+            Item.CORRUPTED_TOPAZ.id to 5,
+            Item.INNSMOUTH_WATER.id to 5,
         )
     }
 

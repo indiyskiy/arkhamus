@@ -15,16 +15,16 @@
     <h1>Levels</h1>
     <table style="border-collapse: collapse; width: 100%;">
         <tr>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Id</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Latest version</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">State</th>
+            <th >Id</th>
+            <th >Latest version</th>
+            <th >State</th>
         </tr>
         <tr th:each="level : ${levelInfo}">
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;">
+            <td >
                 <a th:href="@{/admin/browser/level/{levelId}(levelId=${level.levelId})}" th:text="${level.levelId}"></a>
             </td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${level.latestVersion}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${level.state}"></td>
+            <td  th:text="${level.latestVersion}"></td>
+            <td  th:text="${level.state}"></td>
         </tr>
     </table>
 </div>

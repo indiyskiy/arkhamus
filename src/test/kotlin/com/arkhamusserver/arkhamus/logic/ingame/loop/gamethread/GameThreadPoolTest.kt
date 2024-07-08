@@ -370,6 +370,8 @@ class GameThreadPoolTest {
                 ongoingCraftingProcess = emptyList(),
                 visibleItems = emptyList(),
                 containers = emptyList(),
+                inZones = emptyList(),
+                clues = emptyList(),
                 tick = tick + 1
             ),
             lastExecutedAction = ExecutedAction(-1, true, "")
@@ -396,7 +398,7 @@ class GameThreadPoolTest {
         )
 
         val usersOfGameSession = (0 until usersCount).map { _ ->
-            val userAccount = UserAccount()
+            val userAccount = UserAccount(nickName = "test")
             userAccount.id = userAccountCounter
             userAccount.nickName = "user$userAccountCounter"
             userAccountCounter++
@@ -435,7 +437,11 @@ class GameThreadPoolTest {
 
         val globalGameData = GlobalGameData(
             game = redisGame,
-            altarHolder = RedisAltarHolder("altar holder", redisGame.gameId!!),
+            altarHolder = RedisAltarHolder(
+                id = "altar holder",
+                gameId = redisGame.gameId!!,
+                altarHolderId = 0L,
+            ),
             users = redisGameUsers.associateBy { user -> user.userId }
         )
 

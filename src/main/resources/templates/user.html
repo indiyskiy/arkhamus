@@ -15,53 +15,65 @@
 
     <table>
         <tr>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Id</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">nick name</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">email</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">created</th>
+            <th>Id</th>
+            <th>nick name</th>
+            <th>email</th>
+            <th>created</th>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${user.userId}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${user.nickName}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${user.email}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;" th:text="${user.creation?:''}"></td>
+            <td th:text="${user.userId}"></td>
+            <td th:text="${user.nickName}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.creation?:''}"></td>
         </tr>
     </table>
 
 
     <h2>User games</h2>
 
+    Wins: <span th:text="${data.wins}"></span>
+    <br/>
+    Looses: <span th:text="${data.losses}"></span>
+    <br/>
+    Win rate: <span th:text="${data.winrate}"></span>
+    <br/>
+
     <table style="border-collapse: collapse; width: 100%;">
         <tr>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Id</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">State</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Game Type</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">My role</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">My class</th>
-            <th style="border: 1px solid #000; padding: 8px; text-align: left;">God</th>
+            <th>Id</th>
+            <th>State</th>
+            <th>Game Type</th>
+            <th>Win or loose</th>
+            <th>My role</th>
+            <th>My class</th>
+            <th>God</th>
         </tr>
-        <tr th:each="game : ${games}">
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;">
+        <tr th:each="game : ${data.games}">
+            <td>
                 <a th:href="@{/admin/browser/game/{gameId}(gameId=${game?.gameSession?.id})}"
                    th:text="${game?.gameSession?.id}"></a>
             </td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
-                th:text="${game?.gameSession?.state ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
-                th:text="${game?.gameSession?.gameType ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
-                th:text="${game?.roleInGame ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
-                th:text="${game?.classInGame ?: ''}"></td>
-            <td style="border: 1px solid #000; padding: 8px; text-align: left;"
-                th:text="${game?.gameSession?.god?.title ?: ''}"></td>
+            <td
+                    th:text="${game?.gameSession?.state ?: ''}"></td>
+            <td
+                    th:text="${game?.gameSession?.gameType ?: ''}"></td>
+            <td
+                    th:text="${game?.winOrLoose ?: ''}"></td>
+            <td
+                    th:text="${game?.roleInGame ?: ''}"></td>
+            <td
+                    th:text="${game?.classInGame ?: ''}"></td>
+            <td
+                    th:text="${game?.gameSession?.god?.title ?: ''}"></td>
         </tr>
     </table>
 </div>
+
 <div class="footer">
     <footer>
         <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
     </footer>
 </div>
+
 </body>
 </html>
