@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.item.RecipesSource
 import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -21,7 +22,7 @@ class CorksUsabilityUtils() {
 
     @Test
     fun countItemsUsability() {
-        val recipes: List< Recipe> =  recipesSource.getAllRecipes()
+        val recipes: List<Recipe> = recipesSource.getAllRecipes()
 
         val itemsUsability =
             recipes
@@ -40,6 +41,31 @@ class CorksUsabilityUtils() {
                 this?.let { "$first - $second" } ?: "${item.name} - 0"
             }
         })
+    }
+
+    @Test
+    fun countItemsUsabilityForCorksAndInvestigators() {
+        val recipes: List<Recipe> = recipesSource.getAllRecipes().filter {
+            it.item.itemType == ItemType.CORK ||
+                    it.item.itemType == ItemType.INVESTIGATION
+        }
+
+        val itemsUsability =
+            recipes
+                .asSequence()
+                .map { recipe ->
+                    recipe.ingredients
+                        .map { it.item to it.number }
+                }
+                .flatten()
+                .groupBy { it.first }
+                .map { it.key to it.value.map { it.second } }
+                .map { it.first to it.second.sumOf { it } }
+                .toList()
+                .filterNot { it.second == 0 }
+                .sortedByDescending { it.second }
+                .sortedByDescending { it.first.itemType }
+        println(itemsUsability.joinToString("\r\n") { "${it.first} - ${it.first.itemType} - ${it.second}" })
     }
 
     @Test
@@ -77,7 +103,7 @@ class CorksUsabilityUtils() {
 
     private fun someItems(god: God): List<Ingredient> {
         val cork = godToCorkResolver.resolve(god)
-        val recipe = recipesSource.getAllRecipes().first{it.item == cork}
+        val recipe = recipesSource.getAllRecipes().first { it.item == cork }
         return recipe.ingredients
     }
 
@@ -119,7 +145,7 @@ class CorksUsabilityUtils() {
         this.forEach { ingredient1 ->
             ingredients.forEach { ingredient2 ->
                 if (ingredient1.item == ingredient2.item) {
-                    sum += min(ingredient1.number, ingredient2.number )
+                    sum += min(ingredient1.number, ingredient2.number)
                 }
             }
         }
