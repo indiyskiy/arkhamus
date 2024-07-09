@@ -31,7 +31,6 @@ class RecipesSource {
                 5001,
                 item = INSCRIPTION_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILIS / 2,
-                numberOfItems = 1,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -42,7 +41,6 @@ class RecipesSource {
                 5002,
                 item = SOUND_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILIS / 2,
-                numberOfItems = 1,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -53,7 +51,6 @@ class RecipesSource {
                 5003,
                 item = SCENT_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILIS / 2,
-                numberOfItems = 1,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -64,7 +61,6 @@ class RecipesSource {
                 5004,
                 item = AURA_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILIS / 2,
-                numberOfItems = 1,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -75,7 +71,6 @@ class RecipesSource {
                 5005,
                 item = CORRUPTION_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILIS / 2,
-                numberOfItems = 1,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -86,7 +81,6 @@ class RecipesSource {
                 5006,
                 item = OMEN_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILIS / 2,
-                numberOfItems = 1,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -97,7 +91,6 @@ class RecipesSource {
                 5007,
                 item = DISTORTION_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILIS / 2,
-                numberOfItems = 1,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
 
@@ -106,7 +99,6 @@ class RecipesSource {
                 7001,
                 item = MOON_STONE,
                 timeToCraft = MINUTE_IN_MILIS,
-                numberOfItems = 1,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
 
