@@ -18,7 +18,7 @@ interface RedisDataAccess {
     fun getAltarPolling(gameId: Long): RedisAltarPolling?
     fun getGameAltars(gameId: Long): Map<Long, RedisAltar>
     fun getTimeEvents(gameId: Long): List<RedisTimeEvent>
-    fun getCastedAbilities(gameId: Long): List<RedisAbilityCast>
+    fun getCastAbilities(gameId: Long): List<RedisAbilityCast>
     fun getCraftProcess(gameId: Long): List<RedisCraftProcess>
     fun getZones(gameId: Long): List<RedisLevelZone>
     fun getTetragons(gameId: Long): List<RedisLevelZoneTetragon>
@@ -38,7 +38,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     val allContainers = getGameContainers(gameId)
     val allCrafters = getGameCrafters(gameId)
     val allEvents = getTimeEvents(gameId)
-    val castedAbilities = getCastedAbilities(gameId)
+    val castAbilities = getCastAbilities(gameId)
     val allLanterns = getGameLanterns(gameId)
     val craftProcess = getCraftProcess(gameId)
     val altars = getGameAltars(gameId)
@@ -61,7 +61,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.containers = allContainers.associateBy { it.containerId }
         this.crafters = allCrafters.associateBy { it.crafterId }
         this.timeEvents = allEvents
-        this.castedAbilities = castedAbilities
+        this.castAbilities = castAbilities
         this.craftProcess = craftProcess
         this.lanterns = allLanterns.associateBy { it.lanternId }
         this.clues = allClues

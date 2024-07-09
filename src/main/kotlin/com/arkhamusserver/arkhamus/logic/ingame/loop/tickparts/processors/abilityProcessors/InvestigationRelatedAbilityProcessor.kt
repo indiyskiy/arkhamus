@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class InvestigationRelatedAbilityProcessor() : ActiveAbilityProcessor {
-    override fun accepts(castedAbility: RedisAbilityCast): Boolean {
-        return castedAbility.abilityId.toAbility()?.let { ability ->
+    override fun accepts(castAbility: RedisAbilityCast): Boolean {
+        return castAbility.abilityId.toAbility()?.let { ability ->
             ability in setOf(
                 Ability.SEARCH_FOR_INSCRIPTION,
                 Ability.SEARCH_FOR_SOUND,
@@ -23,15 +23,15 @@ class InvestigationRelatedAbilityProcessor() : ActiveAbilityProcessor {
     }
 
     override fun processActive(
-        castedAbility: RedisAbilityCast,
+        castAbility: RedisAbilityCast,
         globalGameData: GlobalGameData
     ) {
-        val user = globalGameData.users[castedAbility.sourceUserId]
+        val user = globalGameData.users[castAbility.sourceUserId]
         user?.stateTags?.add(UserStateTag.INVESTIGATING.name)
     }
 
-    override fun finishActive(castedAbility: RedisAbilityCast, globalGameData: GlobalGameData) {
-        val user = globalGameData.users[castedAbility.sourceUserId]
+    override fun finishActive(castAbility: RedisAbilityCast, globalGameData: GlobalGameData) {
+        val user = globalGameData.users[castAbility.sourceUserId]
         user?.stateTags?.remove(UserStateTag.INVESTIGATING.name)
     }
 

@@ -64,7 +64,7 @@ class RedisDataAccessImpl(
     override fun getTimeEvents(gameId: Long) =
         timeEventRepository.findByGameId(gameId)
 
-    override fun getCastedAbilities(gameId: Long): List<RedisAbilityCast> =
+    override fun getCastAbilities(gameId: Long): List<RedisAbilityCast> =
         abilityCastRepository.findByGameId(gameId)
 
     override fun getCraftProcess(gameId: Long): List<RedisCraftProcess> =

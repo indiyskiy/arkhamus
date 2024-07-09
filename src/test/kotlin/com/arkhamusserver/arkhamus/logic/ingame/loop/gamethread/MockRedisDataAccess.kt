@@ -69,7 +69,7 @@ class MockRedisDataAccess : RedisDataAccess {
         TODO("Not yet implemented")
     }
 
-    override fun getCastedAbilities(gameId: Long): List<RedisAbilityCast> {
+    override fun getCastAbilities(gameId: Long): List<RedisAbilityCast> {
         TODO("Not yet implemented")
     }
 

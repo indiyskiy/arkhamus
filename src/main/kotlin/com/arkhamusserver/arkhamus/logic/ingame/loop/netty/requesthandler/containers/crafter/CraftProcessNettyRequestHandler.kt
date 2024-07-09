@@ -18,7 +18,7 @@ class CraftProcessNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val inventoryHandler: InventoryHandler,
     private val recipesSource: RecipesSource,
-    private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
+    private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
     private val canRecipeBeCraftedHandler: CanRecipeBeCraftedHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
     private val zonesHandler: ZonesHandler,
@@ -49,7 +49,7 @@ class CraftProcessNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castedAbilities,
+                globalGameData.castAbilities,
                 userId!!
             )
             val sortedUserInventory = request.newInventoryContent
@@ -66,7 +66,7 @@ class CraftProcessNettyRequestHandler(
                     otherGameUsers = users,
                     inZones = inZones,
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
-                    availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+                    availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
                     visibleItems = inventoryHandler.mapUsersItems(user.items),
                     tick = globalGameData.game.currentTick,
                     ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
@@ -88,7 +88,7 @@ class CraftProcessNettyRequestHandler(
                     inZones = inZones,
                     sortedUserInventory = sortedUserInventory,
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
-                    availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+                    availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
                     visibleItems = inventoryHandler.mapUsersItems(user.items),
                     tick = globalGameData.game.currentTick,
                     ongoingCraftingProcess = crafterProcessHandler.filterAndMap(

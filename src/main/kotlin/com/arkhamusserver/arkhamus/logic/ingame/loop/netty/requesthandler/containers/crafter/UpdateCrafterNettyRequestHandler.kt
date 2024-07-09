@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 @Component
 class UpdateCrafterNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
-    private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
+    private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
     private val inventoryHandler: InventoryHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
     private val zonesHandler: ZonesHandler,
@@ -45,7 +45,7 @@ class UpdateCrafterNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castedAbilities,
+                globalGameData.castAbilities,
                 userId!!
             )
             val sortedUserInventory = request.newInventoryContent
@@ -57,7 +57,7 @@ class UpdateCrafterNettyRequestHandler(
                 executedSuccessfully = true,
                 sortedUserInventory = sortedUserInventory,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
-                availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+                availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),
                 ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
                     user,

@@ -1,10 +1,19 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component
 import java.awt.geom.Point2D
 
 @Component
 class GeometryUtils {
+
+    fun distanceLessOrEquals(
+        user1: RedisGameUser,
+        user2: RedisGameUser,
+        maxDistance: Double
+    ): Boolean {
+        return distanceLessOrEquals(user2.x, user1.y, user2.x, user2.y, maxDistance)
+    }
 
     fun distance(
         point1X: Double,

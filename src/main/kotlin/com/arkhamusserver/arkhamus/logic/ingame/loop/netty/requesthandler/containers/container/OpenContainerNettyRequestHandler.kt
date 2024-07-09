@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 @Component
 class OpenContainerNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
-    private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
+    private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
     private val inventoryHandler: InventoryHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
     private val zonesHandler: ZonesHandler,
@@ -45,7 +45,7 @@ class OpenContainerNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castedAbilities,
+                globalGameData.castAbilities,
                 userId!!
             )
             return OpenContainerRequestGameData(
@@ -54,7 +54,7 @@ class OpenContainerNettyRequestHandler(
                 otherGameUsers = users,
                 inZones = inZones,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
-                availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+                availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),
                 ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
                     user,

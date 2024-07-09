@@ -27,9 +27,11 @@ class AbilityRequestProcessor(
         val abilityRequestProcessData = requestDataHolder.requestProcessData as AbilityRequestProcessData
         val ability = abilityRequestProcessData.ability
         if (ability != null) {
-            val canBeCasted =
-                abilityRequestProcessData.canBeCasted && (abilityRequestProcessData.cooldown?.let { it <= 0 } ?: true)
-            if (canBeCasted) {
+            val canBeCast =
+                abilityRequestProcessData.canBeSeen &&
+                abilityRequestProcessData.fitAdditionalConditions &&
+                        (abilityRequestProcessData.cooldown?.let { it <= 0 } ?: true)
+            if (canBeCast) {
                 val item = abilityRequestProcessData.item
                 if (item != null) {
                     consumeItem(ability, abilityRequestProcessData, item)

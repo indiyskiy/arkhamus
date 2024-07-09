@@ -14,7 +14,8 @@ class AbilityMergeHandler : ActionMergeHandler {
         if (newRequestProcessData is AbilityRequestProcessData) {
             if (cachedRequestProcessData is AbilityRequestProcessData) {
                 newRequestProcessData.ability = cachedRequestProcessData.ability
-                newRequestProcessData.canBeCasted = cachedRequestProcessData.canBeCasted
+                newRequestProcessData.canBeSeen = cachedRequestProcessData.canBeSeen
+                newRequestProcessData.fitAdditionalConditions = cachedRequestProcessData.fitAdditionalConditions
                 newRequestProcessData.cooldown = cachedRequestProcessData.cooldown
                 newRequestProcessData.cooldownOf = cachedRequestProcessData.cooldownOf
                 newRequestProcessData.executedSuccessfully = cachedRequestProcessData.executedSuccessfully

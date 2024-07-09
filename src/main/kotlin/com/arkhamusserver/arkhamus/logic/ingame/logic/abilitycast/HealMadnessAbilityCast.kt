@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalHealMadnessCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -13,7 +14,6 @@ class HealMadnessAbilityCast(
     private val madnessHandler: UserMadnessHandler
 ) : AbilityCast {
 
-    private val MAX_DISTANCE: Double = 20.0
     private val REDUCE_VALUE: Double = 20.0
 
     override fun accept(ability: Ability): Boolean {
@@ -45,11 +45,9 @@ class HealMadnessAbilityCast(
                 )
             }
             if (user != null && geometryUtils.distanceLessOrEquals(
-                    currentUserNotNull.x,
-                    currentUserNotNull.y,
-                    user.x,
-                    user.y,
-                    MAX_DISTANCE
+                    currentUserNotNull,
+                    user,
+                    AdditionalHealMadnessCondition.MAX_DISTANCE
                 )
             ) {
                 madnessHandler.reduceMadness(user, REDUCE_VALUE)

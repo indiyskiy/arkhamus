@@ -29,7 +29,7 @@ class AbilityDtoMaker(
             requiredClassIds = if (value.classBased) {
                 abilityToClassResolver.resolve(value)?.map { it.id }
             } else null,
-            availableFor = value.availableFor.toList(),
+            availableFor = value.availableForRole.toList(),
             cooldown = value.cooldown,
             globalCooldown = value.globalCooldown
         )

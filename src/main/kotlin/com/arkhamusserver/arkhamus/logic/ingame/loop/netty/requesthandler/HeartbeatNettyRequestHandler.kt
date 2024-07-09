@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 @Component
 class HeartbeatNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
-    private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
+    private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
     private val inventoryHandler: InventoryHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
     private val zonesHandler: ZonesHandler,
@@ -44,7 +44,7 @@ class HeartbeatNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castedAbilities,
+                globalGameData.castAbilities,
                 userId!!
             )
             return HeartbeatRequestGameData(
@@ -52,7 +52,7 @@ class HeartbeatNettyRequestHandler(
                 otherGameUsers = users,
                 inZones = inZones,
                 visibleOngoingEvents = visibleOngoingEvents,
-                availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+                availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),
                 tick = globalGameData.game.currentTick,
                 ongoingCraftingProcess = crafterProcessHandler.filterAndMap(

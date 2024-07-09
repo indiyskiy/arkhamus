@@ -39,7 +39,7 @@ class ArkhamusOneTickLogicImpl(
             )
             onTickAbilityCast.applyAbilityCasts(
                 globalGameData,
-                globalGameData.castedAbilities,
+                globalGameData.castAbilities,
                 game.globalTimer
             )
             onTickCraftProcess.applyCraftProcess(

@@ -23,7 +23,7 @@ class AbilityNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val abilityToItemResolver: AbilityToItemResolver,
     private val relatedAbilityCastHandler: RelatedAbilityCastHandler,
-    private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
+    private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
     private val inventoryHandler: InventoryHandler,
     private val zonesHandler: ZonesHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
@@ -53,17 +53,19 @@ class AbilityNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castedAbilities,
+                globalGameData.castAbilities,
                 userId!!
             )
             return ability?.let {
                 val relatedAbility =
-                    relatedAbilityCastHandler.findForUser(user, ability, globalGameData.castedAbilities)
+                    relatedAbilityCastHandler.findForUser(user, ability, globalGameData.castAbilities)
                 val requiredItem = abilityToItemResolver.resolve(it)
-                val canBeCasted = canAbilityBeCastedHandler.canUserCast(user, ability, requiredItem)
+                val canUserSeeAbility = canAbilityBeCastHandler.canUserSeeAbility(user, ability, requiredItem)
+                val canUserCastAbility = canAbilityBeCastHandler.fitAdditionalCondition(ability, user, globalGameData)
                 buildAbilityGameData(
                     ability,
-                    canBeCasted,
+                    canUserSeeAbility,
+                    canUserCastAbility,
                     relatedAbility,
                     requiredItem,
                     user,
@@ -79,7 +81,8 @@ class AbilityNettyRequestHandler(
 
     private fun buildAbilityGameData(
         ability: Ability,
-        canBeCasted: Boolean,
+        canBeSeen: Boolean,
+        canBeCast: Boolean,
         relatedAbility: RedisAbilityCast?,
         requiredItem: Item?,
         user: RedisGameUser,
@@ -90,7 +93,8 @@ class AbilityNettyRequestHandler(
         clues: List<RedisClue>
     ) = AbilityRequestProcessData(
         ability = ability,
-        canBeCasted = canBeCasted,
+        canBeSeen = canBeSeen,
+        fitAdditionalConditions = canBeCast,
         cooldown = relatedAbility?.timeLeftCooldown,
         cooldownOf = ability.cooldown,
         item = requiredItem,
@@ -99,7 +103,7 @@ class AbilityNettyRequestHandler(
         otherGameUsers = users,
         inZones = inZones,
         visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
-        availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+        availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
         visibleItems = inventoryHandler.mapUsersItems(user.items),
         ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
             user,
@@ -121,7 +125,8 @@ class AbilityNettyRequestHandler(
         clues: List<RedisClue>
     ) = AbilityRequestProcessData(
         ability = null,
-        canBeCasted = false,
+        canBeSeen = false,
+        fitAdditionalConditions = false,
         cooldown = null,
         cooldownOf = null,
         item = null,
@@ -130,7 +135,7 @@ class AbilityNettyRequestHandler(
         otherGameUsers = users,
         inZones = inZones,
         visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
-        availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+        availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
         ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
             user,
             globalGameData.crafters,

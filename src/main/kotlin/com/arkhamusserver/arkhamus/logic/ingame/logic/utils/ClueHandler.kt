@@ -16,10 +16,10 @@ class ClueHandler(
     fun filterClues(
         clues: List<RedisClue>,
         inZones: List<LevelZone>,
-        castedAbilities: List<RedisAbilityCast>,
+        castAbilities: List<RedisAbilityCast>,
         userId: Long
     ): List<RedisClue> {
-        val myOngoingAbilities = abilityHandler.myActiveAbilities(userId, castedAbilities)
+        val myOngoingAbilities = abilityHandler.myActiveAbilities(userId, castAbilities)
         val possibleClues = myOngoingAbilities
             .mapNotNull {
                 it.abilityId.toAbility()

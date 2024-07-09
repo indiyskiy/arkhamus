@@ -26,10 +26,10 @@ class OnTickCraftProcess(
 
     fun applyCraftProcess(
         globalGameData: GlobalGameData,
-        castedAbilities: List<RedisCraftProcess>,
+        castAbilities: List<RedisCraftProcess>,
         currentGameTime: Long
     ) {
-        castedAbilities.forEach { craftProcess ->
+        castAbilities.forEach { craftProcess ->
             if (craftProcess.state == RedisTimeEventState.ACTIVE && craftProcess.timeLeft > 0) {
                 val timeAdd = min(craftProcess.timeLeft, ArkhamusOneTickLogic.TICK_DELTA)
                 processActiveCraftProcess(craftProcess, timeAdd)

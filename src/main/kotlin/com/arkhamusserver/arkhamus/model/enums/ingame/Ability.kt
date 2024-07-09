@@ -12,7 +12,7 @@ enum class Ability(
     val requiresItem: Boolean = false,
     val consumesItem: Boolean = false,
     val classBased: Boolean = false,
-    val availableFor: Set<RoleTypeInGame> = setOf(CULTIST, INVESTIGATOR, NEUTRAL),
+    val availableForRole: Set<RoleTypeInGame> = setOf(CULTIST, INVESTIGATOR, NEUTRAL),
     val cooldown: Long = MINIMUM_COOLDOWN,
     val active: Long? = null,
     val globalCooldown: Boolean = false
@@ -39,7 +39,7 @@ enum class Ability(
         id = 202,
         requiresItem = true,
         consumesItem = true,
-        availableFor = setOf(CULTIST),
+        availableForRole = setOf(CULTIST),
         cooldown = MINUTE_IN_MILLIS * 5,
         globalCooldown = true
     ),

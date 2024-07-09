@@ -22,20 +22,20 @@ class OnTickAbilityCast(
 
     fun applyAbilityCasts(
         globalGameData: GlobalGameData,
-        castedAbilities: List<RedisAbilityCast>,
+        castAbilities: List<RedisAbilityCast>,
         currentGameTime: Long
     ) {
-        castedAbilities.forEach { castedAbility ->
-            when (castedAbility.state) {
+        castAbilities.forEach { castAbility ->
+            when (castAbility.state) {
                 ACTIVE -> {
-                    processActive(castedAbility, globalGameData)
-                    processActiveEvent(castedAbility, globalGameData)
-                    redisAbilityCastRepository.save(castedAbility)
+                    processActive(castAbility, globalGameData)
+                    processActiveEvent(castAbility, globalGameData)
+                    redisAbilityCastRepository.save(castAbility)
                 }
 
                 ON_COOLDOWN -> {
-                    processCooldown(castedAbility)
-                    redisAbilityCastRepository.save(castedAbility)
+                    processCooldown(castAbility)
+                    redisAbilityCastRepository.save(castAbility)
                 }
 
                 else -> {}
@@ -44,56 +44,56 @@ class OnTickAbilityCast(
     }
 
     private fun processActive(
-        castedAbility: RedisAbilityCast,
+        castAbility: RedisAbilityCast,
         globalGameData: GlobalGameData
     ) {
-        if (castedAbility.timeLeftActive > 0) {
-            val timeAdd = min(castedAbility.timeLeftCooldown, ArkhamusOneTickLogic.TICK_DELTA)
-            processNotPastEvent(castedAbility, timeAdd)
-            if (castedAbility.timeLeftActive <= 0) {
-                castedAbility.state = ON_COOLDOWN
-                if (castedAbility.timeLeftCooldown <= 0) {
-                    castedAbility.state = PAST
+        if (castAbility.timeLeftActive > 0) {
+            val timeAdd = min(castAbility.timeLeftCooldown, ArkhamusOneTickLogic.TICK_DELTA)
+            processNotPastEvent(castAbility, timeAdd)
+            if (castAbility.timeLeftActive <= 0) {
+                castAbility.state = ON_COOLDOWN
+                if (castAbility.timeLeftCooldown <= 0) {
+                    castAbility.state = PAST
                 }
-                endActiveEvent(castedAbility, globalGameData)
+                endActiveEvent(castAbility, globalGameData)
             }
         } else {
-            castedAbility.state = ON_COOLDOWN
+            castAbility.state = ON_COOLDOWN
         }
     }
 
 
-    private fun processCooldown(castedAbility: RedisAbilityCast) {
-        if (castedAbility.timeLeftCooldown > 0 || castedAbility.timeLeftActive > 0) {
-            val timeAdd = min(castedAbility.timeLeftCooldown, ArkhamusOneTickLogic.TICK_DELTA)
-            processNotPastEvent(castedAbility, timeAdd)
-            if (castedAbility.timeLeftCooldown <= 0 && castedAbility.timeLeftActive <= 0) {
-                castedAbility.state = PAST
+    private fun processCooldown(castAbility: RedisAbilityCast) {
+        if (castAbility.timeLeftCooldown > 0 || castAbility.timeLeftActive > 0) {
+            val timeAdd = min(castAbility.timeLeftCooldown, ArkhamusOneTickLogic.TICK_DELTA)
+            processNotPastEvent(castAbility, timeAdd)
+            if (castAbility.timeLeftCooldown <= 0 && castAbility.timeLeftActive <= 0) {
+                castAbility.state = PAST
             }
         } else {
-            castedAbility.state = PAST
+            castAbility.state = PAST
         }
     }
 
     private fun processActiveEvent(
-        castedAbility: RedisAbilityCast,
+        castAbility: RedisAbilityCast,
         globalGameData: GlobalGameData
     ) {
         activeAbilityProcessors.filter {
-            it.accepts(castedAbility)
+            it.accepts(castAbility)
         }.forEach { processor ->
-            processor.processActive(castedAbility, globalGameData)
+            processor.processActive(castAbility, globalGameData)
         }
     }
 
     private fun endActiveEvent(
-        castedAbility: RedisAbilityCast,
+        castAbility: RedisAbilityCast,
         globalGameData: GlobalGameData
     ) {
         activeAbilityProcessors.filter {
-            it.accepts(castedAbility)
+            it.accepts(castAbility)
         }.forEach { processor ->
-            processor.finishActive(castedAbility, globalGameData)
+            processor.finishActive(castAbility, globalGameData)
         }
     }
 

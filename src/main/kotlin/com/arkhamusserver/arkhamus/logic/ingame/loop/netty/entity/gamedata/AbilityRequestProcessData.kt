@@ -13,7 +13,8 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessRes
 
 class AbilityRequestProcessData(
     var ability: Ability?,
-    var canBeCasted: Boolean,
+    var canBeSeen: Boolean,
+    var fitAdditionalConditions: Boolean,
     var cooldown: Long?,
     var cooldownOf: Long?,
     var executedSuccessfully: Boolean,

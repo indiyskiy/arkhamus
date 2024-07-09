@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastedHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component
 @Component
 class GameEndedNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
-    private val canAbilityBeCastedHandler: CanAbilityBeCastedHandler,
+    private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
     private val inventoryHandler: InventoryHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
 ) : NettyRequestHandler {
@@ -56,7 +56,7 @@ class GameEndedNettyRequestHandler(
                 otherGameUsers = users,
                 god = globalGameData.game.godId.toGod()!!,
                 visibleOngoingEvents = visibleOngoingEvents,
-                availableAbilities = canAbilityBeCastedHandler.abilityOfUserResponses(user, globalGameData),
+                availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),
                 tick = globalGameData.game.currentTick,
                 ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
