@@ -29,22 +29,23 @@ class AbilityRequestProcessor(
         if (ability != null) {
             val canBeCast =
                 abilityRequestProcessData.canBeSeen &&
-                abilityRequestProcessData.fitAdditionalConditions &&
+                        abilityRequestProcessData.fitAdditionalConditions &&
                         (abilityRequestProcessData.cooldown?.let { it <= 0 } ?: true)
             if (canBeCast) {
                 val item = abilityRequestProcessData.item
-                if (item != null) {
+                if (item != null && ability.consumesItem) {
                     consumeItem(ability, abilityRequestProcessData, item)
-                    abilityCastHandler.cast(ability, abilityRequestProcessData, globalGameData)
-                    createCastAbility(
-                        ability,
-                        abilityRequestProcessData,
-                        requestDataHolder.userAccount.id!!,
-                        requestDataHolder.gameSession!!.id!!,
-                        globalGameData.game.globalTimer
-                    )
-                    abilityRequestProcessData.executedSuccessfully = true
                 }
+                abilityCastHandler.cast(ability, abilityRequestProcessData, globalGameData)
+                createCastAbility(
+                    ability,
+                    abilityRequestProcessData,
+                    requestDataHolder.userAccount.id!!,
+                    requestDataHolder.gameSession!!.id!!,
+                    globalGameData.game.globalTimer
+                )
+                abilityRequestProcessData.executedSuccessfully = true
+
             }
         }
     }

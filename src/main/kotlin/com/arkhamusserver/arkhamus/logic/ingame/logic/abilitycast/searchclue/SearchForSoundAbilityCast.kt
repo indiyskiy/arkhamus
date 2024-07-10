@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -25,6 +26,7 @@ class SearchForSoundAbilityCast : AbilityCast {
         globalGameData: GlobalGameData
     ) {
         logger.info("cast $ability")
+        abilityRequestProcessData.gameUser?.stateTags?.add(UserStateTag.INVESTIGATING.name)
     }
 
 }

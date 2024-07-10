@@ -9,7 +9,6 @@ import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-import kotlin.math.min
 
 @Component
 class OnTickAbilityCast(
@@ -28,13 +27,13 @@ class OnTickAbilityCast(
         castAbilities.forEach { castAbility ->
             when (castAbility.state) {
                 ACTIVE -> {
-                    processActive(castAbility, globalGameData)
-                    processActiveEvent(castAbility, globalGameData)
+                    handleActiveEvent(castAbility, globalGameData)
+                    pushActive(castAbility, globalGameData)
                     redisAbilityCastRepository.save(castAbility)
                 }
 
                 ON_COOLDOWN -> {
-                    processCooldown(castAbility)
+                    pushCooldown(castAbility)
                     redisAbilityCastRepository.save(castAbility)
                 }
 
@@ -43,31 +42,37 @@ class OnTickAbilityCast(
         }
     }
 
-    private fun processActive(
+    private fun pushActive(
         castAbility: RedisAbilityCast,
         globalGameData: GlobalGameData
     ) {
         if (castAbility.timeLeftActive > 0) {
-            val timeAdd = min(castAbility.timeLeftCooldown, ArkhamusOneTickLogic.TICK_DELTA)
-            processNotPastEvent(castAbility, timeAdd)
+            pushNotPastEvent(castAbility)
             if (castAbility.timeLeftActive <= 0) {
-                castAbility.state = ON_COOLDOWN
-                if (castAbility.timeLeftCooldown <= 0) {
-                    castAbility.state = PAST
-                }
-                endActiveEvent(castAbility, globalGameData)
+                transitActiveToCooldown(castAbility, globalGameData)
             }
         } else {
-            castAbility.state = ON_COOLDOWN
+            transitActiveToCooldown(castAbility, globalGameData)
+            pushCooldown(castAbility)
+        }
+    }
+
+    private fun transitActiveToCooldown(
+        castAbility: RedisAbilityCast,
+        globalGameData: GlobalGameData
+    ) {
+        endActiveEvent(castAbility, globalGameData)
+        castAbility.state = ON_COOLDOWN
+        if (castAbility.timeLeftCooldown <= 0) {
+            castAbility.state = PAST
         }
     }
 
 
-    private fun processCooldown(castAbility: RedisAbilityCast) {
-        if (castAbility.timeLeftCooldown > 0 || castAbility.timeLeftActive > 0) {
-            val timeAdd = min(castAbility.timeLeftCooldown, ArkhamusOneTickLogic.TICK_DELTA)
-            processNotPastEvent(castAbility, timeAdd)
-            if (castAbility.timeLeftCooldown <= 0 && castAbility.timeLeftActive <= 0) {
+    private fun pushCooldown(castAbility: RedisAbilityCast) {
+        if (castAbility.timeLeftCooldown > 0) {
+            pushNotPastEvent(castAbility)
+            if (castAbility.timeLeftCooldown <= 0) {
                 castAbility.state = PAST
             }
         } else {
@@ -75,7 +80,8 @@ class OnTickAbilityCast(
         }
     }
 
-    private fun processActiveEvent(
+
+    private fun handleActiveEvent(
         castAbility: RedisAbilityCast,
         globalGameData: GlobalGameData
     ) {
@@ -97,14 +103,11 @@ class OnTickAbilityCast(
         }
     }
 
-    private fun processNotPastEvent(
-        abilityCast: RedisAbilityCast,
-        timeAdd: Long,
+    private fun pushNotPastEvent(
+        abilityCast: RedisAbilityCast
     ) {
-        if (abilityCast.timeLeftCooldown > 0 || abilityCast.timeLeftActive > 0) {
-            abilityCast.timePast += timeAdd
-            abilityCast.timeLeftCooldown -= timeAdd
-            abilityCast.timeLeftActive -= timeAdd
-        }
+        abilityCast.timePast += ArkhamusOneTickLogic.TICK_DELTA
+        abilityCast.timeLeftCooldown -= ArkhamusOneTickLogic.TICK_DELTA
+        abilityCast.timeLeftActive -= ArkhamusOneTickLogic.TICK_DELTA
     }
 }
