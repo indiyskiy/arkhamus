@@ -1,10 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.containers.container
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.container.OpenContainerRequestGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.otherGameUsersResponseMessage
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.container.OpenContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Component
 @Component
 class OpenContainerNettyResponseMapper(
     private val inventoryHandler: InventoryHandler,
+    private val otherGameUsersDataHandler: OtherGameUsersDataHandler
 ) : NettyResponseMapper {
 
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
@@ -35,7 +38,8 @@ class OpenContainerNettyResponseMapper(
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?,
-        inBetweenEventHolder: InBetweenEventHolder
+        inBetweenEventHolder: InBetweenEventHolder,
+        globalGameData: GlobalGameData
     ): OpenContainerNettyResponse {
         with(requestProcessData as OpenContainerRequestGameData) {
             val mappedItem = this.container.items.map {
@@ -58,7 +62,8 @@ class OpenContainerNettyResponseMapper(
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
                     inZones = requestProcessData.inZones,
-                    clues = requestProcessData.clues
+                    clues = requestProcessData.clues,
+                    levelGeometryData = globalGameData.levelGeometryData
                 )
             } else {
                 return buildContainer(
@@ -73,7 +78,8 @@ class OpenContainerNettyResponseMapper(
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
                     inZones = requestProcessData.inZones,
-                    clues = requestProcessData.clues
+                    clues = requestProcessData.clues,
+                    levelGeometryData = globalGameData.levelGeometryData
                 )
             }
         }
@@ -91,7 +97,8 @@ class OpenContainerNettyResponseMapper(
         containerHoldingUserId: Long?,
         containers: List<RedisContainer>,
         clues: List<RedisClue>,
-        inZones: List<LevelZone>
+        inZones: List<LevelZone>,
+        levelGeometryData: LevelGeometryData,
     ) = OpenContainerNettyResponse(
         itemsInside = itemsInside,
         state = state,
@@ -99,7 +106,11 @@ class OpenContainerNettyResponseMapper(
         tick = gameData.tick,
         userId = user.id!!,
         myGameUser = MyGameUserResponse(gameUser),
-        otherGameUsers = gameData.otherGameUsersResponseMessage(),
+        otherGameUsers = otherGameUsersDataHandler.map(
+            myUser = gameUser,
+            gameData.otherGameUsers,
+            levelGeometryData
+        ),
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         },

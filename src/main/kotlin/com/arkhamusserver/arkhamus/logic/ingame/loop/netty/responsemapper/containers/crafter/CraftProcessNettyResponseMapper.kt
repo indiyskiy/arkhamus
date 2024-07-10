@@ -1,9 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.containers.crafter
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter.CraftProcessRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter.CraftProcessRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.ItemsInBetweenHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -13,14 +15,14 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.CraftProcessNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
 import org.springframework.stereotype.Component
 
 @Component
 class CraftProcessNettyResponseMapper(
-    val itemsInBetweenHandler: ItemsInBetweenHandler
+    private val itemsInBetweenHandler: ItemsInBetweenHandler,
+    private val otherGameUsersDataHandler: OtherGameUsersDataHandler
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == CraftProcessRequestProcessData::class.java
@@ -33,7 +35,8 @@ class CraftProcessNettyResponseMapper(
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?,
-        inBetweenEventHolder: InBetweenEventHolder
+        inBetweenEventHolder: InBetweenEventHolder,
+        globalGameData: GlobalGameData
     ): CraftProcessNettyResponse {
         (requestProcessData as CraftProcessRequestProcessData).let {
             return CraftProcessNettyResponse(
@@ -54,9 +57,11 @@ class CraftProcessNettyResponseMapper(
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!),
-                otherGameUsers = it.otherGameUsers.map { gameUser ->
-                    GameUserResponse(gameUser)
-                },
+                otherGameUsers = otherGameUsersDataHandler.map(
+                    myUser = it.gameUser,
+                    it.otherGameUsers,
+                    globalGameData.levelGeometryData
+                ),
                 ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
                     OngoingEventResponse(event)
                 },

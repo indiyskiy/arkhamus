@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalHealMadnessCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class HealMadnessAbilityCast(
+    private val userLocationHandler: UserLocationHandler,
     private val geometryUtils: GeometryUtils,
     private val madnessHandler: UserMadnessHandler
 ) : AbilityCast {
@@ -44,7 +46,7 @@ class HealMadnessAbilityCast(
                     user.y
                 )
             }
-            if (user != null && geometryUtils.distanceLessOrEquals(
+            if (user != null && userLocationHandler.distanceLessOrEquals(
                     currentUserNotNull,
                     user,
                     AdditionalHealMadnessCondition.MAX_DISTANCE

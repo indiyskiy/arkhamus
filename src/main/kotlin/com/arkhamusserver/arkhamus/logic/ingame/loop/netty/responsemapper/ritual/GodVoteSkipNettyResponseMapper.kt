@@ -1,21 +1,24 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.ritual
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteSkipRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteSkipRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.ritual.GodVoteSkipNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.ritual.GodVoteSkipNettyResponse
 import org.springframework.stereotype.Component
 
 @Component
-class GodVoteSkipNettyResponseMapper : NettyResponseMapper {
+class GodVoteSkipNettyResponseMapper(
+    private val otherGameUsersDataHandler: OtherGameUsersDataHandler
+) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == GodVoteSkipRequestProcessData::class.java
 
@@ -27,7 +30,8 @@ class GodVoteSkipNettyResponseMapper : NettyResponseMapper {
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?,
-        inBetweenEventHolder: InBetweenEventHolder
+        inBetweenEventHolder: InBetweenEventHolder,
+        globalGameData: GlobalGameData
     ): GodVoteSkipNettyResponse {
         (requestProcessData as GodVoteSkipRequestProcessData).let {
             return GodVoteSkipNettyResponse(
@@ -36,9 +40,11 @@ class GodVoteSkipNettyResponseMapper : NettyResponseMapper {
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!),
-                otherGameUsers = it.otherGameUsers.map { gameUser ->
-                    GameUserResponse(gameUser)
-                },
+                otherGameUsers = otherGameUsersDataHandler.map(
+                    myUser = it.gameUser,
+                    it.otherGameUsers,
+                    globalGameData.levelGeometryData
+                ),
                 ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
                     OngoingEventResponse(event)
                 },

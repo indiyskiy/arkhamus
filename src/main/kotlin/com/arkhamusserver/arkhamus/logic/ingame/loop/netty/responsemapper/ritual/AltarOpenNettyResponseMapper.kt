@@ -1,24 +1,27 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.ritual
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.AltarOpenRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.AltarOpenRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.ritual.AltarOpenNettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarPolling
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.VoteForGod
+import com.arkhamusserver.arkhamus.view.dto.netty.response.ritual.AltarOpenNettyResponse
 import org.springframework.stereotype.Component
 
 @Component
-class AltarOpenNettyResponseMapper : NettyResponseMapper {
+class AltarOpenNettyResponseMapper(
+    private val otherGameUsersDataHandler: OtherGameUsersDataHandler
+) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == AltarOpenRequestProcessData::class.java
 
@@ -30,7 +33,8 @@ class AltarOpenNettyResponseMapper : NettyResponseMapper {
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?,
-        inBetweenEventHolder: InBetweenEventHolder
+        inBetweenEventHolder: InBetweenEventHolder,
+        globalGameData: GlobalGameData
     ): AltarOpenNettyResponse {
         (requestProcessData as AltarOpenRequestProcessData).let {
             return AltarOpenNettyResponse(
@@ -43,9 +47,11 @@ class AltarOpenNettyResponseMapper : NettyResponseMapper {
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!),
-                otherGameUsers = it.otherGameUsers.map { gameUser ->
-                    GameUserResponse(gameUser)
-                },
+                otherGameUsers = otherGameUsersDataHandler.map(
+                    myUser = it.gameUser,
+                    it.otherGameUsers,
+                    globalGameData.levelGeometryData
+                ),
                 ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
                     OngoingEventResponse(event)
                 },

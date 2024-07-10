@@ -22,7 +22,8 @@ class NettyResponseBuilder(
             requestContainer.userAccount,
             requestContainer.gameSession,
             requestContainer.userRole,
-            globalGameData.inBetweenEvents
+            globalGameData.inBetweenEvents,
+            globalGameData
         )
     }
 

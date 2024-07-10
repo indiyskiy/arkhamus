@@ -1,9 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.containers.crafter
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter.OpenCrafterRequestGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.otherGameUsersResponseMessage
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter.OpenCrafterRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -20,7 +22,9 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
 @Component
-class OpenCrafterNettyResponseMapper : NettyResponseMapper {
+class OpenCrafterNettyResponseMapper(
+    private val otherGameUsersDataHandler: OtherGameUsersDataHandler
+) : NettyResponseMapper {
 
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == OpenCrafterRequestGameData::class.java
@@ -33,7 +37,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?,
-        inBetweenEventHolder: InBetweenEventHolder
+        inBetweenEventHolder: InBetweenEventHolder,
+        globalGameData: GlobalGameData
     ): OpenCrafterNettyResponse {
         with(requestProcessData as OpenCrafterRequestGameData) {
             val mappedItem = this.crafter.items.map {
@@ -62,7 +67,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
                     inZones = requestProcessData.inZones,
-                    clues = requestProcessData.clues
+                    clues = requestProcessData.clues,
+                    levelGeometryData = globalGameData.levelGeometryData
                 )
             } else {
                 return buildCrafter(
@@ -77,7 +83,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
                     inZones = requestProcessData.inZones,
-                    clues = requestProcessData.clues
+                    clues = requestProcessData.clues,
+                    levelGeometryData = globalGameData.levelGeometryData
                 )
             }
         }
@@ -95,7 +102,8 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         containerHoldingUserId: Long?,
         containers: List<RedisContainer>,
         clues: List<RedisClue>,
-        inZones: List<LevelZone>
+        inZones: List<LevelZone>,
+        levelGeometryData: LevelGeometryData
     ) = OpenCrafterNettyResponse(
         itemsInside = itemsInside,
         state = state,
@@ -104,7 +112,11 @@ class OpenCrafterNettyResponseMapper : NettyResponseMapper {
         tick = gameData.tick,
         userId = user.id!!,
         myGameUser = MyGameUserResponse(gameUser),
-        otherGameUsers = gameData.otherGameUsersResponseMessage(),
+        otherGameUsers = otherGameUsersDataHandler.map(
+            myUser = gameUser,
+            gameData.otherGameUsers,
+            levelGeometryData
+        ),
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         },

@@ -1,10 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.containers.crafter
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter.UpdateCrafterRequestGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.otherGameUsersResponseMessage
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.ItemsInBetweenHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
@@ -21,7 +23,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class UpdateCrafterNettyResponseMapper(
-    val itemsInBetweenHandler: ItemsInBetweenHandler
+    private val itemsInBetweenHandler: ItemsInBetweenHandler,
+    private val otherGameUsersDataHandler: OtherGameUsersDataHandler
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == UpdateCrafterRequestGameData::class.java
@@ -34,7 +37,8 @@ class UpdateCrafterNettyResponseMapper(
         user: UserAccount,
         gameSession: GameSession?,
         userRole: UserOfGameSession?,
-        inBetweenEventHolder: InBetweenEventHolder
+        inBetweenEventHolder: InBetweenEventHolder,
+        globalGameData: GlobalGameData
     ): UpdateCrafterNettyResponse {
         with(requestProcessData as UpdateCrafterRequestGameData) {
             return build(
@@ -55,7 +59,8 @@ class UpdateCrafterNettyResponseMapper(
                 ongoingCraftingProcess = ongoingCraftingProcess,
                 containers = requestProcessData.containers,
                 inZones = requestProcessData.inZones,
-                clues = requestProcessData.clues
+                clues = requestProcessData.clues,
+                levelGeometryData = globalGameData.levelGeometryData
             )
         }
     }
@@ -70,7 +75,8 @@ class UpdateCrafterNettyResponseMapper(
         itemsInside: List<InventoryCell>,
         containers: List<RedisContainer>,
         inZones: List<LevelZone>,
-        clues: List<RedisClue>
+        clues: List<RedisClue>,
+        levelGeometryData: LevelGeometryData
     ) = UpdateCrafterNettyResponse(
         sortedUserInventory = sortedUserInventory,
         itemsInside = itemsInside,
@@ -80,7 +86,11 @@ class UpdateCrafterNettyResponseMapper(
         tick = gameData.tick,
         userId = user.id!!,
         myGameUser = MyGameUserResponse(gameUser),
-        otherGameUsers = gameData.otherGameUsersResponseMessage(),
+        otherGameUsers = otherGameUsersDataHandler.map(
+            myUser = gameUser,
+            otherGameUsers = gameData.otherGameUsers,
+            levelGeometryData = levelGeometryData,
+        ),
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         },

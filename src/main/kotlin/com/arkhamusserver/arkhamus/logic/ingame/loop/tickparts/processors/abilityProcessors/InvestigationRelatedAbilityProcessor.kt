@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class InvestigationRelatedAbilityProcessor() : ActiveAbilityProcessor {
+class InvestigationRelatedAbilityProcessor : ActiveAbilityProcessor {
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(InvestigationRelatedAbilityProcessor::class.java)
