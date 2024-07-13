@@ -27,6 +27,7 @@ class RitualPutItemRequestProcessData(
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
+    crafters: List<RedisCrafter>,
     clues: List<RedisClue>,
     tick: Long
 ) : GameUserData(
@@ -38,6 +39,7 @@ class RitualPutItemRequestProcessData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     containers = containers,
+    crafters = crafters,
     clues = clues,
     tick = tick
 ), ActionProcessData {

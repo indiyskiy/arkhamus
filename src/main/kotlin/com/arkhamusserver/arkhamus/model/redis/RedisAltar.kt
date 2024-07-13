@@ -12,4 +12,13 @@ data class RedisAltar(
     var x: Double,
     var y: Double,
     var interactionRadius: Double,
-)
+): WithPoint {
+
+    override fun x(): Double {
+        return x
+    }
+
+    override fun y(): Double {
+        return y
+    }
+}

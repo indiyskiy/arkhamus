@@ -5,11 +5,11 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.container.UpdateContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.container.UpdateContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
-import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -35,7 +35,7 @@ class UpdateContainerNettyRequestHandler(
         val userId = requestDataHolder.userAccount.id
         val request = requestDataHolder.nettyRequestMessage
         with(request as UpdateContainerRequestMessage) {
-            val inZones = zonesHandler.filterByUserPosition(
+            val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
             )
@@ -64,6 +64,7 @@ class UpdateContainerNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
+                crafters = globalGameData.crafters.values.toList(),
                 tick = globalGameData.game.currentTick,
                 clues = clues
             )

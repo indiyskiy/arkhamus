@@ -8,8 +8,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteStartRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
-import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.GodVoteStartRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.GodVoteStartRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -35,7 +35,7 @@ class GodVoteStartNettyRequestHandler(
     ): GodVoteStartRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
         with(request as GodVoteStartRequestMessage) {
-            val inZones = zonesHandler.filterByUserPosition(
+            val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
             )
@@ -68,6 +68,7 @@ class GodVoteStartNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
+                crafters = globalGameData.crafters.values.toList(),
                 tick = globalGameData.game.currentTick,
                 clues = clues
             )

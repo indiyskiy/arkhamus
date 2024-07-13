@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.jsonparser.ritual
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.jsonparser.NettyRequestJsonParser
-import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.GodVoteCastRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.GodVoteCastRequestMessage
 import org.springframework.stereotype.Component
 
 @Component

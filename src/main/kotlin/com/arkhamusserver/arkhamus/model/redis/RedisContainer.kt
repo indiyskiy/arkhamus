@@ -16,4 +16,13 @@ data class RedisContainer(
     var y: Double = 0.0,
     var interactionRadius: Double = 0.0,
     var items: MutableMap<Int, Int> = HashMap()
-)
+) : WithPoint {
+
+    override fun x(): Double {
+        return x
+    }
+
+    override fun y(): Double {
+        return y
+    }
+}

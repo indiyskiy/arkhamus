@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.ContainerDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.CrafterDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.OtherGameUsersDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ISawTheEndOfTimesRequestGameData
@@ -16,7 +18,9 @@ import org.springframework.stereotype.Component
 
 @Component
 class ISawTheEndOfTimesNettyResponseMapper(
-    private val otherGameUsersDataHandler: OtherGameUsersDataHandler
+    private val otherGameUsersDataHandler: OtherGameUsersDataHandler,
+    private val containersDataHandler: ContainerDataHandler,
+    private val craftersDataHandler: CrafterDataHandler,
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == ISawTheEndOfTimesRequestGameData::class.java
@@ -49,7 +53,16 @@ class ISawTheEndOfTimesNettyResponseMapper(
                 availableAbilities = requestProcessData.availableAbilities,
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 userInventory = requestProcessData.visibleItems,
-                containers = requestProcessData.containers,
+                containers = containersDataHandler.map(
+                    myUser = it.gameUser,
+                    containers = it.containers,
+                    levelGeometryData = globalGameData.levelGeometryData
+                ),
+                crafters = craftersDataHandler.map(
+                    it.gameUser,
+                    it.crafters,
+                    globalGameData.levelGeometryData
+                ),
                 inZones = requestProcessData.inZones,
                 clues = requestProcessData.clues
             )

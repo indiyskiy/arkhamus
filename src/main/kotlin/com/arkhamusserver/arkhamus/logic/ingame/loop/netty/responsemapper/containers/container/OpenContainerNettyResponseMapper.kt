@@ -1,7 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.containers.container
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.ContainerDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.CrafterDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.OtherGameUsersDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.OtherGameUsersDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
@@ -15,6 +17,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.container.OpenContainerNettyResponse
@@ -24,7 +27,9 @@ import org.springframework.stereotype.Component
 @Component
 class OpenContainerNettyResponseMapper(
     private val inventoryHandler: InventoryHandler,
-    private val otherGameUsersDataHandler: OtherGameUsersDataHandler
+    private val otherGameUsersDataHandler: OtherGameUsersDataHandler,
+    private val containersDataHandler: ContainerDataHandler,
+    private val craftersDataHandler: CrafterDataHandler,
 ) : NettyResponseMapper {
 
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
@@ -61,6 +66,7 @@ class OpenContainerNettyResponseMapper(
                     state = containerState,
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
+                    crafters = requestProcessData.crafters,
                     inZones = requestProcessData.inZones,
                     clues = requestProcessData.clues,
                     levelGeometryData = globalGameData.levelGeometryData
@@ -77,6 +83,7 @@ class OpenContainerNettyResponseMapper(
                     state = containerState,
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
+                    crafters = requestProcessData.crafters,
                     inZones = requestProcessData.inZones,
                     clues = requestProcessData.clues,
                     levelGeometryData = globalGameData.levelGeometryData
@@ -96,6 +103,7 @@ class OpenContainerNettyResponseMapper(
         state: MapObjectState,
         containerHoldingUserId: Long?,
         containers: List<RedisContainer>,
+        crafters: List<RedisCrafter>,
         clues: List<RedisClue>,
         inZones: List<LevelZone>,
         levelGeometryData: LevelGeometryData,
@@ -117,7 +125,16 @@ class OpenContainerNettyResponseMapper(
         availableAbilities = availableAbilities,
         ongoingCraftingProcess = ongoingCraftingProcess,
         userInventory = visibleItems,
-        containers = containers,
+        containers = containersDataHandler.map(
+            gameUser,
+            containers,
+            levelGeometryData
+        ),
+        crafters = craftersDataHandler.map(
+            gameUser,
+            crafters,
+            levelGeometryData
+        ),
         inZones = inZones,
         clues = clues
     )

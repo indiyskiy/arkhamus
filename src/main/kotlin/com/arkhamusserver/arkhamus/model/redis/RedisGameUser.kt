@@ -23,4 +23,13 @@ data class RedisGameUser(
     var won: Boolean? = null,
     var sawTheEndOfTimes: Boolean = false,
     var connected: Boolean,
-)
+): WithPoint {
+
+    override fun x(): Double {
+        return x
+    }
+
+    override fun y(): Double {
+        return y
+    }
+}

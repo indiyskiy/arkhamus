@@ -7,8 +7,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteSkipRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
-import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.GodVoteSkipRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.GodVoteSkipRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -34,7 +34,7 @@ class GodVoteSkipNettyRequestHandler(
     ): GodVoteSkipRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
         with(request as GodVoteSkipRequestMessage) {
-            val inZones = zonesHandler.filterByUserPosition(
+            val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
             )
@@ -67,6 +67,7 @@ class GodVoteSkipNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
+                crafters = globalGameData.crafters.values.toList(),
                 tick = globalGameData.game.currentTick,
                 clues = clues
             )

@@ -21,4 +21,13 @@ data class RedisAltarHolder(
     var itemsOnAltars: Map<Int, Int> = emptyMap(),
 
     var state: MapAltarState = MapAltarState.OPEN,
-)
+): WithPoint {
+
+    override fun x(): Double {
+        return x
+    }
+
+    override fun y(): Double {
+        return y
+    }
+}

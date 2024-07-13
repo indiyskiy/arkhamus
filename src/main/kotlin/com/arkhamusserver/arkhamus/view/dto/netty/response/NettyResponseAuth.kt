@@ -20,6 +20,7 @@ class NettyResponseAuth(
     ongoingCraftingProcess = emptyList(),
     userInventory = emptyList(),
     containers = emptyList(),
+    crafters = emptyList(),
     inZones = emptyList(),
     clues = emptyList(),
     type = NettyResponseAuth::class.java.simpleName

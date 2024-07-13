@@ -3,8 +3,8 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.view.dto.netty.response.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.ActionResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.ExternalInventoryNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class UpdateCrafterNettyResponse(
@@ -22,7 +22,8 @@ class UpdateCrafterNettyResponse(
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<InventoryCell>,
-    containers: List<RedisContainer>,
+    containers: List<ContainerState>,
+    crafters: List<CrafterState>,
     inZones: List<LevelZone>,
     clues: List<RedisClue>,
 ) : ExternalInventoryNettyResponse(
@@ -39,6 +40,7 @@ class UpdateCrafterNettyResponse(
     ongoingCraftingProcess = ongoingCraftingProcess,
     userInventory = userInventory,
     containers = containers,
+    crafters = crafters,
     inZones = inZones,
     clues = clues,
     type = UpdateCrafterNettyResponse::class.java.simpleName

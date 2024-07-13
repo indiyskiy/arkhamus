@@ -10,8 +10,8 @@ import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
 class CraftProcessRequestProcessData(
     var recipe: Recipe?,
@@ -27,6 +27,7 @@ class CraftProcessRequestProcessData(
     ongoingCraftingProcess: List<CraftProcessResponse>,
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
+    crafters: List<RedisCrafter>,
     clues: List<RedisClue>,
     tick: Long
 ) : GameUserData(
@@ -38,6 +39,7 @@ class CraftProcessRequestProcessData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     containers = containers,
+    crafters = crafters,
     clues = clues,
     tick = tick
 ), ActionProcessData {

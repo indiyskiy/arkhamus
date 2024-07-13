@@ -7,8 +7,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
@@ -43,7 +43,7 @@ class AbilityNettyRequestHandler(
         val userId = requestDataHolder.userAccount.id
         val request = requestDataHolder.nettyRequestMessage
         with(request as AbilityRequestMessage) {
-            val inZones = zonesHandler.filterByUserPosition(
+            val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
             )
@@ -111,6 +111,7 @@ class AbilityNettyRequestHandler(
             globalGameData.craftProcess
         ),
         containers = globalGameData.containers.values.toList(),
+        crafters = globalGameData.crafters.values.toList(),
         clues = clues,
         tick = globalGameData.game.currentTick
     )
@@ -143,6 +144,7 @@ class AbilityNettyRequestHandler(
         ),
         visibleItems = inventoryHandler.mapUsersItems(user.items),
         containers = globalGameData.containers.values.toList(),
+        crafters = globalGameData.crafters.values.toList(),
         clues = clues,
         tick = globalGameData.game.currentTick
     )

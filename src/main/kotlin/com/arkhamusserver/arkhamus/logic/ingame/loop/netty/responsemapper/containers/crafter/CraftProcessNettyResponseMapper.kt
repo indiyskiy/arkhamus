@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.containers.crafter
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.ContainerDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.CrafterDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.OtherGameUsersDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
@@ -22,7 +24,9 @@ import org.springframework.stereotype.Component
 @Component
 class CraftProcessNettyResponseMapper(
     private val itemsInBetweenHandler: ItemsInBetweenHandler,
-    private val otherGameUsersDataHandler: OtherGameUsersDataHandler
+    private val otherGameUsersDataHandler: OtherGameUsersDataHandler,
+    private val containersDataHandler: ContainerDataHandler,
+    private val craftersDataHandler: CrafterDataHandler,
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == CraftProcessRequestProcessData::class.java
@@ -70,7 +74,16 @@ class CraftProcessNettyResponseMapper(
                 holdingUser = it.crafter!!.holdingUser,
                 state = it.crafter?.state ?: MapObjectState.DISABLED,
                 userInventory = requestProcessData.visibleItems,
-                containers = requestProcessData.containers,
+                containers = containersDataHandler.map(
+                    it.gameUser,
+                    it.containers,
+                    globalGameData.levelGeometryData
+                ),
+                crafters = craftersDataHandler.map(
+                    it.gameUser,
+                    it.crafters,
+                    globalGameData.levelGeometryData
+                ),
                 inZones = requestProcessData.inZones,
                 clues = requestProcessData.clues
             )

@@ -35,7 +35,7 @@ class UpdateCrafterNettyRequestHandler(
         val userId = requestDataHolder.userAccount.id
         val request = requestDataHolder.nettyRequestMessage
         with(request as UpdateCrafterRequestMessage) {
-            val inZones = zonesHandler.filterByUserPosition(
+            val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
             )
@@ -65,6 +65,7 @@ class UpdateCrafterNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
+                crafters = globalGameData.crafters.values.toList(),
                 tick = globalGameData.game.currentTick,
                 clues = clues
             )

@@ -34,7 +34,7 @@ class HeartbeatNettyRequestHandler(
     ): RequestProcessData {
         val userId = requestDataHolder.userAccount.id
         requestDataHolder.gameSession?.id?.let {
-            val inZones = zonesHandler.filterByUserPosition(
+            val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
             )
@@ -61,6 +61,7 @@ class HeartbeatNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
+                crafters = globalGameData.crafters.values.toList(),
                 clues = clues
             )
         } ?: return ErrorGameResponse("game session id is null", globalGameData.game.currentTick)

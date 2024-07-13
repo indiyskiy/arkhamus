@@ -22,6 +22,5 @@ data class CraftProcessResponse(
         timePast = craftProcess.timePast,
         timeLeft = craftProcess.timeLeft,
         state = craftProcess.state,
-
     )
 }

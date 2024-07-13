@@ -2,8 +2,9 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.ritual
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.view.dto.netty.response.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToClueResponses
+import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneResponses
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class RitualProgressNettyResponse(
@@ -16,7 +17,8 @@ class RitualProgressNettyResponse(
     ongoingCraftingProcess: List<CraftProcessResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     userInventory: List<InventoryCell>,
-    containers: List<RedisContainer>,
+    containers: List<ContainerState>,
+    crafters: List<CrafterState>,
     inZones: List<LevelZone>,
     clues: List<RedisClue>,
 ) : NettyResponse(
@@ -28,7 +30,8 @@ class RitualProgressNettyResponse(
     ongoingCraftingProcess = ongoingCraftingProcess,
     availableAbilities = availableAbilities,
     userInventory = userInventory,
-    containers = containers.convertToContainerInfo(),
+    containers = containers,
+    crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     clues = clues.convertToClueResponses(),
     type = RitualProgressNettyResponse::class.java.simpleName,

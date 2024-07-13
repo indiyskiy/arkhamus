@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.jsonparser.containers.crafter
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.jsonparser.NettyRequestJsonParser
-import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.crafter.UpdateCrafterRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.crafter.UpdateCrafterRequestMessage
 import org.springframework.stereotype.Component
 
 @Component

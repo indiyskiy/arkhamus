@@ -11,8 +11,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.AltarOpenRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.AltarOpenRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -38,7 +38,7 @@ class AltarOpenNettyRequestHandler(
     ): AltarOpenRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
         with(request as AltarOpenRequestMessage) {
-            val inZones = zonesHandler.filterByUserPosition(
+            val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
             )
@@ -76,6 +76,7 @@ class AltarOpenNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
+                crafters = globalGameData.crafters.values.toList(),
                 tick = globalGameData.game.currentTick,
                 clues = clues
             )

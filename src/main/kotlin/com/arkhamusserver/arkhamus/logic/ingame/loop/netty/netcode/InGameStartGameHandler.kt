@@ -8,9 +8,9 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameStartedResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component

@@ -1,0 +1,16 @@
+package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
+
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
+
+data class CrafterState(
+    var crafterId: Long,
+    var state: MapObjectState,
+    var holdingUserId: Long?
+) {
+    constructor(crafter: RedisCrafter) : this(
+        crafterId = crafter.crafterId,
+        state = crafter.state,
+        holdingUserId = crafter.holdingUser
+    )
+}

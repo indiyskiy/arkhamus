@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
@@ -22,6 +23,7 @@ class GameEndedRequestGameData(
     ongoingCraftingProcess: List<CraftProcessResponse>,
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
+    crafters: List<RedisCrafter>,
     tick: Long
 ) : GameUserData(
     gameUser = gameUser,
@@ -32,6 +34,7 @@ class GameEndedRequestGameData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     containers = containers,
+    crafters = crafters,
     clues = emptyList(),
     tick = tick
 )

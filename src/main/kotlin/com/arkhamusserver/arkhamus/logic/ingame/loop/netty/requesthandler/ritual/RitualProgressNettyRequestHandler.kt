@@ -36,7 +36,7 @@ class RitualProgressNettyRequestHandler(
     ): RitualProgressRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
         with(request as RitualProgressRequestMessage) {
-            val inZones = zonesHandler.filterByUserPosition(
+            val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
             )
@@ -70,6 +70,7 @@ class RitualProgressNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
+                crafters = globalGameData.crafters.values.toList(),
                 tick = globalGameData.game.currentTick,
                 clues = clues
             )

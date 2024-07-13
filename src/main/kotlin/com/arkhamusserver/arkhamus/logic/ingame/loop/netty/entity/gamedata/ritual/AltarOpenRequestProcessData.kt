@@ -28,6 +28,7 @@ class AltarOpenRequestProcessData(
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
+    crafters: List<RedisCrafter>,
     clues: List<RedisClue>,
     tick: Long
 ) : GameUserData(
@@ -39,6 +40,7 @@ class AltarOpenRequestProcessData(
     ongoingCraftingProcess = ongoingCraftingProcess,
     visibleItems = visibleItems,
     containers = containers,
+    crafters = crafters,
     clues = clues,
     tick = tick
 )

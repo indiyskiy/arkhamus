@@ -65,6 +65,7 @@ class GameEndedNettyRequestHandler(
                     globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
+                crafters = globalGameData.crafters.values.toList(),
             )
         } ?: return ErrorGameResponse("game session id is null", globalGameData.game.currentTick)
     }
