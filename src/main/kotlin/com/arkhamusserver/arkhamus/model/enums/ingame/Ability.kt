@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.DAY_LENGTH
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.DAY_LENGTH_MINUTES
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.MINUTE_IN_MILLIS
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.NIGHT_LENGTH
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.NIGHT_LENGTH_MINUTES
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SECOND_IN_MILLIS
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.*
 
@@ -95,8 +95,8 @@ enum class Ability(
         id = 9001,
         requiresItem = true,
         consumesItem = false,
-        cooldown = MINUTE_IN_MILLIS * DAY_LENGTH,
-        active = NIGHT_LENGTH / 2
+        cooldown = MINUTE_IN_MILLIS * DAY_LENGTH_MINUTES,
+        active = MINUTE_IN_MILLIS * NIGHT_LENGTH_MINUTES / 2
     )
     ;
 
