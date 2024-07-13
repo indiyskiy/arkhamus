@@ -1,9 +1,11 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.DAY_LENGTH
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.MINUTE_IN_MILLIS
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.NIGHT_LENGTH
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SECOND_IN_MILLIS
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.*
 
-private const val SECOND_IN_MILLIS: Long = 1 * 1000
-private const val MINUTE_IN_MILLIS: Long = SECOND_IN_MILLIS * 60
 private const val MINIMUM_COOLDOWN: Long = SECOND_IN_MILLIS
 private const val DEFAULT_INVESTIGATION_ACTIVE: Long = MINUTE_IN_MILLIS
 
@@ -23,12 +25,12 @@ enum class Ability(
         classBased = true,
         cooldown = MINUTE_IN_MILLIS
     ),
+    //cultist ability 2***
 
-    //investigator items 2***
     //cultist class items 3***
     //cultist items spell 4***
     THROW_POTATO(
-        id = 202,
+        id = 4001,
         requiresItem = true,
         consumesItem = true,
         //available for everybody couse can ber re-thrown
@@ -36,7 +38,7 @@ enum class Ability(
         globalCooldown = true
     ),
     SUMMON_NIGHT(
-        id = 202,
+        id = 4002,
         requiresItem = true,
         consumesItem = true,
         availableForRole = setOf(CULTIST),
@@ -87,6 +89,15 @@ enum class Ability(
         cooldown = MINUTE_IN_MILLIS * 2,
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
+
+    //ADVANCED_USEFUL_ITEM 9***
+    KINDLE_CLOAK(
+        id = 9001,
+        requiresItem = true,
+        consumesItem = false,
+        cooldown = MINUTE_IN_MILLIS * DAY_LENGTH,
+        active = NIGHT_LENGTH / 2
+    )
     ;
 
     companion object {

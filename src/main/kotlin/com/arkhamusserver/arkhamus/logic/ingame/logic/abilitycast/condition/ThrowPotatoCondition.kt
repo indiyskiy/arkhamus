@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component
 
 @Component
-class AdditionalHealMadnessCondition(
+class ThrowPotatoCondition(
     private val geometryUtils: GeometryUtils
 ) : AdditionalAbilityCondition {
     companion object {
@@ -15,7 +15,7 @@ class AdditionalHealMadnessCondition(
     }
 
     override fun accepts(ability: Ability): Boolean {
-        return ability == Ability.HEAL_MADNESS
+        return ability == Ability.THROW_POTATO
     }
 
     override fun fitCondition(

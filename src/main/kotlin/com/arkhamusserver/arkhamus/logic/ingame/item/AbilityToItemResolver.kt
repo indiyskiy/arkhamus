@@ -24,6 +24,7 @@ class AbilityToItemResolver {
                 SEARCH_FOR_CORRUPTION -> CORRUPTION_INVESTIGATION_ITEM
                 SEARCH_FOR_OMEN -> OMEN_INVESTIGATION_ITEM
                 SEARCH_FOR_DISTORTION -> DISTORTION_INVESTIGATION_ITEM
+                KINDLE_CLOAK -> CLOAK_OF_FLAMES
                 else -> null
             }
         }

@@ -1,0 +1,44 @@
+package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors
+
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag
+import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
+
+@Component
+class KindleCloakAbilityProcessor : ActiveAbilityProcessor {
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(KindleCloakAbilityProcessor::class.java)
+        val relatedSet = setOf(
+            Ability.KINDLE_CLOAK,
+        )
+    }
+
+    override fun accepts(castAbility: RedisAbilityCast): Boolean {
+        return castAbility.abilityId.toAbility()?.let { ability ->
+            ability in relatedSet
+        } ?: false
+    }
+
+    override fun processActive(
+        castAbility: RedisAbilityCast,
+        globalGameData: GlobalGameData
+    ) {
+
+    }
+
+    override fun finishActive(castAbility: RedisAbilityCast, globalGameData: GlobalGameData) {
+        val user = globalGameData.users[castAbility.sourceUserId]
+        user?.stateTags?.remove(UserStateTag.LUMINOUS.name)
+    }
+
+    private fun Int.toAbility(): Ability? =
+        Ability.values().firstOrNull { it.id == this }
+
+}
+
+

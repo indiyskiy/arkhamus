@@ -16,6 +16,14 @@ data class LevelFromJson(
     var clueZones: List<ClueZoneFromJson> = emptyList()
 )
 
+data class QuestGiverFromJson(
+    var id: Long? = null,
+    var interactionRadius: Double? = null,
+    var x: Double? = null,
+    var y: Double? = null
+)
+
+
 data class ContainerFromJson(
     var id: Long? = null,
     var interactionRadius: Double? = null,
