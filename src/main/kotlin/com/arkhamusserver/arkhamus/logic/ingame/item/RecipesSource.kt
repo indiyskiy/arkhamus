@@ -13,8 +13,8 @@ class RecipesSource {
     private val allRecipesMap = allRecipes.associateBy { it.recipeId }
 
     companion object {
-        private const val SECOND_IN_MILIS: Long = 1 * 1000
-        private const val MINUTE_IN_MILIS: Long = SECOND_IN_MILIS * 60
+        private const val SECOND_IN_MILLIS: Long = 1 * 1000
+        private const val MINUTE_IN_MILLIS: Long = SECOND_IN_MILLIS * 60
     }
 
     fun getAllRecipes() = allRecipes
@@ -30,7 +30,7 @@ class RecipesSource {
             ).toRecipe(
                 5001,
                 item = INSCRIPTION_INVESTIGATION_ITEM,
-                timeToCraft = MINUTE_IN_MILIS / 2,
+                timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -40,7 +40,7 @@ class RecipesSource {
             ).toRecipe(
                 5002,
                 item = SOUND_INVESTIGATION_ITEM,
-                timeToCraft = MINUTE_IN_MILIS / 2,
+                timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -50,7 +50,7 @@ class RecipesSource {
             ).toRecipe(
                 5003,
                 item = SCENT_INVESTIGATION_ITEM,
-                timeToCraft = MINUTE_IN_MILIS / 2,
+                timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -60,7 +60,7 @@ class RecipesSource {
             ).toRecipe(
                 5004,
                 item = AURA_INVESTIGATION_ITEM,
-                timeToCraft = MINUTE_IN_MILIS / 2,
+                timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -70,7 +70,7 @@ class RecipesSource {
             ).toRecipe(
                 5005,
                 item = CORRUPTION_INVESTIGATION_ITEM,
-                timeToCraft = MINUTE_IN_MILIS / 2,
+                timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -80,7 +80,7 @@ class RecipesSource {
             ).toRecipe(
                 5006,
                 item = OMEN_INVESTIGATION_ITEM,
-                timeToCraft = MINUTE_IN_MILIS / 2,
+                timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
             listOf(
@@ -90,7 +90,7 @@ class RecipesSource {
             ).toRecipe(
                 5007,
                 item = DISTORTION_INVESTIGATION_ITEM,
-                timeToCraft = MINUTE_IN_MILIS / 2,
+                timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
 
@@ -98,14 +98,14 @@ class RecipesSource {
             listOf(Ingredient(SAINT_QUARTZ, 1), Ingredient(DARK_ESSENCE, 1)).toRecipe(
                 7001,
                 item = MOON_STONE,
-                timeToCraft = MINUTE_IN_MILIS,
+                timeToCraft = MINUTE_IN_MILLIS,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
 
             listOf(Ingredient(SAINT_QUARTZ, 2), Ingredient(DARK_ESSENCE, 2)).toRecipe(
                 7002,
                 item = MOON_STONE,
-                timeToCraft = (0.5 * MINUTE_IN_MILIS).roundToLong(),
+                timeToCraft = (0.5 * MINUTE_IN_MILLIS).roundToLong(),
                 numberOfItems = 3,
                 crafterTypes = listOf(CrafterType.ADVANCED)
             ),

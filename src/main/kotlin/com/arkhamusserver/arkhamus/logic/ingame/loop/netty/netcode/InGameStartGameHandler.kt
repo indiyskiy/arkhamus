@@ -28,7 +28,7 @@ class InGameStartGameHandler(
     fun tryToStartGame(
         authData: AuthRequestProcessData
     ) {
-        ProcessingHandler.logger.info("try to start the gamer after auth {}", authData)
+        ProcessingHandler.logger.info("try to start the gamer after auth {}", authData.userAccount?.id)
         authData.game?.id?.let { gameId ->
             val channels = channelRepository.getByGameId(gameId)
             if (allUsersAuthorised(channels, authData)) {

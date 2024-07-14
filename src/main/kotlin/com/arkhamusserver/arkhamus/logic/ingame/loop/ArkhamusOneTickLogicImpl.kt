@@ -61,7 +61,7 @@ class ArkhamusOneTickLogicImpl(
                     processedTasks,
                 )
             return responses
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             logger.error("Error processing current tasks: ${e.message}", e)
         }
         return emptyList()

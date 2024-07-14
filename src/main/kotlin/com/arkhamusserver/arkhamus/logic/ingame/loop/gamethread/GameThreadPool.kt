@@ -40,36 +40,48 @@ class GameThreadPool(
     }
 
     fun initTickProcessingLoop(gameSession: GameSession) {
-        val newTaskCollection = (TaskCollection()).apply {
-            init(gameSession)
+        try {
+            val newTaskCollection = (TaskCollection()).apply {
+                init(gameSession)
+            }
+            val gameId = gameSession.id!!
+            tasksMap[gameId] = newTaskCollection
+            val scheduledFuture = taskExecutor.scheduleAtFixedRate(
+                {
+                    processGameTasks(gameId)
+                },
+                0L,
+                TICK_DELTA,
+                TimeUnit.MILLISECONDS
+            )
+            loopHandlerFutures[gameSession.id] = scheduledFuture
+        } catch (th: Throwable) {
+            logger.error("Error occurred while initializing tick processing loop", th)
+            throw th
         }
-        val gameId = gameSession.id!!
-        tasksMap[gameId] = newTaskCollection
-        val scheduledFuture = taskExecutor.scheduleAtFixedRate(
-            {
-                processGameTasks(gameId)
-            },
-            0L,
-            TICK_DELTA,
-            TimeUnit.MILLISECONDS
-        )
-        loopHandlerFutures[gameSession.id] = scheduledFuture
+
     }
 
     private fun processGameTasks(gameId: Long) {
-        val taskCollection = tasksMap[gameId]!!
-        val taskList = synchronized(taskCollection) {
-            taskCollection.getList().also { taskCollection.resetList() }
+        try {
+            val taskCollection = tasksMap[gameId]!!
+            val taskList = synchronized(taskCollection) {
+                taskCollection.getList().also { taskCollection.resetList() }
+            }
+            val redisGame = redisDataAccess.getGame(gameId)
+            // TODO better state handling - e.g. we might want to support pause somehow and other stuff later
+            if (redisGame != null && redisGame.state in GameState.gameInProgressStateStrings) {
+                processGameTick(
+                    tasks = taskList,
+                    gameId = gameId,
+                    ongoingGame = redisGame
+                )
+            }
+        } catch (e: Throwable) {
+            logger.error("error on processing game tasks for game $gameId", e)
+            throw e
         }
-        val redisGame = redisDataAccess.getGame(gameId)
-        // TODO better state handling - e.g. we might want to support pause somehow and other stuff later
-        if (redisGame != null && redisGame.state in GameState.gameInProgressStateStrings) {
-            processGameTick(
-                tasks = taskList,
-                gameId = gameId,
-                ongoingGame = redisGame
-            )
-        }
+
     }
 
     @Scheduled(fixedRate = 10_000)
@@ -87,7 +99,9 @@ class GameThreadPool(
                     }
                 }
                 logger.info("cleaning redis database")
-                redisGameSession.gameId?.let { jedisCleaner.cleanGame(it) }?:jedisCleaner.cleanGameWithoutGameId(redisGameSession)
+                redisGameSession.gameId?.let { jedisCleaner.cleanGame(it) } ?: jedisCleaner.cleanGameWithoutGameId(
+                    redisGameSession
+                )
             }
         }
     }
@@ -124,11 +138,17 @@ class GameThreadPool(
         gameId: Long,
         ongoingGame: RedisGame
     ) {
-        val responses = tickLogic.processCurrentTasks(
-            tasks,
-            ongoingGame
-        )
-        responseSendingLoopManager.addResponses(responses, gameId)
+        try {
+            val responses = tickLogic.processCurrentTasks(
+                tasks,
+                ongoingGame
+            )
+            responseSendingLoopManager.addResponses(responses, gameId)
+        } catch (e: Throwable) {
+            logger.error("error on processing game tick for game $gameId", e)
+            throw e
+        }
+
     }
 
 }
