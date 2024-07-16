@@ -2,25 +2,25 @@
   {
     "altars": [
       {
-        "id": 12,
+        "id": 600,
         "interactionRadius": 3.5,
         "x": 48,
         "y": 48
       },
       {
-        "id": 13,
+        "id": 601,
         "interactionRadius": 3.5,
         "x": 48,
         "y": 52
       },
       {
-        "id": 14,
+        "id": 602,
         "interactionRadius": 3.5,
         "x": 52,
         "y": 48
       },
       {
-        "id": 15,
+        "id": 603,
         "interactionRadius": 3.5,
         "x": 52,
         "y": 52
@@ -166,55 +166,55 @@
     ],
     "containers": [
       {
-        "id": 1,
+        "id": 800,
         "interactionRadius": 3.5,
         "x": 75,
         "y": 5
       },
       {
-        "id": 2,
+        "id": 801,
         "interactionRadius": 3.5,
         "x": 85,
         "y": 5
       },
       {
-        "id": 16,
+        "id": 802,
         "interactionRadius": 3.5,
         "x": 95,
         "y": 5
       },
       {
-        "id": 17,
+        "id": 803,
         "interactionRadius": 3.5,
         "x": 75,
         "y": 15
       },
       {
-        "id": 18,
+        "id": 804,
         "interactionRadius": 3.5,
         "x": 85,
         "y": 15
       },
       {
-        "id": 19,
+        "id": 805,
         "interactionRadius": 3.5,
         "x": 95,
         "y": 15
       },
       {
-        "id": 20,
+        "id": 806,
         "interactionRadius": 3.5,
         "x": 75,
         "y": 25
       },
       {
-        "id": 21,
+        "id": 807,
         "interactionRadius": 3.5,
         "x": 85,
         "y": 25
       },
       {
-        "id": 22,
+        "id": 808,
         "interactionRadius": 3.5,
         "x": 95,
         "y": 25
@@ -223,21 +223,21 @@
     "crafters": [
       {
         "crafterType": "REGULAR",
-        "id": 9,
+        "id": 900,
         "interactionRadius": 3.5,
         "x": 65,
         "y": 28
       },
       {
         "crafterType": "ADVANCED",
-        "id": 10,
+        "id": 901,
         "interactionRadius": 3.5,
         "x": 92,
         "y": 75
       },
       {
         "crafterType": "CULTIST",
-        "id": 11,
+        "id": 902,
         "interactionRadius": 3.5,
         "x": 27,
         "y": 21.5
@@ -245,13 +245,13 @@
     ],
     "lanterns": [
       {
-        "id": 7,
+        "id": 1100,
         "lightRange": 12,
         "x": 47,
         "y": 27
       },
       {
-        "id": 8,
+        "id": 1101,
         "lightRange": 12,
         "x": 37,
         "y": 38
@@ -259,11 +259,57 @@
     ],
     "levelHeight": 104,
     "levelId": 1,
+    "levelTasks": [
+      {
+        "id": 1200,
+        "interactionRadius": 3.5,
+        "name": "Insanity",
+        "x": 40,
+        "y": 20
+      },
+      {
+        "id": 1201,
+        "interactionRadius": 3.5,
+        "name": "Sorority",
+        "x": 69,
+        "y": 88
+      },
+      {
+        "id": 1201,
+        "interactionRadius": 3.5,
+        "name": "Fraternity",
+        "x": 42,
+        "y": 94
+      }
+    ],
     "levelVersion": 1,
     "levelWidth": 104,
+    "questGivers": [
+      {
+        "id": 1300,
+        "interactionRadius": 3.5,
+        "name": "Warren Rice",
+        "x": 58,
+        "y": 14
+      },
+      {
+        "id": 1301,
+        "interactionRadius": 3.5,
+        "name": "Francis Morgan",
+        "x": 66,
+        "y": 9
+      },
+      {
+        "id": 1302,
+        "interactionRadius": 3.5,
+        "name": "Henry Armitage",
+        "x": 94,
+        "y": 97
+      }
+    ],
     "ritualAreas": [
       {
-        "id": 666,
+        "id": 500,
         "radius": 10,
         "x": 50,
         "y": 50

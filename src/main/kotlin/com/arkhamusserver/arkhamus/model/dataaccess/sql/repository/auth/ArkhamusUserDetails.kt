@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth
 
-import com.arkhamusserver.arkhamus.model.database.entity.Role
+import com.arkhamusserver.arkhamus.model.database.entity.game.Role
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User

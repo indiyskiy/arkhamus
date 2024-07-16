@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
+import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import jakarta.persistence.*
 
 /**

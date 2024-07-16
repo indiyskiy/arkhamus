@@ -1,17 +1,17 @@
-package com.arkhamusserver.arkhamus.model.database.entity
+package com.arkhamusserver.arkhamus.model.database.entity.game
 
 import jakarta.persistence.*
 import org.postgresql.geometric.PGpoint
 
 @Entity
-data class RitualArea(
+data class Container(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
     var inGameId: Long,
-    var radius: Double,
     var point: PGpoint,
+    var interactionRadius: Double,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
-    var level: Level
+    var level: Level? = null
 )

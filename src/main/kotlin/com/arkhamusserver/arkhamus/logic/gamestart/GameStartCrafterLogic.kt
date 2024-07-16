@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.CrafterRepository
-import com.arkhamusserver.arkhamus.model.database.entity.Crafter
+import com.arkhamusserver.arkhamus.model.database.entity.game.Crafter
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.fasterxml.uuid.Generators

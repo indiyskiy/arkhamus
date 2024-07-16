@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.model.database.entity
+package com.arkhamusserver.arkhamus.model.database.entity.game
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import jakarta.persistence.*

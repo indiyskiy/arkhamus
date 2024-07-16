@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.config.database
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
-import com.arkhamusserver.arkhamus.model.database.entity.*
+import com.arkhamusserver.arkhamus.model.database.entity.game.*
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.view.levelDesign.*
@@ -30,8 +30,9 @@ class LevelDesignInfoProcessor(
     private val ellipseRepository: EllipseRepository,
     private val crafterRepository: CrafterRepository,
     private val startMarkerRepository: StartMarkerRepository,
-
-    ) {
+    private val questGiverRepository: QuestGiverRepository,
+    private val levelTaskRepository: LevelTaskRepository,
+) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(LevelDesignInfoProcessor::class.java)
         var gson: Gson = Gson()
@@ -103,6 +104,36 @@ class LevelDesignInfoProcessor(
         processCrafters(levelFromJson.crafters, savedLevel)
         processStartMarkers(levelFromJson.startMarkers, savedLevel)
         processClueZones(levelFromJson.clueZones, savedLevel)
+        processQuestGiverFromJson(levelFromJson.questGivers, savedLevel)
+        processLevelTasksFromJson(levelFromJson.levelTasks, savedLevel)
+    }
+
+    private fun processLevelTasksFromJson(levelTasks: List<LevelTaskFromJson>, savedLevel: Level) {
+        levelTasks.map { jsonLevelTask ->
+            LevelTask(
+                inGameId = jsonLevelTask.id!!,
+                point = PGpoint(jsonLevelTask.x!!, jsonLevelTask.y!!),
+                interactionRadius = jsonLevelTask.interactionRadius!!,
+                level = savedLevel,
+                name = jsonLevelTask.name!!
+            )
+        }.apply {
+            levelTaskRepository.saveAll(this)
+        }
+    }
+
+    private fun processQuestGiverFromJson(questGivers: List<QuestGiverFromJson>, savedLevel: Level) {
+        questGivers.map { jsonQuestGiver ->
+            QuestGiver(
+                inGameId = jsonQuestGiver.id!!,
+                point = PGpoint(jsonQuestGiver.x!!, jsonQuestGiver.y!!),
+                interactionRadius = jsonQuestGiver.interactionRadius!!,
+                level = savedLevel,
+                name = jsonQuestGiver.name!!
+            )
+        }.apply {
+            questGiverRepository.saveAll(this)
+        }
     }
 
     private fun processClueZones(clueZones: List<ClueZoneFromJson>, savedLevel: Level) {

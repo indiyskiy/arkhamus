@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.config.database
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.RoleRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserSkinRepository
-import com.arkhamusserver.arkhamus.model.database.entity.Role
+import com.arkhamusserver.arkhamus.model.database.entity.game.Role
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
 import com.arkhamusserver.arkhamus.model.enums.RoleName

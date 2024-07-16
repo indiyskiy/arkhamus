@@ -15,11 +15,7 @@ data class RedisQuestGiver(
     var x: Double,
     var y: Double,
     var interactionRadius: Double,
-
-    var possibleUserIds: MutableList<Long>,
-    var acceptedUserIds: MutableList<Long> = emptyList<Long>().toMutableList(),
-    var justFinishedUserIds: MutableList<Long> = emptyList<Long>().toMutableList(),
-) : WithPoint {
+    ) : WithPoint {
 
     override fun x(): Double {
         return x

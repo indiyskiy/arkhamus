@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame
 
-import com.arkhamusserver.arkhamus.model.database.entity.Container
+import com.arkhamusserver.arkhamus.model.database.entity.game.Container
 import org.springframework.data.repository.CrudRepository
 
 

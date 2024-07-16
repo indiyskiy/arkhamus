@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
-import com.arkhamusserver.arkhamus.model.database.entity.*
+import com.arkhamusserver.arkhamus.model.database.entity.game.*
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminGameLevelGeometryDto
 import com.arkhamusserver.arkhamus.view.dto.admin.EllipseDto
 import com.arkhamusserver.arkhamus.view.dto.admin.PointDto

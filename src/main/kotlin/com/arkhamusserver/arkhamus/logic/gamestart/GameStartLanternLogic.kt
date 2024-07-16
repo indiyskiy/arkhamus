@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLanternRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LanternRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.Lantern
+import com.arkhamusserver.arkhamus.model.database.entity.game.Lantern
 import com.arkhamusserver.arkhamus.model.redis.RedisLantern
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component

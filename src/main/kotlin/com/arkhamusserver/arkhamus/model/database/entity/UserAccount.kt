@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
+import com.arkhamusserver.arkhamus.model.database.entity.game.Role
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.sql.Timestamp

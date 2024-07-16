@@ -7,6 +7,8 @@ data class LevelFromJson(
     var levelVersion: Long? = null,
     var levelHeight: Long? = null,
     var levelWidth: Long? = null,
+    var questGivers: List<QuestGiverFromJson> = emptyList(),
+    var levelTasks: List<LevelTaskFromJson> = emptyList(),
     var containers: List<ContainerFromJson> = emptyList(),
     var lanterns: List<LanternFromJson> = emptyList(),
     var altars: List<AltarFromJson> = emptyList(),
@@ -20,9 +22,17 @@ data class QuestGiverFromJson(
     var id: Long? = null,
     var interactionRadius: Double? = null,
     var x: Double? = null,
-    var y: Double? = null
+    var y: Double? = null,
+    var name: String? = null,
 )
 
+data class LevelTaskFromJson(
+    var id: Long? = null,
+    var interactionRadius: Double? = null,
+    var x: Double? = null,
+    var y: Double? = null,
+    var name: String? = null,
+)
 
 data class ContainerFromJson(
     var id: Long? = null,

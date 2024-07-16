@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
-import com.arkhamusserver.arkhamus.model.database.entity.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminGameLevelInfoDto
 import org.springframework.stereotype.Component
 

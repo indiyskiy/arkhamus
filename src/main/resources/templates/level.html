@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
 <head>
-    <title>User Details</title>
+    <title>Level</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body>
@@ -22,6 +22,8 @@
     State: <span th:text="${levelInfo.state}"></span>
     <br/>
     <a th:href="@{/admin/browser/level/{levelId}/preview(levelId=${levelInfo.levelId})}" title="Preview">Preview</a>
+    <br/>
+    <a th:href="@{/admin/browser/level/{levelId}/quests(levelId=${levelInfo.levelId})}" title="Quests">Quests</a>
 </div>
 
 <div class="footer">

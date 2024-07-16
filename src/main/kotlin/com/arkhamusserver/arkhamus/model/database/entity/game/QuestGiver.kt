@@ -1,17 +1,18 @@
-package com.arkhamusserver.arkhamus.model.database.entity
+package com.arkhamusserver.arkhamus.model.database.entity.game
 
 import jakarta.persistence.*
 import org.postgresql.geometric.PGpoint
 
 @Entity
-data class Altar(
+data class QuestGiver(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
+    var inGameId: Long,
     var point: PGpoint,
-    var inGameId: Long? = null,
-    var interactionRadius: Double? = null,
+    var interactionRadius: Double,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
-    var level: Level? = null
+    var level: Level? = null,
+    var name: String
 )

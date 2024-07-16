@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository
 
-import com.arkhamusserver.arkhamus.model.database.entity.Role
+import com.arkhamusserver.arkhamus.model.database.entity.game.Role
 import org.springframework.data.repository.CrudRepository
 import java.util.*
 

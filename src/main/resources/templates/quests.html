@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Quests</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/levels}" title="Levels">Levels</a>
+        <a th:href="@{/admin/browser/level/{levelId}(levelId=${levelId})}" title="Level">Level</a>
+    </footer>
+</div>
+
+<div class="main">
+    <h1>Quests</h1>
+    <table style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>State</th>
+        </tr>
+        <tr th:each="quest : ${quests}">
+            <td>
+                <a th:href="@{/admin/browser/level/{levelId}/quest/{questId}(levelId=${levelId}, questId=${quest.id})}"
+                   th:text="${quest.id}"></a>
+            </td>
+            <td th:text="${quest.name}"></td>
+            <td th:text="${quest.state}"></td>
+        </tr>
+    </table>
+    <br/>
+    <form method="post"
+          th:action="@{/admin/browser/level/{levelId}/quest(levelId=${levelId})}"
+          th:object="${quest}">
+        <input type="submit" value="Create new quest">
+    </form>
+</div>
+
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/levels}" title="Levels">Levels</a>
+        <a th:href="@{/admin/browser/level/{levelId}(levelId=${levelId})}" title="Level">Level</a>
+    </footer>
+</div>
+</body>
+</html>

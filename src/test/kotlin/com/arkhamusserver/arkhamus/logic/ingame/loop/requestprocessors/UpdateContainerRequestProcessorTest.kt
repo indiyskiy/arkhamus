@@ -7,6 +7,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.container.UpdateContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.containers.container.UpdateContainerRequestProcessor
 import com.arkhamusserver.arkhamus.model.database.entity.*
+import com.arkhamusserver.arkhamus.model.database.entity.game.Container
+import com.arkhamusserver.arkhamus.model.database.entity.game.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.Role
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import com.arkhamusserver.arkhamus.model.enums.RoleName
@@ -467,7 +470,8 @@ class UpdateContainerRequestProcessorTest {
             tick = 100L,
             containers = emptyList(),
             clues = emptyList(),
-            inZones = emptyList()
+            inZones = emptyList(),
+            crafters = emptyList()
         )
 
         val globalGameData = GlobalGameData(

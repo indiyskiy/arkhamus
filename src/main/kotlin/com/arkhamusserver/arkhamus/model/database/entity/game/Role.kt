@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.model.database.entity
+package com.arkhamusserver.arkhamus.model.database.entity.game
 
 import jakarta.persistence.*
 
