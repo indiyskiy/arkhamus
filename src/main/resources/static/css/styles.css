@@ -26,6 +26,24 @@ table th {
     text-align: left;
 }
 
+.square-button {
+    box-sizing: border-box;
+    margin: 10px 0;
+    padding: 10px 20px;
+    border: 1px solid orange;
+    outline: none;
+    font-size: 15px;
+    border-radius: 5px;
+}
+
+.square-button img {
+    height: 20px;
+    width: 20px;
+    object-fit: scale-down;
+    display: inline-block;
+    font-weight: bold;
+}
+
 .long-button {
     width: 100%;
     box-sizing: border-box;
@@ -64,20 +82,24 @@ table th {
     padding-bottom: 35px;
 }
 
-a:link{
-    color:orange;
+a:link {
+    color: orange;
 }
-a:visited{
-    color:orange;
+
+a:visited {
+    color: orange;
 }
-a:hover{
-    color:green;
+
+a:hover {
+    color: green;
 }
-a:focus{
-    color:green;
+
+a:focus {
+    color: green;
 }
-a:active{
-    color:green;
+
+a:active {
+    color: green;
 }
 
 input {
@@ -96,12 +118,40 @@ input:focus {
     box-shadow: 0 0 8px darkgreen;
 }
 
-.step-item {
+select {
+    width: 100%;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid orange;
+    font-size: 15px;
+    color: #333;
+    background-color: #f8f8f8;
+    transition: all 0.3s ease;
+}
+
+select:focus {
+    border-color: green;
+    outline: none;
+    box-shadow: 0 0 5px darkgreen;
+}
+
+.form-part {
     margin-bottom: 20px;
     padding: 10px;
     border: 1px solid orange;
     background-color: lightgreen;
     border-radius: 5px;
+}
+
+.form-part label {
+    display: inline-block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-part label:hover {
+    color: #666;
 }
 
 .form-group {

@@ -1,15 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelTaskRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestStepRepository
-import com.arkhamusserver.arkhamus.model.database.entity.game.Level
-import com.arkhamusserver.arkhamus.model.database.entity.game.LevelTask
-import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
-import com.arkhamusserver.arkhamus.model.database.entity.game.QuestStep
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
+import com.arkhamusserver.arkhamus.model.database.entity.game.*
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
 import com.arkhamusserver.arkhamus.view.dto.admin.LevelTaskDto
+import com.arkhamusserver.arkhamus.view.dto.admin.QuestGiverDto
 import com.arkhamusserver.arkhamus.view.dto.admin.QuestStepDto
 import com.arkhamusserver.arkhamus.view.validator.utils.assertEquals
 import jakarta.transaction.Transactional
@@ -22,7 +17,8 @@ class AdminQuestLogic(
     private val levelRepository: LevelRepository,
     private val levelTaskRepository: LevelTaskRepository,
     private val stepRepository: QuestStepRepository,
-    private val questMergeHandler: QuestMergeHandler
+    private val questGiverRepository: QuestGiverRepository,
+    private val questMergeHandler: QuestMergeHandler,
 ) {
 
     fun get(questId: Long): AdminQuestDto {
@@ -53,11 +49,15 @@ class AdminQuestLogic(
     @Transactional
     fun save(questId: Long, questDto: AdminQuestDto): AdminQuestDto {
         val quest = questRepository.findById(questId).get()
-        assertEquals(quest.id!!, questDto.id!!, "changing wrong quest", Quest::class.simpleName!!)
+        assertEquals(quest.id!!, questDto.id, "changing wrong quest", Quest::class.simpleName!!)
         val allRelatedTasks: List<LevelTask> = (quest.questSteps.map { it.levelTask }) +
-                (questDto.steps.mapNotNull { it.levelTask?.id }.map { levelTaskRepository.findById(it).get() })
+                (questDto.steps.map { it.levelTask.id }.map { levelTaskRepository.findById(it).get() })
         val allRelatedTasksMap = allRelatedTasks.filter { it.id != null }.associateBy { it.id!! }
-        questMergeHandler.merge(quest, questDto, allRelatedTasksMap)
+        val questGivers: Map<Long, QuestGiver> = listOf(
+            questGiverRepository.findById(questDto.startQuestGiver.id).get(),
+            questGiverRepository.findById(questDto.endQuestGiver.id).get()
+        ).associateBy { it.id!! }
+        questMergeHandler.merge(quest, questDto, allRelatedTasksMap, questGivers)
         val saved = questRepository.save(quest)
         return saved.toDto()
     }
@@ -100,9 +100,14 @@ class AdminQuestLogic(
     }
 
     private fun newQuest(level: Level): Quest = Quest(
-        level = level
+        level = level,
+        startQuestGiver = defaultQuestGiver(level),
+        endQuestGiver = defaultQuestGiver(level)
     )
 
+    private fun defaultQuestGiver(level: Level): QuestGiver {
+        return questGiverRepository.findByLevelId(level.id!!).first()
+    }
 
     private fun Quest.toDto(): AdminQuestDto =
         AdminQuestDto(
@@ -111,6 +116,8 @@ class AdminQuestLogic(
             state = this.questState,
             name = this.name,
             steps = this.questSteps.map { it.toDto() }.sortedBy { it.number }.toMutableList(),
+            startQuestGiver = this.startQuestGiver.toDto(),
+            endQuestGiver = this.endQuestGiver.toDto(),
         )
 
 
@@ -125,5 +132,14 @@ class AdminQuestLogic(
         number = this.stepNumber,
         levelTask = this.levelTask.toDto()
     )
+
+    private fun QuestGiver.toDto(): QuestGiverDto =
+        QuestGiverDto(
+            id = this.id!!,
+            name = this.name
+        )
+
+    fun possibleQuestGivers(levelId: Long): List<QuestGiverDto> =
+        questGiverRepository.findByLevelId(levelId).map { it.toDto() }
 
 }

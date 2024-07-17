@@ -14,7 +14,13 @@ data class Quest(
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "quest")
     var questSteps: MutableList<QuestStep> = mutableListOf(),
     var questState: QuestState = QuestState.DRAFT,
-    var name: String = "new quest"
+    var name: String = "new quest",
+    @ManyToOne
+    @JoinColumn(name = "startQuestGiverId", nullable = false)
+    var startQuestGiver: QuestGiver,
+    @ManyToOne
+    @JoinColumn(name = "endQuestGiverId", nullable = false)
+    var endQuestGiver: QuestGiver,
 ) {
     fun addQuestStep(questStep: QuestStep) {
         this.questSteps.add(questStep)

@@ -1,8 +1,10 @@
 package com.arkhamusserver.arkhamus.view.controller.admin.browser.level
 
 import com.arkhamusserver.arkhamus.logic.admin.AdminQuestLogic
+import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
 import com.arkhamusserver.arkhamus.view.dto.admin.LevelTaskDto
+import com.arkhamusserver.arkhamus.view.dto.admin.QuestGiverDto
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -29,12 +31,8 @@ class BrowserQuestController(
     ): String {
         val createdQuest: AdminQuestDto = adminQuestLogic.create(levelId)
         model.addAttribute("quest", createdQuest)
-        addPossibleTasks(levelId, model)
-        addLevelIdAttribute(model, levelId)
-
-        redirectAttrs.addAttribute("levelId", levelId)
-        redirectAttrs.addAttribute("questId", createdQuest.id)
-        return "redirect:/admin/browser/level/{levelId}/quest/{questId}"
+        addDefaultPageValues(levelId, model)
+        return setUpRedirect(redirectAttrs, levelId, createdQuest.id)
     }
 
     @PostMapping("/admin/browser/level/{levelId}/quest/{questId}")
@@ -45,15 +43,11 @@ class BrowserQuestController(
         @PathVariable questId: Long,
         @ModelAttribute quest: AdminQuestDto,
     ): String {
-       logger.info("save by Thymeleaf")
-        val createdQuest: AdminQuestDto = adminQuestLogic.save(questId, quest)
-        model.addAttribute("quest", createdQuest)
-        addPossibleTasks(levelId, model)
-        addLevelIdAttribute(model, levelId)
-
-        redirectAttrs.addAttribute("levelId", levelId)
-        redirectAttrs.addAttribute("questId", createdQuest.id)
-        return "redirect:/admin/browser/level/{levelId}/quest/{questId}"
+        logger.info("save by Thymeleaf")
+        val editedQuest: AdminQuestDto = adminQuestLogic.save(questId, quest)
+        model.addAttribute("quest", editedQuest)
+        addDefaultPageValues(levelId, model)
+        return setUpRedirect(redirectAttrs, levelId, editedQuest.id)
     }
 
     @GetMapping("/admin/browser/level/{levelId}/quests")
@@ -73,12 +67,28 @@ class BrowserQuestController(
         @PathVariable levelId: Long,
         @PathVariable questId: Long,
     ): String {
-        logger.info("loading quest ${questId}")
+        logger.info("loading quest $questId")
         val quest: AdminQuestDto = adminQuestLogic.get(questId)
         model.addAttribute("quest", quest)
-        addLevelIdAttribute(model, levelId)
-        addPossibleTasks(levelId, model)
+        addDefaultPageValues(levelId, model)
         return "quest"
+    }
+
+    private fun addDefaultPageValues(levelId: Long, model: Model) {
+        addPossibleStates(model)
+        addPossibleTasks(levelId, model)
+        addPossibleQuestGivers(levelId, model)
+        addLevelIdAttribute(model, levelId)
+    }
+
+    private fun setUpRedirect(
+        redirectAttrs: RedirectAttributes,
+        levelId: Long,
+        questId: Long
+    ): String {
+        redirectAttrs.addAttribute("levelId", levelId)
+        redirectAttrs.addAttribute("questId", questId)
+        return "redirect:/admin/browser/level/{levelId}/quest/{questId}"
     }
 
     private fun addLevelIdAttribute(model: Model, levelId: Long) {
@@ -88,5 +98,15 @@ class BrowserQuestController(
     private fun addPossibleTasks(levelId: Long, model: Model) {
         val possibleTasks: List<LevelTaskDto> = adminQuestLogic.possibleTasks(levelId)
         model.addAttribute("possibleTasks", possibleTasks)
+    }
+
+    private fun addPossibleQuestGivers(levelId: Long, model: Model) {
+        val possibleQuestGivers: List<QuestGiverDto> = adminQuestLogic.possibleQuestGivers(levelId)
+        model.addAttribute("possibleQuestGivers", possibleQuestGivers)
+    }
+
+    private fun addPossibleStates(model: Model) {
+        val possibleStates: List<String> = QuestState.values().map { it.name }
+        model.addAttribute("possibleStates", possibleStates)
     }
 }

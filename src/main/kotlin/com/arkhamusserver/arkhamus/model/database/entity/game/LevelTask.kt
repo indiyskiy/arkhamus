@@ -11,7 +11,7 @@ data class LevelTask(
     var inGameId: Long,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
-    var level: Level? = null,
+    var level: Level,
     var name: String,
     var point: PGpoint,
     var interactionRadius: Double,

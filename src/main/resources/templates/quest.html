@@ -22,21 +22,36 @@
             th:object="${quest}"
     >
 
-        <div>
+        <div class="form-part">
             <label for="id" hidden="hidden"></label><input type="text" th:field="${quest.id}" id="id" hidden="hidden"/>
-        </div>
 
-        <div>
             <label for="name">Name:</label>
             <input type="text" th:field="${quest.name}" id="name"/>
-        </div>
 
-        <div>
             <label for="state">State:</label>
-            <input type="text" th:field="${quest.state}" id="state"/>
+            <select th:field="${quest.state}" id="state">
+                <option
+                        th:each="state : ${possibleStates}"
+                        th:value="${state}"
+                        th:text="${state}"
+                        th:selected="${state == quest.state.name}">
+                </option>
+            </select>
+        </div>
+        <!--        START QUEST GIVER-->
+        <div class="form-part">
+            <label for="startQuestGiver">Quest giver start</label>
+            <select th:field="${quest.startQuestGiver.id}" id="startQuestGiver">
+                <option
+                        th:each="npc : ${possibleQuestGivers}"
+                        th:value="${npc.id}"
+                        th:text="${npc.name}"
+                        th:selected="${npc.id == quest.startQuestGiver.id}">
+                </option>
+            </select>
         </div>
         <!--QUEST STEPS-->
-        <div class="step-item" th:each="step, iterStatus : *{steps}">
+        <div class="form-part" th:each="step, iterStatus : *{steps}">
             <div class="step-content">
                 <div class="form-group">
                     <label th:for="${step.number}">Number</label>
@@ -66,16 +81,31 @@
                     </label>
                 </div>
                 <div class="form-group">
-                    <button th:onclick="'removeItem(\'' + ${levelId} + '\', \'' + ${quest.id} + '\', \'' + ${step.id} + '\');'">
-                        Remove
+                    <button
+                            class="square-button"
+                            th:onclick="'removeItem(\'' + ${levelId} + '\', \'' + ${quest.id} + '\', \'' + ${step.id} + '\');'">
+                        <img th:src="@{/icon/trash.png}" alt="Remove">
                     </button>
                 </div>
             </div>
         </div>
-        <button class="long-button" type="button" id="addStep"
-                th:attr="data-level-id=${levelId},data-quest-id=${quest.id}">Add step
+        <button class="long-button"
+                type="button"
+                id="addStep"
+                th:attr="data-level-id=${levelId},data-quest-id=${quest.id}">
+            Add step
         </button>
-
+        <div class="form-part">
+            <label for="endQuestGiver">Quest giver start</label>
+            <select th:field="${quest.endQuestGiver.id}" id="endQuestGiver">
+                <option
+                        th:each="npc : ${possibleQuestGivers}"
+                        th:value="${npc.id}"
+                        th:text="${npc.name}"
+                        th:selected="${npc.id == quest.endQuestGiver.id}">
+                </option>
+            </select>
+        </div>
         <div>
             <input type="submit" value="Save">
         </div>
@@ -90,7 +120,6 @@
         <a th:href="@{/admin/browser/level/{levelId}(levelId=${levelId})}" title="Level">Level</a>
         <a th:href="@{/admin/browser/level/{levelId}/quests(levelId=${levelId})}" title="Quests">Quests</a>
     </footer>
-
 </div>
 <script>
     document.getElementById('addStep').addEventListener('click', function () {
