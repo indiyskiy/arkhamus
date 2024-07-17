@@ -106,8 +106,7 @@
             },
             body: null
         })
-            .then(response => {
-                alert(response)
+            .then(() => {
                 window.location.href = redirect
             })
             .catch((error) => console.error('Error:', error));
