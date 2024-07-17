@@ -98,7 +98,6 @@
         let questId = this.getAttribute('data-quest-id');
 
         let url = '/arkhamus/admin/level/' + levelId + '/quest/' + questId + '/addStep';
-        let redirect = '/arkhamus/admin/browser/level/' + levelId + '/quest/' + questId;
         fetch(url, {
             method: 'POST',
             headers: {
@@ -107,7 +106,7 @@
             body: null
         })
             .then(() => {
-                window.location.href = redirect
+                location.reload();
             })
             .catch((error) => console.error('Error:', error));
 
@@ -116,7 +115,6 @@
 <script>
     function removeItem(levelId, questId, stepId) {
         let url = '/arkhamus/admin/level/' + levelId + '/quest/' + questId + '/removeStep/' + stepId;
-        let redirect = '/arkhamus/admin/browser/level/' + levelId + '/quest/' + questId;
         console.log('Starting Fetch Call');
         fetch(url, {
             method: 'POST',
@@ -131,10 +129,8 @@
             }
             return response.json();
         })
-            .then(data => {
-                console.log(data);
-                window.location.href = redirect
-                return false;
+            .then(() => {
+                location.reload();
             })
             .catch((error) => {
                 console.error('Fetch error:', error);

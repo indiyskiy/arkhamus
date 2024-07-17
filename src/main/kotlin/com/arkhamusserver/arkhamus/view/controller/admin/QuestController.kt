@@ -29,6 +29,7 @@ class QuestController(
         @PathVariable questId: Long,
         @RequestBody quest: AdminQuestDto,
     ): AdminQuestDto {
+        logger.info("save by rest controller")
         val savedQuest: AdminQuestDto = adminQuestLogic.save(questId, quest)
         return savedQuest
     }

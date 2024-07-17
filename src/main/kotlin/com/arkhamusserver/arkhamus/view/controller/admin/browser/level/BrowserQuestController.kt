@@ -40,15 +40,20 @@ class BrowserQuestController(
     @PostMapping("/admin/browser/level/{levelId}/quest/{questId}")
     fun saveQuest(
         model: Model,
+        redirectAttrs: RedirectAttributes,
         @PathVariable levelId: Long,
         @PathVariable questId: Long,
         @ModelAttribute quest: AdminQuestDto,
     ): String {
+       logger.info("save by Thymeleaf")
         val createdQuest: AdminQuestDto = adminQuestLogic.save(questId, quest)
         model.addAttribute("quest", createdQuest)
         addPossibleTasks(levelId, model)
         addLevelIdAttribute(model, levelId)
-        return "quest"
+
+        redirectAttrs.addAttribute("levelId", levelId)
+        redirectAttrs.addAttribute("questId", createdQuest.id)
+        return "redirect:/admin/browser/level/{levelId}/quest/{questId}"
     }
 
     @GetMapping("/admin/browser/level/{levelId}/quests")
