@@ -16,13 +16,12 @@ class QuestMergeHandler() {
         sortSteps(quest)
     }
 
-    private fun sortSteps(quest: Quest) {
+    fun sortSteps(quest: Quest) {
         quest.questSteps = quest.questSteps.sortedBy { it.stepNumber }.toMutableList()
         quest.questSteps.forEachIndexed { index, questStep ->
             questStep.stepNumber = index
         }
     }
-
 
     private fun changeSteps(quest: Quest, questDto: AdminQuestDto, allRelatedTasks: Map<Long, LevelTask>) {
         quest.questSteps.forEach { step ->

@@ -3,7 +3,6 @@
 <head>
     <title>Level</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 
@@ -23,22 +22,20 @@
             th:object="${quest}"
     >
 
-        <!-- Field for 'id' in AdminQuestDto -->
         <div>
             <label for="id" hidden="hidden"></label><input type="text" th:field="${quest.id}" id="id" hidden="hidden"/>
         </div>
-        <!-- Field for 'name' in AdminQuestDto -->
+
         <div>
             <label for="name">Name:</label>
             <input type="text" th:field="${quest.name}" id="name"/>
         </div>
 
-        <!-- Field for 'state' in AdminQuestDto -->
         <div>
             <label for="state">State:</label>
             <input type="text" th:field="${quest.state}" id="state"/>
         </div>
-        <!-- QuestStepDto fields for all steps -->
+        <!--QUEST STEPS-->
         <div class="step-item" th:each="step, iterStatus : *{steps}">
             <div class="step-content">
                 <div class="form-group">
@@ -68,22 +65,23 @@
                         </select>
                     </label>
                 </div>
+                <div class="form-group">
+                    <button th:onclick="'removeItem(\'' + ${levelId} + '\', \'' + ${quest.id} + '\', \'' + ${step.id} + '\');'">
+                        Remove
+                    </button>
+                </div>
             </div>
         </div>
+        <button class="long-button" type="button" id="addStep"
+                th:attr="data-level-id=${levelId},data-quest-id=${quest.id}">Add step
+        </button>
 
-        <!-- Save Button -->
         <div>
             <input type="submit" value="Save">
         </div>
 
     </form>
 </div>
-<!-- Add Button -->
-<form method="post"
-      th:action="@{/admin/browser/level/{levelId}/quest/{questId}/addStep(levelId=${levelId}, questId=${quest.id})}"
-      th:object="${quest}">
-    <input type="submit" value="add step">
-</form>
 
 <div class="footer">
     <footer>
@@ -94,5 +92,57 @@
     </footer>
 
 </div>
+<script>
+    document.getElementById('addStep').addEventListener('click', function () {
+        let levelId = this.getAttribute('data-level-id');
+        let questId = this.getAttribute('data-quest-id');
+
+        let url = '/arkhamus/admin/level/' + levelId + '/quest/' + questId + '/addStep';
+        let redirect = '/arkhamus/admin/browser/level/' + levelId + '/quest/' + questId;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: null
+        })
+            .then(response => {
+                alert(response)
+                window.location.href = redirect
+            })
+            .catch((error) => console.error('Error:', error));
+
+    });
+</script>
+<script>
+    function removeItem(levelId, questId, stepId) {
+        let url = '/arkhamus/admin/level/' + levelId + '/quest/' + questId + '/removeStep/' + stepId;
+        let redirect = '/arkhamus/admin/browser/level/' + levelId + '/quest/' + questId;
+        console.log('Starting Fetch Call');
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: null
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+            .then(data => {
+                console.log(data);
+                window.location.href = redirect
+                return false;
+            })
+            .catch((error) => {
+                console.error('Fetch error:', error);
+            });
+        return false
+    }
+</script>
+
 </body>
 </html>

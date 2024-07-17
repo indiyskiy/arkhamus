@@ -62,10 +62,22 @@ class AdminQuestLogic(
         return saved.toDto()
     }
 
+    @Transactional
     fun addStep(questId: Long): AdminQuestDto {
         val quest = questRepository.findById(questId).get()
         val levelTask = defaultLevelTask(quest.level.id!!)
         quest.addQuestStep(newStep(quest, levelTask))
+        val saved = questRepository.save(quest)
+        return saved.toDto()
+    }
+
+    @Transactional
+    fun removeStep(questId: Long, stepId: Long): AdminQuestDto {
+        val quest = questRepository.findById(questId).get()
+        val step = quest.questSteps.first { it.id == stepId }
+        quest.removeQuestStep(step)
+        stepRepository.delete(step)
+        questMergeHandler.sortSteps(quest)
         val saved = questRepository.save(quest)
         return saved.toDto()
     }

@@ -26,6 +26,17 @@ table th {
     text-align: left;
 }
 
+.long-button {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px 0;
+    padding: 10px 20px;
+    border: 1px solid orange;
+    outline: none;
+    font-size: 15px;
+    border-radius: 5px;
+}
+
 .footer, .header {
     position: fixed;
     left: 0;

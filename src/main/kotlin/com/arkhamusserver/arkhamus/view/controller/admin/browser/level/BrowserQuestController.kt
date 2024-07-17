@@ -3,27 +3,38 @@ package com.arkhamusserver.arkhamus.view.controller.admin.browser.level
 import com.arkhamusserver.arkhamus.logic.admin.AdminQuestLogic
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
 import com.arkhamusserver.arkhamus.view.dto.admin.LevelTaskDto
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 @Controller
 class BrowserQuestController(
     private val adminQuestLogic: AdminQuestLogic
 ) {
+
+    companion object {
+        val logger = LoggerFactory.getLogger(BrowserQuestController::class.java)!!
+    }
+
     @PostMapping("/admin/browser/level/{levelId}/quest")
     fun createQuest(
         model: Model,
+        redirectAttrs: RedirectAttributes,
         @PathVariable levelId: Long,
     ): String {
         val createdQuest: AdminQuestDto = adminQuestLogic.create(levelId)
         model.addAttribute("quest", createdQuest)
         addPossibleTasks(levelId, model)
         addLevelIdAttribute(model, levelId)
-        return "quest"
+
+        redirectAttrs.addAttribute("levelId", levelId)
+        redirectAttrs.addAttribute("questId", createdQuest.id)
+        return "redirect:/admin/browser/level/{levelId}/quest/{questId}"
     }
 
     @PostMapping("/admin/browser/level/{levelId}/quest/{questId}")
@@ -34,19 +45,6 @@ class BrowserQuestController(
         @ModelAttribute quest: AdminQuestDto,
     ): String {
         val createdQuest: AdminQuestDto = adminQuestLogic.save(questId, quest)
-        model.addAttribute("quest", createdQuest)
-        addPossibleTasks(levelId, model)
-        addLevelIdAttribute(model, levelId)
-        return "quest"
-    }
-
-    @PostMapping("/admin/browser/level/{levelId}/quest/{questId}/addStep")
-    fun addStep(
-        model: Model,
-        @PathVariable levelId: Long,
-        @PathVariable questId: Long,
-    ): String {
-        val createdQuest: AdminQuestDto = adminQuestLogic.addStep(questId)
         model.addAttribute("quest", createdQuest)
         addPossibleTasks(levelId, model)
         addLevelIdAttribute(model, levelId)
@@ -70,6 +68,7 @@ class BrowserQuestController(
         @PathVariable levelId: Long,
         @PathVariable questId: Long,
     ): String {
+        logger.info("loading quest ${questId}")
         val quest: AdminQuestDto = adminQuestLogic.get(questId)
         model.addAttribute("quest", quest)
         addLevelIdAttribute(model, levelId)
