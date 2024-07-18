@@ -2,10 +2,7 @@ package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
-import com.arkhamusserver.arkhamus.view.dto.admin.AdminGameLevelGeometryDto
-import com.arkhamusserver.arkhamus.view.dto.admin.EllipseDto
-import com.arkhamusserver.arkhamus.view.dto.admin.PointDto
-import com.arkhamusserver.arkhamus.view.dto.admin.PolygonDto
+import com.arkhamusserver.arkhamus.view.dto.admin.*
 import org.springframework.stereotype.Component
 
 private const val SCREEN_ZOOM = 10
@@ -19,6 +16,8 @@ class AdminLevelPreviewLogic(
     private val altarRepository: AltarRepository,
     private val crafterRepository: CrafterRepository,
     private val lanternRepository: LanternRepository,
+    private val questGiverRepository: QuestGiverRepository,
+    private val levelTaskRepository: LevelTaskRepository,
 ) {
 
     fun geometry(levelId: Long): AdminGameLevelGeometryDto {
@@ -31,6 +30,9 @@ class AdminLevelPreviewLogic(
         val crafters = crafterRepository.findByLevelId(levelId)
         val lanterns = lanternRepository.findByLevelId(levelId)
 
+        val questGivers = questGiverRepository.findByLevelId(levelId)
+        val levelTasks = levelTaskRepository.findByLevelId(levelId)
+
         return AdminGameLevelGeometryDto(
             levelId = level.levelId,
             height = level.levelHeight.toInt() * SCREEN_ZOOM,
@@ -38,7 +40,59 @@ class AdminLevelPreviewLogic(
             polygons = mapPolygons(tetragons),
             ellipses = mapEllipses(ellipses),
             keyPoints = mapKeyPoints(containers, altars, crafters, lanterns),
+            questGivers = mapQuestGivers(questGivers),
+            tasks = mapTasks(levelTasks)
+        )
+    }
+
+    private fun mapQuestGivers(questGivers: List<QuestGiver>): List<NpcDto> {
+        return questGivers.map {
+            NpcDto(
+                points = listOf(
+                    PointDto(
+                        it.point.x.toFloat(),
+                        it.point.y.toFloat(),
+                        NiceColor.VIOLET
+                    ),
+                    PointDto(
+                        (it.point.x + 5).toFloat(),
+                        (it.point.y + 10).toFloat(),
+                        NiceColor.VIOLET
+                    ),
+                    PointDto(
+                        (it.point.x - 5).toFloat(),
+                        (it.point.y + 10).toFloat(),
+                        NiceColor.VIOLET
+                    )
+                ),
+                color = NiceColor.VIOLET
             )
+        }
+    }
+
+    private fun mapTasks(levelTasks: List<LevelTask>): List<TaskGeometryDto> {
+        return levelTasks.map {
+            TaskGeometryDto(
+                points = listOf(
+                    PointDto(
+                        it.point.x.toFloat(),
+                        it.point.y.toFloat(),
+                        NiceColor.VIOLET
+                    ),
+                    PointDto(
+                        (it.point.x + 5).toFloat(),
+                        (it.point.y - 5).toFloat(),
+                        NiceColor.VIOLET
+                    ),
+                    PointDto(
+                        (it.point.x - 5).toFloat(),
+                        (it.point.y - 5).toFloat(),
+                        NiceColor.VIOLET
+                    )
+                ),
+                color = NiceColor.VIOLET
+            )
+        }
     }
 
     private fun mapKeyPoints(

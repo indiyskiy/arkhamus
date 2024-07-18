@@ -19,7 +19,7 @@
     <!-- Processing tetragons -->
     <th:block th:each="poly : ${levelGeometry.polygons}">
         <polygon th:attr="points=${poly.polygonPoints}"
-                 th:style="'fill:' + ${poly.color.getCode()} + ';stroke:black;stroke-width:1'"/>
+                 th:style="'fill:' + ${poly.color.getCode()} + ';+fill-opacity:0.5' + ';stroke:black;stroke-width:1'"/>
     </th:block>
     <!-- Processing ellipses -->
     <th:block th:each="ellipse : ${levelGeometry.ellipses}">
@@ -28,7 +28,17 @@
     </th:block>
     <!--Processing keypoint-->
     <th:block th:each="point : ${levelGeometry.keyPoints}">
-        <circle th:attr="cx=${point.pointX},cy=${point.pointY}" r="10" th:fill="${point.color.getCode()}" stroke="black" stroke-width="1"/>
+        <circle th:attr="cx=${point.pointX},cy=${point.pointY}" r="10" th:fill="${point.color.getCode()}" stroke="black"
+                stroke-width="1"/>
+    </th:block>
+    <!-- Processing quests> -->
+    <th:block th:each="poly : ${levelGeometry.questGivers}">
+        <polygon th:attr="points=${poly.polygonPoints}"
+                 th:style="'fill:' + ${poly.color.getCode()} + ';stroke:black;stroke-width:1'"/>
+    </th:block>
+    <th:block th:each="poly : ${levelGeometry.tasks}">
+        <polygon th:attr="points=${poly.polygonPoints}"
+                 th:style="'fill:' + ${poly.color.getCode()} + ';stroke:black;stroke-width:1'"/>
     </th:block>
 </svg>
 
