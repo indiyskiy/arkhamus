@@ -75,18 +75,18 @@ class AdminLevelPreviewLogic(
             TaskGeometryDto(
                 points = listOf(
                     PointDto(
-                        it.point.x.toFloat(),
-                        it.point.y.toFloat(),
+                        it.point.x.toFloat()* SCREEN_ZOOM,
+                        it.point.y.toFloat()* SCREEN_ZOOM,
                         NiceColor.VIOLET
                     ),
                     PointDto(
-                        (it.point.x + 5).toFloat(),
-                        (it.point.y - 5).toFloat(),
+                        (it.point.x + 5).toFloat()* SCREEN_ZOOM,
+                        (it.point.y - 5).toFloat()* SCREEN_ZOOM,
                         NiceColor.VIOLET
                     ),
                     PointDto(
-                        (it.point.x - 5).toFloat(),
-                        (it.point.y - 5).toFloat(),
+                        (it.point.x - 5).toFloat()* SCREEN_ZOOM,
+                        (it.point.y - 5).toFloat()* SCREEN_ZOOM,
                         NiceColor.VIOLET
                     )
                 ),
