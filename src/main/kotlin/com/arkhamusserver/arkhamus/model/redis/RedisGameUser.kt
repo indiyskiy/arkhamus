@@ -23,7 +23,8 @@ data class RedisGameUser(
     var won: Boolean? = null,
     var sawTheEndOfTimes: Boolean = false,
     var connected: Boolean,
-): WithPoint {
+    var availableQuestIds: MutableSet<Long> = mutableSetOf(),
+) : WithPoint {
 
     override fun x(): Double {
         return x

@@ -1,9 +1,12 @@
 package com.arkhamusserver.arkhamus.config.database
 
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CREATE_TEST_QUESTS
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
 import com.arkhamusserver.arkhamus.model.enums.LevelState
+import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.view.levelDesign.*
 import com.arkhamusserver.arkhamus.view.validator.utils.assertTrue
@@ -17,6 +20,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.io.File
 import java.io.FileReader
+import kotlin.math.min
+import kotlin.random.Random
 
 @Component
 class LevelDesignInfoProcessor(
@@ -32,9 +37,12 @@ class LevelDesignInfoProcessor(
     private val startMarkerRepository: StartMarkerRepository,
     private val questGiverRepository: QuestGiverRepository,
     private val levelTaskRepository: LevelTaskRepository,
+    private val questRepository: QuestRepository,
+    private val questStepRepository: QuestStepRepository,
 ) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(LevelDesignInfoProcessor::class.java)
+        var random = Random(System.currentTimeMillis())
         var gson: Gson = Gson()
     }
 
@@ -104,11 +112,17 @@ class LevelDesignInfoProcessor(
         processCrafters(levelFromJson.crafters, savedLevel)
         processStartMarkers(levelFromJson.startMarkers, savedLevel)
         processClueZones(levelFromJson.clueZones, savedLevel)
-        processQuestGiverFromJson(levelFromJson.questGivers, savedLevel)
-        processLevelTasksFromJson(levelFromJson.levelTasks, savedLevel)
+
+        val questGivers = processQuestGiverFromJson(levelFromJson.questGivers, savedLevel)
+        val levelTasks = processLevelTasksFromJson(levelFromJson.levelTasks, savedLevel)
+
+        if (CREATE_TEST_QUESTS) {
+            logger.info("creating random quests")
+            generateRandomQuests(savedLevel, questGivers, levelTasks)
+        }
     }
 
-    private fun processLevelTasksFromJson(levelTasks: List<LevelTaskFromJson>, savedLevel: Level) {
+    private fun processLevelTasksFromJson(levelTasks: List<LevelTaskFromJson>, savedLevel: Level): List<LevelTask> {
         levelTasks.map { jsonLevelTask ->
             LevelTask(
                 inGameId = jsonLevelTask.id!!,
@@ -118,11 +132,11 @@ class LevelDesignInfoProcessor(
                 name = jsonLevelTask.name!!
             )
         }.apply {
-            levelTaskRepository.saveAll(this)
+            return levelTaskRepository.saveAll(this).toList()
         }
     }
 
-    private fun processQuestGiverFromJson(questGivers: List<QuestGiverFromJson>, savedLevel: Level) {
+    private fun processQuestGiverFromJson(questGivers: List<QuestGiverFromJson>, savedLevel: Level): List<QuestGiver> {
         questGivers.map { jsonQuestGiver ->
             QuestGiver(
                 inGameId = jsonQuestGiver.id!!,
@@ -132,7 +146,7 @@ class LevelDesignInfoProcessor(
                 name = jsonQuestGiver.name!!
             )
         }.apply {
-            questGiverRepository.saveAll(this)
+            return questGiverRepository.saveAll(this).toList()
         }
     }
 
@@ -290,4 +304,40 @@ class LevelDesignInfoProcessor(
             it.levelId == levelFromJson.levelId && it.version == levelFromJson.levelVersion
         }
 
+
+    private fun generateRandomQuests(level: Level, questGivers: List<QuestGiver>, levelTasks: List<LevelTask>) {
+        val hasOldQuests = questRepository.findAll().iterator().hasNext()
+        if (hasOldQuests) {
+            return
+        }
+        logger.info("processing quest for level ${level.id}")
+        (0..QUESTS_ON_START * 2).map { number ->
+            val randomQuestGiverStart = questGivers.random()
+            val randomQuestGiverEnd = questGivers.random()
+
+            val stepSize = random.nextInt(1, min(5, levelTasks.size + 1))
+            val newQuest = Quest(
+                id = null,
+                level = level,
+                questSteps = mutableListOf(),
+                questState = QuestState.ACTIVE,
+                name = "awesome quest $number",
+                startQuestGiver = randomQuestGiverStart,
+                endQuestGiver = randomQuestGiverEnd,
+            )
+            levelTasks.shuffled(random).take(stepSize).forEachIndexed { i, task ->
+                val step = QuestStep(
+                    id = null,
+                    stepNumber = i,
+                    quest = newQuest,
+                    levelTask = task
+                )
+                newQuest.addQuestStep(step)
+            }
+
+            logger.info("created quest: ${newQuest.name}")
+            questRepository.save(newQuest)
+            questStepRepository.saveAll(newQuest.questSteps)
+        }
+    }
 }

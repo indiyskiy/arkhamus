@@ -9,7 +9,8 @@ data class MyGameUserResponse(
     var madnessNotches: List<Double>,
     val x: Double,
     val y: Double,
-    val stateTags : Set<String> = emptySet()
+    val stateTags : Set<String> = emptySet(),
+    var availableQuests: Set<Long> = emptySet()
 ) {
     constructor(gameUser: RedisGameUser) : this(
         id = gameUser.userId,
@@ -18,6 +19,7 @@ data class MyGameUserResponse(
         madnessNotches = gameUser.madnessNotches,
         x = gameUser.x,
         y = gameUser.y,
-        stateTags = gameUser.stateTags
+        stateTags = gameUser.stateTags,
+        availableQuests = gameUser.availableQuestIds
     )
 }

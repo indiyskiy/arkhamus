@@ -3,8 +3,8 @@ package com.arkhamusserver.arkhamus.view.controller.admin.browser.level
 import com.arkhamusserver.arkhamus.logic.admin.AdminQuestLogic
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
-import com.arkhamusserver.arkhamus.view.dto.admin.LevelTaskDto
-import com.arkhamusserver.arkhamus.view.dto.admin.QuestGiverDto
+import com.arkhamusserver.arkhamus.view.dto.admin.AdminLevelTaskDto
+import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestGiverDto
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -96,12 +96,12 @@ class BrowserQuestController(
     }
 
     private fun addPossibleTasks(levelId: Long, model: Model) {
-        val possibleTasks: List<LevelTaskDto> = adminQuestLogic.possibleTasks(levelId)
+        val possibleTasks: List<AdminLevelTaskDto> = adminQuestLogic.possibleTasks(levelId)
         model.addAttribute("possibleTasks", possibleTasks)
     }
 
     private fun addPossibleQuestGivers(levelId: Long, model: Model) {
-        val possibleQuestGivers: List<QuestGiverDto> = adminQuestLogic.possibleQuestGivers(levelId)
+        val possibleQuestGivers: List<AdminQuestGiverDto> = adminQuestLogic.possibleQuestGivers(levelId)
         model.addAttribute("possibleQuestGivers", possibleQuestGivers)
     }
 

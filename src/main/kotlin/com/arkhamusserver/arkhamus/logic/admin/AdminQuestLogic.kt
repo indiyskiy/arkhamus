@@ -3,9 +3,9 @@ package com.arkhamusserver.arkhamus.logic.admin
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
-import com.arkhamusserver.arkhamus.view.dto.admin.LevelTaskDto
-import com.arkhamusserver.arkhamus.view.dto.admin.QuestGiverDto
-import com.arkhamusserver.arkhamus.view.dto.admin.QuestStepDto
+import com.arkhamusserver.arkhamus.view.dto.admin.AdminLevelTaskDto
+import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestGiverDto
+import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestStepDto
 import com.arkhamusserver.arkhamus.view.validator.utils.assertEquals
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
@@ -95,7 +95,7 @@ class AdminQuestLogic(
         return stepRepository.save(step)
     }
 
-    fun possibleTasks(levelId: Long): List<LevelTaskDto> {
+    fun possibleTasks(levelId: Long): List<AdminLevelTaskDto> {
         return levelTaskRepository.findByLevelId(levelId).map { it.toDto() }
     }
 
@@ -121,25 +121,25 @@ class AdminQuestLogic(
         )
 
 
-    private fun LevelTask.toDto(): LevelTaskDto =
-        LevelTaskDto(
+    private fun LevelTask.toDto(): AdminLevelTaskDto =
+        AdminLevelTaskDto(
             id = this.id!!,
             name = this.name
         )
 
-    private fun QuestStep.toDto() = QuestStepDto(
+    private fun QuestStep.toDto() = AdminQuestStepDto(
         id = this.id!!,
         number = this.stepNumber,
         levelTask = this.levelTask.toDto()
     )
 
-    private fun QuestGiver.toDto(): QuestGiverDto =
-        QuestGiverDto(
+    private fun QuestGiver.toDto(): AdminQuestGiverDto =
+        AdminQuestGiverDto(
             id = this.id!!,
             name = this.name
         )
 
-    fun possibleQuestGivers(levelId: Long): List<QuestGiverDto> =
+    fun possibleQuestGivers(levelId: Long): List<AdminQuestGiverDto> =
         questGiverRepository.findByLevelId(levelId).map { it.toDto() }
 
 }

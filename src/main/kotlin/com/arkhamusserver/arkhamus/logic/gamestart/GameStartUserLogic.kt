@@ -26,14 +26,14 @@ class GameStartUserLogic(
         private val random: Random = Random(System.currentTimeMillis())
     }
 
-    fun createGameUsers(levelId: Long, game: GameSession) {
+    fun createGameUsers(levelId: Long, game: GameSession): List<RedisGameUser> {
         updateInvitedUsersInfoOnGameStart(game)
-        createRedisUsers(levelId, game)
+        return createRedisUsers(levelId, game)
     }
 
-    private fun createRedisUsers(levelId: Long, game: GameSession) {
+    private fun createRedisUsers(levelId: Long, game: GameSession): List<RedisGameUser> {
         val startMarkers = startMarkerRepository.findByLevelId(levelId)
-        game.usersOfGameSession.forEach {
+        val redisGameUsers = game.usersOfGameSession.map {
             val marker = startMarkers.random(GameStartLogic.random)
             val redisGameUser = RedisGameUser(
                 id = Generators.timeBasedEpochGenerator().generate().toString(),
@@ -49,9 +49,11 @@ class GameStartUserLogic(
                 this.x = marker.point.x
                 this.y = marker.point.y
             }
-            redisGameUserRepository.save(redisGameUser)
             GameStartLogic.logger.info("user placed to $redisGameUser")
+            redisGameUser
         }
+        redisGameUserRepository.saveAll(redisGameUsers)
+        return redisGameUsers
     }
 
     fun updateInvitedUsersInfoOnGameStart(

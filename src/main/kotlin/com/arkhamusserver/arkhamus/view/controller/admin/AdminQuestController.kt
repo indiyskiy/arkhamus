@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/admin/level/{levelId}/quest")
-class QuestController(
+class AdminQuestController(
     private val adminQuestLogic: AdminQuestLogic
 ) {
 
     companion object {
-        val logger = LoggerFactory.getLogger(QuestController::class.java)!!
+        val logger = LoggerFactory.getLogger(AdminQuestController::class.java)!!
     }
 
     @PostMapping

@@ -18,7 +18,8 @@ class GameStartLogic(
     private val gameStartTimeEventLogic: GameStartTimeEventLogic,
     private val gameStartLevelZoneLogic: GameStartLevelZoneLogic,
     private val gameStartClueLogic: GameStartClueLogic,
-    private val gameThreadPool: GameThreadPool
+    private val gameStartQuestLogic: GameStartQuestLogic,
+    private val gameThreadPool: GameThreadPool,
 ) {
 
     companion object {
@@ -29,7 +30,7 @@ class GameStartLogic(
     fun startGame(game: GameSession) {
         game.gameSessionSettings.level?.levelId?.let { levelId ->
             gameStartGameLogic.createTheGame(game)
-            gameStartUserLogic.createGameUsers(levelId, game)
+            val users = gameStartUserLogic.createGameUsers(levelId, game)
             gameStartContainerLogic.createContainers(levelId, game)
             gameStartCrafterLogic.createCrafters(levelId, game)
             gameStartLanternLogic.createLanterns(levelId, game)
@@ -37,6 +38,7 @@ class GameStartLogic(
             gameStartLevelZoneLogic.createLevelZones(levelId, game)
             gameStartClueLogic.createClues(levelId, game)
             gameStartTimeEventLogic.createStartEvents(game)
+            gameStartQuestLogic.createQuests(levelId, game, users)
         }
         gameThreadPool.initTickProcessingLoop(game)
     }

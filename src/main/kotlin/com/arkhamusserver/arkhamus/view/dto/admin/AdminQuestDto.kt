@@ -7,23 +7,23 @@ data class AdminQuestDto(
     var levelId: Long = 0,
     var name: String = "",
     var state: QuestState = QuestState.DRAFT,
-    var steps: MutableList<QuestStepDto> = mutableListOf(),
-    var startQuestGiver: QuestGiverDto = QuestGiverDto(),
-    var endQuestGiver: QuestGiverDto = QuestGiverDto(),
+    var steps: MutableList<AdminQuestStepDto> = mutableListOf(),
+    var startQuestGiver: AdminQuestGiverDto = AdminQuestGiverDto(),
+    var endQuestGiver: AdminQuestGiverDto = AdminQuestGiverDto(),
 )
 
-data class QuestStepDto(
+data class AdminQuestStepDto(
     var id: Long = 0,
     var number: Int = 0,
-    var levelTask: LevelTaskDto = LevelTaskDto()
+    var levelTask: AdminLevelTaskDto = AdminLevelTaskDto()
 )
 
-data class LevelTaskDto(
+data class AdminLevelTaskDto(
     var id: Long = 0,
     var name: String = "",
 )
 
-data class QuestGiverDto(
+data class AdminQuestGiverDto(
     var id: Long = 0,
     var name: String = "",
 )
