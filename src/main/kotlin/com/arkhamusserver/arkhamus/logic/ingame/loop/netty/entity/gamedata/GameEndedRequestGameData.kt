@@ -36,5 +36,6 @@ class GameEndedRequestGameData(
     containers = containers,
     crafters = crafters,
     clues = emptyList(),
+    userQuestProgresses = emptyList(),
     tick = tick
 )

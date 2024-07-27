@@ -18,4 +18,5 @@ enum class RedisResourceType {
     CLUE,
     QUEST,
     QUEST_REWARD,
+    USER_QUEST_PROGRESS,
 }

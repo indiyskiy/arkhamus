@@ -1,11 +1,18 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.redis
 
+import com.arkhamusserver.arkhamus.model.dataaccess.CountInStatistic
+import com.arkhamusserver.arkhamus.model.dataaccess.ToDeleteOnGameEnd
+import com.arkhamusserver.arkhamus.model.dataaccess.ToDeleteOnServerStart
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
+import com.arkhamusserver.arkhamus.view.dto.admin.RedisResourceType
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RedisClueRepository : CrudRepository<RedisClue, String> {
-    fun findByGameId(gameId: Long): List<RedisClue>
-    fun findByGameIdAndLevelZoneId(gameId: Long, levelZoneId: Long): List<RedisClue>
+interface RedisClueRepository : CrudRepository<RedisClue, String>,
+    ToDeleteOnGameEnd<RedisClue>,
+    ToDeleteOnServerStart<RedisClue>,
+    CountInStatistic<RedisClue> {
+    override fun redisResourceType(): RedisResourceType = RedisResourceType.ALTAR
+    override fun findByGameId(gameId: Long): List<RedisClue>
 }

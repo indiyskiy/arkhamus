@@ -8,11 +8,11 @@ import org.springframework.data.redis.core.index.Indexed
 @RedisHash("RedisLantern")
 data class RedisLantern(
     @Id var id: String,
-    @Indexed var lanternId: Long,
     @Indexed var gameId: Long,
-    @Indexed var state: MapObjectState = MapObjectState.ACTIVE,
-    @Indexed var filled: Boolean = false,
-    @Indexed var activated: Boolean = false,
+    var lanternId: Long,
+    var state: MapObjectState = MapObjectState.ACTIVE,
+    var filled: Boolean = false,
+    var activated: Boolean = false,
     var x: Double,
     var y: Double,
     var lightRange: Double,

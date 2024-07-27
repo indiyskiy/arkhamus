@@ -23,6 +23,7 @@ class RedisDataAccessImpl(
     private val redisLevelEllipseRepository: RedisLevelEllipseRepository,
     private val redisClueRepository: RedisClueRepository,
     private val redisQuestRepository: RedisQuestRepository,
+    private val redisUserQuestProgressRepository: RedisUserQuestProgressRepository,
     private val redisQuestRewardRepository: RedisQuestRewardRepository,
 ) : RedisDataAccess {
     override fun getGameUser(userId: Long?, gameId: Long?) =
@@ -32,18 +33,6 @@ class RedisDataAccessImpl(
         gameUserRepository.findByGameId(gameId!!)
 
     override fun getGame(gameId: Long) = gameRepository.findById(gameId.toString()).getOrNull()
-
-    override fun getContainer(containerId: Long, gameId: Long) =
-        containerRepository.findByGameIdAndContainerId(gameId, containerId).first()
-
-    override fun getCrafter(crafterId: Long, gameId: Long) =
-        crafterRepository.findByGameIdAndCrafterId(gameId, crafterId).first()
-
-    override fun getLantern(lanternId: Long, gameId: Long) =
-        lanternRepository.findByGameIdAndLanternId(gameId, lanternId).first()
-
-    override fun getAltar(altarId: Long, gameId: Long) =
-        altarRepository.findByGameIdAndAltarId(gameId, altarId).first()
 
     override fun getAltarHolder(gameId: Long) =
         altarHolderRepository.findByGameId(gameId).first()
@@ -90,6 +79,10 @@ class RedisDataAccessImpl(
 
     override fun getQuestRewards(gameId: Long): List<RedisQuestReward> {
         return redisQuestRewardRepository.findByGameId(gameId)
+    }
+
+    override fun getUserQuestProrgesses(gameId: Long): List<RedisUserQuestProgress> {
+        return redisUserQuestProgressRepository.findByGameId(gameId)
     }
 
     override fun getEllipses(gameId: Long): List<RedisLevelZoneEllipse> {

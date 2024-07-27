@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.containers.crafter
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -20,6 +21,7 @@ class UpdateCrafterNettyRequestHandler(
     private val crafterProcessHandler: CrafterProcessHandler,
     private val zonesHandler: ZonesHandler,
     private val clueHandler: ClueHandler,
+    private val questProgressHandler: QuestProgressHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -67,7 +69,11 @@ class UpdateCrafterNettyRequestHandler(
                 containers = globalGameData.containers.values.toList(),
                 crafters = globalGameData.crafters.values.toList(),
                 tick = globalGameData.game.currentTick,
-                clues = clues
+                clues = clues,
+                userQuestProgresses = questProgressHandler.filterQuestProgresses(
+                    globalGameData.questProgressByUserId,
+                    user
+                ),
             )
         }
     }

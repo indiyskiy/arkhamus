@@ -15,10 +15,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyR
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.UpdateCrafterNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
@@ -66,6 +63,7 @@ class UpdateCrafterNettyResponseMapper(
                 crafters = requestProcessData.crafters,
                 inZones = requestProcessData.inZones,
                 clues = requestProcessData.clues,
+                userQuestProgresses = requestProcessData.userQuestProgresses,
                 levelGeometryData = globalGameData.levelGeometryData
             )
         }
@@ -83,6 +81,7 @@ class UpdateCrafterNettyResponseMapper(
         crafters: List<RedisCrafter>,
         inZones: List<LevelZone>,
         clues: List<RedisClue>,
+        userQuestProgresses: List<RedisUserQuestProgress>,
         levelGeometryData: LevelGeometryData
     ) = UpdateCrafterNettyResponse(
         sortedUserInventory = sortedUserInventory,
@@ -92,7 +91,7 @@ class UpdateCrafterNettyResponseMapper(
         userInventory = sortedUserInventory,
         tick = gameData.tick,
         userId = user.id!!,
-        myGameUser = MyGameUserResponse(gameUser),
+        myGameUser = MyGameUserResponse(gameUser, userQuestProgresses),
         otherGameUsers = otherGameUsersDataHandler.map(
             myUser = gameUser,
             otherGameUsers = gameData.otherGameUsers,

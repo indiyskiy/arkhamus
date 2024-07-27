@@ -9,6 +9,6 @@ import org.springframework.data.redis.core.index.Indexed
 data class RedisLevelZone(
     @Id var id: String,
     @Indexed var gameId: Long,
-    @Indexed var levelZoneId: Long,
-    @Indexed var zoneType: ZoneType,
+    var levelZoneId: Long,
+    var zoneType: ZoneType,
 )

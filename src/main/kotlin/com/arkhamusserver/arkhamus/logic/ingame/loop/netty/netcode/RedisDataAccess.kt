@@ -7,13 +7,9 @@ interface RedisDataAccess {
     fun getGameUser(userId: Long?, gameId: Long?): RedisGameUser?
     fun getGameUsers(gameId: Long?): List<RedisGameUser>
     fun getGame(gameId: Long): RedisGame?
-    fun getContainer(containerId: Long, gameId: Long): RedisContainer?
-    fun getCrafter(crafterId: Long, gameId: Long): RedisCrafter
     fun getGameContainers(gameId: Long): List<RedisContainer>
     fun getGameCrafters(gameId: Long): List<RedisCrafter>
-    fun getLantern(lanternId: Long, gameId: Long): RedisLantern
     fun getGameLanterns(gameId: Long): List<RedisLantern>
-    fun getAltar(altarId: Long, gameId: Long): RedisAltar
     fun getAltarHolder(gameId: Long): RedisAltarHolder
     fun getAltarPolling(gameId: Long): RedisAltarPolling?
     fun getGameAltars(gameId: Long): Map<Long, RedisAltar>
@@ -26,6 +22,7 @@ interface RedisDataAccess {
     fun getClues(gameId: Long): List<RedisClue>
     fun getQuests(gameId: Long): List<RedisQuest>
     fun getQuestRewards(gameId: Long): List<RedisQuestReward>
+    fun getUserQuestProrgesses(gameId: Long): List<RedisUserQuestProgress>
 
     fun deleteGame(gameId: Long)
     fun deleteGameUsers(gameId: Long)
@@ -55,6 +52,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
 
     val allQuests = getQuests(gameId)
     val allQuestRewards = getQuestRewards(gameId)
+    val allUsersQuestProgresses = getUserQuestProrgesses(gameId)
 
     return GlobalGameData(
         game = game,
@@ -72,7 +70,8 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.clues = allClues
         this.levelGeometryData = buildGeometryData(zones, tetragons, ellipses)
         this.quests = allQuests
-        this.questRewards = allQuestRewards.groupBy { it.questId }
+        this.questRewardsByQuestId = allQuestRewards.groupBy { it.questId }
+        this.questProgressByUserId = allUsersQuestProgresses.groupBy { it.userId }
     }
 }
 

@@ -1,59 +1,48 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.*
+import com.arkhamusserver.arkhamus.model.dataaccess.CountInStatistic
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminRedisResourcesInfoDto
 import com.arkhamusserver.arkhamus.view.dto.admin.RedisResourceDto
 import com.arkhamusserver.arkhamus.view.dto.admin.RedisResourceType
-import com.arkhamusserver.arkhamus.view.dto.admin.RedisResourceType.*
+import com.arkhamusserver.arkhamus.view.dto.admin.RedisResourceType.GAME
 import org.springframework.stereotype.Component
 
 @Component
 class AdminRedisResourcesLogic(
-    private val gameUserRepository: RedisGameUserRepository,
     private val gameRepository: RedisGameRepository,
-    private val containerRepository: RedisContainerRepository,
-    private val crafterRepository: RedisCrafterRepository,
-    private val lanternRepository: RedisLanternRepository,
-    private val altarRepository: RedisAltarRepository,
-    private val altarHolderRepository: RedisAltarHolderRepository,
-    private val altarPollingRepository: RedisAltarPollingRepository,
-    private val timeEventRepository: RedisTimeEventRepository,
-    private val abilityCastRepository: RedisAbilityCastRepository,
-    private val craftProcessRepository: RedisCraftProcessRepository,
-    private val redisLevelZoneRepository: RedisLevelZoneRepository,
-    private val redisLevelTetragonRepository: RedisLevelTetragonRepository,
-    private val redisLevelEllipseRepository: RedisLevelEllipseRepository,
-    private val redisClueRepository: RedisClueRepository,
-    private val redisQuestRepository: RedisQuestRepository,
-    private val redisQuestRewardRepository: RedisQuestRewardRepository
-) {
+    private val countInStatistics: List<CountInStatistic<*>>,
+
+    ) {
     fun info(): AdminRedisResourcesInfoDto {
         return AdminRedisResourcesInfoDto(
             listOf(
-                gameRepository.findAll().mapInfo(GAME),
-                gameUserRepository.findAll().mapInfo(GAME_USER),
-                containerRepository.findAll().mapInfo(CONTAINER),
-                crafterRepository.findAll().mapInfo(CRAFTER),
-                lanternRepository.findAll().mapInfo(LANTERN),
-                altarRepository.findAll().mapInfo(ALTAR),
-                altarHolderRepository.findAll().mapInfo(ALTAR_HOLDER),
-                altarPollingRepository.findAll().mapInfo(ALTAR_POLLING),
-                timeEventRepository.findAll().mapInfo(TIME_EVENT),
-                abilityCastRepository.findAll().mapInfo(ABILITY_CAST),
-                craftProcessRepository.findAll().mapInfo(CRAFT_PROCESS),
-                redisLevelZoneRepository.findAll().mapInfo(LEVEL_ZONE),
-                redisLevelTetragonRepository.findAll().mapInfo(TETRAGON),
-                redisLevelEllipseRepository.findAll().mapInfo(ELLIPSE),
-                redisClueRepository.findAll().mapInfo(CLUE),
-                redisQuestRepository.findAll().mapInfo(QUEST),
-                redisQuestRewardRepository.findAll().mapInfo(QUEST_REWARD),
-            )
+                gameRepository.findAll().mapInfoList(GAME),
+            ) + countInStatistics.map { it.findAll() to it.redisResourceType() }.map {
+                it.first.mapInfoList(it.second)
+            }
         )
     }
 
-    private fun <T> Iterable<T>.mapInfo(type: RedisResourceType): RedisResourceDto {
+    fun info(gameId: Long): AdminRedisResourcesInfoDto {
+        return AdminRedisResourcesInfoDto(
+            listOf(
+                gameRepository.findByGameId(gameId).mapInfo(GAME),
+            ) + countInStatistics.map { it.findByGameId(gameId) to it.redisResourceType() }.map {
+                it.first.mapInfoList(it.second)
+            }
+        )
+    }
+
+    private fun <T> Iterable<T>.mapInfoList(type: RedisResourceType): RedisResourceDto {
         return RedisResourceDto(type, this.toList().size)
     }
+
+    private fun Any?.mapInfo(type: RedisResourceType): RedisResourceDto {
+        return RedisResourceDto(type, this?.let { 1 } ?: 0)
+    }
 }
+
+
 
 

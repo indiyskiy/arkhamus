@@ -23,6 +23,7 @@ class RitualProgressRequestProcessData(
     containers: List<RedisContainer>,
     crafters: List<RedisCrafter>,
     clues: List<RedisClue>,
+    userQuestProgresses: List<RedisUserQuestProgress>,
     tick: Long
 ) : GameUserData(
     gameUser = gameUser,
@@ -35,5 +36,6 @@ class RitualProgressRequestProcessData(
     containers = containers,
     crafters = crafters,
     clues = clues,
+    userQuestProgresses = userQuestProgresses,
     tick = tick
 )

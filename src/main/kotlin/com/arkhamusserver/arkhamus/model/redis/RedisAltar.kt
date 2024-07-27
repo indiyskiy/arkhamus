@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.index.Indexed
 @RedisHash("RedisAltar")
 data class RedisAltar(
     @Id var id: String,
-    @Indexed var altarId: Long,
+    var altarId: Long,
     @Indexed var gameId: Long,
     var x: Double,
     var y: Double,

@@ -30,5 +30,6 @@ class ISawTheEndOfTimesRequestGameData(
     containers = containers,
     crafters = crafters,
     clues = emptyList(),
+    userQuestProgresses = emptyList(),
     tick = tick
 )

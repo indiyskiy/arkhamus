@@ -41,7 +41,7 @@ class ISawTheEndOfTimesNettyResponseMapper(
                 gameEnded = it.gameEnded,
                 tick = it.tick,
                 userId = user.id!!,
-                myGameUser = MyGameUserResponse(it.gameUser!!),
+                myGameUser = MyGameUserResponse(it.gameUser!!, emptyList()),
                 otherGameUsers = otherGameUsersDataHandler.map(
                     myUser = it.gameUser,
                     it.otherGameUsers,

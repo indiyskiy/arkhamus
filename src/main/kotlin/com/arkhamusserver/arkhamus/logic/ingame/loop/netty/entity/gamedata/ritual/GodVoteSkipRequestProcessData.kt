@@ -23,6 +23,7 @@ class GodVoteSkipRequestProcessData(
     containers: List<RedisContainer>,
     crafters: List<RedisCrafter>,
     clues: List<RedisClue>,
+    userQuestProgresses: List<RedisUserQuestProgress>,
     tick: Long
 ) : GameUserData(
     gameUser = gameUser,
@@ -35,6 +36,7 @@ class GodVoteSkipRequestProcessData(
     containers = containers,
     crafters = crafters,
     clues = clues,
+    userQuestProgresses = userQuestProgresses,
     tick = tick
 ), ActionProcessData {
     override fun executedSuccessfully(): Boolean {

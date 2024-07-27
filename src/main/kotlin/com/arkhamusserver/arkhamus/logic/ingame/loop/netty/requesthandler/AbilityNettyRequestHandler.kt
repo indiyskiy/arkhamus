@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -28,6 +29,7 @@ class AbilityNettyRequestHandler(
     private val zonesHandler: ZonesHandler,
     private val crafterProcessHandler: CrafterProcessHandler,
     private val clueHandler: ClueHandler,
+    private val questProgressHandler: QuestProgressHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -113,7 +115,11 @@ class AbilityNettyRequestHandler(
         containers = globalGameData.containers.values.toList(),
         crafters = globalGameData.crafters.values.toList(),
         clues = clues,
-        tick = globalGameData.game.currentTick
+        tick = globalGameData.game.currentTick,
+        userQuestProgresses = questProgressHandler.filterQuestProgresses(
+            globalGameData.questProgressByUserId,
+            user
+        ),
     )
 
 
@@ -146,6 +152,10 @@ class AbilityNettyRequestHandler(
         containers = globalGameData.containers.values.toList(),
         crafters = globalGameData.crafters.values.toList(),
         clues = clues,
-        tick = globalGameData.game.currentTick
+        tick = globalGameData.game.currentTick,
+        userQuestProgresses = questProgressHandler.filterQuestProgresses(
+            globalGameData.questProgressByUserId,
+            user
+        ),
     )
 }

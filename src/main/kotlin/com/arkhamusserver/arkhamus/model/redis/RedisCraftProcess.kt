@@ -9,9 +9,9 @@ import org.springframework.data.redis.core.index.Indexed
 data class RedisCraftProcess(
     @Id var id: String,
     @Indexed var gameId: Long,
-    @Indexed var recipeId: Int,
-    @Indexed var targetCrafterId: Long,
-    @Indexed var sourceUserId: Long,
+    var recipeId: Int,
+    var targetCrafterId: Long,
+    var sourceUserId: Long,
     var timeStart: Long,
     var timePast: Long,
     var timeLeft: Long,

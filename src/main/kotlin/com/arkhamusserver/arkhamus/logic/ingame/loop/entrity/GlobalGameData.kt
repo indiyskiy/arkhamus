@@ -20,7 +20,8 @@ data class GlobalGameData(
     var inBetweenEvents: InBetweenEventHolder = InBetweenEventHolder(),
     var levelGeometryData: LevelGeometryData = LevelGeometryData(),
     var quests: List<RedisQuest> = emptyList(),
-    var questRewards: Map<Long, List<RedisQuestReward>> = emptyMap(),
+    var questRewardsByQuestId: Map<Long, List<RedisQuestReward>> = emptyMap(),
+    var questProgressByUserId: Map<Long, List<RedisUserQuestProgress>> = emptyMap(),
 ) {
     fun buildGeometryData(
         zones: List<RedisLevelZone>,

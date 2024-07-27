@@ -10,7 +10,6 @@ data class RedisLevelZoneEllipse(
     var id: String,
     @Indexed
     var gameId: Long,
-    @Indexed
     var levelZoneId: Long,
     var inGameTetragonId: Long,
 

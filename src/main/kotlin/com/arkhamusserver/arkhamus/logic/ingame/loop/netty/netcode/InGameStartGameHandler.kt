@@ -73,12 +73,12 @@ class InGameStartGameHandler(
     private fun notifyUsers(
         channels: List<ArkhamusChannel>,
         user: RedisGameUser?,
-        users: List<RedisGameUser>
+        users: List<RedisGameUser>,
     ) {
         channels.map {
             it.channel to NettyGameStartedResponse(
                 userId = it.userAccount!!.id!!,
-                myGameUser = MyGameUserResponse(user!!),
+                myGameUser = MyGameUserResponse(user!!, emptyList()),
                 allGameUsers = users.map { gameUser ->
                     GameUserResponse(gameUser)
                 }

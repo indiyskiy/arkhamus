@@ -23,5 +23,6 @@ class AuthRequestProcessData(
     containers = emptyList(),
     clues = emptyList(),
     crafters = emptyList(),
+    userQuestProgresses = emptyList(),
     tick = -1L
 )

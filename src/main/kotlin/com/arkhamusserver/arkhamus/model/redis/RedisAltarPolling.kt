@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.index.Indexed
 data class RedisAltarPolling(
     @Id var id: String,
     @Indexed var gameId: Long,
-    @Indexed var state: MapAltarPollingState = MapAltarPollingState.ONGOING,
+    var state: MapAltarPollingState = MapAltarPollingState.ONGOING,
     var altarId: Long,
     var startedUserId: Long,
     var userVotes: MutableMap<Long, Int> = HashMap(), //user ID to God ID

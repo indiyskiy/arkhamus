@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.conta
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.RecipesSource
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -23,6 +24,7 @@ class CraftProcessNettyRequestHandler(
     private val crafterProcessHandler: CrafterProcessHandler,
     private val zonesHandler: ZonesHandler,
     private val clueHandler: ClueHandler,
+    private val questProgressHandler: QuestProgressHandler,
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -76,7 +78,11 @@ class CraftProcessNettyRequestHandler(
                     ),
                     containers = globalGameData.containers.values.toList(),
                     crafters = globalGameData.crafters.values.toList(),
-                    clues = clues
+                    clues = clues,
+                    userQuestProgresses = questProgressHandler.filterQuestProgresses(
+                        globalGameData.questProgressByUserId,
+                        user
+                    ),
                 )
             } else {
                 CraftProcessRequestProcessData(
@@ -99,7 +105,11 @@ class CraftProcessNettyRequestHandler(
                     ),
                     containers = globalGameData.containers.values.toList(),
                     crafters = globalGameData.crafters.values.toList(),
-                    clues = clues
+                    clues = clues,
+                    userQuestProgresses = questProgressHandler.filterQuestProgresses(
+                        globalGameData.questProgressByUserId,
+                        user
+                    ),
                 )
             }
         }

@@ -246,13 +246,13 @@
     "lanterns": [
       {
         "id": 1100,
-        "lightRange": 12,
-        "x": 47,
-        "y": 27
+        "lightRange": 6,
+        "x": 55,
+        "y": 29
       },
       {
         "id": 1101,
-        "lightRange": 12,
+        "lightRange": 6,
         "x": 37,
         "y": 38
       }
@@ -275,11 +275,81 @@
         "y": 88
       },
       {
-        "id": 1201,
+        "id": 1202,
         "interactionRadius": 3.5,
         "name": "Fraternity",
         "x": 42,
         "y": 94
+      },
+      {
+        "id": 1203,
+        "interactionRadius": 3.5,
+        "name": "Attend a Lecture",
+        "x": 11,
+        "y": 99
+      },
+      {
+        "id": 1204,
+        "interactionRadius": 3.5,
+        "name": "Watch the Stars",
+        "x": 3.5,
+        "y": 55
+      },
+      {
+        "id": 1205,
+        "interactionRadius": 3.5,
+        "name": "Rob the Museum",
+        "x": 99,
+        "y": 22
+      },
+      {
+        "id": 1206,
+        "interactionRadius": 3.5,
+        "name": "Read a Goddamn Book For Once",
+        "x": 86,
+        "y": 81.5
+      },
+      {
+        "id": 1207,
+        "interactionRadius": 3.5,
+        "name": "Get Permission",
+        "x": 95,
+        "y": 39.5
+      },
+      {
+        "id": 1208,
+        "interactionRadius": 3.5,
+        "name": "Secret Spot",
+        "x": 3.5,
+        "y": 7.5
+      },
+      {
+        "id": 1209,
+        "interactionRadius": 3.5,
+        "name": "Touch Grass",
+        "x": 13,
+        "y": 34.5
+      },
+      {
+        "id": 1210,
+        "interactionRadius": 3.5,
+        "name": "Shady Deal",
+        "x": 57.5,
+        "y": 101.5
+      },
+      {
+        "id": 1211,
+        "interactionRadius": 3.5,
+        "name": "Experiment",
+        "x": 8.5,
+        "y": 16
+      },
+      {
+        "id": 1212,
+        "interactionRadius": 3.5,
+        "name": "Corners of Reality",
+        "x": 102,
+        "y": 2
       }
     ],
     "levelVersion": 1,

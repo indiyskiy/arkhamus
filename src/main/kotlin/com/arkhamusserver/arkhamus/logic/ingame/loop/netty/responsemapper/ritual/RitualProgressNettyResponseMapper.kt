@@ -48,7 +48,7 @@ class RitualProgressNettyResponseMapper(
                 ),
                 tick = it.tick,
                 userId = user.id!!,
-                myGameUser = MyGameUserResponse(it.gameUser!!),
+                myGameUser = MyGameUserResponse(it.gameUser!!, it.userQuestProgresses),
                 otherGameUsers = otherGameUsersDataHandler.map(
                     myUser = it.gameUser,
                     it.otherGameUsers,

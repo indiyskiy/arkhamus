@@ -11,7 +11,6 @@ data class RedisClue(
     var id: String,
     @Indexed
     var gameId: Long,
-    @Indexed
     var levelZoneId: Long,
     var clue: GodType,
 )

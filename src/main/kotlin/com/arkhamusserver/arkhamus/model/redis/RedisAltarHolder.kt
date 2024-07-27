@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.index.Indexed
 data class RedisAltarHolder(
     @Id var id: String,
     @Indexed var gameId: Long,
-    @Indexed var altarHolderId: Long,
+    var altarHolderId: Long,
 
     var x: Double = 0.0,
     var y: Double = 0.0,

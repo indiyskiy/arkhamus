@@ -9,9 +9,9 @@ import org.springframework.data.redis.core.index.Indexed
 data class RedisAbilityCast(
     @Id var id: String,
     @Indexed var gameId: Long,
-    @Indexed var abilityId: Int,
-    @Indexed var sourceUserId: Long? = null,
-    @Indexed var targetUserId: Long? = null,
+    var abilityId: Int,
+    var sourceUserId: Long? = null,
+    var targetUserId: Long? = null,
     var timeStart: Long,
     var timePast: Long,
     var timeLeftCooldown: Long,

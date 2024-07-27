@@ -29,7 +29,7 @@ class AuthNettyResponseMapper(
             return NettyResponseAuth(
                 message = AuthState.SUCCESS,
                 userId = user.id!!,
-                myGameUser = MyGameUserResponse(gameUser),
+                myGameUser = MyGameUserResponse(gameUser, emptyList()),
                 allGameUsers = otherUsers.map {
                     GameUserResponse(it)
                 }

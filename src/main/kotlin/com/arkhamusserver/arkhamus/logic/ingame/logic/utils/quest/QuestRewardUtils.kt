@@ -22,6 +22,19 @@ class QuestRewardUtils(
     }
 
     fun generateQuestRewardsForUser(
+        rewards: List<RedisQuestReward>,
+        quest: RedisQuest,
+        user: RedisGameUser
+    ): List<RedisQuestReward> {
+        val oldRewards = rewards.filter { it.userId == user.userId }
+        return if (oldRewards.isEmpty()) {
+            generateQuestRewardsForUser(quest, user)
+        } else {
+            oldRewards
+        }
+    }
+
+    private fun generateQuestRewardsForUser(
         quest: RedisQuest,
         user: RedisGameUser
     ): List<RedisQuestReward> {

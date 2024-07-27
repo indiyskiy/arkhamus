@@ -29,28 +29,12 @@ class MockRedisDataAccess : RedisDataAccess {
         return games.find { it.gameId == gameId }!!
     }
 
-    override fun getContainer(containerId: Long, gameId: Long): RedisContainer {
-        return containers.find { it.containerId == containerId && it.gameId == gameId }!!
-    }
-
-    override fun getCrafter(crafterId: Long, gameId: Long): RedisCrafter {
-        return crafters.find { it.crafterId == crafterId && it.gameId == gameId }!!
-    }
-
     override fun getGameContainers(gameId: Long): List<RedisContainer> {
         return containers.filter { it.gameId == gameId }
     }
 
     override fun getGameCrafters(gameId: Long): List<RedisCrafter> {
         return crafters.filter { it.gameId == gameId }
-    }
-
-    override fun getLantern(lanternId: Long, gameId: Long): RedisLantern {
-        TODO("Not yet implemented")
-    }
-
-    override fun getAltar(altarId: Long, gameId: Long): RedisAltar {
-        TODO("Not yet implemented")
     }
 
     override fun getAltarHolder(gameId: Long): RedisAltarHolder {
@@ -110,6 +94,18 @@ class MockRedisDataAccess : RedisDataAccess {
     }
 
     override fun getClues(gameId: Long): List<RedisClue> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getQuests(gameId: Long): List<RedisQuest> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getQuestRewards(gameId: Long): List<RedisQuestReward> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getUserQuestProrgesses(gameId: Long): List<RedisUserQuestProgress> {
         TODO("Not yet implemented")
     }
 
