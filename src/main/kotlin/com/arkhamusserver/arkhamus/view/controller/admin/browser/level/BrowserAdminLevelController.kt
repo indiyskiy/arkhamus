@@ -4,10 +4,10 @@ import com.arkhamusserver.arkhamus.logic.admin.AdminLevelInfoLogic
 import com.arkhamusserver.arkhamus.logic.admin.AdminLevelPreviewLogic
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminGameLevelGeometryDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminGameLevelInfoDto
+import com.arkhamusserver.arkhamus.view.dto.admin.LevelFilterDto
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.*
 
 @Controller
 class BrowserAdminLevelController(
@@ -17,7 +17,7 @@ class BrowserAdminLevelController(
     @GetMapping("/admin/browser/levels")
     fun levels(
         model: Model,
-        ): String {
+    ): String {
         val levelGeometry: List<AdminGameLevelInfoDto> = adminLevelInfoLogic.all()
         model.addAttribute("levelInfo", levelGeometry)
         return "levels"
@@ -27,7 +27,7 @@ class BrowserAdminLevelController(
     fun level(
         @PathVariable levelId: Long,
         model: Model,
-        ): String {
+    ): String {
         val levelGeometry: AdminGameLevelInfoDto = adminLevelInfoLogic.info(levelId)
         model.addAttribute("levelInfo", levelGeometry)
         return "level"
@@ -37,8 +37,19 @@ class BrowserAdminLevelController(
     fun levelPreview(
         @PathVariable levelId: Long,
         model: Model,
-        ): String {
+    ): String {
         val levelGeometry: AdminGameLevelGeometryDto = adminLevelPreviewLogic.geometry(levelId)
+        model.addAttribute("levelGeometry", levelGeometry)
+        return "levelPreview"
+    }
+
+    @PostMapping("/admin/browser/level/{levelId}/preview")
+    fun receiveLevelDetails(
+        @PathVariable levelId: Long,
+        @ModelAttribute levelFilterDto: LevelFilterDto,
+        model: Model
+    ): String {
+        val levelGeometry: AdminGameLevelGeometryDto = adminLevelPreviewLogic.geometry(levelId, levelFilterDto)
         model.addAttribute("levelGeometry", levelGeometry)
         return "levelPreview"
     }

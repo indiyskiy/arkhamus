@@ -24,6 +24,7 @@ class JedisCleaner(
     private val redisLevelEllipseRepository: RedisLevelEllipseRepository,
 
     private val redisQuestRepository: RedisQuestRepository,
+    private val redisQuestRewardRepository: RedisQuestRewardRepository,
 
     private val redisClueRepository: RedisClueRepository,
 ) {
@@ -48,6 +49,7 @@ class JedisCleaner(
         redisClueRepository.deleteAll()
 
         redisQuestRepository.deleteAll()
+        redisQuestRewardRepository.deleteAll()
     }
 
     fun cleanGame(gameId: Long) {
@@ -69,7 +71,9 @@ class JedisCleaner(
         redisLevelEllipseRepository.deleteAll(redisLevelEllipseRepository.findByGameId(gameId))
 
         redisClueRepository.deleteAll(redisClueRepository.findByGameId(gameId))
+
         redisQuestRepository.deleteAll(redisQuestRepository.findByGameId(gameId))
+        redisQuestRewardRepository.deleteAll(redisQuestRewardRepository.findByGameId(gameId))
     }
 
     fun cleanGameWithoutGameId(redisGameSession: RedisGame) {

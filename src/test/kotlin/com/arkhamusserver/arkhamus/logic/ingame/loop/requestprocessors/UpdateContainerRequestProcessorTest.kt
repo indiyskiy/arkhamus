@@ -484,6 +484,7 @@ class UpdateContainerRequestProcessorTest {
             users = mapOf(gameUser.userId to gameUser),
             containers = mapOf(redisContainer.containerId to redisContainer),
             timeEvents = emptyList(),
+            crafters = emptyMap()
         )
         val data = Data(redisContainer, gameUser, requestUserAccount, gameSession, user, oldContainer, globalGameData)
         return data

@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestRewardUtils
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisQuestRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestRepository
@@ -20,7 +21,8 @@ import kotlin.random.Random
 class GameStartQuestLogic(
     private val redisQuestRepository: RedisQuestRepository,
     private val questRepository: QuestRepository,
-    private val redisGameUserRepository: RedisGameUserRepository
+    private val redisGameUserRepository: RedisGameUserRepository,
+    private val questRewardUtils: QuestRewardUtils
 ) {
 
     companion object {
@@ -49,6 +51,9 @@ class GameStartQuestLogic(
         val quests =
             createdRedisQuests.shuffled(random).take(min(QUESTS_ON_START, createdRedisQuests.size)).toMutableList()
         user.availableQuestIds = quests.map { it.questId }.toMutableSet()
+        quests.forEach { quest ->
+            questRewardUtils.generateQuestRewardsForUser(quest, user)
+        }
     }
 
     private fun createQuest(
@@ -60,7 +65,8 @@ class GameStartQuestLogic(
         gameId = game.id!!,
         startQuestGiverId = dbQuest.startQuestGiver.inGameId,
         endQuestGiverId = dbQuest.endQuestGiver.inGameId,
-        levelTaskId = dbQuest.questSteps.sortedBy { it.stepNumber }.map { it.levelTask.inGameId }.toMutableList()
+        levelTaskId = dbQuest.questSteps.sortedBy { it.stepNumber }.map { it.levelTask.inGameId }.toMutableList(),
+        difficulty = dbQuest.dificulty
     )
 
 }

@@ -18,7 +18,9 @@ data class GlobalGameData(
     var castAbilities: List<RedisAbilityCast> = emptyList(),
     var craftProcess: List<RedisCraftProcess> = emptyList(),
     var inBetweenEvents: InBetweenEventHolder = InBetweenEventHolder(),
-    var levelGeometryData: LevelGeometryData = LevelGeometryData()
+    var levelGeometryData: LevelGeometryData = LevelGeometryData(),
+    var quests: List<RedisQuest> = emptyList(),
+    var questRewards: Map<Long, List<RedisQuestReward>> = emptyMap(),
 ) {
     fun buildGeometryData(
         zones: List<RedisLevelZone>,

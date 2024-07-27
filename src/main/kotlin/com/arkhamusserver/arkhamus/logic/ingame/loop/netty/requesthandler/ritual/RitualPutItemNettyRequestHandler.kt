@@ -95,5 +95,4 @@ class RitualPutItemNettyRequestHandler(
             ((globalGameData.altarHolder.itemsForRitual[item.id] ?: 0) >
                     (globalGameData.altarHolder.itemsOnAltars[item.id] ?: 0))
 
-    private fun Int?.toItem(): Item? = Item.values().firstOrNull { it.id == this }
 }

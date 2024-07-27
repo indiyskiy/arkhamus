@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed
@@ -10,6 +11,7 @@ data class RedisQuest(
     var id: String,
     var startQuestGiverId: Long,
     var endQuestGiverId: Long,
+    var difficulty: QuestDifficulty,
     @Indexed var gameId: Long,
     @Indexed var questId: Long,
     var levelTaskId: MutableList<Long> = mutableListOf(),

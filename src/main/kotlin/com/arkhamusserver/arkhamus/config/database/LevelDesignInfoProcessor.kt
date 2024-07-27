@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.config.database
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CREATE_TEST_QUESTS
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
+import com.arkhamusserver.arkhamus.logic.ingame.quest.LevelDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
@@ -39,6 +40,7 @@ class LevelDesignInfoProcessor(
     private val levelTaskRepository: LevelTaskRepository,
     private val questRepository: QuestRepository,
     private val questStepRepository: QuestStepRepository,
+    private val levelDifficultyLogic: LevelDifficultyLogic
 ) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(LevelDesignInfoProcessor::class.java)
@@ -336,6 +338,7 @@ class LevelDesignInfoProcessor(
             }
 
             logger.info("created quest: ${newQuest.name}")
+            levelDifficultyLogic.recount(newQuest)
             questRepository.save(newQuest)
             questStepRepository.saveAll(newQuest.questSteps)
         }

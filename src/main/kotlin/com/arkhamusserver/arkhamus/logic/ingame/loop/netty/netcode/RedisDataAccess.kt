@@ -22,8 +22,10 @@ interface RedisDataAccess {
     fun getCraftProcess(gameId: Long): List<RedisCraftProcess>
     fun getZones(gameId: Long): List<RedisLevelZone>
     fun getTetragons(gameId: Long): List<RedisLevelZoneTetragon>
-    fun getClues(gameId: Long): List<RedisClue>
     fun getEllipses(gameId: Long): List<RedisLevelZoneEllipse>
+    fun getClues(gameId: Long): List<RedisClue>
+    fun getQuests(gameId: Long): List<RedisQuest>
+    fun getQuestRewards(gameId: Long): List<RedisQuestReward>
 
     fun deleteGame(gameId: Long)
     fun deleteGameUsers(gameId: Long)
@@ -51,9 +53,12 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
 
     val allClues = getClues(gameId)
 
+    val allQuests = getQuests(gameId)
+    val allQuestRewards = getQuestRewards(gameId)
+
     return GlobalGameData(
         game = game,
-        altarHolder = altarHolder
+        altarHolder = altarHolder,
     ).apply {
         this.altars = altars
         this.altarPolling = altarPolling
@@ -66,6 +71,8 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.lanterns = allLanterns.associateBy { it.lanternId }
         this.clues = allClues
         this.levelGeometryData = buildGeometryData(zones, tetragons, ellipses)
+        this.quests = allQuests
+        this.questRewards = allQuestRewards.groupBy { it.questId }
     }
 }
 

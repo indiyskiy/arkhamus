@@ -14,5 +14,4 @@ data class QuestStep(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "levelTaskId", referencedColumnName = "id", nullable = false)
     var levelTask: LevelTask,
-
 )

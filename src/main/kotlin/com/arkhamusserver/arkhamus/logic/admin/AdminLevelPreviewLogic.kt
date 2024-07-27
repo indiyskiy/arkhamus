@@ -19,19 +19,40 @@ class AdminLevelPreviewLogic(
     private val questGiverRepository: QuestGiverRepository,
     private val levelTaskRepository: LevelTaskRepository,
 ) {
-
-    fun geometry(levelId: Long): AdminGameLevelGeometryDto {
+    fun geometry(
+        levelId: Long,
+        filter: LevelFilterDto = LevelFilterDto.allTrue(levelId)
+    ): AdminGameLevelGeometryDto {
         val level = levelRepository.findByLevelId(levelId).maxBy { it.version }
-        val tetragons = tetragonRepository.findByLevelZoneLevelId(levelId)
-        val ellipses = ellipsesRepository.findByLevelZoneLevelId(levelId)
 
-        val containers = containerRepository.findByLevelId(levelId)
-        val altars = altarRepository.findByLevelId(levelId)
-        val crafters = crafterRepository.findByLevelId(levelId)
-        val lanterns = lanternRepository.findByLevelId(levelId)
+        val tetragons = if (filter.zones == true) {
+            tetragonRepository.findByLevelZoneLevelId(levelId)
+        } else emptyList()
 
-        val questGivers = questGiverRepository.findByLevelId(levelId)
-        val levelTasks = levelTaskRepository.findByLevelId(levelId)
+        val ellipses = if (filter.zones == true) {
+            ellipsesRepository.findByLevelZoneLevelId(levelId)
+        } else emptyList()
+
+        val containers = if (filter.containers == true) {
+            containerRepository.findByLevelId(levelId)
+        } else emptyList()
+        val altars = if (filter.altars == true) {
+            altarRepository.findByLevelId(levelId)
+        } else emptyList()
+        val crafters = if (filter.containers == true) {
+            crafterRepository.findByLevelId(levelId)
+        } else emptyList()
+        val lanterns = if (filter.lanterns == true) {
+            lanternRepository.findByLevelId(levelId)
+        } else emptyList()
+
+        val questGivers = if (filter.questGivers == true) {
+            questGiverRepository.findByLevelId(levelId)
+        } else emptyList()
+
+        val levelTasks = if (filter.levelTasks == true) {
+            levelTaskRepository.findByLevelId(levelId)
+        } else emptyList()
 
         return AdminGameLevelGeometryDto(
             levelId = level.levelId,
@@ -50,18 +71,18 @@ class AdminLevelPreviewLogic(
             NpcDto(
                 points = listOf(
                     PointDto(
-                        it.point.x.toFloat()* SCREEN_ZOOM,
-                        it.point.y.toFloat()* SCREEN_ZOOM,
+                        (it.point.x * SCREEN_ZOOM).toFloat(),
+                        (it.point.y * SCREEN_ZOOM).toFloat(),
                         NiceColor.VIOLET
                     ),
                     PointDto(
-                        (it.point.x + 5).toFloat()* SCREEN_ZOOM,
-                        (it.point.y + 10).toFloat()* SCREEN_ZOOM,
+                        (it.point.x * SCREEN_ZOOM + 5).toFloat(),
+                        (it.point.y * SCREEN_ZOOM - 10).toFloat(),
                         NiceColor.VIOLET
                     ),
                     PointDto(
-                        (it.point.x - 5).toFloat()* SCREEN_ZOOM,
-                        (it.point.y + 10).toFloat()* SCREEN_ZOOM,
+                        (it.point.x * SCREEN_ZOOM - 5).toFloat(),
+                        (it.point.y * SCREEN_ZOOM - 10).toFloat(),
                         NiceColor.VIOLET
                     )
                 ),
@@ -75,22 +96,22 @@ class AdminLevelPreviewLogic(
             TaskGeometryDto(
                 points = listOf(
                     PointDto(
-                        it.point.x.toFloat()* SCREEN_ZOOM,
-                        it.point.y.toFloat()* SCREEN_ZOOM,
-                        NiceColor.VIOLET
+                        it.point.x.toFloat() * SCREEN_ZOOM,
+                        it.point.y.toFloat() * SCREEN_ZOOM,
+                        NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
-                        (it.point.x + 5).toFloat()* SCREEN_ZOOM,
-                        (it.point.y - 5).toFloat()* SCREEN_ZOOM,
-                        NiceColor.VIOLET
+                        (it.point.x * SCREEN_ZOOM + 5).toFloat(),
+                        (it.point.y * SCREEN_ZOOM - 10).toFloat(),
+                        NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
-                        (it.point.x - 5).toFloat()* SCREEN_ZOOM,
-                        (it.point.y - 5).toFloat()* SCREEN_ZOOM,
-                        NiceColor.VIOLET
+                        (it.point.x * SCREEN_ZOOM - 5).toFloat(),
+                        (it.point.y * SCREEN_ZOOM - 10).toFloat(),
+                        NiceColor.MEDIUM_PURPLE
                     )
                 ),
-                color = NiceColor.VIOLET
+                color = NiceColor.MEDIUM_PURPLE
             )
         }
     }

@@ -1,9 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
+import com.arkhamusserver.arkhamus.logic.ingame.quest.LevelDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
-import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminLevelTaskDto
+import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestGiverDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestStepDto
 import com.arkhamusserver.arkhamus.view.validator.utils.assertEquals
@@ -19,6 +20,7 @@ class AdminQuestLogic(
     private val stepRepository: QuestStepRepository,
     private val questGiverRepository: QuestGiverRepository,
     private val questMergeHandler: QuestMergeHandler,
+    private val levelDifficultyLogic: LevelDifficultyLogic
 ) {
 
     fun get(questId: Long): AdminQuestDto {
@@ -33,7 +35,7 @@ class AdminQuestLogic(
     fun create(levelId: Long): AdminQuestDto {
         val level = levelRepository.findByLevelId(levelId).maxBy { it.version }
         val quest = newQuest(level)
-        val saved = questRepository.save(quest)
+        val saved = saveQuest(quest)
 
         val levelTask = defaultLevelTask(quest.level.id!!)
         val questStep = QuestStep(
@@ -58,7 +60,7 @@ class AdminQuestLogic(
             questGiverRepository.findById(questDto.endQuestGiver.id).get()
         ).associateBy { it.id!! }
         questMergeHandler.merge(quest, questDto, allRelatedTasksMap, questGivers)
-        val saved = questRepository.save(quest)
+        val saved = saveQuest(quest)
         return saved.toDto()
     }
 
@@ -67,7 +69,7 @@ class AdminQuestLogic(
         val quest = questRepository.findById(questId).get()
         val levelTask = defaultLevelTask(quest.level.id!!)
         quest.addQuestStep(newStep(quest, levelTask))
-        val saved = questRepository.save(quest)
+        val saved = saveQuest(quest)
         return saved.toDto()
     }
 
@@ -78,8 +80,14 @@ class AdminQuestLogic(
         quest.removeQuestStep(step)
         stepRepository.delete(step)
         questMergeHandler.sortSteps(quest)
-        val saved = questRepository.save(quest)
+        val saved = saveQuest(quest)
         return saved.toDto()
+    }
+
+    private fun saveQuest(quest: Quest): Quest {
+        levelDifficultyLogic.recount(quest)
+        val saved = questRepository.save(quest)
+        return saved
     }
 
     private fun defaultLevelTask(levelId: Long): LevelTask {

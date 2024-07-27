@@ -15,6 +15,14 @@ class GeometryUtils {
         return distanceLessOrEquals(withPoint1.x(), withPoint1.y(), withPoint2.x(), withPoint2.y(), maxDistance)
     }
 
+
+    fun distance(
+        withPoint1: WithPoint,
+        withPoint2: WithPoint,
+    ): Double {
+        return distance(withPoint1.x(), withPoint1.y(), withPoint2.x(), withPoint2.y())
+    }
+
     fun distance(
         point1X: Double,
         point1Y: Double,

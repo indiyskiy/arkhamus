@@ -16,4 +16,6 @@ enum class RedisResourceType {
     TETRAGON,
     ELLIPSE,
     CLUE,
+    QUEST,
+    QUEST_REWARD,
 }

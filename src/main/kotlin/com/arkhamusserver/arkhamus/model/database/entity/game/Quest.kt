@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import jakarta.persistence.*
 
@@ -21,6 +22,7 @@ data class Quest(
     @ManyToOne
     @JoinColumn(name = "endQuestGiverId", nullable = false)
     var endQuestGiver: QuestGiver,
+    var dificulty: QuestDifficulty = QuestDifficulty.VERY_EASY
 ) {
     fun addQuestStep(questStep: QuestStep) {
         this.questSteps.add(questStep)

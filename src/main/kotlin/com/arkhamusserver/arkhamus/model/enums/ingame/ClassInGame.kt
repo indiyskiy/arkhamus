@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.INVESTIGATO
 
 enum class ClassInGame(val id: Int, val roleType: RoleTypeInGame) {
     MIND_HEALER(101, INVESTIGATOR),
+    BREADWINNER(102, INVESTIGATOR),
 
     AAMON_CULTIST(201, CULTIST),
     BELETH_CULTIST(202, CULTIST),

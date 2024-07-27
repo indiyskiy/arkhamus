@@ -90,7 +90,7 @@ class GameStartContainerLogic(
     }
 
     private fun mapOfType(type: ItemType) =
-        Item.values().filter { it.itemType == type }.associate { it.id to 99 }.toMutableMap()
+        Item.values().filter { it.itemType == type }.associate { it.id to 50 }.toMutableMap()
 
     private fun godMode(): MutableMap<Int, Int> {
         val items = Item.values().filter {

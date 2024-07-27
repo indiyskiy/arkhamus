@@ -370,6 +370,7 @@ class GameThreadPoolTest {
                 ongoingCraftingProcess = emptyList(),
                 visibleItems = emptyList(),
                 containers = emptyList(),
+                crafters = emptyList(),
                 inZones = emptyList(),
                 clues = emptyList(),
                 tick = tick + 1
@@ -442,7 +443,7 @@ class GameThreadPoolTest {
                 gameId = redisGame.gameId!!,
                 altarHolderId = 0L,
             ),
-            users = redisGameUsers.associateBy { user -> user.userId }
+            users = redisGameUsers.associateBy { user -> user.userId },
         )
 
         redisDataAccess.setUp(listOf(globalGameData))

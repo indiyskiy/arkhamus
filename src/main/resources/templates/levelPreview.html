@@ -14,7 +14,38 @@
         <a th:href="@{/admin/browser/level/{levelId}(levelId=${levelGeometry.levelId})}" title="Level">Level</a>
     </footer>
 </div>
-
+<form th:action="@{/admin/browser/level/{levelId}/preview(levelId=${levelGeometry.levelId})}" method="post">
+    <div class="row">
+        <div class="checkbox-input">
+            <input type="checkbox" id="zones" name="zones" value="true" checked = "checked" >
+            <label for="zones"> Zones</label>
+        </div>
+        <div class="checkbox-input">
+            <input type="checkbox" id="containers" name="containers" value="true" checked = "checked">
+            <label for="containers"> Containers</label>
+        </div>
+        <div class="checkbox-input">
+            <input type="checkbox" id="altars" name="altars" value="true" checked = "checked">
+            <label for="altars"> Altars</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="checkbox-input">
+            <input type="checkbox" id="lanterns" name="lanterns" value="true" checked = "checked">
+            <label for="lanterns"> Lanterns</label>
+        </div>
+        <div class="checkbox-input">
+            <input type="checkbox" id="questGivers" name="questGivers" value="true" checked = "checked">
+            <label for="questGivers"> Quest Givers</label>
+        </div>
+        <div class="checkbox-input">
+            <input type="checkbox" id="levelTasks" name="levelTasks" value="true" checked = "checked">
+            <label for="levelTasks"> Level Tasks</label>
+        </div>
+    </div>
+    <input type="hidden" id="levelId" name="levelId" th:value="${levelGeometry.levelId}">
+    <input type="submit" value="Filter">
+</form>
 <svg th:width="${levelGeometry.width}" th:height="${levelGeometry.height}">
     <!-- Processing tetragons -->
     <th:block th:each="poly : ${levelGeometry.polygons}">
