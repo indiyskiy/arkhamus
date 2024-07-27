@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 
 class RitualProgressRequestProcessData(
     var currentGameTime: Long,
@@ -23,7 +24,7 @@ class RitualProgressRequestProcessData(
     containers: List<RedisContainer>,
     crafters: List<RedisCrafter>,
     clues: List<RedisClue>,
-    userQuestProgresses: List<RedisUserQuestProgress>,
+    userQuestProgresses: List<UserQuestResponse>,
     tick: Long
 ) : GameUserData(
     gameUser = gameUser,
@@ -36,6 +37,6 @@ class RitualProgressRequestProcessData(
     containers = containers,
     crafters = crafters,
     clues = clues,
-    userQuestProgresses = userQuestProgresses,
+    userQuest = userQuestProgresses,
     tick = tick
 )

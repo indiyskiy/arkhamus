@@ -79,9 +79,10 @@ class CraftProcessNettyRequestHandler(
                     containers = globalGameData.containers.values.toList(),
                     crafters = globalGameData.crafters.values.toList(),
                     clues = clues,
-                    userQuestProgresses = questProgressHandler.filterQuestProgresses(
+                    userQuestProgresses = questProgressHandler.mapQuestProgresses(
                         globalGameData.questProgressByUserId,
-                        user
+                        user,
+                        globalGameData.quests
                     ),
                 )
             } else {
@@ -106,9 +107,10 @@ class CraftProcessNettyRequestHandler(
                     containers = globalGameData.containers.values.toList(),
                     crafters = globalGameData.crafters.values.toList(),
                     clues = clues,
-                    userQuestProgresses = questProgressHandler.filterQuestProgresses(
+                    userQuestProgresses = questProgressHandler.mapQuestProgresses(
                         globalGameData.questProgressByUserId,
-                        user
+                        user,
+                        globalGameData.quests
                     ),
                 )
             }

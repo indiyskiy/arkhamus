@@ -65,9 +65,10 @@ class HeartbeatNettyRequestHandler(
                 containers = globalGameData.containers.values.toList(),
                 crafters = globalGameData.crafters.values.toList(),
                 clues = clues,
-                userQuestProgresses = questProgressHandler.filterQuestProgresses(
+                userQuestProgresses = questProgressHandler.mapQuestProgresses(
                     globalGameData.questProgressByUserId,
-                    user
+                    user,
+                    globalGameData.quests
                 ),
             )
         } ?: return ErrorGameResponse("game session id is null", globalGameData.game.currentTick)

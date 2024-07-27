@@ -81,9 +81,10 @@ class RitualPutItemNettyRequestHandler(
                 containers = globalGameData.containers.values.toList(),
                 crafters = globalGameData.crafters.values.toList(),
                 clues = clues,
-                userQuestProgresses = questProgressHandler.filterQuestProgresses(
+                userQuestProgresses = questProgressHandler.mapQuestProgresses(
                     globalGameData.questProgressByUserId,
-                    user
+                    user,
+                    globalGameData.quests
                 ),
                 tick = globalGameData.game.currentTick
             )

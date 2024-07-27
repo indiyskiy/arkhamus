@@ -63,7 +63,7 @@ class UpdateCrafterNettyResponseMapper(
                 crafters = requestProcessData.crafters,
                 inZones = requestProcessData.inZones,
                 clues = requestProcessData.clues,
-                userQuestProgresses = requestProcessData.userQuestProgresses,
+                userQuestProgresses = requestProcessData.userQuest,
                 levelGeometryData = globalGameData.levelGeometryData
             )
         }
@@ -81,7 +81,7 @@ class UpdateCrafterNettyResponseMapper(
         crafters: List<RedisCrafter>,
         inZones: List<LevelZone>,
         clues: List<RedisClue>,
-        userQuestProgresses: List<RedisUserQuestProgress>,
+        userQuestProgresses: List<UserQuestResponse>,
         levelGeometryData: LevelGeometryData
     ) = UpdateCrafterNettyResponse(
         sortedUserInventory = sortedUserInventory,

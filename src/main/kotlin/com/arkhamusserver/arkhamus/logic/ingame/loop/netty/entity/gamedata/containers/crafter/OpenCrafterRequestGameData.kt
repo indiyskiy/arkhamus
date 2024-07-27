@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 
 class OpenCrafterRequestGameData(
     var crafter: RedisCrafter,
@@ -19,7 +20,7 @@ class OpenCrafterRequestGameData(
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
     crafters: List<RedisCrafter>,
-    userQuestProgresses: List<RedisUserQuestProgress>,
+    userQuestProgresses: List<UserQuestResponse>,
     clues: List<RedisClue>,
     tick: Long
 ) : GameUserData(
@@ -33,6 +34,6 @@ class OpenCrafterRequestGameData(
     containers = containers,
     crafters = crafters,
     clues = clues,
-    userQuestProgresses = userQuestProgresses,
+    userQuest = userQuestProgresses,
     tick = tick
 )

@@ -70,9 +70,10 @@ class UpdateCrafterNettyRequestHandler(
                 crafters = globalGameData.crafters.values.toList(),
                 tick = globalGameData.game.currentTick,
                 clues = clues,
-                userQuestProgresses = questProgressHandler.filterQuestProgresses(
+                userQuestProgresses = questProgressHandler.mapQuestProgresses(
                     globalGameData.questProgressByUserId,
-                    user
+                    user,
+                    globalGameData.quests
                 ),
             )
         }

@@ -52,7 +52,7 @@ class RitualPutItemNettyResponseMapper(
                 firstTime = true,
                 tick = it.tick,
                 userId = user.id!!,
-                myGameUser = MyGameUserResponse(it.gameUser!!, it.userQuestProgresses),
+                myGameUser = MyGameUserResponse(it.gameUser!!, it.userQuest),
                 otherGameUsers = otherGameUsersDataHandler.map(
                     myUser = it.gameUser,
                     it.otherGameUsers,

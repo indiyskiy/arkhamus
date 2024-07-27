@@ -116,9 +116,10 @@ class AbilityNettyRequestHandler(
         crafters = globalGameData.crafters.values.toList(),
         clues = clues,
         tick = globalGameData.game.currentTick,
-        userQuestProgresses = questProgressHandler.filterQuestProgresses(
+        userQuestProgresses = questProgressHandler.mapQuestProgresses(
             globalGameData.questProgressByUserId,
-            user
+            user,
+            globalGameData.quests
         ),
     )
 
@@ -153,9 +154,10 @@ class AbilityNettyRequestHandler(
         crafters = globalGameData.crafters.values.toList(),
         clues = clues,
         tick = globalGameData.game.currentTick,
-        userQuestProgresses = questProgressHandler.filterQuestProgresses(
+        userQuestProgresses = questProgressHandler.mapQuestProgresses(
             globalGameData.questProgressByUserId,
-            user
+            user,
+            globalGameData.quests
         ),
     )
 }

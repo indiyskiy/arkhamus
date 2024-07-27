@@ -66,7 +66,7 @@ class OpenContainerNettyResponseMapper(
                     crafters = requestProcessData.crafters,
                     inZones = requestProcessData.inZones,
                     clues = requestProcessData.clues,
-                    userQuestProgresses = requestProcessData.userQuestProgresses,
+                    userQuestProgresses = requestProcessData.userQuest,
                     levelGeometryData = globalGameData.levelGeometryData
                 )
             } else {
@@ -84,7 +84,7 @@ class OpenContainerNettyResponseMapper(
                     crafters = requestProcessData.crafters,
                     inZones = requestProcessData.inZones,
                     clues = requestProcessData.clues,
-                    userQuestProgresses = requestProcessData.userQuestProgresses,
+                    userQuestProgresses = requestProcessData.userQuest,
                     levelGeometryData = globalGameData.levelGeometryData
                 )
             }
@@ -104,7 +104,7 @@ class OpenContainerNettyResponseMapper(
         containers: List<RedisContainer>,
         crafters: List<RedisCrafter>,
         clues: List<RedisClue>,
-        userQuestProgresses: List<RedisUserQuestProgress>,
+        userQuestProgresses: List<UserQuestResponse>,
         inZones: List<LevelZone>,
         levelGeometryData: LevelGeometryData,
     ) = OpenContainerNettyResponse(
