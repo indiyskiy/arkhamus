@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
-import com.arkhamusserver.arkhamus.config.jedis.JedisCleaner
+import com.arkhamusserver.arkhamus.config.redis.RedisCleaner
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic.Companion.TICK_DELTA
@@ -21,7 +21,7 @@ class GameThreadPool(
     private val redisDataAccess: RedisDataAccess,
     private val responseSendingLoopManager: ResponseSendingLoopManager,
     private val tickLogic: ArkhamusOneTickLogic,
-    private val jedisCleaner: JedisCleaner,
+    private val redisCleaner: RedisCleaner,
     private val channelRepository: ChannelRepository
 ) {
     private val taskExecutor: ScheduledThreadPoolExecutor = ScheduledThreadPoolExecutor(CORE_POOL_SIZE)
@@ -99,7 +99,7 @@ class GameThreadPool(
                     }
                 }
                 logger.info("cleaning redis database")
-                redisGameSession.gameId?.let { jedisCleaner.cleanGame(it) } ?: jedisCleaner.cleanGameWithoutGameId(
+                redisGameSession.gameId?.let { redisCleaner.cleanGame(it) } ?: redisCleaner.cleanGameWithoutGameId(
                     redisGameSession
                 )
             }

@@ -21,7 +21,7 @@
             <th >Size</th>
         </tr>
         <tr th:each="resource : ${redisInfo.redisResourceDtos}">
-            <td  th:text="${resource.type.name}"></td>
+            <td  th:text="${resource.type}"></td>
             <td  th:text="${resource.size}"></td>
         </tr>
     </table>

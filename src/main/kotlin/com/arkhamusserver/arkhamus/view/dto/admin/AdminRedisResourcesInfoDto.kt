@@ -5,6 +5,6 @@ data class AdminRedisResourcesInfoDto(
 )
 
 data class RedisResourceDto(
-    val type: RedisResourceType,
+    val type: String,
     val size: Int
 )

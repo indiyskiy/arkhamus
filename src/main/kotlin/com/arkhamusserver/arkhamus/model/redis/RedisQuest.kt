@@ -14,5 +14,5 @@ data class RedisQuest(
     var difficulty: QuestDifficulty,
     @Indexed var gameId: Long,
     var questId: Long,
-    var levelTaskId: MutableList<Long> = mutableListOf(),
+    var levelTaskIds: MutableList<Long> = mutableListOf(),
 )

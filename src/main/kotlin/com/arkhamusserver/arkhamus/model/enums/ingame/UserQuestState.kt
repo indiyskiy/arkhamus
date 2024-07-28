@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.model.enums.ingame
 
 enum class UserQuestState {
     AWAITING,
-    ACCEPTED,
+    READ,
     DECLINED,
     IN_PROGRESS,
     FINISHED

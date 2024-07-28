@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.config.jedis
+package com.arkhamusserver.arkhamus.config.redis
 
 import com.arkhamusserver.arkhamus.model.dataaccess.ToDeleteOnGameEnd
 import com.arkhamusserver.arkhamus.model.dataaccess.ToDeleteOnServerStart
@@ -8,7 +8,7 @@ import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Component
 
 @Component
-class JedisCleaner(
+class RedisCleaner(
     private val redisGameRepository: RedisGameRepository,
     private val toDeleteOnGameEndList: List<ToDeleteOnGameEnd<*>>,
     private val toDeleteOnServerStartList: List<ToDeleteOnServerStart<*>>,

@@ -1,9 +1,12 @@
 package com.arkhamusserver.arkhamus.model.dataaccess
 
-import com.arkhamusserver.arkhamus.view.dto.admin.RedisResourceType
+import java.lang.reflect.ParameterizedType
 
 interface CountInStatistic<T> {
-    fun findAll(): List<T>
-    fun findByGameId(gameId: Long): List<T>
-    fun redisResourceType(): RedisResourceType
+    fun findAll(): Iterable<T>
+    fun findByGameId(gameId: Long): Iterable<T>
+    fun redisResourceType(): String {
+        return ((javaClass
+            .genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<*>).typeName
+    }
 }

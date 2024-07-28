@@ -49,7 +49,7 @@ class GameStartQuestLogic(
         gameId = game.id!!,
         startQuestGiverId = dbQuest.startQuestGiver.inGameId,
         endQuestGiverId = dbQuest.endQuestGiver.inGameId,
-        levelTaskId = dbQuest.questSteps.sortedBy { it.stepNumber }.map { it.levelTask.inGameId }.toMutableList(),
+        levelTaskIds = dbQuest.questSteps.sortedBy { it.stepNumber }.map { it.levelTask.inGameId }.toMutableList(),
         difficulty = dbQuest.dificulty
     )
 
