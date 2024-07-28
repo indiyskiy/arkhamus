@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
 
 data class UserQuestResponse(
     var id: String,
-    var questId: Long,
+    var questId: Long?,
     var questState: UserQuestState,
     var questCurrentStep: Int = -1,
     var questStepIds: List<Long> = emptyList(),
