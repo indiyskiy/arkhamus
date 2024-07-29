@@ -18,7 +18,7 @@ class GameStartCrafterLogic(
         game: GameSession
     ) {
         val allLevelCrafters = crafterRepository.findByLevelId(levelId)
-        allLevelCrafters.forEachIndexed { i, dbCrafter ->
+        allLevelCrafters.forEach { dbCrafter ->
             with(createCrafter(game, dbCrafter)) {
                 redisCrafterRepository.save(this)
             }
