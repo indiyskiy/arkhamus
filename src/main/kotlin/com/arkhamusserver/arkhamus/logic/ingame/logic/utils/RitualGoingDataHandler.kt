@@ -18,7 +18,7 @@ class RitualGoingDataHandler {
         usersInRitual: List<RedisGameUser>
     ): RitualGoingDataResponse {
         return RitualGoingDataResponse().apply {
-            val currentGameTime = ritualEvent?.let { it.timeStart + it.timePast }?:0
+            val currentGameTime = ritualEvent?.let { it.timeStart + it.timePast } ?: 0
             val gameTimeItemsNotches = countItemsNotches(ritualEvent, altarHolder)
             val currentItemId = countCurrentItem(gameTimeItemsNotches, currentGameTime)
             this.godId = altarHolder.lockedGodId

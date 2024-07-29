@@ -20,7 +20,7 @@ class CrafterDataHandler(
         crafters: List<RedisCrafter>,
         levelGeometryData: LevelGeometryData
     ): List<CrafterState> {
-       return crafters.map { crafter ->
+        return crafters.map { crafter ->
             val response = CrafterState(crafter)
             mask(response, crafter, myUser, levelGeometryData)
             response

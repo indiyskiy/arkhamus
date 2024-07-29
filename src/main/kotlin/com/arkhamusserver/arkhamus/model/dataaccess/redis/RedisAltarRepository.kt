@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RedisAltarRepository: CrudRepository<RedisAltar, String>,
+interface RedisAltarRepository : CrudRepository<RedisAltar, String>,
     ToDeleteOnGameEnd<RedisAltar>,
     ToDeleteOnServerStart<RedisAltar>,
     CountInStatistic<RedisAltar> {

@@ -15,4 +15,4 @@ data class AdminUserGameSessionDto(
     var classInGame: ClassInGame? = null,
     var winOrLoose: String? = null,
     var gameSession: AdminGameSessionDto? = null
-    )
+)

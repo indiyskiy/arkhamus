@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneResponses
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
-class QuestGiverOpenNettyResponse(
+class QuestAcceptNettyResponse(
     var questInfo: QuestInfoResponse?,
     tick: Long,
     userId: Long,
@@ -34,5 +34,5 @@ class QuestGiverOpenNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     clues = clues.convertToClueResponses(),
-    type = QuestGiverOpenNettyResponse::class.java.simpleName,
+    type = QuestAcceptNettyResponse::class.java.simpleName,
 )

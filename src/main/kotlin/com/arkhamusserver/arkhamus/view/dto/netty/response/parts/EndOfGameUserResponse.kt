@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 
-data class EndOfGameUserResponse (
+data class EndOfGameUserResponse(
     val id: Long,
     val nickName: String?,
     val role: String?,

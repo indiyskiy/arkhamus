@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @ConfigurationProperties(prefix = "netty")
-data class ArkhamusNettyProperties (
+data class ArkhamusNettyProperties(
     @NotNull
     @Size(min = 1000, max = 65535)
     var tcpPort: Int = 0,

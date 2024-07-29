@@ -1,31 +1,27 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest
 
-import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ActionProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 
-class CraftProcessRequestProcessData(
-    var recipe: Recipe?,
-    var crafter: RedisCrafter?,
-    var sortedUserInventory: List<InventoryCell>,
-    var canBeStarted: Boolean,
-    var executedSuccessfully: Boolean,
+class QuestAcceptRequestProcessData(
+    var quest: RedisQuest?,
+    var userQuestProgress: RedisUserQuestProgress?,
+    var questRewards: List<RedisQuestReward>,
+    var canAccept: Boolean,
+    var canDecline: Boolean,
+    var canFinish: Boolean,
+    inZones: List<LevelZone>,
+    ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,
-    inZones: List<LevelZone>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
-    ongoingCraftingProcess: List<CraftProcessResponse>,
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
     crafters: List<RedisCrafter>,
@@ -45,12 +41,4 @@ class CraftProcessRequestProcessData(
     clues = clues,
     userQuest = userQuestProgresses,
     tick = tick
-), ActionProcessData {
-    override fun executedSuccessfully(): Boolean {
-        return executedSuccessfully
-    }
-
-    override fun updateExecutedSuccessfully(executedSuccessfully: Boolean) {
-        this.executedSuccessfully = executedSuccessfully
-    }
-}
+)

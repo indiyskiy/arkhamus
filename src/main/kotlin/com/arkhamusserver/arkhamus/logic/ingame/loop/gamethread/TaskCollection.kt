@@ -23,7 +23,7 @@ class TaskCollection {
         this.gameSession = gameSession
     }
 
-    fun add(container: NettyTickRequestMessageDataHolder):Boolean {
+    fun add(container: NettyTickRequestMessageDataHolder): Boolean {
         if (!taskList.any {
                 isCompetingRequest(it, container)
             }) {

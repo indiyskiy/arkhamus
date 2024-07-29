@@ -22,6 +22,7 @@ class AuthConfiguration {
 
     @Bean
     fun encoder(): PasswordEncoder = BCryptPasswordEncoder()
+
     @Bean
     fun authenticationProvider(userRepository: UserAccountRepository): AuthenticationProvider =
         DaoAuthenticationProvider()
@@ -29,6 +30,7 @@ class AuthConfiguration {
                 it.setUserDetailsService(userDetailsService(userRepository))
                 it.setPasswordEncoder(encoder())
             }
+
     @Bean
     fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager =
         config.authenticationManager

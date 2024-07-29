@@ -71,7 +71,7 @@ data class GlobalGameData(
 }
 
 data class LevelGeometryData(
-    var zones:List<GameDataLevelZone> = emptyList()
+    var zones: List<GameDataLevelZone> = emptyList()
 )
 
 data class GameDataLevelZone(

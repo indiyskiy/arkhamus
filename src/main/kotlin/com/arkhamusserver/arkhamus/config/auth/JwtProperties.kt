@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.config.auth
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties("jwt")
-data class JwtProperties (
+data class JwtProperties(
     val key: String = "",
     val access: Long = 0L,
     val refresh: Long = 0L,

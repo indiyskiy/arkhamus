@@ -11,7 +11,7 @@ data class BaseRequestData(
 data class UserPosition(
     val x: Double,
     val y: Double
-): WithPoint {
+) : WithPoint {
     override fun x(): Double {
         return x
     }

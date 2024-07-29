@@ -16,7 +16,7 @@ data class RedisLantern(
     var x: Double,
     var y: Double,
     var lightRange: Double,
-): WithPoint {
+) : WithPoint {
 
     override fun x(): Double {
         return x

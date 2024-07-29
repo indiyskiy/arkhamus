@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
-enum class NiceColor (val colorCode: String) {
+enum class NiceColor(val colorCode: String) {
     RED("#FF0000"),
     LIME("#00FF00"),
     BLUE("#0000FF"),
@@ -34,5 +34,7 @@ enum class NiceColor (val colorCode: String) {
     MEDIUM_ORCHID("#BA55D3"),
     MEDIUM_PURPLE("#9370DB");
 
-    fun getCode(): String{return colorCode}
+    fun getCode(): String {
+        return colorCode
+    }
 }

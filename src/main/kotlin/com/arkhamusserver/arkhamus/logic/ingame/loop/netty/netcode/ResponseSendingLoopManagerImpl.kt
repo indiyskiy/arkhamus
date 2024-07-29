@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 @Component
 class ResponseSendingLoopManagerImpl(
     val channelRepository: ChannelRepository
-): ResponseSendingLoopManager {
+) : ResponseSendingLoopManager {
     private val taskExecutor: ThreadPoolTaskExecutor = ThreadPoolTaskExecutor()
 
     companion object {

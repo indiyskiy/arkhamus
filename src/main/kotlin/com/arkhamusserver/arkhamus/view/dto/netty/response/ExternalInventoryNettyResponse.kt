@@ -36,5 +36,5 @@ abstract class ExternalInventoryNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     clues = clues.convertToClueResponses(),
-    type =type
+    type = type
 )

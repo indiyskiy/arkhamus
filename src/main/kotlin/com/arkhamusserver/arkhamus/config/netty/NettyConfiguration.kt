@@ -24,9 +24,10 @@ class NettyConfiguration(val nettyProperties: ArkhamusNettyProperties) {
     }
 
     @Bean(name = ["serverBootstrap"])
-    fun bootstrap(initializer: ArkhamusChannelInitializer,
-                  bossGroup: NioEventLoopGroup,
-                  workerGroup: NioEventLoopGroup
+    fun bootstrap(
+        initializer: ArkhamusChannelInitializer,
+        bossGroup: NioEventLoopGroup,
+        workerGroup: NioEventLoopGroup
     ): ServerBootstrap {
         val b = ServerBootstrap()
         b.group(bossGroup, workerGroup)

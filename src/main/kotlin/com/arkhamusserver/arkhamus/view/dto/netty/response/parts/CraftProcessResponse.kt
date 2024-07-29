@@ -16,7 +16,7 @@ data class CraftProcessResponse(
     constructor(craftProcess: RedisCraftProcess) : this(
         id = craftProcess.id,
         recipeId = craftProcess.recipeId,
-        targetCrafterId= craftProcess.targetCrafterId,
+        targetCrafterId = craftProcess.targetCrafterId,
         sourceUserId = craftProcess.sourceUserId,
         timeStart = craftProcess.timeStart,
         timePast = craftProcess.timePast,

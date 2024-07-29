@@ -5,6 +5,7 @@ class GlobalGameSettings {
     companion object {
         //TEST
         const val CREATE_TEST_QUESTS = true
+
         //TIMINGS
         const val SECOND_IN_MILLIS: Long = 1 * 1000
         const val MINUTE_IN_MILLIS: Long = SECOND_IN_MILLIS * 60

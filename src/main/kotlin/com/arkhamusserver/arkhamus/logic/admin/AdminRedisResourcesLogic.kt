@@ -42,11 +42,11 @@ class AdminRedisResourcesLogic(
     private fun countName(countInStatistic: CountInStatistic<*>): String =
         countInStatistic.javaClass.annotatedInterfaces.first {
             val name = it.type.typeName
-                name.contains("Redis")&&name.contains("Repository")
+            name.contains("Redis") && name.contains("Repository")
         }.type.typeName
-            .replace("Redis","")
-            .replace("Repository","")
-            .replace("com.arkhamusserver.arkhamus.model.dataaccess.redis.","")
+            .replace("Redis", "")
+            .replace("Repository", "")
+            .replace("com.arkhamusserver.arkhamus.model.dataaccess.redis.", "")
 }
 
 

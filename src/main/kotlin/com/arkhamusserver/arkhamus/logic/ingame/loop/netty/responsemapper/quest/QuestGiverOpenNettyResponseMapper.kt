@@ -1,30 +1,35 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.quest
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.ContainerDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.CrafterDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestRewardUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameEndedRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestGiverOpenRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.GameEndedNettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.EndOfGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestInfoResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.quest.QuestGiverOpenNettyResponse
 import org.springframework.stereotype.Component
 
 @Component
-class GameEndedNettyResponseMapper(
+class QuestGiverOpenNettyResponseMapper(
     private val otherGameUsersDataHandler: OtherGameUsersDataHandler,
     private val containersDataHandler: ContainerDataHandler,
     private val craftersDataHandler: CrafterDataHandler,
+    private val questProgressHandler: QuestProgressHandler,
+    private val rewardUtils: QuestRewardUtils
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == GameEndedRequestGameData::class.java
+        gameResponseMessage::class.java == QuestGiverOpenRequestProcessData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -36,18 +41,25 @@ class GameEndedNettyResponseMapper(
         userRole: UserOfGameSession?,
         inBetweenEventHolder: InBetweenEventHolder,
         globalGameData: GlobalGameData
-    ): GameEndedNettyResponse {
-        (requestProcessData as GameEndedRequestGameData).let { it ->
-            return GameEndedNettyResponse(
-                gameEnded = it.gameEnded,
-                gameEndReason = it.gameEndReason?.name,
-                winners = it.winners?.map { EndOfGameUserResponse(it) },
-                losers = it.losers?.map { EndOfGameUserResponse(it) },
-                godId = it.god.getId(),
-
+    ): QuestGiverOpenNettyResponse {
+        (requestProcessData as QuestGiverOpenRequestProcessData).let {
+            return QuestGiverOpenNettyResponse(
+                questInfo = QuestInfoResponse(
+                    userQuest = requestProcessData.userQuestProgress?.let { process ->
+                        questProgressHandler.mapQuestProgress(
+                            requestProcessData.quest,
+                            process
+                        )
+                    },
+                    questDifficulty = requestProcessData.quest?.difficulty,
+                    rewards = rewardUtils.mapRewards(requestProcessData.questRewards),
+                    canAccept = requestProcessData.canAccept,
+                    canDecline = requestProcessData.canDecline,
+                    canFinish = requestProcessData.canFinish,
+                ),
                 tick = it.tick,
                 userId = user.id!!,
-                myGameUser = MyGameUserResponse(it.gameUser!!, emptyList()),
+                myGameUser = MyGameUserResponse(it.gameUser!!, it.userQuest),
                 otherGameUsers = otherGameUsersDataHandler.map(
                     myUser = it.gameUser,
                     it.otherGameUsers,
@@ -60,9 +72,9 @@ class GameEndedNettyResponseMapper(
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 userInventory = requestProcessData.visibleItems,
                 containers = containersDataHandler.map(
-                    myUser = it.gameUser,
-                    containers = it.containers,
-                    levelGeometryData = globalGameData.levelGeometryData
+                    it.gameUser,
+                    it.containers,
+                    globalGameData.levelGeometryData
                 ),
                 crafters = craftersDataHandler.map(
                     it.gameUser,
@@ -74,5 +86,6 @@ class GameEndedNettyResponseMapper(
             )
         }
     }
+
 
 }

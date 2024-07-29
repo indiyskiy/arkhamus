@@ -23,7 +23,7 @@ class UserMadnessHandler {
 
     fun reduceMadness(user: RedisGameUser, reduceValue: Double) {
         val notch = currentMinNotch(user)
-        notch?.let{
+        notch?.let {
             val afterReduced = max(user.madness - reduceValue, notch)
             user.madness = afterReduced
         }
@@ -32,7 +32,7 @@ class UserMadnessHandler {
     private fun currentMinNotch(user: RedisGameUser): Double? {
         val madness = user.madness
         val notch = user.madnessNotches.sorted().firstOrNull { it >= madness }
-       return notch
+        return notch
     }
 
 }

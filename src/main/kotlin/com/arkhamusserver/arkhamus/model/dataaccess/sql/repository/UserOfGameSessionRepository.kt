@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository
 import java.util.*
 
 
-interface UserOfGameSessionRepository: CrudRepository<UserOfGameSession, Long> {
+interface UserOfGameSessionRepository : CrudRepository<UserOfGameSession, Long> {
     override fun findById(id: Long): Optional<UserOfGameSession>
 
     fun findByUserAccountId(userAccountId: Long): List<UserOfGameSession>

@@ -18,7 +18,7 @@ data class RedisCrafter(
     var interactionRadius: Double = 0.0,
     var items: MutableMap<Int, Int> = HashMap(),
     var crafterType: CrafterType,
-): WithPoint {
+) : WithPoint {
 
     override fun x(): Double {
         return x

@@ -15,10 +15,11 @@ import java.time.LocalDateTime
 @ControllerAdvice
 @Order(Ordered.LOWEST_PRECEDENCE)
 class UnpredictedExceptionHandler {
-    companion object{
+    companion object {
         val logger: Logger = LoggerFactory.getLogger(UnpredictedExceptionHandler::class.java)
 
     }
+
     @ExceptionHandler(Throwable::class)
     fun handleValidationException(
         e: Throwable,

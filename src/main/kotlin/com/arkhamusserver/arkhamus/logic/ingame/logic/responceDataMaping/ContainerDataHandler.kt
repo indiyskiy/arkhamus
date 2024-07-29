@@ -20,7 +20,7 @@ class ContainerDataHandler(
         containers: List<RedisContainer>,
         levelGeometryData: LevelGeometryData
     ): List<ContainerState> {
-       return containers.map { container ->
+        return containers.map { container ->
             val response = ContainerState(container)
             mask(response, container, myUser, levelGeometryData)
             response

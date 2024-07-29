@@ -5,7 +5,7 @@ import jakarta.persistence.*
 import org.postgresql.geometric.PGpoint
 
 @Entity
-data class Crafter (
+data class Crafter(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,

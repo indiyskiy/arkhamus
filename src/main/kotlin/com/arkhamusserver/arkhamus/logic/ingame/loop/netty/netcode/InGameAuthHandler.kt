@@ -21,7 +21,8 @@ class InGameAuthHandler(
     companion object {
         var logger: Logger = LoggerFactory.getLogger(InGameAuthHandler::class.java)
     }
-     fun auth(
+
+    fun auth(
         requestData: AuthRequestMessage,
         arkhamusChannel: ArkhamusChannel
     ): AuthRequestProcessData? {

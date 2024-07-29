@@ -21,7 +21,7 @@ class GameStartTimeEventLogic(
             game,
             RedisTimeEventType.GOD_AWAKEN,
             0
-            )
+        )
     }
 
     private fun createFirstDay(game: GameSession) =

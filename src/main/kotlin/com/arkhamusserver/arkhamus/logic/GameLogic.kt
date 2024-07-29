@@ -121,7 +121,7 @@ class GameLogic(
     ): GameSessionDto =
         gameSessionDtoMaker.toDto(
             this,
-            skins ,
+            skins,
             currentPlayer
         )
 

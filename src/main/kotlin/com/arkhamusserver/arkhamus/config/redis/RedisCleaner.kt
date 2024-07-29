@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.config.redis
 
 import com.arkhamusserver.arkhamus.model.dataaccess.ToDeleteOnGameEnd
 import com.arkhamusserver.arkhamus.model.dataaccess.ToDeleteOnServerStart
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.*
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Component

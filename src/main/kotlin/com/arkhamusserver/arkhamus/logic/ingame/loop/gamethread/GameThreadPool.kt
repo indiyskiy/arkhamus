@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
-import com.arkhamusserver.arkhamus.config.redis.RedisCleaner
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
+import com.arkhamusserver.arkhamus.config.redis.RedisCleaner
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic.Companion.TICK_DELTA
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder

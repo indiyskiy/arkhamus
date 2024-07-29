@@ -20,6 +20,7 @@ class GameController(
         val gameSession = customGameLogic.findGame(gameId)
         return ResponseEntity.ok(gameSession)
     }
+
     @GetMapping("byToken/{token}")
     fun getGameByToken(@PathVariable token: String): ResponseEntity<GameSessionDto> {
         val gameSession = customGameLogic.findGame(token)

@@ -32,7 +32,8 @@ class AuthNettyRequestHandler(
         return nettyAuthService.auth(nettyRequestMessage.token)?.let { account ->
             val userOfTheGame = findUserOfGame(account)
             val game = databaseDataAccess.findByGameId(userOfTheGame.gameSession.id!!)
-            val gameUser = redisDataAccess.getGameUser(userOfTheGame.userAccount.id!!, userOfTheGame.gameSession.id!!) ?: return null
+            val gameUser = redisDataAccess.getGameUser(userOfTheGame.userAccount.id!!, userOfTheGame.gameSession.id!!)
+                ?: return null
             val otherGameUsers = redisDataAccess.getOtherGameUsers(gameUser.id, userOfTheGame.gameSession.id!!)
             AuthRequestProcessData(gameUser = gameUser, otherGameUsers = otherGameUsers).apply {
                 this.userOfTheGame = userOfTheGame

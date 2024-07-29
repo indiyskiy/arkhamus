@@ -25,11 +25,12 @@ class AdminUserLogic(
     }
 
     fun user(userId: Long): AdminUserDto {
-        return makeUserDto(userAccountRepository.findById(userId).orElse(
-            UserAccount(
-                nickName = ""
+        return makeUserDto(
+            userAccountRepository.findById(userId).orElse(
+                UserAccount(
+                    nickName = ""
+                )
             )
-        )
         )
     }
 

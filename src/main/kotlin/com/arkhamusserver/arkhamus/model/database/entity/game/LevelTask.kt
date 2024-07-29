@@ -16,7 +16,7 @@ data class LevelTask(
     var name: String,
     var point: PGpoint,
     var interactionRadius: Double,
-): WithPoint {
+) : WithPoint {
     override fun x(): Double {
         return point.x
     }

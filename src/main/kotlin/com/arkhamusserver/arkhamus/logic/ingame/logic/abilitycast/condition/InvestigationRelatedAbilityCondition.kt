@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component
 
 @Component
-class InvestigationRelatedAbilityCondition: AdditionalAbilityCondition {
+class InvestigationRelatedAbilityCondition : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
         return ability in InvestigationRelatedAbilityProcessor.relatedSet

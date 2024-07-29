@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestRewardUti
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestGiverOpenRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestAcceptRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -16,11 +16,12 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.quest.QuestGiverOpenNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestInfoResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.quest.QuestAcceptNettyResponse
 import org.springframework.stereotype.Component
 
 @Component
-class QuestGiverNettyResponseMapper(
+class QuestAcceptNettyResponseMapper(
     private val otherGameUsersDataHandler: OtherGameUsersDataHandler,
     private val containersDataHandler: ContainerDataHandler,
     private val craftersDataHandler: CrafterDataHandler,
@@ -28,7 +29,7 @@ class QuestGiverNettyResponseMapper(
     private val rewardUtils: QuestRewardUtils
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == QuestGiverOpenRequestProcessData::class.java
+        gameResponseMessage::class.java == QuestAcceptRequestProcessData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -40,20 +41,22 @@ class QuestGiverNettyResponseMapper(
         userRole: UserOfGameSession?,
         inBetweenEventHolder: InBetweenEventHolder,
         globalGameData: GlobalGameData
-    ): QuestGiverOpenNettyResponse {
-        (requestProcessData as QuestGiverOpenRequestProcessData).let {
-            return QuestGiverOpenNettyResponse(
-                userQuest = requestProcessData.userQuestProgress?.let { process ->
-                    questProgressHandler.mapQuestProgress(
-                        requestProcessData.quest,
-                        process
-                    )
-                },
-                questDifficulty = requestProcessData.quest?.difficulty,
-                rewards = rewardUtils.mapRewards(requestProcessData.questRewards),
-                canAccept = requestProcessData.canAccept,
-                canDecline = requestProcessData.canDecline,
-                canFinish = requestProcessData.canFinish,
+    ): QuestAcceptNettyResponse {
+        (requestProcessData as QuestAcceptRequestProcessData).let {
+            return QuestAcceptNettyResponse(
+                questInfo = QuestInfoResponse(
+                    userQuest = requestProcessData.userQuestProgress?.let { process ->
+                        questProgressHandler.mapQuestProgress(
+                            requestProcessData.quest,
+                            process
+                        )
+                    },
+                    questDifficulty = requestProcessData.quest?.difficulty,
+                    rewards = rewardUtils.mapRewards(requestProcessData.questRewards),
+                    canAccept = requestProcessData.canAccept,
+                    canDecline = requestProcessData.canDecline,
+                    canFinish = requestProcessData.canFinish,
+                ),
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!, it.userQuest),
@@ -83,6 +86,5 @@ class QuestGiverNettyResponseMapper(
             )
         }
     }
-
 
 }

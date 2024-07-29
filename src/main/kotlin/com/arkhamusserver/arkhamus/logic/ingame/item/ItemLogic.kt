@@ -17,9 +17,9 @@ class ItemLogic(
         itemsDtoMaker.convert(Item.values().toList())
 
     fun listAllRecipes(): List<RecipeDto> {
-                return recipesSource.getAllRecipes()
-        .filter {
-            it.ingredients.isNotEmpty()
-        }.let { recipeDtoMaker.convert(it) }
+        return recipesSource.getAllRecipes()
+            .filter {
+                it.ingredients.isNotEmpty()
+            }.let { recipeDtoMaker.convert(it) }
     }
 }

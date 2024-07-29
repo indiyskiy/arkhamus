@@ -28,12 +28,12 @@ data class UserOfGameSession(
 ) {
     override fun toString(): String {
         return "UserOfGameSession[" +
-                    "id=$id, " +
-                    "userAccount=$userAccount, " +
-                    "gameSessionId=${gameSession.id}, " +
-                    "host=$host, " +
-                    "roleInGame='$roleInGame', " +
-                    "classInGame='$classInGame'" +
+                "id=$id, " +
+                "userAccount=$userAccount, " +
+                "gameSessionId=${gameSession.id}, " +
+                "host=$host, " +
+                "roleInGame='$roleInGame', " +
+                "classInGame='$classInGame'" +
                 "]"
     }
 }

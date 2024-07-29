@@ -54,7 +54,7 @@ class LevelDifficultyLogic(
         val tasks = quest.questSteps.apply {
             this.sortedBy { it.stepNumber }
         }
-        val inBetweenDistances = (0 until tasks.size-1).sumOf { i ->
+        val inBetweenDistances = (0 until tasks.size - 1).sumOf { i ->
             geometryUtils.distance(tasks[i].levelTask, tasks[i + 1].levelTask)
         }
         return startDistance + inBetweenDistances + lastDistance

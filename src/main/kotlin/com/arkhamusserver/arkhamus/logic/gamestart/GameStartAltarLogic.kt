@@ -4,8 +4,8 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderReposi
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.AltarRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.RitualAreaRepository
-import com.arkhamusserver.arkhamus.model.database.entity.game.Altar
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.database.entity.game.Altar
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder

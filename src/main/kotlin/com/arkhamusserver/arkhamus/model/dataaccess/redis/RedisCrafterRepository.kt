@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RedisCrafterRepository: CrudRepository<RedisCrafter, String>,
+interface RedisCrafterRepository : CrudRepository<RedisCrafter, String>,
     ToDeleteOnGameEnd<RedisCrafter>,
     ToDeleteOnServerStart<RedisCrafter>,
     CountInStatistic<RedisCrafter> {

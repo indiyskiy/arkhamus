@@ -54,7 +54,7 @@ class QuestGiverOpenNettyRequestHandler(
             val userQuestIds = userQuestProgresses?.map { it.questId }?.toSet() ?: emptySet()
             val quest = globalGameData.quests.firstOrNull {
                 it.questId in userQuestIds &&
-                        it.endQuestGiverId == this.questGiverId
+                        it.startQuestGiverId == this.questGiverId
             }
             val userQuestProgress =
                 quest?.let { questNotNull -> userQuestProgresses?.firstOrNull { it.questId == questNotNull.questId } }

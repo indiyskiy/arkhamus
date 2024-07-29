@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component
 @Component
 class AbilityHandler {
     fun myActiveAbilities(userId: Long, castAbilities: List<RedisAbilityCast>): List<RedisAbilityCast> {
-      return castAbilities.filter {
-          userId == it.sourceUserId && it.state == RedisTimeEventState.ACTIVE
-      }
+        return castAbilities.filter {
+            userId == it.sourceUserId && it.state == RedisTimeEventState.ACTIVE
+        }
     }
 }

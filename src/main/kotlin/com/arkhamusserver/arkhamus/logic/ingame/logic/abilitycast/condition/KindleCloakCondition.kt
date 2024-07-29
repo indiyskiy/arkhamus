@@ -7,8 +7,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component
 
 @Component
-class KindleCloakCondition(
-) : AdditionalAbilityCondition {
+class KindleCloakCondition : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
         return ability == Ability.KINDLE_CLOAK

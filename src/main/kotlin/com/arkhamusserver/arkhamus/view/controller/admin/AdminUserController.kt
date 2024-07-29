@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/admin/user")
-class AdminUserController (
-        private val adminUserLogic: AdminUserLogic
-    ) {
-        @GetMapping
-        fun allUsers(
-        ): List<AdminUserDto> =
-            adminUserLogic.all()
+class AdminUserController(
+    private val adminUserLogic: AdminUserLogic
+) {
+    @GetMapping
+    fun allUsers(
+    ): List<AdminUserDto> =
+        adminUserLogic.all()
 }

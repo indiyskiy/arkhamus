@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 @Component
 class OneTickTick(
     private val gameRepository: RedisGameRepository,
-    ) {
+) {
     fun updateNextTick(game: RedisGame) {
         game.currentTick += 1
         game.globalTimer += ArkhamusOneTickLogic.TICK_DELTA

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 @Component
 class RelatedAbilityCastHandler {
     fun findForUser(user: RedisGameUser, ability: Ability, castAbilities: List<RedisAbilityCast>) =
-         if (ability.globalCooldown) {
+        if (ability.globalCooldown) {
             castAbilities.firstOrNull { it.abilityId == ability.id && it.timeLeftCooldown > 0 }
         } else {
             castAbilities.firstOrNull {

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestAcceptRequestProcessData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserQuestProgressRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -15,6 +16,16 @@ class QuestProgressHandler(
 
     companion object {
         val notTakenStates = setOf(UserQuestState.AWAITING)
+    }
+
+    fun acceptTheQuest(userQuestProgress: RedisUserQuestProgress?, data: QuestAcceptRequestProcessData) {
+        userQuestProgress?.let {
+            it.questState = UserQuestState.IN_PROGRESS
+            it.questCurrentStep = 0
+            questProgressRepository.save(it)
+        }
+        data.canAccept = false
+        data.canDecline = true
     }
 
     fun mapQuestProgresses(
