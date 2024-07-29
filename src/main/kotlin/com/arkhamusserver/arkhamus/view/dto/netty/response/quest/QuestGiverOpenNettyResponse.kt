@@ -9,12 +9,12 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneRes
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class QuestGiverOpenNettyResponse(
-    userQuest: UserQuestResponse?,
-    questDifficulty: QuestDifficulty?,
-    rewards: List<QuestRewardResponse>,
-    canAccept: Boolean,
-    canDecline: Boolean,
-    canFinish: Boolean,
+    var userQuest: UserQuestResponse?,
+    var questDifficulty: QuestDifficulty?,
+    var rewards: List<QuestRewardResponse>,
+    var canAccept: Boolean,
+    var canDecline: Boolean,
+    var canFinish: Boolean,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,
