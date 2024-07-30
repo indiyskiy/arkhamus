@@ -5,5 +5,7 @@ enum class UserQuestState {
     READ,
     DECLINED,
     IN_PROGRESS,
-    FINISHED
+    FINISHED,
+    FINISHED_AVAILABLE,
+    DECLINED_AVAILABLE,
 }

@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestAcceptRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestDeclineRequestProcessData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserQuestProgressRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -11,7 +13,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class QuestProgressHandler(
-    private val questProgressRepository: RedisUserQuestProgressRepository
+    private val questProgressRepository: RedisUserQuestProgressRepository,
+    private val userQuestCreationHandler: UserQuestCreationHandler
 ) {
 
     companion object {
@@ -26,6 +29,29 @@ class QuestProgressHandler(
         }
         data.canAccept = false
         data.canDecline = true
+    }
+
+    fun declineTheQuest(
+        globalGameData: GlobalGameData,
+        data: QuestDeclineRequestProcessData
+    ) {
+        data.userQuestProgress?.let {
+            it.questState = UserQuestState.DECLINED
+            it.questCurrentStep = 0
+            questProgressRepository.save(it)
+        }
+        data.canAccept = false
+        data.canDecline = false
+        data.canFinish = false
+
+        val userQuestProgress = globalGameData.questProgressByUserId[data.gameUser!!.userId] ?: emptyList()
+        if (userQuestCreationHandler.needToAddQuests(userQuestProgress)) {
+            val newQuestProgress = userQuestCreationHandler.addQuests(
+                data, globalGameData.quests,
+                userQuestProgress
+            )
+            data.userQuest = newQuestProgress.map { mapQuestProgress(globalGameData.quests, it) }
+        }
     }
 
     fun mapQuestProgresses(
@@ -107,4 +133,5 @@ class QuestProgressHandler(
     private fun questTaken(userQuest: RedisUserQuestProgress): Boolean {
         return userQuest.questState !in notTakenStates
     }
+
 }

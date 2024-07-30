@@ -13,12 +13,12 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestRespon
 
 open class GameUserData(
     val gameUser: RedisGameUser?,
-    val otherGameUsers: List<RedisGameUser>,
-    val userQuest: List<UserQuestResponse>,
-    val inZones: List<LevelZone>,
-    val clues: List<RedisClue>,
-    val visibleOngoingEvents: List<OngoingEvent>,
-    val availableAbilities: List<AbilityOfUserResponse>,
+    var otherGameUsers: List<RedisGameUser>,
+    var userQuest: List<UserQuestResponse>,
+    var inZones: List<LevelZone>,
+    var clues: List<RedisClue>,
+    var visibleOngoingEvents: List<OngoingEvent>,
+    var availableAbilities: List<AbilityOfUserResponse>,
     var ongoingCraftingProcess: List<CraftProcessResponse>,
     var visibleItems: List<InventoryCell>,
     var containers: List<RedisContainer>,

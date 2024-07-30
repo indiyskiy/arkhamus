@@ -19,6 +19,7 @@ class GlobalGameSettings {
 
         //QUESTS
         const val QUESTS_ON_START = 7
+        const val QUESTS_TO_REFRESH = 1
 
     }
 }
