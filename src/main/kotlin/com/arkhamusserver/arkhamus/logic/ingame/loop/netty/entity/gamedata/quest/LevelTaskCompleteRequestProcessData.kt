@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessRes
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 
-class QuestStepCompleteRequestProcessData(
+class LevelTaskCompleteRequestProcessData(
     var quest: RedisQuest?,
     var userQuestProgress: RedisUserQuestProgress?,
     var questRewards: List<RedisQuestReward>,

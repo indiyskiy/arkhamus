@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneResponses
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
-class QuestStepCompleteNettyResponse(
+class LevelTaskCompleteNettyResponse(
     var questInfo: QuestInfoResponse?,
     tick: Long,
     userId: Long,
@@ -34,5 +34,5 @@ class QuestStepCompleteNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     clues = clues.convertToClueResponses(),
-    type = QuestStepCompleteNettyResponse::class.java.simpleName,
+    type = LevelTaskCompleteNettyResponse::class.java.simpleName,
 )

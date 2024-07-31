@@ -7,15 +7,15 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestStepCompleteRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.LevelTaskCompleteRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.IN_PROGRESS
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.request.quest.QuestStepCompleteRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.quest.LevelTaskCompleteRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class QuestStepCompleteNettyRequestHandler(
+class LevelTaskCompleteNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
     private val inventoryHandler: InventoryHandler,
@@ -27,7 +27,7 @@ class QuestStepCompleteNettyRequestHandler(
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
-        nettyRequestMessage::class.java == QuestStepCompleteRequestMessage::class.java
+        nettyRequestMessage::class.java == LevelTaskCompleteRequestMessage::class.java
 
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
@@ -35,9 +35,9 @@ class QuestStepCompleteNettyRequestHandler(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
-    ): QuestStepCompleteRequestProcessData {
+    ): LevelTaskCompleteRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
-        with(request as QuestStepCompleteRequestMessage) {
+        with(request as LevelTaskCompleteRequestMessage) {
             val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
@@ -74,7 +74,7 @@ class QuestStepCompleteNettyRequestHandler(
             val canDecline = questProgressHandler.canDecline(quest, userQuestProgress)
             val canFinish = questProgressHandler.canFinish(quest, userQuestProgress)
 
-            return QuestStepCompleteRequestProcessData(
+            return LevelTaskCompleteRequestProcessData(
                 quest = quest,
                 userQuestProgress = userQuestProgress,
                 questRewards = questRewards,

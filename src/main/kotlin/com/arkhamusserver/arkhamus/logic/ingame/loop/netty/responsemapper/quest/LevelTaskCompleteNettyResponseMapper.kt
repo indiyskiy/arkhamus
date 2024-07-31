@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestRewardUti
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestStepCompleteRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.LevelTaskCompleteRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -17,11 +17,11 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessag
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestInfoResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.quest.QuestStepCompleteNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.quest.LevelTaskCompleteNettyResponse
 import org.springframework.stereotype.Component
 
 @Component
-class QuestStepCompleteNettyResponseMapper(
+class LevelTaskCompleteNettyResponseMapper(
     private val otherGameUsersDataHandler: OtherGameUsersDataHandler,
     private val containersDataHandler: ContainerDataHandler,
     private val craftersDataHandler: CrafterDataHandler,
@@ -29,7 +29,7 @@ class QuestStepCompleteNettyResponseMapper(
     private val rewardUtils: QuestRewardUtils
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == QuestStepCompleteRequestProcessData::class.java
+        gameResponseMessage::class.java == LevelTaskCompleteRequestProcessData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -41,9 +41,9 @@ class QuestStepCompleteNettyResponseMapper(
         userRole: UserOfGameSession?,
         inBetweenEventHolder: InBetweenEventHolder,
         globalGameData: GlobalGameData
-    ): QuestStepCompleteNettyResponse {
-        (requestProcessData as QuestStepCompleteRequestProcessData).let {
-            return QuestStepCompleteNettyResponse(
+    ): LevelTaskCompleteNettyResponse {
+        (requestProcessData as LevelTaskCompleteRequestProcessData).let {
+            return LevelTaskCompleteNettyResponse(
                 questInfo = QuestInfoResponse(
                     userQuest = requestProcessData.userQuestProgress?.let { process ->
                         questProgressHandler.mapQuestProgress(

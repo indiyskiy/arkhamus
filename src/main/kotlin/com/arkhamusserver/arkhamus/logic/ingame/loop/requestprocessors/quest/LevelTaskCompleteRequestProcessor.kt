@@ -4,16 +4,16 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressH
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestStepCompleteRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.LevelTaskCompleteRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import org.springframework.stereotype.Component
 
 @Component
-class QuestStepCompleteRequestProcessor(
+class LevelTaskCompleteRequestProcessor(
     private val questProgressHandler: QuestProgressHandler,
 ) : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
-        return request.requestProcessData is QuestStepCompleteRequestProcessData
+        return request.requestProcessData is LevelTaskCompleteRequestProcessData
     }
 
     override fun process(
@@ -21,15 +21,15 @@ class QuestStepCompleteRequestProcessor(
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        val questStepCompleteRequestProcessData =
-            requestDataHolder.requestProcessData as QuestStepCompleteRequestProcessData
-        val quest = questStepCompleteRequestProcessData.quest
-        val userQuestProgress = questStepCompleteRequestProcessData.userQuestProgress
+        val levelTaskCompleteRequestProcessData =
+            requestDataHolder.requestProcessData as LevelTaskCompleteRequestProcessData
+        val quest = levelTaskCompleteRequestProcessData.quest
+        val userQuestProgress = levelTaskCompleteRequestProcessData.userQuestProgress
 
         questProgressHandler.nextStep(userQuestProgress, quest)
         if (questProgressHandler.isCompleted(quest, userQuestProgress)) {
-            questStepCompleteRequestProcessData.canDecline = false
-            questStepCompleteRequestProcessData.canFinish = true
+            levelTaskCompleteRequestProcessData.canDecline = false
+            levelTaskCompleteRequestProcessData.canFinish = true
         }
     }
 }
