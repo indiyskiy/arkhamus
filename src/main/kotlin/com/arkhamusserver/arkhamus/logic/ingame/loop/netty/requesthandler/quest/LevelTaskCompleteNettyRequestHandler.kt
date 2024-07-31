@@ -59,7 +59,7 @@ class LevelTaskCompleteNettyRequestHandler(
             val questToStep = questIdToStep
                 ?.map { quests.first { quest -> quest.questId == it.first } to it.second }
                 ?.map { it.first to task(it.second, it.first.levelTaskIds) }
-            val quest = questToStep?.firstOrNull { it.second == this.questStepId }?.first
+            val quest = questToStep?.firstOrNull { it.second == this.levelTaskId }?.first
             val userQuestProgress = quest?.let {
                 questSteps.firstOrNull { questStep -> it.questId == questStep.questId }
             }

@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 
 class LevelTaskCompleteRequestMessage(
-    var questStepId: Long,
+    var levelTaskId: Long,
     type: String,
     baseRequestData: BaseRequestData
 ) : NettyBaseRequestMessage(baseRequestData, type)
