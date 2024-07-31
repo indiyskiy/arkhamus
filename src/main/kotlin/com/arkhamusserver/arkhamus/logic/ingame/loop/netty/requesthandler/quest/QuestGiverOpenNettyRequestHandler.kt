@@ -9,6 +9,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestGiverOpenRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
+import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
+import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.quest.QuestGiverOpenRequestMessage
 import org.springframework.stereotype.Component
@@ -24,6 +26,16 @@ class QuestGiverOpenNettyRequestHandler(
     private val questProgressHandler: QuestProgressHandler,
     private val questRewardUtils: QuestRewardUtils
 ) : NettyRequestHandler {
+
+    companion object {
+        private val reasonableStates = setOf(
+            UserQuestState.AWAITING,
+            UserQuestState.READ,
+            UserQuestState.DECLINED,
+            UserQuestState.IN_PROGRESS,
+            UserQuestState.COMPLETED,
+        )
+    }
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
         nettyRequestMessage::class.java == QuestGiverOpenRequestMessage::class.java
@@ -50,17 +62,28 @@ class QuestGiverOpenNettyRequestHandler(
                 globalGameData.castAbilities,
                 userId!!
             )
-            val userQuestProgresses = globalGameData.questProgressByUserId[userId]
+
+            val userQuestProgresses =
+                globalGameData.questProgressByUserId[userId]?.filter { it.questState in reasonableStates }
             val userQuestIds = userQuestProgresses?.map { it.questId }?.toSet() ?: emptySet()
-            val quest = globalGameData.quests.firstOrNull {
-                it.questId in userQuestIds &&
-                        it.startQuestGiverId == this.questGiverId
+            val questsOptions = globalGameData.quests.filter {
+                it.questId in userQuestIds
+                it.startQuestGiverId == this.questGiverId ||
+                        it.endQuestGiverId == this.questGiverId
             }
-            val userQuestProgress =
-                quest?.let { questNotNull -> userQuestProgresses?.firstOrNull { it.questId == questNotNull.questId } }
+
+            val questOptionIds = questsOptions.map { it.questId }.toSet()
+            val userQuestProgressOptions =
+                userQuestProgresses?.filter { it.questId in questOptionIds }
+
+            val userQuestProgress = userQuestProgress(userQuestProgressOptions)
+
+            val quest =
+                userQuestProgress?.let { progress -> questsOptions.firstOrNull { progress.questId == it.questId } }
+
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {
                 val rewards = globalGameData.questRewardsByQuestId[quest?.questId]?.filter { it.userId == userId }
-                questRewardUtils.findOrCreate(rewards, quest!!, userQuestProgress!!, user)
+                questRewardUtils.findOrCreate(rewards, quest!!, userQuestProgress, user)
             } else {
                 emptyList()
             }
@@ -98,6 +121,11 @@ class QuestGiverOpenNettyRequestHandler(
             )
         }
     }
+
+    private fun userQuestProgress(userQuestProgressOptions: List<RedisUserQuestProgress>?): RedisUserQuestProgress? =
+        ((userQuestProgressOptions?.firstOrNull { it.questState == UserQuestState.COMPLETED })
+            ?: (userQuestProgressOptions?.firstOrNull { it.questState == UserQuestState.AWAITING })
+            ?: (userQuestProgressOptions?.firstOrNull()))
 
 }
 

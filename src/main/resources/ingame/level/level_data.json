@@ -243,20 +243,7 @@
         "y": 21.5
       }
     ],
-    "lanterns": [
-      {
-        "id": 1100,
-        "lightRange": 6,
-        "x": 55,
-        "y": 29
-      },
-      {
-        "id": 1101,
-        "lightRange": 6,
-        "x": 37,
-        "y": 38
-      }
-    ],
+    "lanterns": [],
     "levelHeight": 104,
     "levelId": 1,
     "levelTasks": [
@@ -375,6 +362,41 @@
         "name": "Henry Armitage",
         "x": 94,
         "y": 97
+      },
+      {
+        "id": 1303,
+        "interactionRadius": 3.5,
+        "name": "William Dyer",
+        "x": 23,
+        "y": 33
+      },
+      {
+        "id": 1304,
+        "interactionRadius": 3.5,
+        "name": "Ferdinand Ashley",
+        "x": 89.5,
+        "y": 20
+      },
+      {
+        "id": 1305,
+        "interactionRadius": 3.5,
+        "name": "Tyler Freeborn",
+        "x": 77.5,
+        "y": 22
+      },
+      {
+        "id": 1306,
+        "interactionRadius": 3.5,
+        "name": "Nathaniel Wingate Peaslee",
+        "x": 85.3115005493164,
+        "y": 36.9939002990723
+      },
+      {
+        "id": 1307,
+        "interactionRadius": 3.5,
+        "name": "Albert Wilmarth",
+        "x": 4,
+        "y": 44
       }
     ],
     "ritualAreas": [

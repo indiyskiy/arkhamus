@@ -18,8 +18,8 @@ class GlobalGameSettings {
         const val GLOBAL_VISION_DISTANCE: Double = 10.0
 
         //QUESTS
-        const val QUESTS_ON_START = 7
-        const val QUESTS_TO_REFRESH = 1
+        const val QUESTS_ON_START = 5
+        const val QUESTS_TO_REFRESH = 2
 
     }
 }

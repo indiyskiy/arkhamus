@@ -313,7 +313,7 @@ class LevelDesignInfoProcessor(
             return
         }
         logger.info("processing quest for level ${level.id}")
-        (0..QUESTS_ON_START * 2).map { number ->
+        (0..QUESTS_ON_START * 4).map { number ->
             val randomQuestGiverStart = questGivers.random()
             val randomQuestGiverEnd = questGivers.random()
 
