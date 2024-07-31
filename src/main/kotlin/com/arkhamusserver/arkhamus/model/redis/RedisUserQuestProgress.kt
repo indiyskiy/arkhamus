@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
+import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.AWAITING
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed
@@ -12,5 +13,5 @@ data class RedisUserQuestProgress(
     var questId: Long,
     var userId: Long,
     var questCurrentStep: Int = -1,
-    var questState: UserQuestState = UserQuestState.AWAITING
+    var questState: UserQuestState = AWAITING
 )

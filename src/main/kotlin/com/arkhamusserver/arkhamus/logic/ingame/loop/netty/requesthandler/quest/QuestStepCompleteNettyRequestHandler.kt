@@ -7,16 +7,15 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestGiverOpenRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestStepCompleteRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.*
-import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
+import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.IN_PROGRESS
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.request.quest.QuestGiverOpenRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.quest.QuestStepCompleteRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class QuestGiverOpenNettyRequestHandler(
+class QuestStepCompleteNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
     private val inventoryHandler: InventoryHandler,
@@ -27,18 +26,8 @@ class QuestGiverOpenNettyRequestHandler(
     private val questRewardUtils: QuestRewardUtils
 ) : NettyRequestHandler {
 
-    companion object {
-        private val reasonableStates = setOf(
-            AWAITING,
-            READ,
-            DECLINED,
-            IN_PROGRESS,
-            COMPLETED,
-        )
-    }
-
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
-        nettyRequestMessage::class.java == QuestGiverOpenRequestMessage::class.java
+        nettyRequestMessage::class.java == QuestStepCompleteRequestMessage::class.java
 
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
@@ -46,9 +35,9 @@ class QuestGiverOpenNettyRequestHandler(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
-    ): QuestGiverOpenRequestProcessData {
+    ): QuestStepCompleteRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
-        with(request as QuestGiverOpenRequestMessage) {
+        with(request as QuestStepCompleteRequestMessage) {
             val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
@@ -63,27 +52,21 @@ class QuestGiverOpenNettyRequestHandler(
                 userId!!
             )
 
-            val userQuestProgresses =
-                globalGameData.questProgressByUserId[userId]?.filter { it.questState in reasonableStates }
-            val userQuestIds = userQuestProgresses?.map { it.questId }?.toSet() ?: emptySet()
-            val questsOptions = globalGameData.quests.filter {
-                it.questId in userQuestIds
-                it.startQuestGiverId == this.questGiverId ||
-                        it.endQuestGiverId == this.questGiverId
+            val questSteps =
+                globalGameData.questProgressByUserId[userId]?.filter { it.questState == IN_PROGRESS }
+            val quests = globalGameData.quests
+            val questIdToStep = questSteps?.map { it.questId to it.questCurrentStep }
+            val questToStep = questIdToStep
+                ?.map { quests.first { quest -> quest.questId == it.first } to it.second }
+                ?.map { it.first to task(it.second, it.first.levelTaskIds) }
+            val quest = questToStep?.firstOrNull { it.second == this.questStepId }?.first
+            val userQuestProgress = quest?.let {
+                questSteps.firstOrNull { questStep -> it.questId == questStep.questId }
             }
-
-            val questOptionIds = questsOptions.map { it.questId }.toSet()
-            val userQuestProgressOptions =
-                userQuestProgresses?.filter { it.questId in questOptionIds }
-
-            val userQuestProgress = userQuestProgress(userQuestProgressOptions)
-
-            val quest =
-                userQuestProgress?.let { progress -> questsOptions.firstOrNull { progress.questId == it.questId } }
 
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {
                 val rewards = globalGameData.questRewardsByQuestId[quest?.questId]?.filter { it.userId == userId }
-                questRewardUtils.findOrCreate(rewards, quest!!, userQuestProgress, user)
+                questRewardUtils.findOrCreate(rewards, quest!!, userQuestProgress!!, user)
             } else {
                 emptyList()
             }
@@ -91,7 +74,7 @@ class QuestGiverOpenNettyRequestHandler(
             val canDecline = questProgressHandler.canDecline(quest, userQuestProgress)
             val canFinish = questProgressHandler.canFinish(quest, userQuestProgress)
 
-            return QuestGiverOpenRequestProcessData(
+            return QuestStepCompleteRequestProcessData(
                 quest = quest,
                 userQuestProgress = userQuestProgress,
                 questRewards = questRewards,
@@ -122,10 +105,11 @@ class QuestGiverOpenNettyRequestHandler(
         }
     }
 
-    private fun userQuestProgress(userQuestProgressOptions: List<RedisUserQuestProgress>?): RedisUserQuestProgress? =
-        ((userQuestProgressOptions?.firstOrNull { it.questState == COMPLETED })
-            ?: (userQuestProgressOptions?.firstOrNull { it.questState == AWAITING })
-            ?: (userQuestProgressOptions?.firstOrNull()))
+    private fun task(stepNumber: Int, levelTaskIds: MutableList<Long>): Long? {
+        if (stepNumber <= 0) return null
+        if (stepNumber >= levelTaskIds.size) return null
+        return levelTaskIds[stepNumber]
+    }
 
 }
 

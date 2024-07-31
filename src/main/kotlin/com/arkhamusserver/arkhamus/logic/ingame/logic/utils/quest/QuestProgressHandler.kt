@@ -4,12 +4,13 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestAcceptRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestDeclineRequestProcessData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserQuestProgressRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
+import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.*
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 import org.springframework.stereotype.Component
+import kotlin.math.min
 
 @Component
 class QuestProgressHandler(
@@ -18,12 +19,12 @@ class QuestProgressHandler(
 ) {
 
     companion object {
-        val notTakenStates = setOf(UserQuestState.AWAITING)
+        val notTakenStates = setOf(AWAITING)
     }
 
     fun acceptTheQuest(userQuestProgress: RedisUserQuestProgress?, data: QuestAcceptRequestProcessData) {
         userQuestProgress?.let {
-            it.questState = UserQuestState.IN_PROGRESS
+            it.questState = IN_PROGRESS
             it.questCurrentStep = 0
             questProgressRepository.save(it)
         }
@@ -36,7 +37,7 @@ class QuestProgressHandler(
         data: QuestDeclineRequestProcessData
     ) {
         data.userQuestProgress?.let {
-            it.questState = UserQuestState.DECLINED
+            it.questState = DECLINED
             it.questCurrentStep = 0
             questProgressRepository.save(it)
         }
@@ -103,35 +104,56 @@ class QuestProgressHandler(
         quest != null &&
                 userQuestProgress != null &&
                 userQuestProgress.questState in setOf(
-            UserQuestState.AWAITING,
-            UserQuestState.READ
+            AWAITING,
+            READ
         )
 
     fun canDecline(quest: RedisQuest?, userQuestProgress: RedisUserQuestProgress?): Boolean =
         quest != null &&
                 userQuestProgress != null &&
                 userQuestProgress.questState in setOf(
-            UserQuestState.AWAITING,
-            UserQuestState.READ,
-            UserQuestState.IN_PROGRESS
+            AWAITING,
+            READ,
+            IN_PROGRESS
         )
+
+    fun isCompleted(quest: RedisQuest?, userQuestProgress: RedisUserQuestProgress?): Boolean =
+        quest != null &&
+                userQuestProgress != null &&
+                userQuestProgress.questState in setOf(IN_PROGRESS, COMPLETED) &&
+                userQuestProgress.questCurrentStep == quest.levelTaskIds.size
 
     fun canFinish(quest: RedisQuest?, userQuestProgress: RedisUserQuestProgress?): Boolean =
         quest != null &&
                 userQuestProgress != null &&
-                userQuestProgress.questState in setOf(
-            UserQuestState.IN_PROGRESS
-        ) && userQuestProgress.questCurrentStep == quest.levelTaskIds.size
+                userQuestProgress.questState in setOf(COMPLETED) &&
+                userQuestProgress.questCurrentStep == quest.levelTaskIds.size
 
     fun readTheQuest(userQuestProgress: RedisUserQuestProgress?) {
         userQuestProgress?.let {
-            it.questState = UserQuestState.READ
+            it.questState = READ
             questProgressRepository.save(it)
         }
     }
 
     private fun questTaken(userQuest: RedisUserQuestProgress): Boolean {
         return userQuest.questState !in notTakenStates
+    }
+
+    fun nextStep(userQuestProgress: RedisUserQuestProgress?, quest: RedisQuest?) {
+        userQuestProgress?.let { progress ->
+            quest?.let { questNotNull ->
+                progress.questCurrentStep = min(progress.questCurrentStep + 1, questNotNull.levelTaskIds.size)
+                if (isCompleted(quest, userQuestProgress)) {
+                    complete(userQuestProgress)
+                }
+                questProgressRepository.save(progress)
+            }
+        }
+    }
+
+    private fun complete(userQuestProgress: RedisUserQuestProgress?) {
+        userQuestProgress?.questState = COMPLETED
     }
 
 }
