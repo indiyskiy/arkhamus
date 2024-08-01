@@ -1,20 +1,27 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
-import com.arkhamusserver.arkhamus.model.dataaccess.CountInStatistic
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.NonGenericMyCrudRepository
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminRedisResourcesInfoDto
 import com.arkhamusserver.arkhamus.view.dto.admin.RedisResourceDto
+import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Component
 
 @Component
 class AdminRedisResourcesLogic(
     private val gameRepository: RedisGameRepository,
-    private val countInStatistics: List<CountInStatistic<*>>,
+    private val toCount: List<NonGenericMyCrudRepository>,
 ) {
     fun info(): AdminRedisResourcesInfoDto {
         val games = gameRepository.findAll()
         val statistic =
-            countInStatistics.map { countInStatistic -> countInStatistic.findAll() to countName(countInStatistic) }
+            toCount.map { countInStatistic ->
+                if (countInStatistic is CrudRepository<*, *>) {
+                    countInStatistic.findAll() to countName(countInStatistic)
+                } else {
+                    emptyList<String>() to "-"
+                }
+            }
         val gameDto = games.mapInfoList("Game")
         val statisticDto = statistic.map { it.first.mapInfoList(it.second) }
         val fullStatisticDtoList = statisticDto + gameDto
@@ -25,7 +32,7 @@ class AdminRedisResourcesLogic(
         return AdminRedisResourcesInfoDto(
             listOf(
                 gameRepository.findByGameId(gameId).mapInfo("Game"),
-            ) + countInStatistics.map { it.findByGameId(gameId) to it.javaClass.simpleName }.map {
+            ) + toCount.map { it.findByGameId(gameId) to it.javaClass.simpleName }.map {
                 it.first.mapInfoList(it.second)
             }
         )
@@ -39,8 +46,8 @@ class AdminRedisResourcesLogic(
         return RedisResourceDto(type, this?.let { 1 } ?: 0)
     }
 
-    private fun countName(countInStatistic: CountInStatistic<*>): String =
-        countInStatistic.javaClass.annotatedInterfaces.first {
+    private fun countName(nonGenericCountInStatistic: NonGenericMyCrudRepository): String =
+        nonGenericCountInStatistic.javaClass.annotatedInterfaces.first {
             val name = it.type.typeName
             name.contains("Redis") && name.contains("Repository")
         }.type.typeName
