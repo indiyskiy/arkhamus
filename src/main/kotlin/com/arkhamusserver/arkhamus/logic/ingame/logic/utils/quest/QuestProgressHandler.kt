@@ -9,6 +9,8 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.min
 
@@ -20,6 +22,7 @@ class QuestProgressHandler(
 
     companion object {
         val notTakenStates = setOf(AWAITING)
+        var logger: Logger = LoggerFactory.getLogger(QuestProgressHandler::class.java)
     }
 
     fun acceptTheQuest(userQuestProgress: RedisUserQuestProgress?, data: QuestAcceptRequestProcessData) {
@@ -134,6 +137,51 @@ class QuestProgressHandler(
             it.questState = READ
             questProgressRepository.save(it)
         }
+    }
+
+    fun questAndProgress(
+        levelTaskId: Long,
+        globalGameData: GlobalGameData,
+        userId: Long?
+    ): Pair<RedisQuest?, RedisUserQuestProgress?> {
+        logger.info("looking for a quest and user progress for $levelTaskId")
+
+        val questSteps =
+            globalGameData.questProgressByUserId[userId]?.filter { it.questState == IN_PROGRESS }
+        logger.info("current questSteps ${questSteps?.joinToString { it.questId.toString() } ?: "-"}")
+
+        val quests = globalGameData.quests
+        logger.info("quests ${quests.joinToString { it.questId.toString() }}")
+
+        val questIdToStep = questSteps?.map { it.questId to it.questCurrentStep }
+        logger.info("questIdToStep ${questIdToStep?.joinToString { it.first.toString() + "/" + it.second }}")
+
+        val questToStep = questIdToStep
+            ?.map { quests.first { quest -> quest.questId == it.first } to it.second }
+            ?.map { it.first to task(it.second, it.first.levelTaskIds) }
+        logger.info("questToStep ${questToStep?.joinToString { it.first.toString() + "/" + it.second }}")
+
+        val quest = questToStep?.firstOrNull { it.second == levelTaskId }?.first
+        logger.info("quest ${quest?.questId}")
+
+        val userQuestProgress = quest?.let {
+            questSteps.firstOrNull { questStep -> it.questId == questStep.questId }
+        }
+        logger.info("userQuestProgress ${userQuestProgress?.questId}")
+
+        return Pair(quest, userQuestProgress)
+    }
+
+    private fun task(stepNumber: Int, levelTaskIds: MutableList<Long>): Long? {
+        if (stepNumber < 0) {
+            logger.info("still on quest giver state")
+            return null
+        }
+        if (stepNumber >= levelTaskIds.size) {
+            logger.info("quest complete")
+            return null
+        }
+        return levelTaskIds[stepNumber]
     }
 
     private fun questTaken(userQuest: RedisUserQuestProgress): Boolean {

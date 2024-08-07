@@ -5,8 +5,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUE
 import com.arkhamusserver.arkhamus.logic.ingame.quest.LevelDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
+import com.arkhamusserver.arkhamus.model.database.entity.TextKey
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
 import com.arkhamusserver.arkhamus.model.enums.LevelState
+import com.arkhamusserver.arkhamus.model.enums.TextKeyType
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.view.levelDesign.*
@@ -326,6 +328,7 @@ class LevelDesignInfoProcessor(
                 name = "awesome quest $number",
                 startQuestGiver = randomQuestGiverStart,
                 endQuestGiver = randomQuestGiverEnd,
+                textKey = TextKey(type = TextKeyType.QUEST)
             )
             levelTasks.shuffled(random).take(stepSize).forEachIndexed { i, task ->
                 val step = QuestStep(

@@ -2,7 +2,9 @@ package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.logic.ingame.quest.LevelDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
+import com.arkhamusserver.arkhamus.model.database.entity.TextKey
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
+import com.arkhamusserver.arkhamus.model.enums.TextKeyType
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminLevelTaskDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestGiverDto
@@ -110,7 +112,8 @@ class AdminQuestLogic(
     private fun newQuest(level: Level): Quest = Quest(
         level = level,
         startQuestGiver = defaultQuestGiver(level),
-        endQuestGiver = defaultQuestGiver(level)
+        endQuestGiver = defaultQuestGiver(level),
+        textKey = TextKey(type = TextKeyType.QUEST)
     )
 
     private fun defaultQuestGiver(level: Level): QuestGiver {
@@ -121,6 +124,8 @@ class AdminQuestLogic(
         AdminQuestDto(
             id = this.id!!,
             levelId = this.level.id!!,
+            difficulty = this.dificulty,
+            textKey = this.textKey.value ?: "",
             state = this.questState,
             name = this.name,
             steps = this.questSteps.map { it.toDto() }.sortedBy { it.number }.toMutableList(),

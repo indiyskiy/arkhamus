@@ -9,7 +9,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.LevelTaskCompleteRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.IN_PROGRESS
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.quest.LevelTaskCompleteRequestMessage
 import org.springframework.stereotype.Component
@@ -52,17 +51,7 @@ class LevelTaskCompleteNettyRequestHandler(
                 userId!!
             )
 
-            val questSteps =
-                globalGameData.questProgressByUserId[userId]?.filter { it.questState == IN_PROGRESS }
-            val quests = globalGameData.quests
-            val questIdToStep = questSteps?.map { it.questId to it.questCurrentStep }
-            val questToStep = questIdToStep
-                ?.map { quests.first { quest -> quest.questId == it.first } to it.second }
-                ?.map { it.first to task(it.second, it.first.levelTaskIds) }
-            val quest = questToStep?.firstOrNull { it.second == this.levelTaskId }?.first
-            val userQuestProgress = quest?.let {
-                questSteps.firstOrNull { questStep -> it.questId == questStep.questId }
-            }
+            val (quest, userQuestProgress) = questProgressHandler.questAndProgress(levelTaskId, globalGameData, userId)
 
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {
                 val rewards = globalGameData.questRewardsByQuestId[quest?.questId]?.filter { it.userId == userId }
@@ -103,12 +92,6 @@ class LevelTaskCompleteNettyRequestHandler(
                 ),
             )
         }
-    }
-
-    private fun task(stepNumber: Int, levelTaskIds: MutableList<Long>): Long? {
-        if (stepNumber <= 0) return null
-        if (stepNumber >= levelTaskIds.size) return null
-        return levelTaskIds[stepNumber]
     }
 
 }

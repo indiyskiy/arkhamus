@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game
 
+import com.arkhamusserver.arkhamus.model.database.entity.TextKey
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import jakarta.persistence.*
@@ -15,6 +16,9 @@ data class Quest(
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "quest")
     var questSteps: MutableList<QuestStep> = mutableListOf(),
     var questState: QuestState = QuestState.DRAFT,
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "textKeyId")
+    var textKey: TextKey,
     var name: String = "new quest",
     @ManyToOne
     @JoinColumn(name = "startQuestGiverId", nullable = false)
