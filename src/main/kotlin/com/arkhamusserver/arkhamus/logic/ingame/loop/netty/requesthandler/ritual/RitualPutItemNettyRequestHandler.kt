@@ -98,8 +98,8 @@ class RitualPutItemNettyRequestHandler(
         globalGameData: GlobalGameData
     ) = item != null &&
             request.itemNumber <= inventoryHandler.howManyItems(user, item) &&
-            globalGameData.altarHolder.itemsForRitual.containsKey(item.id) &&
-            ((globalGameData.altarHolder.itemsForRitual[item.id] ?: 0) >
-                    (globalGameData.altarHolder.itemsOnAltars[item.id] ?: 0))
+            (globalGameData.altarHolder?.itemsForRitual?.containsKey(item.id)?:false) &&
+            ((globalGameData.altarHolder?.itemsForRitual?.get(item.id) ?: 0) >
+                    (globalGameData.altarHolder?.itemsOnAltars?.get(item.id) ?: 0))
 
 }

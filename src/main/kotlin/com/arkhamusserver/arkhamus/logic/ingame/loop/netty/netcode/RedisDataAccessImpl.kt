@@ -27,7 +27,7 @@ class RedisDataAccessImpl(
     private val redisQuestRewardRepository: RedisQuestRewardRepository,
 ) : RedisDataAccess {
     override fun getGameUser(userId: Long?, gameId: Long?) =
-        gameUserRepository.findByUserIdAndGameId(userId!!, gameId!!).first()
+        gameUserRepository.findByUserIdAndGameId(userId!!, gameId!!).firstOrNull()
 
     override fun getGameUsers(gameId: Long?) =
         gameUserRepository.findByGameId(gameId!!)
@@ -35,7 +35,7 @@ class RedisDataAccessImpl(
     override fun getGame(gameId: Long) = gameRepository.findById(gameId.toString()).getOrNull()
 
     override fun getAltarHolder(gameId: Long) =
-        altarHolderRepository.findByGameId(gameId).first()
+        altarHolderRepository.findByGameId(gameId).firstOrNull()
 
     override fun getAltarPolling(gameId: Long) =
         altarPollingRepository.findByGameId(gameId).maxByOrNull { it.started }

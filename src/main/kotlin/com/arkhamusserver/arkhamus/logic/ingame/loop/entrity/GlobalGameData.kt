@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.redis.*
 
 data class GlobalGameData(
     val game: RedisGame,
-    var altarHolder: RedisAltarHolder,
+    var altarHolder: RedisAltarHolder?,
     var altarPolling: RedisAltarPolling? = null,
     var altars: Map<Long, RedisAltar> = emptyMap(),
     var users: Map<Long, RedisGameUser> = emptyMap(),

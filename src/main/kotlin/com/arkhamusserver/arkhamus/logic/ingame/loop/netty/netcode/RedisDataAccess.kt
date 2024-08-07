@@ -10,7 +10,7 @@ interface RedisDataAccess {
     fun getGameContainers(gameId: Long): List<RedisContainer>
     fun getGameCrafters(gameId: Long): List<RedisCrafter>
     fun getGameLanterns(gameId: Long): List<RedisLantern>
-    fun getAltarHolder(gameId: Long): RedisAltarHolder
+    fun getAltarHolder(gameId: Long): RedisAltarHolder?
     fun getAltarPolling(gameId: Long): RedisAltarPolling?
     fun getGameAltars(gameId: Long): Map<Long, RedisAltar>
     fun getTimeEvents(gameId: Long): List<RedisTimeEvent>

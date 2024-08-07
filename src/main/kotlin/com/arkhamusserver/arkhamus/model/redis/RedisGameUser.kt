@@ -24,7 +24,7 @@ data class RedisGameUser(
     var won: Boolean? = null,
     var sawTheEndOfTimes: Boolean = false,
     var connected: Boolean,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 ) : WithPoint {
 
     override fun x(): Double {

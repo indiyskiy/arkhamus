@@ -19,5 +19,5 @@ data class RedisCraftProcess(
     var state: RedisTimeEventState,
     var xLocation: Double? = null,
     var yLocation: Double? = null,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 )

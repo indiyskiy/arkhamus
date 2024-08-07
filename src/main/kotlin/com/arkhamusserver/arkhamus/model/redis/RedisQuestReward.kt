@@ -15,5 +15,5 @@ data class RedisQuestReward(
     @Indexed var gameId: Long,
     var questId: Long,
     var userId: Long,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 )

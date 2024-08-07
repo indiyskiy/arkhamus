@@ -61,7 +61,7 @@ class RitualHandler(
     }
 
     fun failRitual(
-        altarHolder: RedisAltarHolder,
+        altarHolder: RedisAltarHolder?,
         altarPolling: RedisAltarPolling,
         events: List<RedisTimeEvent>,
         game: RedisGame
@@ -72,8 +72,8 @@ class RitualHandler(
         altarPolling.state = MapAltarPollingState.FAILED
         redisAltarPollingRepository.delete(altarPolling)
 
-        altarHolder.state = MapAltarState.LOCKED
-        redisAltarHolderRepository.save(altarHolder)
+        altarHolder?.state = MapAltarState.LOCKED
+        altarHolder?.let { redisAltarHolderRepository.save(it) }
         logger.info("creating COOLDOWN event")
         eventHandler.createDefaultEvent(
             game,
@@ -84,19 +84,19 @@ class RitualHandler(
 
     fun finishAltarPolling(
         altarPolling: RedisAltarPolling,
-        altarHolder: RedisAltarHolder
-    ): RedisAltarHolder {
+        altarHolder: RedisAltarHolder?
+    ): RedisAltarHolder? {
         redisAltarPollingRepository.delete(altarPolling)
         unlockTheGod(altarHolder)
-        altarHolder.state = MapAltarState.OPEN
-        return redisAltarHolderRepository.save(altarHolder)
+        altarHolder?.state = MapAltarState.OPEN
+        return altarHolder?.let { redisAltarHolderRepository.save(altarHolder) }
     }
 
     fun tryToForceStartRitual(
         allUsers: Collection<RedisGameUser>,
         altarPolling: RedisAltarPolling,
         altars: Map<Long, RedisAltar>,
-        altarHolder: RedisAltarHolder,
+        altarHolder: RedisAltarHolder?,
         events: List<RedisTimeEvent>,
         game: RedisGame
     ) {
@@ -127,7 +127,7 @@ class RitualHandler(
         quorum: God,
         altars: List<RedisAltar>,
         altarPolling: RedisAltarPolling,
-        altarHolder: RedisAltarHolder,
+        altarHolder: RedisAltarHolder?,
         events: List<RedisTimeEvent>,
         game: RedisGame
     ) {
@@ -139,19 +139,19 @@ class RitualHandler(
 
         val cork = godToCorkResolver.resolve(quorum)
         val recipe = recipesSource.getAllRecipes().first { it.item == cork }
-        altarHolder.lockedGodId = quorum.getId()
-        altarHolder.itemsForRitual = recipe.ingredients.associate {
+        altarHolder?.lockedGodId = quorum.getId()
+        altarHolder?.itemsForRitual = recipe.ingredients.associate {
             it.item.id to it.number
         }
-        altarHolder.itemsOnAltars = recipe.ingredients.associate {
+        altarHolder?.itemsOnAltars = recipe.ingredients.associate {
             it.item.id to 0
         }
-        altarHolder.itemsIdToAltarId = recipe.ingredients.mapIndexed { index, ingredient ->
+        altarHolder?.itemsIdToAltarId = recipe.ingredients.mapIndexed { index, ingredient ->
             ingredient.item.id to altars[index].altarId
         }.toMap()
 
-        altarHolder.state = MapAltarState.GOD_LOCKED
-        redisAltarHolderRepository.save(altarHolder)
+        altarHolder?.state = MapAltarState.GOD_LOCKED
+        altarHolder?.let { redisAltarHolderRepository.save(it) }
 
         eventHandler.createDefaultEvent(
             game, RedisTimeEventType.RITUAL_GOING
@@ -159,10 +159,10 @@ class RitualHandler(
     }
 
 
-    fun unlockTheGod(altarHolder: RedisAltarHolder) {
-        altarHolder.lockedGodId = null
-        altarHolder.itemsForRitual = emptyMap()
-        altarHolder.itemsIdToAltarId = emptyMap()
-        altarHolder.itemsOnAltars = emptyMap()
+    fun unlockTheGod(altarHolder: RedisAltarHolder?) {
+        altarHolder?.lockedGodId = null
+        altarHolder?.itemsForRitual = emptyMap()
+        altarHolder?.itemsIdToAltarId = emptyMap()
+        altarHolder?.itemsOnAltars = emptyMap()
     }
 }

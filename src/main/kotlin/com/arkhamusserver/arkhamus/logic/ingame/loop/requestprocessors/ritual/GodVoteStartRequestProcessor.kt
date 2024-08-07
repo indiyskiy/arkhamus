@@ -58,8 +58,8 @@ class GodVoteStartRequestProcessor(
                     globalGameData = globalGameData,
                     gameData = godVoteStartRequestProcessData
                 )
-                globalGameData.altarHolder.state = MapAltarState.VOTING
-                redisAltarHolderRepository.save(globalGameData.altarHolder)
+                globalGameData.altarHolder?.state = MapAltarState.VOTING
+                globalGameData.altarHolder?.let { redisAltarHolderRepository.save(it) }
 
                 ritualHandler.tryToForceStartRitual(allUsers, altarPolling, altars, altarHolder, events, game)
 

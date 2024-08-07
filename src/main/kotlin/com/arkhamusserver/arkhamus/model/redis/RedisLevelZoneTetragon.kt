@@ -18,5 +18,5 @@ data class RedisLevelZoneTetragon(
     var point1X: Double, var point1Y: Double,
     var point2X: Double, var point2Y: Double,
     var point3X: Double, var point3Y: Double,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 )

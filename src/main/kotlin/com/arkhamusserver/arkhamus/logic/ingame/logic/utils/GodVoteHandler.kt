@@ -22,7 +22,7 @@ class GodVoteHandler(
     }
 
     fun canBeStarted(
-        altarHolder: RedisAltarHolder,
+        altarHolder: RedisAltarHolder?,
         altar: RedisAltar?,
         ongoingEvents: List<OngoingEvent>
     ): Boolean =
@@ -79,8 +79,8 @@ class GodVoteHandler(
 
     private fun getAltarExist(altar: RedisAltar?) = altar != null
 
-    private fun getAltarIsOpen(altarHolder: RedisAltarHolder) =
-        altarHolder.state == MapAltarState.OPEN
+    private fun getAltarIsOpen(altarHolder: RedisAltarHolder?) =
+        altarHolder?.state == MapAltarState.OPEN
 
 
 }

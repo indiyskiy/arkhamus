@@ -59,7 +59,7 @@ class RitualPutItemRequestProcessor(
             )
             logger.info("put item executed")
 
-            if (altarHolder.isAllItemsPut()) {
+            if (altarHolder?.isAllItemsPut() == true) {
                 logger.info("put all item")
                 if (globalGameData.game.godId == altarHolder.lockedGodId) {
                     gameEndLogic.endTheGame(
@@ -94,7 +94,11 @@ class RitualPutItemRequestProcessor(
     }
 
 
-    private fun shiftTimeOfEvent(ongoingEvents: List<OngoingEvent>, item: Item, altarHolder: RedisAltarHolder) {
+    private fun shiftTimeOfEvent(
+        ongoingEvents: List<OngoingEvent>,
+        item: Item,
+        altarHolder: RedisAltarHolder?
+    ) {
         findRitualEvent(ongoingEvents).forEach { event ->
             pushEvent(event, altarHolder, item)
         }
@@ -102,7 +106,7 @@ class RitualPutItemRequestProcessor(
 
     private fun pushEvent(
         event: OngoingEvent,
-        altarHolder: RedisAltarHolder,
+        altarHolder: RedisAltarHolder?,
         item: Item
     ) {
         val ritualEvent = event.event
@@ -124,24 +128,25 @@ class RitualPutItemRequestProcessor(
 
 
     private fun thisItemIsPutOnAltar(
-        altarHolder: RedisAltarHolder,
+        altarHolder: RedisAltarHolder?,
         item: Item
-    ) = (altarHolder.itemsOnAltars[item.id] ?: 0) >= (altarHolder.itemsForRitual[item.id] ?: 0)
+    ) = (altarHolder?.itemsOnAltars?.get(item.id) ?: 0) >= (altarHolder?.itemsForRitual?.get(item.id) ?: 0)
 
     private fun takeItemForRitual(
         item: Item,
         itemNumber: Int,
-        altarHolder: RedisAltarHolder,
+        altarHolder: RedisAltarHolder?,
         user: RedisGameUser
     ) {
-        val itemsNeeded = (altarHolder.itemsForRitual[item.id] ?: 0) - (altarHolder.itemsOnAltars[item.id] ?: 0)
+        val itemsNeeded = (altarHolder?.itemsForRitual?.get(item.id) ?: 0) -
+                (altarHolder?.itemsOnAltars?.get(item.id) ?: 0)
         val itemsInInventory = inventoryHandler.howManyItems(user, item)
         val itemsToTake = min(itemNumber, itemsNeeded, itemsInInventory)
         if (itemsToTake > 0) {
-            val mutableMap = altarHolder.itemsOnAltars.toMutableMap()
-            mutableMap[item.id] = (mutableMap[item.id] ?: 0) + itemsToTake
-            altarHolder.itemsOnAltars = mutableMap
-            redisAltarHolderRepository.save(altarHolder)
+            val mutableMap = altarHolder?.itemsOnAltars?.toMutableMap()
+            mutableMap?.set(item.id, (mutableMap[item.id] ?: 0) + itemsToTake)
+            altarHolder?.itemsOnAltars = mutableMap ?: emptyMap()
+            altarHolder?.let { redisAltarHolderRepository.save(it) }
 
             user.items[item.id] = user.items[item.id]?.let { it - itemsToTake } ?: 0
         }

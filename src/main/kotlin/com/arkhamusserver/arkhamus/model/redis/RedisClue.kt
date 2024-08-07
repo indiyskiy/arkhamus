@@ -14,5 +14,5 @@ data class RedisClue(
     var gameId: Long,
     var levelZoneId: Long,
     var clue: GodType,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 )

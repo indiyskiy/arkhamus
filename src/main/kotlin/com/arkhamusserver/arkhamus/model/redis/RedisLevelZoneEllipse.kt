@@ -16,5 +16,5 @@ data class RedisLevelZoneEllipse(
 
     var pointX: Double, var pointY: Double,
     var height: Double, var width: Double,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 )

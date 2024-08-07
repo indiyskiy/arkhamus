@@ -15,5 +15,5 @@ data class RedisUserQuestProgress(
     var userId: Long,
     var questCurrentStep: Int = -1,
     var questState: UserQuestState = AWAITING,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 )

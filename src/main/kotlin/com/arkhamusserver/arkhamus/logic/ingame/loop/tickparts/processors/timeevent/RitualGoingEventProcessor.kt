@@ -45,11 +45,13 @@ class RitualGoingEventProcessor(
     }
 
     private fun addUsersToRitual(globalGameData: GlobalGameData) {
-        val center = globalGameData.altarHolder.x to globalGameData.altarHolder.y
-        val altar = globalGameData.altars.values.first()
-        val radius = distance(altar, center) + altar.interactionRadius
-        addUsersToRitual(globalGameData.users.values, center, radius)
-        setUsersPosition(globalGameData.users.values, center, radius)
+        globalGameData.altarHolder?.let {
+            val center = it.x to it.y
+            val altar = globalGameData.altars.values.first()
+            val radius = distance(altar, center) + altar.interactionRadius
+            addUsersToRitual(globalGameData.users.values, center, radius)
+            setUsersPosition(globalGameData.users.values, center, radius)
+        }
     }
 
     override fun processEnd(

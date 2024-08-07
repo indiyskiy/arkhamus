@@ -12,5 +12,5 @@ data class RedisLevelZone(
     @Indexed var gameId: Long,
     var levelZoneId: Long,
     var zoneType: ZoneType,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 )

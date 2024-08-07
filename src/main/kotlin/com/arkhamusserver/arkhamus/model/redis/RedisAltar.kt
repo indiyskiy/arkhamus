@@ -13,7 +13,7 @@ data class RedisAltar(
     var x: Double,
     var y: Double,
     var interactionRadius: Double,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 ) : WithPoint {
 
     override fun x(): Double {

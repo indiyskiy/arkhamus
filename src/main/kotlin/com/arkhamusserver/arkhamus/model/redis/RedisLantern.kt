@@ -17,7 +17,7 @@ data class RedisLantern(
     var x: Double,
     var y: Double,
     var lightRange: Double,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 ) : WithPoint {
 
     override fun x(): Double {

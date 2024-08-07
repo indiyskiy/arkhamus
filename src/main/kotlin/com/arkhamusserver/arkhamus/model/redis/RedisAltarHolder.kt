@@ -22,7 +22,7 @@ data class RedisAltarHolder(
     var itemsOnAltars: Map<Int, Int> = emptyMap(),
 
     var state: MapAltarState = MapAltarState.OPEN,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 ) : WithPoint {
 
     override fun x(): Double {

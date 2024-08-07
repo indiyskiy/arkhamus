@@ -19,7 +19,7 @@ data class RedisCrafter(
     var interactionRadius: Double = 0.0,
     var items: MutableMap<Int, Int> = HashMap(),
     var crafterType: CrafterType,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 ) : WithPoint {
 
     override fun x(): Double {

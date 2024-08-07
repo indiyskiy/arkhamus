@@ -16,5 +16,5 @@ data class RedisGame(
     var gameStart: Long = System.currentTimeMillis(),
     @Indexed var state: String = GameState.PENDING.name,
     var gameEndReason: String? = null,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 )

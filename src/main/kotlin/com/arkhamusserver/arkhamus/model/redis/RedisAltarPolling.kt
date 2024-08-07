@@ -16,5 +16,5 @@ data class RedisAltarPolling(
     var userVotes: MutableMap<Long, Int> = HashMap(), //user ID to God ID
     var skippedUsers: List<Long> = ArrayList(),
     var started: Long,
-    @TimeToLive val timeToLive: Long = 7200
+    @TimeToLive val timeToLive: Long = 10800
 )
