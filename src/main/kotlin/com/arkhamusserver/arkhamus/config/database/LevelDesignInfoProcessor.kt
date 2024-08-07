@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CRE
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
 import com.arkhamusserver.arkhamus.logic.ingame.quest.LevelDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.TextKeyRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.TextKey
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
@@ -41,6 +42,7 @@ class LevelDesignInfoProcessor(
     private val questGiverRepository: QuestGiverRepository,
     private val levelTaskRepository: LevelTaskRepository,
     private val questRepository: QuestRepository,
+    private val textKeyRepository: TextKeyRepository,
     private val questStepRepository: QuestStepRepository,
     private val levelDifficultyLogic: LevelDifficultyLogic
 ) {
@@ -320,6 +322,8 @@ class LevelDesignInfoProcessor(
             val randomQuestGiverEnd = questGivers.random()
 
             val stepSize = random.nextInt(1, min(5, levelTasks.size + 1))
+            val textKey = TextKey(type = TextKeyType.QUEST, value = "quest$number")
+            val savedTextKey = textKeyRepository.save(textKey)
             val newQuest = Quest(
                 id = null,
                 level = level,
@@ -328,7 +332,7 @@ class LevelDesignInfoProcessor(
                 name = "awesome quest $number",
                 startQuestGiver = randomQuestGiverStart,
                 endQuestGiver = randomQuestGiverEnd,
-                textKey = TextKey(type = TextKeyType.QUEST)
+                textKey = savedTextKey
             )
             levelTasks.shuffled(random).take(stepSize).forEachIndexed { i, task ->
                 val step = QuestStep(
