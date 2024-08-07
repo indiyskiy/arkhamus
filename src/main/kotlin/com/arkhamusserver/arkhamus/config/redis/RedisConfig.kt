@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.config.redis
 
+import jakarta.annotation.PreDestroy
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig
+import org.springframework.beans.factory.DisposableBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
@@ -10,7 +12,10 @@ import org.springframework.data.redis.core.RedisTemplate
 import java.time.Duration
 
 @Configuration
-class RedisConfig {
+class RedisConfig : DisposableBean {
+
+    private lateinit var jedisConnectionFactory: JedisConnectionFactory
+
     @Bean
     fun jedisConnectionFactory(): JedisConnectionFactory {
         val redisStandaloneConfiguration = RedisStandaloneConfiguration("localhost", 6379)
@@ -28,7 +33,7 @@ class RedisConfig {
             .poolConfig(jedisPoolConfig)
             .build()
 
-        val jedisConnectionFactory = JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfiguration)
+        jedisConnectionFactory = JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfiguration)
         return jedisConnectionFactory
     }
 
@@ -37,5 +42,10 @@ class RedisConfig {
         val template: RedisTemplate<String, Any> = RedisTemplate()
         template.connectionFactory = connectionFactory
         return template
+    }
+
+    @PreDestroy
+    override fun destroy() {
+        jedisConnectionFactory.destroy()
     }
 }
