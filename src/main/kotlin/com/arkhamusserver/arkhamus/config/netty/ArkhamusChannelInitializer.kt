@@ -10,21 +10,17 @@ import io.netty.handler.codec.Delimiters
 import io.netty.handler.codec.string.StringEncoder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class ArkhamusChannelInitializer : ChannelInitializer<SocketChannel>() {
-
-    @Autowired
-    lateinit var processingHandler: ProcessingHandler
-
-    @Autowired
-    lateinit var parsers: List<NettyRequestJsonParser>
+class ArkhamusChannelInitializer(
+    private val parsers: List<NettyRequestJsonParser>,
+    private val processingHandler: ProcessingHandler
+) : ChannelInitializer<SocketChannel>() {
 
     companion object {
-        const val MAX_LENGTH = 100 * 1024 * 1024
-        var logger: Logger = LoggerFactory.getLogger(ArkhamusChannelInitializer::class.java)
+        const val MAX_LENGTH = 2 * 1024 * 1024
+        private var logger: Logger = LoggerFactory.getLogger(ArkhamusChannelInitializer::class.java)
     }
 
     override fun initChannel(socketChannel: SocketChannel) {

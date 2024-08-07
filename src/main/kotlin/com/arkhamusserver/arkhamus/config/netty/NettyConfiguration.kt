@@ -35,6 +35,9 @@ class NettyConfiguration(val nettyProperties: ArkhamusNettyProperties) {
             .handler(LoggingHandler(LogLevel.DEBUG))
             .childHandler(initializer)
         b.option(ChannelOption.SO_BACKLOG, nettyProperties.backlog)
+        b.option(ChannelOption.SO_REUSEADDR, nettyProperties.reuseAddress)  // Enable address reuse
+        b.childOption(ChannelOption.SO_KEEPALIVE, nettyProperties.keepAlive)    // Enable keepalive
+        b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)  // Set connection timeout to 10 seconds
         return b
     }
 

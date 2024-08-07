@@ -66,15 +66,11 @@ class ChannelRepository {
     }
 
     fun closeAndRemove(channelId: String) {
-        remove(channelId)
-    }
-
-    fun remove(key: String) {
         try {
-            logger.warn("close and remove socket $key")
-            val channel = channelCache.remove(key)
+            logger.warn("close and remove socket $channelId")
+            val channel = channelCache.remove(channelId)
             channel?.close()?.sync()
-            val arkhamusChannel = arkhamusChannelCache.remove(key)
+            val arkhamusChannel = arkhamusChannelCache.remove(channelId)
             arkhamusChannel?.userAccount?.id?.let { arkhamusUserCache.remove(it) }
         } catch (e: Exception) {
             logger.error("Error occurred while removing ArkhamusChannel", e)

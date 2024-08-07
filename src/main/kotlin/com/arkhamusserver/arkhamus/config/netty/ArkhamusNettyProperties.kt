@@ -25,5 +25,8 @@ data class ArkhamusNettyProperties(
     var keepAlive: Boolean = false,
 
     @NotNull
+    var reuseAddress: Boolean = false,
+
+    @NotNull
     var backlog: Int = 0
 )

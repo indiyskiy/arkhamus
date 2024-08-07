@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.net.InetSocketAddress
+import java.util.concurrent.Executors
 
 
 @Component
@@ -25,17 +26,16 @@ class TcpNettyServer {
     }
 
     fun start() {
-        Thread {
+        Executors.newSingleThreadExecutor().submit {
             try {
                 logger.info("Netty try to start : port {}", tcpPort.port)
                 val serverChannelFuture = serverBootstrap.bind(tcpPort).sync()
                 logger.info("Netty is started : port {}", tcpPort.port)
                 channel = serverChannelFuture.channel().closeFuture().sync().channel()
-            } catch (ex: InterruptedException) {
+            } catch (ex: Exception) {
                 logger.error("Netty server failed to start", ex)
-                Thread.currentThread().interrupt()
             }
-        }.start()
+        }
     }
 
     @PreDestroy
