@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
+import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisAltarPolling")
@@ -15,4 +16,5 @@ data class RedisAltarPolling(
     var userVotes: MutableMap<Long, Int> = HashMap(), //user ID to God ID
     var skippedUsers: List<Long> = ArrayList(),
     var started: Long,
+    @TimeToLive val timeToLive: Long = 7200
 )

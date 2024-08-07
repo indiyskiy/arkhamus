@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.CrafterType
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
+import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisCrafter")
@@ -18,6 +19,7 @@ data class RedisCrafter(
     var interactionRadius: Double = 0.0,
     var items: MutableMap<Int, Int> = HashMap(),
     var crafterType: CrafterType,
+    @TimeToLive val timeToLive: Long = 7200
 ) : WithPoint {
 
     override fun x(): Double {

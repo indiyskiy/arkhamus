@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.model.redis
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
+import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisLevelZoneEllipse")
@@ -15,4 +16,5 @@ data class RedisLevelZoneEllipse(
 
     var pointX: Double, var pointY: Double,
     var height: Double, var width: Double,
+    @TimeToLive val timeToLive: Long = 7200
 )

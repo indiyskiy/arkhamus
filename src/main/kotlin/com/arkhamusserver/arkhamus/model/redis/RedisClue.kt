@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.enums.ingame.GodType
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
+import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisClue")
@@ -13,4 +14,5 @@ data class RedisClue(
     var gameId: Long,
     var levelZoneId: Long,
     var clue: GodType,
+    @TimeToLive val timeToLive: Long = 7200
 )

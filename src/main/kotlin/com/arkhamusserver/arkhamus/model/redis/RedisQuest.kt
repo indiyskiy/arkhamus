@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
+import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisQuest")
@@ -15,4 +16,5 @@ data class RedisQuest(
     @Indexed var gameId: Long,
     var questId: Long,
     var levelTaskIds: MutableList<Long> = mutableListOf(),
+    @TimeToLive val timeToLive: Long = 7200
 )
