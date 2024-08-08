@@ -19,13 +19,12 @@ class InventoryHandler {
     }
 
     fun addItem(user: RedisGameUser, addedItem: Item) {
-        val howManyItems = howManyItems(user, addedItem)
-        user.items[addedItem.id] = howManyItems + 1
+        addItems(user, addedItem)
     }
 
-    fun addItems(user: RedisGameUser, addedItem: Item, itemsToAdd: Int) {
+    fun addItems(user: RedisGameUser, addedItem: Item, itemsToAdd: Int = 1) {
         val howManyItems = howManyItems(user, addedItem)
-        user.items[addedItem.id] = howManyItems + 1
+        user.items[addedItem.id] = howManyItems + itemsToAdd
     }
 
     fun userHaveItem(user: RedisGameUser, requiredItem: Item): Boolean {
