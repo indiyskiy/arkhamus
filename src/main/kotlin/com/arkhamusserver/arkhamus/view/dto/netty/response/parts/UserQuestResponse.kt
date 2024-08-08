@@ -10,4 +10,5 @@ data class UserQuestResponse(
     var questStepIds: List<Long> = emptyList(),
     var endQuestGiverId: Long? = null,
     var startQuestGiverId: Long? = null,
+    var textKey: String
 )

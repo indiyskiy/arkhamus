@@ -89,6 +89,7 @@ class QuestProgressHandler(
                 questStepIds = quest.levelTaskIds,
                 endQuestGiverId = quest.endQuestGiverId,
                 startQuestGiverId = quest.startQuestGiverId,
+                textKey = quest.textKey
             )
         } else {
             UserQuestResponse(
@@ -99,6 +100,7 @@ class QuestProgressHandler(
                 questStepIds = emptyList(),
                 endQuestGiverId = null,
                 startQuestGiverId = quest?.startQuestGiverId,
+                textKey = quest?.textKey ?: ""
             )
         }
     }

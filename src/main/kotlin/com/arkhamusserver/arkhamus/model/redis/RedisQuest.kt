@@ -16,5 +16,6 @@ data class RedisQuest(
     @Indexed var gameId: Long,
     var questId: Long,
     var levelTaskIds: MutableList<Long> = mutableListOf(),
+    var textKey: String,
     @TimeToLive val timeToLive: Long = 10800
 )
