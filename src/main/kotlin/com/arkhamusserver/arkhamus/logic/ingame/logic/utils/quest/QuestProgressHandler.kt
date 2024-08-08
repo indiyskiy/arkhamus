@@ -1,8 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestAcceptRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestDeclineRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.TakeQuestRewardRequestProcessData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserQuestProgressRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.*
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -35,23 +37,46 @@ class QuestProgressHandler(
         data.canDecline = true
     }
 
-    fun declineTheQuest(
+    fun finishQuest(
+        quest: RedisQuest,
         globalGameData: GlobalGameData,
-        data: QuestDeclineRequestProcessData
+        data: TakeQuestRewardRequestProcessData
     ) {
         data.userQuestProgress?.let {
-            it.questState = DECLINED
-            it.questCurrentStep = 0
+            it.questState = FINISHED
             questProgressRepository.save(it)
         }
         data.canAccept = false
         data.canDecline = false
         data.canFinish = false
 
+        addMoreQuestsMaybe(globalGameData, data)
+    }
+
+    fun declineTheQuest(
+        globalGameData: GlobalGameData,
+        data: QuestDeclineRequestProcessData
+    ) {
+        data.userQuestProgress?.let {
+            it.questState = DECLINED
+            questProgressRepository.save(it)
+        }
+        data.canAccept = false
+        data.canDecline = false
+        data.canFinish = false
+
+        addMoreQuestsMaybe(globalGameData, data)
+    }
+
+    private fun addMoreQuestsMaybe(
+        globalGameData: GlobalGameData,
+        data: GameUserData
+    ) {
         val userQuestProgress = globalGameData.questProgressByUserId[data.gameUser!!.userId] ?: emptyList()
         if (userQuestCreationHandler.needToAddQuests(userQuestProgress)) {
             val newQuestProgress = userQuestCreationHandler.addQuests(
-                data, globalGameData.quests,
+                data,
+                globalGameData.quests,
                 userQuestProgress
             )
             data.userQuest = newQuestProgress.map { mapQuestProgress(globalGameData.quests, it) }
@@ -174,6 +199,18 @@ class QuestProgressHandler(
         return Pair(quest, userQuestProgress)
     }
 
+    fun nextStep(userQuestProgress: RedisUserQuestProgress?, quest: RedisQuest?) {
+        userQuestProgress?.let { progress ->
+            quest?.let { questNotNull ->
+                progress.questCurrentStep = min(progress.questCurrentStep + 1, questNotNull.levelTaskIds.size)
+                if (isCompleted(quest, userQuestProgress)) {
+                    complete(userQuestProgress)
+                }
+                questProgressRepository.save(progress)
+            }
+        }
+    }
+
     private fun task(stepNumber: Int, levelTaskIds: MutableList<Long>): Long? {
         if (stepNumber < 0) {
             logger.info("still on quest giver state")
@@ -188,18 +225,6 @@ class QuestProgressHandler(
 
     private fun questTaken(userQuest: RedisUserQuestProgress): Boolean {
         return userQuest.questState !in notTakenStates
-    }
-
-    fun nextStep(userQuestProgress: RedisUserQuestProgress?, quest: RedisQuest?) {
-        userQuestProgress?.let { progress ->
-            quest?.let { questNotNull ->
-                progress.questCurrentStep = min(progress.questCurrentStep + 1, questNotNull.levelTaskIds.size)
-                if (isCompleted(quest, userQuestProgress)) {
-                    complete(userQuestProgress)
-                }
-                questProgressRepository.save(progress)
-            }
-        }
     }
 
     private fun complete(userQuestProgress: RedisUserQuestProgress?) {

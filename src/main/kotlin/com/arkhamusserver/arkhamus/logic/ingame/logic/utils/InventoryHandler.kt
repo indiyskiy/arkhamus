@@ -23,6 +23,11 @@ class InventoryHandler {
         user.items[addedItem.id] = howManyItems + 1
     }
 
+    fun addItems(user: RedisGameUser, addedItem: Item, itemsToAdd: Int) {
+        val howManyItems = howManyItems(user, addedItem)
+        user.items[addedItem.id] = howManyItems + 1
+    }
+
     fun userHaveItem(user: RedisGameUser, requiredItem: Item): Boolean {
         return (user.items[requiredItem.id] ?: 0) > 0
     }

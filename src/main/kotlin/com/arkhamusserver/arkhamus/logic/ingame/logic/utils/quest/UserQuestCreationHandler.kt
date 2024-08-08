@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_TO_REFRESH
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestDeclineRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserQuestProgressRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.*
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -36,7 +36,7 @@ class UserQuestCreationHandler(
     }
 
     fun addQuests(
-        data: QuestDeclineRequestProcessData,
+        data: GameUserData,
         levelQuests: List<RedisQuest>,
         userQuestsProgresses: List<RedisUserQuestProgress>
     ): List<RedisUserQuestProgress> {
@@ -114,7 +114,7 @@ class UserQuestCreationHandler(
     }
 
     private fun addQuests(
-        data: QuestDeclineRequestProcessData,
+        data: GameUserData,
         levelQuests: List<RedisQuest>,
         toAdd: Int
     ): List<RedisUserQuestProgress> {

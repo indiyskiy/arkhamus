@@ -1,7 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.toItem
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.toItemName
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisQuestRewardRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
@@ -19,6 +22,7 @@ class QuestRewardUtils(
     private val questRewardTypeUtils: QuestRewardTypeUtils,
     private val questRewardItemUtils: QuestRewardItemUtils,
     private val questRewardAmountUtils: QuestRewardAmountUtils,
+    private val inventoryHandler: InventoryHandler
 ) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(QuestRewardUtils::class.java)
@@ -27,6 +31,7 @@ class QuestRewardUtils(
     fun mapRewards(questRewards: List<RedisQuestReward>): List<QuestRewardResponse> {
         return questRewards.map {
             QuestRewardResponse(
+                rewardId = it.id,
                 rewardType = it.rewardType,
                 rewardItem = it.rewardItem,
                 rewardAmount = it.rewardAmount,
@@ -91,5 +96,29 @@ class QuestRewardUtils(
             questId = quest.questId,
             userId = user.userId,
         )
+    }
+
+    fun takeReward(
+        user: RedisGameUser,
+        quest: RedisQuest,
+        reward: RedisQuestReward
+    ): Boolean {
+        when (reward.rewardType) {
+            ITEM -> {
+                takeItems(reward, user)
+                return true
+            }
+
+            ADD_CLUE -> {
+                return true
+            }
+        }
+    }
+
+    private fun takeItems(
+        reward: RedisQuestReward,
+        user: RedisGameUser
+    ) {
+        inventoryHandler.addItems(user, reward.rewardItem!!.toItem(), reward.rewardAmount)
     }
 }
