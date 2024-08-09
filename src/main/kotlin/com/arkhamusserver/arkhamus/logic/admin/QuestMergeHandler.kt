@@ -17,6 +17,7 @@ class QuestMergeHandler {
     ) {
         quest.name = questDto.name
         quest.questState = questDto.state
+        quest.dificulty = questDto.difficulty
 //        removeSteps(quest, questDto)
         changeSteps(quest, questDto, allRelatedTasks)
 //        addSteps(quest, questDto, allRelatedTasks)

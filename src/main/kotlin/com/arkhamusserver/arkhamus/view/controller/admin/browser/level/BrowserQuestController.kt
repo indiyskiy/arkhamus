@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.view.controller.admin.browser.level
 
 import com.arkhamusserver.arkhamus.logic.admin.AdminQuestLogic
+import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminLevelTaskDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
@@ -76,6 +77,7 @@ class BrowserQuestController(
 
     private fun addDefaultPageValues(levelId: Long, model: Model) {
         addPossibleStates(model)
+        addPossibleDifficulties(model)
         addPossibleTasks(levelId, model)
         addPossibleQuestGivers(levelId, model)
         addLevelIdAttribute(model, levelId)
@@ -108,5 +110,10 @@ class BrowserQuestController(
     private fun addPossibleStates(model: Model) {
         val possibleStates: List<String> = QuestState.values().map { it.name }
         model.addAttribute("possibleStates", possibleStates)
+    }
+
+    private fun addPossibleDifficulties(model: Model) {
+        val possibleStates: List<String> = QuestDifficulty.values().map { it.name }
+        model.addAttribute("possibleDifficulties", possibleStates)
     }
 }

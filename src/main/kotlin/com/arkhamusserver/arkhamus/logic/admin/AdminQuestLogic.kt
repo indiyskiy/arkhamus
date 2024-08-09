@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.logic.ingame.quest.LevelDifficultyLogic
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.TextKeyRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.TextKey
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
@@ -22,7 +23,8 @@ class AdminQuestLogic(
     private val stepRepository: QuestStepRepository,
     private val questGiverRepository: QuestGiverRepository,
     private val questMergeHandler: QuestMergeHandler,
-    private val levelDifficultyLogic: LevelDifficultyLogic
+    private val levelDifficultyLogic: LevelDifficultyLogic,
+    private val textKeyRepository: TextKeyRepository,
 ) {
 
     fun get(questId: Long): AdminQuestDto {
@@ -37,6 +39,7 @@ class AdminQuestLogic(
     fun create(levelId: Long): AdminQuestDto {
         val level = levelRepository.findByLevelId(levelId).maxBy { it.version }
         val quest = newQuest(level)
+        levelDifficultyLogic.recount(quest)
         val saved = saveQuest(quest)
 
         val levelTask = defaultLevelTask(quest.level.id!!)
@@ -63,7 +66,21 @@ class AdminQuestLogic(
         ).associateBy { it.id!! }
         questMergeHandler.merge(quest, questDto, allRelatedTasksMap, questGivers)
         val saved = saveQuest(quest)
+        saveTextKey(questDto, quest)
         return saved.toDto()
+    }
+
+    private fun saveTextKey(
+        questDto: AdminQuestDto,
+        quest: Quest
+    ) {
+        if (questDto.textKey.isNotEmpty()) {
+            textKeyRepository.save(
+                quest.textKey.apply {
+                    value = questDto.textKey
+                }
+            )
+        }
     }
 
     @Transactional
@@ -87,7 +104,6 @@ class AdminQuestLogic(
     }
 
     private fun saveQuest(quest: Quest): Quest {
-        levelDifficultyLogic.recount(quest)
         val saved = questRepository.save(quest)
         return saved
     }

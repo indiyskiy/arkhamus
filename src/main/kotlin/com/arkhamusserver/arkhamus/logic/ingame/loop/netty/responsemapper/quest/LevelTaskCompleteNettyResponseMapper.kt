@@ -56,6 +56,7 @@ class LevelTaskCompleteNettyResponseMapper(
                     canAccept = requestProcessData.canAccept,
                     canDecline = requestProcessData.canDecline,
                     canFinish = requestProcessData.canFinish,
+                    rightQuestGiverForAction = true
                 ),
                 tick = it.tick,
                 userId = user.id!!,

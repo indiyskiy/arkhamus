@@ -28,6 +28,9 @@
             <label for="name">Name:</label>
             <input type="text" th:field="${quest.name}" id="name"/>
 
+            <label for="textKey">Text key:</label>
+            <input type="text" th:field="${quest.textKey}" id="textKey"/>
+
             <label for="state">State:</label>
             <select th:field="${quest.state}" id="state">
                 <option
@@ -35,6 +38,16 @@
                         th:value="${state}"
                         th:text="${state}"
                         th:selected="${state == quest.state.name}">
+                </option>
+            </select>
+
+            <label for="difficulty">Difficulty:</label>
+            <select th:field="${quest.difficulty}" id="difficulty">
+                <option
+                        th:each="difficulty : ${possibleDifficulties}"
+                        th:value="${difficulty}"
+                        th:text="${difficulty}"
+                        th:selected="${difficulty == quest.difficulty.name}">
                 </option>
             </select>
         </div>

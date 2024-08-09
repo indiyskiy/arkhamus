@@ -20,6 +20,7 @@
             <th>Id</th>
             <th>Name</th>
             <th>State</th>
+            <th>Difficulty</th>
         </tr>
         <tr th:each="quest : ${quests}">
             <td>
@@ -28,6 +29,7 @@
             </td>
             <td th:text="${quest.name}"></td>
             <td th:text="${quest.state}"></td>
+            <td th:text="${quest.difficulty}"></td>
         </tr>
     </table>
     <br/>
