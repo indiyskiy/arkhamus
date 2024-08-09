@@ -68,7 +68,7 @@ class RitualHandler(
     ) {
         eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
 
-        logger.info("removing polling")
+        logger.info("removing polling - fail ritual")
         altarPolling.state = MapAltarPollingState.FAILED
         redisAltarPollingRepository.delete(altarPolling)
 
@@ -133,7 +133,7 @@ class RitualHandler(
     ) {
         eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
 
-        logger.info("removing polling")
+        logger.info("removing polling - god locked")
         altarPolling.state = MapAltarPollingState.FIXED
         redisAltarPollingRepository.delete(altarPolling)
 

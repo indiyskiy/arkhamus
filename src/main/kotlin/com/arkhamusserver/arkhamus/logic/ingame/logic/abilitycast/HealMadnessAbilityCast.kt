@@ -16,7 +16,9 @@ class HealMadnessAbilityCast(
     private val madnessHandler: UserMadnessHandler
 ) : AbilityCast {
 
-    private val REDUCE_VALUE: Double = 20.0
+    companion object{
+        private const val REDUCE_VALUE: Double = 20.0
+    }
 
     override fun accept(ability: Ability): Boolean {
         return ability == Ability.HEAL_MADNESS
