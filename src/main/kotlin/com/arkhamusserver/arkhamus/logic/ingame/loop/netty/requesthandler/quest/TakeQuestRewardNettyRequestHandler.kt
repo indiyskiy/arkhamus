@@ -49,6 +49,7 @@ class TakeQuestRewardNettyRequestHandler(
                 userId!!
             )
 
+            val questGiverId = this.questGiverId
             val questReward = globalGameData.questRewardsByQuestId
                 .values
                 .firstOrNull {
@@ -72,9 +73,11 @@ class TakeQuestRewardNettyRequestHandler(
                 globalGameData.questRewardsByQuestId[questNotNull.questId]
             } ?: emptyList()
 
-            val canAccept = questProgressHandler.canAccept(quest, userQuestProgress)
-            val canDecline = questProgressHandler.canDecline(quest, userQuestProgress)
-            val canFinish = questProgressHandler.canFinish(quest, userQuestProgress)
+            val rightQuestGiverForAction = questGiverId == quest?.endQuestGiverId
+
+            val canAccept = rightQuestGiverForAction && questProgressHandler.canAccept(quest, userQuestProgress)
+            val canDecline = rightQuestGiverForAction && questProgressHandler.canDecline(quest, userQuestProgress)
+            val canFinish = rightQuestGiverForAction && questProgressHandler.canFinish(quest, userQuestProgress)
 
             return TakeQuestRewardRequestProcessData(
                 questReward = questReward,
@@ -84,6 +87,8 @@ class TakeQuestRewardNettyRequestHandler(
                 canAccept = canAccept,
                 canDecline = canDecline,
                 canFinish = canFinish,
+                questGiverId = questGiverId,
+                rightQuestGiverForAction = rightQuestGiverForAction,
                 gameUser = user,
                 otherGameUsers = users,
                 inZones = inZones,

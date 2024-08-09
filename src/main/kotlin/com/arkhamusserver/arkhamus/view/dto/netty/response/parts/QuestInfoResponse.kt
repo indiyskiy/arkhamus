@@ -9,4 +9,5 @@ data class QuestInfoResponse(
     var canAccept: Boolean,
     var canDecline: Boolean,
     var canFinish: Boolean,
+    var rightQuestGiverForAction: Boolean
 )

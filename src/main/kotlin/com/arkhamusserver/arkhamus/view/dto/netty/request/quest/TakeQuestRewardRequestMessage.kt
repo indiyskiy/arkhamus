@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessag
 
 class TakeQuestRewardRequestMessage(
     var questRewardId: String,
+    var questGiverId: Long,
     type: String,
     baseRequestData: BaseRequestData
 ) : NettyBaseRequestMessage(baseRequestData, type)

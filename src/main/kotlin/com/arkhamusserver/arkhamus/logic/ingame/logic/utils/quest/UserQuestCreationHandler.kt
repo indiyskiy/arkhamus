@@ -78,9 +78,10 @@ class UserQuestCreationHandler(
     }
 
     fun setStartsQuestsForUser(user: RedisGameUser, createdRedisQuests: List<RedisQuest>) {
-        val questsWithUniqueQuestGivers = createdRedisQuests
-            .shuffled(random)
-            .distinctBy { it.startQuestGiverId }
+        val questsWithUniqueQuestGivers: List<RedisQuest> = createdRedisQuests
+            .groupBy { it.startQuestGiverId }
+            .map { it.value.random() }
+
         val quests =
             questsWithUniqueQuestGivers
                 .shuffled(random)
@@ -101,7 +102,10 @@ class UserQuestCreationHandler(
         levelQuests: List<RedisQuest>,
         userQuestsProgresses: List<RedisUserQuestProgress>
     ): List<RedisQuest> {
-        val notAvailableNpcs = userQuestsProgresses.map { it.questId to it.questState }.map { pair ->
+        val notAvailableNpcs = userQuestsProgresses
+            .asSequence()
+            .map { it.questId to it.questState }
+            .map { pair ->
             levelQuests.first { it.questId == pair.first } to pair.second
         }.mapNotNull {
             when (it.second) {

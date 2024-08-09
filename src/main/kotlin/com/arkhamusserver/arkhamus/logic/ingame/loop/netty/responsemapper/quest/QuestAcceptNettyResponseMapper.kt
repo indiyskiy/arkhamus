@@ -56,6 +56,7 @@ class QuestAcceptNettyResponseMapper(
                     canAccept = requestProcessData.canAccept,
                     canDecline = requestProcessData.canDecline,
                     canFinish = requestProcessData.canFinish,
+                    rightQuestGiverForAction = requestProcessData.rightQuestGiverForAction
                 ),
                 tick = it.tick,
                 userId = user.id!!,
