@@ -79,7 +79,7 @@ class GameThreadPool(
             }
         } catch (e: Throwable) {
             logger.error("error on processing game tasks for game $gameId", e)
-            throw e
+//            throw e
         }
 
     }
