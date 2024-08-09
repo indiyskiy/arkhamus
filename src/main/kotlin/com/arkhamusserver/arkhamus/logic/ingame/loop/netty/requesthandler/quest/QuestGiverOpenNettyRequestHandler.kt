@@ -9,7 +9,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestGiverOpenRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
+import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
 import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.*
+import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.quest.QuestGiverOpenRequestMessage
@@ -64,17 +66,26 @@ class QuestGiverOpenNettyRequestHandler(
             )
 
             val userQuestProgresses =
-                globalGameData.questProgressByUserId[userId]?.filter { it.questState in reasonableStates }
-            val userQuestIds = userQuestProgresses?.map { it.questId }?.toSet() ?: emptySet()
+                globalGameData.questProgressByUserId[userId]?.filter {
+                    it.questState in reasonableStates
+                }
+            val userQuestIds = userQuestProgresses?.map {
+                it.questId
+            }?.toSet() ?: emptySet()
             val questsOptions = globalGameData.quests.filter {
                 it.questId in userQuestIds
-                it.startQuestGiverId == this.questGiverId ||
-                        it.endQuestGiverId == this.questGiverId
             }
 
             val questOptionIds = questsOptions.map { it.questId }.toSet()
             val userQuestProgressOptions =
-                userQuestProgresses?.filter { it.questId in questOptionIds }
+                userQuestProgresses?.filter {
+                    it.questId in questOptionIds && rightNpcForState(
+                        it.questId,
+                        questsOptions,
+                        it.questState,
+                        this.questGiverId
+                    )
+                }
 
             val userQuestProgress = userQuestProgress(userQuestProgressOptions)
 
@@ -127,6 +138,30 @@ class QuestGiverOpenNettyRequestHandler(
                 ),
             )
         }
+    }
+
+    private fun rightNpcForState(
+        questId: Long,
+        questsOptions: List<RedisQuest>,
+        questState: UserQuestState,
+        questGiverId: Long
+    ): Boolean {
+        val quest = questsOptions.firstOrNull { it.questId == questId }
+        return quest?.let {
+            when (questState) {
+                AWAITING,
+                READ,
+                DECLINED,
+                IN_PROGRESS -> questGiverId == quest.startQuestGiverId
+
+                COMPLETED -> questGiverId == quest.endQuestGiverId
+
+                FINISHED,
+                FINISHED_AVAILABLE,
+                DECLINED_AVAILABLE -> false
+            }
+        } ?: false
+
     }
 
     private fun userQuestProgress(userQuestProgressOptions: List<RedisUserQuestProgress>?): RedisUserQuestProgress? =
