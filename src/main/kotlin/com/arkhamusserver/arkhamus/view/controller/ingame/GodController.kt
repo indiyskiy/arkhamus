@@ -14,7 +14,7 @@ class GodController(
     private val godLogic: GodLogic
 ) {
     @GetMapping
-    fun getAllItems(): ResponseEntity<List<GodDto>> {
+    fun getAllGods(): ResponseEntity<List<GodDto>> {
         val gods = godLogic.listAllGods()
         return ResponseEntity.ok(gods)
     }
