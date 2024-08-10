@@ -9,6 +9,8 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
 import com.fasterxml.uuid.Generators
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.min
 import kotlin.random.Random
@@ -18,21 +20,39 @@ class UserQuestCreationHandler(
     private val redisUserQuestProgressRepository: RedisUserQuestProgressRepository,
 ) {
     companion object {
+        var logger: Logger = LoggerFactory.getLogger(UserQuestCreationHandler::class.java)
         val random: Random = Random(System.currentTimeMillis())
+
+        val QUESTS_IN_PROGRESS = setOf(
+            AWAITING,
+            READ,
+            IN_PROGRESS,
+            COMPLETED
+        )
+        val QUESTS_RELEVANT = setOf(
+            AWAITING,
+            READ,
+            IN_PROGRESS,
+            DECLINED,
+            COMPLETED,
+            FINISHED,
+        )
+
+        val ON_DELETE = setOf(
+            DECLINED,
+            FINISHED,
+        )
     }
 
     fun needToAddQuests(
         userQuestsProgresses: List<RedisUserQuestProgress>
     ): Boolean {
         val userInProgress = userQuestsProgresses
-            .filter {
-                it.questState in setOf(
-                    AWAITING,
-                    READ,
-                    IN_PROGRESS
-                )
+            .count {
+                it.questState in QUESTS_IN_PROGRESS
             }
-        return userInProgress.size < QUESTS_TO_REFRESH
+        logger.info("add more quests maybe? $userInProgress < $QUESTS_TO_REFRESH")
+        return userInProgress < QUESTS_TO_REFRESH
     }
 
     fun addQuests(
@@ -40,42 +60,113 @@ class UserQuestCreationHandler(
         levelQuests: List<RedisQuest>,
         userQuestsProgresses: List<RedisUserQuestProgress>
     ): List<RedisUserQuestProgress> {
-        val userInProgress = userQuestsProgresses
-            .filter {
-                it.questState in setOf(
-                    AWAITING,
-                    READ,
-                    IN_PROGRESS
-                )
-            }
-        val userInProgressIds = userInProgress.map { it.questId }
-        val availableByNpc = availableByNpc(levelQuests, userQuestsProgresses)
-        val availableByNpcIds = availableByNpc.map { it.questId }.toSet()
-
-        val finished = userQuestsProgresses.filter { it.questState == FINISHED }
-        val declined = userQuestsProgresses.filter { it.questState == DECLINED }
-
-        val finishedIds = finished.map { it.questId }
-        val declinedIds = declined.map { it.questId }
-
-        val notInProgress = levelQuests.filter { it.questId !in userInProgressIds && it.questId in availableByNpcIds }
-        if (notInProgress.isNotEmpty()) {
-            return userQuestsProgresses
+        val questsToAdd = questsToAdd(userQuestsProgresses)
+        logger.info("quests to add $questsToAdd")
+        val availableQuests = availableQuests(levelQuests, userQuestsProgresses)
+        return if (availableQuests.size >= questsToAdd) {
+            addQuests(
+                data,
+                levelQuests,
+                userQuestsProgresses,
+                questsToAdd,
+                availableQuests
+            )
+        } else {
+            val cleanedUpText = cleanOldQuests(levelQuests, userQuestsProgresses)
+            val newAvailableQuests = availableQuests + cleanedUpText
+            addQuests(data, levelQuests, userQuestsProgresses, questsToAdd, newAvailableQuests)
         }
-        val notDeclined = notInProgress.filter { it.questId !in declinedIds }
-        val availableQuests = notDeclined.filter { it.questId !in finishedIds }
-
-        val toAdd = QUESTS_ON_START - userInProgress.size
-        if (toAdd > 0) {
-            if (availableQuests.size >= toAdd) {
-                return addQuests(data, availableQuests, toAdd)
-            } else {
-                cleanUserQuestLog(finished, declined)
-                return addQuests(data, notInProgress, toAdd)
-            }
-        }
-        return userQuestsProgresses
     }
+
+    private fun cleanOldQuests(
+        levelQuests: List<RedisQuest>,
+        userQuestsProgresses: List<RedisUserQuestProgress>,
+    ): List<RedisQuest> {
+        logger.info("clean up old quests")
+        val questToDelete = userQuestsProgresses.filter {
+            it.questState in ON_DELETE
+        }
+        logger.info("quests to delete ${questToDelete.joinToString { it.questId.toString() }}")
+        questToDelete.forEach {
+            when (it.questState) {
+                FINISHED -> {
+                    it.questState = FINISHED_AVAILABLE
+                }
+
+                DECLINED -> {
+                    it.questState = DECLINED_AVAILABLE
+                }
+
+                else -> {}
+            }
+        }
+        val questToDeleteIds = questToDelete.map { it.questId }.toSet()
+        val newlyAvailableQuests = levelQuests.filter { it.questId in questToDeleteIds }
+        logger.info("newly available quests ${newlyAvailableQuests.joinToString { it.questId.toString() }}")
+        return newlyAvailableQuests
+    }
+
+    private fun availableQuests(
+        levelQuests: List<RedisQuest>,
+        userQuestsProgresses: List<RedisUserQuestProgress>
+    ): List<RedisQuest> {
+        val relevant = userQuestsProgresses
+            .filter {
+                it.questState in QUESTS_RELEVANT
+            }
+        val relevantIds = relevant.map { it.questId }.toSet()
+        logger.info("relevant quests ${relevantIds.joinToString(",") { it.toString() }}")
+
+        val notRelevant = levelQuests.filterNot { it.questId !in relevantIds }
+        logger.info("not relevant quests ${notRelevant.joinToString(",") { it.questId.toString() }}")
+
+        val inProgress = userQuestsProgresses
+            .filter {
+                it.questState in QUESTS_IN_PROGRESS
+            }
+        logger.info("in progress quests ${inProgress.joinToString(",") { it.questId.toString() }}")
+
+        val inProgressQuestGivers = inProgress.map { userQuest ->
+            levelQuests.first {
+                userQuest.questId == it.questId
+            }
+        }.map {
+            it.startQuestGiverId
+        }
+        logger.info("in progress quests givers ${inProgressQuestGivers.joinToString(",") { it.toString() }}")
+
+        val notRelevantFreeByQuestGivers = notRelevant.filter {
+            it.startQuestGiverId !in inProgressQuestGivers
+        }
+        logger.info("not relevant not blocked by quest givers ${notRelevantFreeByQuestGivers.joinToString(",") { it.questId.toString() }}")
+
+        return notRelevantFreeByQuestGivers
+    }
+
+    private fun questsToAdd(
+        userQuestsProgresses: List<RedisUserQuestProgress>
+    ): Int {
+        val userInProgress = userQuestsProgresses
+            .count {
+                it.questState in QUESTS_IN_PROGRESS
+            }
+        return QUESTS_TO_REFRESH - userInProgress
+    }
+
+    fun addQuests(
+        data: GameUserData,
+        levelQuests: List<RedisQuest>,
+        userQuestsProgresses: List<RedisUserQuestProgress>,
+        questsToAddSize: Int,
+        availableQuests: List<RedisQuest>
+    ): List<RedisUserQuestProgress> {
+        val questsToAdd = availableQuests.shuffled(random).take(questsToAddSize)
+        return addQuestsForUser(
+            questsToAdd,
+            data.gameUser!!
+        )
+    }
+
 
     fun setStartsQuestsForUser(user: RedisGameUser, createdRedisQuests: List<RedisQuest>) {
         val questsWithUniqueQuestGivers: List<RedisQuest> = createdRedisQuests
@@ -87,6 +178,13 @@ class UserQuestCreationHandler(
                 .shuffled(random)
                 .take(min(QUESTS_ON_START, questsWithUniqueQuestGivers.size))
                 .toMutableList()
+        addQuestsForUser(quests, user)
+    }
+
+    private fun addQuestsForUser(
+        quests: List<RedisQuest>,
+        user: RedisGameUser
+    ): List<RedisUserQuestProgress> {
         val userStartQuests = quests.map { quest ->
             RedisUserQuestProgress(
                 id = Generators.timeBasedEpochGenerator().generate().toString(),
@@ -95,63 +193,7 @@ class UserQuestCreationHandler(
                 userId = user.userId,
             )
         }
-        redisUserQuestProgressRepository.saveAll(userStartQuests)
+        return redisUserQuestProgressRepository.saveAll(userStartQuests).toList()
     }
 
-    private fun availableByNpc(
-        levelQuests: List<RedisQuest>,
-        userQuestsProgresses: List<RedisUserQuestProgress>
-    ): List<RedisQuest> {
-        val notAvailableNpcs = userQuestsProgresses
-            .asSequence()
-            .map { it.questId to it.questState }
-            .map { pair ->
-            levelQuests.first { it.questId == pair.first } to pair.second
-        }.mapNotNull {
-            when (it.second) {
-                AWAITING -> it.first.startQuestGiverId
-                READ -> it.first.startQuestGiverId
-                else -> null
-            }
-        }.distinct().toSet()
-        return levelQuests.filter { it.startQuestGiverId !in notAvailableNpcs }
-    }
-
-    private fun addQuests(
-        data: GameUserData,
-        levelQuests: List<RedisQuest>,
-        toAdd: Int
-    ): List<RedisUserQuestProgress> {
-        val questsWithUniqueQuestGivers = levelQuests
-            .shuffled(random)
-            .distinctBy { it.startQuestGiverId }
-        val quests =
-            questsWithUniqueQuestGivers
-                .shuffled(random)
-                .take(min(toAdd, questsWithUniqueQuestGivers.size))
-                .toMutableList()
-        val userQuests = quests.map { quest ->
-            RedisUserQuestProgress(
-                id = Generators.timeBasedEpochGenerator().generate().toString(),
-                gameId = quest.gameId,
-                questId = quest.questId,
-                userId = data.gameUser!!.userId,
-            )
-        }
-        return redisUserQuestProgressRepository.saveAll(userQuests).toList()
-    }
-
-    private fun cleanUserQuestLog(
-        finished: List<RedisUserQuestProgress>,
-        declined: List<RedisUserQuestProgress>,
-    ) {
-        finished.forEach {
-            it.questState = FINISHED_AVAILABLE
-        }
-        redisUserQuestProgressRepository.saveAll(finished)
-        declined.forEach {
-            it.questState = DECLINED_AVAILABLE
-        }
-        redisUserQuestProgressRepository.saveAll(declined)
-    }
 }

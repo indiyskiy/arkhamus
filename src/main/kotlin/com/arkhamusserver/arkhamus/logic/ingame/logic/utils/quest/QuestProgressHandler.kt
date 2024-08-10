@@ -72,14 +72,17 @@ class QuestProgressHandler(
         globalGameData: GlobalGameData,
         data: GameUserData
     ) {
+        logger.info("add more quests maybe?")
         val userQuestProgress = globalGameData.questProgressByUserId[data.gameUser!!.userId] ?: emptyList()
         if (userQuestCreationHandler.needToAddQuests(userQuestProgress)) {
+            logger.info("add more quests definitely")
             val newQuestProgress = userQuestCreationHandler.addQuests(
                 data,
                 globalGameData.quests,
                 userQuestProgress
             )
-            data.userQuest = newQuestProgress.map { mapQuestProgress(globalGameData.quests, it) }
+            logger.info("new quest progress ${newQuestProgress.size}")
+            data.userQuest += newQuestProgress.map { mapQuestProgress(globalGameData.quests, it) }
         }
     }
 
@@ -171,30 +174,18 @@ class QuestProgressHandler(
         globalGameData: GlobalGameData,
         userId: Long?
     ): Pair<RedisQuest?, RedisUserQuestProgress?> {
-        logger.info("looking for a quest and user progress for $levelTaskId")
 
         val questSteps =
             globalGameData.questProgressByUserId[userId]?.filter { it.questState == IN_PROGRESS }
-        logger.info("current questSteps ${questSteps?.joinToString { it.questId.toString() } ?: "-"}")
-
         val quests = globalGameData.quests
-        logger.info("quests ${quests.joinToString { it.questId.toString() }}")
-
         val questIdToStep = questSteps?.map { it.questId to it.questCurrentStep }
-        logger.info("questIdToStep ${questIdToStep?.joinToString { it.first.toString() + "/" + it.second }}")
-
         val questToStep = questIdToStep
             ?.map { quests.first { quest -> quest.questId == it.first } to it.second }
             ?.map { it.first to task(it.second, it.first.levelTaskIds) }
-        logger.info("questToStep ${questToStep?.joinToString { it.first.toString() + "/" + it.second }}")
-
         val quest = questToStep?.firstOrNull { it.second == levelTaskId }?.first
-        logger.info("quest ${quest?.questId}")
-
         val userQuestProgress = quest?.let {
             questSteps.firstOrNull { questStep -> it.questId == questStep.questId }
         }
-        logger.info("userQuestProgress ${userQuestProgress?.questId}")
 
         return Pair(quest, userQuestProgress)
     }
@@ -213,11 +204,9 @@ class QuestProgressHandler(
 
     private fun task(stepNumber: Int, levelTaskIds: MutableList<Long>): Long? {
         if (stepNumber < 0) {
-            logger.info("still on quest giver state")
             return null
         }
         if (stepNumber >= levelTaskIds.size) {
-            logger.info("quest complete")
             return null
         }
         return levelTaskIds[stepNumber]
