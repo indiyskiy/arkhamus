@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ResponseSendi
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
+import jakarta.annotation.PreDestroy
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
@@ -59,7 +60,6 @@ class GameThreadPool(
             logger.error("Error occurred while initializing tick processing loop", th)
             throw th
         }
-
     }
 
     private fun processGameTasks(gameId: Long) {
@@ -107,13 +107,21 @@ class GameThreadPool(
     }
 
     private fun cleanGameLoopFuture(gameSessionId: Long) {
-        if (loopHandlerFutures[gameSessionId]?.isCancelled == true) {
-            loopHandlerFutures.remove(gameSessionId)
-            tasksMap.remove(gameSessionId)
-            logger.info("Loop handler stopped for game session $gameSessionId")
-            return
+        loopHandlerFutures[gameSessionId]?.let {
+            if (!it.isCancelled) {
+                val canceled = it.cancel(false)
+                if (canceled) {
+                    loopHandlerFutures.remove(gameSessionId)
+                    tasksMap.remove(gameSessionId)
+                    logger.info("Loop handler stopped for game session $gameSessionId")
+                }
+            } else {
+                loopHandlerFutures.remove(gameSessionId)
+                tasksMap.remove(gameSessionId)
+                logger.info("Loop handler stopped for game session $gameSessionId")
+            }
         }
-        loopHandlerFutures[gameSessionId]?.cancel(false)
+
     }
 
     fun addTask(task: NettyTickRequestMessageDataHolder) {
@@ -148,7 +156,14 @@ class GameThreadPool(
             logger.error("error on processing game tick for game $gameId", e)
             throw e
         }
+    }
 
+    @PreDestroy
+    fun onDestroy() {
+        for (handler in loopHandlerFutures.values) {
+            handler.cancel(true)
+        }
+        loopHandlerFutures.clear()
     }
 
 }
