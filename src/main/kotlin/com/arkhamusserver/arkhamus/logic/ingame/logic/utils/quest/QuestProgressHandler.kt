@@ -128,7 +128,7 @@ class QuestProgressHandler(
                 questStepIds = emptyList(),
                 endQuestGiverId = null,
                 startQuestGiverId = quest?.startQuestGiverId,
-                textKey = quest?.textKey ?: ""
+                textKey = null
             )
         }
     }

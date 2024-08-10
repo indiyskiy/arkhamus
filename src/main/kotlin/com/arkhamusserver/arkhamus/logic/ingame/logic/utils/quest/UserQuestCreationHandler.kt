@@ -117,7 +117,7 @@ class UserQuestCreationHandler(
         val relevantIds = relevant.map { it.questId }.toSet()
         logger.info("relevant quests ${relevantIds.joinToString(",") { it.toString() }}")
 
-        val notRelevant = levelQuests.filterNot { it.questId !in relevantIds }
+        val notRelevant = levelQuests.filter { it.questId !in relevantIds }
         logger.info("not relevant quests ${notRelevant.joinToString(",") { it.questId.toString() }}")
 
         val inProgress = userQuestsProgresses
