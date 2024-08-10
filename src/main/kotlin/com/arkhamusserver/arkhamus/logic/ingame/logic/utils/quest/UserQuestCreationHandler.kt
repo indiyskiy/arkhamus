@@ -52,7 +52,7 @@ class UserQuestCreationHandler(
                 it.questState in QUESTS_IN_PROGRESS
             }
         logger.info("add more quests maybe? $userInProgress < $QUESTS_TO_REFRESH")
-        return userInProgress < QUESTS_TO_REFRESH
+        return userInProgress <= QUESTS_TO_REFRESH
     }
 
     fun addQuests(
@@ -63,8 +63,8 @@ class UserQuestCreationHandler(
         val questsToAdd = questsToAdd(userQuestsProgresses)
         logger.info("quests to add $questsToAdd")
         val availableQuests = availableQuests(levelQuests, userQuestsProgresses)
-        return if (availableQuests.size >= questsToAdd) {
-            addQuests(
+        if (availableQuests.size >= questsToAdd) {
+            return addQuests(
                 data,
                 levelQuests,
                 userQuestsProgresses,
@@ -72,9 +72,10 @@ class UserQuestCreationHandler(
                 availableQuests
             )
         } else {
-            val cleanedUpText = cleanOldQuests(levelQuests, userQuestsProgresses)
-            val newAvailableQuests = availableQuests + cleanedUpText
-            addQuests(data, levelQuests, userQuestsProgresses, questsToAdd, newAvailableQuests)
+            val cleanedUpQuests = cleanOldQuests(levelQuests, userQuestsProgresses)
+            val cleanedUpQuestsAvailableByQuestGiver = filterByNpc(userQuestsProgresses, cleanedUpQuests)
+            val newAvailableQuests = availableQuests + cleanedUpQuestsAvailableByQuestGiver
+            return addQuests(data, levelQuests, userQuestsProgresses, questsToAdd, newAvailableQuests)
         }
     }
 
@@ -104,6 +105,27 @@ class UserQuestCreationHandler(
         val newlyAvailableQuests = levelQuests.filter { it.questId in questToDeleteIds }
         logger.info("newly available quests ${newlyAvailableQuests.joinToString { it.questId.toString() }}")
         return newlyAvailableQuests
+    }
+
+    private fun filterByNpc(
+        userQuestsProgresses: List<RedisUserQuestProgress>,
+        levelQuests: List<RedisQuest>
+    ): List<RedisQuest> {
+        val inProgress = userQuestsProgresses
+            .filter {
+                it.questState in QUESTS_IN_PROGRESS
+            }
+        val inProgressQuestGivers = inProgress.map { userQuest ->
+            levelQuests.first {
+                userQuest.questId == it.questId
+            }
+        }.map {
+            it.startQuestGiverId
+        }
+        val notRelevantFreeByQuestGivers = levelQuests.filter {
+            it.startQuestGiverId !in inProgressQuestGivers
+        }
+        return notRelevantFreeByQuestGivers
     }
 
     private fun availableQuests(
@@ -150,7 +172,7 @@ class UserQuestCreationHandler(
             .count {
                 it.questState in QUESTS_IN_PROGRESS
             }
-        return QUESTS_TO_REFRESH - userInProgress
+        return QUESTS_ON_START - userInProgress
     }
 
     fun addQuests(
