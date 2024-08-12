@@ -33,7 +33,6 @@ class TakeQuestRewardRequestProcessor(
                 val applied = questRewardUtils.takeReward(user, quest, reward)
                 if (applied) {
                     questProgressHandler.finishQuest(
-                        quest,
                         globalGameData,
                         takeQuestRewardRequestProcessData
                     )

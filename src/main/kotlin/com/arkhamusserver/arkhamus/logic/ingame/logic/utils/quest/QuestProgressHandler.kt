@@ -38,7 +38,6 @@ class QuestProgressHandler(
     }
 
     fun finishQuest(
-        quest: RedisQuest,
         globalGameData: GlobalGameData,
         data: TakeQuestRewardRequestProcessData
     ) {
