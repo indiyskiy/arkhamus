@@ -54,7 +54,6 @@ class QuestRewardUtils(
     fun findOrCreate(
         rewards: List<RedisQuestReward>?,
         quest: RedisQuest,
-        userQuestProgress: RedisUserQuestProgress,
         user: RedisGameUser
     ): List<RedisQuestReward> {
         return if (rewards.isNullOrEmpty()) {
@@ -73,9 +72,13 @@ class QuestRewardUtils(
         user: RedisGameUser
     ): List<RedisQuestReward> {
         logger.info("generating rewards for: ${quest.difficulty} ${quest.questId}")
-        val rewards = (0..2).map { i ->
-            generateQuestRewardsForUser(quest, user, i)
-        }
+
+        val first = generateQuestRewardsForUser(quest, user, 0, emptyList())
+        val second = generateQuestRewardsForUser(quest, user, 1, listOf(first))
+        val third = generateQuestRewardsForUser(quest, user, 2, listOf(first, second))
+
+        val rewards = listOf(first, second, third)
+
         rewards.forEach {
             logger.info("generated reward: ${it.rewardType} ${it.rewardItem.toItemName()} ${it.rewardAmount}")
         }
@@ -83,10 +86,15 @@ class QuestRewardUtils(
         return rewards
     }
 
-    private fun generateQuestRewardsForUser(quest: RedisQuest, user: RedisGameUser, i: Int): RedisQuestReward {
-        val rewardType = questRewardTypeUtils.chooseType(quest, user, i)
-        val rewardItem = questRewardItemUtils.chooseItem(quest, user, rewardType, i)
-        val rewardAmount = questRewardAmountUtils.chooseAmount(quest, user, rewardType, rewardItem, i)
+    private fun generateQuestRewardsForUser(
+        quest: RedisQuest,
+        user: RedisGameUser,
+        i: Int,
+        previousRewards: List<RedisQuestReward>
+    ): RedisQuestReward {
+        val rewardType = questRewardTypeUtils.chooseType(quest, user, i, previousRewards)
+        val rewardItem = questRewardItemUtils.chooseItem(quest, user, rewardType, i, previousRewards)
+        val rewardAmount = questRewardAmountUtils.chooseAmount(quest, user, rewardType, rewardItem)
         return RedisQuestReward(
             id = Generators.timeBasedEpochGenerator().generate().toString(),
             rewardType = rewardType,
@@ -100,17 +108,19 @@ class QuestRewardUtils(
 
     fun takeReward(
         user: RedisGameUser,
-        quest: RedisQuest,
         reward: RedisQuestReward
-    ): Boolean {
+    ) {
         when (reward.rewardType) {
             ITEM -> {
                 takeItems(reward, user)
-                return true
             }
 
             ADD_CLUE -> {
-                return true
+
+            }
+
+            REMOVE_CLUE -> {
+
             }
         }
     }

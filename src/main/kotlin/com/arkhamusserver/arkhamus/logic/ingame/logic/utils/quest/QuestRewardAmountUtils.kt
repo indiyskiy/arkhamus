@@ -12,7 +12,7 @@ import kotlin.random.Random
 @Component
 class QuestRewardAmountUtils {
     companion object {
-        const val DEFAULT_AMOUNT = 10
+        const val DEFAULT_AMOUNT = 5
         private val random = Random(System.currentTimeMillis())
         var logger: Logger = LoggerFactory.getLogger(QuestRewardAmountUtils::class.java)
     }
@@ -22,7 +22,6 @@ class QuestRewardAmountUtils {
         user: RedisGameUser,
         rewardType: RewardType,
         rewardItem: Item?,
-        i: Int
     ): Int {
         if (rewardItem == null || rewardType != RewardType.ITEM) {
             return 0
