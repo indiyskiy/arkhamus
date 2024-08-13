@@ -66,9 +66,11 @@ class QuestRewardTypeUtils {
 
     private fun byClass(
         type: RewardType,
-        game: ClassInGame
+        classInGame: ClassInGame
     ): Boolean {
-        return true
+      return when (classInGame){
+           else -> {type in setOf(ITEM, ADD_CLUE, REMOVE_CLUE)}
+       }
     }
 
     private fun availableByDifficulty(
