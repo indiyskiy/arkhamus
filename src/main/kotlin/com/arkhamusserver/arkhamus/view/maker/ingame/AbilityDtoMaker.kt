@@ -19,7 +19,6 @@ class AbilityDtoMaker(
         return AbilityDto(
             id = value.id,
             value = value.name,
-            title = value.name.lowercase(),
             requireItem = value.requiresItem,
             requireItemId = if (value.requiresItem) {
                 abilityToItemResolver.resolve(value)?.id

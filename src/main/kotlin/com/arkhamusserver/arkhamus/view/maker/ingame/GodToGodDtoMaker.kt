@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.view.maker.ingame
 
-import com.arkhamusserver.arkhamus.globalutils.capitalizeIfFirstCharIsLowercase
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.view.dto.ingame.GodDto
 import org.springframework.stereotype.Component
@@ -14,8 +13,6 @@ class GodToGodDtoMaker {
         GodDto().apply {
             this.id = from.getId()
             this.name = from
-            this.title = from.name.lowercase().replace("_", " ")
-                .capitalizeIfFirstCharIsLowercase()
             this.types = from.getTypes()
         }
 
