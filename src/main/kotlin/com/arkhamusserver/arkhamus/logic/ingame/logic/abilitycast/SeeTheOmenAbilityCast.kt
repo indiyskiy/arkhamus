@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.AbilityCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CreateCastAbilityEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class SeeTheOmenAbilityCast(
-    private val abilityCastHandler: AbilityCastHandler,
+    private val createCastAbilityEventHandler: CreateCastAbilityEventHandler
 ) : AbilityCast {
 
     companion object {
@@ -44,7 +44,7 @@ class SeeTheOmenAbilityCast(
         currentUser?.let { currentUserNotNull ->
             currentUser.stateTags.add(UserStateTag.INVESTIGATING.name)
             abilitiesList.forEach {
-                abilityCastHandler.createCastAbilityEvent(
+                createCastAbilityEventHandler.createCastAbilityEvent(
                     it,
                     currentUserNotNull.userId,
                     globalGameData.game.gameId!!,

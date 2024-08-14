@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.AbilityCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CreateCastAbilityEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component
 class AbilityRequestProcessor(
     private val inventoryHandler: InventoryHandler,
     private val abilityCastHandler: AbilityCastHandler,
+    private val createCastAbilityEventHandler: CreateCastAbilityEventHandler
 ) : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is AbilityRequestProcessData
@@ -55,7 +57,7 @@ class AbilityRequestProcessor(
         gameId: Long,
         globalTimer: Long
     ) {
-        abilityCastHandler.createCastAbilityEvent(ability, id, gameId, globalTimer)
+        createCastAbilityEventHandler.createCastAbilityEvent(ability, id, gameId, globalTimer)
     }
 
     private fun consumeItem(
