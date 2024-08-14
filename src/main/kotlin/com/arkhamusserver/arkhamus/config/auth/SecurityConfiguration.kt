@@ -28,7 +28,13 @@ class SecurityConfiguration(
                 it
                     .requestMatchers(AntPathRequestMatcher("/")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/public/**")).permitAll()
+                    //web page content part
                     .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/css/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/js/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/images/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/fonts/**")).permitAll()
+                    //admin part
                     .requestMatchers(AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                     .anyRequest().authenticated()
             }.exceptionHandling(customizer)
