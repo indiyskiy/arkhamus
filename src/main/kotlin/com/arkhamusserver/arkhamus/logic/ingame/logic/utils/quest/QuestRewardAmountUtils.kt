@@ -41,32 +41,14 @@ class QuestRewardAmountUtils {
     }
 
     private fun userLuck(user: RedisGameUser): Int {
-        return if (user.classInGame == ClassInGame.BREADWINNER) {
-            1
-        } else {
-            0
-        }
+        return 0
     }
 
     private fun userModifier(user: RedisGameUser): Double {
         return when (user.role) {
-            RoleTypeInGame.CULTIST -> cultistModifier(user)
-            RoleTypeInGame.INVESTIGATOR -> investigatorModifier(user)
-            RoleTypeInGame.NEUTRAL -> 1.0
-        }
-    }
-
-    private fun investigatorModifier(user: RedisGameUser): Double {
-        return when (user.classInGame) {
-            ClassInGame.BREADWINNER -> 1.5
-            else -> 1.0
-        }
-    }
-
-    private fun cultistModifier(user: RedisGameUser): Double {
-        return when (user.classInGame) {
-            ClassInGame.DAGON_CULTIST -> 1.5
-            else -> 1.0
+            RoleTypeInGame.CULTIST -> 1.0
+            RoleTypeInGame.INVESTIGATOR -> 1.0
+            RoleTypeInGame.NEUTRAL -> 1.2
         }
     }
 

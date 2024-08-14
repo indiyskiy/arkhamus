@@ -1,9 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.item
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability.HEAL_MADNESS
+import com.arkhamusserver.arkhamus.model.enums.ingame.Ability.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
-import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame.MIND_HEALER
+import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,7 +13,12 @@ class AbilityToClassResolver {
             null
         } else {
             when (ability) {
+                //investigators
                 HEAL_MADNESS -> setOf(MIND_HEALER)
+                SPAWN_LOOT -> setOf(BREADWINNER)
+                //cultists
+                FARSIGHT -> setOf(ARISTOCRAT)
+                SEE_THE_OMEN -> setOf(DESCENDENT)
                 else -> null
             }
         }

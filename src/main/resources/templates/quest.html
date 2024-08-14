@@ -139,7 +139,7 @@
         let levelId = this.getAttribute('data-level-id');
         let questId = this.getAttribute('data-quest-id');
 
-        let url = '/arkhamus/admin/level/' + levelId + '/quest/' + questId + '/addStep';
+        let url = '/admin/level/' + levelId + '/quest/' + questId + '/addStep';
         fetch(url, {
             method: 'POST',
             headers: {
@@ -156,7 +156,7 @@
 </script>
 <script>
     function removeItem(levelId, questId, stepId) {
-        let url = '/arkhamus/admin/level/' + levelId + '/quest/' + questId + '/removeStep/' + stepId;
+        let url = '/admin/level/' + levelId + '/quest/' + questId + '/removeStep/' + stepId;
         console.log('Starting Fetch Call');
         fetch(url, {
             method: 'POST',

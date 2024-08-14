@@ -27,7 +27,6 @@ class AbilityCastHandler(
 
     fun createCastAbilityEvent(
         ability: Ability,
-        abilityRequestProcessData: AbilityRequestProcessData,
         sourceUserId: Long,
         gameId: Long,
         currentGameTime: Long

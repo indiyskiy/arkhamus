@@ -9,12 +9,12 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class KindleCloakAbilityProcessor : ActiveAbilityProcessor {
+class FarsightAbilityProcessor : ActiveAbilityProcessor {
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(KindleCloakAbilityProcessor::class.java)
+        val logger: Logger = LoggerFactory.getLogger(FarsightAbilityProcessor::class.java)
         val relatedSet = setOf(
-            Ability.KINDLE_CLOAK,
+            Ability.FARSIGHT,
         )
     }
 
@@ -33,7 +33,7 @@ class KindleCloakAbilityProcessor : ActiveAbilityProcessor {
 
     override fun finishActive(castAbility: RedisAbilityCast, globalGameData: GlobalGameData) {
         val user = globalGameData.users[castAbility.sourceUserId]
-        user?.stateTags?.remove(UserStateTag.LUMINOUS.name)
+        user?.stateTags?.remove(UserStateTag.FARSIGHT.name)
     }
 
     private fun Int.toAbility(): Ability? =

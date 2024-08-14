@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisLantern
+import com.arkhamusserver.arkhamus.model.redis.WithPoint
 import org.springframework.stereotype.Component
 
 const val USER_LUMINOUS_RADIUS = 5.0 //m
@@ -16,27 +17,29 @@ class UserLocationHandler(
     private val zonesHandler: ZonesHandler
 ) {
 
-    fun userCanSeeUser(
-        user1: RedisGameUser,
-        user2: RedisGameUser,
+    fun userCanSeeTarget(
+        whoLooks: RedisGameUser,
+        target: WithPoint,
         levelGeometryData: LevelGeometryData
     ): Boolean {
-        return inVisionDistance(user1, user2) && zonesHandler.inSameZoneOrNotInZone(user1, user2, levelGeometryData)
+        return whoLooks.stateTags.contains(UserStateTag.FARSIGHT.name) ||
+                inVisionDistance(whoLooks, target) &&
+                zonesHandler.inSameZoneOrNotInZone(whoLooks, target, levelGeometryData)
     }
 
     fun inVisionDistance(
-        user1: RedisGameUser,
-        user2: RedisGameUser,
+        whoLooks: RedisGameUser,
+        target: WithPoint,
     ): Boolean {
-        return distanceLessOrEquals(user1, user2, GlobalGameSettings.GLOBAL_VISION_DISTANCE)
+        return distanceLessOrEquals(whoLooks, target, GlobalGameSettings.GLOBAL_VISION_DISTANCE)
     }
 
     fun distanceLessOrEquals(
-        user1: RedisGameUser,
-        user2: RedisGameUser,
+        point1: WithPoint,
+        point2: WithPoint,
         maxDistance: Double
     ): Boolean {
-        return geometryUtils.distanceLessOrEquals(user1, user2, maxDistance)
+        return geometryUtils.distanceLessOrEquals(point1, point2, maxDistance)
     }
 
     fun isInDarkness(user: RedisGameUser, globalGameData: GlobalGameData): Boolean {

@@ -39,7 +39,6 @@ class AbilityRequestProcessor(
                 abilityCastHandler.cast(ability, abilityRequestProcessData, globalGameData)
                 createCastAbility(
                     ability,
-                    abilityRequestProcessData,
                     requestDataHolder.userAccount.id!!,
                     requestDataHolder.gameSession!!.id!!,
                     globalGameData.game.globalTimer
@@ -52,12 +51,11 @@ class AbilityRequestProcessor(
 
     private fun createCastAbility(
         ability: Ability,
-        abilityRequestProcessData: AbilityRequestProcessData,
         id: Long,
         gameId: Long,
         globalTimer: Long
     ) {
-        abilityCastHandler.createCastAbilityEvent(ability, abilityRequestProcessData, id, gameId, globalTimer)
+        abilityCastHandler.createCastAbilityEvent(ability, id, gameId, globalTimer)
     }
 
     private fun consumeItem(

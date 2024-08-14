@@ -25,9 +25,25 @@ enum class Ability(
         classBased = true,
         cooldown = MINUTE_IN_MILLIS
     ),
-    //cultist ability 2***
+    SPAWN_LOOT(
+        id = 1002,
+        classBased = true,
+        cooldown = MINUTE_IN_MILLIS / 2
+    ),
 
-    //cultist class items 3***
+    //cultist ability 2***
+    FARSIGHT(
+        id = 2001,
+        classBased = true,
+        cooldown = MINUTE_IN_MILLIS / 2
+    ),
+    SEE_THE_OMEN(
+        id = 2002,
+        classBased = true,
+        cooldown = MINUTE_IN_MILLIS * 5
+    ),
+
+    //neutral ability 3***
     //cultist items spell 4***
     THROW_POTATO(
         id = 4001,

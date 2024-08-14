@@ -5,6 +5,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 data class ClassInGameDto(
     val id: Int,
     val name: String,
-    val value: String,
-    val roleType: RoleTypeInGame
+    val roleType: RoleTypeInGame,
+    val defaultAbility: AbilityDto?
 )
