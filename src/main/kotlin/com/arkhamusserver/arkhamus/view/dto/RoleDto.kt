@@ -6,4 +6,5 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 data class RoleDto(
     var userRole: RoleTypeInGame? = null,
     var userClass: ClassInGame? = null,
+    var userClassId: Int? = null,
 )

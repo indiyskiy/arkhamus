@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.view.maker
 
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
 import com.arkhamusserver.arkhamus.model.enums.GameState.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.CULTIST
@@ -110,26 +111,47 @@ class GameSessionDtoMaker(
             this.userId = it.userAccount.id
             this.nickName = it.userAccount.nickName
             this.isHost = it.host
-            this.role = RoleDto().apply {
-                this.userRole = when (gameSession.state) {
-                    NEW -> null
-                    IN_PROGRESS, PENDING -> if (isCultist) it.roleInGame else INVESTIGATOR
-                    GAME_END_SCREEN, FINISHED -> it.roleInGame
-                }
-                this.userClass = when (gameSession.state) {
-                    NEW -> null
-                    IN_PROGRESS, PENDING -> if (it.id == userId) {
-                        it.classInGame
-                    } else {
-                        null
-                    }
-
-                    GAME_END_SCREEN, FINISHED -> it.classInGame
-                }
-            }
+            this.role = buildRoleDto(gameSession, isCultist, it, userId)
             this.gameSkin = userSkinDtoMaker.toDto(userSkins[it.userAccount.id]!!)
         }
     }
+
+    private fun buildRoleDto(
+        gameSession: GameSession,
+        isCultist: Boolean,
+        session: UserOfGameSession,
+        userId: Long
+    ): RoleDto = RoleDto().apply {
+        this.userRole = when (gameSession.state) {
+            NEW -> null
+            IN_PROGRESS, PENDING -> if (cultistSeeCultist(isCultist, session) || session.id == userId) session.roleInGame else INVESTIGATOR
+            GAME_END_SCREEN, FINISHED -> session.roleInGame
+        }
+        when (gameSession.state) {
+            NEW -> {
+                this.userClass = null
+                this.userClassId = null
+            }
+
+            IN_PROGRESS, PENDING -> if (session.id == userId) {
+                this.userClass = session.classInGame
+                this.userClassId = session.classInGame?.id
+            } else {
+                this.userClass = null
+                this.userClass = null
+            }
+
+            GAME_END_SCREEN, FINISHED -> {
+                this.userClass = session.classInGame
+                this.userClassId = session.classInGame?.id
+            }
+        }
+    }
+
+    private fun cultistSeeCultist(
+        isCultist: Boolean,
+        session: UserOfGameSession
+    ): Boolean = (isCultist && session.roleInGame == CULTIST)
 
     private fun mapRolesByReceiverRoleAsAdmin(
         gameSession: GameSession,

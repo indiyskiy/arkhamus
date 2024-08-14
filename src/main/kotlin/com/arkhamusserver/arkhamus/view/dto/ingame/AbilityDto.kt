@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 data class AbilityDto(
     val id: Int,
     val value: String,
-    val title: String,
     val requireItem: Boolean,
     val requireItemId: Int?,
     val consumesItem: Boolean,
