@@ -18,7 +18,7 @@ class AbilityToClassResolver {
                 SPAWN_LOOT -> setOf(BREADWINNER)
                 //cultists
                 FARSIGHT -> setOf(ARISTOCRAT)
-                SEE_THE_OMEN -> setOf(DESCENDENT)
+                SEE_THE_OMEN -> setOf(DESCENDANT)
                 else -> null
             }
         }

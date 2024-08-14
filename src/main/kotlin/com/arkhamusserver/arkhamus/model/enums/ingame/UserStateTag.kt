@@ -1,8 +1,14 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
-enum class UserStateTag {
-    IN_RITUAL,
-    INVESTIGATING,
-    LUMINOUS,
-    FARSIGHT
+enum class UserStateTag(
+    private val visibility: Visibility?
+) {
+    IN_RITUAL(Visibility.PUBLIC),
+    INVESTIGATING(Visibility.SOURCE),
+    LUMINOUS(Visibility.PUBLIC),
+    FARSIGHT(Visibility.SOURCE);
+
+    fun getVisibility(): Visibility? {
+        return visibility
+    }
 }

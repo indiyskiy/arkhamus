@@ -8,5 +8,5 @@ enum class ClassInGame(val id: Int, val roleType: RoleTypeInGame) {
     BREADWINNER(102, INVESTIGATOR),
 
     ARISTOCRAT(201,CULTIST),
-    DESCENDENT(202,CULTIST)
+    DESCENDANT(202,CULTIST)
 }
