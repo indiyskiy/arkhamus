@@ -1,5 +1,6 @@
 package  com.arkhamusserver.arkhamus.config.auth
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationProvider
@@ -27,6 +28,7 @@ class SecurityConfiguration(
                 it
                     .requestMatchers(AntPathRequestMatcher("/")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/public/**")).permitAll()
+                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                     .anyRequest().authenticated()
             }.exceptionHandling(customizer)
