@@ -68,9 +68,15 @@ class QuestRewardTypeUtils {
         type: RewardType,
         classInGame: ClassInGame
     ): Boolean {
-      return when (classInGame){
-           else -> {type in setOf(ITEM, ADD_CLUE, REMOVE_CLUE)}
-       }
+        return when (classInGame) {
+            ClassInGame.MIND_HEALER -> {
+                type in setOf(ITEM, ADD_CLUE, REMOVE_CLUE)
+            }
+
+            else -> {
+                type in setOf(ITEM, ADD_CLUE, REMOVE_CLUE)
+            }
+        }
     }
 
     private fun availableByDifficulty(
