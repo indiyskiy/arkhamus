@@ -71,7 +71,6 @@ class GameSessionDtoMaker(
             formatter.format(it.toLocalDateTime())
         } ?: ""
 
-
     private fun convertGod(
         gameSession: GameSession,
         isCultist: Boolean
@@ -105,27 +104,35 @@ class GameSessionDtoMaker(
         gameSession: GameSession,
         userSkins: Map<Long, UserSkinSettings>,
         isCultist: Boolean,
-        userId: Long,
-    ) = gameSession.usersOfGameSession.map {
+        myUserId: Long,
+    ) = gameSession.usersOfGameSession.map { convertingUser ->
         InGameUserDto().apply {
-            this.userId = it.userAccount.id
-            this.nickName = it.userAccount.nickName
-            this.isHost = it.host
-            this.role = buildRoleDto(gameSession, isCultist, it, userId)
-            this.gameSkin = userSkinDtoMaker.toDto(userSkins[it.userAccount.id]!!)
+            this.userId = convertingUser.userAccount.id
+            this.nickName = convertingUser.userAccount.nickName
+            this.isHost = convertingUser.host
+            this.role = buildRoleDto(gameSession, isCultist, convertingUser, myUserId)
+            this.gameSkin = userSkinDtoMaker.toDto(userSkins[convertingUser.userAccount.id]!!)
         }
     }
 
     private fun buildRoleDto(
         gameSession: GameSession,
         isCultist: Boolean,
-        session: UserOfGameSession,
-        userId: Long
+        convertingUser: UserOfGameSession,
+        myUserId: Long,
     ): RoleDto = RoleDto().apply {
         this.userRole = when (gameSession.state) {
             NEW -> null
-            IN_PROGRESS, PENDING -> if (cultistSeeCultist(isCultist, session) || session.id == userId) session.roleInGame else INVESTIGATOR
-            GAME_END_SCREEN, FINISHED -> session.roleInGame
+            IN_PROGRESS, PENDING -> if (
+                cultistSeeCultist(isCultist, convertingUser) ||
+                convertingUser.userAccount.id == myUserId
+            ) {
+                convertingUser.roleInGame
+            } else {
+                INVESTIGATOR
+            }
+
+            GAME_END_SCREEN, FINISHED -> convertingUser.roleInGame
         }
         when (gameSession.state) {
             NEW -> {
@@ -133,17 +140,17 @@ class GameSessionDtoMaker(
                 this.userClassId = null
             }
 
-            IN_PROGRESS, PENDING -> if (session.id == userId) {
-                this.userClass = session.classInGame
-                this.userClassId = session.classInGame?.id
+            IN_PROGRESS, PENDING -> if (convertingUser.userAccount.id == myUserId) {
+                this.userClass = convertingUser.classInGame
+                this.userClassId = convertingUser.classInGame?.id
             } else {
                 this.userClass = null
                 this.userClass = null
             }
 
             GAME_END_SCREEN, FINISHED -> {
-                this.userClass = session.classInGame
-                this.userClassId = session.classInGame?.id
+                this.userClass = convertingUser.classInGame
+                this.userClassId = convertingUser.classInGame?.id
             }
         }
     }
