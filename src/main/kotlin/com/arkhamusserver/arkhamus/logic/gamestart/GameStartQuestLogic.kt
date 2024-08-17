@@ -35,8 +35,8 @@ class GameStartQuestLogic(
                 redisQuestRepository.save(this)
             }
         }
-        users.forEach { user ->
-            userQuestCreationHandler.setStartsQuestsForUser(user, createdRedisQuests)
+        users.forEach {
+            userQuestCreationHandler.setStartsQuestsForUser(it, createdRedisQuests)
         }
     }
 

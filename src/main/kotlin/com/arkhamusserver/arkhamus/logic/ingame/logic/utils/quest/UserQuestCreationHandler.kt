@@ -12,7 +12,6 @@ import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-import kotlin.math.min
 import kotlin.random.Random
 
 @Component
@@ -63,11 +62,9 @@ class UserQuestCreationHandler(
         val questsToAdd = questsToAdd(userQuestsProgresses)
         logger.info("quests to add $questsToAdd")
         val availableQuests = availableQuests(levelQuests, userQuestsProgresses)
-        if (availableQuests.size >= questsToAdd) {
+        if (availableQuests.map { it.startQuestGiverId }.distinct().size >= questsToAdd) {
             return addQuests(
                 data,
-                levelQuests,
-                userQuestsProgresses,
                 questsToAdd,
                 availableQuests
             )
@@ -75,8 +72,15 @@ class UserQuestCreationHandler(
             val cleanedUpQuests = cleanOldQuests(levelQuests, userQuestsProgresses)
             val cleanedUpQuestsAvailableByQuestGiver = filterByNpc(userQuestsProgresses, cleanedUpQuests)
             val newAvailableQuests = availableQuests + cleanedUpQuestsAvailableByQuestGiver
-            return addQuests(data, levelQuests, userQuestsProgresses, questsToAdd, newAvailableQuests)
+            return addQuests(data, questsToAdd, newAvailableQuests)
         }
+    }
+
+    fun setStartsQuestsForUser(user: RedisGameUser, createdRedisQuests: List<RedisQuest>) {
+        val quests = getQuestsWithUniqueQuestGivers(createdRedisQuests)
+            .take(QUESTS_ON_START)
+            .toMutableList()
+        addQuestsForUser(quests, user)
     }
 
     private fun cleanOldQuests(
@@ -175,34 +179,6 @@ class UserQuestCreationHandler(
         return QUESTS_ON_START - userInProgress
     }
 
-    fun addQuests(
-        data: GameUserData,
-        levelQuests: List<RedisQuest>,
-        userQuestsProgresses: List<RedisUserQuestProgress>,
-        questsToAddSize: Int,
-        availableQuests: List<RedisQuest>
-    ): List<RedisUserQuestProgress> {
-        val questsToAdd = availableQuests.shuffled(random).take(questsToAddSize)
-        return addQuestsForUser(
-            questsToAdd,
-            data.gameUser!!
-        )
-    }
-
-
-    fun setStartsQuestsForUser(user: RedisGameUser, createdRedisQuests: List<RedisQuest>) {
-        val questsWithUniqueQuestGivers: List<RedisQuest> = createdRedisQuests
-            .groupBy { it.startQuestGiverId }
-            .map { it.value.random() }
-
-        val quests =
-            questsWithUniqueQuestGivers
-                .shuffled(random)
-                .take(min(QUESTS_ON_START, questsWithUniqueQuestGivers.size))
-                .toMutableList()
-        addQuestsForUser(quests, user)
-    }
-
     private fun addQuestsForUser(
         quests: List<RedisQuest>,
         user: RedisGameUser
@@ -217,5 +193,23 @@ class UserQuestCreationHandler(
         }
         return redisUserQuestProgressRepository.saveAll(userStartQuests).toList()
     }
+
+    private fun addQuests(
+        data: GameUserData,
+        questsToAddSize: Int,
+        availableQuests: List<RedisQuest>
+    ): List<RedisUserQuestProgress> {
+        val questsToAdd = getQuestsWithUniqueQuestGivers(availableQuests).take(questsToAddSize)
+        return addQuestsForUser(
+            questsToAdd,
+            data.gameUser!!
+        )
+    }
+
+    private fun getQuestsWithUniqueQuestGivers(createdRedisQuests: List<RedisQuest>): List<RedisQuest> =
+        createdRedisQuests
+            .groupBy { it.startQuestGiverId }
+            .map { it.value.random(random) }
+            .shuffled(random)
 
 }
