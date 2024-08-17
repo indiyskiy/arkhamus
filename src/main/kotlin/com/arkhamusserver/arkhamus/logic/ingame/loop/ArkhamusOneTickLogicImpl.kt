@@ -62,7 +62,7 @@ class ArkhamusOneTickLogicImpl(
                     processedTasks,
                 )
             if(responses.isNotEmpty()){
-                game.lastTimeSentResponse = game.lastTimeSentResponse
+                game.lastTimeSentResponse = game.globalTimer
             }
             saveAllUsers(globalGameData)
             gameRepository.save(game)

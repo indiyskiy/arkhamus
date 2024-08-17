@@ -115,6 +115,7 @@ class GameThreadPool(
 
     private fun markLeaversIfNoResponses(game: RedisGame, users: List<RedisGameUser>) {
         if (game.globalTimer - game.lastTimeSentResponse > MAX_TIME_NO_RESPONSES) {
+            logger.info("no responses too long (${game.globalTimer} now, last was ${game.lastTimeSentResponse}) for game ${game.id}, marking all users as leavers")
             users.forEach { it.livedTheGame = true }
             redisGameUserRepository.saveAll(users)
         }
