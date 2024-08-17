@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository
 interface RedisGameUserRepository : MyCrudRepository<RedisGameUser> {
     override fun findByGameId(gameId: Long): List<RedisGameUser>
     fun findByUserIdAndGameId(userId: Long, gameId: Long): List<RedisGameUser>
+    fun findByUserId(userId: Long): List<RedisGameUser>
 }

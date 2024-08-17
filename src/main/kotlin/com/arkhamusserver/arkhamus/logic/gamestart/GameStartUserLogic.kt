@@ -1,14 +1,18 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.CULTIST
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.INVESTIGATOR
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.fasterxml.uuid.Generators
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -17,10 +21,33 @@ class GameStartUserLogic(
     private val redisGameUserRepository: RedisGameUserRepository,
     private val startMarkerRepository: StartMarkerRepository,
     private val userOfGameSessionRepository: UserOfGameSessionRepository,
+    private val redisGameRepository: RedisGameRepository
 ) {
 
     companion object {
         private val random: Random = Random(System.currentTimeMillis())
+        private val logger: Logger = LoggerFactory.getLogger(GameStartLogic::class.java)
+    }
+
+    fun leaveFromPreviousGames(game: GameSession) {
+        game.usersOfGameSession.forEach { userOfGameSession ->
+            val usersInGames = redisGameUserRepository.findByUserId(userOfGameSession.userAccount.id!!)
+            usersInGames.forEach { userInGame ->
+                if (userInGame.gameId != game.id) {
+                    val redisGame = redisGameRepository.findByGameId(userInGame.gameId)
+                    if (redisGame.state in setOf(
+                            GameState.NEW.name,
+                            GameState.PENDING.name,
+                            GameState.IN_PROGRESS.name,
+                        )
+                    ){
+                        logger.info("user ${userInGame.userId} started another game so he disconnected from ${userInGame.gameId}")
+                        userInGame.livedTheGame = true
+                        redisGameUserRepository.save(userInGame)
+                    }
+                }
+            }
+        }
     }
 
     fun createGameUsers(levelId: Long, game: GameSession): List<RedisGameUser> {

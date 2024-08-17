@@ -40,7 +40,7 @@ class GameThreadPool(
 
         //TODO read from config?
         const val CORE_POOL_SIZE = 3
-        const val MAX_TIME_NO_RESPONSES = 1000 * 60 * 5 // 5 min
+        const val MAX_TIME_NO_RESPONSES = 1000 * 60 * 10 // 10 min
     }
 
     init {
@@ -99,8 +99,8 @@ class GameThreadPool(
             val redisGameSession = redisDataAccess.getGame(gameSessionId)
             redisGameSession?.let {
                 val users = redisGameUserRepository.findByGameId(gameSessionId)
+                markLeaversIfNoResponses(it, users)
                 abandonIfAllLeave(it, users)
-                abandonIfNoResponses(it, users)
             }
             closeFinished(redisGameSession, gameSessionId)
         }
@@ -109,10 +109,11 @@ class GameThreadPool(
     private fun abandonIfAllLeave(game: RedisGame, users: List<RedisGameUser>) {
         if (users.all { it.livedTheGame }) {
             gameEndLogic.endTheGame(game, users.associateBy { it.userId }, GameEndReason.ABANDONED)
+            gameEndLogic.endTheGameCompletely(game)
         }
     }
 
-    private fun abandonIfNoResponses(game: RedisGame, users: List<RedisGameUser>) {
+    private fun markLeaversIfNoResponses(game: RedisGame, users: List<RedisGameUser>) {
         if (game.globalTimer - game.lastTimeSentResponse > MAX_TIME_NO_RESPONSES) {
             users.forEach { it.livedTheGame = true }
             redisGameUserRepository.saveAll(users)
