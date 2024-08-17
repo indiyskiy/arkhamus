@@ -75,7 +75,6 @@ class GameLogic(
             RELATED_ENTITY
         )
 
-
     fun connectUserToGame(
         player: UserAccount, game: GameSession, host: Boolean = false
     ): UserOfGameSession {
@@ -124,6 +123,5 @@ class GameLogic(
             skins,
             currentPlayer
         )
-
 
 }

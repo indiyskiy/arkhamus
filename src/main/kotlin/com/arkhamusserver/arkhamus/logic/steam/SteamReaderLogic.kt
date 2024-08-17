@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.steam
 
+import com.arkhamusserver.arkhamus.logic.exception.ArkhamusServerRequestException
 import com.arkhamusserver.arkhamus.view.controller.steam.SteamCallbackController
 import org.apache.http.client.fluent.Form
 import org.apache.http.client.fluent.Request
@@ -8,12 +9,14 @@ import org.springframework.stereotype.Component
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
+
 @Component
 class SteamReaderLogic {
-
     companion object {
         private val logger = LoggerFactory.getLogger(SteamCallbackController::class.java)
-        private const val STEAM_OPENID_URL = "https://steamcommunity.com/openid/login"
+        private const val STEAM_URL = "https://steamcommunity.com"
+        private const val STEAM_OPENID_URL = "${STEAM_URL}/openid/login"
+        private const val STEAM_ID_URL = "${STEAM_URL}/openid/id/"
     }
 
     fun handleSteamAuthCallback(
@@ -27,6 +30,16 @@ class SteamReaderLogic {
         baseUrl: String,
         responseNonce: String,
     ): String {
+        logger.info("OpenID Fields:")
+        logger.info("openidMode: {}", openidMode)
+        logger.info("openidIdentity: {}", openidIdentity)
+        logger.info("claimedId: {}", claimedId)
+        logger.info("assocHandle: {}", assocHandle)
+        logger.info("signedParams: {}", signedParams)
+        logger.info("openidSig: {}", openidSig)
+        logger.info("opEndpoint: {}", opEndpoint)
+        logger.info("baseUrl: {}", baseUrl)
+        logger.info("responseNonce: {}", responseNonce)
         if (openidMode == "id_res") {
             val validationURL = buildValidationURL(
                 openidIdentity,
@@ -51,17 +64,16 @@ class SteamReaderLogic {
                 .returnContent()
                 .asString()
 
+            logger.info("responseBody: ${responseBody}")
+
             if (responseBody.contains("is_valid:true")) {
-                val steamID = openidIdentity?.replace("https://steamcommunity.com/openid/id/", "")
-                // Here you can link the steamID with your user account in the database
-                logger.info("Steam ID: $steamID")
-                return "Steam ID: $steamID"
+                val steamId = openidIdentity?.replace(STEAM_ID_URL, "")
+                logger.info("Steam Id: $steamId")
+                return "Steam Id: $steamId"
             }
-            logger.info("Invalid OpenID response")
-            return "Invalid OpenID response."
+           throw ArkhamusServerRequestException("Invalid OpenID response", "SteamAuthCallback")
         }
-        logger.info("Invalid OpenID mode.")
-        return "Invalid OpenID mode."
+        throw ArkhamusServerRequestException("Invalid OpenId mode", "SteamAuthCallback")
     }
 
     private fun buildValidationURL(

@@ -28,6 +28,7 @@ class SecurityConfiguration(
                 it
                     .requestMatchers(AntPathRequestMatcher("/")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/public/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/steam/**")).permitAll()
                     //web page content part
                     .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/css/**")).permitAll()

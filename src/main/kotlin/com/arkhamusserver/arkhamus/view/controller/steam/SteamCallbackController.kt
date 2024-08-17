@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.view.controller.steam
 
+import com.arkhamusserver.arkhamus.logic.auth.SteamAuthService
 import com.arkhamusserver.arkhamus.logic.steam.SteamReaderLogic
+import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -10,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/steam/callback")
 class SteamCallbackController(
-    private val steamReaderLogic: SteamReaderLogic
+    private val steamReaderLogic: SteamReaderLogic,
+    private val steamAuthService: SteamAuthService,
 ) {
 
     @GetMapping
@@ -24,9 +27,9 @@ class SteamCallbackController(
         @RequestParam("openid.sig", required = false) openidSig: String?,
         @RequestParam("openid.op_endpoint", required = false) opEndpoint: String?,
         @RequestParam("openid.response_nonce") responseNonce: String,
-    ): String {
+    ): AuthenticationResponse {
         val baseUrl = request.requestURL.toString()
-        return steamReaderLogic.handleSteamAuthCallback(
+        val steamId = steamReaderLogic.handleSteamAuthCallback(
             openidMode,
             openidIdentity,
             claimedId,
@@ -37,5 +40,6 @@ class SteamCallbackController(
             baseUrl,
             responseNonce
         )
+        return steamAuthService.authenticationSteam(steamId)
     }
 }

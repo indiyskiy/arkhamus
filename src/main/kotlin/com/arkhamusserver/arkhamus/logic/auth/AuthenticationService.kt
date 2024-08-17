@@ -1,6 +1,10 @@
-package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth
+package com.arkhamusserver.arkhamus.logic.auth
 
 import com.arkhamusserver.arkhamus.config.auth.JwtProperties
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.ArkhamusUserDetails
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.CustomUserDetailsService
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.RefreshTokenRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.TokenService
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
 import com.arkhamusserver.arkhamus.view.dto.user.UserDto
@@ -26,6 +30,10 @@ class AuthenticationService(
             )
         )
         val user = userDetailsService.loadUserByUsername(authenticationRequest.login)
+        return authUser(user)
+    }
+
+    fun authUser(user: ArkhamusUserDetails): AuthenticationResponse {
         val accessToken = createAccessToken(user)
         val refreshToken = createRefreshToken(user)
         refreshTokenRepository.save(refreshToken, user)
@@ -36,17 +44,6 @@ class AuthenticationService(
         )
     }
 
-    //    fun refreshAccessToken(refreshToken: String): String? {
-//        val extractedEmail = tokenService.extractEmail(refreshToken)
-//        return extractedEmail?.let { email ->
-//            val currentUserDetails = userDetailsService.loadUserByUsername(email)
-//            val refreshTokenUserDetails = refreshTokenRepository.findUserDetailsByToken(refreshToken)
-//            if (!tokenService.isExpired(refreshToken) && refreshTokenUserDetails?.username == currentUserDetails.username)
-//                createAccessToken(currentUserDetails)
-//            else
-//                null
-//        }
-//    }
     private fun createAccessToken(user: UserDetails) = tokenService.generate(
         userDetails = user,
         expirationDate = getAccessTokenExpiration()

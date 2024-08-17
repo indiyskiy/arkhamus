@@ -8,5 +8,7 @@ import java.util.*
 interface UserAccountRepository : CrudRepository<UserAccount, Long> {
     fun findByEmail(email: String): Optional<UserAccount>
 
+    fun findBySteamId(steamId: String): Optional<UserAccount>
+
     override fun findById(id: Long): Optional<UserAccount>
 }

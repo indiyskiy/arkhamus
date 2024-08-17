@@ -10,6 +10,7 @@ data class UserAccount(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
+    var steamId: String? = null,
     @CreationTimestamp
     var creationTimestamp: Timestamp? = null,
     var nickName: String,

@@ -66,7 +66,10 @@ class JwtAuthenticationFilter(
     }
 
     private fun processToken(
-        jwtToken: String, request: HttpServletRequest, filterChain: FilterChain, response: HttpServletResponse
+        jwtToken: String,
+        request: HttpServletRequest,
+        filterChain: FilterChain,
+        response: HttpServletResponse
     ) {
         val email = tokenService.extractEmail(jwtToken)
         if (email != null && SecurityContextHolder.getContext().authentication == null) {
@@ -81,10 +84,19 @@ class JwtAuthenticationFilter(
 
     private fun String.extractTokenValue() = this.substringAfter("Bearer ")
 
-    private fun updateContext(player: UserAccount, foundUser: UserDetails, request: HttpServletRequest) {
-        val authToken = UsernamePasswordAuthenticationToken(foundUser, null, foundUser.authorities)
+    private fun updateContext(
+        player: UserAccount,
+        foundUser: UserDetails,
+        request: HttpServletRequest
+    ) {
+        val authToken = UsernamePasswordAuthenticationToken(
+            foundUser,
+            null,
+            foundUser.authorities
+        )
         authToken.details = ArkhamusWebAuthenticationDetails(
-            userAccount = player, context = request
+            userAccount = player,
+            context = request
         )
         SecurityContextHolder.getContext().authentication = authToken
     }

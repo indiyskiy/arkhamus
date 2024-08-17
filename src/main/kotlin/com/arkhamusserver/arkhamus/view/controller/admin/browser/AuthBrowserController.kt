@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.controller.admin.browser
 
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.AuthenticationService
+import com.arkhamusserver.arkhamus.logic.auth.AuthenticationService
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
