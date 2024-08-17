@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.loadGlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.*
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
@@ -20,7 +21,8 @@ class ArkhamusOneTickLogicImpl(
     private val oneTickTimeEvent: OneTickTimeEvent,
     private val onTickAbilityCast: OnTickAbilityCast,
     private val onTickCraftProcess: OnTickCraftProcess,
-    private val gameUserRedisRepository: RedisGameUserRepository
+    private val gameUserRedisRepository: RedisGameUserRepository,
+    private val gameRepository: RedisGameRepository,
 ) : ArkhamusOneTickLogic {
 
     override fun processCurrentTasks(
@@ -53,13 +55,17 @@ class ArkhamusOneTickLogicImpl(
                 globalGameData,
                 ongoingEvents
             )
-            saveAllUsers(globalGameData)
             val responses =
                 oneTickUserResponses.buildResponses(
                     currentTick,
                     globalGameData,
                     processedTasks,
                 )
+            if(responses.isNotEmpty()){
+                game.lastTimeSentResponse = game.lastTimeSentResponse
+            }
+            saveAllUsers(globalGameData)
+            gameRepository.save(game)
             return responses
         } catch (e: Throwable) {
             logger.error("Error processing current tasks: ${e.message}", e)

@@ -29,8 +29,6 @@ class FarsightAbilityCast() : AbilityCast {
         abilityRequestProcessData: AbilityRequestProcessData,
     ) {
         val currentUser = abilityRequestProcessData.gameUser
-        currentUser?.let { currentUserNotNull ->
-            currentUser.stateTags.add(UserStateTag.FARSIGHT.name)
-        }
+        currentUser?.stateTags?.add(UserStateTag.FARSIGHT.name)
     }
 }

@@ -96,6 +96,7 @@ class GameEndLogic(
             GameEndReason.GOD_AWAKEN -> cultistsWon(databaseUsers)
             GameEndReason.EVERYBODY_MAD -> cultistsWon(databaseUsers)
             GameEndReason.RITUAL_SUCCESS -> investigatorsWon(databaseUsers)
+            GameEndReason.ABANDONED -> noOneWon(databaseUsers)
         }
         databaseUsers.forEach { databaseUser ->
             val redisUser = redisUsers[databaseUser.userAccount.id]
@@ -146,6 +147,13 @@ class GameEndLogic(
                     user.won = false
                 }
             }
+            logUserWinStatus(user)
+        }
+    }
+
+    private fun noOneWon(users: List<UserOfGameSession>) {
+        users.forEach { user ->
+            user.won = null
             logUserWinStatus(user)
         }
     }

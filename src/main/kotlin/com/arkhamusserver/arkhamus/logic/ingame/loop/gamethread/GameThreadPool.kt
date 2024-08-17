@@ -2,14 +2,18 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.config.redis.RedisCleaner
+import com.arkhamusserver.arkhamus.logic.ingame.GameEndLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic.Companion.TICK_DELTA
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ResponseSendingLoopManager
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import jakarta.annotation.PreDestroy
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -23,7 +27,9 @@ class GameThreadPool(
     private val responseSendingLoopManager: ResponseSendingLoopManager,
     private val tickLogic: ArkhamusOneTickLogic,
     private val redisCleaner: RedisCleaner,
-    private val channelRepository: ChannelRepository
+    private val channelRepository: ChannelRepository,
+    private val redisGameUserRepository: RedisGameUserRepository,
+    private val gameEndLogic: GameEndLogic
 ) {
     private val taskExecutor: ScheduledThreadPoolExecutor = ScheduledThreadPoolExecutor(CORE_POOL_SIZE)
     private val tasksMap: ConcurrentMap<Long, TaskCollection> = ConcurrentHashMap()
@@ -34,6 +40,7 @@ class GameThreadPool(
 
         //TODO read from config?
         const val CORE_POOL_SIZE = 3
+        const val MAX_TIME_NO_RESPONSES = 1000 * 60 * 5 // 5 min
     }
 
     init {
@@ -56,6 +63,8 @@ class GameThreadPool(
                 TimeUnit.MILLISECONDS
             )
             loopHandlerFutures[gameSession.id] = scheduledFuture
+            logger.info("Added tick processing loop for game session $gameId")
+            logger.info("loop handler futures size: ${loopHandlerFutures.size}")
         } catch (th: Throwable) {
             logger.error("Error occurred while initializing tick processing loop", th)
             throw th
@@ -84,25 +93,52 @@ class GameThreadPool(
 
     }
 
-    @Scheduled(fixedRate = 10_000)
+    @Scheduled(fixedDelay = 10_000)
     fun cleanUpGames() {
         for (gameSessionId in loopHandlerFutures.keys) {
             val redisGameSession = redisDataAccess.getGame(gameSessionId)
-            if (redisGameSession?.state == GameState.FINISHED.name) {
-                logger.info("Trying to end $gameSessionId")
-                cleanGameLoopFuture(gameSessionId)
-                logger.info("close all connections")
-                redisGameSession.gameId?.let {
-                    val channels = channelRepository.getByGameId(it)
-                    channels.forEach {
-                        channelRepository.closeAndRemove(it)
-                    }
-                }
-                logger.info("cleaning redis database")
-                redisGameSession.gameId?.let { redisCleaner.cleanGame(it) } ?: redisCleaner.cleanGameWithoutGameId(
-                    redisGameSession
-                )
+            redisGameSession?.let {
+                val users = redisGameUserRepository.findByGameId(gameSessionId)
+                abandonIfAllLeave(it, users)
+                abandonIfNoResponses(it, users)
             }
+            closeFinished(redisGameSession, gameSessionId)
+        }
+    }
+
+    private fun abandonIfAllLeave(game: RedisGame, users: List<RedisGameUser>) {
+        if (users.all { it.livedTheGame }) {
+            gameEndLogic.endTheGame(game, users.associateBy { it.userId }, GameEndReason.ABANDONED)
+        }
+    }
+
+    private fun abandonIfNoResponses(game: RedisGame, users: List<RedisGameUser>) {
+        if (game.globalTimer - game.lastTimeSentResponse > MAX_TIME_NO_RESPONSES) {
+            users.forEach { it.livedTheGame = true }
+            redisGameUserRepository.saveAll(users)
+        }
+    }
+
+    private fun closeFinished(
+        redisGameSession: RedisGame?,
+        gameSessionId: Long
+    ) {
+        if (redisGameSession?.state == GameState.FINISHED.name) {
+            logger.info("Trying to end $gameSessionId")
+            cleanGameLoopFuture(gameSessionId)
+            logger.info("close all connections")
+            redisGameSession.gameId?.let {
+                val channels = channelRepository.getByGameId(it)
+                channels.forEach {
+                    channelRepository.closeAndRemove(it)
+                }
+            }
+            logger.info("cleaning redis database")
+            redisGameSession.gameId?.let {
+                redisCleaner.cleanGame(it)
+            } ?: redisCleaner.cleanGameWithoutGameId(
+                redisGameSession
+            )
         }
     }
 
@@ -113,12 +149,14 @@ class GameThreadPool(
                 if (canceled) {
                     loopHandlerFutures.remove(gameSessionId)
                     tasksMap.remove(gameSessionId)
-                    logger.info("Loop handler stopped for game session $gameSessionId")
+                    logger.info("Loop handler stopped for game session $gameSessionId with cancel")
+                    logger.info("loop handler futures size: ${loopHandlerFutures.size}")
                 }
             } else {
                 loopHandlerFutures.remove(gameSessionId)
                 tasksMap.remove(gameSessionId)
-                logger.info("Loop handler stopped for game session $gameSessionId")
+                logger.info("Loop handler stopped for game session $gameSessionId without cancel")
+                logger.info("loop handler futures size: ${loopHandlerFutures.size}")
             }
         }
 
@@ -162,6 +200,7 @@ class GameThreadPool(
     fun onDestroy() {
         for (handler in loopHandlerFutures.values) {
             handler.cancel(true)
+            logger.info("Loop handler cancelled")
         }
         loopHandlerFutures.clear()
     }

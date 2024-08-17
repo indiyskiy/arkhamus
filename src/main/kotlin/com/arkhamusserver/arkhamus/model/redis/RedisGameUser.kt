@@ -24,6 +24,7 @@ data class RedisGameUser(
     var won: Boolean? = null,
     var sawTheEndOfTimes: Boolean = false,
     var connected: Boolean,
+    var livedTheGame: Boolean = false,
     @TimeToLive val timeToLive: Long = 10800
 ) : WithPoint {
 
