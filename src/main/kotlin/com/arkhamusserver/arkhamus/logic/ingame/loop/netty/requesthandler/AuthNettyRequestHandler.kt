@@ -31,29 +31,43 @@ class AuthNettyRequestHandler(
     ): AuthRequestProcessData? {
         return nettyAuthService.auth(nettyRequestMessage.token)?.let { account ->
             val userOfTheGame = findUserOfGame(account)
-            val game = databaseDataAccess.findByGameId(userOfTheGame.gameSession.id!!)
-            val gameUser = redisDataAccess.getGameUser(userOfTheGame.userAccount.id!!, userOfTheGame.gameSession.id!!)
-                ?: return null
-            val otherGameUsers = redisDataAccess.getOtherGameUsers(gameUser.id, userOfTheGame.gameSession.id!!)
-            AuthRequestProcessData(gameUser = gameUser, otherGameUsers = otherGameUsers).apply {
-                this.userOfTheGame = userOfTheGame
-                this.userAccount = userOfTheGame.userAccount
-                this.game = game
-                this.message = "Authentication successful"
-            }.also { auth ->
-                arkhamusChannel.userAccount = auth.userAccount
-                arkhamusChannel.gameSession = auth.game
-                arkhamusChannel.userOfGameSession = auth.userOfTheGame
-                channelRepository.update(arkhamusChannel)
-            }
-        } ?: AuthRequestProcessData(gameUser = null, otherGameUsers = emptyList())
+            userOfTheGame?.let {
+                val game = databaseDataAccess.findByGameId(it.gameSession.id!!)
+                val gameUser = redisDataAccess.getGameUser(
+                    it.userAccount.id!!,
+                    it.gameSession.id!!
+                ) ?: return null
+                val otherGameUsers = redisDataAccess.getOtherGameUsers(gameUser.id, it.gameSession.id!!)
+                AuthRequestProcessData(gameUser = gameUser, success = false, otherGameUsers = otherGameUsers).apply {
+                    this.userOfTheGame = it
+                    this.userAccount = it.userAccount
+                    this.game = game
+                    this.reason = "Authentication successful"
+                }.also { auth ->
+                    arkhamusChannel.userAccount = auth.userAccount
+                    arkhamusChannel.gameSession = auth.game
+                    arkhamusChannel.userOfGameSession = auth.userOfTheGame
+                    channelRepository.update(arkhamusChannel)
+                }
+            } ?: AuthRequestProcessData(
+                gameUser = null,
+                otherGameUsers = emptyList(),
+                success = false,
+                reason = "User in game not found"
+            )
+        } ?: AuthRequestProcessData(
+            gameUser = null,
+            otherGameUsers = emptyList(),
+            success = false,
+            reason = "Auth failed"
+        )
     }
 
-    private fun findUserOfGame(account: UserAccount): UserOfGameSession {
+    private fun findUserOfGame(account: UserAccount): UserOfGameSession? {
         return databaseDataAccess.findByUserAccountId(account.id!!)
             .filter { it.gameSession.state in allowedStates }
             .sortedByDescending { it.gameSession.creationTimestamp }
-            .first()
+            .firstOrNull()
     }
 
 }

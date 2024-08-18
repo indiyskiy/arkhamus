@@ -32,7 +32,7 @@
             </td>
             <td  th:text="${game.state}"></td>
             <td  th:text="${game.gameType}"></td>
-            <td  th:text="${game.god?.title}"></td>
+            <td  th:text="${game.god?.name}"></td>
             <td
                 th:text="${#strings.arrayJoin(game?.usersInGame, ', ')}"></td>
             <td  th:text="${game?.creation ?: ''}"></td>

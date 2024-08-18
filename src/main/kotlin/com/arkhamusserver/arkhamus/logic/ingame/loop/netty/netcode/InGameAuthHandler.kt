@@ -30,7 +30,8 @@ class InGameAuthHandler(
         val authResponse = authResponseMapper.process(
             auth.userAccount,
             auth.game,
-            auth.userOfTheGame
+            auth.userOfTheGame,
+            auth.success
         ) ?: return null
         val responseJson = authResponse.toJson()
         arkhamusChannel.channel.writeAndFlush(responseJson)

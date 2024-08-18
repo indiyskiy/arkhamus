@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserRespo
 
 class NettyResponseAuth(
     val message: AuthState = AuthState.FAIL,
+    val reason: String = "",
     tick: Long = -1,
     userId: Long,
     myGameUser: MyGameUserResponse,

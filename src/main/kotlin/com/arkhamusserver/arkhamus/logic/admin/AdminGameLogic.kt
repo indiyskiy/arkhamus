@@ -37,7 +37,7 @@ class AdminGameLogic(
             AdminUserGameSessionDto().apply {
                 this.classInGame = it.classInGame
                 this.roleInGame = it.roleInGame
-                this.winOrLoose = it.won?.let { if (it) "win" else "loose" } ?: "not yet"
+                this.winOrLoose = it.won?.let { if (it) "win" else "loose" } ?: "who knows"
                 this.gameSession = adminGameSessionDto(it.gameSession)
             }
         }

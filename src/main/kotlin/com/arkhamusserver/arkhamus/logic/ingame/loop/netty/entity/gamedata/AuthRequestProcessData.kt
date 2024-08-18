@@ -6,7 +6,8 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 
 class AuthRequestProcessData(
-    var message: String? = null,
+    var reason: String? = null,
+    var success: Boolean = false,
     var userAccount: UserAccount? = null,
     var game: GameSession? = null,
     var userOfTheGame: UserOfGameSession? = null,

@@ -18,36 +18,40 @@ class AuthNettyResponseMapper(
     fun process(
         user: UserAccount?,
         gameSession: GameSession?,
-        userRole: UserOfGameSession?
+        userRole: UserOfGameSession?,
+        success: Boolean,
+        reason: String? = null,
     ): NettyResponseAuth? {
         if (
-            user?.id != null && gameSession != null && userRole != null
+            user?.id != null && gameSession != null && userRole != null && success
         ) {
             val gameUser = redisDataAccess.getGameUser(user.id, gameSession.id) ?: return null
             val otherUsers = redisDataAccess.getOtherGameUsers(user.id, gameSession.id)
 
             return NettyResponseAuth(
                 message = AuthState.SUCCESS,
+                reason = reason ?: "",
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(gameUser, emptyList()),
                 allGameUsers = otherUsers.map {
                     GameUserResponse(it)
-                }
+                },
             )
         } else {
             return NettyResponseAuth(
-                AuthState.FAIL,
-                -1L,
-                0L,
-                MyGameUserResponse(
+                message = AuthState.FAIL,
+                reason = reason ?: "",
+                tick = -1L,
+                userId = 0L,
+                myGameUser = MyGameUserResponse(
                     id = 0,
                     nickName = "",
                     madness = 0.0,
-                    madnessNotches = listOf(100.0, 300.0, 600.0),
+                    madnessNotches = listOf(0.0, 0.0, 0.0),
                     x = 0.0,
                     y = 0.0,
                 ),
-                emptyList()
+                allGameUsers = emptyList(),
             )
         }
     }
