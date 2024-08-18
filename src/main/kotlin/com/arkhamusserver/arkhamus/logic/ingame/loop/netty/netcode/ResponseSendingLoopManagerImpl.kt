@@ -20,7 +20,10 @@ class ResponseSendingLoopManagerImpl(
 
     init {
         taskExecutor.corePoolSize = 3
-        taskExecutor.maxPoolSize = 5
+        taskExecutor.maxPoolSize = 10
+        taskExecutor.queueCapacity = 8
+        taskExecutor.keepAliveSeconds = 60
+        taskExecutor.setThreadNamePrefix("ResponseSendingExecutor-")
         taskExecutor.initialize()
     }
 
@@ -40,9 +43,23 @@ class ResponseSendingLoopManagerImpl(
     }
 
     private fun sendOneMessage(responseMessage: NettyResponse) {
-        val channel = channelRepository.getUserChannel(responseMessage.userId)
-        channel?.channel?.writeAndFlush(
-            responseMessage.toJson()
-        )
+        try {
+            val channel = channelRepository.getUserChannel(responseMessage.userId)
+            channel?.channel?.let {
+                if (it.isActive) {
+                    logger.warn("channel is not active for user ${responseMessage.userId} channel ${channel.channelId}")
+                    return
+                }
+                if (it.isWritable) {
+                    logger.warn("channel is not writeable for user ${responseMessage.userId} channel ${channel.channelId}")
+                    return
+                }
+                it.writeAndFlush(
+                    responseMessage.toJson()
+                )
+            } ?: { logger.warn("channel null for user ${responseMessage.userId}") }
+        } catch (th: Throwable) {
+            logger.error("failed to send message to user ${responseMessage.userId}", th)
+        }
     }
 }
