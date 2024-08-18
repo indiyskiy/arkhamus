@@ -48,17 +48,16 @@ class GameThreadCleaner(
 
 
     private fun abandonIfAllLeave(game: RedisGame, users: List<RedisGameUser>) {
-        if (users.all { it.livedTheGame }) {
+        if (users.all { it.leftTheGame }) {
             logger.info("all users ${users.joinToString { it.userId.toString() }} leave from the game ${game.id}, abandoning..")
-            gameEndLogic.endTheGame(game, users.associateBy { it.userId }, GameEndReason.ABANDONED)
-            gameEndLogic.endTheGameCompletely(game)
+            gameEndLogic.endTheGame(game, users.associateBy { it.userId }, GameEndReason.ABANDONED, 10_000)
         }
     }
 
     private fun markLeaversIfNoResponses(game: RedisGame, users: List<RedisGameUser>) {
         if (game.globalTimer - game.lastTimeSentResponse > MAX_TIME_NO_RESPONSES) {
             logger.info("no responses too long (${game.globalTimer} now, last was ${game.lastTimeSentResponse}) for game ${game.id}, marking all users as leavers")
-            users.forEach { it.livedTheGame = true }
+            users.forEach { it.leftTheGame = true }
             redisGameUserRepository.saveAll(users)
         }
     }

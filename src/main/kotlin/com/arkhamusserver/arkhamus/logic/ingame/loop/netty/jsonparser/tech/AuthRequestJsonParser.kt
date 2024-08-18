@@ -1,6 +1,7 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.jsonparser
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.jsonparser.tech
 
-import com.arkhamusserver.arkhamus.view.dto.netty.request.AuthRequestMessage
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.jsonparser.NettyRequestJsonParser
+import com.arkhamusserver.arkhamus.view.dto.netty.request.tech.AuthRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
 import org.springframework.stereotype.Component
 

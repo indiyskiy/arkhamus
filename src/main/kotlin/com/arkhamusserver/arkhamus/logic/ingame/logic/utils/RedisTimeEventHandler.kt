@@ -19,9 +19,10 @@ class RedisTimeEventHandler(
         game: RedisGame,
         eventType: RedisTimeEventType,
         sourceUser: RedisGameUser? = null,
-        location: Pair<Double, Double>? = null
+        location: Pair<Double, Double>? = null,
+        timeLeft: Long? = null
     ) {
-        createDefaultEvent(game.gameId!!, eventType, game.globalTimer, sourceUser, location)
+        createDefaultEvent(game.gameId!!, eventType, game.globalTimer, sourceUser, location, timeLeft)
     }
 
     fun createDefaultEvent(
@@ -29,9 +30,10 @@ class RedisTimeEventHandler(
         eventType: RedisTimeEventType,
         startDateTime: Long,
         sourceUser: RedisGameUser? = null,
-        location: Pair<Double, Double>? = null
+        location: Pair<Double, Double>? = null,
+        timeLeft: Long? = null
     ) {
-        createDefaultEvent(game.id!!, eventType, startDateTime, sourceUser, location)
+        createDefaultEvent(game.id!!, eventType, startDateTime, sourceUser, location, timeLeft)
     }
 
     fun createDefaultEvent(
@@ -39,9 +41,10 @@ class RedisTimeEventHandler(
         eventType: RedisTimeEventType,
         startDateTime: Long,
         sourceUser: RedisGameUser? = null,
-        location: Pair<Double, Double>? = null
+        location: Pair<Double, Double>? = null,
+        timeLeft: Long? = null
     ) {
-        createDefaultEvent(gameId, eventType, startDateTime, sourceUser?.userId, location)
+        createDefaultEvent(gameId, eventType, startDateTime, sourceUser?.userId, location, timeLeft)
     }
 
     fun createDefaultEvent(
@@ -49,14 +52,15 @@ class RedisTimeEventHandler(
         eventType: RedisTimeEventType,
         startDateTime: Long,
         sourceUserId: Long? = null,
-        location: Pair<Double, Double>? = null
+        location: Pair<Double, Double>? = null,
+        timeLeft: Long? = null
     ) {
         val timer = RedisTimeEvent(
             id = Generators.timeBasedEpochGenerator().generate().toString(),
             gameId = gameId,
             timeStart = startDateTime,
             timePast = 0L,
-            timeLeft = eventType.getDefaultTime(),
+            timeLeft = timeLeft?:eventType.getDefaultTime(),
             sourceUserId = sourceUserId,
             type = eventType,
             state = RedisTimeEventState.ACTIVE,

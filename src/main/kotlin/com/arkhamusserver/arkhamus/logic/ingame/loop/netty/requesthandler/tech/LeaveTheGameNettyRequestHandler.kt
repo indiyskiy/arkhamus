@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.tech
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
@@ -8,15 +8,17 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ErrorGameResponse
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ISawTheEndOfTimesRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.LeaveTheGameRequestGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.view.dto.netty.request.ISawTheEndOfTimesRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.tech.LeaveTheGameRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.springframework.stereotype.Component
+import kotlin.collections.get
 
 @Component
-class ISawTheEndOfTimesNettyRequestHandler(
+class LeaveTheGameNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
     private val inventoryHandler: InventoryHandler,
@@ -24,7 +26,7 @@ class ISawTheEndOfTimesNettyRequestHandler(
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
-        nettyRequestMessage::class.java == ISawTheEndOfTimesRequestMessage::class.java
+        nettyRequestMessage::class.java == LeaveTheGameRequestMessage::class.java
 
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
@@ -38,10 +40,19 @@ class ISawTheEndOfTimesNettyRequestHandler(
             val user = globalGameData.users[userId]!!
             val users = globalGameData.users.values.filter { it.userId != userId }
             val visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents)
-            val gameEnded = globalGameData.game.state in setOf(GameState.GAME_END_SCREEN.name, GameState.FINISHED.name)
 
-            return ISawTheEndOfTimesRequestGameData(
+            val canLeaveTheGame =
+                (user.leftTheGame == false) &&
+                        (globalGameData.game.state in setOf(
+                            GameState.IN_PROGRESS.name,
+                            GameState.PENDING.name
+                        )
+                                )
+            val gameEnded = users.all { it.leftTheGame == true } && canLeaveTheGame
+
+            return LeaveTheGameRequestGameData(
                 gameEnded = gameEnded,
+                canLeaveTheGame = canLeaveTheGame,
                 gameUser = user,
                 otherGameUsers = users,
                 visibleOngoingEvents = visibleOngoingEvents,
@@ -49,9 +60,7 @@ class ISawTheEndOfTimesNettyRequestHandler(
                 visibleItems = inventoryHandler.mapUsersItems(user.items),
                 tick = globalGameData.game.currentTick,
                 ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
-                    user = user,
-                    crafters = globalGameData.crafters,
-                    globalGameData.craftProcess
+                    user = user, crafters = globalGameData.crafters, globalGameData.craftProcess
                 ),
                 containers = globalGameData.containers.values.toList(),
                 crafters = globalGameData.crafters.values.toList(),

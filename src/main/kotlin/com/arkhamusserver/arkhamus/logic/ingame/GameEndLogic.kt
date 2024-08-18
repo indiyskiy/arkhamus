@@ -33,7 +33,8 @@ class GameEndLogic(
     fun endTheGame(
         game: RedisGame,
         users: Map<Long, RedisGameUser>,
-        gameEndReason: GameEndReason
+        gameEndReason: GameEndReason,
+        timeLeft: Long? = null
     ) {
         if (game.state == GameState.FINISHED.name || game.state == GameState.GAME_END_SCREEN.name) {
             logger.info("already finished")
@@ -42,14 +43,18 @@ class GameEndLogic(
         saveGameState(game, gameEndReason)
         val gameSession = endGameSession(game, gameEndReason)
         setWinnersLosers(gameSession, gameEndReason, users)
-        createEndOfGameTimeEvent(game)
+        createEndOfGameTimeEvent(game, timeLeft = timeLeft)
     }
 
-    private fun createEndOfGameTimeEvent(game: RedisGame) {
+    private fun createEndOfGameTimeEvent(
+        game: RedisGame,
+        timeLeft: Long? = null
+    ) {
         logger.info("creating end of the game event")
         timeEventHandler.createDefaultEvent(
             game,
-            RedisTimeEventType.GAME_END
+            RedisTimeEventType.GAME_END,
+            timeLeft = timeLeft
         )
     }
 

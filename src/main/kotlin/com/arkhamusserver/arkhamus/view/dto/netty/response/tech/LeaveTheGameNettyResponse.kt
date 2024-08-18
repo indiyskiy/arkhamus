@@ -1,11 +1,15 @@
-package com.arkhamusserver.arkhamus.view.dto.netty.response
+package com.arkhamusserver.arkhamus.view.dto.netty.response.tech
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToClueResponses
+import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneResponses
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
-class ISawTheEndOfTimesNettyResponse(
+class LeaveTheGameNettyResponse(
     val gameEnded: Boolean,
+    val leftTheGame: Boolean,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,
@@ -31,5 +35,5 @@ class ISawTheEndOfTimesNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     clues = clues.convertToClueResponses(),
-    type = ISawTheEndOfTimesNettyResponse::class.java.simpleName
+    type = LeaveTheGameNettyResponse::class.java.simpleName
 )

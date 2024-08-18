@@ -23,7 +23,7 @@ data class RedisGameUser(
     var won: Boolean? = null,
     var sawTheEndOfTimes: Boolean = false,
     var connected: Boolean,
-    var livedTheGame: Boolean = false,
+    var leftTheGame: Boolean = false,
 ) : WithPoint {
 
     override fun x(): Double {

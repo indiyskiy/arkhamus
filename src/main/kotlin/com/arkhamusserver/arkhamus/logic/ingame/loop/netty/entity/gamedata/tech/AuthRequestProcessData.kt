@@ -1,5 +1,6 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession

@@ -42,7 +42,7 @@ class GameStartUserLogic(
                         )
                     ){
                         logger.info("user ${userInGame.userId} started another game so he disconnected from ${userInGame.gameId}")
-                        userInGame.livedTheGame = true
+                        userInGame.leftTheGame = true
                         redisGameUserRepository.save(userInGame)
                     }
                 }

@@ -1,8 +1,8 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.tech
 
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AuthRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.AuthRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.DatabaseDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.getOtherGameUsers
@@ -10,7 +10,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.NettyAut
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState.*
-import com.arkhamusserver.arkhamus.view.dto.netty.request.AuthRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.tech.AuthRequestMessage
 import org.springframework.stereotype.Component
 
 @Component

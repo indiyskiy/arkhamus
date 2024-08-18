@@ -1,6 +1,7 @@
-package com.arkhamusserver.arkhamus.view.dto.netty.response
+package com.arkhamusserver.arkhamus.view.dto.netty.response.tech
 
 import com.arkhamusserver.arkhamus.model.enums.AuthState
+import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 
