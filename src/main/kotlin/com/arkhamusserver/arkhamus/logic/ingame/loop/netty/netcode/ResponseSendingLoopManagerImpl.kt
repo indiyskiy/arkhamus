@@ -15,7 +15,7 @@ class ResponseSendingLoopManagerImpl(
     private val taskExecutor: ThreadPoolTaskExecutor = ThreadPoolTaskExecutor()
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(ResponseSendingLoopManager::class.java)
+        var logger: Logger = LoggerFactory.getLogger(ResponseSendingLoopManagerImpl::class.java)
     }
 
     init {
@@ -46,11 +46,11 @@ class ResponseSendingLoopManagerImpl(
         try {
             val channel = channelRepository.getUserChannel(responseMessage.userId)
             channel?.channel?.let {
-                if (it.isActive) {
+                if (!it.isActive) {
                     logger.warn("channel is not active for user ${responseMessage.userId} channel ${channel.channelId}")
                     return
                 }
-                if (it.isWritable) {
+                if (!it.isWritable) {
                     logger.warn("channel is not writeable for user ${responseMessage.userId} channel ${channel.channelId}")
                     return
                 }
