@@ -13,7 +13,7 @@ import com.arkhamusserver.arkhamus.view.dto.GameSessionSettingsDto
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
 import com.arkhamusserver.arkhamus.view.maker.GameSessionSettingsDtoMaker
 import com.arkhamusserver.arkhamus.view.validator.GameValidator
-import jakarta.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Component
 
 

@@ -3,7 +3,6 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisQuestReward")
@@ -15,5 +14,4 @@ data class RedisQuestReward(
     @Indexed var gameId: Long,
     var questId: Long,
     var userId: Long,
-    @TimeToLive val timeToLive: Long = 10800
 )

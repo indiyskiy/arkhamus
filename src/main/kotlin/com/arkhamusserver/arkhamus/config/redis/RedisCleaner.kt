@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import jakarta.annotation.PostConstruct
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class RedisCleaner(
@@ -13,6 +14,7 @@ class RedisCleaner(
     private val toDelete: List<NonGenericMyCrudRepository>,
 ) {
     @PostConstruct
+    @Transactional
     fun cleanAll() {
         redisGameRepository.deleteAll()
         toDelete.forEach { repo ->
@@ -22,6 +24,7 @@ class RedisCleaner(
         }
     }
 
+    @Transactional
     fun cleanGame(gameId: Long) {
         toDelete.forEach { repo ->
             val entities = repo.findByGameId(gameId)
@@ -32,6 +35,7 @@ class RedisCleaner(
         redisGameRepository.delete(redisGameRepository.findByGameId(gameId))
     }
 
+    @Transactional
     fun cleanGameWithoutGameId(redisGameSession: RedisGame) {
         redisGameRepository.delete(redisGameSession)
     }

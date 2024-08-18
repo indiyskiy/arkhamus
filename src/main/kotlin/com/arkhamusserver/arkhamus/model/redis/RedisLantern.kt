@@ -3,7 +3,6 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisLantern")
@@ -17,7 +16,6 @@ data class RedisLantern(
     var x: Double,
     var y: Double,
     var lightRange: Double,
-    @TimeToLive val timeToLive: Long = 10800
 ) : WithPoint {
 
     override fun x(): Double {

@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisGameUser")
@@ -25,7 +24,6 @@ data class RedisGameUser(
     var sawTheEndOfTimes: Boolean = false,
     var connected: Boolean,
     var livedTheGame: Boolean = false,
-    @TimeToLive val timeToLive: Long = 10800
 ) : WithPoint {
 
     override fun x(): Double {

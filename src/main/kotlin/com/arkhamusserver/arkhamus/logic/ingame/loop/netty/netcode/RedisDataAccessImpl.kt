@@ -26,6 +26,7 @@ class RedisDataAccessImpl(
     private val redisUserQuestProgressRepository: RedisUserQuestProgressRepository,
     private val redisQuestRewardRepository: RedisQuestRewardRepository,
 ) : RedisDataAccess {
+
     override fun getGameUser(userId: Long?, gameId: Long?) =
         gameUserRepository.findByUserIdAndGameId(userId!!, gameId!!).firstOrNull()
 

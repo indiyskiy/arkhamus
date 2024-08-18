@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.model.redis
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisAltar")
@@ -13,7 +12,6 @@ data class RedisAltar(
     var x: Double,
     var y: Double,
     var interactionRadius: Double,
-    @TimeToLive val timeToLive: Long = 10800
 ) : WithPoint {
 
     override fun x(): Double {

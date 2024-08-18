@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.model.redis
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisLevelZoneTetragon")
@@ -18,5 +17,4 @@ data class RedisLevelZoneTetragon(
     var point1X: Double, var point1Y: Double,
     var point2X: Double, var point2Y: Double,
     var point3X: Double, var point3Y: Double,
-    @TimeToLive val timeToLive: Long = 10800
 )

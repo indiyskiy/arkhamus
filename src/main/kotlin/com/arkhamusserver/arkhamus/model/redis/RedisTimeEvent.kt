@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisTimeEvent")
@@ -20,5 +19,4 @@ data class RedisTimeEvent(
     var state: RedisTimeEventState,
     var xLocation: Double? = null,
     var yLocation: Double? = null,
-    @TimeToLive val timeToLive: Long = 10800
 )

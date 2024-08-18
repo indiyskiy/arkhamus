@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic
 
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
-import jakarta.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Component
 
 @Component

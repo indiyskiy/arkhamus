@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRe
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import jakarta.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Component
 
 @Component

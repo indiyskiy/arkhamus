@@ -36,7 +36,7 @@ class InGameAuthHandler(
         val responseJson = authResponse.toJson()
         arkhamusChannel.channel.writeAndFlush(responseJson)
         return if (authResponse.message == AuthState.FAIL) {
-            logger.error("fake auth request - $requestData")
+            logger.error("fake auth request - ${authResponse.reason}")
             channelRepository.closeAndRemove(arkhamusChannel)
             null
         } else {
