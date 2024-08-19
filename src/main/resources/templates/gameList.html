@@ -17,29 +17,28 @@
     <h1>Games</h1>
     <table style="border-collapse: collapse; width: 100%;">
         <tr>
-            <th >Id</th>
-            <th >State</th>
-            <th >Game Type</th>
-            <th >God</th>
-            <th >Users</th>
-            <th >Created</th>
-            <th >Started</th>
-            <th >Finished</th>
+            <th>Id</th>
+            <th>State</th>
+            <th>Game Type</th>
+            <th>God</th>
+            <th>Users</th>
+            <th>Created</th>
+            <th>Started</th>
+            <th>Finished</th>
+            <th>Reason</th>
         </tr>
         <tr th:each="game : ${games}">
-            <td >
+            <td>
                 <a th:href="@{/admin/browser/game/{gameId}(gameId=${game.id})}" th:text="${game.id}"></a>
             </td>
-            <td  th:text="${game.state}"></td>
-            <td  th:text="${game.gameType}"></td>
-            <td  th:text="${game.god?.name}"></td>
-            <td
-                th:text="${#strings.arrayJoin(game?.usersInGame, ', ')}"></td>
-            <td  th:text="${game?.creation ?: ''}"></td>
-            <td
-                th:text="${game?.started ?: ''}"></td>
-            <td
-                th:text="${game?.finished ?: ''}"></td>
+            <td th:text="${game.state}"></td>
+            <td th:text="${game.gameType}"></td>
+            <td th:text="${game.god?.name}"></td>
+            <td th:text="${#strings.arrayJoin(game?.usersInGame, ', ')}"></td>
+            <td th:text="${game?.creation ?: ''}"></td>
+            <td th:text="${game?.started ?: ''}"></td>
+            <td th:text="${game?.finished ?: ''}"></td>
+            <td th:text="${game?.gameEndReason ?: ''}"></td>
         </tr>
     </table>
 </div>

@@ -18,32 +18,26 @@
 
     <table>
         <tr>
-            <th >ID</th>
-            <th >State</th>
-            <th >Game Type</th>
-            <th >God</th>
-            <th >Token</th>
-            <th >Created</th>
-            <th >Started</th>
-            <th >Finished</th>
+            <th>ID</th>
+            <th>State</th>
+            <th>Game Type</th>
+            <th>God</th>
+            <th>Token</th>
+            <th>Created</th>
+            <th>Started</th>
+            <th>Finished</th>
+            <th>Ending reason</th>
         </tr>
         <tr>
-            <td
-                th:text="${game?.id ?: ''}"></td>
-            <td
-                th:text="${game?.state ?: ''}"></td>
-            <td
-                th:text="${game?.gameType ?: ''}"></td>
-            <td
-                th:text="${game?.god?.name ?: ''}"></td>
-            <td
-                th:text="${game?.token ?: ''}"></td>
-            <td
-                th:text="${game?.creation ?: ''}"></td>
-            <td
-                th:text="${game?.started ?: ''}"></td>
-            <td
-                th:text="${game?.finished ?: ''}"></td>
+            <td th:text="${game?.id ?: ''}"></td>
+            <td th:text="${game?.state ?: ''}"></td>
+            <td th:text="${game?.gameType ?: ''}"></td>
+            <td th:text="${game?.god?.name ?: ''}"></td>
+            <td th:text="${game?.token ?: ''}"></td>
+            <td th:text="${game?.creation ?: ''}"></td>
+            <td th:text="${game?.started ?: ''}"></td>
+            <td th:text="${game?.finished ?: ''}"></td>
+            <td th:text="${game?.gameEndReason ?: ''}"></td>
         </tr>
     </table>
 
@@ -51,20 +45,16 @@
 
     <table>
         <tr>
-            <th >level Id</th>
-            <th >level</th>
-            <th >lobby size</th>
-            <th >number of cultists</th>
+            <th>level Id</th>
+            <th>level</th>
+            <th>lobby size</th>
+            <th>number of cultists</th>
         </tr>
         <tr>
-            <td
-                th:text="${game?.gameSessionSettings?.level?.levelId ?: ''}"></td>
-            <td
-                th:text="${game?.gameSessionSettings?.level?.name ?: ''}"></td>
-            <td
-                th:text="${game?.gameSessionSettings?.lobbySize ?: ''}"></td>
-            <td
-                th:text="${game?.gameSessionSettings?.numberOfCultists ?: ''}"></td>
+            <td th:text="${game?.gameSessionSettings?.level?.levelId ?: ''}"></td>
+            <td th:text="${game?.gameSessionSettings?.level?.name ?: ''}"></td>
+            <td th:text="${game?.gameSessionSettings?.lobbySize ?: ''}"></td>
+            <td th:text="${game?.gameSessionSettings?.numberOfCultists ?: ''}"></td>
         </tr>
     </table>
 
@@ -72,27 +62,27 @@
 
     <table>
         <tr>
-            <th >User ID</th>
-            <th >Role</th>
-            <th >Class</th>
-            <th >User Name</th>
-            <th >Is Host</th>
-            <th >Game Skin</th>
+            <th>User ID</th>
+            <th>Role</th>
+            <th>Class</th>
+            <th>User Name</th>
+            <th>Is Host</th>
+            <th>Game Skin</th>
         </tr>
         <tr th:if="${game?.usersInGame != null}" th:each="user : ${game.usersInGame}">
-            <td >
+            <td>
                 <a th:href="@{/admin/browser/user/{userId}(userId=${user?.userId ?: ''})}"
                    th:text="${user?.userId ?: ''}">
                 </a>
             </td>
             <td
-                th:text="${user?.role?.userRole ?: ''}"></td>
+                    th:text="${user?.role?.userRole ?: ''}"></td>
             <td
-                th:text="${user?.role?.userClass ?: ''}"></td>
-            <td  th:text="${user?.nickName ?: ''}"></td>
-            <td  th:text="${user?.isHost ?: ''}"></td>
+                    th:text="${user?.role?.userClass ?: ''}"></td>
+            <td th:text="${user?.nickName ?: ''}"></td>
+            <td th:text="${user?.isHost ?: ''}"></td>
             <td
-                th:text="${user?.gameSkin?.skinColor ?: ''}"></td>
+                    th:text="${user?.gameSkin?.skinColor ?: ''}"></td>
         </tr>
     </table>
 </div>

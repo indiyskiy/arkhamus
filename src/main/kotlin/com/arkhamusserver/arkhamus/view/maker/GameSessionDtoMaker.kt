@@ -55,6 +55,7 @@ class GameSessionDtoMaker(
         return AdminGameSessionDto().apply {
             id = gameSession.id
             state = gameSession.state
+            gameEndReason = gameSession.gameEndReason
             token = gameSession.token
             gameType = gameSession.gameType
             gameSessionSettings = gameSessionSettingsDtoMaker.toDto(gameSession.gameSessionSettings)

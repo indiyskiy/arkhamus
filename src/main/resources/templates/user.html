@@ -54,18 +54,12 @@
                 <a th:href="@{/admin/browser/game/{gameId}(gameId=${game?.gameSession?.id})}"
                    th:text="${game?.gameSession?.id}"></a>
             </td>
-            <td
-                    th:text="${game?.gameSession?.state ?: ''}"></td>
-            <td
-                    th:text="${game?.gameSession?.gameType ?: ''}"></td>
-            <td
-                    th:text="${game?.winOrLoose ?: ''}"></td>
-            <td
-                    th:text="${game?.roleInGame ?: ''}"></td>
-            <td
-                    th:text="${game?.classInGame ?: ''}"></td>
-            <td
-                    th:text="${game?.gameSession?.god?.name ?: ''}"></td>
+            <td th:text="${game?.gameSession?.state ?: ''}"></td>
+            <td th:text="${game?.gameSession?.gameType ?: ''}"></td>
+            <td th:text="${game?.winOrLoose ?: ''}"></td>
+            <td th:text="${game?.roleInGame ?: ''}"></td>
+            <td th:text="${game?.classInGame ?: ''}"></td>
+            <td th:text="${game?.gameSession?.god?.name ?: ''}"></td>
         </tr>
     </table>
 </div>

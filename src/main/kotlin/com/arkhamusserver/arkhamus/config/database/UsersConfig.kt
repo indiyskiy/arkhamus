@@ -85,6 +85,11 @@ class UsersConfig {
             "evans",
             role = roles[RoleName.ADMIN]!!
         )
+        addUser(
+            "toklian@gmail.com",
+            "toklian",
+            role = roles[RoleName.ADMIN]!!
+        )
         repeat(100) { i ->
             addUser(
                 "test${i}@gmail.com",
