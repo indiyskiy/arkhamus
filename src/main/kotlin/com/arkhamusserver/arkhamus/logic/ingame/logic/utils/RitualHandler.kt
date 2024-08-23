@@ -13,6 +13,7 @@ import com.arkhamusserver.arkhamus.model.redis.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class RitualHandler(
@@ -60,6 +61,7 @@ class RitualHandler(
         }
     }
 
+    @Transactional
     fun failRitual(
         altarHolder: RedisAltarHolder?,
         altarPolling: RedisAltarPolling,
@@ -81,7 +83,7 @@ class RitualHandler(
         )
     }
 
-
+    @Transactional
     fun finishAltarPolling(
         altarPolling: RedisAltarPolling,
         altarHolder: RedisAltarHolder?
@@ -92,6 +94,7 @@ class RitualHandler(
         return altarHolder?.let { redisAltarHolderRepository.save(altarHolder) }
     }
 
+    @Transactional
     fun tryToForceStartRitual(
         allUsers: Collection<RedisGameUser>,
         altarPolling: RedisAltarPolling,
@@ -123,6 +126,7 @@ class RitualHandler(
         }
     }
 
+    @Transactional
     fun lockTheGod(
         quorum: God,
         altars: List<RedisAltar>,

@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.Lantern
 import com.arkhamusserver.arkhamus.model.redis.RedisLantern
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import kotlin.random.Random
 
 @Component
@@ -16,6 +17,7 @@ class GameStartLanternLogic(
 ) {
     private val random: Random = Random(System.currentTimeMillis())
 
+    @Transactional
     fun createLanterns(
         levelId: Long,
         game: GameSession

@@ -9,6 +9,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequ
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GodVoteSkipRequestProcessor(
@@ -20,6 +21,7 @@ class GodVoteSkipRequestProcessor(
         return request.requestProcessData is GodVoteSkipRequestProcessData
     }
 
+    @Transactional
     override fun process(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,

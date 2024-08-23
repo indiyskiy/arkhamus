@@ -36,6 +36,7 @@ class AdminQuestLogic(
         return questRepository.findByLevelId(levelId).map { it.toDto() }
     }
 
+    @Transactional
     fun create(levelId: Long): AdminQuestDto {
         val level = levelRepository.findByLevelId(levelId).maxBy { it.version }
         val quest = newQuest(level)
@@ -54,7 +55,7 @@ class AdminQuestLogic(
     }
 
     @Transactional
-    fun save(questId: Long, questDto: AdminQuestDto): AdminQuestDto {
+    fun update(questId: Long, questDto: AdminQuestDto): AdminQuestDto {
         val quest = questRepository.findById(questId).get()
         assertEquals(quest.id!!, questDto.id, "changing wrong quest", Quest::class.simpleName!!)
         val allRelatedTasks: List<LevelTask> = (quest.questSteps.map { it.levelTask }) +

@@ -13,6 +13,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisLevelZoneEllipse
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZoneTetragon
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GameStartLevelZoneLogic(
@@ -23,6 +24,8 @@ class GameStartLevelZoneLogic(
     private val redisLevelTetragonRepository: RedisLevelTetragonRepository,
     private val redisLevelEllipseRepository: RedisLevelEllipseRepository,
 ) {
+
+    @Transactional
     fun createLevelZones(levelId: Long, game: GameSession) {
         val levelZones = levelZoneRepository.findByLevelId(levelId)
         levelZones.forEach {

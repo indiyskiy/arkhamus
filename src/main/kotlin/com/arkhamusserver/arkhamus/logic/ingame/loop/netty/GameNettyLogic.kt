@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GameNettyLogic(
@@ -27,6 +28,7 @@ class GameNettyLogic(
         }
     }
 
+    @Transactional
     fun markPlayerDisconnected(user: UserOfGameSession) {
         userRepository.findByUserIdAndGameId(user.id!!, user.gameSession.id!!).firstOrNull()?.let { redisUser ->
             redisUser.connected = false
@@ -34,6 +36,7 @@ class GameNettyLogic(
         }
     }
 
+    @Transactional
     fun markPlayerConnected(user: UserOfGameSession) {
         userRepository.findByUserIdAndGameId(user.id!!, user.gameSession.id!!).firstOrNull()?.let { redisUser ->
             redisUser.connected = true

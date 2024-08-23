@@ -7,12 +7,15 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.Crafter
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GameStartCrafterLogic(
     private val redisCrafterRepository: RedisCrafterRepository,
     private val crafterRepository: CrafterRepository,
 ) {
+
+    @Transactional
     fun createCrafters(
         levelId: Long,
         game: GameSession

@@ -6,13 +6,14 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class CreateCastAbilityEventHandler(
     private val redisAbilityCastRepository: RedisAbilityCastRepository,
 ) {
 
-
+    @Transactional
     fun createCastAbilityEvent(
         ability: Ability,
         sourceUserId: Long,

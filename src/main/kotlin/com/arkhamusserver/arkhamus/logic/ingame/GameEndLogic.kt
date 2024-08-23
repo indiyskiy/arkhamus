@@ -168,6 +168,7 @@ class GameEndLogic(
         logger.info("user ${user.userAccount.id} won? ${user.won ?: "null"}")
     }
 
+    @Transactional
     fun endTheGameCompletely(game: RedisGame) {
         logger.info("ending the game completely ${game.gameId}")
         game.state = GameState.FINISHED.name

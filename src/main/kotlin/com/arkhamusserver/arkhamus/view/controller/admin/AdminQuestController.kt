@@ -30,7 +30,7 @@ class AdminQuestController(
         @RequestBody quest: AdminQuestDto,
     ): AdminQuestDto {
         logger.info("save by rest controller")
-        val savedQuest: AdminQuestDto = adminQuestLogic.save(questId, quest)
+        val savedQuest: AdminQuestDto = adminQuestLogic.update(questId, quest)
         return savedQuest
     }
 

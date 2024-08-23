@@ -15,6 +15,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import kotlin.math.min
 
 @Component
@@ -32,6 +33,7 @@ class CraftProcessRequestProcessor(
         return request.requestProcessData is CraftProcessRequestProcessData
     }
 
+    @Transactional
     override fun process(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,

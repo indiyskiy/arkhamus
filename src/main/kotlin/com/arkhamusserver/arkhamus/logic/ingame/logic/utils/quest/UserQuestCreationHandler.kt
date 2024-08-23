@@ -12,6 +12,7 @@ import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import kotlin.random.Random
 
 @Component
@@ -54,6 +55,7 @@ class UserQuestCreationHandler(
         return userInProgress <= QUESTS_TO_REFRESH
     }
 
+    @Transactional
     fun addQuests(
         data: GameUserData,
         levelQuests: List<RedisQuest>,

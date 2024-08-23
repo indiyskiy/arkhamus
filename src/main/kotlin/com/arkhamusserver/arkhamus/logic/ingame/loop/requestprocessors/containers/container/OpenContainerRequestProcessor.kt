@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequ
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class OpenContainerRequestProcessor(
@@ -17,6 +18,7 @@ class OpenContainerRequestProcessor(
         return request.requestProcessData is OpenContainerRequestGameData
     }
 
+    @Transactional
     override fun process(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,

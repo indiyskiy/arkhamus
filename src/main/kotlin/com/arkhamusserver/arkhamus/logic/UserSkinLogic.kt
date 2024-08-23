@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.view.dto.UserSkinDto
 import com.arkhamusserver.arkhamus.view.maker.UserSkinDtoMaker
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrDefault
 import kotlin.random.Random
 
@@ -26,7 +27,7 @@ class UserSkinLogic(
             .toDto()
     }
 
-
+    @Transactional
     fun updateUserSkin(userSkin: UserSkinDto): UserSkinDto {
         val player = currentUserService.getCurrentUserAccount()
         return repository.findByUserAccountId(player.id!!)

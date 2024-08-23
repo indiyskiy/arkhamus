@@ -14,6 +14,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserRespo
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class InGameStartGameHandler(
@@ -25,6 +26,7 @@ class InGameStartGameHandler(
         var logger: Logger = LoggerFactory.getLogger(InGameStartGameHandler::class.java)
     }
 
+    @Transactional
     fun tryToStartGame(
         authData: AuthRequestProcessData
     ) {

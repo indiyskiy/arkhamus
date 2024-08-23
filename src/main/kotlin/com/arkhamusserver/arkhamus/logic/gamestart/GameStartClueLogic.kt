@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import kotlin.random.Random
 
 @Component
@@ -15,6 +16,7 @@ class GameStartClueLogic(
 ) {
     private val random: Random = Random(System.currentTimeMillis())
 
+    @Transactional
     fun createClues(
         levelId: Long,
         game: GameSession

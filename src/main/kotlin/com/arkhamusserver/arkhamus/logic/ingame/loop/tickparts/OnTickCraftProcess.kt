@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import kotlin.math.min
 
 @Component
@@ -24,6 +25,7 @@ class OnTickCraftProcess(
         var logger: Logger = LoggerFactory.getLogger(OnTickCraftProcess::class.java)
     }
 
+    @Transactional
     fun applyCraftProcess(
         globalGameData: GlobalGameData,
         castAbilities: List<RedisCraftProcess>,

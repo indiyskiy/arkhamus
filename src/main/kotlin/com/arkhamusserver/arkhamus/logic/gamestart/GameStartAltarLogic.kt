@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GameStartAltarLogic(
@@ -20,6 +21,7 @@ class GameStartAltarLogic(
     private val ritualAreaRepository: RitualAreaRepository,
 ) {
 
+    @Transactional
     fun createAltars(
         levelId: Long,
         game: GameSession

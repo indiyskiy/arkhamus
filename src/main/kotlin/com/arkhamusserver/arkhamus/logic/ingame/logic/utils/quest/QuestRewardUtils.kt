@@ -15,6 +15,7 @@ import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class QuestRewardUtils(
@@ -51,6 +52,7 @@ class QuestRewardUtils(
                 userQuestProgress.questState !in setOf(UserQuestState.FINISHED, UserQuestState.DECLINED)
     }
 
+    @Transactional
     fun findOrCreate(
         rewards: List<RedisQuestReward>?,
         quest: RedisQuest,

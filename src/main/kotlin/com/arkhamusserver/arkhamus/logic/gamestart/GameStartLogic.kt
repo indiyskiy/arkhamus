@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import kotlin.random.Random
 
 @Component
@@ -27,6 +28,7 @@ class GameStartLogic(
         val random: Random = Random(System.currentTimeMillis())
     }
 
+    @Transactional
     fun startGame(game: GameSession) {
         game.gameSessionSettings.level?.levelId?.let { levelId ->
             gameStartGameLogic.createTheGame(game)

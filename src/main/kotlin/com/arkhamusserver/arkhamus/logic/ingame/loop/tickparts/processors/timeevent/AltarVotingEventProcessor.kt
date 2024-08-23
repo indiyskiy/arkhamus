@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class AltarVotingEventProcessor(
@@ -29,6 +30,7 @@ class AltarVotingEventProcessor(
 
     }
 
+    @Transactional
     override fun processEnd(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,

@@ -13,6 +13,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.crafter.Upd
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class UpdateCrafterRequestProcessor(
@@ -28,6 +29,7 @@ class UpdateCrafterRequestProcessor(
         return request.requestProcessData is UpdateCrafterRequestGameData
     }
 
+    @Transactional
     override fun process(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,

@@ -1,13 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic.Companion.logger
-import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.loadGlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.*
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import org.springframework.stereotype.Component
@@ -21,8 +18,7 @@ class ArkhamusOneTickLogicImpl(
     private val oneTickTimeEvent: OneTickTimeEvent,
     private val onTickAbilityCast: OnTickAbilityCast,
     private val onTickCraftProcess: OnTickCraftProcess,
-    private val gameUserRedisRepository: RedisGameUserRepository,
-    private val gameRepository: RedisGameRepository,
+    private val afterLoopSaving: AfterLoopSavingComponent,
 ) : ArkhamusOneTickLogic {
 
     override fun processCurrentTasks(
@@ -64,8 +60,7 @@ class ArkhamusOneTickLogicImpl(
             if(responses.isNotEmpty()){
                 game.lastTimeSentResponse = game.globalTimer
             }
-            saveAllUsers(globalGameData)
-            gameRepository.save(game)
+            afterLoopSaving.saveAll(globalGameData, game)
             return responses
         } catch (e: Throwable) {
             logger.error("Error processing current tasks: ${e.message}", e)
@@ -73,10 +68,5 @@ class ArkhamusOneTickLogicImpl(
         return emptyList()
     }
 
-    private fun saveAllUsers(globalGameData: GlobalGameData) {
-        globalGameData.users.forEach { gameUser ->
-            gameUserRedisRepository.save(gameUser.value)
-        }
-    }
 
 }

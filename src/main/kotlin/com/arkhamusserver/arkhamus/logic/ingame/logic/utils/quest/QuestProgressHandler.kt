@@ -14,6 +14,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestRespon
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import kotlin.math.min
 
 @Component
@@ -27,6 +28,7 @@ class QuestProgressHandler(
         var logger: Logger = LoggerFactory.getLogger(QuestProgressHandler::class.java)
     }
 
+    @Transactional
     fun acceptTheQuest(userQuestProgress: RedisUserQuestProgress?, data: QuestAcceptRequestProcessData) {
         userQuestProgress?.let {
             it.questState = IN_PROGRESS
@@ -37,6 +39,7 @@ class QuestProgressHandler(
         data.canDecline = true
     }
 
+    @Transactional
     fun finishQuest(
         globalGameData: GlobalGameData,
         data: TakeQuestRewardRequestProcessData
@@ -52,6 +55,7 @@ class QuestProgressHandler(
         addMoreQuestsMaybe(globalGameData, data)
     }
 
+    @Transactional
     fun declineTheQuest(
         globalGameData: GlobalGameData,
         data: QuestDeclineRequestProcessData
@@ -161,6 +165,7 @@ class QuestProgressHandler(
                 userQuestProgress.questState in setOf(COMPLETED) &&
                 userQuestProgress.questCurrentStep == quest.levelTaskIds.size
 
+    @Transactional
     fun readTheQuest(userQuestProgress: RedisUserQuestProgress?) {
         userQuestProgress?.let {
             it.questState = READ
@@ -189,6 +194,7 @@ class QuestProgressHandler(
         return Pair(quest, userQuestProgress)
     }
 
+    @Transactional
     fun nextStep(userQuestProgress: RedisUserQuestProgress?, quest: RedisQuest?) {
         userQuestProgress?.let { progress ->
             quest?.let { questNotNull ->

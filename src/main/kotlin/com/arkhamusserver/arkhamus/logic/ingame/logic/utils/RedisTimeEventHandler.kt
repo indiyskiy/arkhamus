@@ -10,11 +10,13 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class RedisTimeEventHandler(
     private val redisTimeEventRepository: RedisTimeEventRepository
 ) {
+    @Transactional
     fun createDefaultEvent(
         game: RedisGame,
         eventType: RedisTimeEventType,
@@ -25,6 +27,7 @@ class RedisTimeEventHandler(
         createDefaultEvent(game.gameId!!, eventType, game.globalTimer, sourceUser, location, timeLeft)
     }
 
+    @Transactional
     fun createDefaultEvent(
         game: GameSession,
         eventType: RedisTimeEventType,
@@ -36,6 +39,7 @@ class RedisTimeEventHandler(
         createDefaultEvent(game.id!!, eventType, startDateTime, sourceUser, location, timeLeft)
     }
 
+    @Transactional
     fun createDefaultEvent(
         gameId: Long,
         eventType: RedisTimeEventType,
@@ -47,6 +51,7 @@ class RedisTimeEventHandler(
         createDefaultEvent(gameId, eventType, startDateTime, sourceUser?.userId, location, timeLeft)
     }
 
+    @Transactional
     fun createDefaultEvent(
         gameId: Long,
         eventType: RedisTimeEventType,

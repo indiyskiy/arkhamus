@@ -9,6 +9,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
 import kotlin.random.Random
 
@@ -22,6 +23,7 @@ class GameStartGameLogic(
         private val random: Random = Random(System.currentTimeMillis())
     }
 
+    @Transactional
     fun createTheGame(game: GameSession) {
         game.god = God.values().random(random)
         game.state = GameState.PENDING

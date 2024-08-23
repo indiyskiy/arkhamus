@@ -7,11 +7,14 @@ import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class CraftProcessHandler(
     private val redisCraftProcessRepository: RedisCraftProcessRepository
 ) {
+
+    @Transactional
     fun startCraftProcess(
         recipe: Recipe,
         crafter: RedisCrafter,

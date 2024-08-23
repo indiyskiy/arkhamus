@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import kotlin.math.min
 
 @Component
@@ -22,6 +23,7 @@ class OneTickTimeEvent(
         var logger: Logger = LoggerFactory.getLogger(OneTickTimeEvent::class.java)
     }
 
+    @Transactional
     fun processTimeEvents(
         globalGameData: GlobalGameData,
         timeEvents: List<RedisTimeEvent>,

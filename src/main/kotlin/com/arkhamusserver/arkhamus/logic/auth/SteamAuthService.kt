@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
 import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class SteamAuthService(
@@ -25,6 +26,7 @@ class SteamAuthService(
         private val logger = LoggerFactory.getLogger(SteamAuthService::class.java)
     }
 
+    @Transactional
     fun authenticationSteam(steamId: String): AuthenticationResponse {
         val userBySteamId = userAccountRepository.findBySteamId(steamId)
         if (userBySteamId.isPresent) {

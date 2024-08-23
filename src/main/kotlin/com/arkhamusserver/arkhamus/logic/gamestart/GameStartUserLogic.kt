@@ -14,6 +14,7 @@ import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import kotlin.random.Random
 
 @Component
@@ -29,6 +30,7 @@ class GameStartUserLogic(
         private val logger: Logger = LoggerFactory.getLogger(GameStartLogic::class.java)
     }
 
+    @Transactional
     fun leaveFromPreviousGames(game: GameSession) {
         game.usersOfGameSession.forEach { userOfGameSession ->
             val usersInGames = redisGameUserRepository.findByUserId(userOfGameSession.userAccount.id!!)

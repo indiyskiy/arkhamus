@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.redis.*
+import org.springframework.transaction.annotation.Transactional
 
 interface RedisDataAccess {
     fun getGameUser(userId: Long?, gameId: Long?): RedisGameUser?
@@ -31,6 +32,7 @@ interface RedisDataAccess {
     fun deleteTimeEvents(gameId: Long)
 }
 
+@Transactional(readOnly = true)
 fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     val gameId = game.gameId!!
     val allUsers = getGameUsers(gameId)
