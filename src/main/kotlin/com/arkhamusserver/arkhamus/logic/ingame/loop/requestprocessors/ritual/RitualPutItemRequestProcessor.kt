@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual
 
 import com.arkhamusserver.arkhamus.logic.ingame.GameEndLogic
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RedisTimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualGoingDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional
 class RitualPutItemRequestProcessor(
     private val inventoryHandler: InventoryHandler,
     private val redisAltarHolderRepository: RedisAltarHolderRepository,
-    private val eventHandler: RedisTimeEventHandler,
+    private val eventHandler: TimeEventHandler,
     private val gameEndLogic: GameEndLogic,
     private val ritualGoingDataHandler: RitualGoingDataHandler
 ) : NettyRequestProcessor {

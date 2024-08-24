@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RedisTimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
@@ -24,7 +24,7 @@ class GodVoteStartRequestProcessor(
     private val redisAltarPollingRepository: RedisAltarPollingRepository,
     private val redisAltarHolderRepository: RedisAltarHolderRepository,
     private val ritualHandler: RitualHandler,
-    private val redisTimeEventHandler: RedisTimeEventHandler,
+    private val timeEventHandler: TimeEventHandler,
 ) : NettyRequestProcessor {
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
@@ -97,7 +97,7 @@ class GodVoteStartRequestProcessor(
         sourceUserId: Long,
         altar: RedisAltar
     ) {
-        redisTimeEventHandler.createEvent(
+        timeEventHandler.createEvent(
             gameId,
             RedisTimeEventType.ALTAR_VOTING,
             globalTimer,

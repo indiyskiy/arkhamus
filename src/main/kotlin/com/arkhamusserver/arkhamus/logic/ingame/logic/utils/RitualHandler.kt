@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class RitualHandler(
-    private val eventHandler: RedisTimeEventHandler,
+    private val eventHandler: TimeEventHandler,
     private val redisAltarPollingRepository: RedisAltarPollingRepository,
     private val redisAltarHolderRepository: RedisAltarHolderRepository,
     private val godVoteHandler: GodVoteHandler,

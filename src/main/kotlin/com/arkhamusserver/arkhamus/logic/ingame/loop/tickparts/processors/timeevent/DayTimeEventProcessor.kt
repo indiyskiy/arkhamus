@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RedisTimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class DayTimeEventProcessor(
-    private val redisTimeEventHandler: RedisTimeEventHandler,
+    private val timeEventHandler: TimeEventHandler,
 ) : TimeEventProcessor {
     override fun accept(type: RedisTimeEventType): Boolean =
         type == RedisTimeEventType.DAY
@@ -41,7 +41,7 @@ class DayTimeEventProcessor(
         event: RedisTimeEvent,
         currentGameTime: Long
     ) {
-        redisTimeEventHandler.createEvent(
+        timeEventHandler.createEvent(
             event.gameId,
             RedisTimeEventType.NIGHT,
             currentGameTime,

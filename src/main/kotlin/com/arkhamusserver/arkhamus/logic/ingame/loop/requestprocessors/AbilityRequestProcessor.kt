@@ -59,7 +59,7 @@ class AbilityRequestProcessor(
         globalTimer: Long
     ) {
         createCastAbilityEventHandler.createCastAbilityEvent(ability, userId, gameId, globalTimer)
-        shortTimeEventHandler.createCastAbilityEvent(ability, userId, gameId, globalTimer)
+        shortTimeEventHandler.createCastAbilityEvent(userId, gameId, globalTimer)
     }
 
     private fun consumeItem(

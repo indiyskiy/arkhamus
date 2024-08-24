@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RedisTimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent.NightTimeEventProcessor
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class GameStartTimeEventLogic(
     private val nightTimeEventProcessor: NightTimeEventProcessor,
-    private val redisTimeEventHandler: RedisTimeEventHandler,
+    private val timeEventHandler: TimeEventHandler,
 ) {
 
     @Transactional
@@ -20,7 +20,7 @@ class GameStartTimeEventLogic(
     }
 
     private fun createGodAwakenTimer(game: GameSession) {
-        redisTimeEventHandler.createEvent(
+        timeEventHandler.createEvent(
             game,
             RedisTimeEventType.GOD_AWAKEN,
             0

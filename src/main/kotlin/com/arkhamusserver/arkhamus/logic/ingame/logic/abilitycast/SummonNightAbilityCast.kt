@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RedisTimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class SummonNightAbilityCast(
-    private val redisTimeEventHandler: RedisTimeEventHandler
+    private val timeEventHandler: TimeEventHandler
 ) : AbilityCast {
     override fun accept(ability: Ability): Boolean {
         return ability == Ability.SUMMON_NIGHT
@@ -32,7 +32,7 @@ class SummonNightAbilityCast(
         game: RedisGame,
         sourceUser: RedisGameUser
     ) {
-        redisTimeEventHandler.createEvent(
+        timeEventHandler.createEvent(
             game,
             RedisTimeEventType.SUMMONED_NIGHT,
             sourceUser

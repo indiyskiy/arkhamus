@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class RedisTimeEventHandler(
+class TimeEventHandler(
     private val redisTimeEventRepository: RedisTimeEventRepository
 ) {
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(RedisTimeEventHandler::class.java)
+        var logger: Logger = LoggerFactory.getLogger(TimeEventHandler::class.java)
     }
 
     @Transactional

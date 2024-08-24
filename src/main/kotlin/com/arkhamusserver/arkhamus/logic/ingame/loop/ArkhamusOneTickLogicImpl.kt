@@ -35,6 +35,7 @@ class ArkhamusOneTickLogicImpl(
                 globalGameData.timeEvents,
                 game.globalTimer
             )
+            oneTickShortTimeEvent.processShortTimeEvents(globalGameData.shortTimeEvents)
             onTickAbilityCast.applyAbilityCasts(
                 globalGameData,
                 globalGameData.castAbilities,
@@ -45,7 +46,7 @@ class ArkhamusOneTickLogicImpl(
                 globalGameData.craftProcess,
                 game.globalTimer
             )
-            val processedTasks = oneTickUserRequests.processRequests(
+            val processedRequests = oneTickUserRequests.processRequests(
                 currentTasks,
                 globalGameData,
                 ongoingEvents,
@@ -53,7 +54,7 @@ class ArkhamusOneTickLogicImpl(
             val responses =
                 oneTickUserResponses.buildResponses(
                     globalGameData,
-                    processedTasks,
+                    processedRequests,
                 )
             if (responses.isNotEmpty()) {
                 game.lastTimeSentResponse = game.globalTimer
