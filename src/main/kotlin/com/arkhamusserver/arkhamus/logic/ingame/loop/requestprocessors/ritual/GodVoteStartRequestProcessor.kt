@@ -97,7 +97,7 @@ class GodVoteStartRequestProcessor(
         sourceUserId: Long,
         altar: RedisAltar
     ) {
-        redisTimeEventHandler.createDefaultEvent(
+        redisTimeEventHandler.createEvent(
             gameId,
             RedisTimeEventType.ALTAR_VOTING,
             globalTimer,

@@ -16,6 +16,7 @@ class NettyGameStartedResponse(
     otherGameUsers = allGameUsers,
     ongoingCraftingProcess = emptyList(),
     ongoingEvents = emptyList(),
+    shortTimeEvents = emptyList(),
     availableAbilities = emptyList(),
     userInventory = emptyList(),
     containers = emptyList(),

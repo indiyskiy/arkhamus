@@ -77,7 +77,7 @@ class RitualHandler(
         altarHolder?.state = MapAltarState.LOCKED
         altarHolder?.let { redisAltarHolderRepository.save(it) }
         logger.info("creating COOLDOWN event")
-        eventHandler.createDefaultEvent(
+        eventHandler.createEvent(
             game,
             RedisTimeEventType.ALTAR_VOTING_COOLDOWN,
         )
@@ -157,7 +157,7 @@ class RitualHandler(
         altarHolder?.state = MapAltarState.GOD_LOCKED
         altarHolder?.let { redisAltarHolderRepository.save(it) }
 
-        eventHandler.createDefaultEvent(
+        eventHandler.createEvent(
             game, RedisTimeEventType.RITUAL_GOING
         )
     }

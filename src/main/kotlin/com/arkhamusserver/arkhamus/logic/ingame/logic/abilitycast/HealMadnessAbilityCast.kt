@@ -16,7 +16,7 @@ class HealMadnessAbilityCast(
     private val madnessHandler: UserMadnessHandler
 ) : AbilityCast {
 
-    companion object{
+    companion object {
         private const val REDUCE_VALUE: Double = 20.0
     }
 

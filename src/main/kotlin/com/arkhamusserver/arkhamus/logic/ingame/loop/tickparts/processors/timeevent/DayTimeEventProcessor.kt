@@ -41,7 +41,7 @@ class DayTimeEventProcessor(
         event: RedisTimeEvent,
         currentGameTime: Long
     ) {
-        redisTimeEventHandler.createDefaultEvent(
+        redisTimeEventHandler.createEvent(
             event.gameId,
             RedisTimeEventType.NIGHT,
             currentGameTime,

@@ -57,7 +57,7 @@ class NightTimeEventProcessor(
     }
 
     private fun createDay(gameId: Long, currentGameTime: Long) {
-        redisTimeEventHandler.createDefaultEvent(
+        redisTimeEventHandler.createEvent(
             gameId,
             RedisTimeEventType.DAY,
             currentGameTime,

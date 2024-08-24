@@ -18,26 +18,26 @@ class GameTasksProcessor(
 ) {
 
     @Transactional
-     fun processGameTasks(gameId: Long, taskCollection: TaskCollection?) {
-         taskCollection?.let{taskCollectionNotNull ->
-             try {
-                 val taskList = synchronized(taskCollectionNotNull) {
-                     taskCollectionNotNull.getList().also { taskCollectionNotNull.resetList() }
-                 }
-                 val redisGame = redisDataAccess.getGame(gameId)
-                 // TODO better state handling - e.g. we might want to support pause somehow and other stuff later
-                 if (redisGame != null && redisGame.state in GameState.gameInProgressStateStrings) {
-                     processGameTick(
-                         tasks = taskList,
-                         gameId = gameId,
-                         ongoingGame = redisGame
-                     )
-                 }
-             } catch (e: Throwable) {
-                 logger.error("error on processing game tasks for game $gameId", e)
+    fun processGameTasks(gameId: Long, taskCollection: TaskCollection?) {
+        taskCollection?.let { taskCollectionNotNull ->
+            try {
+                val taskList = synchronized(taskCollectionNotNull) {
+                    taskCollectionNotNull.getList().also { taskCollectionNotNull.resetList() }
+                }
+                val redisGame = redisDataAccess.getGame(gameId)
+                // TODO better state handling - e.g. we might want to support pause somehow and other stuff later
+                if (redisGame != null && redisGame.state in GameState.gameInProgressStateStrings) {
+                    processGameTick(
+                        tasks = taskList,
+                        gameId = gameId,
+                        ongoingGame = redisGame
+                    )
+                }
+            } catch (e: Throwable) {
+                logger.error("error on processing game tasks for game $gameId", e)
 //            throw e
-             }
-         }
+            }
+        }
     }
 
     private fun processGameTick(

@@ -8,12 +8,12 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ErrorGameResponse
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.ISawTheEndOfTimesRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.ISawTheEndOfTimesRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.view.dto.netty.request.tech.ISawTheEndOfTimesRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.tech.ISawTheEndOfTimesRequestMessage
 import org.springframework.stereotype.Component
 import kotlin.collections.get
 

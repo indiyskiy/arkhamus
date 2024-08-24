@@ -14,7 +14,7 @@ class GameDataBuilder(
     fun build(
         container: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
-        ongoingEvents: List<OngoingEvent>
+        ongoingEvents: List<OngoingEvent>,
     ): RequestProcessData {
         val nettyRequestMessage = container.nettyRequestMessage
         return requestHandlers.first {

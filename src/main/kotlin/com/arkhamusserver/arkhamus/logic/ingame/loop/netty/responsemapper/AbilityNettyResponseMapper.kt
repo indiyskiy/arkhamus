@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.ContainerDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.CrafterDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
@@ -21,6 +22,7 @@ class AbilityNettyResponseMapper(
     private val otherGameUsersDataHandler: OtherGameUsersDataHandler,
     private val containersDataHandler: ContainerDataHandler,
     private val craftersDataHandler: CrafterDataHandler,
+    private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == AbilityRequestProcessData::class.java
@@ -52,6 +54,12 @@ class AbilityNettyResponseMapper(
                 ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
                     OngoingEventResponse(event)
                 },
+                shortTimeEvents = shortTimeEventToResponseHandler.filterAndMap(
+                    globalGameData.shortTimeEvents,
+                    it.gameUser,
+                    it.inZones,
+                    globalGameData
+                ),
                 availableAbilities = requestProcessData.availableAbilities,
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 userInventory = requestProcessData.visibleItems,

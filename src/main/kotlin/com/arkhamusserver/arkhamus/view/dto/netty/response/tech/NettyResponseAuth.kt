@@ -18,6 +18,7 @@ class NettyResponseAuth(
     myGameUser = myGameUser,
     otherGameUsers = allGameUsers,
     ongoingEvents = emptyList(),
+    shortTimeEvents = emptyList(),
     availableAbilities = emptyList(),
     ongoingCraftingProcess = emptyList(),
     userInventory = emptyList(),

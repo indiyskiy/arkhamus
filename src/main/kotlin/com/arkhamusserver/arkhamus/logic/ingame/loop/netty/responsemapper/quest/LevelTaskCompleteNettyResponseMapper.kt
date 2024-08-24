@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.quest
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.ContainerDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.CrafterDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestRewardUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -26,7 +27,8 @@ class LevelTaskCompleteNettyResponseMapper(
     private val containersDataHandler: ContainerDataHandler,
     private val craftersDataHandler: CrafterDataHandler,
     private val questProgressHandler: QuestProgressHandler,
-    private val rewardUtils: QuestRewardUtils
+    private val rewardUtils: QuestRewardUtils,
+    private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == LevelTaskCompleteRequestProcessData::class.java
@@ -69,6 +71,12 @@ class LevelTaskCompleteNettyResponseMapper(
                 ongoingEvents = requestProcessData.visibleOngoingEvents.map { event ->
                     OngoingEventResponse(event)
                 },
+                shortTimeEvents = shortTimeEventToResponseHandler.filterAndMap(
+                    globalGameData.shortTimeEvents,
+                    it.gameUser,
+                    it.inZones,
+                    globalGameData
+                ),
                 availableAbilities = requestProcessData.availableAbilities,
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 userInventory = requestProcessData.visibleItems,

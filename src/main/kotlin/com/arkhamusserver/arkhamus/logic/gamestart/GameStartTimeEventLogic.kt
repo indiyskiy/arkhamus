@@ -20,7 +20,7 @@ class GameStartTimeEventLogic(
     }
 
     private fun createGodAwakenTimer(game: GameSession) {
-        redisTimeEventHandler.createDefaultEvent(
+        redisTimeEventHandler.createEvent(
             game,
             RedisTimeEventType.GOD_AWAKEN,
             0

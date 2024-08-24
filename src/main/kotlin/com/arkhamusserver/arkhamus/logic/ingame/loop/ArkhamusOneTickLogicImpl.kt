@@ -16,6 +16,7 @@ class ArkhamusOneTickLogicImpl(
     private val oneTickUserRequests: OneTickUserRequests,
     private val oneTickTick: OneTickTick,
     private val oneTickTimeEvent: OneTickTimeEvent,
+    private val oneTickShortTimeEvent: OneTickShortTimeEvent,
     private val onTickAbilityCast: OnTickAbilityCast,
     private val onTickCraftProcess: OnTickCraftProcess,
     private val afterLoopSaving: AfterLoopSavingComponent,
@@ -27,7 +28,6 @@ class ArkhamusOneTickLogicImpl(
     ): List<NettyResponse> {
         try {
             val globalGameData = redisDataAccess.loadGlobalGameData(game)
-            val currentTick = game.currentTick
 
             oneTickTick.updateNextTick(game)
             val ongoingEvents = oneTickTimeEvent.processTimeEvents(
@@ -47,17 +47,15 @@ class ArkhamusOneTickLogicImpl(
             )
             val processedTasks = oneTickUserRequests.processRequests(
                 currentTasks,
-                currentTick,
                 globalGameData,
-                ongoingEvents
+                ongoingEvents,
             )
             val responses =
                 oneTickUserResponses.buildResponses(
-                    currentTick,
                     globalGameData,
                     processedTasks,
                 )
-            if(responses.isNotEmpty()){
+            if (responses.isNotEmpty()) {
                 game.lastTimeSentResponse = game.globalTimer
             }
             afterLoopSaving.saveAll(globalGameData, game)
@@ -67,6 +65,5 @@ class ArkhamusOneTickLogicImpl(
         }
         return emptyList()
     }
-
 
 }

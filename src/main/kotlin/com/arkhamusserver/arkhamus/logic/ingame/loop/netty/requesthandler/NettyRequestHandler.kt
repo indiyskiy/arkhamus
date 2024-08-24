@@ -13,7 +13,7 @@ interface NettyRequestHandler {
     fun buildData(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
-        ongoingEvents: List<OngoingEvent>
+        ongoingEvents: List<OngoingEvent>,
     ): RequestProcessData
 
 }

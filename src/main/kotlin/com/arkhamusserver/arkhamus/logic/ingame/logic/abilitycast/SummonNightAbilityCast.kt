@@ -32,7 +32,7 @@ class SummonNightAbilityCast(
         game: RedisGame,
         sourceUser: RedisGameUser
     ) {
-        redisTimeEventHandler.createDefaultEvent(
+        redisTimeEventHandler.createEvent(
             game,
             RedisTimeEventType.SUMMONED_NIGHT,
             sourceUser

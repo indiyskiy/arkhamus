@@ -21,7 +21,7 @@ class SteamAuthController(
     fun verifySteamTicket(
         @RequestBody authTicket: ByteArray
     ): ResponseEntity<String> {
-      val responseFromSteam = steamLogic.authFromClient(authTicket)
+        val responseFromSteam = steamLogic.authFromClient(authTicket)
         return if (responseFromSteam.statusCode == HttpStatus.OK) {
             ResponseEntity.ok("Steam ID: ${responseFromSteam.body}")
         } else {

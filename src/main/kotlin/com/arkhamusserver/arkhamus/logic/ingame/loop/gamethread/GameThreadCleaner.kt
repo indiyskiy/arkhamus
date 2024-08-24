@@ -38,7 +38,7 @@ class GameThreadCleaner(
             logger.info("all users of the game $gameSessionId are: ${users.joinToString { it.userId.toString() }}")
             if (users.isEmpty()) {
                 val allUsers = redisGameUserRepository.findAll()
-                logger.info("all users are: ${allUsers.joinToString { "${it.userId} - ${it.gameId}" }}")
+                logger.warn("list is empty. all users are: ${allUsers.joinToString { "${it.userId} - ${it.gameId}" }}")
             }
             markLeaversIfNoResponses(it, users)
             abandonIfAllLeave(it, users)

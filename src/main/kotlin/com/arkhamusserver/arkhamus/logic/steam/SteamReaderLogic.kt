@@ -71,7 +71,7 @@ class SteamReaderLogic {
                 logger.info("Steam Id: $steamId")
                 return "Steam Id: $steamId"
             }
-           throw ArkhamusServerRequestException("Invalid OpenID response", "SteamAuthCallback")
+            throw ArkhamusServerRequestException("Invalid OpenID response", "SteamAuthCallback")
         }
         throw ArkhamusServerRequestException("Invalid OpenId mode", "SteamAuthCallback")
     }

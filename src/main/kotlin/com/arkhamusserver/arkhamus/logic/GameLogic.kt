@@ -11,9 +11,9 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
 import com.arkhamusserver.arkhamus.view.validator.GameValidator
-import org.springframework.transaction.annotation.Transactional
 import org.apache.commons.lang3.RandomStringUtils
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GameLogic(

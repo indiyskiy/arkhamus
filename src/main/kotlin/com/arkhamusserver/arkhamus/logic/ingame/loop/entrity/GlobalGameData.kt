@@ -15,6 +15,7 @@ data class GlobalGameData(
     var crafters: Map<Long, RedisCrafter> = emptyMap(),
     var lanterns: Map<Long, RedisLantern> = emptyMap(),
     var timeEvents: List<RedisTimeEvent> = emptyList(),
+    var shortTimeEvents: List<RedisShortTimeEvent> = emptyList(),
     var castAbilities: List<RedisAbilityCast> = emptyList(),
     var craftProcess: List<RedisCraftProcess> = emptyList(),
     var inBetweenEvents: InBetweenEventHolder = InBetweenEventHolder(),

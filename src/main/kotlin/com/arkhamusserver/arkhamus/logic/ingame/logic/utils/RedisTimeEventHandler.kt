@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualHandler.Companion.logger
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
@@ -9,6 +8,8 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import com.fasterxml.uuid.Generators
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -16,19 +17,23 @@ import org.springframework.transaction.annotation.Transactional
 class RedisTimeEventHandler(
     private val redisTimeEventRepository: RedisTimeEventRepository
 ) {
+    companion object {
+        var logger: Logger = LoggerFactory.getLogger(RedisTimeEventHandler::class.java)
+    }
+
     @Transactional
-    fun createDefaultEvent(
+    fun createEvent(
         game: RedisGame,
         eventType: RedisTimeEventType,
         sourceUser: RedisGameUser? = null,
         location: Pair<Double, Double>? = null,
         timeLeft: Long? = null
     ) {
-        createDefaultEvent(game.gameId!!, eventType, game.globalTimer, sourceUser, location, timeLeft)
+        createEvent(game.gameId!!, eventType, game.globalTimer, sourceUser, location, timeLeft)
     }
 
     @Transactional
-    fun createDefaultEvent(
+    fun createEvent(
         game: GameSession,
         eventType: RedisTimeEventType,
         startDateTime: Long,
@@ -36,11 +41,11 @@ class RedisTimeEventHandler(
         location: Pair<Double, Double>? = null,
         timeLeft: Long? = null
     ) {
-        createDefaultEvent(game.id!!, eventType, startDateTime, sourceUser, location, timeLeft)
+        createEvent(game.id!!, eventType, startDateTime, sourceUser, location, timeLeft)
     }
 
     @Transactional
-    fun createDefaultEvent(
+    fun createEvent(
         gameId: Long,
         eventType: RedisTimeEventType,
         startDateTime: Long,
@@ -48,11 +53,11 @@ class RedisTimeEventHandler(
         location: Pair<Double, Double>? = null,
         timeLeft: Long? = null
     ) {
-        createDefaultEvent(gameId, eventType, startDateTime, sourceUser?.userId, location, timeLeft)
+        createEvent(gameId, eventType, startDateTime, sourceUser?.userId, location, timeLeft)
     }
 
     @Transactional
-    fun createDefaultEvent(
+    fun createEvent(
         gameId: Long,
         eventType: RedisTimeEventType,
         startDateTime: Long,
@@ -65,7 +70,7 @@ class RedisTimeEventHandler(
             gameId = gameId,
             timeStart = startDateTime,
             timePast = 0L,
-            timeLeft = timeLeft?:eventType.getDefaultTime(),
+            timeLeft = timeLeft ?: eventType.getDefaultTime(),
             sourceUserId = sourceUserId,
             type = eventType,
             state = RedisTimeEventState.ACTIVE,
@@ -75,6 +80,7 @@ class RedisTimeEventHandler(
         redisTimeEventRepository.save(timer)
     }
 
+    @Transactional
     fun tryToDeleteEvent(
         eventType: RedisTimeEventType,
         allEvents: List<RedisTimeEvent>

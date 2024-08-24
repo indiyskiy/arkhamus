@@ -40,7 +40,7 @@ class AbilityNettyRequestHandler(
     override fun buildData(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
-        ongoingEvents: List<OngoingEvent>
+        ongoingEvents: List<OngoingEvent>,
     ): RequestProcessData {
         val userId = requestDataHolder.userAccount.id
         val request = requestDataHolder.nettyRequestMessage

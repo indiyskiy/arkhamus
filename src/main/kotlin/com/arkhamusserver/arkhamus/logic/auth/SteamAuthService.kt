@@ -77,7 +77,7 @@ class SteamAuthService(
         val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&*()-_=+{}[]|:;<>,.?/"
         val password = StringBuilder()
 
-       repeat(12) {
+        repeat(12) {
             password.append(chars.random())
         }
 

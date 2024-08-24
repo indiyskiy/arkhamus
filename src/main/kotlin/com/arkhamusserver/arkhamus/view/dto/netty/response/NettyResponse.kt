@@ -10,6 +10,7 @@ abstract class NettyResponse(
     val myGameUser: MyGameUserResponse,
     val otherGameUsers: List<GameUserResponse>,
     val ongoingEvents: List<OngoingEventResponse>,
+    val shortTimeEvents: List<ShortTimeEventResponse>,
     val ongoingCraftingProcess: List<CraftProcessResponse>,
     val availableAbilities: List<AbilityOfUserResponse>,
     var userInventory: List<InventoryCell>,

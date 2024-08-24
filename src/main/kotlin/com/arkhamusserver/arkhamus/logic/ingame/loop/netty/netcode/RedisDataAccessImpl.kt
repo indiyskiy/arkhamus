@@ -16,6 +16,7 @@ class RedisDataAccessImpl(
     private val altarHolderRepository: RedisAltarHolderRepository,
     private val altarPollingRepository: RedisAltarPollingRepository,
     private val timeEventRepository: RedisTimeEventRepository,
+    private val shortTimeEventRepository: RedisShortTimeEventRepository,
     private val abilityCastRepository: RedisAbilityCastRepository,
     private val craftProcessRepository: RedisCraftProcessRepository,
     private val redisLevelZoneRepository: RedisLevelZoneRepository,
@@ -56,6 +57,9 @@ class RedisDataAccessImpl(
     override fun getTimeEvents(gameId: Long) =
         timeEventRepository.findByGameId(gameId)
 
+    override fun getShortTimeEvents(gameId: Long) =
+        shortTimeEventRepository.findByGameId(gameId)
+
     override fun getCastAbilities(gameId: Long): List<RedisAbilityCast> =
         abilityCastRepository.findByGameId(gameId)
 
@@ -90,28 +94,4 @@ class RedisDataAccessImpl(
         return redisLevelEllipseRepository.findByGameId(gameId)
     }
 
-
-    override fun deleteGame(gameId: Long) {
-        gameRepository.deleteById(gameId.toString())
-    }
-
-    override fun deleteGameUsers(gameId: Long) {
-        val gameUserIds = gameUserRepository.findByGameId(gameId).map { it.id }
-        gameUserRepository.deleteAllById(gameUserIds)
-    }
-
-    override fun deleteContainers(gameId: Long) {
-        val containerIds = containerRepository.findByGameId(gameId).map { it.id }
-        containerRepository.deleteAllById(containerIds)
-    }
-
-    override fun deleteLanterns(gameId: Long) {
-        val lanternIds = lanternRepository.findByGameId(gameId).map { it.id }
-        lanternRepository.deleteAllById(lanternIds)
-    }
-
-    override fun deleteTimeEvents(gameId: Long) {
-        val timeEventIds = timeEventRepository.findByGameId(gameId).map { it.id }
-        timeEventRepository.deleteAllById(timeEventIds)
-    }
 }

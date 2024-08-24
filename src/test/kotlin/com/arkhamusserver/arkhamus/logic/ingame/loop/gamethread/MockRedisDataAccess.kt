@@ -65,23 +65,7 @@ class MockRedisDataAccess : RedisDataAccess {
         return timeEvents[gameId] ?: emptyList()
     }
 
-    override fun deleteGame(gameId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun deleteGameUsers(gameId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun deleteContainers(gameId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun deleteLanterns(gameId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun deleteTimeEvents(gameId: Long) {
+    override fun getShortTimeEvents(gameId: Long): List<RedisShortTimeEvent> {
         TODO("Not yet implemented")
     }
 

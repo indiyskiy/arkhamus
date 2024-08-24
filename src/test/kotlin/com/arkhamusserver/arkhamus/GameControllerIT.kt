@@ -4,19 +4,19 @@ import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.utils.EnvironmentSetupUtil
 import com.arkhamusserver.arkhamus.utils.FakeUserSetupUtil
+import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.GRAF_D
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.INDIYSKIY
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.Q_CHAN
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.SITHOID
-import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.GRAF_D
 import com.arkhamusserver.arkhamus.view.controller.GameController
 import com.arkhamusserver.arkhamus.view.controller.UserController
 import com.arkhamusserver.arkhamus.view.dto.GameSessionSettingsDto
 import com.arkhamusserver.arkhamus.view.dto.LevelDto
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.junit.jupiter.api.Assertions.assertEquals
 
 @SpringBootTest
 class GameControllerIT {
