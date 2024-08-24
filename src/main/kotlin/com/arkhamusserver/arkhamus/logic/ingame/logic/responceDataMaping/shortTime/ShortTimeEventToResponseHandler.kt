@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ShortTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -9,22 +10,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class ShortTimeEventToResponseHandler(
-    private val specificShortTimeEventFilters: List<SpecificShortTimeEventFilter>
-) {
+    private val shortTimeEventHandler: ShortTimeEventHandler,
+
+    ) {
     fun filterAndMap(
         events: List<RedisShortTimeEvent>,
         user: RedisGameUser,
         zones: List<LevelZone>,
         data: GlobalGameData
     ): List<ShortTimeEventResponse> {
-        val filtered = specificShortTimeEventFilters.map {
-            it.filter(
-                events,
-                user,
-                zones,
-                data
-            )
-        }.flatten()
+        val filtered = shortTimeEventHandler.filter(events, user, zones, data)
         return mapFiltered(filtered)
     }
 

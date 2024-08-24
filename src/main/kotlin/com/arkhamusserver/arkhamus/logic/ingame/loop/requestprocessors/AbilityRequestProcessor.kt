@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.AbilityCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CreateCastAbilityEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ShortTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
@@ -15,7 +16,8 @@ import org.springframework.stereotype.Component
 class AbilityRequestProcessor(
     private val inventoryHandler: InventoryHandler,
     private val abilityCastHandler: AbilityCastHandler,
-    private val createCastAbilityEventHandler: CreateCastAbilityEventHandler
+    private val createCastAbilityEventHandler: CreateCastAbilityEventHandler,
+    private val shortTimeEventHandler: ShortTimeEventHandler
 ) : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is AbilityRequestProcessData
@@ -46,18 +48,18 @@ class AbilityRequestProcessor(
                     globalGameData.game.globalTimer
                 )
                 abilityRequestProcessData.executedSuccessfully = true
-
             }
         }
     }
 
     private fun createCastAbility(
         ability: Ability,
-        id: Long,
+        userId: Long,
         gameId: Long,
         globalTimer: Long
     ) {
-        createCastAbilityEventHandler.createCastAbilityEvent(ability, id, gameId, globalTimer)
+        createCastAbilityEventHandler.createCastAbilityEvent(ability, userId, gameId, globalTimer)
+        shortTimeEventHandler.createCastAbilityEvent(ability, userId, gameId, globalTimer)
     }
 
     private fun consumeItem(

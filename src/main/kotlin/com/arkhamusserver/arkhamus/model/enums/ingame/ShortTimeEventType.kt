@@ -6,7 +6,7 @@ enum class ShortTimeEventType(
     private val time: Long,
     private val source: GameObjectType,
 ) {
-    ABILITY_CAST(SECOND, GameObjectType.CHARACTER);
+    ABILITY_CAST(SECOND / 2, GameObjectType.CHARACTER);
 
     fun getTime(): Long = time
     fun getSource(): GameObjectType = source
