@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisClueRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelZoneRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
@@ -21,7 +22,7 @@ class GameStartClueLogic(
         levelId: Long,
         game: GameSession
     ) {
-        val zones = zoneRepository.findByLevelId(levelId)
+        val zones = zoneRepository.findByLevelId(levelId).filter { it.zoneType == ZoneType.CLUE }
         val allClues = game.god?.let {
             it.getTypes().map { clue ->
                 RedisClue(

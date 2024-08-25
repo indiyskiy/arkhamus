@@ -1,0 +1,27 @@
+package com.arkhamusserver.arkhamus.config.database.levelDesign
+
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelTaskRepository
+import com.arkhamusserver.arkhamus.model.database.entity.game.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.LevelTask
+import com.arkhamusserver.arkhamus.view.levelDesign.LevelTaskFromJson
+import org.postgresql.geometric.PGpoint
+import org.springframework.stereotype.Component
+
+@Component
+class LevelDesignLevelTaskInfoProcessor(
+    private val levelTaskRepository: LevelTaskRepository,
+) {
+    fun processLevelTasksFromJson(levelTasks: List<LevelTaskFromJson>, savedLevel: Level): List<LevelTask> {
+        levelTasks.map { jsonLevelTask ->
+            LevelTask(
+                inGameId = jsonLevelTask.id!!,
+                point = PGpoint(jsonLevelTask.x!!, jsonLevelTask.y!!),
+                interactionRadius = jsonLevelTask.interactionRadius!!,
+                level = savedLevel,
+                name = jsonLevelTask.name!!
+            )
+        }.apply {
+            return levelTaskRepository.saveAll(this).toList()
+        }
+    }
+}
