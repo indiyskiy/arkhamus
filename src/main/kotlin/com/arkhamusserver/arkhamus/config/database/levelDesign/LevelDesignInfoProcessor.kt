@@ -28,6 +28,7 @@ class LevelDesignInfoProcessor(
     private val levelDesignZonesInfoProcessor: LevelDesignZonesInfoProcessor,
     private val levelDesignQuestGiverInfoProcessor: LevelDesignQuestGiverInfoProcessor,
     private val levelDesignLevelTaskInfoProcessor: LevelDesignLevelTaskInfoProcessor,
+    private val levelDesignVoteSpotInfoProcessor: LevelDesignVoteSpotInfoProcessor,
     private val randomQuestGenerator: RandomQuestGenerator,
 ) {
     companion object {
@@ -117,6 +118,7 @@ class LevelDesignInfoProcessor(
             logger.info("creating random quests")
             randomQuestGenerator.generateRandomQuests(savedLevel, questGivers, levelTasks)
         }
+        levelDesignVoteSpotInfoProcessor.processVoteSpots(levelFromJson.votespots, savedLevel)
     }
 
     private fun findSameLevel(levelFromJson: LevelFromJson, levelsFromDb: List<Level>): Level? =

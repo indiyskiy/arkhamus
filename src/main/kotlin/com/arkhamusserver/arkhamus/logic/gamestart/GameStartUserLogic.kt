@@ -70,11 +70,11 @@ class GameStartUserLogic(
                 classInGame = it.classInGame!!,
                 madness = 0.0,
                 madnessNotches = listOf(100.0, 300.0, 600.0),
+                x = marker.point.x,
+                y = marker.point.y,
+                callToArms = game.gameSessionSettings.maxCallToArms,
                 connected = true
-            ).apply {
-                this.x = marker.point.x
-                this.y = marker.point.y
-            }
+            )
             GameStartLogic.logger.info("user placed to $redisGameUser")
             redisGameUser
         }

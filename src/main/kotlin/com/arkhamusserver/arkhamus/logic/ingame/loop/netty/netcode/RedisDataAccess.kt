@@ -11,6 +11,8 @@ interface RedisDataAccess {
     fun getGameContainers(gameId: Long): List<RedisContainer>
     fun getGameCrafters(gameId: Long): List<RedisCrafter>
     fun getGameLanterns(gameId: Long): List<RedisLantern>
+    fun getGameVoteSpots(gameId: Long): List<RedisVoteSpot>
+    fun getGameUserVoteSpots(gameId: Long): List<RedisUserVoteSpot>
     fun getAltarHolder(gameId: Long): RedisAltarHolder?
     fun getAltarPolling(gameId: Long): RedisAltarPolling?
     fun getGameAltars(gameId: Long): Map<Long, RedisAltar>
@@ -37,6 +39,8 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     val allShortEvents = getShortTimeEvents(gameId)
     val castAbilities = getCastAbilities(gameId)
     val allLanterns = getGameLanterns(gameId)
+    val allVoteSpots = getGameVoteSpots(gameId)
+    val allUserVoteSpots = getGameUserVoteSpots(gameId)
     val craftProcess = getCraftProcess(gameId)
     val altars = getGameAltars(gameId)
     val altarHolder = getAltarHolder(gameId)
@@ -71,6 +75,8 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.quests = allQuests
         this.questRewardsByQuestId = allQuestRewards.groupBy { it.questId }
         this.questProgressByUserId = allUsersQuestProgresses.groupBy { it.userId }
+        this.voteSpots = allVoteSpots
+        this.userVoteSpotsBySpotId = allUserVoteSpots.groupBy { it.voteSpotId }
     }
 }
 

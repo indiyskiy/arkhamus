@@ -12,6 +12,8 @@ class RedisDataAccessImpl(
     private val containerRepository: RedisContainerRepository,
     private val crafterRepository: RedisCrafterRepository,
     private val lanternRepository: RedisLanternRepository,
+    private val voteSpotRepository: RedisVoteSpotRepository,
+    private val userVoteSpotRepository: RedisUserVoteSpotRepository,
     private val altarRepository: RedisAltarRepository,
     private val altarHolderRepository: RedisAltarHolderRepository,
     private val altarPollingRepository: RedisAltarPollingRepository,
@@ -53,6 +55,12 @@ class RedisDataAccessImpl(
 
     override fun getGameLanterns(gameId: Long) =
         lanternRepository.findByGameId(gameId)
+
+    override fun getGameVoteSpots(gameId: Long) =
+        voteSpotRepository.findByGameId(gameId)
+
+    override fun getGameUserVoteSpots(gameId: Long) =
+        userVoteSpotRepository.findByGameId(gameId)
 
     override fun getTimeEvents(gameId: Long) =
         timeEventRepository.findByGameId(gameId)

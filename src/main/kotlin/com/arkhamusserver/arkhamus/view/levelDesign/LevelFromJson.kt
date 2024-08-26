@@ -18,5 +18,5 @@ data class LevelFromJson(
     var banZones: List<ZoneFromJson> = emptyList(),
     var doors: List<DoorFromJson> = emptyList(),
     var thresholds: List<ThresholdFromJson> = emptyList(),
-    var votespots: List<VotespotFromJson> = emptyList(),
+    var votespots: List<VoteSpotFromJson> = emptyList(),
 )

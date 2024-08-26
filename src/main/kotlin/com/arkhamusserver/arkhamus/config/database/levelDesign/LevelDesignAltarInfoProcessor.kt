@@ -11,7 +11,6 @@ import kotlin.collections.forEach
 @Component
 class LevelDesignAltarInfoProcessor(
     private val altarRepository: AltarRepository,
-
     ) {
 
     fun processAltars(

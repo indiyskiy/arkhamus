@@ -21,6 +21,7 @@ class GameStartLogic(
     private val gameStartClueLogic: GameStartClueLogic,
     private val gameStartQuestLogic: GameStartQuestLogic,
     private val gameThreadPool: GameThreadPool,
+    private val gameStartVoteSpotLogic: GameStartVoteSpotLogic,
 ) {
 
     companion object {
@@ -42,6 +43,7 @@ class GameStartLogic(
             gameStartClueLogic.createClues(levelId, game)
             gameStartTimeEventLogic.createStartEvents(game)
             gameStartQuestLogic.createQuests(levelId, game, users)
+            gameStartVoteSpotLogic.createVoteSpots(levelId, game, users)
         }
         gameThreadPool.initTickProcessingLoop(game)
     }

@@ -13,6 +13,7 @@ data class GameSessionSettings(
     var id: Long? = null,
     var lobbySize: Int,
     var numberOfCultists: Int,
+    var maxCallToArms: Int = 1,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = true)
     var level: Level? = null

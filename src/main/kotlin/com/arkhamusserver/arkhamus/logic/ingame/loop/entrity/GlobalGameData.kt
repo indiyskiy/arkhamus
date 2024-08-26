@@ -23,6 +23,8 @@ data class GlobalGameData(
     var quests: List<RedisQuest> = emptyList(),
     var questRewardsByQuestId: Map<Long, List<RedisQuestReward>> = emptyMap(),
     var questProgressByUserId: Map<Long, List<RedisUserQuestProgress>> = emptyMap(),
+    var voteSpots: List<RedisVoteSpot> = emptyList(),
+    var userVoteSpotsBySpotId: Map<Long, List<RedisUserVoteSpot>> = emptyMap(),
 ) {
     fun buildGeometryData(
         zones: List<RedisLevelZone>,
