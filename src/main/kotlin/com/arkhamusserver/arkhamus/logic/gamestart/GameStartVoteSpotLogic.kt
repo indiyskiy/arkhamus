@@ -45,7 +45,7 @@ class GameStartVoteSpotLogic(
                 gameId = game.id!!,
                 voteSpotId = voteSpot.voteSpotId,
                 userId = user.userId,
-                votes = mutableListOf()
+                votesForUserIds = mutableListOf()
             )
         )
     }
@@ -65,6 +65,7 @@ class GameStartVoteSpotLogic(
                 costValue = 1,
                 costItem = DEFAULT_ITEM.id,
                 bannedUsers = mutableListOf(),
+                availableUsers = mutableListOf(),
             )
         )
 

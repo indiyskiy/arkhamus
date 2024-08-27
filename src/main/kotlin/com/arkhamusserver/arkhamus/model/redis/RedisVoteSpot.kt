@@ -16,7 +16,8 @@ data class RedisVoteSpot(
 
     var costValue: Int? = null,
     var costItem: Int? = null,
-    var bannedUsers: MutableList<Int> = mutableListOf(),
+    var bannedUsers: MutableList<Long> = mutableListOf(),
+    var availableUsers: MutableList<Long> = mutableListOf(),
 ) : WithPoint {
 
     override fun x(): Double {

@@ -32,7 +32,11 @@ class InventoryHandler {
     }
 
     fun howManyItems(user: RedisGameUser, requiredItem: Item?): Int {
-        return requiredItem?.let { user.items[it.id] } ?: 0
+        return howManyItems(user, requiredItem?.id)
+    }
+
+    fun howManyItems(user: RedisGameUser, requiredItemId: Int?): Int {
+        return requiredItemId?.let { user.items[it] } ?: 0
     }
 
     fun consumeItem(user: RedisGameUser, item: Item) {

@@ -10,5 +10,5 @@ data class RedisUserVoteSpot(
     @Indexed var gameId: Long,
     var voteSpotId: Long,
     var userId: Long,
-    var votes: MutableList<Long> = mutableListOf(),
+    var votesForUserIds: MutableList<Long> = mutableListOf(),
 )
