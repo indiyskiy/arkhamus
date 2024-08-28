@@ -4,24 +4,28 @@
       {
         "id": 600,
         "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
         "x": 48,
         "y": 48
       },
       {
         "id": 601,
         "interactionRadius": 3.5,
-        "x": 48,
-        "y": 52
-      },
-      {
-        "id": 602,
-        "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
         "x": 52,
         "y": 48
       },
       {
+        "id": 602,
+        "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 48,
+        "y": 52
+      },
+      {
         "id": 603,
         "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
         "x": 52,
         "y": 52
       }
@@ -197,56 +201,72 @@
       {
         "id": 800,
         "interactionRadius": 3.5,
-        "x": 75,
-        "y": 5
+        "name": "Container 800",
+        "x": 82,
+        "y": 12
       },
       {
         "id": 801,
         "interactionRadius": 3.5,
-        "x": 85,
-        "y": 5
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 80,
+        "y": 2
       },
       {
         "id": 802,
         "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
         "x": 95,
-        "y": 5
+        "y": 2
       },
       {
         "id": 803,
         "interactionRadius": 3.5,
-        "x": 75,
-        "y": 15
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 101,
+        "y": 14
       },
       {
         "id": 804,
         "interactionRadius": 3.5,
-        "x": 85,
-        "y": 15
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 90,
+        "y": 16
       },
       {
         "id": 805,
         "interactionRadius": 3.5,
-        "x": 95,
-        "y": 15
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 101,
+        "y": 34
       },
       {
         "id": 806,
         "interactionRadius": 3.5,
-        "x": 75,
-        "y": 25
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 94,
+        "y": 30
       },
       {
         "id": 807,
         "interactionRadius": 3.5,
-        "x": 85,
-        "y": 25
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 90,
+        "y": 28
       },
       {
         "id": 808,
         "interactionRadius": 3.5,
-        "x": 95,
-        "y": 25
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 85,
+        "y": 24
+      },
+      {
+        "id": 809,
+        "interactionRadius": 3.5,
+        "name": "Can't Touch This",
+        "x": 48,
+        "y": 23
       }
     ],
     "crafters": [
@@ -254,22 +274,25 @@
         "crafterType": "REGULAR",
         "id": 900,
         "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
         "x": 65,
-        "y": 28
+        "y": 22
       },
       {
         "crafterType": "ADVANCED",
         "id": 901,
         "interactionRadius": 3.5,
-        "x": 92,
-        "y": 75
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 84,
+        "y": 72
       },
       {
         "crafterType": "CULTIST",
         "id": 902,
         "interactionRadius": 3.5,
-        "x": 27,
-        "y": 21.5
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 30,
+        "y": 26
       }
     ],
     "doors": [
@@ -298,95 +321,102 @@
     "levelId": 1,
     "levelTasks": [
       {
+        "id": 1213,
+        "interactionRadius": 3.5,
+        "name": "Secret Conversation",
+        "x": 101,
+        "y": 29
+      },
+      {
         "id": 1200,
         "interactionRadius": 3.5,
-        "name": "Insanity",
+        "name": "Become a Patient",
         "x": 40,
         "y": 20
       },
       {
         "id": 1201,
         "interactionRadius": 3.5,
-        "name": "Sorority",
-        "x": 69,
-        "y": 88
+        "name": "Investigate the Fraternity",
+        "x": 46,
+        "y": 84
       },
       {
         "id": 1202,
         "interactionRadius": 3.5,
-        "name": "Fraternity",
-        "x": 42,
-        "y": 94
+        "name": "Investigate the Sorority",
+        "x": 67,
+        "y": 81
       },
       {
         "id": 1203,
         "interactionRadius": 3.5,
         "name": "Attend a Lecture",
-        "x": 11,
-        "y": 99
+        "x": 5,
+        "y": 96
       },
       {
         "id": 1204,
         "interactionRadius": 3.5,
         "name": "Watch the Stars",
-        "x": 3.5,
-        "y": 55
+        "x": 5,
+        "y": 60
       },
       {
         "id": 1205,
         "interactionRadius": 3.5,
         "name": "Rob the Museum",
-        "x": 99,
-        "y": 22
+        "x": 89,
+        "y": 9
       },
       {
         "id": 1206,
         "interactionRadius": 3.5,
         "name": "Read a Goddamn Book For Once",
-        "x": 86,
-        "y": 81.5
+        "x": 95,
+        "y": 82
       },
       {
         "id": 1207,
         "interactionRadius": 3.5,
-        "name": "Get Permission",
-        "x": 95,
-        "y": 42
+        "name": "Get the Paperwork Done",
+        "x": 99,
+        "y": 46
       },
       {
         "id": 1208,
         "interactionRadius": 3.5,
         "name": "Secret Spot",
-        "x": 3.5,
-        "y": 7.5
+        "x": 5,
+        "y": 5
       },
       {
         "id": 1209,
         "interactionRadius": 3.5,
         "name": "Touch Grass",
-        "x": 13,
-        "y": 34.5
+        "x": 6,
+        "y": 33
       },
       {
         "id": 1210,
         "interactionRadius": 3.5,
         "name": "Shady Deal",
-        "x": 57.5,
-        "y": 101.5
+        "x": 57,
+        "y": 101
       },
       {
         "id": 1211,
         "interactionRadius": 3.5,
-        "name": "Experiment",
-        "x": 8.5,
+        "name": "Conduct an Experiment",
+        "x": 16,
         "y": 16
       },
       {
         "id": 1212,
         "interactionRadius": 3.5,
-        "name": "Corners of Reality",
-        "x": 102,
-        "y": 2
+        "name": "Temporary Hideout",
+        "x": 44,
+        "y": 9
       }
     ],
     "levelVersion": 1,
@@ -395,58 +425,58 @@
       {
         "id": 1300,
         "interactionRadius": 3.5,
-        "name": "Warren Rice",
-        "x": 54,
-        "y": 7
+        "name": "Lady in Black",
+        "x": 59,
+        "y": 13
       },
       {
         "id": 1301,
         "interactionRadius": 3.5,
-        "name": "Francis Morgan",
-        "x": 66,
-        "y": 9
+        "name": "H. the Wise",
+        "x": 69,
+        "y": 11
       },
       {
         "id": 1302,
         "interactionRadius": 3.5,
-        "name": "Henry Armitage",
-        "x": 94,
-        "y": 97
+        "name": "Frieren",
+        "x": 102,
+        "y": 92
       },
       {
         "id": 1303,
         "interactionRadius": 3.5,
-        "name": "William Dyer",
-        "x": 23,
+        "name": "Professor Sprout",
+        "x": 20,
         "y": 33
       },
       {
         "id": 1304,
         "interactionRadius": 3.5,
-        "name": "Ferdinand Ashley",
-        "x": 89.5,
-        "y": 20
+        "name": "Mysterious Lady",
+        "x": 101,
+        "y": 29
       },
       {
         "id": 1305,
         "interactionRadius": 3.5,
-        "name": "Tyler Freeborn",
-        "x": 77.5,
+        "name": "Cashier",
+        "x": 81,
         "y": 22
       },
       {
         "id": 1306,
         "interactionRadius": 3.5,
-        "name": "Nathaniel Wingate Peaslee",
-        "x": 85,
-        "y": 46
+        "name": "Headmistress",
+        "x": 83,
+        "y": 45
       },
       {
         "id": 1307,
         "interactionRadius": 3.5,
-        "name": "Albert Wilmarth",
-        "x": 4,
-        "y": 44
+        "name": "Dark Matter",
+        "x": 8,
+        "y": 43
       }
     ],
     "ritualAreas": [
@@ -486,10 +516,11 @@
     "votespots": [
       {
         "id": 1800,
-        "x": 37.5,
+        "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 37,
         "y": 26,
-        "zoneId": 1400,
-        "interactionRadius": 3.5
+        "zoneId": 1400
       }
     ]
   }

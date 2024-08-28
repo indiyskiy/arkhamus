@@ -99,7 +99,6 @@ class QuestGiverOpenNettyRequestHandler(
                 emptyList()
             }
 
-
             val canAccept = this.questGiverId == quest?.startQuestGiverId &&
                     questProgressHandler.canAccept(quest, userQuestProgress)
             val canDecline = this.questGiverId == quest?.startQuestGiverId &&
@@ -151,16 +150,17 @@ class QuestGiverOpenNettyRequestHandler(
             when (questState) {
                 AWAITING,
                 READ,
-                DECLINED,
                 IN_PROGRESS -> questGiverId == quest.startQuestGiverId
 
-                COMPLETED -> questGiverId == quest.endQuestGiverId
+                COMPLETED -> questGiverId == quest.endQuestGiverId ||
+                        questGiverId == quest.startQuestGiverId
 
                 FINISHED,
+                DECLINED,
                 FINISHED_AVAILABLE,
                 DECLINED_AVAILABLE -> false
             }
-        } ?: false
+        } == true
 
     }
 

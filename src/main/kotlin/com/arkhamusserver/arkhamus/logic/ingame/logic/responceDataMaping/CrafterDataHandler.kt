@@ -30,7 +30,7 @@ class CrafterDataHandler(
         myUser: RedisGameUser,
         levelGeometryData: LevelGeometryData
     ) {
-        if (userLocationHandler.userCanSeeTarget(myUser, crafter, levelGeometryData)) {
+        if (!userLocationHandler.userCanSeeTarget(myUser, crafter, levelGeometryData)) {
             responseToMask.state = MapObjectState.ACTIVE
             responseToMask.holdingUserId = null
         }
