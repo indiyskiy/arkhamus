@@ -43,7 +43,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.springframework.boot:spring-boot-starter-data-redis:3.2.1")
-    implementation("redis.clients:jedis")
+    implementation("redis.clients:jedis:5.1.5")
     implementation("jakarta.validation:jakarta.validation-api:3.1.0-M1")
     implementation("org.apache.commons:commons-lang3:3.14.0")
     implementation("com.fasterxml.uuid:java-uuid-generator:4.3.0")

@@ -39,9 +39,10 @@ class GameThreadCleaner(
             if (users.isEmpty()) {
                 val allUsers = redisGameUserRepository.findAll()
                 logger.warn("list is empty. all users are: ${allUsers.joinToString { "${it.userId} - ${it.gameId}" }}")
-            }
+            } /*else {*/
             markLeaversIfNoResponses(it, users)
             abandonIfAllLeave(it, users)
+            /*}*/
         }
         closeFinished(redisGameSession, gameSessionId, loopHandlerFutures, tasksMap)
     }
