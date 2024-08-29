@@ -99,15 +99,23 @@ class RecipesSource {
                 7001,
                 item = MOON_STONE,
                 timeToCraft = MINUTE_IN_MILLIS,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
+                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
             ),
 
-            listOf(Ingredient(SAINT_QUARTZ, 2), Ingredient(DARK_ESSENCE, 2)).toRecipe(
+            listOf(Ingredient(CRYSTALLIZED_BLOOD, 2), Ingredient(STRANGE_BONE, 2)).toRecipe(
                 7002,
-                item = MOON_STONE,
+                item = CURSED_POTATO,
                 timeToCraft = (0.5 * MINUTE_IN_MILLIS).roundToLong(),
                 numberOfItems = 3,
-                crafterTypes = listOf(CrafterType.ADVANCED)
+                crafterTypes = listOf(CrafterType.ADVANCED, CrafterType.CULTIST)
+            ),
+
+            listOf(Ingredient(CORRUPTED_TOPAZ, 1), Ingredient(BLIGHTING_JEWEL, 1), Ingredient(STRANGE_BONE, 1)).toRecipe(
+                7003,
+                item = RITUAL_DAGGER,
+                timeToCraft = (0.2 * MINUTE_IN_MILLIS).roundToLong(),
+                numberOfItems = 1,
+                crafterTypes = listOf(CrafterType.CULTIST)
             ),
 // CORKS 8***
             (oneOfEach(BOOK, CLOCK, MASK) + Ingredient(VIOLET_SCROLL, 10)).toRecipe(

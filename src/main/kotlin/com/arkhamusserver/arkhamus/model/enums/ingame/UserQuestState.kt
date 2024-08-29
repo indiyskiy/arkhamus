@@ -9,4 +9,5 @@ enum class UserQuestState {
     FINISHED,
     FINISHED_AVAILABLE,
     DECLINED_AVAILABLE,
+    INVALID
 }

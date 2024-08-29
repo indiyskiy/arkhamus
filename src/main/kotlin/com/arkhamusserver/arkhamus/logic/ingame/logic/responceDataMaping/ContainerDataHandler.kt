@@ -30,7 +30,7 @@ class ContainerDataHandler(
         myUser: RedisGameUser,
         levelGeometryData: LevelGeometryData
     ) {
-        if (userLocationHandler.userCanSeeTarget(myUser, container, levelGeometryData)) {
+        if (!userLocationHandler.userCanSeeTarget(myUser, container, levelGeometryData)) {
             responseToMask.state = MapObjectState.ACTIVE
             responseToMask.holdingUserId = null
         }

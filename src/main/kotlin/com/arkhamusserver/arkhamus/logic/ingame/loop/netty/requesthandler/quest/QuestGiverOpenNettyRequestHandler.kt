@@ -158,7 +158,8 @@ class QuestGiverOpenNettyRequestHandler(
                 FINISHED,
                 DECLINED,
                 FINISHED_AVAILABLE,
-                DECLINED_AVAILABLE -> false
+                DECLINED_AVAILABLE,
+                INVALID -> false
             }
         } == true
 

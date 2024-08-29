@@ -31,7 +31,7 @@ class UserMadnessHandler {
 
     private fun currentMinNotch(user: RedisGameUser): Double? {
         val madness = user.madness
-        val notch = user.madnessNotches.sorted().firstOrNull { it >= madness }
+        val notch = user.madnessNotches.filter { it <= madness }.maxOrNull()
         return notch
     }
 

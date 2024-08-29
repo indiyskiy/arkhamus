@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.*
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisQuestReward
@@ -64,33 +65,45 @@ class QuestRewardItemUtils {
 
     private fun simpleLoot(role: RoleTypeInGame): Set<ItemType> {
         return if (role == RoleTypeInGame.CULTIST) {
-            setOf(ItemType.LOOT, ItemType.CULTIST_LOOT)
+            setOf(LOOT, CULTIST_LOOT)
         } else {
-            setOf(ItemType.LOOT)
+            setOf(LOOT)
         }
     }
 
     private fun mediumLoot(role: RoleTypeInGame): Set<ItemType> {
         return if (role == RoleTypeInGame.CULTIST) {
-            setOf(ItemType.LOOT, ItemType.CULTIST_LOOT, ItemType.RARE_LOOT)
+            setOf(LOOT, CULTIST_LOOT, RARE_LOOT)
         } else {
-            setOf(ItemType.LOOT, ItemType.RARE_LOOT)
+            setOf(LOOT, RARE_LOOT)
         }
     }
 
     private fun goodLoot(role: RoleTypeInGame): Set<ItemType> {
         return if (role == RoleTypeInGame.CULTIST) {
-            setOf(ItemType.LOOT, ItemType.CULTIST_LOOT, ItemType.RARE_LOOT, ItemType.CRAFT_T2)
+            setOf(LOOT, CULTIST_LOOT, RARE_LOOT, CRAFT_T2)
         } else {
-            setOf(ItemType.LOOT, ItemType.RARE_LOOT, ItemType.CRAFT_T2)
+            setOf(LOOT, RARE_LOOT, CRAFT_T2)
         }
     }
 
     private fun excellentLootTypes(role: RoleTypeInGame): Set<ItemType> {
         return if (role == RoleTypeInGame.CULTIST) {
-            setOf(ItemType.LOOT, ItemType.CULTIST_LOOT, ItemType.RARE_LOOT, ItemType.CRAFT_T2, ItemType.USEFUL_ITEM)
+            setOf(
+                LOOT,
+                CULTIST_LOOT,
+                RARE_LOOT,
+                CRAFT_T2,
+                USEFUL_ITEM,
+                CULTIST_ITEM
+            )
         } else {
-            setOf(ItemType.LOOT, ItemType.RARE_LOOT, ItemType.CRAFT_T2, ItemType.USEFUL_ITEM, ItemType.CULTIST_ITEM)
+            setOf(
+                LOOT,
+                RARE_LOOT,
+                CRAFT_T2,
+                USEFUL_ITEM
+            )
         }
     }
 }
