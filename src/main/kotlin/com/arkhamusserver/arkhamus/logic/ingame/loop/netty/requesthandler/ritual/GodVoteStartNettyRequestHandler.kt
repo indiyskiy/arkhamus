@@ -46,7 +46,7 @@ class GodVoteStartNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.userId != userId }
             val altarHolder = globalGameData.altarHolder
             val altar = globalGameData.altars[this.altarId]
-            val canBeStarted = godVoteHandler.canBeStarted(altarHolder, altar, ongoingEvents)
+            val canBeStarted = godVoteHandler.canBeStarted(altarHolder, altar)
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,

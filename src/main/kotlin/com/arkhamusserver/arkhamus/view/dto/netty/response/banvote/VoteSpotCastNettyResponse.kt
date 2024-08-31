@@ -9,6 +9,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class VoteSpotCastNettyResponse(
     val successfullyVoted: Boolean,
+    val targetUserBanned: Boolean,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,

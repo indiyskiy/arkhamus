@@ -39,10 +39,14 @@ class InventoryHandler {
         return requiredItemId?.let { user.items[it] } ?: 0
     }
 
-    fun consumeItem(user: RedisGameUser, item: Item) {
+    fun consumeItems(user: RedisGameUser, item: Item, number: Int) {
         if (userHaveItem(user, item)) {
-            user.items[item.id] = user.items[item.id]!! - 1
+            user.items[item.id] = user.items[item.id]!! - number
         }
+    }
+
+    fun consumeItem(user: RedisGameUser, item: Item) {
+        consumeItems(user, item, 1)
     }
 
     fun mapUsersItems(items: Map<Int, Int>): List<InventoryCell> {

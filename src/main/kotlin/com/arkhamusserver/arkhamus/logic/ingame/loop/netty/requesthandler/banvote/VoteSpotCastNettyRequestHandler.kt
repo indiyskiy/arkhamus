@@ -66,18 +66,20 @@ class VoteSpotCastNettyRequestHandler(
             val canVoteForTargetUser = canVote &&
                     canPay &&
                     targetUser != null &&
-                    (myUserVoteSpot?.votesForUserIds?.none { it == this.targetUserId } == true) &&
-                    (voteSpot?.bannedUsers?.none { it == this.targetUserId } == true)
+                    voteSpot != null &&
+                    myUserVoteSpot != null &&
+                    (myUserVoteSpot.votesForUserIds.none { it == this.targetUserId }) &&
+                    (voteSpot.bannedUsers.none { it == this.targetUserId }) &&
+                    (voteSpot.availableUsers.contains(targetUser.userId))
 
             return VoteSpotCastRequestProcessData(
                 canVoteForTargetUser = canVoteForTargetUser,
+                targetUserBanned = false,
                 successfullyVoted = false,
                 voteSpot = voteSpot,
                 currentUserVoteSpot = myUserVoteSpot,
                 thisSpotUserInfos = thisSpotUserInfos,
                 canVote = canVote,
-                canPay = canPay,
-                currentUserBanned = currentUserBanned,
                 targetUser = targetUser,
                 gameUser = user,
                 otherGameUsers = users,

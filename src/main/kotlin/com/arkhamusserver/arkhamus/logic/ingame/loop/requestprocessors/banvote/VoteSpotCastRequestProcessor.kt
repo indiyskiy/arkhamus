@@ -1,0 +1,44 @@
+package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.banvote
+
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserVoteHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.VoteSpotCastRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
+import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
+
+@Component
+class VoteSpotCastRequestProcessor(
+    private val voteHandler: UserVoteHandler
+) : NettyRequestProcessor {
+
+    override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
+        return request.requestProcessData is VoteSpotCastRequestProcessData
+    }
+
+    @Transactional
+    override fun process(
+        requestDataHolder: NettyTickRequestMessageDataHolder,
+        globalGameData: GlobalGameData,
+        ongoingEvents: List<OngoingEvent>
+    ) {
+        val gameData = requestDataHolder.requestProcessData as VoteSpotCastRequestProcessData
+        if (gameData.canVoteForTargetUser) {
+            val voteSpot = gameData.voteSpot
+            val currentUserVoteSpot = gameData.currentUserVoteSpot
+            val allUserVoteSpots = gameData.thisSpotUserInfos
+            val targetUser = gameData.targetUser
+            if (currentUserVoteSpot != null &&
+                targetUser != null &&
+                voteSpot != null
+            ) {
+                voteHandler.castVote(currentUserVoteSpot, targetUser, globalGameData, requestDataHolder, voteSpot)
+                val bannedUser = voteHandler.gotQuorum(globalGameData.users.values, voteSpot, allUserVoteSpots)
+                gameData.targetUserBanned = (bannedUser != null) && (bannedUser.userId == targetUser.userId)
+                gameData.successfullyVoted = true
+            }
+        }
+    }
+}

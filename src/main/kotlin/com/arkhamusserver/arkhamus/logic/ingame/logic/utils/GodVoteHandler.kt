@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState.ONGOING
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState.VOTING
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class GodVoteHandler(
-    private val madnessHandler: UserMadnessHandler
+    private val generalVoteHandler: GeneralVoteHandler
 ) {
 
     companion object {
@@ -24,7 +23,6 @@ class GodVoteHandler(
     fun canBeStarted(
         altarHolder: RedisAltarHolder?,
         altar: RedisAltar?,
-        ongoingEvents: List<OngoingEvent>
     ): Boolean =
         getAltarIsOpen(altarHolder) && getAltarExist(altar)
 
@@ -36,7 +34,7 @@ class GodVoteHandler(
             altarHolder != null &&
             isVoteProcessOpen(altarPolling, altarHolder) &&
             ((altarPolling.userVotes[user.userId]) == null) &&
-            usersCanPossiblyVote(user) &&
+            generalVoteHandler.userCanPossiblyVote(user) &&
             !skipped(altarPolling, user.userId)
 
     fun isVoteProcessOpen(
@@ -46,18 +44,12 @@ class GodVoteHandler(
         (altarPolling?.state == ONGOING) &&
                 (altarHolder?.state == VOTING)
 
-    fun usersCanPossiblyVote(allUsers: Collection<RedisGameUser>) =
-        madnessHandler.filterNotMad(allUsers)
-
-    fun usersCanPossiblyVote(users: RedisGameUser) =
-        !madnessHandler.isCompletelyMad(users)
-
     fun everybodyVoted(
         allUsers: Collection<RedisGameUser>,
         altarPolling: RedisAltarPolling
     ): Boolean {
         logger.info("everybodyVoted?")
-        val canVote = usersCanPossiblyVote(allUsers)
+        val canVote = generalVoteHandler.userCanPossiblyVote(allUsers)
         val canVoteIdsSet = canVote.map { it.userId }.toSet()
         val votesStillRelevant = altarPolling.userVotes.filter { it.key in canVoteIdsSet }
         val votedUserIdsSet = votesStillRelevant.map { it.key }.toSet()

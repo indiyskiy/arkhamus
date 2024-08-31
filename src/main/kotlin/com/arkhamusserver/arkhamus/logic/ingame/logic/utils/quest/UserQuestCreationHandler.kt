@@ -121,8 +121,8 @@ class UserQuestCreationHandler(
             .filter {
                 it.questState in QUESTS_IN_PROGRESS
             }
-        val inProgressQuestGivers = inProgress.map { userQuest ->
-            levelQuests.first {
+        val inProgressQuestGivers = inProgress.mapNotNull { userQuest ->
+            levelQuests.firstOrNull {
                 userQuest.questId == it.questId
             }
         }.map {
