@@ -64,7 +64,7 @@ class RedisConfig : DisposableBean {
             valueSerializer = Jackson2JsonRedisSerializer(Any::class.java)
             hashKeySerializer = StringRedisSerializer()
             hashValueSerializer = Jackson2JsonRedisSerializer(Any::class.java)
-            this.setEnableTransactionSupport(true)
+//            this.setEnableTransactionSupport(true)
         }
         return template
     }

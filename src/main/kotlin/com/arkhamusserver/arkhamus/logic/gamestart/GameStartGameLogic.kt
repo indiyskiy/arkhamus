@@ -29,7 +29,10 @@ class GameStartGameLogic(
         game.state = GameState.PENDING
         game.startedTimestamp = Timestamp(System.currentTimeMillis())
         gameSessionRepository.save(game)
+    }
 
+    @Transactional
+    fun createTheRedisGame(game: GameSession) {
         gameRepository.save(
             RedisGame(
                 id = game.id.toString(),

@@ -33,6 +33,7 @@ class GameStartLogic(
     fun startGame(game: GameSession) {
         game.gameSessionSettings.level?.levelId?.let { levelId ->
             gameStartGameLogic.createTheGame(game)
+            gameStartGameLogic.createTheRedisGame(game)
             gameStartUserLogic.leaveFromPreviousGames(game)
             val users = gameStartUserLogic.createGameUsers(levelId, game)
             gameStartContainerLogic.createContainers(levelId, game)
