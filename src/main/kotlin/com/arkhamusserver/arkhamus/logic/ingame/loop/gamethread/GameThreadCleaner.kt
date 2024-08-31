@@ -58,7 +58,6 @@ class GameThreadCleaner(
         gameSessionId: Long,
         loopHandlerFutures: ConcurrentMap<Long, ScheduledFuture<*>>,
         tasksMap: ConcurrentMap<Long, TaskCollection>,
-
         ) {
         loopHandlerFutures[gameSessionId]?.let {
             if (!it.isCancelled) {

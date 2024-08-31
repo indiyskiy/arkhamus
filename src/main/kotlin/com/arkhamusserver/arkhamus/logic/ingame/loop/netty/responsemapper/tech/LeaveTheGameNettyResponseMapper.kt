@@ -42,7 +42,6 @@ class LeaveTheGameNettyResponseMapper(
         (requestProcessData as LeaveTheGameRequestGameData).let {
             return LeaveTheGameNettyResponse(
                 leftTheGame = it.canLeaveTheGame,
-                gameEnded = it.gameEnded,
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!, emptyList()),

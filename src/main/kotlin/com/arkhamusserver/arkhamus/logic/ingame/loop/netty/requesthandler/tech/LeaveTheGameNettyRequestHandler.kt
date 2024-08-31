@@ -41,17 +41,14 @@ class LeaveTheGameNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.userId != userId }
             val visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents)
 
-            val canLeaveTheGame =
-                (user.leftTheGame == false) &&
-                        (globalGameData.game.state in setOf(
-                            GameState.IN_PROGRESS.name,
-                            GameState.PENDING.name
-                        )
-                                )
-            val gameEnded = users.all { it.leftTheGame == true } && canLeaveTheGame
+            val canLeaveTheGame = (user.leftTheGame == false) && (
+                    globalGameData.game.state in setOf(
+                        GameState.IN_PROGRESS.name,
+                        GameState.PENDING.name
+                    )
+                    )
 
             return LeaveTheGameRequestGameData(
-                gameEnded = gameEnded,
                 canLeaveTheGame = canLeaveTheGame,
                 gameUser = user,
                 otherGameUsers = users,

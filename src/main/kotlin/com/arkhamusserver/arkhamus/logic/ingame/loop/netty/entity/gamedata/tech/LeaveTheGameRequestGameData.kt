@@ -10,7 +10,6 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessRes
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
 class LeaveTheGameRequestGameData(
-    val gameEnded: Boolean,
     val canLeaveTheGame: Boolean,
     gameUser: RedisGameUser,
     otherGameUsers: List<RedisGameUser>,

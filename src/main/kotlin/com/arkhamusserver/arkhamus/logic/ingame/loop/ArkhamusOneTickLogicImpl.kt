@@ -20,7 +20,7 @@ class ArkhamusOneTickLogicImpl(
     private val onTickAbilityCast: OnTickAbilityCast,
     private val onTickCraftProcess: OnTickCraftProcess,
     private val afterLoopSaving: AfterLoopSavingComponent,
-    private val tryEndGameMaybeHandler: TryEndGameMaybeHandler,
+    private val oneTickTryEndGameMaybeHandler: OneTickTryEndGameMaybeHandler,
 ) : ArkhamusOneTickLogic {
 
     override fun processCurrentTasks(
@@ -62,7 +62,7 @@ class ArkhamusOneTickLogicImpl(
             }
             afterLoopSaving.saveAll(globalGameData, game)
 
-            tryEndGameMaybeHandler.checkIfEnd(game, globalGameData.users.values)
+            oneTickTryEndGameMaybeHandler.checkIfEnd(game, globalGameData.users.values)
 
             return responses
         } catch (e: Throwable) {

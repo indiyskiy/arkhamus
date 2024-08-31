@@ -163,7 +163,6 @@ class GameEndLogic(
         }
     }
 
-
     private fun logUserWinStatus(user: UserOfGameSession) {
         logger.info("user ${user.userAccount.id} won? ${user.won ?: "null"}")
     }

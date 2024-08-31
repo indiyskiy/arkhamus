@@ -8,7 +8,6 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneRes
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class LeaveTheGameNettyResponse(
-    val gameEnded: Boolean,
     val leftTheGame: Boolean,
     tick: Long,
     userId: Long,
