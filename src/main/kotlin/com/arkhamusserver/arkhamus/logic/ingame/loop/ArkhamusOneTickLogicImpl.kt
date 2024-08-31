@@ -20,6 +20,7 @@ class ArkhamusOneTickLogicImpl(
     private val onTickAbilityCast: OnTickAbilityCast,
     private val onTickCraftProcess: OnTickCraftProcess,
     private val afterLoopSaving: AfterLoopSavingComponent,
+    private val tryEndGameMaybeHandler: TryEndGameMaybeHandler,
 ) : ArkhamusOneTickLogic {
 
     override fun processCurrentTasks(
@@ -60,11 +61,15 @@ class ArkhamusOneTickLogicImpl(
                 game.lastTimeSentResponse = game.globalTimer
             }
             afterLoopSaving.saveAll(globalGameData, game)
+
+            tryEndGameMaybeHandler.checkIfEnd(game, globalGameData.users.values)
+
             return responses
         } catch (e: Throwable) {
             logger.error("Error processing current tasks: ${e.message}", e)
         }
         return emptyList()
     }
+
 
 }
