@@ -27,8 +27,12 @@ class InventoryHandler {
         user.items[addedItem.id] = howManyItems + itemsToAdd
     }
 
+    fun userHaveItems(user: RedisGameUser, requiredItemId: Int?, howManyItems: Int): Boolean {
+        return howManyItems(user, requiredItemId) >= howManyItems
+    }
+
     fun userHaveItem(user: RedisGameUser, requiredItem: Item): Boolean {
-        return (user.items[requiredItem.id] ?: 0) > 0
+        return howManyItems(user, requiredItem) > 0
     }
 
     fun howManyItems(user: RedisGameUser, requiredItem: Item?): Int {

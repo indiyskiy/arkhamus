@@ -21,7 +21,7 @@ class GameStartVoteSpotLogic(
 ) {
 
     companion object {
-        private val DEFAULT_ITEM = Item.ELDER_SIGN
+        private val DEFAULT_ITEM = Item.VOTE_TOKEN
     }
 
     fun createVoteSpots(levelId: Long, game: GameSession, users: List<RedisGameUser>) {

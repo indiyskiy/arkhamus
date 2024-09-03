@@ -60,7 +60,12 @@ class VoteSpotCastNettyRequestHandler(
             }
             val currentUserBanned = voteSpot?.bannedUsers?.any { it == userId } == true
             val canVote = !madnessHandler.isCompletelyMad(user) && !currentUserBanned
-            val canPay = inventoryHandler.howManyItems(user, voteSpot?.costItem) >= (voteSpot?.costItem ?: 0)
+            val costValue = voteSpot?.costValue
+            val canPay = costValue != null && inventoryHandler.userHaveItems(
+                user = user,
+                requiredItemId = voteSpot.costItem,
+                howManyItems = costValue
+            )
             val targetUser = globalGameData.users[targetUserId]
 
             val canVoteForTargetUser = canVote &&

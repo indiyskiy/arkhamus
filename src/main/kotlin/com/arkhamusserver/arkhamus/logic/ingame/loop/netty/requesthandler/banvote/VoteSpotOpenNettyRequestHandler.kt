@@ -60,7 +60,12 @@ class VoteSpotOpenNettyRequestHandler(
             }
             val currentUserBanned = voteSpot?.bannedUsers?.any { it == userId } == true
             val canVote = !madnessHandler.isCompletelyMad(user) && !currentUserBanned
-            val canPay = inventoryHandler.howManyItems(user, voteSpot?.costItem) >= (voteSpot?.costItem ?: 0)
+            val costValue = voteSpot?.costValue
+            val canPay = costValue!=null && inventoryHandler.userHaveItems(
+                user = user,
+                requiredItemId = voteSpot.costItem,
+                howManyItems = costValue
+            )
 
             return VoteSpotOpenRequestProcessData(
                 voteSpot = voteSpot,
