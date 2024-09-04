@@ -61,7 +61,7 @@ class UserVoteHandler(
         if (maxValue == null || maxVotes == null) {
             return null
         }
-        val enoughVotes = maxValue >= (usersCanVoteIdsSet.size / 2) + (usersCanVoteIdsSet.size % 2)
+        val enoughVotes = maxValue >= (usersCanVoteIdsSet.size / 2) + 1
 
         if (enoughVotes) {
             logger.info("looking for a quorum - enough votes")
@@ -109,7 +109,8 @@ class UserVoteHandler(
         logger.info("statistic: ${statistic.toList().joinToString(", ") { "${it.first} - ${it.second}" }}")
         val maxValue = statistic.maxByOrNull { it.value }?.value
         logger.info("maxValue: $maxValue")
-        val userIdsWithMaxVotes = maxValue?.let { maxValueNBotNull -> statistic.filter { it.value == maxValueNBotNull }.keys }
+        val userIdsWithMaxVotes =
+            maxValue?.let { maxValueNBotNull -> statistic.filter { it.value == maxValueNBotNull }.keys }
         logger.info("userIdsWithMaxVotes: ${userIdsWithMaxVotes?.joinToString(", ") { it.toString() }}")
         return Pair(maxValue, userIdsWithMaxVotes)
     }
