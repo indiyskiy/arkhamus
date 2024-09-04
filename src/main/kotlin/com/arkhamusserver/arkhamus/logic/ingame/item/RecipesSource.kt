@@ -93,7 +93,16 @@ class RecipesSource {
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
             ),
-
+//USEFUL_ITEM 6***
+            listOf(
+                Ingredient(ELDER_SIGN, 1),
+                Ingredient(CLOUDY_FLASK, 1)
+            ).toRecipe(
+                6001,
+                item = VOTE_TOKEN,
+                timeToCraft = SECOND_IN_MILLIS * 3,
+                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
+            ),
 // CULTIST ITEMS 7***
             listOf(Ingredient(SAINT_QUARTZ, 1), Ingredient(DARK_ESSENCE, 1)).toRecipe(
                 7001,
@@ -110,7 +119,11 @@ class RecipesSource {
                 crafterTypes = listOf(CrafterType.ADVANCED, CrafterType.CULTIST)
             ),
 
-            listOf(Ingredient(CORRUPTED_TOPAZ, 1), Ingredient(BLIGHTING_JEWEL, 1), Ingredient(STRANGE_BONE, 1)).toRecipe(
+            listOf(
+                Ingredient(CORRUPTED_TOPAZ, 1),
+                Ingredient(BLIGHTING_JEWEL, 1),
+                Ingredient(STRANGE_BONE, 1)
+            ).toRecipe(
                 7003,
                 item = RITUAL_DAGGER,
                 timeToCraft = (0.2 * MINUTE_IN_MILLIS).roundToLong(),

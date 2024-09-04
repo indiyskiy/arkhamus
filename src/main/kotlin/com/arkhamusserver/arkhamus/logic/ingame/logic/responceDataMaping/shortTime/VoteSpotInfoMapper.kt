@@ -14,7 +14,7 @@ class VoteSpotInfoMapper() {
         currentUserVoteSpot: RedisUserVoteSpot?,
         thisSpotUserInfos: List<RedisUserVoteSpot>,
         allUserIds: List<Long>,
-    ): VoteSpotInfo? {
+    ): VoteSpotInfo? =
         voteSpot?.let { voteSpotNotNull ->
             val costValue = voteSpotNotNull.costValue
             val costItem = voteSpotNotNull.costItem
@@ -26,45 +26,47 @@ class VoteSpotInfoMapper() {
                     thisSpotUserInfos = thisSpotUserInfos
                 )
             }
-            return VoteSpotInfo().apply {
+            VoteSpotInfo().apply {
                 this.costValue = costValue
                 this.costItem = costItem
                 this.usersWithBanStates = usersWithBanStates
             }
         }
-        return null
-    }
+
 
     private fun mapUserWithBanState(
         targetUserId: Long,
         voteSpotNotNull: RedisVoteSpot,
         currentUserVoteSpot: RedisUserVoteSpot?,
         thisSpotUserInfos: List<RedisUserVoteSpot>
-    ): UserWithBanState {
-        return UserWithBanState(
+    ): UserWithBanState =
+        UserWithBanState(
             userId = targetUserId,
-            banState = banState(targetUserId, voteSpotNotNull.bannedUsers),
+            banState = banState(targetUserId, voteSpotNotNull.bannedUsers, voteSpotNotNull),
             voteCount = countVotes(targetUserId, thisSpotUserInfos),
             currentUserVoteCast = currentUserVoteSpot?.votesForUserIds?.any { it == targetUserId } == true
         )
-    }
 
     private fun countVotes(
         userId: Long,
         spots: List<RedisUserVoteSpot>
-    ): Int {
-        return spots.count { it.votesForUserIds.contains(userId) }
-    }
+    ): Int =
+        spots.count { it.votesForUserIds.contains(userId) }
+
 
     private fun banState(
         userId: Long,
         bannedUsers: List<Long>,
-    ): BanState {
-        return if (bannedUsers.any { it == userId }) {
+        voteSpot: RedisVoteSpot,
+    ): BanState =
+        if (bannedUsers.any { it == userId }) {
             BanState.BANNED
         } else {
-            BanState.AVAILABLE_FOR_VOTING
+            if (voteSpot.availableUsers.contains(userId)) {
+                BanState.AVAILABLE_FOR_VOTING
+            } else {
+                BanState.NOT_AVAILABLE_FOR_VOTING
+            }
         }
-    }
 
 }
