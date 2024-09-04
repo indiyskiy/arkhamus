@@ -33,7 +33,7 @@ class RitualHandler(
         allUsers: Collection<RedisGameUser>,
         altarPolling: RedisAltarPolling
     ): God? {
-        val canVote = generalVoteHandler.userCanPossiblyVote(allUsers)
+        val canVote = generalVoteHandler.usersCanPossiblyVote(allUsers)
         val canVoteIdsSet = canVote.map { it.userId }.toSet()
         val votesStillRelevant = altarPolling.userVotes.filter { it.key in canVoteIdsSet }
         val votedUserIdsSet = votesStillRelevant.map { it.key }.toSet()

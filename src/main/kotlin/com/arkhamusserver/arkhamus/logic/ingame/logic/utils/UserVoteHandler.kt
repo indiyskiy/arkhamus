@@ -50,17 +50,23 @@ class UserVoteHandler(
         userVoteSpots: List<RedisUserVoteSpot>,
     ): RedisGameUser? {
         logger.info("looking for a quorum")
-        val canVote = generalVoteHandler.userCanPossiblyVote(allUsers)
-        val canVoteIdsSet = canVote.map { it.userId }.toSet()
-        val votesStillRelevant = userVoteSpots.filter { it.userId in canVoteIdsSet }
+        val allUsersCanVoteList = generalVoteHandler.usersCanPossiblyVote(allUsers)
+        logger.info("users can possibly vote: ${allUsersCanVoteList.joinToString(",") { it.userId.toString() }}")
+        val usersCanVoteIdsSet = allUsersCanVoteList.map { it.userId }.toSet()
+        logger.info("users can possibly vote ids: ${usersCanVoteIdsSet.joinToString(",") { it.toString() }}")
+        val votesStillRelevant = userVoteSpots.filter { it.userId in usersCanVoteIdsSet }
+        logger.info("user-votes still relevant: ${votesStillRelevant.joinToString(",") { it.userId.toString() }}")
 
         val (maxValue, maxVotes) = statistic(votesStillRelevant, voteSpot.availableUsers.toSet())
-        val enoughVotes = maxValue >= (canVoteIdsSet.size / 2) + (canVoteIdsSet.size % 2)
+        if (maxValue == null || maxVotes == null) {
+            return null
+        }
+        val enoughVotes = maxValue >= (usersCanVoteIdsSet.size / 2) + (usersCanVoteIdsSet.size % 2)
 
         if (enoughVotes) {
             logger.info("looking for a quorum - enough votes")
             if (maxVotes.size > 1) {
-                if (canVoteIdsSet.size == maxValue) {
+                if (usersCanVoteIdsSet.size == maxValue) {
                     reset(userVoteSpots)
                 }
                 return null
@@ -93,13 +99,19 @@ class UserVoteHandler(
     private fun statistic(
         votesStillRelevant: List<RedisUserVoteSpot>,
         availableUserIds: Set<Long>
-    ): Pair<Int, Set<Long>> {
-        val allVotes = votesStillRelevant.map { it.votesForUserIds }.flatten()
+    ): Pair<Int?, Set<Long>?> {
+        logger.info("counting statistic")
+        val allVotes: List<Long> = votesStillRelevant.map { it.votesForUserIds }.flatten()
+        logger.info("all votes for user: ${allVotes.joinToString(", ") { it.toString() }}")
         val votesForAvailableUsers = allVotes.filter { it in availableUserIds }
+        logger.info("all votes for available users: ${votesForAvailableUsers.joinToString(", ") { it.toString() }}")
         val statistic = votesForAvailableUsers.groupingBy { it }.eachCount()
-        val maxValue = statistic.maxBy { it.value }.value
-        val maxVotes = statistic.filter { it.value == maxValue }.keys
-        return Pair(maxValue, maxVotes)
+        logger.info("statistic: ${statistic.toList().joinToString(", ") { "${it.first} - ${it.second}" }}")
+        val maxValue = statistic.maxByOrNull { it.value }?.value
+        logger.info("maxValue: $maxValue")
+        val userIdsWithMaxVotes = maxValue?.let { maxValueNBotNull -> statistic.filter { it.value == maxValueNBotNull }.keys }
+        logger.info("userIdsWithMaxVotes: ${userIdsWithMaxVotes?.joinToString(", ") { it.toString() }}")
+        return Pair(maxValue, userIdsWithMaxVotes)
     }
 
     private fun reset(userVoteSpots: List<RedisUserVoteSpot>) {

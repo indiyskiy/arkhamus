@@ -8,9 +8,9 @@ class GeneralVoteHandler(
     private val madnessHandler: UserMadnessHandler,
 ) {
 
-    fun userCanPossiblyVote(allUsers: Collection<RedisGameUser>) =
+    fun usersCanPossiblyVote(allUsers: Collection<RedisGameUser>) =
         madnessHandler.filterNotMad(allUsers)
 
-    fun userCanPossiblyVote(user: RedisGameUser) =
+    fun usersCanPossiblyVote(user: RedisGameUser) =
         !madnessHandler.isCompletelyMad(user)
 }

@@ -55,7 +55,7 @@ class VoteSpotOpenNettyRequestHandler(
             val thisSpotUserInfos = voteSpot?.let {
                 globalGameData.userVoteSpotsBySpotId[voteSpotId]
             } ?: emptyList()
-            val myUserVoteSpot = thisSpotUserInfos.let {
+            val currentUserVoteSpot = thisSpotUserInfos.let {
                 it.firstOrNull { it.userId == userId }
             }
             val currentUserBanned = voteSpot?.bannedUsers?.any { it == userId } == true
@@ -69,7 +69,7 @@ class VoteSpotOpenNettyRequestHandler(
 
             return VoteSpotOpenRequestProcessData(
                 voteSpot = voteSpot,
-                currentUserVoteSpot = myUserVoteSpot,
+                currentUserVoteSpot = currentUserVoteSpot,
                 thisSpotUserInfos = thisSpotUserInfos,
                 canVote = canVote,
                 canPay = canPay,

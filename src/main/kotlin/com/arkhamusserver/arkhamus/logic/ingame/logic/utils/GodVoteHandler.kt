@@ -34,7 +34,7 @@ class GodVoteHandler(
             altarHolder != null &&
             isVoteProcessOpen(altarPolling, altarHolder) &&
             ((altarPolling.userVotes[user.userId]) == null) &&
-            generalVoteHandler.userCanPossiblyVote(user) &&
+            generalVoteHandler.usersCanPossiblyVote(user) &&
             !skipped(altarPolling, user.userId)
 
     fun isVoteProcessOpen(
@@ -49,7 +49,7 @@ class GodVoteHandler(
         altarPolling: RedisAltarPolling
     ): Boolean {
         logger.info("everybodyVoted?")
-        val canVote = generalVoteHandler.userCanPossiblyVote(allUsers)
+        val canVote = generalVoteHandler.usersCanPossiblyVote(allUsers)
         val canVoteIdsSet = canVote.map { it.userId }.toSet()
         val votesStillRelevant = altarPolling.userVotes.filter { it.key in canVoteIdsSet }
         val votedUserIdsSet = votesStillRelevant.map { it.key }.toSet()

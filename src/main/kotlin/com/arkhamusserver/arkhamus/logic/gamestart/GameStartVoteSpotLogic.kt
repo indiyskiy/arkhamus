@@ -27,7 +27,7 @@ class GameStartVoteSpotLogic(
     fun createVoteSpots(levelId: Long, game: GameSession, users: List<RedisGameUser>) {
         val voteSpots = voteSpotRepository.findByLevelId(levelId)
         voteSpots.forEach { voteSpot ->
-            val redisVoteSpot = createVoteSpot(voteSpot, game)
+            val redisVoteSpot = createVoteSpot(voteSpot, game, users)
             users.forEach { user ->
                 createUserVoteSpot(redisVoteSpot, game, user)
             }
@@ -52,7 +52,8 @@ class GameStartVoteSpotLogic(
 
     private fun createVoteSpot(
         voteSpot: VoteSpot,
-        game: GameSession
+        game: GameSession,
+        allUsers: List<RedisGameUser>
     ) =
         redisVoteSpotRepository.save(
             RedisVoteSpot(
@@ -65,7 +66,7 @@ class GameStartVoteSpotLogic(
                 costValue = 1,
                 costItem = DEFAULT_ITEM.id,
                 bannedUsers = mutableListOf(),
-                availableUsers = mutableListOf(),
+                availableUsers = allUsers.map { it.userId }.toMutableList(),
             )
         )
 

@@ -18,9 +18,9 @@ class VoteSpotInfoMapper() {
         voteSpot?.let { voteSpotNotNull ->
             val costValue = voteSpotNotNull.costValue
             val costItem = voteSpotNotNull.costItem
-            val usersWithBanStates = allUserIds.map { userId ->
+            val usersWithBanStates = allUserIds.map { targetUserId ->
                 mapUserWithBanState(
-                    userId = userId,
+                    targetUserId = targetUserId,
                     voteSpotNotNull = voteSpotNotNull,
                     currentUserVoteSpot = currentUserVoteSpot,
                     thisSpotUserInfos = thisSpotUserInfos
@@ -36,16 +36,16 @@ class VoteSpotInfoMapper() {
     }
 
     private fun mapUserWithBanState(
-        userId: Long,
+        targetUserId: Long,
         voteSpotNotNull: RedisVoteSpot,
         currentUserVoteSpot: RedisUserVoteSpot?,
         thisSpotUserInfos: List<RedisUserVoteSpot>
     ): UserWithBanState {
         return UserWithBanState(
-            userId = userId,
-            banState = banState(userId, voteSpotNotNull.bannedUsers),
-            voteCount = countVotes(userId, thisSpotUserInfos),
-            currentUserVoteCast = currentUserVoteSpot?.votesForUserIds?.any { it == userId } == true
+            userId = targetUserId,
+            banState = banState(targetUserId, voteSpotNotNull.bannedUsers),
+            voteCount = countVotes(targetUserId, thisSpotUserInfos),
+            currentUserVoteCast = currentUserVoteSpot?.votesForUserIds?.any { it == targetUserId } == true
         )
     }
 
