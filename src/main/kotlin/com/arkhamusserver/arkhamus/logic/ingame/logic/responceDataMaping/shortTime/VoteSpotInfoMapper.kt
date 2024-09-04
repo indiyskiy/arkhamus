@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component
 @Component
 class VoteSpotInfoMapper() {
     fun map(
-        currentUserId: Long,
         voteSpot: RedisVoteSpot?,
         currentUserVoteSpot: RedisUserVoteSpot?,
         thisSpotUserInfos: List<RedisUserVoteSpot>,
@@ -21,7 +20,6 @@ class VoteSpotInfoMapper() {
             val costItem = voteSpotNotNull.costItem
             val usersWithBanStates = allUserIds.map { userId ->
                 mapUserWithBanState(
-                    currentUserId = currentUserId,
                     userId = userId,
                     voteSpotNotNull = voteSpotNotNull,
                     currentUserVoteSpot = currentUserVoteSpot,
@@ -38,7 +36,6 @@ class VoteSpotInfoMapper() {
     }
 
     private fun mapUserWithBanState(
-        currentUserId: Long,
         userId: Long,
         voteSpotNotNull: RedisVoteSpot,
         currentUserVoteSpot: RedisUserVoteSpot?,
@@ -46,9 +43,9 @@ class VoteSpotInfoMapper() {
     ): UserWithBanState {
         return UserWithBanState(
             userId = userId,
-            banState = banState(userId, voteSpotNotNull.bannedUsers, currentUserId),
+            banState = banState(userId, voteSpotNotNull.bannedUsers),
             voteCount = countVotes(userId, thisSpotUserInfos),
-            currentUserVoteCast = currentUserVoteSpot?.votesForUserIds?.any{it == userId} == true
+            currentUserVoteCast = currentUserVoteSpot?.votesForUserIds?.any { it == userId } == true
         )
     }
 
@@ -62,16 +59,11 @@ class VoteSpotInfoMapper() {
     private fun banState(
         userId: Long,
         bannedUsers: List<Long>,
-        currentUserId: Long
     ): BanState {
         return if (bannedUsers.any { it == userId }) {
             BanState.BANNED
         } else {
-            if (userId == currentUserId) {
-                BanState.NOT_AVAILABLE_FOR_VOTING
-            } else {
-                BanState.AVAILABLE_FOR_VOTING
-            }
+            BanState.AVAILABLE_FOR_VOTING
         }
     }
 

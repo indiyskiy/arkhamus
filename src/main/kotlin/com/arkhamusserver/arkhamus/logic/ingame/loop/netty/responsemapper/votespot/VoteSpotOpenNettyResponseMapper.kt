@@ -43,7 +43,6 @@ class VoteSpotOpenNettyResponseMapper(
     ): VoteSpotOpenNettyResponse {
         (requestProcessData as VoteSpotOpenRequestProcessData).let {
             val voteSpotInfo = voteSpotInfoMapper.map(
-                currentUserId = user.id!!,
                 voteSpot = it.voteSpot,
                 currentUserVoteSpot = it.currentUserVoteSpot,
                 thisSpotUserInfos = it.thisSpotUserInfos,
