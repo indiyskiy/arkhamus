@@ -60,9 +60,9 @@ class ArkhamusOneTickLogicImpl(
             if (responses.isNotEmpty()) {
                 game.lastTimeSentResponse = game.globalTimer
             }
-            afterLoopSaving.saveAll(globalGameData, game)
 
             oneTickTryEndGameMaybeHandler.checkIfEnd(game, globalGameData.users.values)
+            afterLoopSaving.saveAll(globalGameData, game)
 
             return responses
         } catch (e: Throwable) {
