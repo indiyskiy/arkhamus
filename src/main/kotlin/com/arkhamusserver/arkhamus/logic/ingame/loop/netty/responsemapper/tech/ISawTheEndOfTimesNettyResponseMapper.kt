@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.tech
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.ContainerDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.CrafterDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.DoorDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.OtherGameUsersDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -23,7 +24,8 @@ class ISawTheEndOfTimesNettyResponseMapper(
     private val otherGameUsersDataHandler: OtherGameUsersDataHandler,
     private val containersDataHandler: ContainerDataHandler,
     private val craftersDataHandler: CrafterDataHandler,
-    private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler
+    private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler,
+    private val doorDataHandler: DoorDataHandler
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == ISawTheEndOfTimesRequestGameData::class.java
@@ -73,7 +75,12 @@ class ISawTheEndOfTimesNettyResponseMapper(
                     globalGameData.levelGeometryData
                 ),
                 inZones = requestProcessData.inZones,
-                clues = requestProcessData.clues
+                clues = requestProcessData.clues,
+                doors = doorDataHandler.map(
+                    it.gameUser,
+                    globalGameData.doorsByZoneId.values.flatten(),
+                    globalGameData.levelGeometryData
+                )
             )
         }
     }

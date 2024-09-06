@@ -25,6 +25,7 @@ class NettyResponseAuth(
     containers = emptyList(),
     crafters = emptyList(),
     inZones = emptyList(),
+    doors = emptyList(),
     clues = emptyList(),
     type = NettyResponseAuth::class.java.simpleName
 )

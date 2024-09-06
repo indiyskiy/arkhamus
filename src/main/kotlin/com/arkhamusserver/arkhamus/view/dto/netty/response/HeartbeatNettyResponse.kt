@@ -17,7 +17,8 @@ class HeartbeatNettyResponse(
     containers: List<ContainerState>,
     crafters: List<CrafterState>,
     clues: List<RedisClue>,
-    inZones: List<LevelZone>
+    inZones: List<LevelZone>,
+    doors: List<DoorResponse>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -31,6 +32,7 @@ class HeartbeatNettyResponse(
     containers = containers,
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
+    doors = doors,
     clues = clues.convertToClueResponses(),
     type = HeartbeatNettyResponse::class.java.simpleName
 )

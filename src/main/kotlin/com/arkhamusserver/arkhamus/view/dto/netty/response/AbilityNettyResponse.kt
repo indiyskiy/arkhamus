@@ -20,6 +20,7 @@ class AbilityNettyResponse(
     containers: List<ContainerState>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
+    doors: List<DoorResponse>,
     clues: List<RedisClue>,
 ) : NettyResponse(
     tick = tick,
@@ -34,7 +35,9 @@ class AbilityNettyResponse(
     containers = containers,
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
+    doors = doors,
     clues = clues.convertToClueResponses(),
+
     type = AbilityNettyResponse::class.java.simpleName
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

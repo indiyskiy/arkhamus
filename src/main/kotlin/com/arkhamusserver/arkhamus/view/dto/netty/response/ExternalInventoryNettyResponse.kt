@@ -22,6 +22,7 @@ abstract class ExternalInventoryNettyResponse(
     containers: List<ContainerState>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
+    doors: List<DoorResponse>,
     clues: List<RedisClue>,
     type: String
 ) : NettyResponse(
@@ -37,6 +38,7 @@ abstract class ExternalInventoryNettyResponse(
     containers = containers,
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
+    doors = doors,
     clues = clues.convertToClueResponses(),
     type = type
 )

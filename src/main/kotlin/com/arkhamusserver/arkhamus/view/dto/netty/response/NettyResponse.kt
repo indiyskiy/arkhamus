@@ -17,6 +17,7 @@ abstract class NettyResponse(
     var containers: List<ContainerState>,
     var crafters: List<CrafterState>,
     var inZones: List<LevelZoneResponse>,
+    var doors: List<DoorResponse>,
     var clues: List<ClueResponse>,
     val type: String
 )

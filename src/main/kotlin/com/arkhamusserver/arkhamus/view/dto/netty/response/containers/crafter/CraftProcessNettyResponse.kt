@@ -28,6 +28,7 @@ class CraftProcessNettyResponse(
     containers: List<ContainerState>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
+    doors: List<DoorResponse>,
     clues: List<RedisClue>,
 ) : ExternalInventoryNettyResponse(
     sortedUserInventory = sortedUserInventory,
@@ -46,6 +47,7 @@ class CraftProcessNettyResponse(
     containers = containers,
     crafters = crafters,
     inZones = inZones,
+    doors = doors,
     clues = clues,
     type = CraftProcessNettyResponse::class.java.simpleName
 ), ActionResponse {

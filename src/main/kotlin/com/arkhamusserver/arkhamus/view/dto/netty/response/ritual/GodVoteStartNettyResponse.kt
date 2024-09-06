@@ -24,6 +24,7 @@ class GodVoteStartNettyResponse(
     containers: List<ContainerState>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
+    doors: List<DoorResponse>,
     clues: List<RedisClue>,
 ) : NettyResponse(
     tick = tick,
@@ -38,6 +39,7 @@ class GodVoteStartNettyResponse(
     containers = containers,
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
+    doors = doors,
     clues = clues.convertToClueResponses(),
     type = GodVoteStartNettyResponse::class.java.simpleName,
 ), ActionResponse {

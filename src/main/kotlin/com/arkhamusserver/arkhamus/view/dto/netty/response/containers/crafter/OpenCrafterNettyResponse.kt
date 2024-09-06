@@ -26,6 +26,7 @@ class OpenCrafterNettyResponse(
     containers: List<ContainerState>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
+    doors: List<DoorResponse>,
     clues: List<RedisClue>,
 ) : NettyResponse(
     tick = tick,
@@ -40,6 +41,7 @@ class OpenCrafterNettyResponse(
     containers = containers,
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
+    doors = doors,
     clues = clues.convertToClueResponses(),
     type = OpenCrafterNettyResponse::class.java.simpleName
 )

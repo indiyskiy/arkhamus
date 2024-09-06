@@ -26,6 +26,7 @@ class RitualPutItemNettyResponse(
     containers: List<ContainerState>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
+    doors: List<DoorResponse>,
     clues: List<RedisClue>,
 ) : NettyResponse(
     tick = tick,
@@ -40,6 +41,7 @@ class RitualPutItemNettyResponse(
     containers = containers,
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
+    doors = doors,
     clues = clues.convertToClueResponses(),
     type = RitualPutItemNettyResponse::class.java.simpleName,
 ), ActionResponse {
