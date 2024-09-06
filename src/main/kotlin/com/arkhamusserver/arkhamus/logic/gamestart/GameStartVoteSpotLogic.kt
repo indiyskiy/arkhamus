@@ -62,6 +62,7 @@ class GameStartVoteSpotLogic(
                 voteSpotId = voteSpot.inGameId,
                 x = voteSpot.point.x,
                 y = voteSpot.point.y,
+                zoneId = voteSpot.zoneId,
                 interactionRadius = voteSpot.interactionRadius,
                 costValue = 1,
                 costItem = DEFAULT_ITEM.id,

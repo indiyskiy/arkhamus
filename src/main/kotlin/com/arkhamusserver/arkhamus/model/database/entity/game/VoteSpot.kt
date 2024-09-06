@@ -16,6 +16,7 @@ data class VoteSpot(
     var point: PGpoint,
     var inGameId: Long,
     var interactionRadius: Double,
+    var zoneId: Long,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
     var level: Level

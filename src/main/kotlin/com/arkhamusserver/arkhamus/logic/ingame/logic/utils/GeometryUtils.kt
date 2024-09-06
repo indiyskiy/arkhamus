@@ -61,6 +61,12 @@ class GeometryUtils {
         b: Line
     ) = (a.p1.x - a.p2.x) * (b.p1.y - b.p2.y) - (a.p1.y - a.p2.y) * (b.p1.x - b.p2.x)
 
+    fun contains(tetragon: Tetragon, point: WithPoint): Boolean =
+        contains(tetragon, Point(point.x(), point.y()))
+
+    fun contains(ellipse: Ellipse, point: WithPoint): Boolean =
+        contains(ellipse, Point(point.x(), point.y()))
+
     fun contains(tetragon: Tetragon, point: Point): Boolean =
         det(tetragon.p0, tetragon.p1, point) >= 0 &&
                 det(tetragon.p1, tetragon.p2, point) >= 0 &&

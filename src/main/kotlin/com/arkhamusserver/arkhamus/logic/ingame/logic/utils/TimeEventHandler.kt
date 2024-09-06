@@ -26,10 +26,19 @@ class TimeEventHandler(
         game: RedisGame,
         eventType: RedisTimeEventType,
         sourceUser: RedisGameUser? = null,
+        targetUser: RedisGameUser? = null,
         location: Pair<Double, Double>? = null,
         timeLeft: Long? = null
     ) {
-        createEvent(game.gameId!!, eventType, game.globalTimer, sourceUser, location, timeLeft)
+        createEvent(
+            gameId = game.gameId!!,
+            eventType = eventType,
+            startDateTime = game.globalTimer,
+            sourceUser = sourceUser,
+            targetUserId = targetUser,
+            location = location,
+            timeLeft = timeLeft
+        )
     }
 
     @Transactional
@@ -38,10 +47,19 @@ class TimeEventHandler(
         eventType: RedisTimeEventType,
         startDateTime: Long,
         sourceUser: RedisGameUser? = null,
+        targetUser: RedisGameUser? = null,
         location: Pair<Double, Double>? = null,
         timeLeft: Long? = null
     ) {
-        createEvent(game.id!!, eventType, startDateTime, sourceUser, location, timeLeft)
+        createEvent(
+            gameId = game.id!!,
+            eventType = eventType,
+            startDateTime = startDateTime,
+            sourceUser = sourceUser,
+            targetUserId = targetUser,
+            location = location,
+            timeLeft = timeLeft
+        )
     }
 
     @Transactional
@@ -50,10 +68,19 @@ class TimeEventHandler(
         eventType: RedisTimeEventType,
         startDateTime: Long,
         sourceUser: RedisGameUser? = null,
+        targetUserId: RedisGameUser? = null,
         location: Pair<Double, Double>? = null,
         timeLeft: Long? = null
     ) {
-        createEvent(gameId, eventType, startDateTime, sourceUser?.userId, location, timeLeft)
+        createEvent(
+            gameId = gameId,
+            eventType = eventType,
+            startDateTime = startDateTime,
+            sourceUserId = sourceUser?.userId,
+            targetUserId = targetUserId?.userId,
+            location = location,
+            timeLeft = timeLeft
+        )
     }
 
     @Transactional
@@ -62,6 +89,7 @@ class TimeEventHandler(
         eventType: RedisTimeEventType,
         startDateTime: Long,
         sourceUserId: Long? = null,
+        targetUserId: Long? = null,
         location: Pair<Double, Double>? = null,
         timeLeft: Long? = null
     ) {
@@ -72,6 +100,7 @@ class TimeEventHandler(
             timePast = 0L,
             timeLeft = timeLeft ?: eventType.getDefaultTime(),
             sourceUserId = sourceUserId,
+            targetUserId = targetUserId,
             type = eventType,
             state = RedisTimeEventState.ACTIVE,
             xLocation = location?.first,

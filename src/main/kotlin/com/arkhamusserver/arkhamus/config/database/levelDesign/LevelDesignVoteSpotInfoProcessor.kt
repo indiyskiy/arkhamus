@@ -17,7 +17,8 @@ class LevelDesignVoteSpotInfoProcessor(
                 point = PGpoint(voteSpot.x!!, voteSpot.y!!),
                 inGameId = voteSpot.id!!,
                 interactionRadius = voteSpot.interactionRadius!!,
-                level = savedLevel
+                level = savedLevel,
+                zoneId = voteSpot.zoneId!!
             ).apply {
                 voteSpotRepository.save(this)
             }

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
@@ -38,4 +39,12 @@ class ZonesHandler(
         }
         return if (types.isEmpty()) zones else zones.filter { it.zoneType in types }
     }
+
+    fun inZone(
+        withPoint: WithPoint,
+        zone: GameDataLevelZone,
+    ): Boolean =
+        zone.ellipses.any { ellipse -> geometryUtils.contains(ellipse, withPoint) } ||
+                zone.tetragons.any { tetragon -> geometryUtils.contains(tetragon, withPoint) }
+
 }

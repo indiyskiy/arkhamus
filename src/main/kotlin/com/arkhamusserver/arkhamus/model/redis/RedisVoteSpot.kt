@@ -13,6 +13,7 @@ data class RedisVoteSpot(
     var x: Double = 0.0,
     var y: Double = 0.0,
     var interactionRadius: Double = 0.0,
+    var zoneId: Long,
 
     var costValue: Int? = null,
     var costItem: Int? = null,

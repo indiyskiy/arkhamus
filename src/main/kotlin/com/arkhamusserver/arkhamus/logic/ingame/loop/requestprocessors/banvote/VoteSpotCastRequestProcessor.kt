@@ -41,7 +41,12 @@ class VoteSpotCastRequestProcessor(
             ) {
                 logger.info("casting vote from ${currentUserVoteSpot.userId} to ${targetUser.userId}")
                 voteHandler.castVote(currentUserVoteSpot, targetUser, globalGameData, requestDataHolder, voteSpot)
-                val bannedUser = voteHandler.gotQuorum(globalGameData.users.values, voteSpot, allUserVoteSpots)
+                val bannedUser = voteHandler.applyBanMaybe(
+                    globalGameData.users.values,
+                    voteSpot,
+                    allUserVoteSpots,
+                    globalGameData
+                )
                 gameData.targetUserBanned = (bannedUser != null) && (bannedUser.userId == targetUser.userId)
                 gameData.successfullyVoted = true
             }
