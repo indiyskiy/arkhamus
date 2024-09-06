@@ -15,6 +15,7 @@ class RedisDataAccessImpl(
     private val voteSpotRepository: RedisVoteSpotRepository,
     private val userVoteSpotRepository: RedisUserVoteSpotRepository,
     private val thresholdRepository: RedisThresholdRepository,
+    private val doorRepository: RedisDoorRepository,
     private val altarRepository: RedisAltarRepository,
     private val altarHolderRepository: RedisAltarHolderRepository,
     private val altarPollingRepository: RedisAltarPollingRepository,
@@ -65,6 +66,9 @@ class RedisDataAccessImpl(
 
     override fun getThresholds(gameId: Long): List<RedisThreshold> =
         thresholdRepository.findByGameId(gameId)
+
+    override fun getDoors(gameId: Long): List<RedisDoor> =
+        doorRepository.findByGameId(gameId)
 
     override fun getTimeEvents(gameId: Long) =
         timeEventRepository.findByGameId(gameId)

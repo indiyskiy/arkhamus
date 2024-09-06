@@ -25,7 +25,8 @@ data class GlobalGameData(
     var questProgressByUserId: Map<Long, List<RedisUserQuestProgress>> = emptyMap(),
     var voteSpots: List<RedisVoteSpot> = emptyList(),
     var userVoteSpotsBySpotId: Map<Long, List<RedisUserVoteSpot>> = emptyMap(),
-    var thresholds: Map<Long, List<RedisThreshold>> = emptyMap(),
+    var thresholdsByZoneId: Map<Long, List<RedisThreshold>> = emptyMap(),
+    var doorsByZoneId: Map<Long, List<RedisDoor>> = emptyMap(),
 ) {
     fun buildGeometryData(
         zones: List<RedisLevelZone>,

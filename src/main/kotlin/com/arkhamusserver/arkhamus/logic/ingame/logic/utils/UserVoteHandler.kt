@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisDoorRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
@@ -21,7 +22,8 @@ class UserVoteHandler(
     private val madnessHandler: UserMadnessHandler,
     private val teleportHandler: TeleportHandler,
     private val zonesHandler: ZonesHandler,
-    private val geometryUtils: GeometryUtils
+    private val geometryUtils: GeometryUtils,
+    private val redisDoorRepository: RedisDoorRepository
 ) {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(UserVoteHandler::class.java)
@@ -146,7 +148,7 @@ class UserVoteHandler(
             voteSpot.costValue = value + 1
         }
         if (user.inRelatedZone(globalGameData.levelGeometryData.zones, voteSpot.zoneId)) {
-            val pointToTeleport = geometryUtils.nearestPoint(user, globalGameData.thresholds[voteSpot.zoneId])
+            val pointToTeleport = geometryUtils.nearestPoint(user, globalGameData.thresholdsByZoneId[voteSpot.zoneId])
             pointToTeleport?.let {
                 teleportHandler.forceTeleport(
                     game = globalGameData.game,
@@ -155,6 +157,14 @@ class UserVoteHandler(
                 )
             }
         }
+        val doors = globalGameData.doorsByZoneId[voteSpot.zoneId]
+        doors?.let {
+            it.forEach { door ->
+                door.closedForUsers += userId
+            }
+            redisDoorRepository.saveAll(it)
+        }
+
         logger.debug("ban user $userId - done")
         voteSpotRepository.save(voteSpot)
     }

@@ -14,6 +14,7 @@ interface RedisDataAccess {
     fun getVoteSpots(gameId: Long): List<RedisVoteSpot>
     fun getUserVoteSpots(gameId: Long): List<RedisUserVoteSpot>
     fun getThresholds(gameId: Long): List<RedisThreshold>
+    fun getDoors(gameId: Long): List<RedisDoor>
     fun getAltarHolder(gameId: Long): RedisAltarHolder?
     fun getAltarPolling(gameId: Long): RedisAltarPolling?
     fun getAltars(gameId: Long): Map<Long, RedisAltar>
@@ -44,6 +45,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     val allVoteSpots = getVoteSpots(gameId)
     val allUserVoteSpots = getUserVoteSpots(gameId)
     val thresholds = getThresholds(gameId)
+    val doors = getDoors(gameId)
 
     val craftProcess = getCraftProcess(gameId)
 
@@ -82,7 +84,8 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.questProgressByUserId = allUsersQuestProgresses.groupBy { it.userId }
         this.voteSpots = allVoteSpots
         this.userVoteSpotsBySpotId = allUserVoteSpots.groupBy { it.voteSpotId }
-        this.thresholds = thresholds.groupBy { it.zoneId }
+        this.thresholdsByZoneId = thresholds.groupBy { it.zoneId }
+        this.doorsByZoneId = doors.groupBy { it.zoneId }
     }
 }
 
