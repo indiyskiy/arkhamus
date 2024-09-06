@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.DAY
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.GAME_LENGTH
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.MINUTE_IN_MILLIS
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.NIGHT_LENGTH_MINUTES
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SECOND_IN_MILLIS
 
 enum class RedisTimeEventType(
     private val defaultTime: Long,
@@ -22,7 +23,10 @@ enum class RedisTimeEventType(
     ALTAR_VOTING_COOLDOWN(DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS / 8, Visibility.PUBLIC),
 
     //ability
-    SUMMONED_NIGHT(NIGHT_LENGTH_MINUTES * MINUTE_IN_MILLIS / 4, Visibility.PUBLIC);
+    SUMMONED_NIGHT(NIGHT_LENGTH_MINUTES * MINUTE_IN_MILLIS / 4, Visibility.PUBLIC),
+    //tech
+    TELEPORTATION_STUN(SECOND_IN_MILLIS * 5, Visibility.NONE),
+    ;
 
     fun getDefaultTime() = defaultTime
     fun getVisibility() = visibility

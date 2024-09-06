@@ -13,7 +13,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyR
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.banvote.VoteSpotOpenNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
@@ -53,7 +52,6 @@ class VoteSpotOpenNettyResponseMapper(
                 voteSpotInfo = voteSpotInfo,
                 canVote = requestProcessData.canVote,
                 cantVoteReasons = requestProcessData.cantVoteReasons.sortedByDescending { it.priority },
-                canPay = !(requestProcessData.cantVoteReasons.contains(CantVoteReason.CANT_PAY)),
                 votesToBan = requestProcessData.votesToBan,
                 tick = it.tick,
                 userId = user.id!!,

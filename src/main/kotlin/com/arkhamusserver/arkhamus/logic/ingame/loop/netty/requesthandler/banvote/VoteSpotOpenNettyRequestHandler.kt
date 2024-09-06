@@ -64,7 +64,6 @@ class VoteSpotOpenNettyRequestHandler(
                 voteSpot = voteSpot,
             )
             val canVote = cantVoteReasons.isEmpty()
-
             val votesToBan = voteSpot?.let { voteHandler.votesToBan(globalGameData.users.values, voteSpot) } ?: 0
 
             return VoteSpotOpenRequestProcessData(

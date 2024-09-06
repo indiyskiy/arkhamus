@@ -29,17 +29,30 @@ class UserVoteHandler(
         voteSpot: RedisVoteSpot?,
     ): List<CantVoteReason> {
         return listOf(
-            CantVoteReason.MAD.takeIf { madnessHandler.isCompletelyMad(votingUser) },
-            CantVoteReason.CANT_PAY.takeIf {
-                inventoryHandler.userHaveItems(
-                    votingUser,
-                    voteSpot?.costItem,
-                    voteSpot?.costValue ?: 0
-                )
-            },
-            CantVoteReason.BANNED.takeIf { voteSpot?.bannedUsers?.contains(votingUser.userId) == true },
+            mad(votingUser),
+            cantPay(votingUser, voteSpot),
+            isUserBannedFromVoteSpot(voteSpot, votingUser),
         ).filterNotNull()
     }
+
+    private fun isUserBannedFromVoteSpot(
+        voteSpot: RedisVoteSpot?,
+        votingUser: RedisGameUser
+    ): CantVoteReason? = CantVoteReason.BANNED.takeIf { voteSpot?.bannedUsers?.contains(votingUser.userId) == true }
+
+    private fun cantPay(
+        votingUser: RedisGameUser,
+        voteSpot: RedisVoteSpot?
+    ): CantVoteReason? = CantVoteReason.CANT_PAY.takeIf {
+        !inventoryHandler.userHaveItems(
+            votingUser,
+            voteSpot?.costItem,
+            voteSpot?.costValue ?: 0
+        )
+    }
+
+    private fun mad(votingUser: RedisGameUser): CantVoteReason? =
+        CantVoteReason.MAD.takeIf { madnessHandler.isCompletelyMad(votingUser) }
 
     @Transactional
     fun castVote(

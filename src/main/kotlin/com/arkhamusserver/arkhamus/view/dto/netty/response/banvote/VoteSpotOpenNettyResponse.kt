@@ -11,7 +11,6 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 class VoteSpotOpenNettyResponse(
     val voteSpotInfo: VoteSpotInfo?,
     val canVote: Boolean,
-    val canPay: Boolean,
     val votesToBan: Int,
     val cantVoteReasons: List<CantVoteReason>,
     tick: Long,
