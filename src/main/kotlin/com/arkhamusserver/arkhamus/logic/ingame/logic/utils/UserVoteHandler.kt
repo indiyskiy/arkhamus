@@ -20,7 +20,8 @@ class UserVoteHandler(
     private val inventoryHandler: InventoryHandler,
     private val madnessHandler: UserMadnessHandler,
     private val teleportHandler: TeleportHandler,
-    private val zonesHandler: ZonesHandler
+    private val zonesHandler: ZonesHandler,
+    private val geometryUtils: GeometryUtils
 ) {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(UserVoteHandler::class.java)
@@ -145,11 +146,14 @@ class UserVoteHandler(
             voteSpot.costValue = value + 1
         }
         if (user.inRelatedZone(globalGameData.levelGeometryData.zones, voteSpot.zoneId)) {
-            teleportHandler.forceTeleport(
-                game = globalGameData.game,
-                user = user,
-                point = globalGameData.altarHolder
-            )
+            val pointToTeleport = geometryUtils.nearestPoint(user, globalGameData.thresholds[voteSpot.zoneId])
+            pointToTeleport?.let {
+                teleportHandler.forceTeleport(
+                    game = globalGameData.game,
+                    user = user,
+                    point = it
+                )
+            }
         }
         logger.debug("ban user $userId - done")
         voteSpotRepository.save(voteSpot)

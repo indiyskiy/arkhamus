@@ -1,9 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.WithPoint
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,7 +13,7 @@ class TeleportHandler(
     fun forceTeleport(
         game: RedisGame,
         user: RedisGameUser,
-        point: RedisAltarHolder?
+        point: WithPoint?
     ) {
         point?.let {
             user.x = point.x()

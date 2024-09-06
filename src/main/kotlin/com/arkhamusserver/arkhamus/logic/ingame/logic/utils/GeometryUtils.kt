@@ -95,6 +95,11 @@ class GeometryUtils {
                 b.x * (c.y - a.y) +
                 c.x * (a.y - b.y)
 
+    fun nearestPoint(point: WithPoint, points: List<WithPoint>?):WithPoint? {
+        if(points == null || points.isEmpty()) return null
+        return points.minByOrNull { distance(it, point) }
+    }
+
     data class Point(var x: Double, var y: Double)
 
     class Line(var p1: Point, var p2: Point)

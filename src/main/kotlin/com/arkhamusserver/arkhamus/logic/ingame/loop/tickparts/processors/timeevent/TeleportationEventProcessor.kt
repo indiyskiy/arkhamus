@@ -17,7 +17,7 @@ class TeleportationEventProcessor() : TimeEventProcessor {
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
-
+        globalGameData.users[event.targetUserId]?.stateTags?.add(UserStateTag.TELEPORTATION_STUN.name)
     }
 
     override fun processStart(

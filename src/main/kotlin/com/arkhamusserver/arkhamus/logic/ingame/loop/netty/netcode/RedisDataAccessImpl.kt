@@ -14,6 +14,7 @@ class RedisDataAccessImpl(
     private val lanternRepository: RedisLanternRepository,
     private val voteSpotRepository: RedisVoteSpotRepository,
     private val userVoteSpotRepository: RedisUserVoteSpotRepository,
+    private val thresholdRepository: RedisThresholdRepository,
     private val altarRepository: RedisAltarRepository,
     private val altarHolderRepository: RedisAltarHolderRepository,
     private val altarPollingRepository: RedisAltarPollingRepository,
@@ -44,23 +45,26 @@ class RedisDataAccessImpl(
     override fun getAltarPolling(gameId: Long) =
         altarPollingRepository.findByGameId(gameId).maxByOrNull { it.started }
 
-    override fun getGameAltars(gameId: Long) =
+    override fun getAltars(gameId: Long) =
         altarRepository.findByGameId(gameId).associateBy { it.altarId }
 
-    override fun getGameContainers(gameId: Long) =
+    override fun getContainers(gameId: Long) =
         containerRepository.findByGameId(gameId)
 
-    override fun getGameCrafters(gameId: Long) =
+    override fun getCrafters(gameId: Long) =
         crafterRepository.findByGameId(gameId)
 
-    override fun getGameLanterns(gameId: Long) =
+    override fun getLanterns(gameId: Long) =
         lanternRepository.findByGameId(gameId)
 
-    override fun getGameVoteSpots(gameId: Long) =
+    override fun getVoteSpots(gameId: Long) =
         voteSpotRepository.findByGameId(gameId)
 
-    override fun getGameUserVoteSpots(gameId: Long) =
+    override fun getUserVoteSpots(gameId: Long) =
         userVoteSpotRepository.findByGameId(gameId)
+
+    override fun getThresholds(gameId: Long): List<RedisThreshold> =
+        thresholdRepository.findByGameId(gameId)
 
     override fun getTimeEvents(gameId: Long) =
         timeEventRepository.findByGameId(gameId)

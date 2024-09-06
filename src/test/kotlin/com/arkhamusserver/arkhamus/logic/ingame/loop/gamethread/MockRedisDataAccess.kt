@@ -29,11 +29,11 @@ class MockRedisDataAccess : RedisDataAccess {
         return games.find { it.gameId == gameId }!!
     }
 
-    override fun getGameContainers(gameId: Long): List<RedisContainer> {
+    override fun getContainers(gameId: Long): List<RedisContainer> {
         return containers.filter { it.gameId == gameId }
     }
 
-    override fun getGameCrafters(gameId: Long): List<RedisCrafter> {
+    override fun getCrafters(gameId: Long): List<RedisCrafter> {
         return crafters.filter { it.gameId == gameId }
     }
 
@@ -45,19 +45,23 @@ class MockRedisDataAccess : RedisDataAccess {
         TODO("Not yet implemented")
     }
 
-    override fun getGameAltars(gameId: Long): Map<Long, RedisAltar> {
+    override fun getAltars(gameId: Long): Map<Long, RedisAltar> {
         TODO("Not yet implemented")
     }
 
-    override fun getGameLanterns(gameId: Long): List<RedisLantern> {
+    override fun getLanterns(gameId: Long): List<RedisLantern> {
         TODO("Not yet implemented")
     }
 
-    override fun getGameVoteSpots(gameId: Long): List<RedisVoteSpot> {
+    override fun getVoteSpots(gameId: Long): List<RedisVoteSpot> {
         TODO("Not yet implemented")
     }
 
-    override fun getGameUserVoteSpots(gameId: Long): List<RedisUserVoteSpot> {
+    override fun getUserVoteSpots(gameId: Long): List<RedisUserVoteSpot> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getThresholds(gameId: Long): List<RedisThreshold> {
         TODO("Not yet implemented")
     }
 
