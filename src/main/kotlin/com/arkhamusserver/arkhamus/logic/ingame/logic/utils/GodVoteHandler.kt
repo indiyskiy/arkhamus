@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class GodVoteHandler(
-    private val generalVoteHandler: GeneralVoteHandler
+    private val madnessHandler: UserMadnessHandler,
 ) {
 
     companion object {
@@ -34,7 +34,7 @@ class GodVoteHandler(
             altarHolder != null &&
             isVoteProcessOpen(altarPolling, altarHolder) &&
             ((altarPolling.userVotes[user.userId]) == null) &&
-            generalVoteHandler.usersCanPossiblyVote(user) &&
+            usersCanPossiblyVote(user) &&
             !skipped(altarPolling, user.userId)
 
     fun isVoteProcessOpen(
@@ -49,7 +49,7 @@ class GodVoteHandler(
         altarPolling: RedisAltarPolling
     ): Boolean {
         logger.info("everybodyVoted?")
-        val canVote = generalVoteHandler.usersCanPossiblyVote(allUsers)
+        val canVote = usersCanPossiblyVote(allUsers)
         val canVoteIdsSet = canVote.map { it.userId }.toSet()
         val votesStillRelevant = altarPolling.userVotes.filter { it.key in canVoteIdsSet }
         val votedUserIdsSet = votesStillRelevant.map { it.key }.toSet()
@@ -66,6 +66,12 @@ class GodVoteHandler(
         return result
     }
 
+    fun usersCanPossiblyVote(allUsers: Collection<RedisGameUser>) =
+        madnessHandler.filterNotMad(allUsers)
+
+    fun usersCanPossiblyVote(user: RedisGameUser) =
+        !madnessHandler.isCompletelyMad(user)
+
     private fun skipped(altarPolling: RedisAltarPolling, userId: Long): Boolean =
         altarPolling.skippedUsers.contains(userId)
 
@@ -73,6 +79,4 @@ class GodVoteHandler(
 
     private fun getAltarIsOpen(altarHolder: RedisAltarHolder?) =
         altarHolder?.state == MapAltarState.OPEN
-
-
 }

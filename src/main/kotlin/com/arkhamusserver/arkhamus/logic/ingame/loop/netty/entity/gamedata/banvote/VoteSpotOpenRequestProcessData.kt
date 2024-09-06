@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banv
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
+import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
@@ -14,8 +15,8 @@ class VoteSpotOpenRequestProcessData(
     var currentUserVoteSpot: RedisUserVoteSpot?,
     var thisSpotUserInfos: List<RedisUserVoteSpot>,
     var canVote: Boolean,
-    val canPay: Boolean,
-    val currentUserBanned: Boolean,
+    var votesToBan: Int,
+    val cantVoteReasons: List<CantVoteReason>,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,

@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.banvote
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
+import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToClueResponses
@@ -11,6 +12,8 @@ class VoteSpotOpenNettyResponse(
     val voteSpotInfo: VoteSpotInfo?,
     val canVote: Boolean,
     val canPay: Boolean,
+    val votesToBan: Int,
+    val cantVoteReasons: List<CantVoteReason>,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,

@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
 import com.arkhamusserver.arkhamus.model.redis.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -13,13 +14,31 @@ import kotlin.collections.get
 
 @Component
 class UserVoteHandler(
-    private val generalVoteHandler: GeneralVoteHandler,
     private val userVoteSpotRepository: RedisUserVoteSpotRepository,
     private val voteSpotRepository: RedisVoteSpotRepository,
     private val inventoryHandler: InventoryHandler,
+    private val madnessHandler: UserMadnessHandler
 ) {
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(UserVoteHandler::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(UserVoteHandler::class.java)
+        private val CANT_VOTE_AT_ALL = setOf(CantVoteReason.MAD, CantVoteReason.BANNED)
+    }
+
+    fun cantVoteReasons(
+        votingUser: RedisGameUser,
+        voteSpot: RedisVoteSpot?,
+    ): List<CantVoteReason> {
+        return listOf(
+            CantVoteReason.MAD.takeIf { madnessHandler.isCompletelyMad(votingUser) },
+            CantVoteReason.CANT_PAY.takeIf {
+                inventoryHandler.userHaveItems(
+                    votingUser,
+                    voteSpot?.costItem,
+                    voteSpot?.costValue ?: 0
+                )
+            },
+            CantVoteReason.BANNED.takeIf { voteSpot?.bannedUsers?.contains(votingUser.userId) == true },
+        ).filterNotNull()
     }
 
     @Transactional
@@ -30,12 +49,9 @@ class UserVoteHandler(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         voteSpot: RedisVoteSpot
     ) {
-        logger.info("old vote state ${currentUserVoteSpot.votesForUserIds.joinToString(", ")}")
         currentUserVoteSpot.votesForUserIds = (currentUserVoteSpot.votesForUserIds + targetUser.userId)
             .toMutableList()
-        logger.info("new vote state ${currentUserVoteSpot.votesForUserIds.joinToString(", ")}")
         userVoteSpotRepository.save(currentUserVoteSpot)
-        logger.info("also consuming item ${voteSpot.costItem} - ${voteSpot.costValue}")
         inventoryHandler.consumeItems(
             user = globalGameData.users[requestDataHolder.userAccount.id]!!,
             item = voteSpot.costItem!!.toItem(),
@@ -49,22 +65,17 @@ class UserVoteHandler(
         voteSpot: RedisVoteSpot,
         userVoteSpots: List<RedisUserVoteSpot>,
     ): RedisGameUser? {
-        logger.info("looking for a quorum")
-        val allUsersCanVoteList = generalVoteHandler.usersCanPossiblyVote(allUsers)
-        logger.info("users can possibly vote: ${allUsersCanVoteList.joinToString(",") { it.userId.toString() }}")
+        val allUsersCanVoteList = usersCanPossiblyVote(allUsers, voteSpot)
         val usersCanVoteIdsSet = allUsersCanVoteList.map { it.userId }.toSet()
-        logger.info("users can possibly vote ids: ${usersCanVoteIdsSet.joinToString(",") { it.toString() }}")
         val votesStillRelevant = userVoteSpots.filter { it.userId in usersCanVoteIdsSet }
-        logger.info("user-votes still relevant: ${votesStillRelevant.joinToString(",") { it.userId.toString() }}")
 
         val (maxValue, maxVotes) = statistic(votesStillRelevant, voteSpot.availableUsers.toSet())
         if (maxValue == null || maxVotes == null) {
             return null
         }
-        val enoughVotes = maxValue >= (usersCanVoteIdsSet.size / 2) + 1
+        val enoughVotes = maxValue >= votesToBan(usersCanVoteIdsSet.size)
 
         if (enoughVotes) {
-            logger.info("looking for a quorum - enough votes")
             if (maxVotes.size > 1) {
                 if (usersCanVoteIdsSet.size == maxValue) {
                     reset(userVoteSpots)
@@ -77,22 +88,40 @@ class UserVoteHandler(
                 return allUsers.first { it.userId == userToBan }
             }
         }
-        logger.info("looking for a quorum - not enough votes")
         return null
+    }
+
+    fun votesToBan(
+        allUsers: Collection<RedisGameUser>,
+        voteSpot: RedisVoteSpot,
+    ): Int {
+        val allUsersCanVoteList = usersCanPossiblyVote(allUsers, voteSpot)
+        return votesToBan(allUsersCanVoteList.size)
+    }
+
+    private fun votesToBan(size: Int): Int = (size / 2) + 1
+
+    private fun usersCanPossiblyVote(
+        users: Collection<RedisGameUser>,
+        voteSpot: RedisVoteSpot,
+    ): List<RedisGameUser> {
+        return users.filter {
+            cantVoteReasons(it, voteSpot).any { it in CANT_VOTE_AT_ALL }
+        }
     }
 
     private fun banUser(
         voteSpot: RedisVoteSpot,
         userId: Long
     ) {
-        logger.info("ban user $userId")
+        logger.debug("ban user $userId")
         voteSpot.bannedUsers += userId
         voteSpot.availableUsers -= userId
         val value = voteSpot.costValue
         if (value != null && value > 0) {
             voteSpot.costValue = value + 1
         }
-        logger.info("ban user $userId - done")
+        logger.debug("ban user $userId - done")
         voteSpotRepository.save(voteSpot)
     }
 
@@ -100,27 +129,20 @@ class UserVoteHandler(
         votesStillRelevant: List<RedisUserVoteSpot>,
         availableUserIds: Set<Long>
     ): Pair<Int?, Set<Long>?> {
-        logger.info("counting statistic")
         val allVotes: List<Long> = votesStillRelevant.map { it.votesForUserIds }.flatten()
-        logger.info("all votes for user: ${allVotes.joinToString(", ") { it.toString() }}")
         val votesForAvailableUsers = allVotes.filter { it in availableUserIds }
-        logger.info("all votes for available users: ${votesForAvailableUsers.joinToString(", ") { it.toString() }}")
         val statistic = votesForAvailableUsers.groupingBy { it }.eachCount()
-        logger.info("statistic: ${statistic.toList().joinToString(", ") { "${it.first} - ${it.second}" }}")
         val maxValue = statistic.maxByOrNull { it.value }?.value
-        logger.info("maxValue: $maxValue")
         val userIdsWithMaxVotes =
             maxValue?.let { maxValueNBotNull -> statistic.filter { it.value == maxValueNBotNull }.keys }
-        logger.info("userIdsWithMaxVotes: ${userIdsWithMaxVotes?.joinToString(", ") { it.toString() }}")
         return Pair(maxValue, userIdsWithMaxVotes)
     }
 
     private fun reset(userVoteSpots: List<RedisUserVoteSpot>) {
-        logger.info("reset votes list")
         userVoteSpots.forEach {
             it.votesForUserIds = mutableListOf()
         }
         userVoteSpotRepository.saveAll(userVoteSpots)
-        logger.info("reset votes list - done")
     }
+
 }

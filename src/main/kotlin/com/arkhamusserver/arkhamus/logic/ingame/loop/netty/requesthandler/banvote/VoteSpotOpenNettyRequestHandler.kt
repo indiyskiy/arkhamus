@@ -21,7 +21,7 @@ class VoteSpotOpenNettyRequestHandler(
     private val zonesHandler: ZonesHandler,
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
-    private val madnessHandler: UserMadnessHandler,
+    private val voteHandler: UserVoteHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -58,22 +58,22 @@ class VoteSpotOpenNettyRequestHandler(
             val currentUserVoteSpot = thisSpotUserInfos.let {
                 it.firstOrNull { it.userId == userId }
             }
-            val currentUserBanned = voteSpot?.bannedUsers?.any { it == userId } == true
-            val canVote = !madnessHandler.isCompletelyMad(user) && !currentUserBanned
-            val costValue = voteSpot?.costValue
-            val canPay = costValue!=null && inventoryHandler.userHaveItems(
-                user = user,
-                requiredItemId = voteSpot.costItem,
-                howManyItems = costValue
+
+            val cantVoteReasons = voteHandler.cantVoteReasons(
+                votingUser = user,
+                voteSpot = voteSpot,
             )
+            val canVote = cantVoteReasons.isEmpty()
+
+            val votesToBan = voteSpot?.let { voteHandler.votesToBan(globalGameData.users.values, voteSpot) } ?: 0
 
             return VoteSpotOpenRequestProcessData(
                 voteSpot = voteSpot,
                 currentUserVoteSpot = currentUserVoteSpot,
                 thisSpotUserInfos = thisSpotUserInfos,
                 canVote = canVote,
-                canPay = canPay,
-                currentUserBanned = currentUserBanned,
+                votesToBan = votesToBan,
+                cantVoteReasons = cantVoteReasons,
                 gameUser = user,
                 otherGameUsers = users,
                 inZones = inZones,
