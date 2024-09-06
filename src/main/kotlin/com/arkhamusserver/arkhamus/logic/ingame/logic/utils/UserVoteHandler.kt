@@ -119,7 +119,7 @@ class UserVoteHandler(
         voteSpot: RedisVoteSpot,
     ): List<RedisGameUser> {
         return users.filter {
-            cantVoteReasons(it, voteSpot).any { it in CANT_VOTE_AT_ALL }
+            !cantVoteReasons(it, voteSpot).any { it in CANT_VOTE_AT_ALL }
         }
     }
 
