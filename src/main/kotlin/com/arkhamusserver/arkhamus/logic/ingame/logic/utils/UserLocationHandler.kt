@@ -20,12 +20,20 @@ class UserLocationHandler(
     fun userCanSeeTarget(
         whoLooks: RedisGameUser,
         target: WithPoint,
-        levelGeometryData: LevelGeometryData
+        levelGeometryData: LevelGeometryData,
+        geometryAffectsVision: Boolean = true,
     ): Boolean {
         return whoLooks.stateTags.contains(UserStateTag.FARSIGHT.name) ||
                 inVisionDistance(whoLooks, target) &&
-                zonesHandler.inSameZoneOrNotInZone(whoLooks, target, levelGeometryData)
+                geometryCheck(geometryAffectsVision, whoLooks, target, levelGeometryData)
     }
+
+    private fun geometryCheck(
+        geometryAffectsVision: Boolean,
+        whoLooks: RedisGameUser,
+        target: WithPoint,
+        levelGeometryData: LevelGeometryData
+    ): Boolean = (!geometryAffectsVision || zonesHandler.inSameZoneOrNotInZone(whoLooks, target, levelGeometryData))
 
     fun inVisionDistance(
         whoLooks: RedisGameUser,

@@ -50,7 +50,8 @@ class DoorDataHandler(
         myUser: RedisGameUser,
         levelGeometryData: LevelGeometryData
     ) {
-        if (!userLocationHandler.userCanSeeTarget(myUser, door, levelGeometryData)) {
+        //TODO maybe turn geometry of vision for doors back when it will be done in a right way
+        if (!userLocationHandler.userCanSeeTarget(myUser, door, levelGeometryData, false)) {
             responseToMask.doorState = DoorUserState.OPEN
         }
     }
