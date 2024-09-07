@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestG
 import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.model.database.entity.game.QuestGiver
 import com.arkhamusserver.arkhamus.view.levelDesign.QuestGiverFromJson
-import org.postgresql.geometric.PGpoint
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,7 +14,9 @@ class LevelDesignQuestGiverInfoProcessor(
         questGivers.map { jsonQuestGiver ->
             QuestGiver(
                 inGameId = jsonQuestGiver.id!!,
-                point = PGpoint(jsonQuestGiver.x!!, jsonQuestGiver.y!!),
+                x = jsonQuestGiver.x!!,
+                y = jsonQuestGiver.y!!,
+                z = jsonQuestGiver.z!!,
                 interactionRadius = jsonQuestGiver.interactionRadius!!,
                 level = savedLevel,
                 name = jsonQuestGiver.name!!

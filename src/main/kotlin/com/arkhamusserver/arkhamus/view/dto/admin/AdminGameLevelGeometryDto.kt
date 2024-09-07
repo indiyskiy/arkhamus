@@ -12,6 +12,9 @@ data class AdminGameLevelGeometryDto(
     var keyPoints: List<PointDto>,
     var questGivers: List<NpcDto>,
     var tasks: List<TaskGeometryDto>,
+    var voteSpots: List<VoteSpotDto>,
+    var doors: List<DoorDto>,
+    var thresholds: List<ThresholdDto>,
 )
 
 data class PolygonDto(
@@ -37,6 +40,24 @@ data class NpcDto(
 )
 
 data class TaskGeometryDto(
+    val points: List<PointDto>,
+    val polygonPoints: String = points.joinToString(" ") { "${it.pointX},${it.pointY}" },
+    var color: NiceColor
+)
+
+data class VoteSpotDto(
+    val points: List<PointDto>,
+    val polygonPoints: String = points.joinToString(" ") { "${it.pointX},${it.pointY}" },
+    var color: NiceColor
+)
+
+data class DoorDto(
+    val points: List<PointDto>,
+    val polygonPoints: String = points.joinToString(" ") { "${it.pointX},${it.pointY}" },
+    var color: NiceColor
+)
+
+data class ThresholdDto(
     val points: List<PointDto>,
     val polygonPoints: String = points.joinToString(" ") { "${it.pointX},${it.pointY}" },
     var color: NiceColor

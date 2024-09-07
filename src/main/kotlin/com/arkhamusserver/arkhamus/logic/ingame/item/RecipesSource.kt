@@ -25,7 +25,7 @@ class RecipesSource {
 //INVESTIGATION ITEM 5***
             listOf(
                 Ingredient(SCYTHE, 1),
-                Ingredient(BLIGHTING_JEWEL, 5),
+//                Ingredient(BLIGHTING_JEWEL, 5),
                 Ingredient(INNSMOUTH_WATER, 5)
             ).toRecipe(
                 5001,
@@ -35,7 +35,7 @@ class RecipesSource {
             ),
             listOf(
                 Ingredient(BLACK_STONE, 1),
-                Ingredient(INNSMOUTH_WATER, 5),
+//                Ingredient(INNSMOUTH_WATER, 5),
                 Ingredient(CLOUDY_FLASK, 5)
             ).toRecipe(
                 5002,
@@ -45,7 +45,7 @@ class RecipesSource {
             ),
             listOf(
                 Ingredient(RING, 1),
-                Ingredient(CLOUDY_FLASK, 5),
+//                Ingredient(CLOUDY_FLASK, 5),
                 Ingredient(CORRUPTED_TOPAZ, 5)
             ).toRecipe(
                 5003,
@@ -55,7 +55,7 @@ class RecipesSource {
             ),
             listOf(
                 Ingredient(TEAR, 1),
-                Ingredient(CORRUPTED_TOPAZ, 5),
+//                Ingredient(CORRUPTED_TOPAZ, 5),
                 Ingredient(ELDER_SIGN, 5)
             ).toRecipe(
                 5004,
@@ -65,7 +65,7 @@ class RecipesSource {
             ),
             listOf(
                 Ingredient(PLATE, 1),
-                Ingredient(ELDER_SIGN, 5),
+//                Ingredient(ELDER_SIGN, 5),
                 Ingredient(CRYSTALLIZED_BLOOD, 5)
             ).toRecipe(
                 5005,
@@ -75,7 +75,7 @@ class RecipesSource {
             ),
             listOf(
                 Ingredient(EYE, 1),
-                Ingredient(CRYSTALLIZED_BLOOD, 5),
+//                Ingredient(CRYSTALLIZED_BLOOD, 5),
                 Ingredient(SAINT_QUARTZ, 5)
             ).toRecipe(
                 5006,
@@ -85,7 +85,7 @@ class RecipesSource {
             ),
             listOf(
                 Ingredient(MASK, 1),
-                Ingredient(SAINT_QUARTZ, 5),
+//                Ingredient(SAINT_QUARTZ, 5),
                 Ingredient(BLIGHTING_JEWEL, 5)
             ).toRecipe(
                 5007,

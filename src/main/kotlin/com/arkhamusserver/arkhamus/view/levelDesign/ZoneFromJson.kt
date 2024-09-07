@@ -21,4 +21,5 @@ data class EllipseFromJson(
 data class PointJson(
     var x: Double? = null,
     var y: Double? = null,
+    var z: Double? = null,
 )

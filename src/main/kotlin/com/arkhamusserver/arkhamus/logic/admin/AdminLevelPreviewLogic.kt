@@ -18,6 +18,9 @@ class AdminLevelPreviewLogic(
     private val lanternRepository: LanternRepository,
     private val questGiverRepository: QuestGiverRepository,
     private val levelTaskRepository: LevelTaskRepository,
+    private val voteSpotRepository: VoteSpotRepository,
+    private val doorRepository: DoorRepository,
+    private val thresholdRepository: ThresholdRepository,
 ) {
     fun geometry(
         levelId: Long,
@@ -36,12 +39,15 @@ class AdminLevelPreviewLogic(
         val containers = if (filter.containers == true) {
             containerRepository.findByLevelId(levelId)
         } else emptyList()
+
         val altars = if (filter.altars == true) {
             altarRepository.findByLevelId(levelId)
         } else emptyList()
+
         val crafters = if (filter.containers == true) {
             crafterRepository.findByLevelId(levelId)
         } else emptyList()
+
         val lanterns = if (filter.lanterns == true) {
             lanternRepository.findByLevelId(levelId)
         } else emptyList()
@@ -54,6 +60,18 @@ class AdminLevelPreviewLogic(
             levelTaskRepository.findByLevelId(levelId)
         } else emptyList()
 
+        val voteSpots = if (filter.voteSpotData == true) {
+            voteSpotRepository.findByLevelId(levelId)
+        } else emptyList()
+
+        val doors = if (filter.voteSpotData == true) {
+            doorRepository.findByLevelId(levelId)
+        } else emptyList()
+
+        val thresholds = if (filter.voteSpotData == true) {
+            thresholdRepository.findByLevelId(levelId)
+        } else emptyList()
+
         return AdminGameLevelGeometryDto(
             levelId = level.levelId,
             height = level.levelHeight.toInt() * SCREEN_ZOOM,
@@ -62,7 +80,10 @@ class AdminLevelPreviewLogic(
             ellipses = mapEllipses(ellipses),
             keyPoints = mapKeyPoints(containers, altars, crafters, lanterns),
             questGivers = mapQuestGivers(questGivers),
-            tasks = mapTasks(levelTasks)
+            tasks = mapTasks(levelTasks),
+            voteSpots = mapVoteSpots(voteSpots),
+            doors = mapDoors(doors),
+            thresholds = mapThresholds(thresholds)
         )
     }
 
@@ -71,18 +92,18 @@ class AdminLevelPreviewLogic(
             NpcDto(
                 points = listOf(
                     PointDto(
-                        (it.point.x * SCREEN_ZOOM).toFloat(),
-                        (it.point.y * SCREEN_ZOOM).toFloat(),
+                        (it.x * SCREEN_ZOOM).toFloat(),
+                        (it.y * SCREEN_ZOOM).toFloat(),
                         NiceColor.VIOLET
                     ),
                     PointDto(
-                        (it.point.x * SCREEN_ZOOM + 5).toFloat(),
-                        (it.point.y * SCREEN_ZOOM - 10).toFloat(),
+                        (it.x * SCREEN_ZOOM + 5).toFloat(),
+                        (it.y * SCREEN_ZOOM - 10).toFloat(),
                         NiceColor.VIOLET
                     ),
                     PointDto(
-                        (it.point.x * SCREEN_ZOOM - 5).toFloat(),
-                        (it.point.y * SCREEN_ZOOM - 10).toFloat(),
+                        (it.x * SCREEN_ZOOM - 5).toFloat(),
+                        (it.y * SCREEN_ZOOM - 10).toFloat(),
                         NiceColor.VIOLET
                     )
                 ),
@@ -96,22 +117,113 @@ class AdminLevelPreviewLogic(
             TaskGeometryDto(
                 points = listOf(
                     PointDto(
-                        it.point.x.toFloat() * SCREEN_ZOOM,
-                        it.point.y.toFloat() * SCREEN_ZOOM,
+                        it.x.toFloat() * SCREEN_ZOOM,
+                        it.y.toFloat() * SCREEN_ZOOM,
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
-                        (it.point.x * SCREEN_ZOOM + 5).toFloat(),
-                        (it.point.y * SCREEN_ZOOM - 10).toFloat(),
+                        (it.x * SCREEN_ZOOM + 5).toFloat(),
+                        (it.y * SCREEN_ZOOM - 10).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
-                        (it.point.x * SCREEN_ZOOM - 5).toFloat(),
-                        (it.point.y * SCREEN_ZOOM - 10).toFloat(),
+                        (it.x * SCREEN_ZOOM - 5).toFloat(),
+                        (it.y * SCREEN_ZOOM - 10).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     )
                 ),
                 color = NiceColor.MEDIUM_PURPLE
+            )
+        }
+    }
+
+    private fun mapVoteSpots(voteSpots: List<VoteSpot>): List<VoteSpotDto> {
+        return voteSpots.map {
+            VoteSpotDto(
+                points = listOf(
+                    PointDto(
+                        it.x.toFloat() * SCREEN_ZOOM - 5,
+                        it.y.toFloat() * SCREEN_ZOOM - 5,
+                        NiceColor.MEDIUM_PURPLE
+                    ),
+                    PointDto(
+                        (it.x * SCREEN_ZOOM + 5).toFloat(),
+                        (it.y * SCREEN_ZOOM - 5).toFloat(),
+                        NiceColor.MEDIUM_PURPLE
+                    ),
+                    PointDto(
+                        (it.x * SCREEN_ZOOM + 5).toFloat(),
+                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        NiceColor.MEDIUM_PURPLE
+                    ),
+                    PointDto(
+                        (it.x * SCREEN_ZOOM - 5).toFloat(),
+                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        NiceColor.MEDIUM_PURPLE
+                    )
+                ),
+                color = NiceColor.GREEN_YELLOW
+            )
+        }
+    }
+
+    private fun mapDoors(doors: List<Door>): List<DoorDto> {
+        return doors.map {
+            DoorDto(
+                points = listOf(
+                    PointDto(
+                        it.x.toFloat() * SCREEN_ZOOM - 5,
+                        it.y.toFloat() * SCREEN_ZOOM - 5,
+                        NiceColor.MEDIUM_PURPLE
+                    ),
+                    PointDto(
+                        (it.x * SCREEN_ZOOM + 5).toFloat(),
+                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        NiceColor.MEDIUM_PURPLE
+                    ),
+                    PointDto(
+                        (it.x * SCREEN_ZOOM - 5).toFloat(),
+                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        NiceColor.MEDIUM_PURPLE
+                    ),
+                    PointDto(
+                        (it.x * SCREEN_ZOOM + 5).toFloat(),
+                        (it.y * SCREEN_ZOOM - 5).toFloat(),
+                        NiceColor.MEDIUM_PURPLE
+                    )
+                ),
+                color = NiceColor.GREEN_YELLOW
+            )
+        }
+    }
+
+
+    private fun mapThresholds(doors: List<Threshold>): List<ThresholdDto> {
+        return doors.map {
+            ThresholdDto(
+                points = listOf(
+                    PointDto(
+                        it.x.toFloat() * SCREEN_ZOOM - 5,
+                        it.y.toFloat() * SCREEN_ZOOM - 5,
+                        NiceColor.MEDIUM_PURPLE
+                    ),
+                    PointDto(
+                        (it.x * SCREEN_ZOOM + 5).toFloat(),
+                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        NiceColor.MEDIUM_PURPLE
+                    ),
+                    PointDto(
+                        (it.x * SCREEN_ZOOM + 5).toFloat(),
+                        (it.y * SCREEN_ZOOM - 5).toFloat(),
+                        NiceColor.MEDIUM_PURPLE
+                    ),
+                    PointDto(
+                        (it.x * SCREEN_ZOOM - 5).toFloat(),
+                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        NiceColor.MEDIUM_PURPLE
+                    )
+                ),
+                color = NiceColor.GREEN_YELLOW
             )
         }
     }
@@ -128,8 +240,8 @@ class AdminLevelPreviewLogic(
     private fun mapContainers(containers: List<Container>): List<PointDto> {
         return containers.map {
             PointDto(
-                it.point.x.toFloat() * SCREEN_ZOOM,
-                it.point.y.toFloat() * SCREEN_ZOOM,
+                it.x.toFloat() * SCREEN_ZOOM,
+                it.y.toFloat() * SCREEN_ZOOM,
                 27L.toColor()
             )
         }
@@ -138,8 +250,8 @@ class AdminLevelPreviewLogic(
     private fun mapCrafters(crafters: List<Crafter>): List<PointDto> {
         return crafters.map {
             PointDto(
-                it.point.x.toFloat() * SCREEN_ZOOM,
-                it.point.y.toFloat() * SCREEN_ZOOM,
+                it.x.toFloat() * SCREEN_ZOOM,
+                it.y.toFloat() * SCREEN_ZOOM,
                 28L.toColor()
             )
         }
@@ -148,8 +260,8 @@ class AdminLevelPreviewLogic(
     private fun mapAltars(altars: List<Altar>): List<PointDto> {
         return altars.map {
             PointDto(
-                it.point.x.toFloat() * SCREEN_ZOOM,
-                it.point.y.toFloat() * SCREEN_ZOOM,
+                it.x.toFloat() * SCREEN_ZOOM,
+                it.y.toFloat() * SCREEN_ZOOM,
                 29L.toColor()
             )
         }
@@ -158,8 +270,8 @@ class AdminLevelPreviewLogic(
     private fun mapLanterns(lanterns: List<Lantern>): List<PointDto> {
         return lanterns.map {
             PointDto(
-                it.point.x.toFloat() * SCREEN_ZOOM,
-                it.point.y.toFloat() * SCREEN_ZOOM,
+                it.x.toFloat() * SCREEN_ZOOM,
+                it.y.toFloat() * SCREEN_ZOOM,
                 30L.toColor()
             )
         }
@@ -170,23 +282,23 @@ class AdminLevelPreviewLogic(
             PolygonDto(
                 listOf(
                     PointDto(
-                        tetragon.point0.x.toFloat() * SCREEN_ZOOM,
-                        tetragon.point0.y.toFloat() * SCREEN_ZOOM,
+                        tetragon.point0X.toFloat() * SCREEN_ZOOM,
+                        tetragon.point0Y.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.inGameId.toColor()
                     ),
                     PointDto(
-                        tetragon.point1.x.toFloat() * SCREEN_ZOOM,
-                        tetragon.point1.y.toFloat() * SCREEN_ZOOM,
+                        tetragon.point1X.toFloat() * SCREEN_ZOOM,
+                        tetragon.point1Y.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.inGameId.toColor()
                     ),
                     PointDto(
-                        tetragon.point2.x.toFloat() * SCREEN_ZOOM,
-                        tetragon.point2.y.toFloat() * SCREEN_ZOOM,
+                        tetragon.point2X.toFloat() * SCREEN_ZOOM,
+                        tetragon.point2Y.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.inGameId.toColor()
                     ),
                     PointDto(
-                        tetragon.point3.x.toFloat() * SCREEN_ZOOM,
-                        tetragon.point3.y.toFloat() * SCREEN_ZOOM,
+                        tetragon.point3X.toFloat() * SCREEN_ZOOM,
+                        tetragon.point3Y.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.inGameId.toColor()
                     ),
                 ),
@@ -198,8 +310,8 @@ class AdminLevelPreviewLogic(
     private fun mapEllipses(ellipses: List<Ellipse>): List<EllipseDto> {
         return ellipses.map { ellipse ->
             EllipseDto(
-                cx = ellipse.point.x.toFloat() * SCREEN_ZOOM,
-                cy = ellipse.point.y.toFloat() * SCREEN_ZOOM,
+                cx = ellipse.x.toFloat() * SCREEN_ZOOM,
+                cy = ellipse.y.toFloat() * SCREEN_ZOOM,
                 rx = ellipse.width.toFloat() / 2 * SCREEN_ZOOM,
                 ry = ellipse.height.toFloat() / 2 * SCREEN_ZOOM,
                 color = ellipse.levelZone.inGameId.toColor()

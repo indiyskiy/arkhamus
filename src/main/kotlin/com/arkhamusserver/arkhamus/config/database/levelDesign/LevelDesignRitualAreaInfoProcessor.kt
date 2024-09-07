@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.Ritual
 import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.model.database.entity.game.RitualArea
 import com.arkhamusserver.arkhamus.view.levelDesign.RitualAreaFromJson
-import org.postgresql.geometric.PGpoint
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,7 +18,9 @@ class LevelDesignRitualAreaInfoProcessor(
             RitualArea(
                 inGameId = ritualArea.id!!,
                 radius = ritualArea.radius!!,
-                point = PGpoint(ritualArea.x!!, ritualArea.y!!),
+                x = ritualArea.x!!,
+                y = ritualArea.y!!,
+                z = ritualArea.z!!,
                 level = savedLevel!!
             ).apply {
                 ritualAreaRepository.save(this)

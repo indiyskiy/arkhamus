@@ -11,8 +11,9 @@ data class RedisAltarHolder(
     @Indexed var gameId: Long,
     var altarHolderId: Long,
 
-    var x: Double = 0.0,
-    var y: Double = 0.0,
+    var x: Double,
+    var y: Double,
+    var z: Double,
     var radius: Double = 0.0,
 
     var lockedGodId: Int? = null,
@@ -21,7 +22,7 @@ data class RedisAltarHolder(
     var itemsOnAltars: Map<Int, Int> = emptyMap(),
 
     var state: MapAltarState = MapAltarState.OPEN,
-) : WithPoint {
+)  : WithPoint {
 
     override fun x(): Double {
         return x
@@ -29,5 +30,9 @@ data class RedisAltarHolder(
 
     override fun y(): Double {
         return y
+    }
+
+    override fun z(): Double {
+        return z
     }
 }

@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.model.database.entity.game
 
 import com.arkhamusserver.arkhamus.model.redis.WithPoint
 import jakarta.persistence.*
-import org.postgresql.geometric.PGpoint
 
 @Entity
 data class LevelTask(
@@ -14,14 +13,20 @@ data class LevelTask(
     @JoinColumn(name = "levelId", nullable = false)
     var level: Level,
     var name: String,
-    var point: PGpoint,
+    var x: Double,
+    var y: Double,
+    var z: Double,
     var interactionRadius: Double,
 ) : WithPoint {
     override fun x(): Double {
-        return point.x
+        return x
     }
 
     override fun y(): Double {
-        return point.y
+        return y
+    }
+
+    override fun z(): Double {
+        return z
     }
 }

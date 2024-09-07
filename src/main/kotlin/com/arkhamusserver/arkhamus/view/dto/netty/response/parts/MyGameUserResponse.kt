@@ -9,6 +9,7 @@ data class MyGameUserResponse(
     var madnessNotches: List<Double>,
     val x: Double,
     val y: Double,
+    val z: Double,
     val stateTags: Set<String> = emptySet(),
     var quests: List<UserQuestResponse> = emptyList()
 ) {
@@ -19,6 +20,7 @@ data class MyGameUserResponse(
         madnessNotches = gameUser.madnessNotches,
         x = gameUser.x,
         y = gameUser.y,
+        z = gameUser.z,
         stateTags = gameUser.stateTags,
         quests = quests
     )

@@ -38,8 +38,9 @@ class GameStartLanternLogic(
         id = Generators.timeBasedEpochGenerator().generate().toString(),
         lanternId = dbLantern.inGameId,
         gameId = game.id!!,
-        x = dbLantern.point.x,
-        y = dbLantern.point.y,
+        x = dbLantern.x,
+        y = dbLantern.y,
+        z = dbLantern.z,
         lightRange = dbLantern.lightRange!!,
         filled = filled,
         activated = false

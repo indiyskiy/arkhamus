@@ -42,8 +42,9 @@ class GameStartAltarLogic(
                 gameId = game.id!!,
                 state = MapAltarState.OPEN,
                 altarHolderId = ritualArea.inGameId,
-                x = ritualArea.point.x,
-                y = ritualArea.point.y,
+                x = ritualArea.x,
+                y = ritualArea.y,
+                z = ritualArea.z,
                 radius = ritualArea.radius
             )
         )
@@ -56,8 +57,9 @@ class GameStartAltarLogic(
         id = Generators.timeBasedEpochGenerator().generate().toString(),
         altarId = dbAltar.inGameId!!,
         gameId = game.id!!,
-        x = dbAltar.point.x,
-        y = dbAltar.point.y,
+        x = dbAltar.x,
+        y = dbAltar.y,
+        z = dbAltar.z,
         interactionRadius = dbAltar.interactionRadius!!,
     )
 

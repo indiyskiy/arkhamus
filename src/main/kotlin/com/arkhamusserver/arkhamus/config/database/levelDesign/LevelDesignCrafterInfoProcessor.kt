@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.Crafte
 import com.arkhamusserver.arkhamus.model.database.entity.game.Crafter
 import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.view.levelDesign.CrafterFromJson
-import org.postgresql.geometric.PGpoint
 import org.springframework.stereotype.Component
 import kotlin.collections.forEach
 
@@ -21,7 +20,9 @@ class LevelDesignCrafterInfoProcessor(
             Crafter(
                 inGameId = crafter.id!!,
                 interactionRadius = crafter.interactionRadius!!,
-                point = PGpoint(crafter.x!!, crafter.y!!),
+                x = crafter.x!!,
+                y = crafter.y!!,
+                z = crafter.z!!,
                 level = savedLevel!!,
                 crafterType = crafter.crafterType!!,
             ).apply {

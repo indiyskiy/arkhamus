@@ -35,10 +35,11 @@ class GameStartCrafterLogic(
         id = Generators.timeBasedEpochGenerator().generate().toString(),
         crafterId = dbCrafter.inGameId,
         gameId = game.id!!,
-        crafterType = dbCrafter.crafterType
+        crafterType = dbCrafter.crafterType,
+        x = dbCrafter.x,
+        y = dbCrafter.y,
+        z = dbCrafter.z,
     ).apply {
-        this.x = dbCrafter.point.x
-        this.y = dbCrafter.point.y
         this.interactionRadius = dbCrafter.interactionRadius
         this.items = emptyMap<Int, Int>().toMutableMap()
     }

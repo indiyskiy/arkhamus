@@ -5,5 +5,6 @@ data class LevelTaskFromJson(
     var interactionRadius: Double? = null,
     var x: Double? = null,
     var y: Double? = null,
+    var z: Double? = null,
     var name: String? = null,
 )

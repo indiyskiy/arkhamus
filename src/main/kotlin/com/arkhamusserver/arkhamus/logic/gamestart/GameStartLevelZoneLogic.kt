@@ -43,14 +43,22 @@ class GameStartLevelZoneLogic(
                 gameId = game.id!!,
                 levelZoneId = zone.inGameId,
                 inGameTetragonId = it.inGameId,
-                point0X = it.point0.x,
-                point0Y = it.point0.y,
-                point1X = it.point1.x,
-                point1Y = it.point1.y,
-                point2X = it.point2.x,
-                point2Y = it.point2.y,
-                point3X = it.point3.x,
-                point3Y = it.point3.y,
+
+                point0X = it.point0X,
+                point0Y = it.point0Y,
+                point0Z = it.point0Z,
+
+                point1X = it.point1X,
+                point1Y = it.point1Y,
+                point1Z = it.point1Z,
+
+                point2X = it.point2X,
+                point2Y = it.point2Y,
+                point2Z = it.point2Z,
+
+                point3X = it.point3X,
+                point3Y = it.point3Y,
+                point3Z = it.point3Z,
             )
             redisLevelTetragonRepository.save(redisTetragon)
         }
@@ -64,8 +72,9 @@ class GameStartLevelZoneLogic(
                 gameId = game.id!!,
                 levelZoneId = zone.inGameId,
                 inGameTetragonId = it.inGameId,
-                pointX = it.point.x,
-                pointY = it.point.y,
+                pointX = it.x,
+                pointY = it.y,
+                pointZ = it.z,
                 height = it.height,
                 width = it.width,
             )

@@ -61,11 +61,12 @@ class GameStartContainerLogic(
     ) = RedisContainer(
         id = Generators.timeBasedEpochGenerator().generate().toString(),
         containerId = dbContainer.inGameId,
-        gameId = game.id!!
+        gameId = game.id!!,
+        x = dbContainer.x,
+        y = dbContainer.y,
+        z = dbContainer.z,
+        interactionRadius = dbContainer.interactionRadius,
     ).apply {
-        this.x = dbContainer.point.x
-        this.y = dbContainer.point.y
-        this.interactionRadius = dbContainer.interactionRadius
         this.items = randomizeItems(modifiers)
     }
 

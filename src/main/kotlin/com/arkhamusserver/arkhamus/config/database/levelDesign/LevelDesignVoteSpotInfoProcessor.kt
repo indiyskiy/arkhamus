@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.VoteSp
 import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.model.database.entity.game.VoteSpot
 import com.arkhamusserver.arkhamus.view.levelDesign.VoteSpotFromJson
-import org.postgresql.geometric.PGpoint
 import org.springframework.stereotype.Component
 
 @Component
@@ -14,7 +13,9 @@ class LevelDesignVoteSpotInfoProcessor(
     fun processVoteSpots(voteSpots: List<VoteSpotFromJson>, savedLevel: Level) {
         voteSpots.forEach { voteSpot ->
             VoteSpot(
-                point = PGpoint(voteSpot.x!!, voteSpot.y!!),
+                x = voteSpot.x!!,
+                y = voteSpot.y!!,
+                z = voteSpot.z!!,
                 inGameId = voteSpot.id!!,
                 interactionRadius = voteSpot.interactionRadius!!,
                 level = savedLevel,

@@ -18,30 +18,34 @@
 <form th:action="@{/admin/browser/level/{levelId}/preview(levelId=${levelGeometry.levelId})}" method="post">
     <div class="row">
         <div class="checkbox-input">
-            <input type="checkbox" id="zones" name="zones" value="true" checked = "checked" >
-            <label for="zones"> Zones</label>
+            <input type="checkbox" id="zones" name="zones" value="true" checked="checked">
+            <label for="zones"> Zones </label>
         </div>
         <div class="checkbox-input">
-            <input type="checkbox" id="containers" name="containers" value="true" checked = "checked">
-            <label for="containers"> Containers</label>
+            <input type="checkbox" id="containers" name="containers" value="true" checked="checked">
+            <label for="containers"> Containers </label>
         </div>
         <div class="checkbox-input">
-            <input type="checkbox" id="altars" name="altars" value="true" checked = "checked">
-            <label for="altars"> Altars</label>
+            <input type="checkbox" id="altars" name="altars" value="true" checked="checked">
+            <label for="altars"> Altars </label>
         </div>
     </div>
     <div class="row">
         <div class="checkbox-input">
-            <input type="checkbox" id="lanterns" name="lanterns" value="true" checked = "checked">
-            <label for="lanterns"> Lanterns</label>
+            <input type="checkbox" id="lanterns" name="lanterns" value="true" checked="checked">
+            <label for="lanterns"> Lanterns </label>
         </div>
         <div class="checkbox-input">
-            <input type="checkbox" id="questGivers" name="questGivers" value="true" checked = "checked">
-            <label for="questGivers"> Quest Givers</label>
+            <input type="checkbox" id="questGivers" name="questGivers" value="true" checked="checked">
+            <label for="questGivers"> Quest Givers </label>
         </div>
         <div class="checkbox-input">
-            <input type="checkbox" id="levelTasks" name="levelTasks" value="true" checked = "checked">
-            <label for="levelTasks"> Level Tasks</label>
+            <input type="checkbox" id="levelTasks" name="levelTasks" value="true" checked="checked">
+            <label for="levelTasks"> Level Tasks </label>
+        </div>
+        <div class="checkbox-input">
+            <input type="checkbox" id="voteSpotData" name="voteSpotData" value="true" checked="checked">
+            <label for="voteSpotData"> Vote Spot Data </label>
         </div>
     </div>
     <input type="hidden" id="levelId" name="levelId" th:value="${levelGeometry.levelId}">
@@ -69,6 +73,19 @@
                  th:style="'fill:' + ${poly.color.getCode()} + ';stroke:black;stroke-width:1'"/>
     </th:block>
     <th:block th:each="poly : ${levelGeometry.tasks}">
+        <polygon th:attr="points=${poly.polygonPoints}"
+                 th:style="'fill:' + ${poly.color.getCode()} + ';stroke:black;stroke-width:1'"/>
+    </th:block>
+    <!-- Processing votespots data> -->
+    <th:block th:each="poly : ${levelGeometry.voteSpots}">
+        <polygon th:attr="points=${poly.polygonPoints}"
+                 th:style="'fill:' + ${poly.color.getCode()} + ';stroke:black;stroke-width:1'"/>
+    </th:block>
+    <th:block th:each="poly : ${levelGeometry.doors}">
+        <polygon th:attr="points=${poly.polygonPoints}"
+                 th:style="'fill:' + ${poly.color.getCode()} + ';stroke:black;stroke-width:1'"/>
+    </th:block>
+    <th:block th:each="poly : ${levelGeometry.thresholds}">
         <polygon th:attr="points=${poly.polygonPoints}"
                  th:style="'fill:' + ${poly.color.getCode()} + ';stroke:black;stroke-width:1'"/>
     </th:block>

@@ -31,8 +31,9 @@ class GameStartDoorLogic(
                 id = Generators.timeBasedEpochGenerator().generate().toString(),
                 gameId = game.id!!,
                 doorId = door.inGameId,
-                x = door.point.x,
-                y = door.point.y,
+                x = door.x,
+                y = door.y,
+                z = door.z,
                 zoneId = door.zoneId,
             )
         )

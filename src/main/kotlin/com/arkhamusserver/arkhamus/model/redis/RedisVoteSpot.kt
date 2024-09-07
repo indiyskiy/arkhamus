@@ -10,8 +10,9 @@ data class RedisVoteSpot(
     @Indexed var gameId: Long,
     var voteSpotId: Long,
 
-    var x: Double = 0.0,
-    var y: Double = 0.0,
+    var x: Double,
+    var y: Double,
+    var z: Double,
     var interactionRadius: Double = 0.0,
     var zoneId: Long,
 
@@ -27,5 +28,9 @@ data class RedisVoteSpot(
 
     override fun y(): Double {
         return y
+    }
+
+    override fun z(): Double {
+        return z
     }
 }

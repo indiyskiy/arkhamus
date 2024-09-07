@@ -31,8 +31,9 @@ class GameStartThresholdLogic(
                 id = Generators.timeBasedEpochGenerator().generate().toString(),
                 gameId = game.id!!,
                 thresholdId = threshold.inGameId,
-                x = threshold.point.x,
-                y = threshold.point.y,
+                x = threshold.x,
+                y = threshold.y,
+                z = threshold.z,
                 zoneId = threshold.zoneId,
             )
         )

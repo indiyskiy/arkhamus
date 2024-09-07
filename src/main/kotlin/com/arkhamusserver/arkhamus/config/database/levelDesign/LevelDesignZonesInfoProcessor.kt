@@ -12,7 +12,6 @@ import com.arkhamusserver.arkhamus.view.levelDesign.EllipseFromJson
 import com.arkhamusserver.arkhamus.view.levelDesign.TetragonFromJson
 import com.arkhamusserver.arkhamus.view.levelDesign.ZoneFromJson
 import com.arkhamusserver.arkhamus.view.validator.utils.assertTrue
-import org.postgresql.geometric.PGpoint
 import org.springframework.stereotype.Component
 import kotlin.collections.forEach
 
@@ -68,11 +67,23 @@ class LevelDesignZonesInfoProcessor(
             Tetragon(
                 inGameId = tetragon.id!!,
                 levelZone = levelZone,
-                point0 = PGpoint(tetragon.points[0].x!!, tetragon.points[0].y!!),
-                point1 = PGpoint(tetragon.points[1].x!!, tetragon.points[1].y!!),
-                point2 = PGpoint(tetragon.points[2].x!!, tetragon.points[2].y!!),
-                point3 = PGpoint(tetragon.points[3].x!!, tetragon.points[3].y!!),
-            ).apply {
+                point0X = tetragon.points[0].x!!,
+                point0Y = tetragon.points[0].y!!,
+                point0Z = tetragon.points[0].z!!,
+
+                point1X = tetragon.points[1].x!!,
+                point1Y = tetragon.points[1].y!!,
+                point1Z = tetragon.points[1].z!!,
+
+                point2X = tetragon.points[2].x!!,
+                point2Y = tetragon.points[2].y!!,
+                point2Z = tetragon.points[2].z!!,
+
+                point3X = tetragon.points[3].x!!,
+                point3Y = tetragon.points[3].y!!,
+                point3Z = tetragon.points[3].z!!,
+
+                ).apply {
                 tetragonRepository.save(this)
             }
         }
@@ -86,7 +97,9 @@ class LevelDesignZonesInfoProcessor(
             Ellipse(
                 inGameId = ellipse.id!!,
                 levelZone = levelZone,
-                point = PGpoint(ellipse.center!!.x!!, ellipse.center!!.y!!),
+                x = ellipse.center!!.x!!,
+                y = ellipse.center!!.y!!,
+                z = ellipse.center!!.z!!,
                 height = ellipse.height!!,
                 width = ellipse.width!!,
             ).apply {

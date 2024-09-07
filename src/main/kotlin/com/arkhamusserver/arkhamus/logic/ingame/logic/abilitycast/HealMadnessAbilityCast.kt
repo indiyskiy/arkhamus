@@ -42,10 +42,8 @@ class HealMadnessAbilityCast(
                 it.userId != abilityRequestProcessData.gameUser.userId
             }.minByOrNull { user ->
                 geometryUtils.distance(
-                    currentUserNotNull.x,
-                    currentUserNotNull.y,
-                    user.x,
-                    user.y
+                    currentUserNotNull,
+                    user,
                 )
             }
             if (user != null && userLocationHandler.distanceLessOrEquals(

@@ -12,11 +12,12 @@ data class RedisContainer(
     var containerId: Long,
     var holdingUser: Long? = null,
     var state: MapObjectState = MapObjectState.ACTIVE,
-    var x: Double = 0.0,
-    var y: Double = 0.0,
+    var x: Double,
+    var y: Double,
+    var z: Double,
     var interactionRadius: Double = 0.0,
     var items: MutableMap<Int, Int> = HashMap(),
-) : WithPoint {
+)  : WithPoint {
 
     override fun x(): Double {
         return x
@@ -24,5 +25,9 @@ data class RedisContainer(
 
     override fun y(): Double {
         return y
+    }
+
+    override fun z(): Double {
+        return z
     }
 }

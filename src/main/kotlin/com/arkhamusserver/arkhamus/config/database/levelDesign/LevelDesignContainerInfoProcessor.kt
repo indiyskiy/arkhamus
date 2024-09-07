@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.Contai
 import com.arkhamusserver.arkhamus.model.database.entity.game.Container
 import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.view.levelDesign.ContainerFromJson
-import org.postgresql.geometric.PGpoint
 import org.springframework.stereotype.Component
 import kotlin.collections.forEach
 
@@ -20,7 +19,9 @@ class LevelDesignContainerInfoProcessor(
             Container(
                 inGameId = container.id!!,
                 interactionRadius = container.interactionRadius!!,
-                point = PGpoint(container.x!!, container.y!!),
+                x = container.x!!,
+                y = container.y!!,
+                z = container.z!!,
                 level = savedLevel
             ).apply {
                 containerRepository.save(this)

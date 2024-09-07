@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.Lanter
 import com.arkhamusserver.arkhamus.model.database.entity.game.Lantern
 import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.view.levelDesign.LanternFromJson
-import org.postgresql.geometric.PGpoint
 import org.springframework.stereotype.Component
 import kotlin.collections.forEach
 
@@ -20,7 +19,9 @@ class LevelDesignLanternInfoProcessor(
             Lantern(
                 inGameId = lantern.id!!,
                 lightRange = lantern.lightRange,
-                point = PGpoint(lantern.x!!, lantern.y!!),
+                x = lantern.x!!,
+                y = lantern.y!!,
+                z = lantern.z!!,
                 level = savedLevel!!
             ).apply {
                 lanternRepository.save(this)

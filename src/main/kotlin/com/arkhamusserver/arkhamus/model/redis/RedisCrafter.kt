@@ -13,8 +13,9 @@ data class RedisCrafter(
     var crafterId: Long,
     var holdingUser: Long? = null,
     var state: MapObjectState = MapObjectState.ACTIVE,
-    var x: Double = 0.0,
-    var y: Double = 0.0,
+    var x: Double,
+    var y: Double,
+    var z: Double,
     var interactionRadius: Double = 0.0,
     var items: MutableMap<Int, Int> = HashMap(),
     var crafterType: CrafterType,
@@ -26,5 +27,9 @@ data class RedisCrafter(
 
     override fun y(): Double {
         return y
+    }
+
+    override fun z(): Double {
+        return z
     }
 }

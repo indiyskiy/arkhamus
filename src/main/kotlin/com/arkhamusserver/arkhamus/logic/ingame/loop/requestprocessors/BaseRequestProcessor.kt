@@ -31,6 +31,7 @@ class BaseRequestProcessor : NettyRequestProcessor {
         if (oldGameUser.notRestricted()) {
             oldGameUser.x = nettyRequestMessage.baseRequestData.userPosition.x
             oldGameUser.y = nettyRequestMessage.baseRequestData.userPosition.y
+            oldGameUser.z = nettyRequestMessage.baseRequestData.userPosition.z
         }
     }
 

@@ -53,10 +53,10 @@ data class GlobalGameData(
     ): List<GeometryUtils.Tetragon> {
         return redisLevelZoneTetragons.map { tetragon ->
             GeometryUtils.Tetragon(
-                p0 = GeometryUtils.Point(tetragon.point0X, tetragon.point0Y),
-                p1 = GeometryUtils.Point(tetragon.point1X, tetragon.point1Y),
-                p2 = GeometryUtils.Point(tetragon.point2X, tetragon.point2Y),
-                p3 = GeometryUtils.Point(tetragon.point3X, tetragon.point3Y),
+                p0 = GeometryUtils.Point(tetragon.point0X, tetragon.point0Z),
+                p1 = GeometryUtils.Point(tetragon.point1X, tetragon.point1Z),
+                p2 = GeometryUtils.Point(tetragon.point2X, tetragon.point2Z),
+                p3 = GeometryUtils.Point(tetragon.point3X, tetragon.point3Z),
             )
         }
     }
@@ -66,8 +66,8 @@ data class GlobalGameData(
     ): List<GeometryUtils.Ellipse> {
         return redisLevelZoneEllipses.map { ellipse ->
             GeometryUtils.Ellipse(
-                center = GeometryUtils.Point(ellipse.pointX, ellipse.pointY),
-                ry = ellipse.height / 2,
+                center = GeometryUtils.Point(ellipse.pointX, ellipse.pointZ),
+                rz = ellipse.height / 2,
                 rx = ellipse.width / 2
             )
         }

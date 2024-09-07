@@ -11,6 +11,7 @@ data class RedisAltar(
     @Indexed var gameId: Long,
     var x: Double,
     var y: Double,
+    var z: Double,
     var interactionRadius: Double,
 ) : WithPoint {
 
@@ -20,5 +21,9 @@ data class RedisAltar(
 
     override fun y(): Double {
         return y
+    }
+
+    override fun z(): Double {
+        return z
     }
 }

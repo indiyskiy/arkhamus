@@ -16,6 +16,7 @@ data class RedisGameUser(
     @Indexed var gameId: Long,
     var x: Double,
     var y: Double,
+    var z: Double,
     var madness: Double,
     var madnessNotches: List<Double>,
     var items: MutableMap<Int, Int> = HashMap(),
@@ -26,7 +27,7 @@ data class RedisGameUser(
     var sawTheEndOfTimes: Boolean = false,
     var connected: Boolean,
     var leftTheGame: Boolean = false,
-) : WithPoint {
+)  : WithPoint {
 
     override fun x(): Double {
         return x
@@ -34,5 +35,9 @@ data class RedisGameUser(
 
     override fun y(): Double {
         return y
+    }
+
+    override fun z(): Double {
+        return z
     }
 }

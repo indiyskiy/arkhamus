@@ -26,7 +26,7 @@ class ZonesHandler(
         levelGeometryData: LevelGeometryData,
         types: Set<ZoneType> = emptySet()
     ): List<LevelZone> {
-        val zones = with(GeometryUtils.Point(withPoint.x(), withPoint.y())) {
+        val zones = with(GeometryUtils.Point(withPoint.x(), withPoint.z())) {
             levelGeometryData.zones.filter { zone ->
                 zone.ellipses.any { ellipse -> geometryUtils.contains(ellipse, this) } ||
                         zone.tetragons.any { tetragon -> geometryUtils.contains(tetragon, this) }

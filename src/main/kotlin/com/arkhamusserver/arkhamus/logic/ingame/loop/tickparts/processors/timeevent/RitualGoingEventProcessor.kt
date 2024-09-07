@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag.IN_RITUAL
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
+import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import org.slf4j.Logger
@@ -46,11 +47,10 @@ class RitualGoingEventProcessor(
 
     private fun addUsersToRitual(globalGameData: GlobalGameData) {
         globalGameData.altarHolder?.let {
-            val center = it.x to it.y
             val altar = globalGameData.altars.values.first()
-            val radius = distance(altar, center) + altar.interactionRadius
-            addUsersToRitual(globalGameData.users.values, center, radius)
-            setUsersPosition(globalGameData.users.values, center, radius)
+            val radius = distance(altar, it) + altar.interactionRadius
+            addUsersToRitual(globalGameData.users.values, it, radius)
+            setUsersPosition(globalGameData.users.values, it, radius)
         }
     }
 
@@ -83,28 +83,34 @@ class RitualGoingEventProcessor(
     }
 
 
-    private fun setUsersPosition(values: Collection<RedisGameUser>, center: Pair<Double, Double>, radius: Double) {
+    private fun setUsersPosition(
+        values: Collection<RedisGameUser>,
+        altarHolder: RedisAltarHolder,
+        radius: Double
+    ) {
         val usersInRitual = values.filter { it.stateTags.contains(IN_RITUAL.name) }.sortedBy { it.userId }
         val usersRadius = radius * 2 / 3
         if (usersInRitual.isNotEmpty()) {
             val step = 2 * Math.PI / usersInRitual.size
             usersInRitual.mapIndexed { index, redisGameUser ->
-                val x = usersRadius * cos(index * step) + center.first
-                val y = usersRadius * sin(index * step) + center.second
+                val x = usersRadius * cos(index * step) + altarHolder.x
+                val y = altarHolder.y
+                val z = usersRadius * sin(index * step) + altarHolder.z
                 redisGameUser.x = x
                 redisGameUser.y = y
+                redisGameUser.z = z
             }
         }
     }
 
     private fun addUsersToRitual(
         users: Collection<RedisGameUser>,
-        center: Pair<Double, Double>,
+        altarHolder: RedisAltarHolder,
         radius: Double
     ) {
         users.filterNot { user -> user.inRitual() }.forEach { user ->
             if (geometryUtils.distanceLessOrEquals(
-                    center.first, center.second, user.x, user.y, radius
+                    altarHolder, user, radius
                 )
             ) {
                 user.stateTags.add(IN_RITUAL.name)
@@ -114,10 +120,10 @@ class RitualGoingEventProcessor(
 
     private fun distance(
         altar: RedisAltar,
-        center: Pair<Double, Double>
+        altarHolder: RedisAltarHolder
     ): Double {
         return geometryUtils.distance(
-            altar.x, altar.y, center.first, center.second
+            altar, altarHolder
         )
     }
 

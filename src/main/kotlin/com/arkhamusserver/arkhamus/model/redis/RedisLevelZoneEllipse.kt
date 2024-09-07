@@ -13,6 +13,6 @@ data class RedisLevelZoneEllipse(
     var levelZoneId: Long,
     var inGameTetragonId: Long,
 
-    var pointX: Double, var pointY: Double,
+    var pointX: Double, var pointY: Double, var pointZ: Double,
     var height: Double, var width: Double,
 )

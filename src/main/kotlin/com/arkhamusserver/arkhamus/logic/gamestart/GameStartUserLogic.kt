@@ -70,8 +70,9 @@ class GameStartUserLogic(
                 classInGame = it.classInGame!!,
                 madness = 0.0,
                 madnessNotches = listOf(100.0, 300.0, 600.0),
-                x = marker.point.x,
-                y = marker.point.y,
+                x = marker.x,
+                y = marker.y,
+                z = marker.z,
                 callToArms = game.gameSessionSettings.maxCallToArms,
                 connected = true
             )

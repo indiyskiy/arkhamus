@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game
 
 import jakarta.persistence.*
-import org.postgresql.geometric.PGpoint
 
 @Entity
 data class Tetragon(
@@ -12,8 +11,8 @@ data class Tetragon(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "levelZoneId", referencedColumnName = "id", nullable = false)
     var levelZone: LevelZone,
-    var point0: PGpoint,
-    var point1: PGpoint,
-    var point2: PGpoint,
-    var point3: PGpoint,
+    var point0X: Double, var point0Y: Double, var point0Z: Double,
+    var point1X: Double, var point1Y: Double, var point1Z: Double,
+    var point2X: Double, var point2Y: Double, var point2Z: Double,
+    var point3X: Double, var point3Y: Double, var point3Z: Double,
 )

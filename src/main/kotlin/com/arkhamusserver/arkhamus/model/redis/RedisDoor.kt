@@ -11,13 +11,14 @@ data class RedisDoor(
     @Indexed var gameId: Long,
     var doorId: Long,
 
-    var x: Double = 0.0,
-    var y: Double = 0.0,
+    var x: Double,
+    var y: Double,
+    var z: Double,
     var zoneId: Long,
     var globalState: DoorState = DoorState.OPEN,
     var closedForUsers: MutableList<Long> = mutableListOf(),
 
-    ) : WithPoint {
+    )  : WithPoint {
 
     override fun x(): Double {
         return x
@@ -25,5 +26,9 @@ data class RedisDoor(
 
     override fun y(): Double {
         return y
+    }
+
+    override fun z(): Double {
+        return z
     }
 }

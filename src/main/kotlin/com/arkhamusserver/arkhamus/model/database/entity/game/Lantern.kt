@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game
 
+import com.arkhamusserver.arkhamus.model.redis.WithPoint
 import jakarta.persistence.*
-import org.postgresql.geometric.PGpoint
 
 @Entity
 data class Lantern(
@@ -10,8 +10,22 @@ data class Lantern(
     var id: Long? = null,
     var inGameId: Long,
     var lightRange: Double? = null,
-    var point: PGpoint,
+    var x: Double,
+    var y: Double,
+    var z: Double,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
     var level: Level
-)
+) : WithPoint {
+    override fun x(): Double {
+        return x
+    }
+
+    override fun y(): Double {
+        return y
+    }
+
+    override fun z(): Double {
+        return z
+    }
+}

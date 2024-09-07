@@ -26,7 +26,6 @@ import com.fasterxml.uuid.Generators
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.postgresql.geometric.PGpoint
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.sql.Timestamp
@@ -339,7 +338,8 @@ class UpdateContainerRequestProcessorTest {
                 100L,
                 UserPosition(
                     data.gameUser.x,
-                    data.gameUser.y
+                    data.gameUser.y,
+                    data.gameUser.z,
                 )
             )
         )
@@ -424,7 +424,9 @@ class UpdateContainerRequestProcessorTest {
             id = 1L,
             inGameId = 1L,
             interactionRadius = 200.0,
-            point = PGpoint(50.0, 50.0)
+            x = 50.0,
+            y = 50.0,
+            z = 50.0
         )
         val inContainerItems = createContainersItems()
 
@@ -434,8 +436,9 @@ class UpdateContainerRequestProcessorTest {
             gameId = gameSession.id!!,
             holdingUser = 1,
             state = MapObjectState.HOLD,
-            x = container.point.x,
-            y = container.point.y,
+            x = container.x,
+            y = container.y,
+            z = container.z,
             interactionRadius = container.interactionRadius,
             items = inContainerItems
         )
@@ -449,12 +452,18 @@ class UpdateContainerRequestProcessorTest {
             role = RoleTypeInGame.INVESTIGATOR,
             classInGame = ClassInGame.MIND_HEALER,
             gameId = gameSession.id!!,
-            x = container.point.x,
-            y = container.point.y,
+            x = container.x,
+            y = container.y,
+            z = container.z,
             madness = 20.0,
             madnessNotches = listOf(100.0, 300.0, 600.0),
             items = oldUserItems,
-            connected = true
+            connected = true,
+            stateTags = mutableSetOf(),
+            callToArms = 1,
+            won = null,
+            sawTheEndOfTimes = false,
+            leftTheGame = false
         )
 
         val oldContainer = UpdateContainerRequestGameData(
@@ -471,7 +480,8 @@ class UpdateContainerRequestProcessorTest {
             containers = emptyList(),
             clues = emptyList(),
             inZones = emptyList(),
-            crafters = emptyList()
+            crafters = emptyList(),
+            userQuestProgresses = emptyList()
         )
 
         val globalGameData = GlobalGameData(
@@ -479,7 +489,16 @@ class UpdateContainerRequestProcessorTest {
             altarHolder = RedisAltarHolder(
                 id = "altarHolder",
                 gameId = redisGame.gameId!!,
-                altarHolderId = 0L
+                altarHolderId = 0L,
+                x = 50.0,
+                y = 50.0,
+                z = 50.0,
+                radius = 20.0,
+                lockedGodId = 1,
+                itemsForRitual = emptyMap(),
+                itemsIdToAltarId = emptyMap(),
+                itemsOnAltars = TODO(),
+                state = TODO()
             ),
             users = mapOf(gameUser.userId to gameUser),
             containers = mapOf(redisContainer.containerId to redisContainer),

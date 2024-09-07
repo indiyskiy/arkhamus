@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game
 
 import jakarta.persistence.*
-import org.postgresql.geometric.PGpoint
 
 @Entity
 data class Ellipse(
@@ -12,7 +11,9 @@ data class Ellipse(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "levelZoneId", referencedColumnName = "id", nullable = false)
     var levelZone: LevelZone,
-    var point: PGpoint,
+    var x: Double,
+    var y: Double,
+    var z: Double,
     var height: Double,
     var width: Double,
 )

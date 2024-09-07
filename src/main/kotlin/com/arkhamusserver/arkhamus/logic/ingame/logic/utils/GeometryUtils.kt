@@ -12,7 +12,7 @@ class GeometryUtils {
         withPoint2: WithPoint,
         maxDistance: Double
     ): Boolean {
-        return distanceLessOrEquals(withPoint1.x(), withPoint1.y(), withPoint2.x(), withPoint2.y(), maxDistance)
+        return distanceLessOrEquals(withPoint1.x(), withPoint1.z(), withPoint2.x(), withPoint2.z(), maxDistance)
     }
 
 
@@ -20,7 +20,7 @@ class GeometryUtils {
         withPoint1: WithPoint,
         withPoint2: WithPoint,
     ): Double {
-        return distance(withPoint1.x(), withPoint1.y(), withPoint2.x(), withPoint2.y())
+        return distance(withPoint1.x(), withPoint1.z(), withPoint2.x(), withPoint2.z())
     }
 
     fun distance(
@@ -62,10 +62,10 @@ class GeometryUtils {
     ) = (a.p1.x - a.p2.x) * (b.p1.y - b.p2.y) - (a.p1.y - a.p2.y) * (b.p1.x - b.p2.x)
 
     fun contains(tetragon: Tetragon, point: WithPoint): Boolean =
-        contains(tetragon, Point(point.x(), point.y()))
+        contains(tetragon, Point(point.x(), point.z()))
 
     fun contains(ellipse: Ellipse, point: WithPoint): Boolean =
-        contains(ellipse, Point(point.x(), point.y()))
+        contains(ellipse, Point(point.x(), point.z()))
 
     fun contains(tetragon: Tetragon, point: Point): Boolean =
         det(tetragon.p0, tetragon.p1, point) >= 0 &&
@@ -77,7 +77,7 @@ class GeometryUtils {
         val dx = ellipse.center.x - point.x
         val dy = ellipse.center.y - point.y
         return (dx * dx) / (ellipse.rx * ellipse.rx) +
-                (dy * dy) / (ellipse.ry * ellipse.ry) <= 1
+                (dy * dy) / (ellipse.rz * ellipse.rz) <= 1
     }
 
     private fun magicNumber2(
@@ -106,6 +106,6 @@ class GeometryUtils {
 
     class Tetragon(val p0: Point, val p1: Point, val p2: Point, val p3: Point)
 
-    class Ellipse(val center: Point, val ry: Double, val rx: Double)
+    class Ellipse(val center: Point, val rz: Double, val rx: Double)
 }
 

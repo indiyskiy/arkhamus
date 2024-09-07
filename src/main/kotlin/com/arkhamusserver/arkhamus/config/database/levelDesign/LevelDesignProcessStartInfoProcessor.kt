@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRe
 import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.model.database.entity.game.StartMarker
 import com.arkhamusserver.arkhamus.view.levelDesign.JsonStartMarker
-import org.postgresql.geometric.PGpoint
 import org.springframework.stereotype.Component
 import kotlin.collections.forEach
 
@@ -18,7 +17,9 @@ class LevelDesignProcessStartInfoProcessor(
     ) {
         containers.forEach { startMarker ->
             StartMarker(
-                point = PGpoint(startMarker.x!!, startMarker.y!!),
+                x = startMarker.x!!,
+                y = startMarker.y!!,
+                z = startMarker.z!!,
                 level = savedLevel!!
             ).apply {
                 startMarkerRepository.save(this)

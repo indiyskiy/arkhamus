@@ -7,6 +7,7 @@ data class GameUserResponse(
     var nickName: String?,
     var x: Double?,
     var y: Double?,
+    var z: Double?,
     var stateTags: Set<String> = emptySet(),
 ) {
     constructor(gameUser: RedisGameUser) : this(
@@ -14,6 +15,7 @@ data class GameUserResponse(
         nickName = gameUser.nickName,
         x = gameUser.x,
         y = gameUser.y,
+        z = gameUser.z,
         stateTags = gameUser.stateTags
     )
 }

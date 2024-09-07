@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
@@ -27,7 +28,7 @@ class TimeEventHandler(
         eventType: RedisTimeEventType,
         sourceUser: RedisGameUser? = null,
         targetUser: RedisGameUser? = null,
-        location: Pair<Double, Double>? = null,
+        location: Location? = null,
         timeLeft: Long? = null
     ) {
         createEvent(
@@ -48,7 +49,7 @@ class TimeEventHandler(
         startDateTime: Long,
         sourceUser: RedisGameUser? = null,
         targetUser: RedisGameUser? = null,
-        location: Pair<Double, Double>? = null,
+        location: Location? = null,
         timeLeft: Long? = null
     ) {
         createEvent(
@@ -69,7 +70,7 @@ class TimeEventHandler(
         startDateTime: Long,
         sourceUser: RedisGameUser? = null,
         targetUserId: RedisGameUser? = null,
-        location: Pair<Double, Double>? = null,
+        location: Location? = null,
         timeLeft: Long? = null
     ) {
         createEvent(
@@ -90,7 +91,7 @@ class TimeEventHandler(
         startDateTime: Long,
         sourceUserId: Long? = null,
         targetUserId: Long? = null,
-        location: Pair<Double, Double>? = null,
+        location: Location? = null,
         timeLeft: Long? = null
     ) {
         val timer = RedisTimeEvent(
@@ -103,8 +104,9 @@ class TimeEventHandler(
             targetUserId = targetUserId,
             type = eventType,
             state = RedisTimeEventState.ACTIVE,
-            xLocation = location?.first,
-            yLocation = location?.second
+            xLocation = location?.x,
+            yLocation = location?.y,
+            zLocation = location?.z
         )
         redisTimeEventRepository.save(timer)
     }

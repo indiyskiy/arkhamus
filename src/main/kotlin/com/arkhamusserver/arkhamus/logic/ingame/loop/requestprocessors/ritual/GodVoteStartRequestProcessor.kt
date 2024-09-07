@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -102,7 +103,7 @@ class GodVoteStartRequestProcessor(
             eventType = RedisTimeEventType.ALTAR_VOTING,
             startDateTime = globalTimer,
             sourceUserId = sourceUserId,
-            location = altar.x to altar.y
+            location = Location(altar.x, altar.y, altar.z),
         )
     }
 

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -18,12 +19,13 @@ class TeleportHandler(
         point?.let {
             user.x = point.x()
             user.y = point.y()
+            user.z = point.z()
             timeEventHandler.createEvent(
                 game = game,
                 eventType = RedisTimeEventType.TELEPORTATION_STUN,
                 sourceUser = null,
                 targetUser = user,
-                location = user.x to user.y,
+                location = Location(user.x, user.y, user.z),
                 timeLeft = RedisTimeEventType.TELEPORTATION_STUN.getDefaultTime()
             )
         }
