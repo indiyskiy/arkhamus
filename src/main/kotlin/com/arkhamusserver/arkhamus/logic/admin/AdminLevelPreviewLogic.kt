@@ -283,22 +283,22 @@ class AdminLevelPreviewLogic(
                 listOf(
                     PointDto(
                         tetragon.point0X.toFloat() * SCREEN_ZOOM,
-                        tetragon.point0Y.toFloat() * SCREEN_ZOOM,
+                        tetragon.point0Z.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.inGameId.toColor()
                     ),
                     PointDto(
                         tetragon.point1X.toFloat() * SCREEN_ZOOM,
-                        tetragon.point1Y.toFloat() * SCREEN_ZOOM,
+                        tetragon.point1Z.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.inGameId.toColor()
                     ),
                     PointDto(
                         tetragon.point2X.toFloat() * SCREEN_ZOOM,
-                        tetragon.point2Y.toFloat() * SCREEN_ZOOM,
+                        tetragon.point2Z.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.inGameId.toColor()
                     ),
                     PointDto(
                         tetragon.point3X.toFloat() * SCREEN_ZOOM,
-                        tetragon.point3Y.toFloat() * SCREEN_ZOOM,
+                        tetragon.point3Z.toFloat() * SCREEN_ZOOM,
                         tetragon.levelZone.inGameId.toColor()
                     ),
                 ),
