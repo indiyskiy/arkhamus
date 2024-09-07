@@ -93,17 +93,17 @@ class AdminLevelPreviewLogic(
                 points = listOf(
                     PointDto(
                         (it.x * SCREEN_ZOOM).toFloat(),
-                        (it.y * SCREEN_ZOOM).toFloat(),
+                        (it.z * SCREEN_ZOOM).toFloat(),
                         NiceColor.VIOLET
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM + 5).toFloat(),
-                        (it.y * SCREEN_ZOOM - 10).toFloat(),
+                        (it.z * SCREEN_ZOOM - 10).toFloat(),
                         NiceColor.VIOLET
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM - 5).toFloat(),
-                        (it.y * SCREEN_ZOOM - 10).toFloat(),
+                        (it.z * SCREEN_ZOOM - 10).toFloat(),
                         NiceColor.VIOLET
                     )
                 ),
@@ -118,17 +118,17 @@ class AdminLevelPreviewLogic(
                 points = listOf(
                     PointDto(
                         it.x.toFloat() * SCREEN_ZOOM,
-                        it.y.toFloat() * SCREEN_ZOOM,
+                        it.z.toFloat() * SCREEN_ZOOM,
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM + 5).toFloat(),
-                        (it.y * SCREEN_ZOOM - 10).toFloat(),
+                        (it.z * SCREEN_ZOOM - 10).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM - 5).toFloat(),
-                        (it.y * SCREEN_ZOOM - 10).toFloat(),
+                        (it.z * SCREEN_ZOOM - 10).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     )
                 ),
@@ -143,22 +143,22 @@ class AdminLevelPreviewLogic(
                 points = listOf(
                     PointDto(
                         it.x.toFloat() * SCREEN_ZOOM - 5,
-                        it.y.toFloat() * SCREEN_ZOOM - 5,
+                        it.z.toFloat() * SCREEN_ZOOM - 5,
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM + 5).toFloat(),
-                        (it.y * SCREEN_ZOOM - 5).toFloat(),
+                        (it.z * SCREEN_ZOOM - 5).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM + 5).toFloat(),
-                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        (it.z * SCREEN_ZOOM + 5).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM - 5).toFloat(),
-                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        (it.z * SCREEN_ZOOM + 5).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     )
                 ),
@@ -173,22 +173,22 @@ class AdminLevelPreviewLogic(
                 points = listOf(
                     PointDto(
                         it.x.toFloat() * SCREEN_ZOOM - 5,
-                        it.y.toFloat() * SCREEN_ZOOM - 5,
+                        it.z.toFloat() * SCREEN_ZOOM - 5,
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM + 5).toFloat(),
-                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        (it.z * SCREEN_ZOOM + 5).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM - 5).toFloat(),
-                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        (it.z * SCREEN_ZOOM + 5).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM + 5).toFloat(),
-                        (it.y * SCREEN_ZOOM - 5).toFloat(),
+                        (it.z * SCREEN_ZOOM - 5).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     )
                 ),
@@ -204,22 +204,22 @@ class AdminLevelPreviewLogic(
                 points = listOf(
                     PointDto(
                         it.x.toFloat() * SCREEN_ZOOM - 5,
-                        it.y.toFloat() * SCREEN_ZOOM - 5,
+                        it.z.toFloat() * SCREEN_ZOOM - 5,
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM + 5).toFloat(),
-                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        (it.z * SCREEN_ZOOM + 5).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM + 5).toFloat(),
-                        (it.y * SCREEN_ZOOM - 5).toFloat(),
+                        (it.z * SCREEN_ZOOM - 5).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     ),
                     PointDto(
                         (it.x * SCREEN_ZOOM - 5).toFloat(),
-                        (it.y * SCREEN_ZOOM + 5).toFloat(),
+                        (it.z * SCREEN_ZOOM + 5).toFloat(),
                         NiceColor.MEDIUM_PURPLE
                     )
                 ),
@@ -241,7 +241,7 @@ class AdminLevelPreviewLogic(
         return containers.map {
             PointDto(
                 it.x.toFloat() * SCREEN_ZOOM,
-                it.y.toFloat() * SCREEN_ZOOM,
+                it.z.toFloat() * SCREEN_ZOOM,
                 27L.toColor()
             )
         }
@@ -251,7 +251,7 @@ class AdminLevelPreviewLogic(
         return crafters.map {
             PointDto(
                 it.x.toFloat() * SCREEN_ZOOM,
-                it.y.toFloat() * SCREEN_ZOOM,
+                it.z.toFloat() * SCREEN_ZOOM,
                 28L.toColor()
             )
         }
@@ -261,7 +261,7 @@ class AdminLevelPreviewLogic(
         return altars.map {
             PointDto(
                 it.x.toFloat() * SCREEN_ZOOM,
-                it.y.toFloat() * SCREEN_ZOOM,
+                it.z.toFloat() * SCREEN_ZOOM,
                 29L.toColor()
             )
         }
@@ -271,7 +271,7 @@ class AdminLevelPreviewLogic(
         return lanterns.map {
             PointDto(
                 it.x.toFloat() * SCREEN_ZOOM,
-                it.y.toFloat() * SCREEN_ZOOM,
+                it.z.toFloat() * SCREEN_ZOOM,
                 30L.toColor()
             )
         }
@@ -311,7 +311,7 @@ class AdminLevelPreviewLogic(
         return ellipses.map { ellipse ->
             EllipseDto(
                 cx = ellipse.x.toFloat() * SCREEN_ZOOM,
-                cy = ellipse.y.toFloat() * SCREEN_ZOOM,
+                cy = ellipse.z.toFloat() * SCREEN_ZOOM,
                 rx = ellipse.width.toFloat() / 2 * SCREEN_ZOOM,
                 ry = ellipse.height.toFloat() / 2 * SCREEN_ZOOM,
                 color = ellipse.levelZone.inGameId.toColor()
