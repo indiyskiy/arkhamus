@@ -43,7 +43,7 @@ class CanAbilityBeCastHandler(
 
         val availableAbilities = visibleAbilitiesList.map {
             val cooldown = relatedAbilityCastMap[it.id]?.timeLeftCooldown ?: 0
-            val canBeCast = (fitAdditionalConditionsMap[it] ?: true) && (cooldown <= 0)
+            val canBeCast = (fitAdditionalConditionsMap[it] != false) && (cooldown <= 0)
             val charges = charges(it, user)
             AbilityOfUserResponse(
                 abilityId = it.id,
