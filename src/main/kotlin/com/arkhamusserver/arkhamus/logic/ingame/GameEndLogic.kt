@@ -37,7 +37,6 @@ class GameEndLogic(
         timeLeft: Long? = null
     ) {
         if (game.state == GameState.FINISHED.name || game.state == GameState.GAME_END_SCREEN.name) {
-            logger.info("already finished")
             return
         }
         saveGameState(game, gameEndReason)
