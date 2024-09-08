@@ -42,11 +42,11 @@ class CallForBanVoteRequestProcessor(
         val threshold = gameData.threshold
         eventHandler.createEvent(
             game = globalGameData.game,
-            eventType = RedisTimeEventType.CALL_TO_BAN_VOTE,
+            eventType = RedisTimeEventType.CALL_FOR_BAN_VOTE,
             sourceObject = gameData.gameUser,
             targetObject = voteSpot,
             location = threshold?.let { Location(it.x, it.y, it.z) },
-            timeLeft = RedisTimeEventType.CALL_TO_BAN_VOTE.getDefaultTime()
+            timeLeft = RedisTimeEventType.CALL_FOR_BAN_VOTE.getDefaultTime()
         )
     }
 }

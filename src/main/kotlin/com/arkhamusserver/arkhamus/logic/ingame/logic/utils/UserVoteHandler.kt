@@ -135,7 +135,7 @@ class UserVoteHandler(
             user.callToArms > 0
 
     private fun callForVoteEventInProgress(ongoingEvents: List<OngoingEvent>): Boolean = !ongoingEvents.any {
-        it.event.type == RedisTimeEventType.CALL_TO_BAN_VOTE &&
+        it.event.type == RedisTimeEventType.CALL_FOR_BAN_VOTE &&
                 it.event.state == RedisTimeEventState.ACTIVE
     }
 

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class CallToBanVoteEventProcessor() : TimeEventProcessor {
     override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.CALL_TO_BAN_VOTE
+        type == RedisTimeEventType.CALL_FOR_BAN_VOTE
 
     override fun processStart(
         event: RedisTimeEvent,

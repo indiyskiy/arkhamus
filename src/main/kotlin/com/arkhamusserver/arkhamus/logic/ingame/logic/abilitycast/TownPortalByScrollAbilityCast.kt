@@ -51,7 +51,7 @@ class TownPortalByScrollAbilityCast(
             return data.altarHolder
         }
         val goingBanVoteCall = data.timeEvents.firstOrNull {
-            (it.type == RedisTimeEventType.CALL_TO_BAN_VOTE
+            (it.type == RedisTimeEventType.CALL_FOR_BAN_VOTE
                     ) && it.state == RedisTimeEventState.ACTIVE
         }
         if (goingBanVoteCall != null) {

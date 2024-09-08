@@ -23,7 +23,12 @@ enum class RedisTimeEventType(
     ALTAR_VOTING(DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS / 4, Visibility.PUBLIC),
     RITUAL_GOING(DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS / 4, Visibility.PUBLIC),
     ALTAR_VOTING_COOLDOWN(DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS / 8, Visibility.PUBLIC),
-    CALL_TO_BAN_VOTE(DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS / 8, Visibility.PUBLIC),
+    CALL_FOR_BAN_VOTE(
+        DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS / 8,
+        Visibility.PUBLIC,
+        sourceType = GameObjectType.CHARACTER,
+        targetType = GameObjectType.VOTE_SPOT,
+    ),
 
     //ability
     SUMMONED_NIGHT(
