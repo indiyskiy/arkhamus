@@ -26,9 +26,13 @@ data class GameSession(
     @JoinColumn(name = "gameSettingsId")
     var gameSessionSettings: GameSessionSettings,
 
+    @Enumerated(EnumType.STRING)
     var state: GameState,
+    @Enumerated(EnumType.STRING)
     var gameEndReason: GameEndReason? = null,
+    @Enumerated(EnumType.STRING)
     var gameType: GameType,
+    @Enumerated(EnumType.STRING)
     var god: God? = null,
     var token: String? = null
 )

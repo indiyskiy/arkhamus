@@ -61,6 +61,7 @@ class GameStartContainerLogic(
     ) = RedisContainer(
         id = Generators.timeBasedEpochGenerator().generate().toString(),
         containerId = dbContainer.inGameId,
+        containerTags = dbContainer.containerTags.toMutableList(),
         gameId = game.id!!,
         x = dbContainer.x,
         y = dbContainer.y,

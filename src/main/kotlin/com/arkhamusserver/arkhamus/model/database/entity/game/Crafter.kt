@@ -17,6 +17,7 @@ data class Crafter(
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
     var level: Level,
+    @Enumerated(EnumType.STRING)
     var crafterType: CrafterType,
 ) : WithPoint {
     override fun x(): Double {

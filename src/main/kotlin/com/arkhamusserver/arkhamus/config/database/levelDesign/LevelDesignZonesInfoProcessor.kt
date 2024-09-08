@@ -42,15 +42,15 @@ class LevelDesignZonesInfoProcessor(
 
     private fun processBanZones(clueZones: List<ZoneFromJson>, savedLevel: Level) {
         clueZones.forEach { clueZone ->
-            val levelZone = LevelZone(
+            val banZone = LevelZone(
                 inGameId = clueZone.zoneId!!,
                 zoneType = ZoneType.BAN,
                 level = savedLevel,
             ).apply {
                 levelZoneRepository.save(this)
             }
-            processClueTetragons(clueZone.tetragons, levelZone)
-            processClueEllipses(clueZone.ellipses, levelZone)
+            processClueTetragons(clueZone.tetragons, banZone)
+            processClueEllipses(clueZone.ellipses, banZone)
         }
     }
 

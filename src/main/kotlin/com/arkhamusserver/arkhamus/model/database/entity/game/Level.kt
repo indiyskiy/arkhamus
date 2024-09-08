@@ -2,6 +2,8 @@ package com.arkhamusserver.arkhamus.model.database.entity.game
 
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -21,5 +23,6 @@ data class Level(
     var levelId: Long,
     var levelHeight: Long,
     var levelWidth: Long,
+    @Enumerated(EnumType.STRING)
     var state: LevelState
 )

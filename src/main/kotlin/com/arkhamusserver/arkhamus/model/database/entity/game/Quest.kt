@@ -15,6 +15,7 @@ data class Quest(
     var level: Level,
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "quest")
     var questSteps: MutableList<QuestStep> = mutableListOf(),
+    @Enumerated(EnumType.STRING)
     var questState: QuestState = QuestState.DRAFT,
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "textKeyId")
@@ -26,6 +27,7 @@ data class Quest(
     @ManyToOne
     @JoinColumn(name = "endQuestGiverId", nullable = false)
     var endQuestGiver: QuestGiver,
+    @Enumerated(EnumType.STRING)
     var dificulty: QuestDifficulty = QuestDifficulty.VERY_EASY
 ) {
     fun addQuestStep(questStep: QuestStep) {

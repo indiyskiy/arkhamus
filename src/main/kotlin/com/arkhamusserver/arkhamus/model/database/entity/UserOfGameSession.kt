@@ -20,8 +20,9 @@ data class UserOfGameSession(
 
     var host: Boolean,
 
+    @Enumerated(EnumType.STRING)
     var roleInGame: RoleTypeInGame? = null,
-
+    @Enumerated(EnumType.STRING)
     var classInGame: ClassInGame? = null,
 
     var won: Boolean? = null,

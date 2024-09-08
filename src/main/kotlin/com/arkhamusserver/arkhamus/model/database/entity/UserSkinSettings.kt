@@ -8,6 +8,7 @@ data class UserSkinSettings(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
+    @Enumerated(EnumType.STRING)
     var skinColor: SkinColor,
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userAccountId")

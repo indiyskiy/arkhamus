@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerTag
 import com.arkhamusserver.arkhamus.model.redis.WithPoint
 import jakarta.persistence.*
 
@@ -13,6 +14,13 @@ data class Container(
     var y: Double,
     var z: Double,
     var interactionRadius: Double,
+
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = ContainerTag::class)
+    @CollectionTable(name = "containerTags", joinColumns = [JoinColumn(name = "entity_id")])
+    @Enumerated(EnumType.STRING)
+    @Column(name = "containerTags")
+    var containerTags: Set<ContainerTag> = emptySet(),
+
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
     var level: Level? = null

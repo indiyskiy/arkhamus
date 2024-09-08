@@ -42,6 +42,81 @@
             "id": 1500,
             "points": [
               {
+                "x": 1,
+                "y": 0,
+                "z": 12
+              },
+              {
+                "x": 11,
+                "y": 0,
+                "z": 12
+              },
+              {
+                "x": 11,
+                "y": 0,
+                "z": 32
+              },
+              {
+                "x": 1,
+                "y": 0,
+                "z": 32
+              }
+            ]
+          },
+          {
+            "id": 1501,
+            "points": [
+              {
+                "x": 11,
+                "y": 0,
+                "z": 5
+              },
+              {
+                "x": 33,
+                "y": 0,
+                "z": 5
+              },
+              {
+                "x": 33,
+                "y": 0,
+                "z": 32
+              },
+              {
+                "x": 11,
+                "y": 0,
+                "z": 32
+              }
+            ]
+          },
+          {
+            "id": 1502,
+            "points": [
+              {
+                "x": 1,
+                "y": 0,
+                "z": 32
+              },
+              {
+                "x": 33,
+                "y": 0,
+                "z": 32
+              },
+              {
+                "x": 33,
+                "y": 0,
+                "z": 42
+              },
+              {
+                "x": 1,
+                "y": 0,
+                "z": 42
+              }
+            ]
+          },
+          {
+            "id": 1503,
+            "points": [
+              {
                 "x": 33,
                 "y": 0,
                 "z": 16
@@ -60,6 +135,56 @@
                 "x": 33,
                 "y": 0,
                 "z": 32
+              }
+            ]
+          },
+          {
+            "id": 1504,
+            "points": [
+              {
+                "x": 51,
+                "y": 0,
+                "z": 12
+              },
+              {
+                "x": 51,
+                "y": 0,
+                "z": 4
+              },
+              {
+                "x": 59,
+                "y": 0,
+                "z": 4
+              },
+              {
+                "x": 59,
+                "y": 0,
+                "z": 12
+              }
+            ]
+          },
+          {
+            "id": 1505,
+            "points": [
+              {
+                "x": 49,
+                "y": 0,
+                "z": 12
+              },
+              {
+                "x": 61,
+                "y": 0,
+                "z": 12
+              },
+              {
+                "x": 61,
+                "y": 0,
+                "z": 34
+              },
+              {
+                "x": 49,
+                "y": 0,
+                "z": 34
               }
             ]
           }
@@ -100,11 +225,6 @@
             "id": 401,
             "points": [
               {
-                "x": 2,
-                "y": 0,
-                "z": 13
-              },
-              {
                 "x": 12,
                 "y": 0,
                 "z": 13
@@ -118,6 +238,11 @@
                 "x": 2,
                 "y": 0,
                 "z": 31
+              },
+              {
+                "x": 2,
+                "y": 0,
+                "z": 31.5
               }
             ]
           }
@@ -226,84 +351,177 @@
     ],
     "containers": [
       {
+        "containerTags": [],
         "id": 800,
         "interactionRadius": 3.5,
-        "name": "CONTAINER_NAME_01",
-        "x": 82,
+        "name": "Cheaty Chest",
+        "x": 105.579002380371,
         "y": 2,
-        "z": 12
+        "z": 1.58745002746582
       },
       {
+        "containerTags": [],
         "id": 801,
         "interactionRadius": 3.5,
-        "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 80,
+        "name": "Cheaty Chest",
+        "x": 109.990997314453,
         "y": 2,
         "z": 2
       },
       {
+        "containerTags": [],
         "id": 802,
         "interactionRadius": 3.5,
-        "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 95,
+        "name": "Cheaty Chest",
+        "x": 105.850997924805,
         "y": 2,
-        "z": 2
+        "z": 6.02419996261597
       },
       {
+        "containerTags": [],
         "id": 803,
         "interactionRadius": 3.5,
-        "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 101,
+        "name": "Cheaty Chest",
+        "x": 109.681999206543,
         "y": 2,
-        "z": 14
+        "z": 5.94203996658325
       },
       {
+        "containerTags": [],
         "id": 804,
         "interactionRadius": 3.5,
-        "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 90,
+        "name": "Cheaty Chest",
+        "x": 105.432998657227,
         "y": 2,
-        "z": 16
+        "z": 9.49456024169922
       },
       {
+        "containerTags": [],
         "id": 805,
         "interactionRadius": 3.5,
-        "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 101,
+        "name": "Cheaty Chest",
+        "x": 109.323997497559,
         "y": 2,
-        "z": 34
+        "z": 9.58594036102295
       },
       {
+        "containerTags": [],
         "id": 806,
         "interactionRadius": 3.5,
-        "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 94,
+        "name": "Cheaty Chest",
+        "x": 105.678001403809,
         "y": 2,
-        "z": 30
+        "z": 12.5792999267578
       },
       {
+        "containerTags": [],
         "id": 807,
         "interactionRadius": 3.5,
-        "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 90,
+        "name": "Cheaty Chest",
+        "x": 109.948997497559,
         "y": 2,
-        "z": 28
+        "z": 12.5594997406006
       },
       {
+        "containerTags": [],
         "id": 808,
         "interactionRadius": 3.5,
-        "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 85,
+        "name": "Cheaty Chest",
+        "x": 107.932998657227,
         "y": 2,
-        "z": 24
+        "z": 14.538200378418
       },
       {
+        "containerTags": [
+          "SCIENCE",
+          "POOR"
+        ],
         "id": 809,
         "interactionRadius": 3.5,
         "name": "Can't Touch This",
         "x": 48,
         "y": 0,
         "z": 23
+      },
+      {
+        "containerTags": [
+          "MAGIC",
+          "RICH"
+        ],
+        "id": 810,
+        "interactionRadius": 3.5,
+        "name": "Ancient Sarcophagus",
+        "x": 96.2020034790039,
+        "y": 2,
+        "z": 20.1236991882324
+      },
+      {
+        "containerTags": [
+          "SCIENCE"
+        ],
+        "id": 811,
+        "interactionRadius": 3.5,
+        "name": "Scientist's Freezer",
+        "x": 9.82989025115967,
+        "y": 0,
+        "z": 24.4619007110596
+      },
+      {
+        "containerTags": [
+          "SCIENCE",
+          "RICH"
+        ],
+        "id": 812,
+        "interactionRadius": 3.5,
+        "name": "Observatory Stash",
+        "x": 14.829400062561,
+        "y": 0,
+        "z": 55.9463996887207
+      },
+      {
+        "containerTags": [
+          "MAGIC"
+        ],
+        "id": 813,
+        "interactionRadius": 3.5,
+        "name": "Forbidden Bookcase",
+        "x": 94.2064971923828,
+        "y": 0,
+        "z": 67.9826965332031
+      },
+      {
+        "containerTags": [
+          "MAGIC",
+          "POOR"
+        ],
+        "id": 814,
+        "interactionRadius": 3.5,
+        "name": "Willow's Stash",
+        "x": 68.2055969238281,
+        "y": 0,
+        "z": 95.8114013671875
+      },
+      {
+        "containerTags": [
+          "RICH"
+        ],
+        "id": 815,
+        "interactionRadius": 3.5,
+        "name": "Headmaster's Stash",
+        "x": 92.9896011352539,
+        "y": 0,
+        "z": 43.7750015258789
+      },
+      {
+        "containerTags": [
+          "POOR"
+        ],
+        "id": 816,
+        "interactionRadius": 3.5,
+        "name": "Xander's Stash",
+        "x": 37.0368995666504,
+        "y": 0,
+        "z": 84.8836975097656
       }
     ],
     "crafters": [
@@ -338,9 +556,23 @@
     "doors": [
       {
         "id": 1700,
+        "x": 33,
+        "y": 0,
+        "z": 36,
+        "zoneId": 1400
+      },
+      {
+        "id": 1701,
         "x": 41,
         "y": 0,
         "z": 32,
+        "zoneId": 1400
+      },
+      {
+        "id": 1702,
+        "x": 55,
+        "y": 0,
+        "z": 34,
         "zoneId": 1400
       }
     ],
@@ -570,18 +802,88 @@
     "thresholds": [
       {
         "id": 1600,
-        "x": 41.5,
+        "x": 35.9304008483887,
         "y": 0,
         "z": 36,
         "zoneId": 1400
       },
       {
         "id": 1601,
-        "x": 37,
+        "x": 41.0449981689453,
         "y": 0,
-        "z": 12,
+        "z": 33.9668006896973,
+        "zoneId": 1400
+      },
+      {
+        "id": 1602,
+        "x": 55.0700988769531,
+        "y": 0,
+        "z": 35.8363990783691,
         "zoneId": 1400
       }
+    ],
+    "visibilityDoors": [
+      [
+        {
+          "x": 79.3,
+          "y": 2,
+          "z": 31.3
+        },
+        {
+          "x": 80.7,
+          "y": 2,
+          "z": 32.7
+        }
+      ]
+    ],
+    "visibilityWalls": [
+      [
+        {
+          "x": 79.3,
+          "y": 2,
+          "z": 31.3
+        },
+        {
+          "x": 76,
+          "y": 2,
+          "z": 28
+        },
+        {
+          "x": 72,
+          "y": 2,
+          "z": 28
+        },
+        {
+          "x": 72,
+          "y": 2,
+          "z": 0
+        },
+        {
+          "x": 112,
+          "y": 2,
+          "z": 0
+        },
+        {
+          "x": 112,
+          "y": 2,
+          "z": 40
+        },
+        {
+          "x": 84,
+          "y": 2,
+          "z": 40
+        },
+        {
+          "x": 84,
+          "y": 2,
+          "z": 36
+        },
+        {
+          "x": 80.7,
+          "y": 2,
+          "z": 32.7
+        }
+      ]
     ],
     "votespots": [
       {

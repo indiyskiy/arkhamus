@@ -19,6 +19,7 @@ class LevelDesignContainerInfoProcessor(
             Container(
                 inGameId = container.id!!,
                 interactionRadius = container.interactionRadius!!,
+                containerTags = container.containerTags?.toSet() ?: emptySet(),
                 x = container.x!!,
                 y = container.y!!,
                 z = container.z!!,
