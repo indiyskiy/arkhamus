@@ -20,7 +20,7 @@ data class RedisVoteSpot(
     var costItem: Int? = null,
     var bannedUsers: MutableList<Long> = mutableListOf(),
     var availableUsers: MutableList<Long> = mutableListOf(),
-) : WithPoint {
+) : WithPoint, WithId {
 
     override fun x(): Double {
         return x
@@ -32,5 +32,9 @@ data class RedisVoteSpot(
 
     override fun z(): Double {
         return z
+    }
+
+    override fun inGameId(): Long {
+        return voteSpotId
     }
 }

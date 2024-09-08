@@ -3,21 +3,18 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banv
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 
-class VoteSpotOpenRequestProcessData(
+class CallForBanVoteRequestProcessData(
     var voteSpot: RedisVoteSpot?,
+    var threshold: RedisThreshold?,
     var currentUserVoteSpot: RedisUserVoteSpot?,
-    var thisSpotUserInfos: List<RedisUserVoteSpot>,
-    var canVote: Boolean,
     var canCallForVote: Boolean,
-    var votesToBan: Int,
-    val cantVoteReasons: List<CantVoteReason>,
+    var successfullyCalled: Boolean,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,

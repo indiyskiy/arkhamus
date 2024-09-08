@@ -17,7 +17,7 @@ class TeleportationEventProcessor() : TimeEventProcessor {
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
-        globalGameData.users[event.targetUserId]?.stateTags?.add(UserStateTag.TELEPORTATION_STUN.name)
+        globalGameData.users[event.targetObjectId]?.stateTags?.add(UserStateTag.TELEPORTATION_STUN.name)
     }
 
     override fun processStart(
@@ -25,7 +25,7 @@ class TeleportationEventProcessor() : TimeEventProcessor {
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
-        globalGameData.users[event.targetUserId]?.stateTags?.add(UserStateTag.TELEPORTATION_STUN.name)
+        globalGameData.users[event.targetObjectId]?.stateTags?.add(UserStateTag.TELEPORTATION_STUN.name)
     }
 
     override fun processEnd(
@@ -33,6 +33,6 @@ class TeleportationEventProcessor() : TimeEventProcessor {
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
-        globalGameData.users[event.targetUserId]?.stateTags?.remove(UserStateTag.TELEPORTATION_STUN.name)
+        globalGameData.users[event.targetObjectId]?.stateTags?.remove(UserStateTag.TELEPORTATION_STUN.name)
     }
 }

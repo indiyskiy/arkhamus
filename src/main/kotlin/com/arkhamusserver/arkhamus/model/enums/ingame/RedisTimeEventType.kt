@@ -9,6 +9,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SEC
 enum class RedisTimeEventType(
     private val defaultTime: Long,
     private val visibility: Visibility,
+    private val sourceType: GameObjectType? = null,
+    private val targetType: GameObjectType? = null,
 ) {
 
     //global
@@ -21,14 +23,25 @@ enum class RedisTimeEventType(
     ALTAR_VOTING(DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS / 4, Visibility.PUBLIC),
     RITUAL_GOING(DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS / 4, Visibility.PUBLIC),
     ALTAR_VOTING_COOLDOWN(DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS / 8, Visibility.PUBLIC),
+    CALL_TO_BAN_VOTE(DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS / 8, Visibility.PUBLIC),
 
     //ability
-    SUMMONED_NIGHT(NIGHT_LENGTH_MINUTES * MINUTE_IN_MILLIS / 4, Visibility.PUBLIC),
+    SUMMONED_NIGHT(
+        NIGHT_LENGTH_MINUTES * MINUTE_IN_MILLIS / 4,
+        Visibility.PUBLIC,
+        sourceType = GameObjectType.CHARACTER
+    ),
+
     //tech
-    TELEPORTATION_STUN(SECOND_IN_MILLIS * 5, Visibility.NONE),
+    TELEPORTATION_STUN(
+        SECOND_IN_MILLIS * 5,
+        Visibility.NONE,
+        targetType = GameObjectType.CHARACTER
+    ),
     ;
 
     fun getDefaultTime() = defaultTime
     fun getVisibility() = visibility
-
+    fun getSourceType() = sourceType
+    fun getTargetType() = targetType
 }

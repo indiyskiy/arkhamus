@@ -1,17 +1,15 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
-class DayTimeEventProcessor(
-    private val timeEventHandler: TimeEventHandler,
-) : TimeEventProcessor {
+class CallToBanVoteEventProcessor() : TimeEventProcessor {
     override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.DAY
+        type == RedisTimeEventType.CALL_TO_BAN_VOTE
 
     override fun processStart(
         event: RedisTimeEvent,
@@ -29,24 +27,13 @@ class DayTimeEventProcessor(
 
     }
 
+    @Transactional
     override fun processEnd(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
-        startTheNight(event, currentGameTime)
-    }
 
-    private fun startTheNight(
-        event: RedisTimeEvent,
-        currentGameTime: Long
-    ) {
-        timeEventHandler.createEvent(
-            event.gameId,
-            RedisTimeEventType.NIGHT,
-            currentGameTime,
-            sourceObject = null
-        )
     }
 
 }

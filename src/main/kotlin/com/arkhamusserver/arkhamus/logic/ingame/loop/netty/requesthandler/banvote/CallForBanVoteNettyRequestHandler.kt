@@ -6,14 +6,14 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.VoteSpotOpenRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.CallForBanVoteRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.request.banvote.VoteSpotOpenRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.banvote.CallForBanVoteRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class VoteSpotOpenNettyRequestHandler(
+class CallForBanVoteNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
     private val inventoryHandler: InventoryHandler,
@@ -21,11 +21,12 @@ class VoteSpotOpenNettyRequestHandler(
     private val zonesHandler: ZonesHandler,
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
-    private val voteHandler: UserVoteHandler
+    private val geometryUtils: GeometryUtils,
+    private val userVoteHandler: UserVoteHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
-        nettyRequestMessage::class.java == VoteSpotOpenRequestMessage::class.java
+        nettyRequestMessage::class.java == CallForBanVoteRequestMessage::class.java
 
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
@@ -33,9 +34,9 @@ class VoteSpotOpenNettyRequestHandler(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
-    ): VoteSpotOpenRequestProcessData {
+    ): CallForBanVoteRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
-        with(request as VoteSpotOpenRequestMessage) {
+        with(request as CallForBanVoteRequestMessage) {
             val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
@@ -55,26 +56,22 @@ class VoteSpotOpenNettyRequestHandler(
             val thisSpotUserInfos = voteSpot?.let {
                 globalGameData.userVoteSpotsBySpotId[voteSpotId]
             } ?: emptyList()
-            val currentUserVoteSpot = thisSpotUserInfos.let {
+            val myUserVoteSpot = thisSpotUserInfos.let {
                 it.firstOrNull { it.userId == userId }
             }
 
-            val cantVoteReasons = voteHandler.cantVoteReasons(
-                votingUser = user,
-                voteSpot = voteSpot,
-            )
-            val canVote = cantVoteReasons.isEmpty()
-            val votesToBan = voteSpot?.let { voteHandler.votesToBan(globalGameData.users.values, voteSpot) } ?: 0
-            val canCallForVote = voteHandler.getCanCallForVote(voteSpot, ongoingEvents, user)
+            val threshold = voteSpot?.let {
+                geometryUtils.nearestPoint(it, globalGameData.thresholdsByZoneId[it.zoneId])
+            }
 
-            return VoteSpotOpenRequestProcessData(
+            val canCallForVote = userVoteHandler.getCanCallForVote(voteSpot, ongoingEvents, user)
+
+            return CallForBanVoteRequestProcessData(
                 voteSpot = voteSpot,
-                currentUserVoteSpot = currentUserVoteSpot,
-                thisSpotUserInfos = thisSpotUserInfos,
-                canVote = canVote,
-                votesToBan = votesToBan,
-                cantVoteReasons = cantVoteReasons,
+                currentUserVoteSpot = myUserVoteSpot,
                 canCallForVote = canCallForVote,
+                successfullyCalled = false,
+                threshold = threshold,
                 gameUser = user,
                 otherGameUsers = users,
                 inZones = inZones,

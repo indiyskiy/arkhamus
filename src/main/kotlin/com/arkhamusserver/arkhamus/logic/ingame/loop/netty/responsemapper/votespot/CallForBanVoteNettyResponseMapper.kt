@@ -5,32 +5,30 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.Crafter
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.DoorDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.OtherGameUsersDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.VoteSpotInfoMapper
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.VoteSpotOpenRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.CallForBanVoteRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.banvote.VoteSpotOpenNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.banvote.CallForBanVoteNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
 import org.springframework.stereotype.Component
 
 @Component
-class VoteSpotOpenNettyResponseMapper(
+class CallForBanVoteNettyResponseMapper(
     private val otherGameUsersDataHandler: OtherGameUsersDataHandler,
     private val containersDataHandler: ContainerDataHandler,
     private val craftersDataHandler: CrafterDataHandler,
     private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler,
-    private val voteSpotInfoMapper: VoteSpotInfoMapper,
     private val doorDataHandler: DoorDataHandler
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == VoteSpotOpenRequestProcessData::class.java
+        gameResponseMessage::class.java == CallForBanVoteRequestProcessData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -42,20 +40,9 @@ class VoteSpotOpenNettyResponseMapper(
         userRole: UserOfGameSession?,
         inBetweenEventHolder: InBetweenEventHolder,
         globalGameData: GlobalGameData
-    ): VoteSpotOpenNettyResponse {
-        (requestProcessData as VoteSpotOpenRequestProcessData).let {
-            val voteSpotInfo = voteSpotInfoMapper.map(
-                voteSpot = it.voteSpot,
-                currentUserVoteSpot = it.currentUserVoteSpot,
-                thisSpotUserInfos = it.thisSpotUserInfos,
-                allUserIds = globalGameData.users.keys.toList(),
-            )
-            return VoteSpotOpenNettyResponse(
-                voteSpotInfo = voteSpotInfo,
-                canVote = requestProcessData.canVote,
-                canCallForVote = requestProcessData.canCallForVote,
-                cantVoteReasons = requestProcessData.cantVoteReasons.sortedByDescending { it.priority },
-                votesToBan = requestProcessData.votesToBan,
+    ): CallForBanVoteNettyResponse {
+        (requestProcessData as CallForBanVoteRequestProcessData).let {
+            return CallForBanVoteNettyResponse(
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!, it.userQuest),
@@ -92,7 +79,8 @@ class VoteSpotOpenNettyResponseMapper(
                     it.gameUser,
                     globalGameData.doorsByZoneId.values.flatten(),
                     globalGameData.levelGeometryData
-                )
+                ),
+                successfullyCalled = requestProcessData.successfullyCalled
             )
         }
     }

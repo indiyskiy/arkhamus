@@ -18,8 +18,8 @@ data class OngoingEventResponse(
 ) {
     constructor(ongoingEvent: OngoingEvent) : this(
         id = ongoingEvent.event.id,
-        sourceUserId = ongoingEvent.event.sourceUserId,
-        targetUserId = ongoingEvent.event.targetUserId,
+        sourceUserId = ongoingEvent.event.sourceObjectId,
+        targetUserId = ongoingEvent.event.targetObjectId,
         timeStart = ongoingEvent.event.timeStart,
         timePast = ongoingEvent.event.timePast,
         timeLeft = ongoingEvent.event.timeLeft,

@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.redis.WithId
 import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -26,8 +27,8 @@ class TimeEventHandler(
     fun createEvent(
         game: RedisGame,
         eventType: RedisTimeEventType,
-        sourceUser: RedisGameUser? = null,
-        targetUser: RedisGameUser? = null,
+        sourceObject: WithId? = null,
+        targetObject: WithId? = null,
         location: Location? = null,
         timeLeft: Long? = null
     ) {
@@ -35,8 +36,8 @@ class TimeEventHandler(
             gameId = game.gameId!!,
             eventType = eventType,
             startDateTime = game.globalTimer,
-            sourceUser = sourceUser,
-            targetUserId = targetUser,
+            sourceObject = sourceObject,
+            targetObject = targetObject,
             location = location,
             timeLeft = timeLeft
         )
@@ -56,8 +57,8 @@ class TimeEventHandler(
             gameId = game.id!!,
             eventType = eventType,
             startDateTime = startDateTime,
-            sourceUser = sourceUser,
-            targetUserId = targetUser,
+            sourceObject = sourceUser,
+            targetObject = targetUser,
             location = location,
             timeLeft = timeLeft
         )
@@ -68,8 +69,8 @@ class TimeEventHandler(
         gameId: Long,
         eventType: RedisTimeEventType,
         startDateTime: Long,
-        sourceUser: RedisGameUser? = null,
-        targetUserId: RedisGameUser? = null,
+        sourceObject: WithId? = null,
+        targetObject: WithId? = null,
         location: Location? = null,
         timeLeft: Long? = null
     ) {
@@ -77,8 +78,8 @@ class TimeEventHandler(
             gameId = gameId,
             eventType = eventType,
             startDateTime = startDateTime,
-            sourceUserId = sourceUser?.userId,
-            targetUserId = targetUserId?.userId,
+            sourceObjectId = sourceObject?.inGameId(),
+            targetObjectId = targetObject?.inGameId(),
             location = location,
             timeLeft = timeLeft
         )
@@ -89,8 +90,8 @@ class TimeEventHandler(
         gameId: Long,
         eventType: RedisTimeEventType,
         startDateTime: Long,
-        sourceUserId: Long? = null,
-        targetUserId: Long? = null,
+        sourceObjectId: Long? = null,
+        targetObjectId: Long? = null,
         location: Location? = null,
         timeLeft: Long? = null
     ) {
@@ -100,8 +101,8 @@ class TimeEventHandler(
             timeStart = startDateTime,
             timePast = 0L,
             timeLeft = timeLeft ?: eventType.getDefaultTime(),
-            sourceUserId = sourceUserId,
-            targetUserId = targetUserId,
+            sourceObjectId = sourceObjectId,
+            targetObjectId = targetObjectId,
             type = eventType,
             state = RedisTimeEventState.ACTIVE,
             xLocation = location?.x,

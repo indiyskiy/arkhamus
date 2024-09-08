@@ -2,11 +2,14 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisDoorRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
+import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -121,6 +124,19 @@ class UserVoteHandler(
     ): Int {
         val allUsersCanVoteList = usersCanPossiblyVote(allUsers, voteSpot)
         return votesToBan(allUsersCanVoteList.size)
+    }
+
+    fun getCanCallForVote(
+        voteSpot: RedisVoteSpot?,
+        ongoingEvents: List<OngoingEvent>,
+        user: RedisGameUser
+    ): Boolean = voteSpot != null &&
+            callForVoteEventInProgress(ongoingEvents) &&
+            user.callToArms > 0
+
+    private fun callForVoteEventInProgress(ongoingEvents: List<OngoingEvent>): Boolean = !ongoingEvents.any {
+        it.event.type == RedisTimeEventType.CALL_TO_BAN_VOTE &&
+                it.event.state == RedisTimeEventState.ACTIVE
     }
 
     private fun votesToBan(size: Int): Int = (size / 2) + 1

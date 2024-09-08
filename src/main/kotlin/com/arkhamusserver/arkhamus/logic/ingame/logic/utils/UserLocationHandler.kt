@@ -33,7 +33,9 @@ class UserLocationHandler(
         whoLooks: RedisGameUser,
         target: WithPoint,
         levelGeometryData: LevelGeometryData
-    ): Boolean = (!geometryAffectsVision || zonesHandler.inSameZoneOrNotInZone(whoLooks, target, levelGeometryData))
+        //TODO implement true geometry handler
+//    ): Boolean = (!geometryAffectsVision || zonesHandler.inSameZoneOrNotInZone(whoLooks, target, levelGeometryData))
+    ): Boolean = (!geometryAffectsVision || true)
 
     fun inVisionDistance(
         whoLooks: RedisGameUser,

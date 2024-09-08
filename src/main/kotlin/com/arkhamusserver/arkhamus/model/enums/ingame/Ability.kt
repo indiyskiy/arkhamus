@@ -31,6 +31,13 @@ enum class Ability(
         cooldown = MINUTE_IN_MILLIS / 2
     ),
 
+    TOWN_PORTAL_BY_SCROLL(
+        id = 1102,
+        cooldown = MINUTE_IN_MILLIS * 5,
+        requiresItem = true,
+        consumesItem = true,
+    ),
+
     //cultist ability 2***
     FARSIGHT(
         id = 2001,

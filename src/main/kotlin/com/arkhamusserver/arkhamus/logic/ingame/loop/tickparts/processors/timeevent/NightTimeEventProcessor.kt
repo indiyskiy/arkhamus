@@ -61,7 +61,7 @@ class NightTimeEventProcessor(
             gameId,
             RedisTimeEventType.DAY,
             currentGameTime,
-            sourceUser = null
+            sourceObject = null
         )
     }
 

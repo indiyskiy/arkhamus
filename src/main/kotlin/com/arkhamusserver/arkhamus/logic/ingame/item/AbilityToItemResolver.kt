@@ -13,6 +13,8 @@ class AbilityToItemResolver {
             null
         } else {
             when (ability) {
+                //useful items
+                TOWN_PORTAL_BY_SCROLL -> TOWN_PORTAL_SCROLL
                 //cultist items
                 THROW_POTATO -> CURSED_POTATO
                 SUMMON_NIGHT -> MOON_STONE

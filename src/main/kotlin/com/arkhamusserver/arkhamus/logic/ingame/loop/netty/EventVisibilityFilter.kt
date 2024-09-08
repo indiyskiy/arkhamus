@@ -14,9 +14,9 @@ class EventVisibilityFilter {
                 PUBLIC -> true
                 CULTIST_VISIBILITY -> user.role == CULTIST
                 NONE -> false
-                SOURCE -> it.event.sourceUserId == user.userId
-                TARGET -> it.event.targetUserId == user.userId
-                SOURCE_AND_TARGET -> it.event.sourceUserId == user.userId || it.event.targetUserId == user.userId
+                SOURCE -> it.event.sourceObjectId == user.userId
+                TARGET -> it.event.targetObjectId == user.userId
+                SOURCE_AND_TARGET -> it.event.sourceObjectId == user.userId || it.event.targetObjectId == user.userId
             }
         }
 

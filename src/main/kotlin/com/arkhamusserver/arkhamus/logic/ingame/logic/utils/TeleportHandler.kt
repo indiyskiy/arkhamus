@@ -23,8 +23,8 @@ class TeleportHandler(
             timeEventHandler.createEvent(
                 game = game,
                 eventType = RedisTimeEventType.TELEPORTATION_STUN,
-                sourceUser = null,
-                targetUser = user,
+                sourceObject = null,
+                targetObject = user,
                 location = Location(user.x, user.y, user.z),
                 timeLeft = RedisTimeEventType.TELEPORTATION_STUN.getDefaultTime()
             )

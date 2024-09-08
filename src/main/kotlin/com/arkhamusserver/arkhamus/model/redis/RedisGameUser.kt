@@ -27,7 +27,7 @@ data class RedisGameUser(
     var sawTheEndOfTimes: Boolean = false,
     var connected: Boolean,
     var leftTheGame: Boolean = false,
-)  : WithPoint {
+)  : WithPoint, WithId {
 
     override fun x(): Double {
         return x
@@ -39,5 +39,9 @@ data class RedisGameUser(
 
     override fun z(): Double {
         return z
+    }
+
+    override fun inGameId():Long {
+        return userId
     }
 }

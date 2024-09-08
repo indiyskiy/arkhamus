@@ -102,7 +102,7 @@ class GodVoteStartRequestProcessor(
             gameId = gameId,
             eventType = RedisTimeEventType.ALTAR_VOTING,
             startDateTime = globalTimer,
-            sourceUserId = sourceUserId,
+            sourceObjectId = sourceUserId,
             location = Location(altar.x, altar.y, altar.z),
         )
     }

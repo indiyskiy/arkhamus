@@ -95,8 +95,8 @@ class GeometryUtils {
                 b.x * (c.y - a.y) +
                 c.x * (a.y - b.y)
 
-    fun nearestPoint(point: WithPoint, points: List<WithPoint>?):WithPoint? {
-        if(points == null || points.isEmpty()) return null
+    fun <T : WithPoint> nearestPoint(point: WithPoint, points: List<T>?): T? {
+        if (points == null || points.isEmpty()) return null
         return points.minByOrNull { distance(it, point) }
     }
 
