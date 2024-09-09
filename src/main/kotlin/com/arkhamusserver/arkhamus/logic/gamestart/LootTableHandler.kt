@@ -97,13 +97,13 @@ class LootTableHandler {
     private fun rawByContainerTag(tag: ContainerTag): List<LootRaw>? {
         return when (tag) {
             SCIENCE -> listOf(
-                LootRaw(HIGGS_BOSON, 1, 5),
+                LootRaw(HIGGS_BOSON, 10, 5),
                 LootRaw(SCIENTIFIC_GIZMO, 1, 1)
             )
 
             MAGIC -> listOf(
-                LootRaw(SAINT_QUARTZ, 1, 5),
-                LootRaw(ELDER_SIGN, 1, 5),
+                LootRaw(SAINT_QUARTZ, 10, 5),
+                LootRaw(ELDER_SIGN, 10, 5),
                 LootRaw(BOOK, 1, 1)
             )
 
@@ -112,7 +112,7 @@ class LootTableHandler {
                 LootRaw(BLIGHTING_JEWEL, 1, 5),
             )
             POOR -> listOf(
-                LootRaw(RAGS, 1, 5)
+                LootRaw(RAGS, 10, 5)
             )
         }
     }
