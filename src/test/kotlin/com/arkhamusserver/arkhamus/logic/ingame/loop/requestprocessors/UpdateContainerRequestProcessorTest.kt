@@ -67,8 +67,8 @@ class UpdateContainerRequestProcessorTest {
         assertNull(resultUser[Item.HIGGS_BOSON.id])
         assertEquals(5, resultContainer[Item.HIGGS_BOSON.id])
 
-        assertNull(resultUser[Item.INNSMOUTH_WATER.id])
-        assertEquals(5, resultContainer[Item.INNSMOUTH_WATER.id])
+        assertNull(resultUser[Item.RAGS.id])
+        assertEquals(5, resultContainer[Item.RAGS.id])
     }
 
     @Test
@@ -79,7 +79,7 @@ class UpdateContainerRequestProcessorTest {
             InventoryCell(Item.ELDER_SIGN.id, 10),
             InventoryCell(Item.CORRUPTED_TOPAZ.id, 10),
             InventoryCell(Item.HIGGS_BOSON.id, 5),
-            InventoryCell(Item.INNSMOUTH_WATER.id, 5),
+            InventoryCell(Item.RAGS.id, 5),
         )
 
         val (data, _) = executeRequest(newInventoryContent)
@@ -102,8 +102,8 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(5, resultUser[Item.HIGGS_BOSON.id])
         assertNull(resultContainer[Item.HIGGS_BOSON.id])
 
-        assertEquals(5, resultUser[Item.INNSMOUTH_WATER.id])
-        assertNull(resultContainer[Item.INNSMOUTH_WATER.id])
+        assertEquals(5, resultUser[Item.RAGS.id])
+        assertNull(resultContainer[Item.RAGS.id])
     }
 
     @Test
@@ -114,7 +114,7 @@ class UpdateContainerRequestProcessorTest {
             InventoryCell(Item.ELDER_SIGN.id, 3),
             InventoryCell(Item.CORRUPTED_TOPAZ.id, 10),
             InventoryCell(Item.HIGGS_BOSON.id, 3),
-            InventoryCell(Item.INNSMOUTH_WATER.id, 3),
+            InventoryCell(Item.RAGS.id, 3),
         )
 
         val (data, _) = executeRequest(newInventoryContent)
@@ -137,8 +137,8 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(3, resultUser[Item.HIGGS_BOSON.id])
         assertEquals(2, resultContainer[Item.HIGGS_BOSON.id])
 
-        assertEquals(3, resultUser[Item.INNSMOUTH_WATER.id])
-        assertEquals(2, resultContainer[Item.INNSMOUTH_WATER.id])
+        assertEquals(3, resultUser[Item.RAGS.id])
+        assertEquals(2, resultContainer[Item.RAGS.id])
     }
 
     @Test
@@ -206,8 +206,8 @@ class UpdateContainerRequestProcessorTest {
         assertNull(resultUser[Item.HIGGS_BOSON.id])
         assertEquals(5, resultContainer[Item.HIGGS_BOSON.id])
 
-        assertNull(resultUser[Item.INNSMOUTH_WATER.id])
-        assertEquals(5, resultContainer[Item.INNSMOUTH_WATER.id])
+        assertNull(resultUser[Item.RAGS.id])
+        assertEquals(5, resultContainer[Item.RAGS.id])
 
         val updateContainerRequestGameData = requestContainer.requestProcessData as UpdateContainerRequestGameData
 
@@ -257,8 +257,8 @@ class UpdateContainerRequestProcessorTest {
         assertNull(resultUser[Item.HIGGS_BOSON.id])
         assertEquals(5, resultContainer[Item.HIGGS_BOSON.id])
 
-        assertNull(resultUser[Item.INNSMOUTH_WATER.id])
-        assertEquals(5, resultContainer[Item.INNSMOUTH_WATER.id])
+        assertNull(resultUser[Item.RAGS.id])
+        assertEquals(5, resultContainer[Item.RAGS.id])
 
         val updateContainerRequestGameData = requestContainer.requestProcessData as UpdateContainerRequestGameData
 
@@ -525,7 +525,7 @@ class UpdateContainerRequestProcessorTest {
             Item.CRYSTALLIZED_BLOOD.id to 5,
             Item.ELDER_SIGN.id to 5,
             Item.CORRUPTED_TOPAZ.id to 5,
-            Item.INNSMOUTH_WATER.id to 5,
+            Item.RAGS.id to 5,
         )
     }
 

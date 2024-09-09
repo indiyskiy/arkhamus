@@ -107,8 +107,13 @@ class LootTableHandler {
                 LootRaw(BOOK, 1, 1)
             )
 
-            RICH -> null
-            POOR -> null
+            RICH -> listOf(
+                LootRaw(CORRUPTED_TOPAZ, 1, 5),
+                LootRaw(BLIGHTING_JEWEL, 1, 5),
+            )
+            POOR -> listOf(
+                LootRaw(RAGS, 1, 5)
+            )
         }
     }
 

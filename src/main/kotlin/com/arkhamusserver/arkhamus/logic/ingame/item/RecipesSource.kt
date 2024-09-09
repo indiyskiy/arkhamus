@@ -26,7 +26,7 @@ class RecipesSource {
             listOf(
                 Ingredient(SCYTHE, 1),
 //                Ingredient(BLIGHTING_JEWEL, 5),
-                Ingredient(INNSMOUTH_WATER, 5)
+                Ingredient(RAGS, 5)
             ).toRecipe(
                 5001,
                 item = INSCRIPTION_INVESTIGATION_ITEM,
