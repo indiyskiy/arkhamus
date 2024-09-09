@@ -59,7 +59,7 @@ class QuestRewardTypeUtils {
     ): Boolean {
         return when (role) {
             CULTIST -> type in setOf(ITEM, REMOVE_CLUE)
-            INVESTIGATOR -> type in setOf(ITEM, REMOVE_CLUE)
+            INVESTIGATOR -> type in setOf(ITEM, ADD_CLUE)
             NEUTRAL -> true
         }
     }
@@ -69,10 +69,6 @@ class QuestRewardTypeUtils {
         classInGame: ClassInGame
     ): Boolean {
         return when (classInGame) {
-            ClassInGame.MIND_HEALER -> {
-                type in setOf(ITEM, ADD_CLUE, REMOVE_CLUE)
-            }
-
             else -> {
                 type in setOf(ITEM, ADD_CLUE, REMOVE_CLUE)
             }
