@@ -14,10 +14,11 @@ class AbilityCastHandler(
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
-    ) {
-        abilityCasts
+    ): Boolean {
+        val casted = abilityCasts
             .first { it.accept(ability) }
             .cast(ability, abilityRequestProcessData, globalGameData)
+        return casted
     }
 
 }

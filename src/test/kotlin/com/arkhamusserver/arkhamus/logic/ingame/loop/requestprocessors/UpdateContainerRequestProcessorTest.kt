@@ -64,8 +64,8 @@ class UpdateContainerRequestProcessorTest {
         assertNull(resultUser[Item.CORRUPTED_TOPAZ.id])
         assertEquals(10, resultContainer[Item.CORRUPTED_TOPAZ.id])
 
-        assertNull(resultUser[Item.CLOUDY_FLASK.id])
-        assertEquals(5, resultContainer[Item.CLOUDY_FLASK.id])
+        assertNull(resultUser[Item.HIGGS_BOSON.id])
+        assertEquals(5, resultContainer[Item.HIGGS_BOSON.id])
 
         assertNull(resultUser[Item.INNSMOUTH_WATER.id])
         assertEquals(5, resultContainer[Item.INNSMOUTH_WATER.id])
@@ -78,7 +78,7 @@ class UpdateContainerRequestProcessorTest {
             InventoryCell(Item.CRYSTALLIZED_BLOOD.id, 10),
             InventoryCell(Item.ELDER_SIGN.id, 10),
             InventoryCell(Item.CORRUPTED_TOPAZ.id, 10),
-            InventoryCell(Item.CLOUDY_FLASK.id, 5),
+            InventoryCell(Item.HIGGS_BOSON.id, 5),
             InventoryCell(Item.INNSMOUTH_WATER.id, 5),
         )
 
@@ -99,8 +99,8 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(10, resultUser[Item.CORRUPTED_TOPAZ.id])
         assertNull(resultContainer[Item.CORRUPTED_TOPAZ.id])
 
-        assertEquals(5, resultUser[Item.CLOUDY_FLASK.id])
-        assertNull(resultContainer[Item.CLOUDY_FLASK.id])
+        assertEquals(5, resultUser[Item.HIGGS_BOSON.id])
+        assertNull(resultContainer[Item.HIGGS_BOSON.id])
 
         assertEquals(5, resultUser[Item.INNSMOUTH_WATER.id])
         assertNull(resultContainer[Item.INNSMOUTH_WATER.id])
@@ -113,7 +113,7 @@ class UpdateContainerRequestProcessorTest {
             InventoryCell(Item.CRYSTALLIZED_BLOOD.id, 0),
             InventoryCell(Item.ELDER_SIGN.id, 3),
             InventoryCell(Item.CORRUPTED_TOPAZ.id, 10),
-            InventoryCell(Item.CLOUDY_FLASK.id, 3),
+            InventoryCell(Item.HIGGS_BOSON.id, 3),
             InventoryCell(Item.INNSMOUTH_WATER.id, 3),
         )
 
@@ -134,8 +134,8 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(10, resultUser[Item.CORRUPTED_TOPAZ.id])
         assertNull(resultContainer[Item.CORRUPTED_TOPAZ.id])
 
-        assertEquals(3, resultUser[Item.CLOUDY_FLASK.id])
-        assertEquals(2, resultContainer[Item.CLOUDY_FLASK.id])
+        assertEquals(3, resultUser[Item.HIGGS_BOSON.id])
+        assertEquals(2, resultContainer[Item.HIGGS_BOSON.id])
 
         assertEquals(3, resultUser[Item.INNSMOUTH_WATER.id])
         assertEquals(2, resultContainer[Item.INNSMOUTH_WATER.id])
@@ -203,8 +203,8 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(10, resultUser[Item.CORRUPTED_TOPAZ.id])
         assertNull(resultContainer[Item.CORRUPTED_TOPAZ.id])
 
-        assertNull(resultUser[Item.CLOUDY_FLASK.id])
-        assertEquals(5, resultContainer[Item.CLOUDY_FLASK.id])
+        assertNull(resultUser[Item.HIGGS_BOSON.id])
+        assertEquals(5, resultContainer[Item.HIGGS_BOSON.id])
 
         assertNull(resultUser[Item.INNSMOUTH_WATER.id])
         assertEquals(5, resultContainer[Item.INNSMOUTH_WATER.id])
@@ -254,8 +254,8 @@ class UpdateContainerRequestProcessorTest {
         assertEquals(10, resultUser[Item.CORRUPTED_TOPAZ.id])
         assertNull(resultContainer[Item.CORRUPTED_TOPAZ.id])
 
-        assertNull(resultUser[Item.CLOUDY_FLASK.id])
-        assertEquals(5, resultContainer[Item.CLOUDY_FLASK.id])
+        assertNull(resultUser[Item.HIGGS_BOSON.id])
+        assertEquals(5, resultContainer[Item.HIGGS_BOSON.id])
 
         assertNull(resultUser[Item.INNSMOUTH_WATER.id])
         assertEquals(5, resultContainer[Item.INNSMOUTH_WATER.id])
@@ -515,7 +515,7 @@ class UpdateContainerRequestProcessorTest {
             Item.CRYSTALLIZED_BLOOD.id to 5,
             Item.ELDER_SIGN.id to 5,
             Item.CORRUPTED_TOPAZ.id to 5,
-            Item.CLOUDY_FLASK.id to 5,
+            Item.HIGGS_BOSON.id to 5,
         )
     }
 

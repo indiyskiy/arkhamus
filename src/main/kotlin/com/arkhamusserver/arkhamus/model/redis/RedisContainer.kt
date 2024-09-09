@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.model.redis
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
@@ -16,7 +15,7 @@ data class RedisContainer(
     var x: Double,
     var y: Double,
     var z: Double,
-    var containerTags: MutableList<ContainerTag>,
+    var containerTags: MutableList<String> = mutableListOf(),
     var interactionRadius: Double = 0.0,
     var items: MutableMap<Int, Int> = HashMap(),
 )  : WithPoint {

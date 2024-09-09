@@ -4,8 +4,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerReposito
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.ContainerRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.Container
-import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerAffectModifiers
-import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerAffectModifiers.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.*
@@ -21,6 +20,7 @@ import kotlin.random.Random
 class GameStartContainerLogic(
     private val redisContainerRepository: RedisContainerRepository,
     private val containerRepository: ContainerRepository,
+    private val lootTableHandler: LootTableHandler
 ) {
 
     companion object {
@@ -34,89 +34,59 @@ class GameStartContainerLogic(
     ) {
         val allLevelContainers = containerRepository.findByLevelId(levelId)
         allLevelContainers.forEachIndexed { i, dbContainer ->
-            val modifiers = listOf(
-                when (i % 9) {
-                    0 -> LOOT_RANDOM
-                    1 -> RARE_LOOT_RANDOM
-                    2 -> CULTIST_LOOT_RANDOM
-                    3 -> CRAFT_T2_RANDOM
-                    4 -> INVESTIGATION_RANDOM
-                    5 -> USEFUL_ITEM_RANDOM
-                    6 -> CULTIST_ITEM_RANDOM
-                    7 -> ADVANCED_USEFUL_ITEM_RANDOM
-                    8 -> ADVANCED_CULTIST_ITEM_RANDOM
-                    else -> FULL_RANDOM
-                }
-            )
-
-            with(createContainer(game, dbContainer, modifiers)) {
-                redisContainerRepository.save(this)
-                logger.info("set chest ${dbContainer.inGameId} to ${this.items.keys.joinToString { it.toString() }}")
-            }
+            createContainer(game, dbContainer)
         }
     }
 
     private fun createContainer(
-        game: GameSession, dbContainer: Container, modifiers: List<ContainerAffectModifiers>
+        game: GameSession, dbContainer: Container
     ) = RedisContainer(
         id = Generators.timeBasedEpochGenerator().generate().toString(),
         containerId = dbContainer.inGameId,
-        containerTags = dbContainer.containerTags.toMutableList(),
+        containerTags = dbContainer.containerTags.map { it.name }.toMutableList(),
         gameId = game.id!!,
         x = dbContainer.x,
         y = dbContainer.y,
         z = dbContainer.z,
         interactionRadius = dbContainer.interactionRadius,
     ).apply {
-        this.items = randomizeItems(modifiers)
+        this.items = randomizeItems(dbContainer)
+        redisContainerRepository.save(this)
     }
 
-    private fun randomizeItems(modifiers: List<ContainerAffectModifiers>): MutableMap<Int, Int> {
-        return when (modifiers.first()) {
-            FULL_RANDOM -> {
-                fullRandom()
-            }
+    private fun randomizeItems(
+        dbContainer: Container
+    ): MutableMap<Int, Int> {
+        return if (!dbContainer.containerTags.isEmpty()) {
+            randomItems(dbContainer.containerTags)
+        } else {
+            godModChest(dbContainer)
+        }
+    }
 
-            GOD_MODE_CHEST -> {
-                godMode()
-            }
+    private fun randomItems(
+        containerTags: Set<ContainerTag>
+    ): MutableMap<Int, Int> {
+        return lootTableHandler.generateLoot(containerTags)
+    }
 
-            LOOT_RANDOM -> mapOfType(LOOT)
-            RARE_LOOT_RANDOM -> mapOfType(RARE_LOOT)
-            CULTIST_LOOT_RANDOM -> mapOfType(CULTIST_LOOT)
-            CRAFT_T2_RANDOM -> mapOfType(CRAFT_T2)
-            INVESTIGATION_RANDOM -> mapOfType(INVESTIGATION)
-            USEFUL_ITEM_RANDOM -> mapOfType(USEFUL_ITEM)
-            CULTIST_ITEM_RANDOM -> mapOfType(CULTIST_ITEM)
-            ADVANCED_USEFUL_ITEM_RANDOM -> mapOfType(ADVANCED_USEFUL_ITEM)
-            ADVANCED_CULTIST_ITEM_RANDOM -> mapOfType(ADVANCED_CULTIST_ITEM)
+    private fun godModChest(dbContainer: Container): MutableMap<Int, Int> {
+        val num = (dbContainer.id ?: 0) % 9
+        return when (num) {
+            0L -> mapOfType(LOOT)
+            1L -> mapOfType(RARE_LOOT)
+            2L -> mapOfType(CULTIST_LOOT)
+            3L -> mapOfType(CRAFT_T2)
+            4L -> mapOfType(INVESTIGATION)
+            5L -> mapOfType(USEFUL_ITEM)
+            6L -> mapOfType(CULTIST_ITEM)
+            7L -> mapOfType(ADVANCED_USEFUL_ITEM)
+            8L -> mapOfType(ADVANCED_CULTIST_ITEM)
+            else -> mapOfType(TECH_TYPE)
         }
     }
 
     private fun mapOfType(type: ItemType) =
         Item.values().filter { it.itemType == type }.associate { it.id to 50 }.toMutableMap()
 
-    private fun godMode(): MutableMap<Int, Int> {
-        val items = Item.values().filter {
-            it.itemType in setOf(
-                LOOT,
-                RARE_LOOT,
-                CULTIST_LOOT,
-                CRAFT_T2,
-                INVESTIGATION,
-                USEFUL_ITEM,
-                CULTIST_ITEM,
-                ADVANCED_USEFUL_ITEM,
-                ADVANCED_CULTIST_ITEM
-            )
-        }
-        return items.associate { it.id to 99 }.toMutableMap()
-    }
-
-    private fun fullRandom(): MutableMap<Int, Int> {
-        val items = Item.values().filter {
-            it.itemType in setOf(LOOT, RARE_LOOT)
-        }.shuffled(random).subList(0, random.nextInt(3) + 1)
-        return items.associate { it.id to (random.nextInt(3) + 1) }.toMutableMap()
-    }
 }

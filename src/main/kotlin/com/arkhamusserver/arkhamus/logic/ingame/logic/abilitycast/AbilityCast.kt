@@ -10,5 +10,5 @@ interface AbilityCast {
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
-    )
+    ): Boolean
 }

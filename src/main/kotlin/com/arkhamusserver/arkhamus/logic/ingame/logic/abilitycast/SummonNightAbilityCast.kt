@@ -21,11 +21,12 @@ class SummonNightAbilityCast(
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
-    ) {
+    ): Boolean {
         createSummonedNightEvent(
             globalGameData.game,
             abilityRequestProcessData.gameUser!!
         )
+        return true
     }
 
     private fun createSummonedNightEvent(

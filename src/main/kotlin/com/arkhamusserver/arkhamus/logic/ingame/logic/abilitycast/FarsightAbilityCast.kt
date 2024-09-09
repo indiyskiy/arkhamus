@@ -21,8 +21,9 @@ class FarsightAbilityCast() : AbilityCast {
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
-    ) {
+    ): Boolean {
         farsight(abilityRequestProcessData)
+        return true
     }
 
     private fun farsight(

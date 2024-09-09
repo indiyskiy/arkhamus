@@ -7,13 +7,19 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Abili
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import com.arkhamusserver.arkhamus.model.redis.WithPoint
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class TownPortalByScrollAbilityCast(
     private val teleportHandler: TeleportHandler,
 ) : AbilityCast {
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(TownPortalByScrollAbilityCast::class.java)
+    }
 
     override fun accept(ability: Ability): Boolean {
         return ability == Ability.TOWN_PORTAL_BY_SCROLL
@@ -23,44 +29,52 @@ class TownPortalByScrollAbilityCast(
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
-    ) {
+    ): Boolean {
         portalToLastInterestPoint(globalGameData, abilityRequestProcessData)
+        return true
     }
 
     private fun portalToLastInterestPoint(
         globalGameData: GlobalGameData,
         abilityRequestProcessData: AbilityRequestProcessData,
-    ) {
-        val user = abilityRequestProcessData.gameUser
-        user?.let {
+    ) =
+        abilityRequestProcessData.gameUser?.let { userNotNull ->
+            val point = findLastInterestPoint(globalGameData)
+            logger.info("teleport user to ${point.x()}; ${point.y()}; ${point.z()}")
             teleportHandler.forceTeleport(
                 game = globalGameData.game,
-                user = it,
-                point = findLastInterestPoint(globalGameData)
+                user = userNotNull,
+                point = point
             )
         }
-    }
 
-    private fun findLastInterestPoint(data: GlobalGameData): WithPoint? {
-        if (data.timeEvents.any {
-                (it.type == RedisTimeEventType.ALTAR_VOTING ||
-                        it.type == RedisTimeEventType.RITUAL_GOING
-                        ) && it.state == RedisTimeEventState.ACTIVE
-            }
+    private fun findLastInterestPoint(data: GlobalGameData): WithPoint {
+        if (ritualGoing(data)
         ) {
-            return data.altarHolder
+            logger.info("teleport user to altarHolder")
+            return data.altarHolder!!
         }
-        val goingBanVoteCall = data.timeEvents.firstOrNull {
-            (it.type == RedisTimeEventType.CALL_FOR_BAN_VOTE
-                    ) && it.state == RedisTimeEventState.ACTIVE
-        }
+        val goingBanVoteCall = findCallForBan(data)
         if (goingBanVoteCall != null) {
+            logger.info("teleport user to goingBanVoteCall")
             return Location(
                 goingBanVoteCall.xLocation!!,
                 goingBanVoteCall.yLocation!!,
                 goingBanVoteCall.zLocation!!,
             )
         }
-        return data.altarHolder
+        logger.info("teleport user to altarHolder - 2")
+        return data.altarHolder!!
+    }
+
+    private fun findCallForBan(data: GlobalGameData): RedisTimeEvent? = data.timeEvents.firstOrNull {
+        (it.type == RedisTimeEventType.CALL_FOR_BAN_VOTE
+                ) && it.state == RedisTimeEventState.ACTIVE
+    }
+
+    private fun ritualGoing(data: GlobalGameData): Boolean = data.timeEvents.any {
+        (it.type == RedisTimeEventType.ALTAR_VOTING ||
+                it.type == RedisTimeEventType.RITUAL_GOING
+                ) && it.state == RedisTimeEventState.ACTIVE
     }
 }

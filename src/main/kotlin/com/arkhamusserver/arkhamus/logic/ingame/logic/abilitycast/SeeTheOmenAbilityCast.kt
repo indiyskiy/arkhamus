@@ -32,8 +32,9 @@ class SeeTheOmenAbilityCast(
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
-    ) {
+    ): Boolean{
         seeTheOmen(globalGameData, abilityRequestProcessData)
+        return true
     }
 
     private fun seeTheOmen(

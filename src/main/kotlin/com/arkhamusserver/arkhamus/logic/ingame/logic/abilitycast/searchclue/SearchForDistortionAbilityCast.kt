@@ -24,9 +24,10 @@ class SearchForDistortionAbilityCast : AbilityCast {
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
-    ) {
+    ): Boolean {
         logger.info("cast $ability")
         abilityRequestProcessData.gameUser?.stateTags?.add(UserStateTag.INVESTIGATING.name)
+        return true
     }
 
 }

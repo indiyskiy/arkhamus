@@ -28,8 +28,9 @@ class HealMadnessAbilityCast(
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
-    ) {
+    ): Boolean {
         healMadness(globalGameData, abilityRequestProcessData)
+        return true
     }
 
     private fun healMadness(

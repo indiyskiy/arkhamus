@@ -35,6 +35,7 @@ class SecurityConfiguration(
                     .requestMatchers(AntPathRequestMatcher("/js/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/images/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/fonts/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/img/**")).permitAll()
                     //admin part
                     .requestMatchers(AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                     .anyRequest().authenticated()

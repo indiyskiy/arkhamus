@@ -36,18 +36,20 @@ class AbilityRequestProcessor(
                         abilityRequestProcessData.fitAdditionalConditions &&
                         (abilityRequestProcessData.cooldown?.let { it <= 0 } ?: true)
             if (canBeCast) {
-                val item = abilityRequestProcessData.item
-                if (item != null && ability.consumesItem) {
-                    consumeItem(ability, abilityRequestProcessData, item)
+                val casted = abilityCastHandler.cast(ability, abilityRequestProcessData, globalGameData)
+                if (casted) {
+                    val item = abilityRequestProcessData.item
+                    if (item != null && ability.consumesItem) {
+                        consumeItem(ability, abilityRequestProcessData, item)
+                    }
+                    createCastAbility(
+                        ability,
+                        requestDataHolder.userAccount.id!!,
+                        requestDataHolder.gameSession!!.id!!,
+                        globalGameData.game.globalTimer
+                    )
+                    abilityRequestProcessData.executedSuccessfully = true
                 }
-                abilityCastHandler.cast(ability, abilityRequestProcessData, globalGameData)
-                createCastAbility(
-                    ability,
-                    requestDataHolder.userAccount.id!!,
-                    requestDataHolder.gameSession!!.id!!,
-                    globalGameData.game.globalTimer
-                )
-                abilityRequestProcessData.executedSuccessfully = true
             }
         }
     }

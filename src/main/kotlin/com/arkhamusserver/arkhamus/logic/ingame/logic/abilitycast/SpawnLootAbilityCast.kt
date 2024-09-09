@@ -29,8 +29,9 @@ class SpawnLootAbilityCast(
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
-    ) {
+    ): Boolean {
         spawnLoot(globalGameData, abilityRequestProcessData)
+        return true
     }
 
     private fun spawnLoot(

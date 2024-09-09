@@ -24,8 +24,9 @@ class ThrowPotatoAbilityCast(
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
-    ) {
+    ): Boolean {
         throwPotato(globalGameData, abilityRequestProcessData)
+        return true
     }
 
     private fun throwPotato(

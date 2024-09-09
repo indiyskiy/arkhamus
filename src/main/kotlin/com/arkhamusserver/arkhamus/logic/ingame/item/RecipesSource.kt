@@ -36,7 +36,7 @@ class RecipesSource {
             listOf(
                 Ingredient(BLACK_STONE, 1),
 //                Ingredient(INNSMOUTH_WATER, 5),
-                Ingredient(CLOUDY_FLASK, 5)
+                Ingredient(HIGGS_BOSON, 5)
             ).toRecipe(
                 5002,
                 item = SOUND_INVESTIGATION_ITEM,
@@ -96,7 +96,7 @@ class RecipesSource {
 //USEFUL_ITEM 6***
             listOf(
                 Ingredient(ELDER_SIGN, 1),
-                Ingredient(CLOUDY_FLASK, 1)
+                Ingredient(HIGGS_BOSON, 1)
             ).toRecipe(
                 6001,
                 item = VOTE_TOKEN,
