@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerTag
-import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerTag.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -19,34 +19,24 @@ class LootTableHandler {
 
     fun generateLoot(tags: Set<ContainerTag>): MutableMap<Int, Int> {
         val lootTable = createLootTable(tags)
-        val size = countSize(tags)
-        return lootByTable(size, lootTable)
+        return lootByTable(lootTable)
     }
 
-    private fun countSize(tags: Set<ContainerTag>): Int {
-        var size = 3
-        tags.forEach {
-            val multiplier: Double = when (it) {
-                RICH -> 1.5
-                POOR -> 0.5
-                else -> 1.0
-            }
-            size = (size * multiplier).roundToInt()
-        }
-        return size
-    }
 
     private fun lootByTable(
-        size: Int,
         table: LootTable,
     ): MutableMap<Int, Int> {
+        val size = random.nextDouble(table.size).roundToInt() + 1
         val totalWeight = table.lootRaws.sumOf { it.weight }
         if (totalWeight < 1 || size < 1) return mutableMapOf()
-        return (1..size).map {
+        val map = (1..size).map {
             randomWithWeight(totalWeight, table)
         }.filter { it.second > 0 && it.first > 0 }
-            .toMap()
-            .toMutableMap()
+            .groupBy { it.first }
+            .map { pair ->
+                pair.key to pair.value.sumOf { it.second }
+            }
+        return map.toMap().toMutableMap()
     }
 
     private fun randomWithWeight(
@@ -58,63 +48,133 @@ class LootTableHandler {
         table.lootRaws.forEach { raw ->
             cumulativeWeight += raw.weight
             if (randomValue < cumulativeWeight) {
-                return raw.item.id to (random.nextInt(raw.weightSize) + 1)
+                return raw.item.id to (random.nextDouble(raw.weightSize).roundToInt() + 1)
             }
         }
         return 0 to 0
     }
 
     private fun createLootTable(tags: Set<ContainerTag>): LootTable {
-        val lootRaws: List<LootRaw> = tags.mapNotNull {
-            rawByContainerTag(it)
-        }.flatten().filter { it.weight > 0 && it.weightSize > 0 }
-        lootRaws.forEach { lootRaw ->
-            tags.forEach { tag ->
-                affectRawByTag(lootRaw, tag)
-            }
+        val defaultLootTable = defaultLootTable()
+        tags.forEach {
+            val multiplierLootTable = multiplierLootTable(it)
+            multiply(defaultLootTable, multiplierLootTable)
         }
-        val lootTable = LootTable(lootRaws)
-        return lootTable
+        defaultLootTable.lootRaws = filterRaws(defaultLootTable.lootRaws)
+        return defaultLootTable
     }
 
-    private fun affectRawByTag(
-        raw: LootRaw,
-        tag: ContainerTag
-    ) {
-        when (tag) {
-            SCIENCE -> {}
-            MAGIC -> {}
-            RICH -> {
-                raw.weightSize = (raw.weightSize * 1.5).roundToInt()
-            }
+    private fun filterRaws(raws: List<LootRaw>): List<LootRaw> =
+        raws.filter {
+            it.weight > 0 &&
+                    it.weightSize > 0.5 &&
+                    it.item.itemType != ItemType.TECH_TYPE
+        }
 
-            POOR -> {
-                raw.weightSize = (raw.weightSize / 1.5).roundToInt()
+    private fun multiply(target: LootTable, multiplier: LootTable): List<LootRaw> {
+        target.size = target.size * multiplier.size
+        target.lootRaws.forEach { raw ->
+            val multiplierRaw = multiplier.lootRaws.firstOrNull { it.item == raw.item }
+            if (multiplierRaw != null) {
+                raw.weight = raw.weight * multiplierRaw.weight
+                raw.weightSize = raw.weightSize * multiplierRaw.weightSize
             }
         }
+        return target.lootRaws
     }
 
-    private fun rawByContainerTag(tag: ContainerTag): List<LootRaw>? {
+    private fun multiplierLootTable(tag: ContainerTag): LootTable {
         return when (tag) {
-            SCIENCE -> listOf(
-                LootRaw(HIGGS_BOSON, 10, 5),
-                LootRaw(SCIENTIFIC_GIZMO, 1, 1)
-            )
-
-            MAGIC -> listOf(
-                LootRaw(SAINT_QUARTZ, 10, 5),
-                LootRaw(ELDER_SIGN, 10, 5),
-                LootRaw(BOOK, 1, 1)
-            )
-
-            RICH -> listOf(
-                LootRaw(CORRUPTED_TOPAZ, 1, 5),
-                LootRaw(BLIGHTING_JEWEL, 1, 5),
-            )
-            POOR -> listOf(
-                LootRaw(RAGS, 10, 5)
-            )
+            ContainerTag.MAGIC -> magicLootTable()
+            ContainerTag.SCIENCE -> scienceLootTable()
+            ContainerTag.FANCY -> fancyLootTable()
+            ContainerTag.ROUGH -> roughLootTable()
+            ContainerTag.ABUNDANT -> abundantLootTable()
+            ContainerTag.SCARCE -> scarceLootTable()
         }
+    }
+
+    private fun roughLootTable(): LootTable {
+        val defaultLootRaws: List<LootRaw> = Item.values().map {
+            when (it.itemType) {
+                ItemType.LOOT -> LootRaw(it, 10, 1.0)
+                ItemType.RARE_LOOT -> LootRaw(it, 1, 1.0)
+                ItemType.CULTIST_LOOT -> LootRaw(it, 10, 1.0)
+                ItemType.CRAFT_T2 -> LootRaw(it, 1, 1.0)
+                ItemType.USEFUL_ITEM -> LootRaw(it, 1, 1.0)
+                ItemType.CULTIST_ITEM -> LootRaw(it, 1, 1.0)
+                ItemType.ADVANCED_USEFUL_ITEM -> LootRaw(it, 1, 1.0)
+                ItemType.ADVANCED_CULTIST_ITEM -> LootRaw(it, 1, 1.0)
+                else -> LootRaw(Item.PURE_NOTHING, 0, 0.0)
+            }
+        }
+        return LootTable(1.0, defaultLootRaws)
+    }
+
+    private fun abundantLootTable(): LootTable {
+        val defaultLootRaws: List<LootRaw> = Item.values().map {
+            LootRaw(it, 1, 2.0)
+        }
+        return LootTable(1.5, defaultLootRaws)
+    }
+
+    private fun scarceLootTable(): LootTable {
+        val defaultLootRaws: List<LootRaw> = Item.values().map {
+            LootRaw(it, 1, 0.5)
+        }
+        return LootTable(0.7, defaultLootRaws)
+    }
+
+    private fun fancyLootTable(): LootTable {
+        val defaultLootRaws: List<LootRaw> = Item.values().map {
+            when (it.itemType) {
+                ItemType.LOOT -> LootRaw(it, 1, 1.0)
+                ItemType.RARE_LOOT -> LootRaw(it, 10, 1.0)
+                ItemType.CULTIST_LOOT -> LootRaw(it, 1, 1.0)
+                ItemType.CRAFT_T2 -> LootRaw(it, 10, 1.0)
+                ItemType.USEFUL_ITEM -> LootRaw(it, 10, 1.0)
+                ItemType.CULTIST_ITEM -> LootRaw(it, 10, 1.0)
+                ItemType.ADVANCED_USEFUL_ITEM -> LootRaw(it, 10, 1.0)
+                ItemType.ADVANCED_CULTIST_ITEM -> LootRaw(it, 10, 1.0)
+                else -> LootRaw(Item.PURE_NOTHING, 0, 0.0)
+            }
+        }
+        return LootTable(1.0, defaultLootRaws)
+    }
+
+    private fun magicLootTable(): LootTable {
+        val defaultLootRaws: List<LootRaw> = listOf(
+            LootRaw(Item.SAINT_QUARTZ, 100, 1.0),
+            LootRaw(Item.ELDER_SIGN, 100, 1.0),
+            LootRaw(Item.BLACK_STONE, 100, 1.0),
+            LootRaw(Item.SOUL_STONE, 100, 1.0),
+        )
+        return LootTable(1.0, defaultLootRaws)
+    }
+
+    private fun scienceLootTable(): LootTable {
+        val defaultLootRaws: List<LootRaw> = listOf(
+            LootRaw(Item.HIGGS_BOSON, 100, 1.0),
+            LootRaw(Item.SCIENTIFIC_GIZMO, 100, 1.0),
+        )
+        return LootTable(1.0, defaultLootRaws)
+    }
+
+    private fun defaultLootTable(): LootTable {
+        val defaultLootRaws: List<LootRaw> = Item.values().map {
+            when (it.itemType) {
+                ItemType.LOOT -> LootRaw(it, 100, 5.0)
+                ItemType.RARE_LOOT -> LootRaw(it, 10, 1.0)
+                ItemType.CULTIST_LOOT -> LootRaw(it, 100, 5.0)
+                ItemType.CRAFT_T2 -> LootRaw(it, 10, 1.0)
+                ItemType.USEFUL_ITEM -> LootRaw(it, 10, 1.0)
+                ItemType.CULTIST_ITEM -> LootRaw(it, 10, 1.0)
+                ItemType.ADVANCED_USEFUL_ITEM -> LootRaw(it, 1, 1.0)
+                ItemType.ADVANCED_CULTIST_ITEM -> LootRaw(it, 1, 1.0)
+                else -> LootRaw(Item.PURE_NOTHING, 0, 0.0)
+            }
+        }
+        return LootTable(3.0, defaultLootRaws)
     }
 
 }

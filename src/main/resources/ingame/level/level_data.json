@@ -434,7 +434,7 @@
       {
         "containerTags": [
           "SCIENCE",
-          "POOR"
+          "ROUGH"
         ],
         "id": 809,
         "interactionRadius": 3.5,
@@ -446,7 +446,7 @@
       {
         "containerTags": [
           "MAGIC",
-          "RICH"
+          "FANCY"
         ],
         "id": 810,
         "interactionRadius": 3.5,
@@ -454,6 +454,19 @@
         "x": 96.2020034790039,
         "y": 2,
         "z": 20.1236991882324
+      },
+      {
+        "containerTags": [
+          "MAGIC",
+          "FANCY",
+          "ABUNDANT"
+        ],
+        "id": 817,
+        "interactionRadius": 3.5,
+        "name": "Cursed Gold Display",
+        "x": 75.1249008178711,
+        "y": 2,
+        "z": 1.8554699420929
       },
       {
         "containerTags": [
@@ -469,7 +482,7 @@
       {
         "containerTags": [
           "SCIENCE",
-          "RICH"
+          "FANCY"
         ],
         "id": 812,
         "interactionRadius": 3.5,
@@ -492,7 +505,7 @@
       {
         "containerTags": [
           "MAGIC",
-          "POOR"
+          "ROUGH"
         ],
         "id": 814,
         "interactionRadius": 3.5,
@@ -503,7 +516,7 @@
       },
       {
         "containerTags": [
-          "RICH"
+          "FANCY"
         ],
         "id": 815,
         "interactionRadius": 3.5,
@@ -514,7 +527,8 @@
       },
       {
         "containerTags": [
-          "POOR"
+          "ROUGH",
+          "SCARCE"
         ],
         "id": 816,
         "interactionRadius": 3.5,
@@ -522,6 +536,17 @@
         "x": 37.0368995666504,
         "y": 0,
         "z": 84.8836975097656
+      },
+      {
+        "containerTags": [
+          "ROUGH"
+        ],
+        "id": 818,
+        "interactionRadius": 3.5,
+        "name": "Psst...",
+        "x": 60.3558006286621,
+        "y": 0,
+        "z": 99.734001159668
       }
     ],
     "crafters": [
