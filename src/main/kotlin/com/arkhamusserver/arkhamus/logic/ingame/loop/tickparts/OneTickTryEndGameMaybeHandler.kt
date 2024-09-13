@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.GameEndLogic
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool.Companion.MAX_TIME_NO_RESPONSES
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
@@ -46,7 +47,7 @@ class OneTickTryEndGameMaybeHandler(
 
     private fun abandonIfAllLeave(game: RedisGame, users: Collection<RedisGameUser>) {
         if (users.all { it.leftTheGame }) {
-            gameEndLogic.endTheGame(game, users.associateBy { it.userId }, GameEndReason.ABANDONED)
+            gameEndLogic.endTheGame(game, users.associateBy { it.userId }, GameEndReason.ABANDONED, timeLeft = GlobalGameSettings.MINUTE_IN_MILLIS)
         }
     }
 
