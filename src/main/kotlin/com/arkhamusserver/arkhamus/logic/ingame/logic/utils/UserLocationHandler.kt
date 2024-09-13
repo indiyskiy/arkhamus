@@ -14,7 +14,6 @@ const val USER_LUMINOUS_RADIUS = 5.0 //m
 @Component
 class UserLocationHandler(
     private val geometryUtils: GeometryUtils,
-    private val zonesHandler: ZonesHandler
 ) {
 
     fun userCanSeeTarget(
@@ -23,10 +22,22 @@ class UserLocationHandler(
         levelGeometryData: LevelGeometryData,
         geometryAffectsVision: Boolean = true,
     ): Boolean {
-        return whoLooks.stateTags.contains(UserStateTag.FARSIGHT.name) ||
+        return haveGlobalVision(whoLooks) || (
                 inVisionDistance(whoLooks, target) &&
-                geometryCheck(geometryAffectsVision, whoLooks, target, levelGeometryData)
+                        onHighGroundOrSameLevel(whoLooks, target) &&
+                        geometryCheck(geometryAffectsVision, whoLooks, target, levelGeometryData)
+                )
     }
+
+    private fun onHighGroundOrSameLevel(
+        whoLooks: RedisGameUser,
+        target: WithPoint
+    ): Boolean {
+        return geometryUtils.onHighGroundOrSameLevel(whoLooks, target)
+    }
+
+    private fun haveGlobalVision(whoLooks: RedisGameUser): Boolean =
+        whoLooks.stateTags.contains(UserStateTag.FARSIGHT.name)
 
     private fun geometryCheck(
         geometryAffectsVision: Boolean,
@@ -34,8 +45,8 @@ class UserLocationHandler(
         target: WithPoint,
         levelGeometryData: LevelGeometryData
         //TODO implement true geometry handler
-//    ): Boolean = (!geometryAffectsVision || zonesHandler.inSameZoneOrNotInZone(whoLooks, target, levelGeometryData))
-    ): Boolean = (!geometryAffectsVision || true)
+//    ): Boolean = (!geometryAffectsVision || some geometry check)
+    ): Boolean = true
 
     fun inVisionDistance(
         whoLooks: RedisGameUser,

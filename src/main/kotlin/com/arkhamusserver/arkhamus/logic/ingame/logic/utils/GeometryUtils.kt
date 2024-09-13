@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.WithPoint
 import org.springframework.stereotype.Component
 import java.awt.geom.Point2D
@@ -98,6 +99,13 @@ class GeometryUtils {
     fun <T : WithPoint> nearestPoint(point: WithPoint, points: List<T>?): T? {
         if (points == null || points.isEmpty()) return null
         return points.minByOrNull { distance(it, point) }
+    }
+
+    fun onHighGroundOrSameLevel(
+        whoLooks: RedisGameUser,
+        target: WithPoint
+    ): Boolean {
+        return whoLooks.y - target.y() >= -1
     }
 
     data class Point(var x: Double, var y: Double)
