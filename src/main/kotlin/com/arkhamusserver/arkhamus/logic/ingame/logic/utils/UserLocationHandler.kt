@@ -25,7 +25,7 @@ class UserLocationHandler(
         return haveGlobalVision(whoLooks) || (
                 inVisionDistance(whoLooks, target) &&
                         onHighGroundOrSameLevel(whoLooks, target) &&
-                        geometryCheck(geometryAffectsVision, whoLooks, target, levelGeometryData)
+                        geometryCheck()
                 )
     }
 
@@ -40,12 +40,7 @@ class UserLocationHandler(
         whoLooks.stateTags.contains(UserStateTag.FARSIGHT.name)
 
     private fun geometryCheck(
-        geometryAffectsVision: Boolean,
-        whoLooks: RedisGameUser,
-        target: WithPoint,
-        levelGeometryData: LevelGeometryData
         //TODO implement true geometry handler
-//    ): Boolean = (!geometryAffectsVision || some geometry check)
     ): Boolean = true
 
     fun inVisionDistance(
