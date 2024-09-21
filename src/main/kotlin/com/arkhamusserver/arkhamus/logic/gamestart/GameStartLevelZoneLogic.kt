@@ -26,13 +26,15 @@ class GameStartLevelZoneLogic(
 ) {
 
     @Transactional
-    fun createLevelZones(levelId: Long, game: GameSession) {
+    fun createLevelZones(levelId: Long, game: GameSession): List<RedisLevelZone> {
         val levelZones = levelZoneRepository.findByLevelId(levelId)
-        levelZones.forEach {
-            createRedisLevelZone(it, game)
+        val zones = levelZones.map {
+            val zone = createRedisLevelZone(it, game)
             createRedisTetragons(it, game)
             createRedisEllipses(it, game)
+            zone
         }
+        return zones
     }
 
     private fun createRedisTetragons(zone: LevelZone, game: GameSession) {
