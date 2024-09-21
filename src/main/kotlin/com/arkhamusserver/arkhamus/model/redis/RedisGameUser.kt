@@ -21,6 +21,7 @@ data class RedisGameUser(
     var madnessNotches: List<Double>,
     var items: MutableMap<Int, Int> = HashMap(),
     var stateTags: MutableSet<String> = mutableSetOf(),
+    var madnessDebuffs: MutableSet<String> = mutableSetOf(),
     var callToArms: Int,
     //tech
     var won: Boolean? = null,

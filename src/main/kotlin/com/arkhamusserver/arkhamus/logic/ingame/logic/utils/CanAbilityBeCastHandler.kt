@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
@@ -38,7 +39,7 @@ class CanAbilityBeCastHandler(
                     )
         }
         val fitAdditionalConditionsMap: Map<Ability, Boolean> = visibleAbilitiesList.associateWith { ability ->
-            fitAdditionalCondition(ability, user, globalGameData)
+            canBeCastedAtAll(ability, user, globalGameData)
         }
 
         val availableAbilities = visibleAbilitiesList.map {
@@ -56,13 +57,31 @@ class CanAbilityBeCastHandler(
         return availableAbilities
     }
 
-    fun fitAdditionalCondition(
+    fun canBeCastedAtAll(
         ability: Ability,
         user: RedisGameUser,
         globalGameData: GlobalGameData
     ) = additionalAbilityConditions.filter { it.accepts(ability) }.let { conditions ->
         conditions.isEmpty() || conditions.all {
-            it.fitCondition(ability, user, globalGameData)
+            it.canBeCastedAtAll(ability, user, globalGameData)
+        }
+    }
+
+    fun canBeCastedRightNow(
+        ability: Ability,
+        user: RedisGameUser,
+        targetId: String?,
+        targetType: GameObjectType?,
+        globalGameData: GlobalGameData
+    ) = additionalAbilityConditions.filter { it.accepts(ability) }.let { conditions ->
+        conditions.isEmpty() || conditions.all {
+            it.canBeCastedRightNow(
+                ability,
+                user,
+                targetId,
+                targetType,
+                globalGameData
+            )
         }
     }
 

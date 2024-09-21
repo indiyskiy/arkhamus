@@ -17,13 +17,15 @@ enum class Ability(
     val availableForRole: Set<RoleTypeInGame> = setOf(CULTIST, INVESTIGATOR, NEUTRAL),
     val cooldown: Long = MINIMUM_COOLDOWN,
     val active: Long? = null,
-    val globalCooldown: Boolean = false
+    val globalCooldown: Boolean = false,
+    val targetTypes: List<GameObjectType>? = null,
+    val range: Double? = null,
 ) {
     // investigator ability 1***
     HEAL_MADNESS(
         id = 1001,
         classBased = true,
-        cooldown = MINUTE_IN_MILLIS
+        cooldown = MINUTE_IN_MILLIS,
     ),
     SPAWN_LOOT(
         id = 1002,
@@ -58,7 +60,9 @@ enum class Ability(
         consumesItem = true,
         //available for everybody couse can ber re-thrown
         cooldown = SECOND_IN_MILLIS * 30,
-        globalCooldown = true
+        globalCooldown = true,
+        targetTypes = listOf(GameObjectType.CHARACTER),
+        range = 20.0
     ),
     SUMMON_NIGHT(
         id = 4002,

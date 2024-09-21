@@ -30,7 +30,9 @@ class AbilityDtoMaker(
             } else null,
             availableFor = value.availableForRole.toList(),
             cooldown = value.cooldown,
-            globalCooldown = value.globalCooldown
+            globalCooldown = value.globalCooldown,
+            targetTypes = value.targetTypes,
+            range = value.range,
         )
     }
 }

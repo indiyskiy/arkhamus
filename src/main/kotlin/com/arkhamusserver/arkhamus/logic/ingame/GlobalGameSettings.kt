@@ -16,6 +16,7 @@ class GlobalGameSettings {
 
         //DISTANCE
         const val GLOBAL_VISION_DISTANCE: Double = 10.0
+        const val HIGH_GROUND_HEIGHT: Double = -1.0
 
         //QUESTS
         const val QUESTS_ON_START = 5

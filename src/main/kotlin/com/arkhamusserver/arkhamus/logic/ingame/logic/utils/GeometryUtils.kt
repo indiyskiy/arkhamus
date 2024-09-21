@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.WithPoint
 import org.springframework.stereotype.Component
@@ -11,11 +12,12 @@ class GeometryUtils {
     fun distanceLessOrEquals(
         withPoint1: WithPoint,
         withPoint2: WithPoint,
-        maxDistance: Double
+        maxDistance: Double?
     ): Boolean {
-        return distanceLessOrEquals(withPoint1.x(), withPoint1.z(), withPoint2.x(), withPoint2.z(), maxDistance)
+        return maxDistance?.let {
+            distanceLessOrEquals(withPoint1.x(), withPoint1.z(), withPoint2.x(), withPoint2.z(), maxDistance)
+        } == true
     }
-
 
     fun distance(
         withPoint1: WithPoint,
@@ -105,7 +107,7 @@ class GeometryUtils {
         whoLooks: RedisGameUser,
         target: WithPoint
     ): Boolean {
-        return whoLooks.y - target.y() >= -1
+        return (whoLooks.y - target.y()) >= GlobalGameSettings.HIGH_GROUND_HEIGHT
     }
 
     data class Point(var x: Double, var y: Double)

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.ingame
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 
 data class AbilityDto(
@@ -13,4 +14,6 @@ data class AbilityDto(
     val availableFor: List<RoleTypeInGame>,
     val cooldown: Long?,
     val globalCooldown: Boolean,
+    val targetTypes:List<GameObjectType>?,
+    val range: Double?
 )

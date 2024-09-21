@@ -63,7 +63,13 @@ class AbilityNettyRequestHandler(
                     relatedAbilityCastHandler.findForUser(user, ability, globalGameData.castAbilities)
                 val requiredItem = abilityToItemResolver.resolve(it)
                 val canUserSeeAbility = canAbilityBeCastHandler.canUserSeeAbility(user, ability, requiredItem)
-                val canUserCastAbility = canAbilityBeCastHandler.fitAdditionalCondition(ability, user, globalGameData)
+                val canUserCastAbility = canAbilityBeCastHandler.canBeCastedRightNow(
+                    ability,
+                    user,
+                    this.targetId,
+                    this.targetType,
+                    globalGameData
+                )
                 buildAbilityGameData(
                     ability,
                     canUserSeeAbility,

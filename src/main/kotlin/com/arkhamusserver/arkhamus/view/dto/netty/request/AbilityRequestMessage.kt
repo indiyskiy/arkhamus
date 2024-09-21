@@ -1,7 +1,11 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.request
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
+
 class AbilityRequestMessage(
     var abilityId: Int,
+    var targetId: String?,
+    var targetType: GameObjectType?,
     var actionId: Long,
     type: String,
     baseRequestData: BaseRequestData
