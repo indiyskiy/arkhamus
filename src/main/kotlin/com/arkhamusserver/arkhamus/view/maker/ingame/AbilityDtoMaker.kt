@@ -32,7 +32,7 @@ class AbilityDtoMaker(
             cooldown = value.cooldown,
             globalCooldown = value.globalCooldown,
             targetTypes = value.targetTypes,
-            requiresTarget = value.targetTypes.isNullOrEmpty(),
+            requiresTarget = !value.targetTypes.isNullOrEmpty(),
             range = value.range,
         )
     }
