@@ -55,9 +55,9 @@ class QuestRewardAmountUtils {
     private fun rewardItemModifier(rewardItem: Item): Double {
         return when (rewardItem.itemType) {
             ItemType.LOOT -> 1.0
-            ItemType.RARE_LOOT -> 0.5
+            ItemType.RARE_LOOT -> 0.2
             ItemType.CULTIST_LOOT -> 0.7
-            ItemType.CRAFT_T2 -> 0.25
+            ItemType.CRAFT_T2 -> 0.2
             ItemType.INVESTIGATION -> 0.0
             ItemType.USEFUL_ITEM -> 0.0
             ItemType.CULTIST_ITEM -> 0.0
@@ -72,8 +72,8 @@ class QuestRewardAmountUtils {
             QuestDifficulty.VERY_EASY -> 0.25
             QuestDifficulty.EASY -> 0.5
             QuestDifficulty.NORMAL -> 1.0
-            QuestDifficulty.HARD -> 1.5
-            QuestDifficulty.VERY_HARD -> 2.0
+            QuestDifficulty.HARD -> 1.7
+            QuestDifficulty.VERY_HARD -> 2.4
         }
     }
 }

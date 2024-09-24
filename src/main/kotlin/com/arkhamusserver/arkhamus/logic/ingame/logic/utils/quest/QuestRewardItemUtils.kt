@@ -22,7 +22,6 @@ class QuestRewardItemUtils {
         quest: RedisQuest,
         user: RedisGameUser,
         rewardType: RewardType,
-        i: Int,
         previousRewards: List<RedisQuestReward>
     ): Item? {
         if (rewardType != RewardType.ITEM) {
@@ -32,27 +31,35 @@ class QuestRewardItemUtils {
             .filter { it.rewardType == RewardType.ITEM }
             .mapNotNull { it.rewardItem }
             .toSet()
-        val possibleSet = if (i > 0) {
-            if (i > 1) {
-                if (quest.difficulty in setOf(QuestDifficulty.VERY_EASY, QuestDifficulty.EASY)) {
-                    goodLoot(user.role)
-                } else {
-                    excellentLootTypes(user.role)
-                }
-            } else {
-                if (quest.difficulty in setOf(QuestDifficulty.VERY_EASY, QuestDifficulty.EASY)) {
-                    mediumLoot(user.role)
-                } else {
-                    goodLoot(user.role)
-                }
-            }
-        } else {
-            if (quest.difficulty in setOf(QuestDifficulty.VERY_EASY, QuestDifficulty.EASY)) {
-                simpleLoot(user.role)
-            } else {
-                mediumLoot(user.role)
-            }
+        val possibleSet = when (quest.difficulty) {
+            QuestDifficulty.VERY_EASY -> simpleLoot(user.role)
+            QuestDifficulty.EASY -> simpleLoot(user.role)
+            QuestDifficulty.NORMAL -> mediumLoot(user.role)
+            QuestDifficulty.HARD -> goodLoot(user.role)
+            QuestDifficulty.VERY_HARD -> excellentLootTypes(user.role)
         }
+        //option to suggest better loot for late slots
+//        val possibleSet = if (i > 0) {
+//            if (i > 1) {
+//                if (quest.difficulty in setOf(QuestDifficulty.VERY_EASY, QuestDifficulty.EASY)) {
+//                    goodLoot(user.role)
+//                } else {
+//                    excellentLootTypes(user.role)
+//                }
+//            } else {
+//                if (quest.difficulty in setOf(QuestDifficulty.VERY_EASY, QuestDifficulty.EASY)) {
+//                    mediumLoot(user.role)
+//                } else {
+//                    goodLoot(user.role)
+//                }
+//            }
+//        } else {
+//            if (quest.difficulty in setOf(QuestDifficulty.VERY_EASY, QuestDifficulty.EASY)) {
+//                simpleLoot(user.role)
+//            } else {
+//                mediumLoot(user.role)
+//            }
+//        }
         val type = possibleSet.random(random)
         val item = Item
             .values()
