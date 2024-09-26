@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
@@ -354,7 +355,7 @@ class GameThreadPoolTest {
             HeartbeatRequestMessage(
                 baseRequestData = BaseRequestData(
                     tick,
-                    UserPosition(0.0, 0.0)
+                    UserPosition(0.0, 0.0, 0.0)
                 ),
                 type = "test-type"
             ),
@@ -373,6 +374,7 @@ class GameThreadPoolTest {
                 crafters = emptyList(),
                 inZones = emptyList(),
                 clues = emptyList(),
+                userQuestProgresses = emptyList(),
                 tick = tick + 1
             ),
             lastExecutedAction = ExecutedAction(-1, true, "")
@@ -408,7 +410,7 @@ class GameThreadPoolTest {
                 userAccount = userAccount,
                 host = false,
                 roleInGame = RoleTypeInGame.CULTIST,
-                classInGame = ClassInGame.KING_IN_YELLOW_CULTIST,
+                classInGame = ClassInGame.ARISTOCRAT,
                 gameSession = gameSession
             )
         }
@@ -425,7 +427,17 @@ class GameThreadPoolTest {
                 gameId = gameSession.id!!,
                 madness = 0.0,
                 madnessNotches = listOf(100.0, 300.0, 600.0),
-                connected = true
+                connected = true,
+                x = 0.0,
+                y = 0.0,
+                z = 0.0,
+                items = mutableMapOf(),
+                stateTags = mutableSetOf(),
+                madnessDebuffs = mutableSetOf(),
+                callToArms = 0,
+                won = null,
+                sawTheEndOfTimes = false,
+                leftTheGame = false
             )
         }
 
@@ -442,6 +454,15 @@ class GameThreadPoolTest {
                 id = "altar holder",
                 gameId = redisGame.gameId!!,
                 altarHolderId = 0L,
+                x = 0.0,
+                y = 0.0,
+                z = 0.0,
+                radius =0.0,
+                lockedGodId = null,
+                itemsForRitual = mutableMapOf(),
+                itemsIdToAltarId = mutableMapOf(),
+                itemsOnAltars = mutableMapOf(),
+                state = MapAltarState.OPEN,
             ),
             users = redisGameUsers.associateBy { user -> user.userId },
         )

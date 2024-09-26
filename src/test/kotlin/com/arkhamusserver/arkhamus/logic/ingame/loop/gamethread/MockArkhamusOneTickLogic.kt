@@ -31,11 +31,9 @@ class MockArkhamusOneTickLogic(
             Thread.sleep(processingDelay)
         }
 
-        val currentTick = game.currentTick
         val globalGameData = redisDataAccess.loadGlobalGameData(game)
         game.currentTick++
         val responses = oneTickUserResponses.buildResponses(
-            currentTick,
             globalGameData,
             currentTasks
         )

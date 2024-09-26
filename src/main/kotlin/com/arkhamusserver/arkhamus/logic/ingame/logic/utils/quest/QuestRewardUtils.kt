@@ -95,7 +95,7 @@ class QuestRewardUtils(
         previousRewards: List<RedisQuestReward>
     ): RedisQuestReward {
         val rewardType = questRewardTypeUtils.chooseType(quest, user, i, previousRewards)
-        val rewardItem = questRewardItemUtils.chooseItem(quest, user, rewardType, i, previousRewards)
+        val rewardItem = questRewardItemUtils.chooseItem(quest, user, rewardType, previousRewards)
         val rewardAmount = questRewardAmountUtils.chooseAmount(quest, user, rewardType, rewardItem)
         return RedisQuestReward(
             id = Generators.timeBasedEpochGenerator().generate().toString(),
