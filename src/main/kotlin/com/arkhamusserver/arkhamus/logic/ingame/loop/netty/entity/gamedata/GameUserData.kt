@@ -23,7 +23,7 @@ open class GameUserData(
     var visibleItems: List<InventoryCell>,
     var containers: List<RedisContainer>,
     var crafters: List<RedisCrafter>,
-    tick: Long
+    tick: Long,
 ) : RequestProcessData(
-    tick = tick
+    tick = tick,
 )

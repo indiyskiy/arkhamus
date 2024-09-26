@@ -94,7 +94,7 @@ class QuestGiverOpenNettyRequestHandler(
 
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {
                 val rewards = globalGameData.questRewardsByQuestId[quest?.questId]?.filter { it.userId == userId }
-                questRewardUtils.findOrCreate(rewards, quest!!, user)
+                questRewardUtils.findOrCreate(rewards, quest!!, user, globalGameData.game.globalTimer)
             } else {
                 emptyList()
             }

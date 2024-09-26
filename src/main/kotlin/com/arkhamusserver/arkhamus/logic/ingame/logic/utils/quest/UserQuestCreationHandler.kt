@@ -59,7 +59,8 @@ class UserQuestCreationHandler(
     fun addQuests(
         data: GameUserData,
         levelQuests: List<RedisQuest>,
-        userQuestsProgresses: List<RedisUserQuestProgress>
+        userQuestsProgresses: List<RedisUserQuestProgress>,
+        currentGameTime: Long,
     ): List<RedisUserQuestProgress> {
         val questsToAdd = questsToAdd(userQuestsProgresses)
         logger.info("quests to add $questsToAdd")
@@ -68,21 +69,25 @@ class UserQuestCreationHandler(
             return addQuests(
                 data,
                 questsToAdd,
-                availableQuests
+                availableQuests,
+                currentGameTime
             )
         } else {
             val cleanedUpQuests = cleanOldQuests(levelQuests, userQuestsProgresses)
             val cleanedUpQuestsAvailableByQuestGiver = filterByNpc(userQuestsProgresses, cleanedUpQuests)
             val newAvailableQuests = availableQuests + cleanedUpQuestsAvailableByQuestGiver
-            return addQuests(data, questsToAdd, newAvailableQuests)
+            return addQuests(data, questsToAdd, newAvailableQuests, currentGameTime)
         }
     }
 
-    fun setStartsQuestsForUser(user: RedisGameUser, createdRedisQuests: List<RedisQuest>) {
+    fun setStartsQuestsForUser(
+        user: RedisGameUser,
+        createdRedisQuests: List<RedisQuest>
+    ) {
         val quests = getQuestsWithUniqueQuestGivers(createdRedisQuests)
             .take(QUESTS_ON_START)
             .toMutableList()
-        addQuestsForUser(quests, user)
+        addQuestsForUser(quests, user, 0)
     }
 
     private fun cleanOldQuests(
@@ -183,7 +188,8 @@ class UserQuestCreationHandler(
 
     private fun addQuestsForUser(
         quests: List<RedisQuest>,
-        user: RedisGameUser
+        user: RedisGameUser,
+        currentGameTime: Long
     ): List<RedisUserQuestProgress> {
         val userStartQuests = quests.map { quest ->
             RedisUserQuestProgress(
@@ -191,6 +197,7 @@ class UserQuestCreationHandler(
                 gameId = quest.gameId,
                 questId = quest.questId,
                 userId = user.userId,
+                creationGameTime = currentGameTime
             )
         }
         return redisUserQuestProgressRepository.saveAll(userStartQuests).toList()
@@ -199,12 +206,14 @@ class UserQuestCreationHandler(
     private fun addQuests(
         data: GameUserData,
         questsToAddSize: Int,
-        availableQuests: List<RedisQuest>
+        availableQuests: List<RedisQuest>,
+        currentGameTime: Long
     ): List<RedisUserQuestProgress> {
         val questsToAdd = getQuestsWithUniqueQuestGivers(availableQuests).take(questsToAddSize)
         return addQuestsForUser(
             questsToAdd,
-            data.gameUser!!
+            data.gameUser!!,
+            currentGameTime
         )
     }
 

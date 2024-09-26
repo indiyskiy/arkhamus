@@ -14,4 +14,8 @@ data class RedisUserQuestProgress(
     var userId: Long,
     var questCurrentStep: Int = -1,
     var questState: UserQuestState = AWAITING,
+    var creationGameTime: Long,
+    var readGameTime: Long? = null,
+    var acceptanceGameTime: Long? = null,
+    var finishGameTime: Long? = null,
 )

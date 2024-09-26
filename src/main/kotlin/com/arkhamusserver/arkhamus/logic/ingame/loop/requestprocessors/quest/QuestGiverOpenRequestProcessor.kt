@@ -23,7 +23,10 @@ class QuestGiverOpenRequestProcessor(
     ) {
         val questGiverOpenRequestProcessData = requestDataHolder.requestProcessData as QuestGiverOpenRequestProcessData
         if (questGiverOpenRequestProcessData.canAccept) {
-            questProgressHandler.readTheQuest(questGiverOpenRequestProcessData.userQuestProgress)
+            questProgressHandler.readTheQuest(
+                questGiverOpenRequestProcessData.userQuestProgress,
+                globalGameData.game.globalTimer
+            )
         }
     }
 }

@@ -15,6 +15,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import kotlin.Long
 import kotlin.math.min
 
 @Component
@@ -29,10 +30,15 @@ class QuestProgressHandler(
     }
 
     @Transactional
-    fun acceptTheQuest(userQuestProgress: RedisUserQuestProgress?, data: QuestAcceptRequestProcessData) {
+    fun acceptTheQuest(
+        userQuestProgress: RedisUserQuestProgress?,
+        data: QuestAcceptRequestProcessData,
+        currentGameTime: Long
+    ) {
         userQuestProgress?.let {
             it.questState = IN_PROGRESS
             it.questCurrentStep = 0
+            it.acceptanceGameTime = currentGameTime
             questProgressRepository.save(it)
         }
         data.canAccept = false
@@ -46,13 +52,14 @@ class QuestProgressHandler(
     ) {
         data.userQuestProgress?.let {
             it.questState = FINISHED
+            it.finishGameTime = globalGameData.game.globalTimer
             questProgressRepository.save(it)
         }
         data.canAccept = false
         data.canDecline = false
         data.canFinish = false
 
-        addMoreQuestsMaybe(globalGameData, data)
+        addMoreQuestsMaybe(globalGameData, data, globalGameData.game.globalTimer)
     }
 
     @Transactional
@@ -62,18 +69,20 @@ class QuestProgressHandler(
     ) {
         data.userQuestProgress?.let {
             it.questState = DECLINED
+            it.finishGameTime = globalGameData.game.globalTimer
             questProgressRepository.save(it)
         }
         data.canAccept = false
         data.canDecline = false
         data.canFinish = false
 
-        addMoreQuestsMaybe(globalGameData, data)
+        addMoreQuestsMaybe(globalGameData, data, globalGameData.game.globalTimer)
     }
 
     private fun addMoreQuestsMaybe(
         globalGameData: GlobalGameData,
-        data: GameUserData
+        data: GameUserData,
+        currentGameTime: Long
     ) {
         logger.info("add more quests maybe?")
         val userQuestProgress = globalGameData.questProgressByUserId[data.gameUser!!.userId] ?: emptyList()
@@ -82,7 +91,8 @@ class QuestProgressHandler(
             val newQuestProgress = userQuestCreationHandler.addQuests(
                 data,
                 globalGameData.quests,
-                userQuestProgress
+                userQuestProgress,
+                currentGameTime
             )
             logger.info("new quest progress ${newQuestProgress.size}")
             data.userQuest += newQuestProgress.map { mapQuestProgress(globalGameData.quests, it) }
@@ -120,7 +130,11 @@ class QuestProgressHandler(
                 questStepIds = quest.levelTaskIds,
                 endQuestGiverId = quest.endQuestGiverId,
                 startQuestGiverId = quest.startQuestGiverId,
-                textKey = quest.textKey
+                textKey = quest.textKey,
+                creationGameTime = userQuest.creationGameTime,
+                readGameTime = userQuest.readGameTime,
+                acceptanceGameTime = userQuest.acceptanceGameTime,
+                finishGameTime = userQuest.acceptanceGameTime,
             )
         } else {
             UserQuestResponse(
@@ -131,7 +145,11 @@ class QuestProgressHandler(
                 questStepIds = emptyList(),
                 endQuestGiverId = null,
                 startQuestGiverId = quest?.startQuestGiverId,
-                textKey = null
+                textKey = null,
+                creationGameTime = userQuest.creationGameTime,
+                readGameTime = userQuest.readGameTime,
+                acceptanceGameTime = userQuest.acceptanceGameTime,
+                finishGameTime = userQuest.acceptanceGameTime,
             )
         }
     }
@@ -166,9 +184,13 @@ class QuestProgressHandler(
                 userQuestProgress.questCurrentStep == quest.levelTaskIds.size
 
     @Transactional
-    fun readTheQuest(userQuestProgress: RedisUserQuestProgress?) {
+    fun readTheQuest(
+        userQuestProgress: RedisUserQuestProgress?,
+        currentGameTime: Long
+    ) {
         userQuestProgress?.let {
             it.questState = READ
+            it.readGameTime = currentGameTime
             questProgressRepository.save(it)
         }
     }
@@ -221,7 +243,9 @@ class QuestProgressHandler(
         return userQuest.questState !in notTakenStates
     }
 
-    private fun complete(userQuestProgress: RedisUserQuestProgress?) {
+    private fun complete(
+        userQuestProgress: RedisUserQuestProgress?
+    ) {
         userQuestProgress?.questState = COMPLETED
     }
 

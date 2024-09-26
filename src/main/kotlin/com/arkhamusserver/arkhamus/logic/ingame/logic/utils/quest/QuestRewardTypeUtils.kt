@@ -31,9 +31,9 @@ class QuestRewardTypeUtils {
     ): RewardType {
         val previousRewardTypes = previousRewards
             .map { it.rewardType }
-            .filter { it.getOneForQuest() }
+            .filter { it.getOnlyOneForQuest() }
             .toSet()
-        val availableByNumber = if (i < 2) {
+        val availableByNumber = if (i != 3) {
             listOf(ITEM)
         } else {
             RewardType.values().toList()

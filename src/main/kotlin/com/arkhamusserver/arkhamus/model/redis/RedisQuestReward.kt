@@ -14,4 +14,5 @@ data class RedisQuestReward(
     @Indexed var gameId: Long,
     var questId: Long,
     var userId: Long,
+    var creationGameTime: Long,
 )

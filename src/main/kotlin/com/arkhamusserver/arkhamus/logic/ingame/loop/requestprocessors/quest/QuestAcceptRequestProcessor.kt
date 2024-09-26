@@ -25,7 +25,8 @@ class QuestAcceptRequestProcessor(
         if (questAcceptRequestProcessData.canAccept) {
             questProgressHandler.acceptTheQuest(
                 questAcceptRequestProcessData.userQuestProgress,
-                questAcceptRequestProcessData
+                questAcceptRequestProcessData,
+                globalGameData.game.globalTimer
             )
         }
     }

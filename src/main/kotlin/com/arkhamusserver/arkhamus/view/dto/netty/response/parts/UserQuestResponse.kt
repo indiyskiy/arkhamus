@@ -10,5 +10,9 @@ data class UserQuestResponse(
     var questStepIds: List<Long> = emptyList(),
     var endQuestGiverId: Long? = null,
     var startQuestGiverId: Long? = null,
-    var textKey: String?
+    var textKey: String?,
+    var creationGameTime: Long,
+    var readGameTime: Long? = null,
+    var acceptanceGameTime: Long? = null,
+    var finishGameTime: Long? = null,
 )
