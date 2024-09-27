@@ -60,11 +60,12 @@ class QuestRewardUtils(
         currentGameTime: Long
     ): List<RedisQuestReward> {
         return if (rewards.isNullOrEmpty()) {
-            generateQuestRewardsForUser(quest, user, currentGameTime)
+            generateQuestRewardsForUser(quest, user, currentGameTime, emptyList())
         } else {
-            val filtered = rewards.filter { it.questId == quest.questId && it.userId == user.userId }
+            val rewardsOfUser = rewards.filter { it.userId == user.userId }
+            val filtered = rewardsOfUser.filter { it.questId == quest.questId }
             filtered.ifEmpty {
-                generateQuestRewardsForUser(quest, user, currentGameTime)
+                generateQuestRewardsForUser(quest, user, currentGameTime, rewardsOfUser)
             }
         }
     }
@@ -72,14 +73,55 @@ class QuestRewardUtils(
     private fun generateQuestRewardsForUser(
         quest: RedisQuest,
         user: RedisGameUser,
-        currentGameTime: Long
+        currentGameTime: Long,
+        allRewardsOfUser: List<RedisQuestReward>
     ): List<RedisQuestReward> {
         logger.info("generating rewards for: ${quest.difficulty} ${quest.questId}")
+        val lastReward = allRewardsOfUser
+            .filter {
+                it.rewardType == ITEM
+            }
+            .maxByOrNull {
+                it.creationGameTime
+            }
+        val allRewardsOfLastQuest = allRewardsOfUser.filter { it.questId == lastReward?.questId }
+        val allItemsOfLastQuestRewards =
+            allRewardsOfLastQuest.filter { it.rewardType == ITEM }.mapNotNull { it.rewardItem }
 
-        val first = generateQuestRewardsForUser(quest, user, 0, emptyList(), currentGameTime)
-        val second = generateQuestRewardsForUser(quest, user, 1, listOf(first), currentGameTime)
-        val third = generateQuestRewardsForUser(quest, user, 2, listOf(first, second), currentGameTime)
-        val forth = generateQuestRewardsForUser(quest, user, 3, listOf(first, second, third), currentGameTime)
+        val first =
+            generateQuestRewardsForUser(
+                quest = quest,
+                user = user,
+                i = 0,
+                previousRewards = emptyList(),
+                currentGameTime = currentGameTime,
+                rewardsFromPreviousQuest = allItemsOfLastQuestRewards
+            )
+        val second =
+            generateQuestRewardsForUser(
+                quest = quest,
+                user = user,
+                i = 1,
+                previousRewards = listOf(first),
+                currentGameTime = currentGameTime,
+                rewardsFromPreviousQuest = allItemsOfLastQuestRewards
+            )
+        val third = generateQuestRewardsForUser(
+            quest = quest,
+            user = user,
+            i = 2,
+            previousRewards = listOf(first, second),
+            currentGameTime = currentGameTime,
+            rewardsFromPreviousQuest = allItemsOfLastQuestRewards
+        )
+        val forth = generateQuestRewardsForUser(
+            quest = quest,
+            user = user,
+            i = 3,
+            previousRewards = listOf(first, second, third),
+            currentGameTime = currentGameTime,
+            rewardsFromPreviousQuest = allItemsOfLastQuestRewards
+        )
 
         val rewards = listOf(first, second, third, forth)
 
@@ -95,10 +137,11 @@ class QuestRewardUtils(
         user: RedisGameUser,
         i: Int,
         previousRewards: List<RedisQuestReward>,
-        currentGameTime: Long
+        currentGameTime: Long,
+        rewardsFromPreviousQuest: List<Int>
     ): RedisQuestReward {
         val rewardType = questRewardTypeUtils.chooseType(quest, user, i, previousRewards)
-        val rewardItem = questRewardItemUtils.chooseItem(quest, user, rewardType, previousRewards)
+        val rewardItem = questRewardItemUtils.chooseItem(quest, user, rewardType, previousRewards, rewardsFromPreviousQuest)
         val rewardAmount = questRewardAmountUtils.chooseAmount(quest, user, rewardType, rewardItem)
         return RedisQuestReward(
             id = Generators.timeBasedEpochGenerator().generate().toString(),

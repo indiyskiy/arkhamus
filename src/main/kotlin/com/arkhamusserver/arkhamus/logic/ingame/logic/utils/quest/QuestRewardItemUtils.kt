@@ -22,7 +22,8 @@ class QuestRewardItemUtils {
         quest: RedisQuest,
         user: RedisGameUser,
         rewardType: RewardType,
-        previousRewards: List<RedisQuestReward>
+        previousRewards: List<RedisQuestReward>,
+        rewardsFromPreviousQuest: List<Int>
     ): Item? {
         if (rewardType != RewardType.ITEM) {
             return null
@@ -30,6 +31,7 @@ class QuestRewardItemUtils {
         val itemsInUse = previousRewards
             .filter { it.rewardType == RewardType.ITEM }
             .mapNotNull { it.rewardItem }
+            .plus(rewardsFromPreviousQuest)
             .toSet()
         val possibleSet = when (quest.difficulty) {
             QuestDifficulty.VERY_EASY -> simpleLoot(user.role)

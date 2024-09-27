@@ -62,7 +62,7 @@ enum class Ability(
         cooldown = SECOND_IN_MILLIS * 30,
         globalCooldown = true,
         targetTypes = listOf(GameObjectType.CHARACTER),
-        range = 20.0
+        range = 2.0
     ),
     SUMMON_NIGHT(
         id = 4002,
