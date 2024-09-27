@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Items</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/items}" title="Items">Items</a>
+    </footer>
+</div>
+
+<div class="main">
+    <h1>Item details</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <td th:text="${item.id}">ID</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td th:text="${item.name?.name}">Name</td> <!-- Assuming Item has a `name` field -->
+        </tr>
+        <tr>
+            <th>Type</th>
+            <td th:text="${item.type?.name}">Type</td> <!-- Assuming ItemType has a `name` field -->
+        </tr>
+    </table>
+    <h1>Item recipes</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Recipe ID</th>
+            <th>Ingredients</th>
+            <th>Number of Items</th>
+            <th>Time to Craft</th>
+            <th>Crafter Types</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="recipe : ${recipes}">
+            <td th:text="${recipe.recipeId}">Recipe ID</td>
+            <td>
+                <ul>
+                    <li th:each="ingredient : ${recipe.ingredients}">
+                        <span th:text="${ingredient.item.name?.name}">Ingredient Name</span>:
+                        <span th:text="${ingredient.number}">Number</span>
+                    </li>
+                </ul>
+            </td>
+            <td th:text="${recipe.numberOfItems}">Number of Items</td>
+            <td th:text="${recipe.timeToCraft}">Time To Craft</td>
+            <td>
+                <ul>
+                    <li th:each="crafterType : ${recipe.crafterTypes}" th:text="${crafterType}">Crafter Type</li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/items}" title="Items">Items</a>
+    </footer>
+</div>
+
+</body>
+</html>

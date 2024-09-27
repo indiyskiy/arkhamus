@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType
 
 data class ItemInformationDto(
-    var id: Int? = null,
-    var name: Item? = null,
-    var type: ItemType? = null
+    var id: Int,
+    var name: Item,
+    var type: ItemType
 )

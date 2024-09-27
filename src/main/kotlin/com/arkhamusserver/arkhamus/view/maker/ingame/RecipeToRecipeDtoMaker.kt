@@ -13,13 +13,13 @@ class RecipeToRecipeDtoMaker(
         from.map { convert(it) }
 
     fun convert(from: Recipe): RecipeDto =
-        RecipeDto().apply {
-            this.recipeId = from.recipeId
-            this.item = itemInformationDtoMaker.convert(from.item)
-            this.ingredients = ingredientDtoMaker.convert(from.ingredients)
-            this.numberOfItems = from.numberOfItems
-            this.timeToCraft = from.timeToCraft
-            this.crafterTypes = from.crafterTypes
-        }
+        RecipeDto(
+            recipeId = from.recipeId,
+            item = itemInformationDtoMaker.convert(from.item),
+            ingredients = ingredientDtoMaker.convert(from.ingredients),
+            numberOfItems = from.numberOfItems,
+            timeToCraft = from.timeToCraft,
+            crafterTypes = from.crafterTypes,
+        )
 
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Items</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
+</div>
+
+<div class="main">
+    <h1>Item List</h1>
+    <table style="border-collapse: collapse; width: 100%;">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${items}">
+            <td><a th:href="@{/admin/browser/items/{itemId}(itemId=${item.id})}" th:text="${item.id}">ID</a></td>
+            <td th:text="${item.name.name}">Name</td>
+            <td th:text="${item.type.name}">Type</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/levels}" title="Levels">Levels</a>
+    </footer>
+</div>
+
+</body>
+</html>

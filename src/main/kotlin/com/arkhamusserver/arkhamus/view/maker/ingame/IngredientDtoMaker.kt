@@ -12,9 +12,9 @@ class IngredientDtoMaker(
         from.map { convert(it) }
 
     fun convert(from: Ingredient): IngredientDto =
-        IngredientDto().apply {
-            this.number = from.number
-            this.item = itemInformationDtoMaker.convert(from.item)
-        }
+        IngredientDto(
+            number = from.number,
+            item = itemInformationDtoMaker.convert(from.item)
+        )
 
 }

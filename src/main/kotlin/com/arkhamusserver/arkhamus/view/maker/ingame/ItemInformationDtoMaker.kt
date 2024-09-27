@@ -10,9 +10,9 @@ class ItemInformationDtoMaker {
         values.map { convert(it) }
 
     fun convert(value: Item): ItemInformationDto =
-        ItemInformationDto().apply {
-            id = value.id
-            name = value
+        ItemInformationDto(
+            id = value.id,
+            name = value,
             type = value.itemType
-        }
+        )
 }

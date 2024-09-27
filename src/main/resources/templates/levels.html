@@ -16,16 +16,16 @@
     <h1>Levels</h1>
     <table style="border-collapse: collapse; width: 100%;">
         <tr>
-            <th >Id</th>
-            <th >Latest version</th>
-            <th >State</th>
+            <th>Id</th>
+            <th>Latest version</th>
+            <th>State</th>
         </tr>
         <tr th:each="level : ${levelInfo}">
-            <td >
+            <td>
                 <a th:href="@{/admin/browser/level/{levelId}(levelId=${level.levelId})}" th:text="${level.levelId}"></a>
             </td>
-            <td  th:text="${level.latestVersion}"></td>
-            <td  th:text="${level.state}"></td>
+            <td th:text="${level.latestVersion}"></td>
+            <td th:text="${level.state}"></td>
         </tr>
     </table>
 </div>
