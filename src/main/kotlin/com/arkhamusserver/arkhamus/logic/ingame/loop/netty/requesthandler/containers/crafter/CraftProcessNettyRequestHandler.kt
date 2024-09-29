@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.conta
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.crafter.CraftProcessRequestMessage
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -26,6 +27,10 @@ class CraftProcessNettyRequestHandler(
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
 ) : NettyRequestHandler {
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(CraftProcessNettyRequestHandler::class.java)
+    }
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
         nettyRequestMessage::class.java == CraftProcessRequestMessage::class.java
@@ -86,6 +91,7 @@ class CraftProcessNettyRequestHandler(
                     ),
                 )
             } else {
+                logger.warn("can't craft! recipe = $recipe, crafter = $crafter")
                 CraftProcessRequestProcessData(
                     recipe = recipe,
                     crafter = crafter,
