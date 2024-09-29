@@ -44,16 +44,14 @@ class QuestRewardItemUtils {
         val itemsOfType = Item
             .values()
             .filter { it.itemType == type }
-        val item = itemsOfType
-            .filter { it.id !in itemsInUseAndPrevious }
-            .ifEmpty {
-                itemsOfType
-                    .filter { it.id !in itemsInUse }
-            }.ifEmpty {
-                itemsOfType
-            }
-            .random(random)
-        return item
+        return itemsOfType.filter {
+            it.id !in itemsInUseAndPrevious
+        }.ifEmpty {
+            itemsOfType
+                .filter { it.id !in itemsInUse }
+        }.ifEmpty {
+            itemsOfType
+        }.random(random)
     }
 
 

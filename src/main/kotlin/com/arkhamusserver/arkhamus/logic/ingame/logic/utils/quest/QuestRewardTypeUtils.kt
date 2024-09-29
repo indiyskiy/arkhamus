@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUEST_REWARD_SLOTS
 import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty.*
@@ -33,7 +34,7 @@ class QuestRewardTypeUtils {
             .map { it.rewardType }
             .filter { it.getOnlyOneForQuest() }
             .toSet()
-        val availableByNumber = if (i != 3) {
+        val availableByNumber = if (i != QUEST_REWARD_SLOTS - 1) {
             listOf(ITEM)
         } else {
             RewardType.values().toList()

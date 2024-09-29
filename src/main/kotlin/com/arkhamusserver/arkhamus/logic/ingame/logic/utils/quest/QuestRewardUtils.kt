@@ -1,8 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.toItem
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.toItemName
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisQuestRewardRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
@@ -23,7 +25,8 @@ class QuestRewardUtils(
     private val questRewardTypeUtils: QuestRewardTypeUtils,
     private val questRewardItemUtils: QuestRewardItemUtils,
     private val questRewardAmountUtils: QuestRewardAmountUtils,
-    private val inventoryHandler: InventoryHandler
+    private val inventoryHandler: InventoryHandler,
+    private val clueHandler: ClueHandler
 ) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(QuestRewardUtils::class.java)
@@ -141,7 +144,8 @@ class QuestRewardUtils(
         rewardsFromPreviousQuest: List<Int>
     ): RedisQuestReward {
         val rewardType = questRewardTypeUtils.chooseType(quest, user, i, previousRewards)
-        val rewardItem = questRewardItemUtils.chooseItem(quest, user, rewardType, previousRewards, rewardsFromPreviousQuest)
+        val rewardItem =
+            questRewardItemUtils.chooseItem(quest, user, rewardType, previousRewards, rewardsFromPreviousQuest)
         val rewardAmount = questRewardAmountUtils.chooseAmount(quest, user, rewardType, rewardItem)
         return RedisQuestReward(
             id = Generators.timeBasedEpochGenerator().generate().toString(),
@@ -157,7 +161,8 @@ class QuestRewardUtils(
 
     fun takeReward(
         user: RedisGameUser,
-        reward: RedisQuestReward
+        reward: RedisQuestReward,
+        globalGameData: GlobalGameData
     ) {
         when (reward.rewardType) {
             ITEM -> {
@@ -165,11 +170,11 @@ class QuestRewardUtils(
             }
 
             ADD_CLUE -> {
-
+                clueHandler.addRandomClue(globalGameData)
             }
 
             REMOVE_CLUE -> {
-
+                clueHandler.removeRandomClue(globalGameData)
             }
         }
     }

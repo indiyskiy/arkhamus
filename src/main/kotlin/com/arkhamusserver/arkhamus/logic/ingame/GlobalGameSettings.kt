@@ -21,6 +21,9 @@ class GlobalGameSettings {
         //QUESTS
         const val QUESTS_ON_START = 5
         const val QUESTS_TO_REFRESH = 2
+        const val QUEST_REWARD_SLOTS = 4
 
+        //CLUES
+        const val EACH_CLUE_ON_START = 2
     }
 }

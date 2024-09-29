@@ -1,20 +1,17 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisClueRepository
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.EACH_CLUE_ON_START
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ClueHandler
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import kotlin.random.Random
 
 @Component
 class GameStartClueLogic(
-    private val redisClueRepository: RedisClueRepository,
+    private val clueHandler: ClueHandler
 ) {
-    private val random: Random = Random(System.currentTimeMillis())
 
     @Transactional
     fun createClues(
@@ -22,17 +19,11 @@ class GameStartClueLogic(
         zones: List<RedisLevelZone>
     ) {
         val clueZones = zones.filter { it.zoneType == ZoneType.CLUE }
-        val allClues = game.god?.let {
-            it.getTypes().map { clue ->
-                RedisClue(
-                    id = Generators.timeBasedEpochGenerator().generate().toString(),
-                    gameId = game.id!!,
-                    levelZoneId = clueZones.random(random).levelZoneId,
-                    clue = clue
-                )
+        game.god?.let {
+            it.getTypes().forEach { clue ->
+                clueHandler.addClues(game, clueZones, clue, EACH_CLUE_ON_START)
             }
-        } ?: emptyList()
-        redisClueRepository.saveAll(allClues)
+        }
     }
 
 }
