@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gods</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
+</div>
+
+<div class="main">
+    <h1>Gods List</h1>
+    <table style="border-collapse: collapse; width: 100%;">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Clues</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="god : ${gods}">
+            <td><a th:href="@{/admin/browser/gods/{godId}(godId=${god.id})}" th:text="${god.id}">ID</a></td>
+            <td th:text="${god.name.name}">Name</td>
+            <td>
+                <ul>
+                    <li th:each="type : ${god.getTypes()}">
+                        <span th:text="${type.name}">Clue</span>:
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/levels}" title="Levels">Levels</a>
+    </footer>
+</div>
+
+</body>
+</html>

@@ -26,6 +26,12 @@ class BrowserAdminItemController(
         model.addAttribute("item", item)
         val recipes = itemLogic.listAllRecipes().filter { it.item.id == item.id }
         model.addAttribute("recipes", recipes)
+        val relatedRecipes = itemLogic.listAllRecipes().filter {
+            it.ingredients.any {
+                it.item.id == item.id
+            }
+        }
+        model.addAttribute("relatedRecipes", relatedRecipes)
         return "item"
     }
 }

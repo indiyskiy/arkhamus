@@ -18,9 +18,14 @@
         <h1>Admin Panel</h1>
         <ul>
             <li><a th:href="@{/public/browser/login}">Auth</a></li>
+            <li>Server state</li>
             <li><a th:href="@{/admin/browser/game}">Games List</a></li>
             <li><a th:href="@{/admin/browser/user}">Users List</a></li>
+            <li>Base info</li>
             <li><a th:href="@{/admin/browser/levels}" title="Levels">Levels</a></li>
+            <li><a th:href="@{/admin/browser/items}" title="Items">Items</a></li>
+            <li><a th:href="@{/admin/browser/gods}" title="Gods">Gods</a></li>
+            <li>Tech info</li>
             <li><a th:href="@{/admin/browser/redis/statistic}" title="Redis statistic">Redis statistic</a></li>
             <li><a th:href="@{/admin/browser/netty/statistic}" title="Netty statistic">Netty statistic</a></li>
         </ul>

@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUEST_REWARD_SLOTS
-import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType
@@ -51,7 +50,7 @@ class QuestRewardTypeUtils {
         type: RewardType,
         user: RedisGameUser
     ): Boolean {
-        return byRole(type, user.role) && byClass(type, user.classInGame)
+        return byRole(type, user.role) //&& byClass(type, user.classInGame)
     }
 
     private fun byRole(
@@ -65,16 +64,16 @@ class QuestRewardTypeUtils {
         }
     }
 
-    private fun byClass(
-        type: RewardType,
-        classInGame: ClassInGame
-    ): Boolean {
-        return when (classInGame) {
-            else -> {
-                type in setOf(ITEM, ADD_CLUE, REMOVE_CLUE)
-            }
-        }
-    }
+//    private fun byClass(
+//        type: RewardType,
+//        classInGame: ClassInGame
+//    ): Boolean {
+//        return when (classInGame) {
+//            else -> {
+//                type in setOf(ITEM, ADD_CLUE, REMOVE_CLUE)
+//            }
+//        }
+//    }
 
     private fun availableByDifficulty(
         type: RewardType,

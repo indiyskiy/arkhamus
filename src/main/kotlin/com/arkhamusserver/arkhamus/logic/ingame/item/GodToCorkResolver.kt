@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.item
 
+import com.arkhamusserver.arkhamus.logic.ingame.toGod
 import com.arkhamusserver.arkhamus.model.enums.ingame.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.God.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.Item
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class GodToCorkResolver {
+    fun resolve(id: Int): Item = resolve(id.toGod()!!)
+
     fun resolve(god: God): Item =
         when (god) {
             YERLEG -> CORK_YERLEG

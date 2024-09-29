@@ -63,6 +63,40 @@
         </tr>
         </tbody>
     </table>
+    <h1>Recipes with inrgidient</h1>
+    <table>
+        <thead>
+         <tr>
+            <th>Recipe ID</th>
+            <th>Item</th>
+            <th>Ingredients</th>
+            <th>Number of Items</th>
+            <th>Time to Craft</th>
+            <th>Crafter Types</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="recipe : ${relatedRecipes}">
+            <td th:text="${recipe.recipeId}">Recipe ID</td>
+            <td th:text="'[' + ${recipe.item.getId()} + '] '+ ${recipe.item.name}">Item</td>
+            <td>
+                <ul>
+                    <li th:each="ingredient : ${recipe.ingredients}">
+                        <span th:text="${ingredient.item.name?.name}">Ingredient Name</span>:
+                        <span th:text="${ingredient.number}">Number</span>
+                    </li>
+                </ul>
+            </td>
+            <td th:text="${recipe.numberOfItems}">Number of Items</td>
+            <td th:text="${recipe.timeToCraft}">Time To Craft</td>
+            <td>
+                <ul>
+                    <li th:each="crafterType : ${recipe.crafterTypes}" th:text="${crafterType}">Crafter Type</li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="footer">

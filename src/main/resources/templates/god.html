@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>God</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/gods}" title="Gods">Gods</a>
+    </footer>
+</div>
+
+<div class="main">
+    <h1>Cork recipes</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <td th:text="${god.id}">ID</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td th:text="${god.name.name}">Name</td> <!-- Assuming Item has a `name` field -->
+        </tr>
+        <tr>
+            <th>Clues</th>
+            <td>
+                <ul>
+                    <li th:each="type : ${god.getTypes()}">
+                        <span th:text="${type.name}">Clue</span>:
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+    <h1>Cork recipe</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Recipe ID</th>
+            <th>Ingredients</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${recipe.recipeId}">Recipe ID</td>
+            <td>
+                <ul>
+                    <li th:each="ingredient : ${recipe.ingredients}">
+                        <span th:text="${ingredient.item.name?.name}">Ingredient Name</span>:
+                        <span th:text="${ingredient.number}">Number</span>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/gods}" title="Gods">Gods</a>
+    </footer>
+</div>
+
+</body>
+</html>
