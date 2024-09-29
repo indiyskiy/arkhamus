@@ -31,8 +31,8 @@ class QuestRewardItemUtils {
         val itemsInUse = previousRewards
             .filter { it.rewardType == RewardType.ITEM }
             .mapNotNull { it.rewardItem }
-            .plus(rewardsFromPreviousQuest)
             .toSet()
+        val itemsInUseAndPrevious = itemsInUse.plus(rewardsFromPreviousQuest)
         val possibleSet = when (quest.difficulty) {
             QuestDifficulty.VERY_EASY -> simpleLoot(user.role)
             QuestDifficulty.EASY -> simpleLoot(user.role)
@@ -40,33 +40,18 @@ class QuestRewardItemUtils {
             QuestDifficulty.HARD -> goodLoot(user.role)
             QuestDifficulty.VERY_HARD -> excellentLootTypes(user.role)
         }
-        //option to suggest better loot for late slots
-//        val possibleSet = if (i > 0) {
-//            if (i > 1) {
-//                if (quest.difficulty in setOf(QuestDifficulty.VERY_EASY, QuestDifficulty.EASY)) {
-//                    goodLoot(user.role)
-//                } else {
-//                    excellentLootTypes(user.role)
-//                }
-//            } else {
-//                if (quest.difficulty in setOf(QuestDifficulty.VERY_EASY, QuestDifficulty.EASY)) {
-//                    mediumLoot(user.role)
-//                } else {
-//                    goodLoot(user.role)
-//                }
-//            }
-//        } else {
-//            if (quest.difficulty in setOf(QuestDifficulty.VERY_EASY, QuestDifficulty.EASY)) {
-//                simpleLoot(user.role)
-//            } else {
-//                mediumLoot(user.role)
-//            }
-//        }
         val type = possibleSet.random(random)
-        val item = Item
+        val itemsOfType = Item
             .values()
             .filter { it.itemType == type }
-            .filter { it.id !in itemsInUse }
+        val item = itemsOfType
+            .filter { it.id !in itemsInUseAndPrevious }
+            .ifEmpty {
+                itemsOfType
+                    .filter { it.id !in itemsInUse }
+            }.ifEmpty {
+                itemsOfType
+            }
             .random(random)
         return item
     }
