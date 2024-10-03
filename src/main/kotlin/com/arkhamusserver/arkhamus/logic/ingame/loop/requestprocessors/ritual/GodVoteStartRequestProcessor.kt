@@ -82,7 +82,7 @@ class GodVoteStartRequestProcessor(
         val altarPolling = RedisAltarPolling(
             id = Generators.timeBasedEpochGenerator().generate().toString(),
             started = globalGameData.game.globalTimer,
-            altarId = altar.altarId,
+            altarId = altar.inGameId(),
             gameId = globalGameData.game.gameId!!,
             startedUserId = userId,
             userVotes = mutableMapOf(userId to godId),

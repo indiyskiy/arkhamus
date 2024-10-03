@@ -37,10 +37,10 @@ data class GlobalGameData(
         val ellipsesMap = ellipses.groupBy { it.levelZoneId }
         val zonesMap = zones.map { zone ->
             GameDataLevelZone(
-                zoneId = zone.levelZoneId,
+                zoneId = zone.inGameId(),
                 zoneType = zone.zoneType,
-                tetragons = mapTetragons(tetragonsMap[zone.levelZoneId] ?: emptyList()),
-                ellipses = mapEllipses(ellipsesMap[zone.levelZoneId] ?: emptyList())
+                tetragons = mapTetragons(tetragonsMap[zone.inGameId()] ?: emptyList()),
+                ellipses = mapEllipses(ellipsesMap[zone.inGameId()] ?: emptyList())
             )
         }
         return LevelGeometryData().apply {

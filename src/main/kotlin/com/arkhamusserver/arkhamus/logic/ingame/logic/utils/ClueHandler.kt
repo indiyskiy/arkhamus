@@ -56,7 +56,7 @@ class ClueHandler(
         godType: GodType,
         number: Int
     ) {
-        val zoneIds = clueZones.shuffled(random).take(number).map { it.levelZoneId }
+        val zoneIds = clueZones.shuffled(random).take(number).map { it.inGameId() }
         zoneIds.forEach {
             addClueToZone(game, it, godType)
         }

@@ -70,13 +70,13 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.altars = altars
         this.altarPolling = altarPolling
         this.users = allUsers.associateBy { it.userId }
-        this.containers = allContainers.associateBy { it.containerId }
-        this.crafters = allCrafters.associateBy { it.crafterId }
+        this.containers = allContainers.associateBy { it.inGameId() }
+        this.crafters = allCrafters.associateBy { it.inGameId() }
         this.timeEvents = allEvents
         this.shortTimeEvents = allShortEvents
         this.castAbilities = castAbilities
         this.craftProcess = craftProcess
-        this.lanterns = allLanterns.associateBy { it.lanternId }
+        this.lanterns = allLanterns.associateBy { it.inGameId() }
         this.clues = allClues
         this.levelGeometryData = buildGeometryData(zones, tetragons, ellipses)
         this.quests = allQuests

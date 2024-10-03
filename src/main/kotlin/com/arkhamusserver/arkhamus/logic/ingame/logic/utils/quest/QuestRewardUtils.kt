@@ -50,7 +50,7 @@ class QuestRewardUtils(
     ): Boolean {
         return quest != null &&
                 userQuestProgress != null &&
-                userQuestProgress.questId == quest.questId &&
+                userQuestProgress.questId == quest.inGameId() &&
                 userQuestProgress.userId == user.userId &&
                 userQuestProgress.questState !in setOf(UserQuestState.FINISHED, UserQuestState.DECLINED)
     }
@@ -66,7 +66,7 @@ class QuestRewardUtils(
             generateQuestRewardsForUser(quest, user, currentGameTime, emptyList())
         } else {
             val rewardsOfUser = rewards.filter { it.userId == user.userId }
-            val filtered = rewardsOfUser.filter { it.questId == quest.questId }
+            val filtered = rewardsOfUser.filter { it.questId == quest.inGameId() }
             filtered.ifEmpty {
                 generateQuestRewardsForUser(quest, user, currentGameTime, rewardsOfUser)
             }
@@ -79,7 +79,7 @@ class QuestRewardUtils(
         currentGameTime: Long,
         allRewardsOfUser: List<RedisQuestReward>
     ): List<RedisQuestReward> {
-        logger.info("generating rewards for: ${quest.difficulty} ${quest.questId}")
+        logger.info("generating rewards for: ${quest.difficulty} ${quest.inGameId()}")
         val lastReward = allRewardsOfUser
             .filter {
                 it.rewardType == ITEM
@@ -153,7 +153,7 @@ class QuestRewardUtils(
             rewardAmount = rewardAmount,
             rewardItem = rewardItem?.id,
             gameId = quest.gameId,
-            questId = quest.questId,
+            questId = quest.inGameId(),
             userId = user.userId,
             creationGameTime = currentGameTime,
         )

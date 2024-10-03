@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
@@ -14,7 +15,7 @@ data class RedisAltar(
     var y: Double,
     var z: Double,
     var interactionRadius: Double,
-) : WithPoint {
+) : WithPoint, WithId {
 
     override fun x(): Double {
         return x
@@ -26,5 +27,9 @@ data class RedisAltar(
 
     override fun z(): Double {
         return z
+    }
+
+    override fun inGameId(): Long {
+        return altarId
     }
 }

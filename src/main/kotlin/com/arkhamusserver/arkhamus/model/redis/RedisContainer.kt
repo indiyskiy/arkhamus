@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithGameTags
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
@@ -22,7 +23,7 @@ data class RedisContainer(
     var interactionRadius: Double = 0.0,
     var items: MutableMap<Int, Int> = HashMap(),
     var gameTags: MutableList<String>,
-) : WithPoint, WithGameTags {
+) : WithPoint, WithId, WithGameTags {
 
     override fun x(): Double {
         return x
@@ -42,5 +43,9 @@ data class RedisContainer(
 
     override fun rewriteGameTags(tags: List<InGameObjectTag>) {
         gameTags = tags.map { it.name }.toMutableList()
+    }
+
+    override fun inGameId(): Long {
+        return containerId
     }
 }

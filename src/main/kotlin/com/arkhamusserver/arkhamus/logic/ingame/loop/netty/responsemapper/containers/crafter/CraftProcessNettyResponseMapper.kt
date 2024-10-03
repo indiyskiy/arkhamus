@@ -49,7 +49,7 @@ class CraftProcessNettyResponseMapper(
         (requestProcessData as CraftProcessRequestProcessData).let {
             return CraftProcessNettyResponse(
                 recipeId = it.recipe?.recipeId,
-                crafterId = it.crafter?.crafterId,
+                crafterId = it.crafter?.inGameId(),
                 executedSuccessfully = it.executedSuccessfully,
                 firstTime = true,
                 sortedUserInventory = (it.sortedUserInventory).applyInBetween(

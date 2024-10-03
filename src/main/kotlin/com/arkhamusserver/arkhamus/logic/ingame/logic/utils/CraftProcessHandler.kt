@@ -27,7 +27,7 @@ class CraftProcessHandler(
             gameId = gameId,
             recipeId = recipe.recipeId,
             sourceUserId = sourceUserId,
-            targetCrafterId = crafter.crafterId,
+            targetCrafterId = crafter.inGameId(),
             timeStart = currentGameTime,
             timePast = 0,
             timeLeft = recipe.timeToCraft,

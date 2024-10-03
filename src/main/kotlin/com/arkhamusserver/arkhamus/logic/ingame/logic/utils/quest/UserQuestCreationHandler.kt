@@ -113,7 +113,7 @@ class UserQuestCreationHandler(
             }
         }
         val questToDeleteIds = questToDelete.map { it.questId }.toSet()
-        val newlyAvailableQuests = levelQuests.filter { it.questId in questToDeleteIds }
+        val newlyAvailableQuests = levelQuests.filter { it.inGameId() in questToDeleteIds }
         logger.info("newly available quests ${newlyAvailableQuests.joinToString { it.questId.toString() }}")
         return newlyAvailableQuests
     }
@@ -128,7 +128,7 @@ class UserQuestCreationHandler(
             }
         val inProgressQuestGivers = inProgress.mapNotNull { userQuest ->
             levelQuests.firstOrNull {
-                userQuest.questId == it.questId
+                userQuest.questId == it.inGameId()
             }
         }.map {
             it.startQuestGiverId
@@ -150,7 +150,7 @@ class UserQuestCreationHandler(
         val relevantIds = relevant.map { it.questId }.toSet()
         logger.info("relevant quests ${relevantIds.joinToString(",") { it.toString() }}")
 
-        val notRelevant = levelQuests.filter { it.questId !in relevantIds }
+        val notRelevant = levelQuests.filter { it.inGameId() !in relevantIds }
         logger.info("not relevant quests ${notRelevant.joinToString(",") { it.questId.toString() }}")
 
         val inProgress = userQuestsProgresses
@@ -161,7 +161,7 @@ class UserQuestCreationHandler(
 
         val inProgressQuestGivers = inProgress.map { userQuest ->
             levelQuests.first {
-                userQuest.questId == it.questId
+                userQuest.questId == it.inGameId()
             }
         }.map {
             it.startQuestGiverId
@@ -195,7 +195,7 @@ class UserQuestCreationHandler(
             RedisUserQuestProgress(
                 id = Generators.timeBasedEpochGenerator().generate().toString(),
                 gameId = quest.gameId,
-                questId = quest.questId,
+                questId = quest.inGameId(),
                 userId = user.userId,
                 creationGameTime = currentGameTime
             )

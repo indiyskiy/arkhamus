@@ -58,7 +58,7 @@ class QuestDeclineNettyRequestHandler(
             val userQuestProgress =
                 quest?.let { questNotNull ->
                     userQuestProgresses?.firstOrNull { userQuestProgress ->
-                        userQuestProgress.questId == questNotNull.questId &&
+                        userQuestProgress.questId == questNotNull.inGameId() &&
                                 userQuestProgress.questState in listOf(
                             UserQuestState.AWAITING,
                             UserQuestState.READ,
@@ -67,7 +67,7 @@ class QuestDeclineNettyRequestHandler(
                     }
                 }
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {
-                val rewards = globalGameData.questRewardsByQuestId[quest?.questId]?.filter { it.userId == userId }
+                val rewards = globalGameData.questRewardsByQuestId[quest?.inGameId()]?.filter { it.userId == userId }
                 questRewardUtils.findOrCreate(rewards, quest!!, user, globalGameData.game.globalTimer)
             } else {
                 emptyList()

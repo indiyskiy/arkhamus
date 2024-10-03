@@ -21,7 +21,7 @@ class DoorDataHandler(
         return doors.map { door ->
             val state = door.globalState
             val response = DoorResponse(
-                doorId = door.doorId,
+                doorId = door.inGameId(),
                 doorState = when (state) {
                     DoorState.OPEN -> if (inBanList(myUser, door)) {
                         DoorUserState.CLOSED_PERSONALLY

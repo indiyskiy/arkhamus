@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
@@ -23,7 +24,7 @@ data class RedisAltarHolder(
     var itemsOnAltars: Map<Int, Int> = emptyMap(),
 
     var state: MapAltarState = MapAltarState.OPEN,
-)  : WithPoint {
+)  : WithPoint, WithId {
 
     override fun x(): Double {
         return x
@@ -35,5 +36,9 @@ data class RedisAltarHolder(
 
     override fun z(): Double {
         return z
+    }
+
+    override fun inGameId(): Long {
+        return altarHolderId
     }
 }

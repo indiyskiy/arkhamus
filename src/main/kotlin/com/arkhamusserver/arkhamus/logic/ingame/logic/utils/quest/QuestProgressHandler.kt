@@ -113,7 +113,7 @@ class QuestProgressHandler(
         quests: List<RedisQuest>,
         userQuest: RedisUserQuestProgress
     ): UserQuestResponse {
-        val quest = quests.firstOrNull { it.questId == userQuest.questId }
+        val quest = quests.firstOrNull { it.inGameId() == userQuest.questId }
         return mapQuestProgress(quest, userQuest)
     }
 
@@ -206,11 +206,11 @@ class QuestProgressHandler(
         val quests = globalGameData.quests
         val questIdToStep = questSteps?.map { it.questId to it.questCurrentStep }
         val questToStep = questIdToStep
-            ?.map { quests.first { quest -> quest.questId == it.first } to it.second }
+            ?.map { quests.first { quest -> quest.inGameId() == it.first } to it.second }
             ?.map { it.first to task(it.second, it.first.levelTaskIds) }
         val quest = questToStep?.firstOrNull { it.second == levelTaskId }?.first
         val userQuestProgress = quest?.let {
-            questSteps.firstOrNull { questStep -> it.questId == questStep.questId }
+            questSteps.firstOrNull { questStep -> it.inGameId() == questStep.questId }
         }
 
         return Pair(quest, userQuestProgress)

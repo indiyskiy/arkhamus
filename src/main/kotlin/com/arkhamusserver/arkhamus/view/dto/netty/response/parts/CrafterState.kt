@@ -9,7 +9,7 @@ data class CrafterState(
     var holdingUserId: Long?
 ) {
     constructor(crafter: RedisCrafter) : this(
-        crafterId = crafter.crafterId,
+        crafterId = crafter.inGameId(),
         state = crafter.state,
         holdingUserId = crafter.holdingUser
     )

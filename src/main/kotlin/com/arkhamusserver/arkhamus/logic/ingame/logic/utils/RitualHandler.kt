@@ -151,7 +151,7 @@ class RitualHandler(
             it.item.id to 0
         }
         altarHolder?.itemsIdToAltarId = recipe.ingredients.mapIndexed { index, ingredient ->
-            ingredient.item.id to altars[index].altarId
+            ingredient.item.id to altars[index].inGameId()
         }.toMap()
 
         altarHolder?.state = MapAltarState.GOD_LOCKED

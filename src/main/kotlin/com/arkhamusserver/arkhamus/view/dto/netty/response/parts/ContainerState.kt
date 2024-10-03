@@ -9,7 +9,7 @@ data class ContainerState(
     var holdingUserId: Long?
 ) {
     constructor(container: RedisContainer) : this(
-        containerId = container.containerId,
+        containerId = container.inGameId(),
         state = container.state,
         holdingUserId = container.holdingUser
     )

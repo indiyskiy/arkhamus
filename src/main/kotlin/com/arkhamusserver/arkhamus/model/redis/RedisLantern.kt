@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
@@ -18,7 +19,7 @@ data class RedisLantern(
     var y: Double,
     var z: Double,
     var lightRange: Double,
-)  : WithPoint {
+)  : WithPoint, WithId {
 
     override fun x(): Double {
         return x
@@ -30,5 +31,9 @@ data class RedisLantern(
 
     override fun z(): Double {
         return z
+    }
+
+    override fun inGameId(): Long {
+        return lanternId
     }
 }

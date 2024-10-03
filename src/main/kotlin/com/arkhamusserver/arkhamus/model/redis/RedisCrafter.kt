@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithGameTags
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
@@ -23,7 +24,7 @@ data class RedisCrafter(
     var items: MutableMap<Int, Int> = HashMap(),
     var crafterType: CrafterType,
     var gameTags: MutableList<String>,
-) : WithPoint, WithGameTags {
+) : WithPoint, WithId, WithGameTags {
 
     override fun x(): Double {
         return x
@@ -43,5 +44,9 @@ data class RedisCrafter(
 
     override fun rewriteGameTags(tags: List<InGameObjectTag>) {
         gameTags = tags.map { it.name }.toMutableList()
+    }
+
+    override fun inGameId(): Long {
+        return crafterId
     }
 }

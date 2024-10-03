@@ -73,10 +73,10 @@ class QuestGiverOpenNettyRequestHandler(
                 it.questId
             }?.toSet() ?: emptySet()
             val questsOptions = globalGameData.quests.filter {
-                it.questId in userQuestIds
+                it.inGameId() in userQuestIds
             }
 
-            val questOptionIds = questsOptions.map { it.questId }.toSet()
+            val questOptionIds = questsOptions.map { it.inGameId() }.toSet()
             val userQuestProgressOptions =
                 userQuestProgresses?.filter {
                     it.questId in questOptionIds && rightNpcForState(
@@ -90,10 +90,10 @@ class QuestGiverOpenNettyRequestHandler(
             val userQuestProgress = userQuestProgress(userQuestProgressOptions)
 
             val quest =
-                userQuestProgress?.let { progress -> questsOptions.firstOrNull { progress.questId == it.questId } }
+                userQuestProgress?.let { progress -> questsOptions.firstOrNull { progress.questId == it.inGameId() } }
 
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {
-                val rewards = globalGameData.questRewardsByQuestId[quest?.questId]?.filter { it.userId == userId }
+                val rewards = globalGameData.questRewardsByQuestId[quest?.inGameId()]?.filter { it.userId == userId }
                 questRewardUtils.findOrCreate(rewards, quest!!, user, globalGameData.game.globalTimer)
             } else {
                 emptyList()
@@ -145,7 +145,7 @@ class QuestGiverOpenNettyRequestHandler(
         questState: UserQuestState,
         questGiverId: Long
     ): Boolean {
-        val quest = questsOptions.firstOrNull { it.questId == questId }
+        val quest = questsOptions.firstOrNull { it.inGameId() == questId }
         return quest?.let {
             when (questState) {
                 AWAITING,

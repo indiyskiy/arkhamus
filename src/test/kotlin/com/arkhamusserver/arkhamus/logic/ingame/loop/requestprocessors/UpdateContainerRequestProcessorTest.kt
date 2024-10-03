@@ -335,7 +335,7 @@ class UpdateContainerRequestProcessorTest {
 
         val requestMessage = UpdateContainerRequestMessage(
             actionId = 1000,
-            externalInventoryId = data.redisContainer.containerId,
+            externalInventoryId = data.redisContainer.inGameId(),
             newInventoryContent = newInventoryContent,
             type = "CloseContainerRequestMessage",
             close = true,
@@ -507,7 +507,7 @@ class UpdateContainerRequestProcessorTest {
                 state = TODO()
             ),
             users = mapOf(gameUser.userId to gameUser),
-            containers = mapOf(redisContainer.containerId to redisContainer),
+            containers = mapOf(redisContainer.inGameId() to redisContainer),
             timeEvents = emptyList(),
             crafters = emptyMap()
         )
