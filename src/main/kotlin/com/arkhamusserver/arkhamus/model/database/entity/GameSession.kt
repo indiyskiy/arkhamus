@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.model.database.entity
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.sql.Timestamp

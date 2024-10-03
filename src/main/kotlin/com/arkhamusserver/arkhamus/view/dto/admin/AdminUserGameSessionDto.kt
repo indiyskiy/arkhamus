@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.admin
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 
 data class AdminUserGameDataDto(
     val wins: Int = 0,

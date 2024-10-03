@@ -3,10 +3,10 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisLantern
-import com.arkhamusserver.arkhamus.model.redis.WithPoint
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.stereotype.Component
 
 const val USER_LUMINOUS_RADIUS = 5.0 //m

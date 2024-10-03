@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.item
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.view.dto.ingame.ItemInformationDto
 import com.arkhamusserver.arkhamus.view.dto.ingame.RecipeDto
 import com.arkhamusserver.arkhamus.view.maker.ingame.ItemInformationDtoMaker

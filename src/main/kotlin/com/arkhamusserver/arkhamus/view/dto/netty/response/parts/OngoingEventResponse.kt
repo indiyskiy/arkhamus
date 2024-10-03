@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 
 data class OngoingEventResponse(

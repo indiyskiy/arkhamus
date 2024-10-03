@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTi
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisShortTimeEventRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent

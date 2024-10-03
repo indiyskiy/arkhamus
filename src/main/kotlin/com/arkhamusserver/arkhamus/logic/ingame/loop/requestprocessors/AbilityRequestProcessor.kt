@@ -8,8 +8,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import org.springframework.stereotype.Component
 
 @Component

@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.model.enums.ingame
+package com.arkhamusserver.arkhamus.model.enums.ingame.objectstate
 
 enum class DoorUserState {
     CLOSED,

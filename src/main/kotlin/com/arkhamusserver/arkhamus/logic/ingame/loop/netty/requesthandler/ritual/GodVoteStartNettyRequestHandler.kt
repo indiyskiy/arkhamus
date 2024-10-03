@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteStartRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.GodVoteStartRequestMessage
 import org.springframework.stereotype.Component

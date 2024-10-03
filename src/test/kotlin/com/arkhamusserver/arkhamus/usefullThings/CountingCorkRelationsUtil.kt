@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.usefullThings
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import org.assertj.core.util.DateUtil
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test

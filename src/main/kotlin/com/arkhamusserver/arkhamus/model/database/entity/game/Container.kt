@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerTag
-import com.arkhamusserver.arkhamus.model.redis.WithPoint
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.ContainerTag
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import jakarta.persistence.*
 
 @Entity

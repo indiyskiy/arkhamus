@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritu
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse

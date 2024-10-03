@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 
 data class CrafterState(

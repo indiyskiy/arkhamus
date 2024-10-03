@@ -1,10 +1,12 @@
-package com.arkhamusserver.arkhamus.model.enums.ingame
+package com.arkhamusserver.arkhamus.model.enums.ingame.core
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.DAY_LENGTH_MINUTES
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.MINUTE_IN_MILLIS
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.NIGHT_LENGTH_MINUTES
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SECOND_IN_MILLIS
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 
 private const val MINIMUM_COOLDOWN: Long = SECOND_IN_MILLIS
 private const val DEFAULT_INVESTIGATION_ACTIVE: Long = MINUTE_IN_MILLIS
@@ -61,7 +63,7 @@ enum class Ability(
         //available for everybody couse can ber re-thrown
         cooldown = SECOND_IN_MILLIS * 30,
         globalCooldown = true,
-        targetTypes = listOf(GameObjectType.CHARACTER),
+        targetTypes = listOf(CHARACTER),
         range = 2.0
     ),
     SUMMON_NIGHT(
@@ -71,6 +73,16 @@ enum class Ability(
         availableForRole = setOf(CULTIST),
         cooldown = MINUTE_IN_MILLIS * 5,
         globalCooldown = true
+    ),
+    PEEKABOO_CURSE_ITEM(
+        id = 4003,
+        requiresItem = true,
+        consumesItem = false,
+        availableForRole = setOf(CULTIST),
+        cooldown = MINUTE_IN_MILLIS * 1,
+        globalCooldown = false,
+        targetTypes = listOf(CONTAINER, CRAFTER),
+        range = 5.0
     ),
 
     //clue items 5***

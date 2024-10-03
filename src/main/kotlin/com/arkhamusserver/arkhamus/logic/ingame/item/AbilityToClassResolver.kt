@@ -1,9 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.item
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
-import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame.*
 import org.springframework.stereotype.Component
 
 @Component

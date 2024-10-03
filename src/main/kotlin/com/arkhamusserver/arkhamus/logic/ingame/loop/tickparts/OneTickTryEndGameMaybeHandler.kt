@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool.Companion.MAX_TIME_NO_RESPONSES
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component

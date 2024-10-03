@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timee
 import com.arkhamusserver.arkhamus.logic.ingame.GameEndLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import org.springframework.stereotype.Component

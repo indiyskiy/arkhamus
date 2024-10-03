@@ -13,8 +13,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.God.values
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God.values
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.tech.GameEndedRequestMessage
 import org.springframework.stereotype.Component

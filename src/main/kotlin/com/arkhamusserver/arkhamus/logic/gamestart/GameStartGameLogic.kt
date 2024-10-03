@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

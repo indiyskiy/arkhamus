@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
-import com.arkhamusserver.arkhamus.model.redis.WithPoint
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.stereotype.Component
 
 @Component
@@ -14,10 +14,11 @@ class ZonesHandler(
     fun inSameZoneOrNotInZone(
         withPoint1: WithPoint,
         withPoint2: WithPoint,
-        levelGeometryData: LevelGeometryData
+        levelGeometryData: LevelGeometryData,
+        types: Set<ZoneType> = emptySet()
     ): Boolean {
-        val user1Zones = filterByPosition(withPoint1, levelGeometryData)
-        val user2Zones = filterByPosition(withPoint2, levelGeometryData)
+        val user1Zones = filterByPosition(withPoint1, levelGeometryData, types)
+        val user2Zones = filterByPosition(withPoint2, levelGeometryData, types)
         return (user1Zones.isEmpty() && user2Zones.isEmpty()) || user1Zones.any { user2Zones.contains(it) }
     }
 

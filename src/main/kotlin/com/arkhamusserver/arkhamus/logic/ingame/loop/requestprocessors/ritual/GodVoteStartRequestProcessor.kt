@@ -10,9 +10,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritua
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling

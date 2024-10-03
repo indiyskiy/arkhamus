@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.model.redis
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.AWAITING
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.AWAITING
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed

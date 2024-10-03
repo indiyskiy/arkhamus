@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.item
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.CrafterType
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.*
 import org.springframework.stereotype.Component
 import kotlin.math.roundToLong
 

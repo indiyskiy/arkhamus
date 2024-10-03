@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.ingame
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 
 data class AbilityDto(
     val id: Int,

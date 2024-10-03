@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.view.maker.ingame
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToClassResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.view.dto.ingame.AbilityDto
 import org.springframework.stereotype.Component
 

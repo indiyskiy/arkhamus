@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestDeclineRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.TakeQuestRewardRequestProcessData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserQuestProgressRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.*
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.containers
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser

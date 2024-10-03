@@ -3,12 +3,12 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
-import com.arkhamusserver.arkhamus.model.redis.WithId
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

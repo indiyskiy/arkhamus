@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.container.OpenContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

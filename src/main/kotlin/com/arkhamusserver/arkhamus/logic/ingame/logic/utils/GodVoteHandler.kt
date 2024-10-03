@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState.ONGOING
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState.VOTING
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState.VOTING
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling

@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.slf4j.Logger

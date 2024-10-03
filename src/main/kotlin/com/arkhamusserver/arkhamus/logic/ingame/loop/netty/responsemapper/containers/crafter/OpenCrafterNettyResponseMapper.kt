@@ -15,8 +15,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyR
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter

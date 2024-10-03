@@ -4,9 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToClassResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import org.springframework.stereotype.Component
@@ -70,16 +69,14 @@ class CanAbilityBeCastHandler(
     fun canBeCastedRightNow(
         ability: Ability,
         user: RedisGameUser,
-        targetId: String?,
-        targetType: GameObjectType?,
+        target: Any?,
         globalGameData: GlobalGameData
     ) = additionalAbilityConditions.filter { it.accepts(ability) }.let { conditions ->
         conditions.isEmpty() || conditions.all {
             it.canBeCastedRightNow(
                 ability,
                 user,
-                targetId,
-                targetType,
+                target,
                 globalGameData
             )
         }

@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.toItemName
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisQuestRewardRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisQuestReward

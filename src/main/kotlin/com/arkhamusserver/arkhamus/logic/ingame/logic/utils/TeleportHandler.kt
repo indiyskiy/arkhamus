@@ -2,10 +2,10 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.WithPoint
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 

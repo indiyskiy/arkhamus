@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.maker.ingame
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.view.dto.ingame.GodDto
 import org.springframework.stereotype.Component
 

@@ -3,8 +3,8 @@ package com.arkhamusserver.arkhamus.usefullThings
 import com.arkhamusserver.arkhamus.logic.ingame.item.Ingredient
 import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
 import com.arkhamusserver.arkhamus.logic.ingame.item.RecipesSource
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
 
@@ -12,7 +12,7 @@ class QuestProbability {
     companion object {
         private const val numberOfQuests = 50
         private const val timesToRepeat = 10_000
-        private const val slotsFromQuest = 4
+        private const val SLOTS_FOR_ONE_QUEST = 4
         private val random = Random(System.currentTimeMillis())
     }
 
@@ -29,7 +29,7 @@ class QuestProbability {
             repeat(timesToRepeat) {
                 val lootedItemsSet: MutableSet<Item> = mutableSetOf()
                 repeat(currentNumberOfQuests) {
-                    val possibleRewards = generateRewards(distinctItems, slotsFromQuest)
+                    val possibleRewards = generateRewards(distinctItems, SLOTS_FOR_ONE_QUEST)
                     val reward = pickReward(lootedItemsSet, possibleRewards, usefulItems)
                     lootedItemsSet.add(reward)
                 }
@@ -55,7 +55,7 @@ class QuestProbability {
             repeat(timesToRepeat) {
                 val lootedItemsSet: MutableSet<Item> = mutableSetOf()
                 repeat(currentNumberOfQuests) {
-                    val possibleRewards = generateRewards(distinctItems, slotsFromQuest)
+                    val possibleRewards = generateRewards(distinctItems, SLOTS_FOR_ONE_QUEST)
                     val reward = pickReward(lootedItemsSet, possibleRewards, usefulItems)
                     lootedItemsSet.add(reward)
                 }
@@ -90,7 +90,7 @@ class QuestProbability {
             repeat(timesToRepeat) {
                 val lootedItemsSet: MutableSet<Item> = mutableSetOf()
                 repeat(currentNumberOfQuests) {
-                    val possibleRewards = generateRewards(distinctItems, slotsFromQuest)
+                    val possibleRewards = generateRewards(distinctItems, SLOTS_FOR_ONE_QUEST)
                     val reward = pickReward(lootedItemsSet, possibleRewards, usefulItems)
                     lootedItemsSet.add(reward)
                 }

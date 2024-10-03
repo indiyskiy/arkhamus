@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.request
 
-import com.arkhamusserver.arkhamus.model.redis.WithPoint
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 
 
 data class BaseRequestData(

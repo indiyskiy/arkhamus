@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.levelDesign
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.CrafterType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
 
 data class CrafterFromJson(
     var id: Long? = null,

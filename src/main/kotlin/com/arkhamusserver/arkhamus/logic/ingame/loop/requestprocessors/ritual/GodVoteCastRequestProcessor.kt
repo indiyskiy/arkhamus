@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteCastRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

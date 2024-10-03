@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
 
 data class CraftProcessResponse(

@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.WithPoint
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.stereotype.Component
 import java.awt.geom.Point2D
 
@@ -45,25 +45,6 @@ class GeometryUtils {
         return maxDistance >= distance(point1X, point1Y, point2X, point2Y)
     }
 
-    fun lineIntersects(a: Line, b: Line): Boolean {
-        val d = lineInteractionD(a, b)
-        return d != 0.0
-    }
-
-    fun lineIntersection(a: Line, b: Line): Point? {
-        val d = lineInteractionD(a, b)
-        if (d == 0.0) return null
-
-        val xi = (magicNumber1(b, a) - magicNumber1(a, b)) / d
-        val yi = (magicNumber2(b, a) - magicNumber2(a, b)) / d
-        return Point(xi, yi)
-    }
-
-    private fun lineInteractionD(
-        a: Line,
-        b: Line
-    ) = (a.p1.x - a.p2.x) * (b.p1.y - b.p2.y) - (a.p1.y - a.p2.y) * (b.p1.x - b.p2.x)
-
     fun contains(tetragon: Tetragon, point: WithPoint): Boolean =
         contains(tetragon, Point(point.x(), point.z()))
 
@@ -83,16 +64,6 @@ class GeometryUtils {
                 (dy * dy) / (ellipse.rz * ellipse.rz) <= 1
     }
 
-    private fun magicNumber2(
-        b: Line,
-        a: Line
-    ) = (b.p1.y - b.p2.y) * (a.p1.x * a.p2.y - a.p1.y * a.p2.x)
-
-    private fun magicNumber1(
-        b: Line,
-        a: Line
-    ) = (b.p1.x - b.p2.x) * (a.p1.x * a.p2.y - a.p1.y * a.p2.x)
-
     private fun det(a: Point, b: Point, c: Point) =
         a.x * (b.y - c.y) +
                 b.x * (c.y - a.y) +
@@ -111,8 +82,6 @@ class GeometryUtils {
     }
 
     data class Point(var x: Double, var y: Double)
-
-    class Line(var p1: Point, var p2: Point)
 
     class Tetragon(val p0: Point, val p1: Point, val p2: Point, val p3: Point)
 

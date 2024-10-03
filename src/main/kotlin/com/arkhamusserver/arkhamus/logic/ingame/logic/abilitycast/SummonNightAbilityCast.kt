@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser

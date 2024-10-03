@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAbilityCastRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component

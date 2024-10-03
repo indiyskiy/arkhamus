@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component

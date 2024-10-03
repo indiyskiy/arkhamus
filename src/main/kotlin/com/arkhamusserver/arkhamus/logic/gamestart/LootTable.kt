@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 
 data class LootTable(
     var size: Double,

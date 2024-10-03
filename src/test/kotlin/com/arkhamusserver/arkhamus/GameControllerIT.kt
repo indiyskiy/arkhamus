@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus
 
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.utils.EnvironmentSetupUtil
 import com.arkhamusserver.arkhamus.utils.FakeUserSetupUtil
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.GRAF_D

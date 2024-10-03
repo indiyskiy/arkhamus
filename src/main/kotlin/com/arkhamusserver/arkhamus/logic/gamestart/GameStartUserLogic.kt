@@ -6,9 +6,9 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRe
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.CULTIST
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.INVESTIGATOR
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.CULTIST
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.INVESTIGATOR
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.fasterxml.uuid.Generators
 import org.slf4j.Logger

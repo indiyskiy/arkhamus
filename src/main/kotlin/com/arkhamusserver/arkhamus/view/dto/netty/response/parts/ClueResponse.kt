@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.GodType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.GodType
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
 
 data class ClueResponse(

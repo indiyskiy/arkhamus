@@ -16,6 +16,22 @@ class GameObjectFinder {
         return when (type) {
             CHARACTER -> data.users[id.toLong()]
             VOTE_SPOT -> data.voteSpots.firstOrNull { it.gameId == id.toLong() }
+            CONTAINER -> data.containers[id.toLong()]
+            CRAFTER -> data.crafters[id.toLong()]
+        }
+    }
+
+    fun all(
+        types: List<GameObjectType>,
+        data: GlobalGameData
+    ): List<Any> {
+        return types.flatMap { type ->
+            when (type) {
+                CHARACTER -> data.users.values
+                VOTE_SPOT -> data.voteSpots
+                CONTAINER -> data.containers.values
+                CRAFTER -> data.crafters.values
+            }
         }
     }
 }

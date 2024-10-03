@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed

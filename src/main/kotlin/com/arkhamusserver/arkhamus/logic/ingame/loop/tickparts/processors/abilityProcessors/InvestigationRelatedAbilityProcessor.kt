@@ -1,9 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

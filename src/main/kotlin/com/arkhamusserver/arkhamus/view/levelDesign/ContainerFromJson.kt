@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.levelDesign
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.ContainerTag
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.ContainerTag
 
 data class ContainerFromJson(
     var id: Long? = null,

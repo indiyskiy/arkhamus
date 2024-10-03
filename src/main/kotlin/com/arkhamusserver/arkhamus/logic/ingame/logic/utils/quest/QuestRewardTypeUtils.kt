@@ -5,8 +5,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisQuestReward

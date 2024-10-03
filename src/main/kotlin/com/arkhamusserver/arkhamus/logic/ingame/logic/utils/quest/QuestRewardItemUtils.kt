@@ -1,7 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.ItemType.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisQuestReward

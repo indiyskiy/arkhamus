@@ -9,10 +9,10 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarState
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser

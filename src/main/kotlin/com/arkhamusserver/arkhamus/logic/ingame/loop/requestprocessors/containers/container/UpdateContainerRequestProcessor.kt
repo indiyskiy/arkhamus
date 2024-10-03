@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.conta
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.containers.ContainerLikeThingsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
 import org.slf4j.Logger

@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component
 

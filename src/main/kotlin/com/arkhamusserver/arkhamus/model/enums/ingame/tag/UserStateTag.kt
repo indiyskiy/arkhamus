@@ -1,4 +1,6 @@
-package com.arkhamusserver.arkhamus.model.enums.ingame
+package com.arkhamusserver.arkhamus.model.enums.ingame.tag
+
+import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility
 
 enum class UserStateTag(
     private val visibility: Visibility?

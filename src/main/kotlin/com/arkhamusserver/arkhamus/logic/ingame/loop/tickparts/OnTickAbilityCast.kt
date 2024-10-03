@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAbilityCastRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState.*
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -24,7 +24,6 @@ class OnTickAbilityCast(
     fun applyAbilityCasts(
         globalGameData: GlobalGameData,
         castAbilities: List<RedisAbilityCast>,
-        currentGameTime: Long
     ) {
         castAbilities.forEach { castAbility ->
             when (castAbility.state) {

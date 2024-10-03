@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.CrafterType
-import com.arkhamusserver.arkhamus.model.redis.WithPoint
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import jakarta.persistence.*
 
 @Entity

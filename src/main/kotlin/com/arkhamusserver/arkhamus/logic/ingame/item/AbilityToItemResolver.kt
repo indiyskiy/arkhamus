@@ -1,9 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.item
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,6 +18,7 @@ class AbilityToItemResolver {
                 //cultist items
                 THROW_POTATO -> CURSED_POTATO
                 SUMMON_NIGHT -> MOON_STONE
+                PEEKABOO_CURSE_ITEM -> RITUAL_DAGGER
                 //clue search items
                 SEARCH_FOR_INSCRIPTION -> INSCRIPTION_INVESTIGATION_ITEM
                 SEARCH_FOR_SOUND -> SOUND_INVESTIGATION_ITEM

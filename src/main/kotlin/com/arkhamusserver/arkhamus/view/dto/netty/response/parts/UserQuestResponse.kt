@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
 
 data class UserQuestResponse(
     var id: String,

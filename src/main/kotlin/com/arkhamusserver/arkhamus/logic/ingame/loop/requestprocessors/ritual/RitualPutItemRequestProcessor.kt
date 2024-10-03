@@ -11,8 +11,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritua
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser

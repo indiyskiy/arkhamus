@@ -5,8 +5,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCraftProcessRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import org.slf4j.Logger
@@ -29,7 +29,6 @@ class OnTickCraftProcess(
     fun applyCraftProcess(
         globalGameData: GlobalGameData,
         castAbilities: List<RedisCraftProcess>,
-        currentGameTime: Long
     ) {
         castAbilities.forEach { craftProcess ->
             if (craftProcess.state == RedisTimeEventState.ACTIVE && craftProcess.timeLeft > 0) {

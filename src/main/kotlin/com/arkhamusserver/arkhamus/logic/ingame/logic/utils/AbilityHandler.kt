@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import org.springframework.stereotype.Component
 

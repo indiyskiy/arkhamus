@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.model.redis
+package com.arkhamusserver.arkhamus.model.redis.interfaces
 
 interface WithPoint {
     fun x(): Double

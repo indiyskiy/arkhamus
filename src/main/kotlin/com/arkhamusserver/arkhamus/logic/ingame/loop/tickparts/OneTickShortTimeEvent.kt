@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisShortTimeEventRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

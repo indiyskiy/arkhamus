@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import jakarta.persistence.*
 
 @Entity

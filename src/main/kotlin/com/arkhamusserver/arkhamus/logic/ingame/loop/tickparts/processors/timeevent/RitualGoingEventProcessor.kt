@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserStateTag.IN_RITUAL
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser

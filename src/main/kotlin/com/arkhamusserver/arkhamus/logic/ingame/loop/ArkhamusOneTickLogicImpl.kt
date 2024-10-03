@@ -39,13 +39,11 @@ class ArkhamusOneTickLogicImpl(
             oneTickShortTimeEvent.processShortTimeEvents(globalGameData.shortTimeEvents)
             onTickAbilityCast.applyAbilityCasts(
                 globalGameData,
-                globalGameData.castAbilities,
-                game.globalTimer
+                globalGameData.castAbilities
             )
             onTickCraftProcess.applyCraftProcess(
                 globalGameData,
-                globalGameData.craftProcess,
-                game.globalTimer
+                globalGameData.craftProcess
             )
             val processedRequests = oneTickUserRequests.processRequests(
                 currentTasks,

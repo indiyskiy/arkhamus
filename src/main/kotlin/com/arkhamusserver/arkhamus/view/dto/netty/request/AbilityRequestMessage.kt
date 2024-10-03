@@ -4,8 +4,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 
 class AbilityRequestMessage(
     var abilityId: Int,
-    var targetId: String?,
-    var targetType: GameObjectType?,
+    val targetId: String?,
+    val targetType: GameObjectType?,
     var actionId: Long,
     type: String,
     baseRequestData: BaseRequestData

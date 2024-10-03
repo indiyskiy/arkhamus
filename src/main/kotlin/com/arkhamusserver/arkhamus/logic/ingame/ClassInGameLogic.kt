@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToClassResolver
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.ClassInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.view.dto.ingame.ClassInGameDto
 import com.arkhamusserver.arkhamus.view.maker.ingame.ClassInGameDtoMaker
 import org.springframework.stereotype.Component

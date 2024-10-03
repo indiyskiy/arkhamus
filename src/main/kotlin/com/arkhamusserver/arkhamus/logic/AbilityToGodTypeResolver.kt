@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.GodType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.GodType
 import org.springframework.stereotype.Component
 
 @Component

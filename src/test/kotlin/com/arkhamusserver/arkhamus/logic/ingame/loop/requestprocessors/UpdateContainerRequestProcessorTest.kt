@@ -14,6 +14,11 @@ import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import com.arkhamusserver.arkhamus.model.enums.RoleName
 import com.arkhamusserver.arkhamus.model.enums.ingame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
@@ -440,7 +445,8 @@ class UpdateContainerRequestProcessorTest {
             y = container.y,
             z = container.z,
             interactionRadius = container.interactionRadius,
-            items = inContainerItems
+            items = inContainerItems,
+            gameTags = mutableListOf(),
         )
 
         val oldUserItems = createOldUserItems()

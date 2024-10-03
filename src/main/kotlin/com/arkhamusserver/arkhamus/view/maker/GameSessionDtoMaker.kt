@@ -5,8 +5,8 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
 import com.arkhamusserver.arkhamus.model.enums.GameState.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.CULTIST
-import com.arkhamusserver.arkhamus.model.enums.ingame.RoleTypeInGame.INVESTIGATOR
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.CULTIST
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.INVESTIGATOR
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.dto.InGameUserDto
 import com.arkhamusserver.arkhamus.view.dto.RoleDto

@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUE
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_TO_REFRESH
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserQuestProgressRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.UserQuestState.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.*
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress

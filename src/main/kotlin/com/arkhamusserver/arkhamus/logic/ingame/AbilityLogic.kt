@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.view.dto.ingame.AbilityDto
 import com.arkhamusserver.arkhamus.view.dto.ingame.ItemToAbilityDto
 import com.arkhamusserver.arkhamus.view.dto.ingame.SimpleItemToAbilityDto

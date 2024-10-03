@@ -15,7 +15,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyR
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapObjectState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.CraftProcessNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell

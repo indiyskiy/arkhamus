@@ -7,8 +7,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts
 import com.arkhamusserver.arkhamus.logic.ingame.toGod
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.GodType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.GodType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
