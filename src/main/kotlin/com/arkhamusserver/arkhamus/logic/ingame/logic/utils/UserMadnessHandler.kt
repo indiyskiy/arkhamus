@@ -20,6 +20,10 @@ class UserMadnessHandler {
         applyMadness(gameUser, NIGHT_MADNESS_TICK)
     }
 
+    fun applyMadness(gameUser: RedisGameUser, madness: Int) {
+        applyMadness(gameUser, madness.toDouble())
+    }
+
     fun applyMadness(gameUser: RedisGameUser, madness: Double) {
         val before = gameUser.madness
         gameUser.madness += madness

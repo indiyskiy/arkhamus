@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.containers.container
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ObjectWithTagsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
@@ -12,7 +13,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class OpenContainerRequestProcessor(
-    private val redisContainerRepository: RedisContainerRepository
+    private val redisContainerRepository: RedisContainerRepository,
+    private val objectWithTagsHandler: ObjectWithTagsHandler
 ) : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is OpenContainerRequestGameData
@@ -25,11 +27,12 @@ class OpenContainerRequestProcessor(
         ongoingEvents: List<OngoingEvent>
     ) {
         val gameData = requestDataHolder.requestProcessData as OpenContainerRequestGameData
-        val oldGameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
+        val gameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
         val container = gameData.container
         if ((container.state == MapObjectState.ACTIVE) && (container.holdingUser == null)) {
-            container.holdingUser = oldGameUser.userId
+            container.holdingUser = gameUser.userId
             container.state = MapObjectState.HOLD
+            objectWithTagsHandler.processObject(container, gameUser, globalGameData)
             redisContainerRepository.save(container)
         }
     }

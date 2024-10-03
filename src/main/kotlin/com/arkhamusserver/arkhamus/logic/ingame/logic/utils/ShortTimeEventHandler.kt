@@ -4,8 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTi
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisShortTimeEventRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
 import com.fasterxml.uuid.Generators
@@ -41,7 +41,12 @@ class ShortTimeEventHandler(
     }
 
     @Transactional
-    fun createCastAbilityEvent(userId: Long, gameId: Long, globalTimer: Long) {
+    fun createShortTimeEvent(
+        userId: Long,
+        gameId: Long,
+        globalTimer: Long,
+        type: ShortTimeEventType
+    ) {
         redisShortTimeEventRepository.save(
             RedisShortTimeEvent(
                 id = Generators.timeBasedEpochGenerator().generate().toString(),
@@ -51,8 +56,8 @@ class ShortTimeEventHandler(
                 yLocation = null,
                 timeStart = globalTimer,
                 timePast = 0,
-                timeLeft = ShortTimeEventType.ABILITY_CAST.getTime(),
-                type = ShortTimeEventType.ABILITY_CAST,
+                timeLeft = type.getTime(),
+                type = type,
                 state = RedisTimeEventState.ACTIVE,
             )
         )

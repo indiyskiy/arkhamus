@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
+import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import org.springframework.stereotype.Component
@@ -61,7 +62,12 @@ class AbilityRequestProcessor(
         globalTimer: Long
     ) {
         createCastAbilityEventHandler.createCastAbilityEvent(ability, userId, gameId, globalTimer)
-        shortTimeEventHandler.createCastAbilityEvent(userId, gameId, globalTimer)
+        shortTimeEventHandler.createShortTimeEvent(
+            userId,
+            gameId,
+            globalTimer,
+            ShortTimeEventType.ABILITY_CAST
+        )
     }
 
     private fun consumeItem(

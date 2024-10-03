@@ -14,6 +14,7 @@ class ArkhamusOneTickLogicImpl(
     private val oneTickUserResponses: OneTickUserResponses,
     private val redisDataAccess: RedisDataAccess,
     private val oneTickUserRequests: OneTickUserRequests,
+    private val oneTickUser: OneTickUser,
     private val oneTickTick: OneTickTick,
     private val oneTickTimeEvent: OneTickTimeEvent,
     private val oneTickShortTimeEvent: OneTickShortTimeEvent,
@@ -50,6 +51,7 @@ class ArkhamusOneTickLogicImpl(
                 globalGameData,
                 ongoingEvents,
             )
+            oneTickUser.processUsers(globalGameData, ongoingEvents)
             val responses =
                 oneTickUserResponses.buildResponses(
                     globalGameData,
@@ -58,7 +60,6 @@ class ArkhamusOneTickLogicImpl(
             if (responses.isNotEmpty()) {
                 game.lastTimeSentResponse = game.globalTimer
             }
-
             oneTickTryEndGameMaybeHandler.checkIfEnd(game, globalGameData.users.values)
             afterLoopSaving.saveAll(globalGameData, game)
 

@@ -26,7 +26,6 @@ class OneTickUserRequests(
         ongoingEvents: List<OngoingEvent>,
     ): List<NettyTickRequestMessageDataHolder> {
         val tasksByUser = currentTasks.groupBy { it.userAccount.id }
-//        logger.debug("Process tasks of game ${globalGameData.game.gameId} tick $currentTick")
         return tasksByUser.map { entry ->
             val taskToProcess = chooseTaskToProcess(entry.value)
             processRequest(taskToProcess, globalGameData, ongoingEvents)
