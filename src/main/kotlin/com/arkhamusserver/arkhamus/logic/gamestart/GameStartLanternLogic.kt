@@ -46,7 +46,7 @@ class GameStartLanternLogic(
         lightRange = dbLantern.lightRange!!,
         filled = filled,
         activated = false,
-        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableList()
+        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
     )
 
 }

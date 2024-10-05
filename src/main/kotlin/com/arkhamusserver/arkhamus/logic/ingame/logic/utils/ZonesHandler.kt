@@ -11,16 +11,6 @@ import org.springframework.stereotype.Component
 class ZonesHandler(
     private val geometryUtils: GeometryUtils
 ) {
-    fun inSameZoneOrNotInZone(
-        withPoint1: WithPoint,
-        withPoint2: WithPoint,
-        levelGeometryData: LevelGeometryData,
-        types: Set<ZoneType> = emptySet()
-    ): Boolean {
-        val user1Zones = filterByPosition(withPoint1, levelGeometryData, types)
-        val user2Zones = filterByPosition(withPoint2, levelGeometryData, types)
-        return (user1Zones.isEmpty() && user2Zones.isEmpty()) || user1Zones.any { user2Zones.contains(it) }
-    }
 
     fun filterByPosition(
         withPoint: WithPoint,

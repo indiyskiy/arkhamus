@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.VisibilityByTagsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CrafterState
@@ -40,8 +41,8 @@ class CrafterDataHandler(
             responseToMask.holdingUserId = null
         } else {
             responseToMask.gameTags = responseToMask.gameTags.filter {
-                visibilityByTagsHandler.userCanSeeTarget(currentUser, it)
-            }
+                visibilityByTagsHandler.userCanSeeTarget(currentUser, InGameObjectTag.valueOf(it))
+            }.toMutableSet()
         }
     }
 

@@ -25,7 +25,7 @@ class SteamLogic {
         private const val STEAM_API_KEY = "CCCF25C2E631257F00C93AAED8D7037D"
         private const val STEAM_GAME_ID = "480" //public game id
 
-        private val STEAM_USER_INFO = "$STEAM_PRIVATE_URL/ISteamUser/GetPlayerSummaries/v2/"
+        private const val STEAM_USER_INFO = "$STEAM_PRIVATE_URL/ISteamUser/GetPlayerSummaries/v2/"
 
         private val logger = LoggerFactory.getLogger(SteamAuthController::class.java)
     }

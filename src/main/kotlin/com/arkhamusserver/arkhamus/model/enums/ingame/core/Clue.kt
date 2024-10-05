@@ -4,21 +4,18 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
 
 enum class Clue(
-    val visibilityModifiers: List<VisibilityModifier>,
+    val visibilityModifiers: Set<VisibilityModifier>,
+    private val visibilityModifiersString: MutableSet<String> = visibilityModifiers.map { it.name }.toMutableSet(),
 ) : WithVisibilityModifiers {
-    INSCRIPTION(listOf(VisibilityModifier.INSCRIPTION, VisibilityModifier.CULTIST)),
-    SOUND(listOf(VisibilityModifier.SOUND, VisibilityModifier.CULTIST)),
-    SCENT(listOf(VisibilityModifier.SCENT, VisibilityModifier.CULTIST)),
-    AURA(listOf(VisibilityModifier.AURA, VisibilityModifier.CULTIST)),
-    CORRUPTION(listOf(VisibilityModifier.CORRUPTION, VisibilityModifier.CULTIST)),
-    OMEN(listOf(VisibilityModifier.OMEN, VisibilityModifier.CULTIST)),
-    DISTORTION(listOf(VisibilityModifier.DISTORTION, VisibilityModifier.CULTIST));
+    INSCRIPTION(setOf(VisibilityModifier.INSCRIPTION, VisibilityModifier.CULTIST)),
+    SOUND(setOf(VisibilityModifier.SOUND, VisibilityModifier.CULTIST)),
+    SCENT(setOf(VisibilityModifier.SCENT, VisibilityModifier.CULTIST)),
+    AURA(setOf(VisibilityModifier.AURA, VisibilityModifier.CULTIST)),
+    CORRUPTION(setOf(VisibilityModifier.CORRUPTION, VisibilityModifier.CULTIST)),
+    OMEN(setOf(VisibilityModifier.OMEN, VisibilityModifier.CULTIST)),
+    DISTORTION(setOf(VisibilityModifier.DISTORTION, VisibilityModifier.CULTIST));
 
-    override fun visibilityModifiers(): List<VisibilityModifier> {
-        return visibilityModifiers
-    }
-
-    override fun rewriteVisibilityModifiers(modifiers: List<VisibilityModifier>) {
-        return
+    override fun visibilityModifiers(): MutableSet<String> {
+        return visibilityModifiersString
     }
 }

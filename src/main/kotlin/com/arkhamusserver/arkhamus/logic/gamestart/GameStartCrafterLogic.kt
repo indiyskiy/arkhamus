@@ -40,8 +40,8 @@ class GameStartCrafterLogic(
         x = dbCrafter.x,
         y = dbCrafter.y,
         z = dbCrafter.z,
-        gameTags = mutableListOf(),
-        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableList()
+        gameTags = mutableSetOf(),
+        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
     ).apply {
         this.interactionRadius = dbCrafter.interactionRadius
         this.items = emptyMap<Int, Int>().toMutableMap()

@@ -32,6 +32,6 @@ class SteamAuthController(
     @GetMapping("redirect")
     fun redirectToSteamLogin(request: HttpServletRequest, response: HttpServletResponse) {
         val requestUrl = steamLogic.buildSteamAuthUrl()
-        response.sendRedirect(requestUrl);
+        response.sendRedirect(requestUrl)
     }
 }

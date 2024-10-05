@@ -64,7 +64,7 @@ class SteamReaderLogic {
                 .returnContent()
                 .asString()
 
-            logger.info("responseBody: ${responseBody}")
+            logger.info("responseBody: $responseBody")
 
             if (responseBody.contains("is_valid:true")) {
                 val steamId = openidIdentity?.replace(STEAM_ID_URL, "")

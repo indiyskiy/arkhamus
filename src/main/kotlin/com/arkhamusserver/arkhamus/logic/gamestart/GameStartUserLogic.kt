@@ -87,12 +87,12 @@ class GameStartUserLogic(
         return redisGameUsers
     }
 
-    private fun visibleModifiersByRole(game: RoleTypeInGame): MutableList<String> =
+    private fun visibleModifiersByRole(game: RoleTypeInGame): MutableSet<String> =
         when (game) {
             CULTIST -> listOf(VisibilityModifier.ALL, VisibilityModifier.CULTIST)
             INVESTIGATOR -> listOf(VisibilityModifier.ALL, VisibilityModifier.INVESTIGATOR)
             NEUTRAL -> listOf(VisibilityModifier.ALL, VisibilityModifier.NEUTRAL)
-        }.map { it.name }.toMutableList()
+        }.map { it.name }.toMutableSet()
 
 
     fun updateInvitedUsersInfoOnGameStart(

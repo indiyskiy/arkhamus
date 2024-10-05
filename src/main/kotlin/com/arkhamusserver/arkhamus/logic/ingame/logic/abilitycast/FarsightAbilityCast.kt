@@ -9,10 +9,6 @@ import org.springframework.stereotype.Component
 @Component
 class FarsightAbilityCast() : AbilityCast {
 
-    companion object {
-
-    }
-
     override fun accept(ability: Ability): Boolean {
         return ability == Ability.FARSIGHT
     }

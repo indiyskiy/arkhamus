@@ -123,7 +123,7 @@ class GameValidator {
         assertTrue(
             invitedUsers.firstOrNull { it.host }?.userAccount?.id?.let {
                 it == player.id
-            } ?: false,
+            } == true,
             "user ${player.id} is not a host of the game",
             RELATED_OBJECT
         )

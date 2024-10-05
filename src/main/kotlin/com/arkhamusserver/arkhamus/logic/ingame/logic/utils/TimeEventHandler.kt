@@ -110,7 +110,7 @@ class TimeEventHandler(
             xLocation = location?.x,
             yLocation = location?.y,
             zLocation = location?.z,
-            visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableList()
+            visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
         )
         redisTimeEventRepository.save(timer)
     }

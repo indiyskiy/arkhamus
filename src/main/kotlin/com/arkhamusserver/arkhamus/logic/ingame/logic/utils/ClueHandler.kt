@@ -71,7 +71,7 @@ class ClueHandler(
             gameId = gameId,
             levelZoneId = zoneId,
             clue = clue,
-            visibilityModifiers = clue.visibilityModifiers.map { it.name }.toMutableList()
+            visibilityModifiers = clue.visibilityModifiers.map { it.name }.toMutableSet()
         )
         redisClueRepository.save(redisClue)
     }

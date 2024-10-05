@@ -20,6 +20,7 @@ class SeeTheOmenAbilityCast() : AbilityCast {
             VisibilityModifier.OMEN,
             VisibilityModifier.DISTORTION,
         )
+        private val visibilityModifiersStrings = visibilityModifiers.map { it.name }
     }
 
     override fun accept(ability: Ability): Boolean {
@@ -41,11 +42,7 @@ class SeeTheOmenAbilityCast() : AbilityCast {
         val currentUser = abilityRequestProcessData.gameUser
         currentUser?.let { currentUserNotNull ->
             currentUserNotNull.stateTags.add(UserStateTag.INVESTIGATING.name)
-            currentUserNotNull.rewriteVisibilityModifiers(
-                currentUserNotNull.visibilityModifiers()
-                    .plus(visibilityModifiers)
-                    .distinct()
-            )
+            currentUserNotNull.visibilityModifiers.addAll(visibilityModifiersStrings)
         }
     }
 }

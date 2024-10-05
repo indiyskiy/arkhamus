@@ -34,8 +34,7 @@ class SearchForCorruptionAbilityCast(
         user.stateTags.add(UserStateTag.INVESTIGATING.name)
         val visibilityModifier = resolver.toVisibilityModifier(ability)
         visibilityModifier?.let {
-            val visibilityModifiers = (user.visibilityModifiers() + it).distinct()
-            user.rewriteVisibilityModifiers(visibilityModifiers)
+            user.visibilityModifiers.add(it.name)
             return true
         }
         return false

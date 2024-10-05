@@ -24,7 +24,8 @@ enum class Ability(
     val globalCooldown: Boolean = false,
     val targetTypes: List<GameObjectType>? = null,
     val range: Double? = null,
-    val visibilityModifiers: List<VisibilityModifier> = listOf(VisibilityModifier.ALL),
+    val visibilityModifiers: Set<VisibilityModifier> = setOf(VisibilityModifier.ALL),
+    private val visibilityModifiersString: MutableSet<String> = visibilityModifiers.map { it.name }.toMutableSet(),
 ) : WithVisibilityModifiers {
     // investigator ability 1***
     HEAL_MADNESS(
@@ -141,13 +142,10 @@ enum class Ability(
         active = MINUTE_IN_MILLIS * NIGHT_LENGTH_MINUTES / 2
     );
 
-    override fun visibilityModifiers(): List<VisibilityModifier> {
-        return visibilityModifiers
+    override fun visibilityModifiers(): MutableSet<String> {
+        return visibilityModifiersString
     }
 
-    override fun rewriteVisibilityModifiers(modifiers: List<VisibilityModifier>) {
-        return
-    }
 
     companion object {
         private val abilityMap = values().associateBy { it.id }

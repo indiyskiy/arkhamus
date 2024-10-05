@@ -61,7 +61,7 @@ class SteamAuthService(
 
     private fun buildUser(response: SteamUserResponse.SteamUserResponse): UserAccount {
         val player = response.response!!.players.first()
-        logger.info("player: ${player}")
+        logger.info("player: $player")
         return UserAccount(
             id = null,
             steamId = player.steamid,

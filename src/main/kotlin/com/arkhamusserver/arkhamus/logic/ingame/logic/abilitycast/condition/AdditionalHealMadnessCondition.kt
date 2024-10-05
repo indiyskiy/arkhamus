@@ -11,7 +11,7 @@ class AdditionalHealMadnessCondition(
     private val geometryUtils: GeometryUtils
 ) : AdditionalAbilityCondition {
     companion object {
-        val MAX_DISTANCE: Double = 20.0
+        const val MAX_DISTANCE: Double = 20.0
     }
 
     override fun accepts(ability: Ability): Boolean {

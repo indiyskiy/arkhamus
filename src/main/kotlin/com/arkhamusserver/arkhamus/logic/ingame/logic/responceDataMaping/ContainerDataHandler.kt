@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.VisibilityByTagsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.ContainerState
@@ -38,11 +39,11 @@ class ContainerDataHandler(
         ) {
             responseToMask.state = MapObjectState.ACTIVE
             responseToMask.holdingUserId = null
-            responseToMask.gameTags = emptyList()
+            responseToMask.gameTags = mutableSetOf()
         } else {
             responseToMask.gameTags = responseToMask.gameTags.filter {
-                visibilityByTagsHandler.userCanSeeTarget(currentUser, it)
-            }
+                visibilityByTagsHandler.userCanSeeTarget(currentUser, InGameObjectTag.valueOf(it))
+            }.toMutableSet()
         }
     }
 

@@ -96,7 +96,7 @@ class CanAbilityBeCastHandler(
     } else null
 
     private fun haveRelatedClass(ability: Ability, user: RedisGameUser): Boolean =
-        (!ability.classBased) || (abilityToClassResolver.resolve(ability)?.contains(user.classInGame) ?: false)
+        (!ability.classBased) || (abilityToClassResolver.resolve(ability)?.contains(user.classInGame) == true)
 
     private fun haveRelatedRole(ability: Ability, user: RedisGameUser): Boolean =
         user.role in ability.availableForRole

@@ -3,16 +3,14 @@ package com.arkhamusserver.arkhamus.model.enums.ingame.tag
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
 
 enum class InGameObjectTag(
-    private val visibilityModifiers: List<VisibilityModifier>
+    private val visibilityModifiers: Set<VisibilityModifier>,
+    private val visibilityModifiersStrings: MutableSet<String> = visibilityModifiers.map { it.name }.toMutableSet(),
 ) : WithVisibilityModifiers {
 
-    PEEKABOO_CURSE(listOf(VisibilityModifier.CULTIST));
+    PEEKABOO_CURSE(setOf(VisibilityModifier.CULTIST));
 
-    override fun visibilityModifiers(): List<VisibilityModifier> {
-        return visibilityModifiers
+    override fun visibilityModifiers(): MutableSet<String> {
+        return visibilityModifiersStrings
     }
 
-    override fun rewriteVisibilityModifiers(modifiers: List<VisibilityModifier>) {
-        return
-    }
 }

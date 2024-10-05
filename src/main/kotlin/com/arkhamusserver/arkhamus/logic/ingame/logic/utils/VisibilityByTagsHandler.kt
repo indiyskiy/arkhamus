@@ -9,9 +9,9 @@ class VisibilityByTagsHandler {
         who: WithVisibilityModifiers,
         target: WithVisibilityModifiers
     ): Boolean {
-        return !who
+        return who
             .visibilityModifiers()
             .intersect(target.visibilityModifiers())
-            .isEmpty()
+            .isNotEmpty()
     }
 }

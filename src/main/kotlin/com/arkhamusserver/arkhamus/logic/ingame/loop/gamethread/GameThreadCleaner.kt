@@ -65,14 +65,14 @@ class GameThreadCleaner(
                 if (canceled) {
                     loopHandlerFutures.remove(gameSessionId)
                     tasksMap.remove(gameSessionId)
-                    logger.info("Loop handler stopped for game session $gameSessionId with cancel")
-                    logger.info("loop handler futures size: ${loopHandlerFutures.size}")
+                    logger.info("Not canceled: Loop handler stopped for game session $gameSessionId with cancel")
+                    logger.info("Not canceled: loop handler futures size: ${loopHandlerFutures.size}")
                 }
             } else {
                 loopHandlerFutures.remove(gameSessionId)
                 tasksMap.remove(gameSessionId)
-                logger.info("Loop handler stopped for game session $gameSessionId without cancel")
-                logger.info("loop handler futures size: ${loopHandlerFutures.size}")
+                logger.info("Canceled: Loop handler stopped for game session $gameSessionId without cancel")
+                logger.info("Canceled: loop handler futures size: ${loopHandlerFutures.size}")
             }
         }
     }

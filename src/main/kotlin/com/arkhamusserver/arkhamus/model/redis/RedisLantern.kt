@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
@@ -21,7 +20,7 @@ data class RedisLantern(
     var y: Double,
     var z: Double,
     var lightRange: Double,
-    var visibilityModifiers: MutableList<String>,
+    var visibilityModifiers: MutableSet<String>,
 ) : WithPoint, WithId, WithVisibilityModifiers {
 
     override fun x(): Double {
@@ -40,11 +39,7 @@ data class RedisLantern(
         return lanternId
     }
 
-    override fun visibilityModifiers(): List<VisibilityModifier> {
-        return visibilityModifiers.map { enumValueOf<VisibilityModifier>(it) }
-    }
-
-    override fun rewriteVisibilityModifiers(modifiers: List<VisibilityModifier>) {
-        visibilityModifiers = modifiers.map { it.name }.toMutableList()
+    override fun visibilityModifiers(): MutableSet<String> {
+        return visibilityModifiers
     }
 }

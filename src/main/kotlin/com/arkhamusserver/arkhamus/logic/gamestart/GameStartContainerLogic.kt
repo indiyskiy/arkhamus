@@ -44,14 +44,14 @@ class GameStartContainerLogic(
     ) = RedisContainer(
         id = Generators.timeBasedEpochGenerator().generate().toString(),
         containerId = dbContainer.inGameId,
-        containerTags = dbContainer.containerTags.map { it.name }.toMutableList(),
+        containerTags = dbContainer.containerTags.map { it.name }.toMutableSet(),
         gameId = game.id!!,
         x = dbContainer.x,
         y = dbContainer.y,
         z = dbContainer.z,
         interactionRadius = dbContainer.interactionRadius,
-        gameTags = mutableListOf(),
-        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableList()
+        gameTags = mutableSetOf(),
+        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
     ).apply {
         this.items = randomizeItems(dbContainer)
         redisContainerRepository.save(this)

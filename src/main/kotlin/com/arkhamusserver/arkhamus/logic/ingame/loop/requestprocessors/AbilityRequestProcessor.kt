@@ -35,7 +35,7 @@ class AbilityRequestProcessor(
             val canBeCast =
                 abilityRequestProcessData.canBeSeen &&
                         abilityRequestProcessData.fitAdditionalConditions &&
-                        (abilityRequestProcessData.cooldown?.let { it <= 0 } ?: true)
+                        (abilityRequestProcessData.cooldown?.let { it <= 0 } != false)
             if (canBeCast) {
                 val casted = abilityCastHandler.cast(ability, abilityRequestProcessData, globalGameData)
                 if (casted) {
@@ -67,7 +67,7 @@ class AbilityRequestProcessor(
             gameId,
             globalTimer,
             ShortTimeEventType.ABILITY_CAST,
-            ability.visibilityModifiers
+            ability.visibilityModifiers()
         )
     }
 

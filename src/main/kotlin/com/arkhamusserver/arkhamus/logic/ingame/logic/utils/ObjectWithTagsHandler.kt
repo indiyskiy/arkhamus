@@ -23,7 +23,7 @@ class ObjectWithTagsHandler(
     ) {
         withGameTags.gameTags().forEach { tag ->
             when (tag) {
-                InGameObjectTag.PEEKABOO_CURSE -> {
+                InGameObjectTag.PEEKABOO_CURSE.name -> {
                     processPeekabooCurse(user, withGameTags, tag, data)
                 }
             }
@@ -33,7 +33,7 @@ class ObjectWithTagsHandler(
     private fun processPeekabooCurse(
         user: RedisGameUser,
         withGameTags: WithGameTags,
-        tag: InGameObjectTag,
+        tag: String,
         data: GlobalGameData
     ) {
         madnessHandler.applyMadness(user, 10)
@@ -44,7 +44,7 @@ class ObjectWithTagsHandler(
                 data.game.gameId!!,
                 data.game.globalTimer,
                 ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CONTAINER,
-                Ability.PEEKABOO_CURSE_ITEM.visibilityModifiers
+                Ability.PEEKABOO_CURSE_ITEM.visibilityModifiers()
             )
         }
         if (withGameTags is RedisCrafter) {
@@ -53,7 +53,7 @@ class ObjectWithTagsHandler(
                 data.game.gameId!!,
                 data.game.globalTimer,
                 ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CRAFTER,
-                Ability.PEEKABOO_CURSE_ITEM.visibilityModifiers
+                Ability.PEEKABOO_CURSE_ITEM.visibilityModifiers()
             )
         }
     }

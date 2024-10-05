@@ -47,11 +47,13 @@ class InvestigationRelatedAbilityProcessor(
             val ability = castAbility.abilityId.toAbility()!!
             it.stateTags.remove(UserStateTag.INVESTIGATING.name)
             val visibilityModifier = resolver.toVisibilityModifier(ability)
-            visibilityModifier?.let { visibilityModifierNotNull ->
-                val usersVisibleModifiers = it.visibilityModifiers().filter {
-                    it != visibilityModifierNotNull
-                }
-                it.rewriteVisibilityModifiers(usersVisibleModifiers)
+            visibilityModifier?.name?.let { visibilityModifierNotNull ->
+                val usersVisibleModifiers = it
+                    .visibilityModifiers()
+                    .filter {
+                        it != visibilityModifierNotNull
+                    }.toMutableSet()
+                it.visibilityModifiers = usersVisibleModifiers
             }
         }
     }
