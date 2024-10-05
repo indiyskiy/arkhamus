@@ -30,7 +30,7 @@
             <td th:text="${god.name.name}">Name</td>
             <td>
                 <ul>
-                    <li th:each="type : ${god.getTypes()}">
+                    <li th:each="type : ${god.getClues()}">
                         <span th:text="${type.name}">Clue</span>:
                     </li>
                 </ul>

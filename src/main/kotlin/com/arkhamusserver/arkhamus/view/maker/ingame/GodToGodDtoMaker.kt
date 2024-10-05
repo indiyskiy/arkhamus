@@ -13,7 +13,7 @@ class GodToGodDtoMaker {
         GodDto().apply {
             this.id = from.getId()
             this.name = from
-            this.types = from.getTypes()
+            this.clues = from.getTypes()
         }
 
 }

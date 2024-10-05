@@ -47,8 +47,7 @@ class LevelTaskCompleteNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castAbilities,
-                userId!!
+                user
             )
 
             val (quest, userQuestProgress) = questProgressHandler.questAndProgress(levelTaskId, globalGameData, userId)

@@ -51,8 +51,7 @@ class GodVoteCastNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castAbilities,
-                userId!!
+                user
             )
             return GodVoteCastRequestProcessData(
                 votedGod = this.godId.toGod(),

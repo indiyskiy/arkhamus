@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisShortTimeEventRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
 import com.fasterxml.uuid.Generators
@@ -45,7 +46,8 @@ class ShortTimeEventHandler(
         userId: Long,
         gameId: Long,
         globalTimer: Long,
-        type: ShortTimeEventType
+        type: ShortTimeEventType,
+        visibilityModifiers: List<VisibilityModifier>
     ) {
         redisShortTimeEventRepository.save(
             RedisShortTimeEvent(
@@ -59,6 +61,7 @@ class ShortTimeEventHandler(
                 timeLeft = type.getTime(),
                 type = type,
                 state = RedisTimeEventState.ACTIVE,
+                visibilityModifiers = visibilityModifiers.map { it.name }.toMutableList()
             )
         )
     }

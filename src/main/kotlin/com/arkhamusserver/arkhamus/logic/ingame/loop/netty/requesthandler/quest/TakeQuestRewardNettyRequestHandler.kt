@@ -45,8 +45,7 @@ class TakeQuestRewardNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castAbilities,
-                userId!!
+                user
             )
 
             val questGiverId = this.questGiverId

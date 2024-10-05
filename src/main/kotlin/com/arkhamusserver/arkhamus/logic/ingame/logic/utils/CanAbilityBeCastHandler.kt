@@ -18,6 +18,7 @@ class CanAbilityBeCastHandler(
     private val relatedAbilityCastHandler: RelatedAbilityCastHandler,
     private val additionalAbilityConditions: List<AdditionalAbilityCondition>
 ) {
+
     fun canUserSeeAbility(user: RedisGameUser, ability: Ability, requiredItem: Item?): Boolean {
         return haveRequiredItem(ability, requiredItem, user) &&
                 haveRelatedRole(ability, user) &&
@@ -72,6 +73,7 @@ class CanAbilityBeCastHandler(
         target: Any?,
         globalGameData: GlobalGameData
     ) = additionalAbilityConditions.filter { it.accepts(ability) }.let { conditions ->
+
         conditions.isEmpty() || conditions.all {
             it.canBeCastedRightNow(
                 ability,

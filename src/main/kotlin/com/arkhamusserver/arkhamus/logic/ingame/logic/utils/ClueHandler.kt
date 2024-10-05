@@ -1,17 +1,15 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
-import com.arkhamusserver.arkhamus.logic.AbilityToGodTypeResolver
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.toGod
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.GodType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
-import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
@@ -19,9 +17,7 @@ import kotlin.random.Random
 
 @Component
 class ClueHandler(
-    private val abilityToGodTypeResolver: AbilityToGodTypeResolver,
-    private val redisClueRepository: RedisClueRepository,
-    private val abilityHandler: AbilityHandler
+    private val redisClueRepository: RedisClueRepository
 ) {
 
     companion object {
@@ -31,17 +27,11 @@ class ClueHandler(
     fun filterClues(
         clues: List<RedisClue>,
         inZones: List<LevelZone>,
-        castAbilities: List<RedisAbilityCast>,
-        userId: Long
+        user: RedisGameUser
     ): List<RedisClue> {
-        val myOngoingAbilities = abilityHandler.myActiveAbilities(userId, castAbilities)
-        val possibleClues = myOngoingAbilities
-            .mapNotNull {
-                it.abilityId.toAbility()
-            }.map {
-                abilityToGodTypeResolver.resolve(it)
-            }.toSet()
-
+        val possibleClues = Clue.values().filter {
+            (it.visibilityModifiers intersect user.visibilityModifiers).isNotEmpty()
+        }
         val zonesSet = inZones.filter {
             it.zoneType == ZoneType.CLUE
         }.map {
@@ -53,28 +43,28 @@ class ClueHandler(
     fun addClues(
         game: GameSession,
         clueZones: List<RedisLevelZone>,
-        godType: GodType,
+        clue: Clue,
         number: Int
     ) {
         val zoneIds = clueZones.shuffled(random).take(number).map { it.inGameId() }
         zoneIds.forEach {
-            addClueToZone(game, it, godType)
+            addClueToZone(game, it, clue)
         }
     }
 
     private fun addClueToZone(
         game: GameSession,
         zoneId: Long,
-        godType: GodType
+        clue: Clue
     ) {
         val gameId = game.id!!
-        addClueToZone(gameId, zoneId, godType)
+        addClueToZone(gameId, zoneId, clue)
     }
 
     private fun addClueToZone(
         gameId: Long,
         zoneId: Long,
-        godType: GodType
+        godType: Clue
     ) {
         val clue = RedisClue(
             id = Generators.timeBasedEpochGenerator().generate().toString(),
@@ -83,10 +73,6 @@ class ClueHandler(
             clue = godType
         )
         redisClueRepository.save(clue)
-    }
-
-    private fun Int.toAbility(): Ability? {
-        return Ability.values().firstOrNull { it.id == this }
     }
 
     fun addRandomClue(data: GlobalGameData) {
@@ -121,7 +107,7 @@ class ClueHandler(
 
     private fun clueExistAlready(
         zone: GameDataLevelZone,
-        type: GodType,
+        type: Clue,
         clues: List<RedisClue>
     ): Boolean {
         return clues.any { it.clue == type && it.levelZoneId == zone.zoneId }

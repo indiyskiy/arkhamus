@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.VisibilityByTagsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
@@ -10,7 +11,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class ContainerDataHandler(
-    private val userLocationHandler: UserLocationHandler
+    private val userLocationHandler: UserLocationHandler,
+    private val visibilityByTagsHandler: VisibilityByTagsHandler
 ) {
     fun map(
         myUser: RedisGameUser,
@@ -27,12 +29,20 @@ class ContainerDataHandler(
     private fun mask(
         responseToMask: ContainerState,
         container: RedisContainer,
-        myUser: RedisGameUser,
+        currentUser: RedisGameUser,
         levelGeometryData: LevelGeometryData
     ) {
-        if (!userLocationHandler.userCanSeeTarget(myUser, container, levelGeometryData)) {
+        if (
+            !userLocationHandler.userCanSeeTarget(currentUser, container, levelGeometryData) ||
+            !visibilityByTagsHandler.userCanSeeTarget(currentUser, container)
+        ) {
             responseToMask.state = MapObjectState.ACTIVE
             responseToMask.holdingUserId = null
+            responseToMask.gameTags = emptyList()
+        } else {
+            responseToMask.gameTags = responseToMask.gameTags.filter {
+                visibilityByTagsHandler.userCanSeeTarget(currentUser, it)
+            }
         }
     }
 

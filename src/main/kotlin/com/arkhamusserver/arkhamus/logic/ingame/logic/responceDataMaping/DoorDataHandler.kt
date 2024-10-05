@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.VisibilityByTagsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorUserState
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class DoorDataHandler(
-    private val userLocationHandler: UserLocationHandler
+    private val userLocationHandler: UserLocationHandler,
+    private val visibilityByTagsHandler: VisibilityByTagsHandler
 ) {
     fun map(
         myUser: RedisGameUser,
@@ -50,9 +52,11 @@ class DoorDataHandler(
         myUser: RedisGameUser,
         levelGeometryData: LevelGeometryData
     ) {
-        //TODO maybe turn geometry of vision for doors back when it will be done in a right way
-        if (!userLocationHandler.userCanSeeTarget(myUser, door, levelGeometryData, false)) {
-            responseToMask.doorState = DoorUserState.OPEN
+        if (
+            !userLocationHandler.userCanSeeTarget(myUser, door, levelGeometryData, false) ||
+            !visibilityByTagsHandler.userCanSeeTarget(myUser, door)
+        ) {
+            responseToMask.doorState = DoorUserState.CLOSED
         }
     }
 

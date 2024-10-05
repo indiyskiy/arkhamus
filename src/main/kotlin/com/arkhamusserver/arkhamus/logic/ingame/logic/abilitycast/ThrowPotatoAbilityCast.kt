@@ -32,7 +32,7 @@ class ThrowPotatoAbilityCast(
         abilityRequestProcessData: AbilityRequestProcessData,
     ) {
         val currentUser = abilityRequestProcessData.gameUser
-        currentUser?.let { currentUserNotNull ->
+        currentUser?.let { _ ->
             val targetUser = abilityRequestProcessData.target as? RedisGameUser
             if (targetUser != null) {
                 inventoryHandler.addItem(targetUser, Item.CURSED_POTATO)

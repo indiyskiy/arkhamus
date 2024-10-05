@@ -47,8 +47,7 @@ class OpenCrafterNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castAbilities,
-                userId!!
+                user
             )
             return OpenCrafterRequestGameData(
                 crafter = crafter,

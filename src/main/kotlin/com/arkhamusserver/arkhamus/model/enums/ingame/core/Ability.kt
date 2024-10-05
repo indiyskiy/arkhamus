@@ -7,6 +7,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SEC
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
 
 private const val MINIMUM_COOLDOWN: Long = SECOND_IN_MILLIS
 private const val DEFAULT_INVESTIGATION_ACTIVE: Long = MINUTE_IN_MILLIS
@@ -22,7 +24,8 @@ enum class Ability(
     val globalCooldown: Boolean = false,
     val targetTypes: List<GameObjectType>? = null,
     val range: Double? = null,
-) {
+    val visibilityModifiers: List<VisibilityModifier> = listOf(VisibilityModifier.ALL),
+) : WithVisibilityModifiers {
     // investigator ability 1***
     HEAL_MADNESS(
         id = 1001,
@@ -136,8 +139,15 @@ enum class Ability(
         consumesItem = false,
         cooldown = MINUTE_IN_MILLIS * DAY_LENGTH_MINUTES,
         active = MINUTE_IN_MILLIS * NIGHT_LENGTH_MINUTES / 2
-    )
-    ;
+    );
+
+    override fun visibilityModifiers(): List<VisibilityModifier> {
+        return visibilityModifiers
+    }
+
+    override fun rewriteVisibilityModifiers(modifiers: List<VisibilityModifier>) {
+        return
+    }
 
     companion object {
         private val abilityMap = values().associateBy { it.id }
@@ -146,3 +156,5 @@ enum class Ability(
         }
     }
 }
+
+fun Int.toAbility() = Ability.byId(this)

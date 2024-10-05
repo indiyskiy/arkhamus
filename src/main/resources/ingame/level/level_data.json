@@ -695,84 +695,96 @@
     "containers": [
       {
         "containerTags": [],
-        "id": 800,
-        "interactionRadius": 3.5,
-        "name": "Cheaty Chest",
-        "x": 105.579002380371,
-        "y": 2,
-        "z": 1.58745002746582
-      },
-      {
-        "containerTags": [],
         "id": 801,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 109.990997314453,
+        "x": 108,
         "y": 2,
-        "z": 2
+        "z": 3.5
       },
       {
         "containerTags": [],
-        "id": 802,
+        "id": 800,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 105.850997924805,
+        "x": 108,
         "y": 2,
-        "z": 6.02419996261597
+        "z": 8
       },
       {
-        "containerTags": [],
-        "id": 803,
+        "containerTags": [
+          "FANCY",
+          "ABUNDANT"
+        ],
+        "id": 819,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 109.681999206543,
+        "x": 108,
         "y": 2,
-        "z": 5.94203996658325
-      },
-      {
-        "containerTags": [],
-        "id": 804,
-        "interactionRadius": 3.5,
-        "name": "Cheaty Chest",
-        "x": 105.432998657227,
-        "y": 2,
-        "z": 9.49456024169922
-      },
-      {
-        "containerTags": [],
-        "id": 805,
-        "interactionRadius": 3.5,
-        "name": "Cheaty Chest",
-        "x": 109.323997497559,
-        "y": 2,
-        "z": 9.58594036102295
-      },
-      {
-        "containerTags": [],
-        "id": 806,
-        "interactionRadius": 3.5,
-        "name": "Cheaty Chest",
-        "x": 105.678001403809,
-        "y": 2,
-        "z": 12.5792999267578
-      },
-      {
-        "containerTags": [],
-        "id": 807,
-        "interactionRadius": 3.5,
-        "name": "Cheaty Chest",
-        "x": 109.948997497559,
-        "y": 2,
-        "z": 12.5594997406006
+        "z": 11
       },
       {
         "containerTags": [],
         "id": 808,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 107.932998657227,
+        "x": 108,
         "y": 2,
-        "z": 14.538200378418
+        "z": 14.5
+      },
+      {
+        "containerTags": [],
+        "id": 802,
+        "interactionRadius": 3.5,
+        "name": "Cheaty Chest",
+        "x": 106,
+        "y": 2,
+        "z": 6.5
+      },
+      {
+        "containerTags": [],
+        "id": 803,
+        "interactionRadius": 3.5,
+        "name": "Cheaty Chest",
+        "x": 110,
+        "y": 2,
+        "z": 6.5
+      },
+      {
+        "containerTags": [],
+        "id": 804,
+        "interactionRadius": 3.5,
+        "name": "Cheaty Chest",
+        "x": 106,
+        "y": 2,
+        "z": 9.5
+      },
+      {
+        "containerTags": [],
+        "id": 805,
+        "interactionRadius": 3.5,
+        "name": "Cheaty Chest",
+        "x": 110,
+        "y": 2,
+        "z": 9.5
+      },
+      {
+        "containerTags": [],
+        "id": 806,
+        "interactionRadius": 3.5,
+        "name": "Cheaty Chest",
+        "x": 106,
+        "y": 2,
+        "z": 12.5
+      },
+      {
+        "containerTags": [],
+        "id": 807,
+        "interactionRadius": 3.5,
+        "name": "Cheaty Chest",
+        "x": 110,
+        "y": 2,
+        "z": 12.5
       },
       {
         "containerTags": [

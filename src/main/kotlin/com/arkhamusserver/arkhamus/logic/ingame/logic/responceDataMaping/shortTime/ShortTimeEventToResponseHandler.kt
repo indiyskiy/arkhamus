@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component
 @Component
 class ShortTimeEventToResponseHandler(
     private val shortTimeEventHandler: ShortTimeEventHandler,
-
     ) {
     fun filterAndMap(
         events: List<RedisShortTimeEvent>,

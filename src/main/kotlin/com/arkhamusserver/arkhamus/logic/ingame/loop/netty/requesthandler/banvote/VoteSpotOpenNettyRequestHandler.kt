@@ -47,8 +47,7 @@ class VoteSpotOpenNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castAbilities,
-                userId!!
+                user
             )
 
             val voteSpot = globalGameData.voteSpots.firstOrNull { it.voteSpotId == voteSpotId }

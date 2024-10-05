@@ -66,7 +66,8 @@ class AbilityRequestProcessor(
             userId,
             gameId,
             globalTimer,
-            ShortTimeEventType.ABILITY_CAST
+            ShortTimeEventType.ABILITY_CAST,
+            ability.visibilityModifiers
         )
     }
 

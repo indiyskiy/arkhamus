@@ -1,10 +1,10 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame.core
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.GodType.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue.*
 
 enum class God(
     private val id: Int,
-    private val godTypes: List<GodType>
+    private val clues: List<Clue>
 ) {
     AAMON(
         1,
@@ -87,8 +87,8 @@ enum class God(
         listOf(INSCRIPTION, OMEN, DISTORTION)
     );
 
-    fun getTypes(): List<GodType> =
-        godTypes
+    fun getTypes(): List<Clue> =
+        clues
 
 
     fun getId(): Int =

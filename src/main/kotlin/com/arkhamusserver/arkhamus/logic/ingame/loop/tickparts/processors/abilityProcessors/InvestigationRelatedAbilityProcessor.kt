@@ -1,8 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ClueAbilityToVisibilityModifierResolver
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import org.slf4j.Logger
@@ -10,7 +11,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class InvestigationRelatedAbilityProcessor : ActiveAbilityProcessor {
+class InvestigationRelatedAbilityProcessor(
+    private val resolver: ClueAbilityToVisibilityModifierResolver
+) : ActiveAbilityProcessor {
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(InvestigationRelatedAbilityProcessor::class.java)
@@ -23,13 +26,12 @@ class InvestigationRelatedAbilityProcessor : ActiveAbilityProcessor {
             Ability.SEARCH_FOR_OMEN,
             Ability.SEARCH_FOR_DISTORTION,
         )
-        val relatedSetIds = relatedSet.map { it.id }.toSet()
     }
 
     override fun accepts(castAbility: RedisAbilityCast): Boolean {
         return castAbility.abilityId.toAbility()?.let { ability ->
             ability in relatedSet
-        } ?: false
+        } == true
     }
 
     override fun processActive(
@@ -41,26 +43,17 @@ class InvestigationRelatedAbilityProcessor : ActiveAbilityProcessor {
 
     override fun finishActive(castAbility: RedisAbilityCast, globalGameData: GlobalGameData) {
         val user = globalGameData.users[castAbility.sourceUserId]
-        user?.stateTags?.let { tags ->
-            if (!globalGameData.castAbilities.any { ability ->
-                    ability.state == RedisTimeEventState.ACTIVE &&
-                            ability.sourceUserId == castAbility.sourceUserId &&
-                            ability.id != castAbility.id &&
-                            ability.abilityId in relatedSetIds
+        user?.let {
+            val ability = castAbility.abilityId.toAbility()!!
+            it.stateTags.remove(UserStateTag.INVESTIGATING.name)
+            val visibilityModifier = resolver.toVisibilityModifier(ability)
+            visibilityModifier?.let { visibilityModifierNotNull ->
+                val usersVisibleModifiers = it.visibilityModifiers().filter {
+                    it != visibilityModifierNotNull
                 }
-            ) {
-                logger.info("remove INVESTIGATING tag from user ${castAbility.sourceUserId}")
-                tags.remove(UserStateTag.INVESTIGATING.name)
-                logger.info("new user tags list is ${tags.joinToString()}")
-            } else {
-                logger.info("there is still active investigating source for user ${castAbility.sourceUserId}")
+                it.rewriteVisibilityModifiers(usersVisibleModifiers)
             }
         }
     }
-
-    private fun Int.toAbility(): Ability? =
-        Ability.values().firstOrNull { it.id == this }
-
 }
-
 

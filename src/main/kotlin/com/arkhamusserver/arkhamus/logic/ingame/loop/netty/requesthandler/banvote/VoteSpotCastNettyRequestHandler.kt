@@ -55,8 +55,7 @@ class VoteSpotCastNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castAbilities,
-                userId!!
+                user
             )
 
             val voteSpot = globalGameData.voteSpots.firstOrNull { it.voteSpotId == voteSpotId }
@@ -67,7 +66,7 @@ class VoteSpotCastNettyRequestHandler(
                 it.firstOrNull { it.userId == userId }
             }
 
-            val canVote = canUserCastVote(user, voteSpot, userId)
+            val canVote = canUserCastVote(user, voteSpot, userId!!)
             val canPay = checkIfUserCanPay(voteSpot, user)
 
             logger.info("target user id: $targetUserId")

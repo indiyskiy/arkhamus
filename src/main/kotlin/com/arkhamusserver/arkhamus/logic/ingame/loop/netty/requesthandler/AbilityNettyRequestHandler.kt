@@ -17,6 +17,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -32,6 +33,10 @@ class AbilityNettyRequestHandler(
     private val questProgressHandler: QuestProgressHandler,
     private val finder: GameObjectFinder
 ) : NettyRequestHandler {
+
+    companion object{
+        private val logger = LoggerFactory.getLogger(AbilityNettyRequestHandler::class.java)
+    }
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
         nettyRequestMessage::class.java == AbilityRequestMessage::class.java
@@ -56,8 +61,7 @@ class AbilityNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castAbilities,
-                userId!!
+                user
             )
             return ability?.let {
                 val relatedAbility =
@@ -77,6 +81,7 @@ class AbilityNettyRequestHandler(
                     target,
                     globalGameData
                 )
+                logger.info("canUserSeeAbility: $canUserSeeAbility, canUserCastAbility: $canUserCastAbility")
                 buildAbilityGameData(
                     ability,
                     canUserSeeAbility,

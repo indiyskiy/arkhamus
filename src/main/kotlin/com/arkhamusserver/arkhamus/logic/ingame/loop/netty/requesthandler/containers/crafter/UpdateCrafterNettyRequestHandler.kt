@@ -47,8 +47,7 @@ class UpdateCrafterNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castAbilities,
-                userId!!
+                user
             )
             val sortedUserInventory = request.newInventoryContent
             return UpdateCrafterRequestGameData(

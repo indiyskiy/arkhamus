@@ -51,7 +51,7 @@ class ArkhamusOneTickLogicImpl(
                 globalGameData,
                 ongoingEvents,
             )
-            oneTickUser.processUsers(globalGameData, ongoingEvents)
+            oneTickUser.processUsers(globalGameData)
             val responses =
                 oneTickUserResponses.buildResponses(
                     globalGameData,

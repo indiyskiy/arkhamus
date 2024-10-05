@@ -47,8 +47,7 @@ class OpenContainerNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
-                globalGameData.castAbilities,
-                userId!!
+                user
             )
             return OpenContainerRequestGameData(
                 container = container,

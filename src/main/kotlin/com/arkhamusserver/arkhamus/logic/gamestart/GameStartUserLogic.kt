@@ -7,8 +7,11 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSes
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.CULTIST
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.INVESTIGATOR
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
@@ -74,7 +77,8 @@ class GameStartUserLogic(
                 y = marker.y,
                 z = marker.z,
                 callToArms = game.gameSessionSettings.maxCallToArms,
-                connected = true
+                connected = true,
+                visibilityModifiers = visibleModifiersByRole(it.roleInGame!!)
             )
             GameStartLogic.logger.info("user placed to $redisGameUser")
             redisGameUser
@@ -82,6 +86,14 @@ class GameStartUserLogic(
         redisGameUserRepository.saveAll(redisGameUsers)
         return redisGameUsers
     }
+
+    private fun visibleModifiersByRole(game: RoleTypeInGame): MutableList<String> =
+        when (game) {
+            CULTIST -> listOf(VisibilityModifier.ALL, VisibilityModifier.CULTIST)
+            INVESTIGATOR -> listOf(VisibilityModifier.ALL, VisibilityModifier.INVESTIGATOR)
+            NEUTRAL -> listOf(VisibilityModifier.ALL, VisibilityModifier.NEUTRAL)
+        }.map { it.name }.toMutableList()
+
 
     fun updateInvitedUsersInfoOnGameStart(
         game: GameSession
