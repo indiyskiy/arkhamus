@@ -25,7 +25,7 @@ data class RedisShortTimeEvent(
     var type: ShortTimeEventType,
     var state: RedisTimeEventState,
 
-    var visibilityModifiers: MutableList<String> = mutableListOf(),
+    var visibilityModifiers: MutableList<String>,
 ) : WithVisibilityModifiers {
     override fun visibilityModifiers(): List<VisibilityModifier> {
         return visibilityModifiers.map { enumValueOf<VisibilityModifier>(it) }

@@ -25,7 +25,7 @@ data class RedisContainer(
     var interactionRadius: Double = 0.0,
     var items: MutableMap<Int, Int> = HashMap(),
     var gameTags: MutableList<String> = mutableListOf(),
-    var visibilityModifiers: MutableList<String> = mutableListOf(),
+    var visibilityModifiers: MutableList<String>,
 ) : WithPoint, WithId, WithGameTags, WithVisibilityModifiers {
 
     override fun x(): Double {

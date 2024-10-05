@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.VoteSp
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.VoteSpot
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisUserVoteSpot
 import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
@@ -69,6 +70,7 @@ class GameStartVoteSpotLogic(
                 costItem = DEFAULT_ITEM.id,
                 bannedUsers = mutableListOf(),
                 availableUsers = allUsers.map { it.userId }.toMutableList(),
+                visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableList()
             )
         )
 

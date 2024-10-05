@@ -3,8 +3,9 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
@@ -14,6 +15,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import kotlin.collections.listOf
 
 @Component
 class TimeEventHandler(
@@ -107,7 +109,8 @@ class TimeEventHandler(
             state = RedisTimeEventState.ACTIVE,
             xLocation = location?.x,
             yLocation = location?.y,
-            zLocation = location?.z
+            zLocation = location?.z,
+            visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableList()
         )
         redisTimeEventRepository.save(timer)
     }

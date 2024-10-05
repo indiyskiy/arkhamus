@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.CrafterRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.Crafter
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
@@ -39,7 +40,8 @@ class GameStartCrafterLogic(
         x = dbCrafter.x,
         y = dbCrafter.y,
         z = dbCrafter.z,
-        gameTags = mutableListOf()
+        gameTags = mutableListOf(),
+        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableList()
     ).apply {
         this.interactionRadius = dbCrafter.interactionRadius
         this.items = emptyMap<Int, Int>().toMutableMap()

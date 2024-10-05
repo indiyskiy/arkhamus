@@ -34,7 +34,7 @@ class OneTickUser(
 
     private fun processInventory(
         user: RedisGameUser,
-        data: GlobalGameData,
+            data: GlobalGameData,
     ) {
         user.items.filter {
             it.value > 0

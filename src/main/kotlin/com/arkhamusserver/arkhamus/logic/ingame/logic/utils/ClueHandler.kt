@@ -64,15 +64,16 @@ class ClueHandler(
     private fun addClueToZone(
         gameId: Long,
         zoneId: Long,
-        godType: Clue
+        clue: Clue
     ) {
-        val clue = RedisClue(
+        val redisClue = RedisClue(
             id = Generators.timeBasedEpochGenerator().generate().toString(),
             gameId = gameId,
             levelZoneId = zoneId,
-            clue = godType
+            clue = clue,
+            visibilityModifiers = clue.visibilityModifiers.map { it.name }.toMutableList()
         )
-        redisClueRepository.save(clue)
+        redisClueRepository.save(redisClue)
     }
 
     fun addRandomClue(data: GlobalGameData) {

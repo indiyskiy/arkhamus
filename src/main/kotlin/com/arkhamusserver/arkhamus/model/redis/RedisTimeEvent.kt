@@ -22,7 +22,7 @@ data class RedisTimeEvent(
     var xLocation: Double? = null,
     var yLocation: Double? = null,
     var zLocation: Double? = null,
-    var visibilityModifiers: MutableList<String> = mutableListOf(),
+    var visibilityModifiers: MutableList<String>,
 ) : WithVisibilityModifiers {
     override fun visibilityModifiers(): List<VisibilityModifier> {
         return visibilityModifiers.map { enumValueOf<VisibilityModifier>(it) }

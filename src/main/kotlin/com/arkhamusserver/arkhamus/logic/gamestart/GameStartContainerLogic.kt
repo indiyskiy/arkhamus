@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.tag.ContainerTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
@@ -50,6 +51,7 @@ class GameStartContainerLogic(
         z = dbContainer.z,
         interactionRadius = dbContainer.interactionRadius,
         gameTags = mutableListOf(),
+        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableList()
     ).apply {
         this.items = randomizeItems(dbContainer)
         redisContainerRepository.save(this)

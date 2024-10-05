@@ -21,7 +21,7 @@ data class RedisLantern(
     var y: Double,
     var z: Double,
     var lightRange: Double,
-    var visibilityModifiers: MutableList<String> = mutableListOf(),
+    var visibilityModifiers: MutableList<String>,
 ) : WithPoint, WithId, WithVisibilityModifiers {
 
     override fun x(): Double {

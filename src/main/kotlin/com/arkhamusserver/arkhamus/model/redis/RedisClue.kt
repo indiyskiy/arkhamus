@@ -15,7 +15,7 @@ data class RedisClue(
     var gameId: Long,
     var levelZoneId: Long,
     var clue: Clue,
-    var visibilityModifiers: MutableList<String> = mutableListOf(),
+    var visibilityModifiers: MutableList<String>,
 ) : WithVisibilityModifiers {
     override fun visibilityModifiers(): List<VisibilityModifier> {
         return visibilityModifiers.map { enumValueOf<VisibilityModifier>(it) }

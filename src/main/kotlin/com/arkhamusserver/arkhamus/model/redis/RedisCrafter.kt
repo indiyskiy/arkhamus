@@ -26,7 +26,7 @@ data class RedisCrafter(
     var items: MutableMap<Int, Int> = HashMap(),
     var crafterType: CrafterType,
     var gameTags: MutableList<String> = mutableListOf(),
-    var visibilityModifiers: MutableList<String> = mutableListOf(),
+    var visibilityModifiers: MutableList<String>,
 ) : WithPoint, WithId, WithGameTags, WithVisibilityModifiers {
 
     override fun x(): Double {

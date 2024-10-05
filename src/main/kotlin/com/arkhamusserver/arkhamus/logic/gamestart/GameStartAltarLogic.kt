@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.Ritual
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.Altar
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.fasterxml.uuid.Generators
@@ -61,6 +62,7 @@ class GameStartAltarLogic(
         y = dbAltar.y,
         z = dbAltar.z,
         interactionRadius = dbAltar.interactionRadius!!,
+        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableList()
     )
 
 }

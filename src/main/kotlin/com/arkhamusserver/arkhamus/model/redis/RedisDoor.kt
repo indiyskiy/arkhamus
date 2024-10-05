@@ -20,7 +20,7 @@ data class RedisDoor(
     var zoneId: Long,
     var globalState: DoorState = DoorState.OPEN,
     var closedForUsers: MutableList<Long> = mutableListOf(),
-    var visibilityModifiers: MutableList<String> = mutableListOf(),
+    var visibilityModifiers: MutableList<String>,
 ) : WithPoint, WithId, WithVisibilityModifiers {
 
     override fun x(): Double {
