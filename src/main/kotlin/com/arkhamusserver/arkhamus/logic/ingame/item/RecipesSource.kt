@@ -143,21 +143,20 @@ class RecipesSource {
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
             ),
 // CULTIST ITEMS 7***
-            listOf(Ingredient(SAINT_QUARTZ, 1), Ingredient(DARK_ESSENCE, 1)).toRecipe(
+            listOf(Ingredient(SAINT_QUARTZ, 5), Ingredient(DARK_ESSENCE, 3)).toRecipe(
                 7001,
                 item = MOON_STONE,
                 timeToCraft = MINUTE_IN_MILLIS,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
             ),
 
-            listOf(Ingredient(CRYSTALLIZED_BLOOD, 2), Ingredient(STRANGE_BONE, 2)).toRecipe(
+            listOf(Ingredient(CRYSTALLIZED_BLOOD, 3), Ingredient(STRANGE_BONE, 1)).toRecipe(
                 7002,
                 item = CURSED_POTATO,
                 timeToCraft = (0.5 * MINUTE_IN_MILLIS).roundToLong(),
-                numberOfItems = 3,
-                crafterTypes = listOf(CrafterType.ADVANCED, CrafterType.CULTIST)
+                numberOfItems = 1,
+                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
             ),
-
             listOf(
                 Ingredient(CORRUPTED_TOPAZ, 1),
                 Ingredient(BLIGHTING_JEWEL, 1),
@@ -249,6 +248,17 @@ class RecipesSource {
             (oneOfEach(EYE, RING, TEAR) + Ingredient(GREEN_EGG, 3)).toRecipe(
                 8020,
                 item = CORK_YOG_SOTHOTH,
+            ),
+//ADVANCED CULTIST
+            listOf(
+                Ingredient(VIOLET_SCROLL, 1),
+                Ingredient(DARK_ESSENCE, 1)
+            ).toRecipe(
+                10004,
+                item = DUST_OF_DISAPPEARANCE,
+                timeToCraft = (0.7 * MINUTE_IN_MILLIS).roundToLong(),
+                numberOfItems = 1,
+                crafterTypes = listOf(CrafterType.CULTIST)
             ),
         )
     }

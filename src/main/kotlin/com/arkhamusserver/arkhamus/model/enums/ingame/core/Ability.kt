@@ -140,7 +140,19 @@ enum class Ability(
         consumesItem = false,
         cooldown = MINUTE_IN_MILLIS * DAY_LENGTH_MINUTES,
         active = MINUTE_IN_MILLIS * NIGHT_LENGTH_MINUTES / 2
-    );
+    ),
+    //advanced cultist items spell 10***
+    CLEAN_UP_CLUE(
+        id = 10004,
+        requiresItem = true,
+        consumesItem = true,
+        availableForRole = setOf(CULTIST),
+        cooldown = SECOND_IN_MILLIS * 10,
+        globalCooldown = false,
+        targetTypes = listOf(CLUE),
+        range = 2.0
+    ),
+    ;
 
     override fun visibilityModifiers(): MutableSet<String> {
         return visibilityModifiersString

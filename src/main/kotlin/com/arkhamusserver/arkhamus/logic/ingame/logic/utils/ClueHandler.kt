@@ -36,13 +36,13 @@ class ClueHandler(
         }.map {
             it.zoneId
         }.toSet()
-        if(zonesSet.isEmpty()) return emptyList()
+        if (zonesSet.isEmpty()) return emptyList()
         val possibleClues = Clue.values().filter {
             it.visibilityModifiers().any { modifier -> modifier in user.visibilityModifiers() }
         }
-        logger.info("possibleClues ${possibleClues.joinToString(", ") { it.name}}")
-        logger.info("zonesSet ${zonesSet.joinToString(", "){it.toString()}}")
-        logger.info("user visibilityModifiers ${user.visibilityModifiers().joinToString(", "){it}}")
+        logger.info("possibleClues ${possibleClues.joinToString(", ") { it.name }}")
+        logger.info("zonesSet ${zonesSet.joinToString(", ") { it.toString() }}")
+        logger.info("user visibilityModifiers ${user.visibilityModifiers().joinToString(", ") { it }}")
         return clues.filter { it.clue in possibleClues && it.levelZoneId in zonesSet }
     }
 
@@ -110,6 +110,10 @@ class ClueHandler(
         existingClues.randomOrNull()?.let { clue ->
             redisClueRepository.delete(clue)
         }
+    }
+
+    fun removeClue(clue: RedisClue) {
+        redisClueRepository.delete(clue)
     }
 
     private fun clueExistAlready(

@@ -4,5 +4,6 @@ enum class GameObjectType {
     CHARACTER,
     VOTE_SPOT,
     CONTAINER,
-    CRAFTER
+    CRAFTER,
+    CLUE
 }

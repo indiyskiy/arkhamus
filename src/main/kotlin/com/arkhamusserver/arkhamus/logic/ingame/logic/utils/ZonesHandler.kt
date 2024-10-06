@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
+import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.stereotype.Component
 
@@ -11,6 +12,14 @@ import org.springframework.stereotype.Component
 class ZonesHandler(
     private val geometryUtils: GeometryUtils
 ) {
+    fun inSameZone(
+        withPoint: WithPoint,
+        clue: RedisClue,
+        levelGeometryData: LevelGeometryData
+    ): Boolean {
+        val userZones = filterByPosition(withPoint, levelGeometryData)
+        return userZones.any { it.zoneId == clue.levelZoneId }
+    }
 
     fun filterByPosition(
         withPoint: WithPoint,

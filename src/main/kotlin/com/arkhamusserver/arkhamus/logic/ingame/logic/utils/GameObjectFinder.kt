@@ -18,6 +18,7 @@ class GameObjectFinder {
             VOTE_SPOT -> data.voteSpots.firstOrNull { it.gameId == id.toLong() }
             CONTAINER -> data.containers[id.toLong()]
             CRAFTER -> data.crafters[id.toLong()]
+            CLUE -> data.clues.firstOrNull { it.id == id }
         }
     }
 
@@ -31,6 +32,7 @@ class GameObjectFinder {
                 VOTE_SPOT -> data.voteSpots
                 CONTAINER -> data.containers.values
                 CRAFTER -> data.crafters.values
+                CLUE -> data.clues
             }
         }
     }

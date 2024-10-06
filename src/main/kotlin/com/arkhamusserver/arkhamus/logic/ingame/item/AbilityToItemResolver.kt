@@ -19,6 +19,7 @@ class AbilityToItemResolver {
                 THROW_POTATO -> CURSED_POTATO
                 SUMMON_NIGHT -> MOON_STONE
                 PEEKABOO_CURSE_ITEM -> RITUAL_DAGGER
+                CLEAN_UP_CLUE -> DUST_OF_DISAPPEARANCE
                 //clue search items
                 SEARCH_FOR_INSCRIPTION -> INSCRIPTION_INVESTIGATION_ITEM
                 SEARCH_FOR_SOUND -> SOUND_INVESTIGATION_ITEM
