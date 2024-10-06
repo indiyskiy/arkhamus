@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
 import com.fasterxml.uuid.Generators
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -21,6 +22,7 @@ class ClueHandler(
 ) {
 
     companion object {
+        private val logger = LoggerFactory.getLogger(ClueHandler::class.java)
         private val random: Random = Random(System.currentTimeMillis())
     }
 
@@ -29,14 +31,18 @@ class ClueHandler(
         inZones: List<LevelZone>,
         user: RedisGameUser
     ): List<RedisClue> {
-        val possibleClues = Clue.values().filter {
-            (it.visibilityModifiers intersect user.visibilityModifiers).isNotEmpty()
-        }
         val zonesSet = inZones.filter {
             it.zoneType == ZoneType.CLUE
         }.map {
             it.zoneId
         }.toSet()
+        if(zonesSet.isEmpty()) return emptyList()
+        val possibleClues = Clue.values().filter {
+            it.visibilityModifiers().any { modifier -> modifier in user.visibilityModifiers() }
+        }
+        logger.info("possibleClues ${possibleClues.joinToString(", ") { it.name}}")
+        logger.info("zonesSet ${zonesSet.joinToString(", "){it.toString()}}")
+        logger.info("user visibilityModifiers ${user.visibilityModifiers().joinToString(", "){it}}")
         return clues.filter { it.clue in possibleClues && it.levelZoneId in zonesSet }
     }
 

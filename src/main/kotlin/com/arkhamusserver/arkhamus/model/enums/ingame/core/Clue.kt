@@ -7,13 +7,48 @@ enum class Clue(
     val visibilityModifiers: Set<VisibilityModifier>,
     private val visibilityModifiersString: MutableSet<String> = visibilityModifiers.map { it.name }.toMutableSet(),
 ) : WithVisibilityModifiers {
-    INSCRIPTION(setOf(VisibilityModifier.INSCRIPTION, VisibilityModifier.CULTIST)),
-    SOUND(setOf(VisibilityModifier.SOUND, VisibilityModifier.CULTIST)),
-    SCENT(setOf(VisibilityModifier.SCENT, VisibilityModifier.CULTIST)),
-    AURA(setOf(VisibilityModifier.AURA, VisibilityModifier.CULTIST)),
-    CORRUPTION(setOf(VisibilityModifier.CORRUPTION, VisibilityModifier.CULTIST)),
-    OMEN(setOf(VisibilityModifier.OMEN, VisibilityModifier.CULTIST)),
-    DISTORTION(setOf(VisibilityModifier.DISTORTION, VisibilityModifier.CULTIST));
+    INSCRIPTION(
+        setOf(
+            VisibilityModifier.INSCRIPTION,
+            VisibilityModifier.CULTIST
+        )
+    ),
+    SOUND(
+        setOf(
+            VisibilityModifier.SOUND,
+            VisibilityModifier.CULTIST
+        )
+    ),
+    SCENT(
+        setOf(
+            VisibilityModifier.SCENT,
+            VisibilityModifier.CULTIST
+        )
+    ),
+    AURA(
+        setOf(
+            VisibilityModifier.AURA,
+            VisibilityModifier.CULTIST
+        )
+    ),
+    CORRUPTION(
+        setOf(
+            VisibilityModifier.CORRUPTION,
+            VisibilityModifier.CULTIST
+        )
+    ),
+    OMEN(
+        setOf(
+            VisibilityModifier.OMEN,
+            VisibilityModifier.CULTIST
+        )
+    ),
+    DISTORTION(
+        setOf(
+            VisibilityModifier.DISTORTION,
+            VisibilityModifier.CULTIST
+        )
+    );
 
     override fun visibilityModifiers(): MutableSet<String> {
         return visibilityModifiersString
