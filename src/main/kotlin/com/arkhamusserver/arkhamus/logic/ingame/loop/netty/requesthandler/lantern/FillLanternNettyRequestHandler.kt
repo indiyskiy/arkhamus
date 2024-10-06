@@ -1,0 +1,112 @@
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.lantern
+
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.FillLanternRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.lantern.FillLanternRequestMessage
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
+
+@Component
+class FillLanternNettyRequestHandler(
+    private val eventVisibilityFilter: EventVisibilityFilter,
+    private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
+    private val inventoryHandler: InventoryHandler,
+    private val crafterProcessHandler: CrafterProcessHandler,
+    private val zonesHandler: ZonesHandler,
+    private val clueHandler: ClueHandler,
+    private val questProgressHandler: QuestProgressHandler,
+) : NettyRequestHandler {
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(FillLanternNettyRequestHandler::class.java)
+    }
+
+    override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
+        nettyRequestMessage::class.java == FillLanternRequestMessage::class.java
+
+    override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
+
+    override fun buildData(
+        requestDataHolder: NettyTickRequestMessageDataHolder,
+        globalGameData: GlobalGameData,
+        ongoingEvents: List<OngoingEvent>
+    ): FillLanternRequestProcessData {
+        val request = requestDataHolder.nettyRequestMessage
+        with(request as FillLanternRequestMessage) {
+            val inZones = zonesHandler.filterByPosition(
+                requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
+                globalGameData.levelGeometryData
+            )
+            val userId = requestDataHolder.userAccount.id
+            val user = globalGameData.users[userId]!!
+            val users = globalGameData.users.values.filter { it.userId != userId }
+
+            val clues = clueHandler.filterClues(
+                globalGameData.clues,
+                inZones,
+                user
+            )
+
+            val lantern = globalGameData.lanterns[this.lanternId]
+
+            val canPay = checkIfUserCanPay(user)
+            val lanternEmpty = lantern != null &&
+                    lantern.activated == false &&
+                    lantern.fuel <= 0
+
+            return FillLanternRequestProcessData(
+                lantern = lantern,
+                canFillLantern = canPay && lanternEmpty,
+                successfullyFilled = false,
+                gameUser = user,
+                otherGameUsers = users,
+                inZones = inZones,
+                visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
+                availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
+                visibleItems = inventoryHandler.mapUsersItems(user.items),
+                ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
+                    user,
+                    globalGameData.crafters,
+                    globalGameData.craftProcess
+                ),
+                containers = globalGameData.containers.values.toList(),
+                crafters = globalGameData.crafters.values.toList(),
+                tick = globalGameData.game.currentTick,
+                clues = clues,
+                userQuestProgresses = questProgressHandler.mapQuestProgresses(
+                    globalGameData.questProgressByUserId,
+                    user,
+                    globalGameData.quests
+                ),
+            )
+        }
+    }
+
+
+    private fun checkIfUserCanPay(
+        user: RedisGameUser
+    ): Boolean {
+        val costItem = Item.SOLARITE
+        val costValue = 1
+        val canPay = inventoryHandler.userHaveItems(
+            user = user,
+            requiredItemId = costItem.id,
+            howManyItems = costValue
+        )
+        logger.info("can pay: $canPay")
+        return canPay
+    }
+
+}
+
+
+

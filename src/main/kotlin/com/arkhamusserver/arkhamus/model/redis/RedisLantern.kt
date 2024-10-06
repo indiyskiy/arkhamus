@@ -14,8 +14,11 @@ data class RedisLantern(
     @Indexed var gameId: Long,
     var lanternId: Long,
     var state: MapObjectState = MapObjectState.ACTIVE,
+
     var filled: Boolean = false,
     var activated: Boolean = false,
+    var fuel: Double = 0.0,
+
     var x: Double,
     var y: Double,
     var z: Double,

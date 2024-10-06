@@ -17,7 +17,10 @@ class GameStartLanternLogic(
     private val redisLanternRepository: RedisLanternRepository,
     private val lanternRepository: LanternRepository,
 ) {
-    private val random: Random = Random(System.currentTimeMillis())
+    companion object {
+        const val FILLED_ON_START: Int = 2
+        private val random: Random = Random(System.currentTimeMillis())
+    }
 
     @Transactional
     fun createLanterns(
@@ -26,7 +29,7 @@ class GameStartLanternLogic(
     ) {
         val allLevelLanterns = lanternRepository.findByLevelId(levelId)
         allLevelLanterns.shuffled(random).forEachIndexed { i, dbLantern ->
-            with(createLantern(game, dbLantern, (i % 2 == 0))) {
+            with(createLantern(game, dbLantern, i)) {
                 redisLanternRepository.save(this)
             }
         }
@@ -35,7 +38,7 @@ class GameStartLanternLogic(
     private fun createLantern(
         game: GameSession,
         dbLantern: Lantern,
-        filled: Boolean
+        number: Int
     ) = RedisLantern(
         id = Generators.timeBasedEpochGenerator().generate().toString(),
         lanternId = dbLantern.inGameId,
@@ -44,7 +47,8 @@ class GameStartLanternLogic(
         y = dbLantern.y,
         z = dbLantern.z,
         lightRange = dbLantern.lightRange!!,
-        filled = filled,
+        filled = number < FILLED_ON_START,
+        fuel = if(number < FILLED_ON_START){100.0} else {0.0},
         activated = false,
         visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
     )
