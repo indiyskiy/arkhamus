@@ -21,20 +21,18 @@ class OneTickUser(
 
     fun processUsers(data: GlobalGameData) {
         data.users.forEach { user ->
-            processUser(user.value, data)
+            processUser(user.value)
         }
     }
 
     private fun processUser(
         user: RedisGameUser,
-        data: GlobalGameData,
     ) {
-        processInventory(user, data)
+        processInventory(user)
     }
 
     private fun processInventory(
         user: RedisGameUser,
-            data: GlobalGameData,
     ) {
         user.items.filter {
             it.value > 0

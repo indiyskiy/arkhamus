@@ -76,7 +76,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.shortTimeEvents = allShortEvents
         this.castAbilities = castAbilities
         this.craftProcess = craftProcess
-        this.lanterns = allLanterns.associateBy { it.inGameId() }
+        this.lanterns = allLanterns
         this.clues = allClues
         this.levelGeometryData = buildGeometryData(zones, tetragons, ellipses)
         this.quests = allQuests

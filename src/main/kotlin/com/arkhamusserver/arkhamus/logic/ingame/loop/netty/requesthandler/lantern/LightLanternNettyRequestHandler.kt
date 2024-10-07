@@ -8,9 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.LightLanternRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.lantern.LightLanternRequestMessage
 import org.springframework.stereotype.Component
@@ -52,7 +50,7 @@ class LightLanternNettyRequestHandler(
                 user
             )
 
-            val lantern = globalGameData.lanterns[this.lanternId]
+            val lantern = globalGameData.lanterns.firstOrNull{it.inGameId() == this.lanternId}
 
             val lanternFull = lantern != null &&
                     lantern.lanternState == LanternState.FILLED &&
@@ -85,20 +83,6 @@ class LightLanternNettyRequestHandler(
             )
         }
     }
-
-    private fun checkIfUserCanPay(
-        user: RedisGameUser
-    ): Boolean {
-        val costItem = Item.SOLARITE
-        val costValue = 1
-        val canPay = inventoryHandler.userHaveItems(
-            user = user,
-            requiredItemId = costItem.id,
-            howManyItems = costValue
-        )
-        return canPay
-    }
-
 }
 
 

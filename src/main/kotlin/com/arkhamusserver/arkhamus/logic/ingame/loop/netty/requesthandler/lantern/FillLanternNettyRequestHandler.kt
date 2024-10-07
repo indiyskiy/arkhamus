@@ -52,7 +52,7 @@ class FillLanternNettyRequestHandler(
                 user
             )
 
-            val lantern = globalGameData.lanterns[this.lanternId]
+            val lantern = globalGameData.lanterns.firstOrNull{it.inGameId() == this.lanternId}
 
             val canPay = checkIfUserCanPay(user)
             val lanternEmpty = lantern != null &&
