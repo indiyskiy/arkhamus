@@ -16,6 +16,7 @@ class ArkhamusOneTickLogicImpl(
     private val oneTickUserRequests: OneTickUserRequests,
     private val oneTickUser: OneTickUser,
     private val oneTickTick: OneTickTick,
+    private val oneTickLantern: OneTickLantern,
     private val oneTickTimeEvent: OneTickTimeEvent,
     private val oneTickShortTimeEvent: OneTickShortTimeEvent,
     private val onTickAbilityCast: OnTickAbilityCast,
@@ -45,6 +46,9 @@ class ArkhamusOneTickLogicImpl(
             onTickCraftProcess.applyCraftProcess(
                 globalGameData,
                 globalGameData.craftProcess
+            )
+            oneTickLantern.tick(
+                globalGameData
             )
             val processedRequests = oneTickUserRequests.processRequests(
                 currentTasks,

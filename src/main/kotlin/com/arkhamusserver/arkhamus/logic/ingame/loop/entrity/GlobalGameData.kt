@@ -13,7 +13,7 @@ data class GlobalGameData(
     var clues: List<RedisClue> = emptyList(),
     var containers: Map<Long, RedisContainer> = emptyMap(),
     var crafters: Map<Long, RedisCrafter> = emptyMap(),
-    var lanterns: Map<Long, RedisLantern> = emptyMap(),
+    var lanterns: List<RedisLantern> = emptyList(),
     var timeEvents: List<RedisTimeEvent> = emptyList(),
     var shortTimeEvents: List<RedisShortTimeEvent> = emptyList(),
     var castAbilities: List<RedisAbilityCast> = emptyList(),
