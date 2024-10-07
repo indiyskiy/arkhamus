@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.CULTIST
 import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.CULTIST
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component
 

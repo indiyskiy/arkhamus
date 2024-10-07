@@ -1,26 +1,18 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual
+package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 
-class AltarOpenRequestProcessData(
-    var altar: RedisAltar?,
-    var altarHolder: RedisAltarHolder?,
-    var altarPolling: RedisAltarPolling?,
-    var voteProcessOpen: Boolean,
-    var canVote: Boolean,
-    var canStartVote: Boolean,
-    var voteState: MapAltarPollingState,
-    var votedForGod: God?,
-    var godLocked: God?,
+class LightLanternRequestProcessData(
+    var lantern: RedisLantern?,
+    var canLight: Boolean,
+    var successfullyLit: Boolean,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,
