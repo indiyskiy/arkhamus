@@ -9,10 +9,10 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessRes
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 
-class FillLanternRequestProcessData(
+class OpenLanternRequestProcessData(
     var lantern: RedisLantern?,
     var canFill: Boolean,
-    var successfullyFilled: Boolean,
+    var canLight: Boolean,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,

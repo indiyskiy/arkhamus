@@ -7,9 +7,10 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneResponses
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
-class FillLanternNettyResponse(
+class OpenLanternNettyResponse(
     val lanternStateInfo: LanternStateInfo?,
-    val successfullyFilled: Boolean,
+    val canFill: Boolean,
+    val canLight: Boolean,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,
@@ -39,5 +40,5 @@ class FillLanternNettyResponse(
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
     clues = clues.convertToClueResponses(),
-    type = FillLanternNettyResponse::class.java.simpleName,
+    type = OpenLanternNettyResponse::class.java.simpleName,
 )

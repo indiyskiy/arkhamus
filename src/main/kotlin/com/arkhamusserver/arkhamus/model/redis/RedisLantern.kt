@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
@@ -14,11 +15,8 @@ data class RedisLantern(
     @Indexed var gameId: Long,
     var lanternId: Long,
     var state: MapObjectState = MapObjectState.ACTIVE,
-
-    var filled: Boolean = false,
-    var activated: Boolean = false,
+    var lanternState: LanternState,
     var fuel: Double = 0.0,
-
     var x: Double,
     var y: Double,
     var z: Double,

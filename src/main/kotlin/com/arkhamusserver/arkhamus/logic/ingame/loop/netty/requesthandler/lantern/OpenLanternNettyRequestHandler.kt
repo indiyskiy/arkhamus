@@ -6,17 +6,17 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.FillLanternRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.OpenLanternRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.request.lantern.FillLanternRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.request.lantern.OpenLanternRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
-class FillLanternNettyRequestHandler(
+class OpenLanternNettyRequestHandler(
     private val eventVisibilityFilter: EventVisibilityFilter,
     private val canAbilityBeCastHandler: CanAbilityBeCastHandler,
     private val inventoryHandler: InventoryHandler,
@@ -27,7 +27,7 @@ class FillLanternNettyRequestHandler(
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
-        nettyRequestMessage::class.java == FillLanternRequestMessage::class.java
+        nettyRequestMessage::class.java == OpenLanternRequestMessage::class.java
 
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
@@ -35,9 +35,9 @@ class FillLanternNettyRequestHandler(
         requestDataHolder: NettyTickRequestMessageDataHolder,
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
-    ): FillLanternRequestProcessData {
+    ): OpenLanternRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
-        with(request as FillLanternRequestMessage) {
+        with(request as OpenLanternRequestMessage) {
             val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
@@ -58,11 +58,14 @@ class FillLanternNettyRequestHandler(
             val lanternEmpty = lantern != null &&
                     lantern.lanternState == LanternState.EMPTY &&
                     lantern.fuel <= 0
+            val canLight = lantern != null &&
+                    lantern.lanternState == LanternState.FILLED &&
+                    lantern.fuel <= 100
 
-            return FillLanternRequestProcessData(
+            return OpenLanternRequestProcessData(
                 lantern = lantern,
                 canFill = canPay && lanternEmpty,
-                successfullyFilled = false,
+                canLight = canLight,
                 gameUser = user,
                 otherGameUsers = users,
                 inZones = inZones,

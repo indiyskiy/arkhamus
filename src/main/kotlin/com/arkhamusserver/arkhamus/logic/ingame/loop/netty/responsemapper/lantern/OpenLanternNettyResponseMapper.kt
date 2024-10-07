@@ -8,21 +8,21 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTi
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.FillLanternRequestProcessData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.OpenLanternRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.lantern.FillLanternNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.lantern.OpenLanternNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.LanternStateInfo
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
 import org.springframework.stereotype.Component
 
 @Component
-class FillLanternNettyResponseMapper(
+class OpenLanternNettyResponseMapper(
     private val otherGameUsersDataHandler: OtherGameUsersDataHandler,
     private val containersDataHandler: ContainerDataHandler,
     private val craftersDataHandler: CrafterDataHandler,
@@ -30,7 +30,7 @@ class FillLanternNettyResponseMapper(
     private val doorDataHandler: DoorDataHandler
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
-        gameResponseMessage::class.java == FillLanternRequestProcessData::class.java
+        gameResponseMessage::class.java == OpenLanternRequestProcessData::class.java
 
     override fun accept(gameResponseMessage: RequestProcessData): Boolean = true
 
@@ -42,8 +42,9 @@ class FillLanternNettyResponseMapper(
         userRole: UserOfGameSession?,
         inBetweenEventHolder: InBetweenEventHolder,
         globalGameData: GlobalGameData
-    ): FillLanternNettyResponse {
-        (requestProcessData as FillLanternRequestProcessData).let {
+    ): OpenLanternNettyResponse {
+        (requestProcessData as OpenLanternRequestProcessData).let {
+
             val lanternStateInfo = it.lantern?.let { lantern ->
                 LanternStateInfo(
                     costValue = 1,
@@ -52,9 +53,10 @@ class FillLanternNettyResponseMapper(
                     fuel = lantern.fuel,
                 )
             }
-            return FillLanternNettyResponse(
+            return OpenLanternNettyResponse(
                 lanternStateInfo = lanternStateInfo,
-                successfullyFilled = it.successfullyFilled,
+                canFill = it.canFill,
+                canLight = it.canLight,
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!, it.userQuest),
@@ -95,5 +97,6 @@ class FillLanternNettyResponseMapper(
             )
         }
     }
+
 
 }

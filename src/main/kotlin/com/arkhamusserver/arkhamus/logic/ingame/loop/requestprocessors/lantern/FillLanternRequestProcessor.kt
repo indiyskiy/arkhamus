@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.FillLanternRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,11 +23,11 @@ class FillLanternRequestProcessor() : NettyRequestProcessor {
         ongoingEvents: List<OngoingEvent>
     ) {
         val gameData = requestDataHolder.requestProcessData as FillLanternRequestProcessData
-        if (gameData.canFillLantern) {
+        if (gameData.canFill) {
             val lantern = gameData.lantern
             if (lantern != null) {
                 lantern.fuel = 100.0
-                lantern.filled = true
+                lantern.lanternState = LanternState.FILLED
                 gameData.successfullyFilled = true
             }
         }

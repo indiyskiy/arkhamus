@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLanternRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LanternRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.Lantern
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisLantern
 import com.fasterxml.uuid.Generators
@@ -47,9 +48,16 @@ class GameStartLanternLogic(
         y = dbLantern.y,
         z = dbLantern.z,
         lightRange = dbLantern.lightRange!!,
-        filled = number < FILLED_ON_START,
-        fuel = if(number < FILLED_ON_START){100.0} else {0.0},
-        activated = false,
+        fuel = if (number < FILLED_ON_START) {
+            100.0
+        } else {
+            0.0
+        },
+        lanternState = if (number < FILLED_ON_START) {
+            LanternState.FILLED
+        } else {
+            LanternState.EMPTY
+        },
         visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
     )
 
