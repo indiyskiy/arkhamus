@@ -24,6 +24,7 @@ abstract class ExternalInventoryNettyResponse(
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     clues: List<RedisClue>,
+    lanterns: List<LanternData>,
     type: String
 ) : NettyResponse(
     tick = tick,
@@ -40,5 +41,6 @@ abstract class ExternalInventoryNettyResponse(
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
     clues = clues.convertToClueResponses(),
+    lanterns = lanterns,
     type = type
 )

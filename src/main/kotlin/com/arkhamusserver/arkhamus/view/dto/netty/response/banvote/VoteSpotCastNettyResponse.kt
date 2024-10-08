@@ -24,6 +24,7 @@ class VoteSpotCastNettyResponse(
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     clues: List<RedisClue>,
+    lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -39,5 +40,6 @@ class VoteSpotCastNettyResponse(
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
     clues = clues.convertToClueResponses(),
+    lanterns = lanterns,
     type = VoteSpotCastNettyResponse::class.java.simpleName,
 )

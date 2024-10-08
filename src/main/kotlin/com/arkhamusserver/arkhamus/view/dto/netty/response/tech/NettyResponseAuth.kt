@@ -27,5 +27,6 @@ class NettyResponseAuth(
     inZones = emptyList(),
     doors = emptyList(),
     clues = emptyList(),
+    lanterns = emptyList(),
     type = NettyResponseAuth::class.java.simpleName
 )

@@ -24,7 +24,8 @@ class GodVoteSkipNettyResponse(
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
-    clues: List<RedisClue>
+    clues: List<RedisClue>,
+    lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -39,6 +40,7 @@ class GodVoteSkipNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
+    lanterns = lanterns,
     clues = clues.convertToClueResponses(),
     type = GodVoteSkipNettyResponse::class.java.simpleName,
 ), ActionResponse {

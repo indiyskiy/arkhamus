@@ -19,6 +19,7 @@ class HeartbeatNettyResponse(
     clues: List<RedisClue>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
+    lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -34,5 +35,6 @@ class HeartbeatNettyResponse(
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
     clues = clues.convertToClueResponses(),
+    lanterns = lanterns,
     type = HeartbeatNettyResponse::class.java.simpleName
 )

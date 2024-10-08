@@ -23,6 +23,7 @@ class QuestAcceptNettyResponse(
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     clues: List<RedisClue>,
+    lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -37,6 +38,7 @@ class QuestAcceptNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
+    lanterns = lanterns,
     clues = clues.convertToClueResponses(),
     type = QuestAcceptNettyResponse::class.java.simpleName,
 )

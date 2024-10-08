@@ -28,6 +28,7 @@ class UpdateContainerNettyResponse(
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     clues: List<RedisClue>,
+    lanterns: List<LanternData>,
 ) : ExternalInventoryNettyResponse(
     sortedUserInventory = sortedUserInventory,
     itemsInside = itemsInside,
@@ -47,6 +48,7 @@ class UpdateContainerNettyResponse(
     inZones = inZones,
     doors = doors,
     clues = clues,
+    lanterns = lanterns,
     type = UpdateContainerNettyResponse::class.java.simpleName
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

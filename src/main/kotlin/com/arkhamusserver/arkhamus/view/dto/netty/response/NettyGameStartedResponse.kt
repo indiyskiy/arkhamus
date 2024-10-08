@@ -24,5 +24,6 @@ class NettyGameStartedResponse(
     inZones = emptyList(),
     doors = emptyList(),
     clues = emptyList(),
+    lanterns = emptyList(),
     type = NettyGameStartedResponse::class.java.simpleName
 )

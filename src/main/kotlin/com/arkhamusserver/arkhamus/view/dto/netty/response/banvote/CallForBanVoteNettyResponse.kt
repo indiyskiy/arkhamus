@@ -23,6 +23,7 @@ class CallForBanVoteNettyResponse(
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     clues: List<RedisClue>,
+    lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -38,5 +39,6 @@ class CallForBanVoteNettyResponse(
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
     clues = clues.convertToClueResponses(),
+    lanterns = lanterns,
     type = CallForBanVoteNettyResponse::class.java.simpleName,
 )

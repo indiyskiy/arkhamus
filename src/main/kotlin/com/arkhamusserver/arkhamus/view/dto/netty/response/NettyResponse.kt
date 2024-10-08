@@ -18,6 +18,7 @@ abstract class NettyResponse(
     var crafters: List<CrafterState>,
     var inZones: List<LevelZoneResponse>,
     var doors: List<DoorResponse>,
+    var lanterns: List<LanternData>,
     var clues: List<ClueResponse>,
     val type: String
 )

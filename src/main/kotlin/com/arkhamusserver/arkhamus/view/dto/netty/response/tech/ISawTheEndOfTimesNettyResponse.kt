@@ -23,6 +23,7 @@ class ISawTheEndOfTimesNettyResponse(
     clues: List<RedisClue>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
+    lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -37,6 +38,7 @@ class ISawTheEndOfTimesNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
+    lanterns = lanterns,
     clues = clues.convertToClueResponses(),
     type = ISawTheEndOfTimesNettyResponse::class.java.simpleName
 )

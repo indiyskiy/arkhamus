@@ -26,6 +26,7 @@ class GodVoteCastNettyResponse(
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     clues: List<RedisClue>,
+    lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -41,6 +42,7 @@ class GodVoteCastNettyResponse(
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
     clues = clues.convertToClueResponses(),
+    lanterns = lanterns,
     type = GodVoteCastNettyResponse::class.java.simpleName,
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

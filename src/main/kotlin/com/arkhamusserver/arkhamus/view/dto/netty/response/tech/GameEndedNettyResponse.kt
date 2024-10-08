@@ -27,6 +27,7 @@ class GameEndedNettyResponse(
     clues: List<RedisClue>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
+    lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -41,6 +42,7 @@ class GameEndedNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
+    lanterns = lanterns,
     clues = clues.convertToClueResponses(),
     type = GameEndedNettyResponse::class.java.simpleName
 )
