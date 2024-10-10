@@ -543,7 +543,7 @@
             "id": 400,
             "points": [
               {
-                "x": 12,
+                "x": 11,
                 "y": 0,
                 "z": 6
               },
@@ -558,7 +558,7 @@
                 "z": 31
               },
               {
-                "x": 12,
+                "x": 11,
                 "y": 0,
                 "z": 31
               }
@@ -568,24 +568,24 @@
             "id": 401,
             "points": [
               {
-                "x": 2,
+                "x": 1,
                 "y": 0,
-                "z": 17
+                "z": 12
               },
               {
-                "x": 12,
+                "x": 11,
                 "y": 0,
-                "z": 17
+                "z": 12
               },
               {
-                "x": 12,
+                "x": 11,
                 "y": 0,
-                "z": 37
+                "z": 29
               },
               {
-                "x": 2,
+                "x": 1,
                 "y": 0,
-                "z": 37
+                "z": 29
               }
             ]
           }
@@ -1008,17 +1008,39 @@
     "lanterns": [
       {
         "id": 1100,
+        "interactionRadius": 3.5,
         "lightRange": 6,
+        "name": "Lantern",
         "x": 55,
         "y": 0,
         "z": 29
       },
       {
         "id": 1101,
+        "interactionRadius": 3.5,
         "lightRange": 6,
-        "x": 37,
+        "name": "Lantern",
+        "x": 90,
         "y": 0,
-        "z": 38
+        "z": 90
+      },
+      {
+        "id": 1102,
+        "interactionRadius": 3.5,
+        "lightRange": 6,
+        "name": "Lantern",
+        "x": 51,
+        "y": 0,
+        "z": 94
+      },
+      {
+        "id": 1103,
+        "interactionRadius": 3.5,
+        "lightRange": 6,
+        "name": "Lantern",
+        "x": 88,
+        "y": 2,
+        "z": 16
       }
     ],
     "levelHeight": 120,
