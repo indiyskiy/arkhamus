@@ -5,12 +5,15 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.LightLanternRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLanternRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class LightLanternRequestProcessor() : NettyRequestProcessor {
+class LightLanternRequestProcessor(
+    private val redisLanternRepository: RedisLanternRepository
+) : NettyRequestProcessor {
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is LightLanternRequestProcessData
@@ -28,6 +31,7 @@ class LightLanternRequestProcessor() : NettyRequestProcessor {
             if (lantern != null) {
                 lantern.fuel = 100.0
                 lantern.lanternState = LanternState.FILLED
+                redisLanternRepository.save(lantern)
                 gameData.successfullyLit = true
             }
         }
