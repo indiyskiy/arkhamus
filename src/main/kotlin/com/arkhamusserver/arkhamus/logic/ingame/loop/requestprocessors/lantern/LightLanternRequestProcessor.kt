@@ -29,8 +29,7 @@ class LightLanternRequestProcessor(
         if (gameData.canLight) {
             val lantern = gameData.lantern
             if (lantern != null) {
-                lantern.fuel = 100.0
-                lantern.lanternState = LanternState.FILLED
+                lantern.lanternState = LanternState.LIT
                 redisLanternRepository.save(lantern)
                 gameData.successfullyLit = true
             }
