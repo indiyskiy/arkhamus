@@ -56,8 +56,7 @@ class FillLanternNettyRequestHandler(
 
             val canPay = checkIfUserCanPay(user)
             val lanternEmpty = lantern != null &&
-                    lantern.lanternState == LanternState.EMPTY &&
-                    lantern.fuel <= 0
+                    lantern.lanternState == LanternState.EMPTY
 
             return FillLanternRequestProcessData(
                 lantern = lantern,

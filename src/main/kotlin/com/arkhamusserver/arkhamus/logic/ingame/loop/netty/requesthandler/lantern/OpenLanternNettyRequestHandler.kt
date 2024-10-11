@@ -13,6 +13,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.lantern.OpenLanternRequestMessage
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -25,6 +26,10 @@ class OpenLanternNettyRequestHandler(
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
 ) : NettyRequestHandler {
+
+    companion object{
+        private val logger = LoggerFactory.getLogger(OpenLanternNettyRequestHandler::class.java)
+    }
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
         nettyRequestMessage::class.java == OpenLanternRequestMessage::class.java
@@ -56,10 +61,11 @@ class OpenLanternNettyRequestHandler(
 
             val canPay = checkIfUserCanPay(user)
             val lanternEmpty = lantern != null &&
-                    lantern.lanternState == LanternState.EMPTY &&
-                    lantern.fuel <= 0
+                    lantern.lanternState == LanternState.EMPTY
+
             val canLight = lantern != null &&
                     lantern.lanternState == LanternState.FILLED
+            logger.info("lantern state is ${lantern?.lanternState?:"null"}")
 
             return OpenLanternRequestProcessData(
                 lantern = lantern,
