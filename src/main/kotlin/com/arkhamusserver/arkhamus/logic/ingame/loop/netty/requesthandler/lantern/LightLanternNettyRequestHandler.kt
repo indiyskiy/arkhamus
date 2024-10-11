@@ -53,8 +53,7 @@ class LightLanternNettyRequestHandler(
             val lantern = globalGameData.lanterns.firstOrNull{it.inGameId() == this.lanternId}
 
             val lanternFull = lantern != null &&
-                    lantern.lanternState == LanternState.FILLED &&
-                    lantern.fuel == 100.0
+                    lantern.lanternState == LanternState.FILLED
 
             return LightLanternRequestProcessData(
                 lantern = lantern,

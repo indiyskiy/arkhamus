@@ -59,8 +59,7 @@ class OpenLanternNettyRequestHandler(
                     lantern.lanternState == LanternState.EMPTY &&
                     lantern.fuel <= 0
             val canLight = lantern != null &&
-                    lantern.lanternState == LanternState.FILLED &&
-                    lantern.fuel <= 100
+                    lantern.lanternState == LanternState.FILLED
 
             return OpenLanternRequestProcessData(
                 lantern = lantern,
