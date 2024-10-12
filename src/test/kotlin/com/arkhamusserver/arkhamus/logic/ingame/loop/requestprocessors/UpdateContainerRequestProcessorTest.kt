@@ -446,7 +446,9 @@ class UpdateContainerRequestProcessorTest {
             z = container.z,
             interactionRadius = container.interactionRadius,
             items = inContainerItems,
-            gameTags = mutableListOf(),
+            gameTags = mutableSetOf(),
+            containerTags = mutableSetOf(),
+            visibilityModifiers = mutableSetOf(),
         )
 
         val oldUserItems = createOldUserItems()
@@ -469,7 +471,9 @@ class UpdateContainerRequestProcessorTest {
             callToArms = 1,
             won = null,
             sawTheEndOfTimes = false,
-            leftTheGame = false
+            leftTheGame = false,
+            madnessDebuffs = mutableSetOf(),
+            visibilityModifiers = mutableSetOf()
         )
 
         val oldContainer = UpdateContainerRequestGameData(

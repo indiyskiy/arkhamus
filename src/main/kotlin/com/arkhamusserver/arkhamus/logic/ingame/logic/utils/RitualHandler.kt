@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.GodToCorkResolver
-import com.arkhamusserver.arkhamus.logic.ingame.item.RecipesSource
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.RecipesSource
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual.GodVoteCastRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository

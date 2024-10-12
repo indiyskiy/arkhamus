@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.item
+package com.arkhamusserver.arkhamus.logic.ingame.item.recipe
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 

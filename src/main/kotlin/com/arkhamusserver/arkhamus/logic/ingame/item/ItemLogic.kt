@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.item
 
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.RecipesSource
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.view.dto.ingame.ItemInformationDto
 import com.arkhamusserver.arkhamus.view.dto.ingame.RecipeDto
@@ -18,6 +19,8 @@ class ItemLogic(
 
     fun listAllRecipes(): List<RecipeDto> {
         return recipesSource.getAllRecipes()
+            .sortedBy { it.item.name }
+            .sortedBy { it.item.itemType }
             .filter {
                 it.ingredients.isNotEmpty()
             }.let { recipeDtoMaker.convert(it) }

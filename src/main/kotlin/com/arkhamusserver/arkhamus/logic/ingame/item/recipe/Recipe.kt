@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.item
+package com.arkhamusserver.arkhamus.logic.ingame.item.recipe
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
@@ -22,7 +22,7 @@ fun List<Ingredient>.toRecipe(
     this.let {
         Recipe(recipeId, item).apply {
             this.recipeId = recipeId
-            this.ingredients = it
+            this.ingredients = it.sortedBy { it.item.name }.sortedBy { it.item.itemType }
             this.timeToCraft = timeToCraft
             this.numberOfItems = numberOfItems
             this.crafterTypes = crafterTypes

@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.usefullThings
 
-import com.arkhamusserver.arkhamus.logic.ingame.item.Ingredient
-import com.arkhamusserver.arkhamus.logic.ingame.item.Recipe
-import com.arkhamusserver.arkhamus.logic.ingame.item.RecipesSource
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.CorkRecipePart
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.CraftT2RecipePart
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.InvestigationRecipePart
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import org.junit.jupiter.api.Test
@@ -19,8 +19,7 @@ class QuestProbability {
     @Test
     fun getAllInvestigationItems() {
         val distinctItems = Item.values().filter { it.itemType in setOf(ItemType.LOOT, ItemType.RARE_LOOT) }.toSet()
-        val investigationItems = Item.values().filter { it.itemType in setOf(ItemType.INVESTIGATION) }
-        val recipes = RecipesSource().getAllRecipes().filter { it.item in investigationItems }
+        val recipes = InvestigationRecipePart().recipes()
         val itemsForRecipes = recipes.map { it.ingredients.map { it.item } }.flatten().toSet()
         val usefulItems = itemsForRecipes
 
@@ -45,9 +44,8 @@ class QuestProbability {
     @Test
     fun getExactInvestigationItems() {
         val distinctItems = Item.values().filter { it.itemType in setOf(ItemType.LOOT, ItemType.RARE_LOOT) }.toSet()
-        val investigationItems = Item.values().filter { it.itemType in setOf(ItemType.INVESTIGATION) }.random(random)
-        val recipes = RecipesSource().getAllRecipes().filter { it.item == investigationItems }
-        val itemsForRecipes = recipes.map { it.ingredients.map { it.item } }.flatten().toSet()
+        val recipe = InvestigationRecipePart().recipes().random(random)
+        val itemsForRecipes = recipe.ingredients.map { it.item }.toSet()
         val usefulItems = itemsForRecipes
 
         repeat(numberOfQuests) { currentNumberOfQuests ->
@@ -69,18 +67,15 @@ class QuestProbability {
     }
 
     @Test
-    fun getExactCorkItems() {
+    fun getExactCorkItem() {
         val distinctItems = Item.values().filter { it.itemType in setOf(ItemType.LOOT, ItemType.RARE_LOOT) }.toSet()
-        val cork = Item.values().filter { it.itemType in setOf(ItemType.CORK) }.random(random)
-        val recipe = RecipesSource().getAllRecipes().filter { it.item == cork }
-        val itemsForRecipes = recipe.map {
-            it.ingredients.map { it.item }
-        }.flatten()
+        val recipe = CorkRecipePart().recipes().random(random)
+        val itemsForRecipes = recipe.ingredients.map { it.item }
             .map { item ->
-                if (item.itemType == ItemType.RARE_LOOT) {
-                    listOf(item)
+                if (item.itemType == ItemType.CRAFT_T2) {
+                    CraftT2RecipePart().recipes().first { it.item == item }.ingredients.map { it.item }
                 } else {
-                    RecipesSource().getAllRecipes().first { it.item == item }.ingredients.map { it.item }
+                    listOf(item)
                 }
             }.flatten().toSet()
         val usefulItems = itemsForRecipes
@@ -100,74 +95,6 @@ class QuestProbability {
             }
             val percent = (1.0 * positiveCases) / timesToRepeat
             println("$currentNumberOfQuests - $percent")
-        }
-    }
-
-    @Test
-    fun generateUniqueT2Items() {
-        val itemsForRecipes = Item.values().filter { it.itemType == ItemType.CRAFT_T2 }
-        val itemsForIngridients = Item.values().filter { it.itemType == ItemType.LOOT }
-        var difference = Int.MAX_VALUE
-        var finalResult = mutableSetOf<Recipe>()
-        var distinctItems = 0
-        repeat(1000) {
-            val recipes = mutableSetOf<Recipe>()
-            itemsForRecipes.forEach {
-                val recipe = generateRecipe(
-                    itemToCraft = it,
-                    possibleItems = itemsForIngridients,
-                    existingRecipes = recipes
-                )
-                recipes.add(recipe)
-            }
-            val map = recipes.map { it.ingredients }.flatten().groupBy { it.item }
-                .map { it.key to it.value.sumOf { it.number } }
-            val min = map.minOf { it.second }
-            val max = map.maxOf { it.second }
-
-            val distinctNew = map.map { it.first }.distinct().size
-
-            if (max - min < difference) {
-                difference = max - min
-                finalResult = recipes
-                distinctItems = distinctNew
-            } else {
-                if (max - min == difference && distinctItems < distinctNew) {
-                    difference = max - min
-                    finalResult = recipes
-                    distinctItems = distinctNew
-                }
-            }
-        }
-        finalResult.forEach {
-            println("${it.item} ingrs are ${it.ingredients.joinToString { "${it.item};${it.number}" }}")
-        }
-    }
-
-    private fun generateRecipe(
-        itemToCraft: Item,
-        possibleItems: List<Item>,
-        existingRecipes: MutableSet<Recipe>
-    ): Recipe {
-        return Recipe(
-            recipeId = random.nextInt(),
-            item = itemToCraft,
-            ingredients = possibleItems.shuffled(random).take(2).mapIndexed { i, it -> Ingredient(it, i + 2) }
-        ).takeIf {
-            newRecipe(it, existingRecipes)
-        } ?: generateRecipe(itemToCraft, possibleItems, existingRecipes)
-    }
-
-    private fun newRecipe(
-        recipe: Recipe,
-        recipes: MutableSet<Recipe>
-    ): Boolean {
-        return !recipes.any {
-            it.ingredients.all {
-                recipe.ingredients.any { ingredient ->
-                    it.item == ingredient.item
-                }
-            }
         }
     }
 

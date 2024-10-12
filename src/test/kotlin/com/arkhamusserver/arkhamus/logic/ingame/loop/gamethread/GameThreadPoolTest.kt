@@ -437,7 +437,8 @@ class GameThreadPoolTest {
                 callToArms = 0,
                 won = null,
                 sawTheEndOfTimes = false,
-                leftTheGame = false
+                leftTheGame = false,
+                visibilityModifiers = mutableSetOf()
             )
         }
 

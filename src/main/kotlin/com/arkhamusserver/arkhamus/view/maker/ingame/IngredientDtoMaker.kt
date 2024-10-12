@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.maker.ingame
 
-import com.arkhamusserver.arkhamus.logic.ingame.item.Ingredient
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Ingredient
 import com.arkhamusserver.arkhamus.view.dto.ingame.IngredientDto
 import org.springframework.stereotype.Component
 
