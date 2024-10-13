@@ -32,11 +32,18 @@ class LanternDataHandler(
 
     private fun mask(
         responseToMask: LanternData,
-        door: RedisLantern,
+        lantern: RedisLantern,
         myUser: RedisGameUser,
         levelGeometryData: LevelGeometryData
     ) {
-        if (!userLocationHandler.userCanSeeTarget(myUser, door, levelGeometryData, false)) {
+        if (!userLocationHandler.userCanSeeTarget(
+                whoLooks = myUser,
+                target = lantern,
+                levelGeometryData = levelGeometryData,
+                heightAffectVision = false,
+                geometryAffectsVision = false
+            )
+        ) {
             responseToMask.lanternState = LanternState.EMPTY
             responseToMask.objectState = MapObjectState.DISABLED
         }

@@ -53,7 +53,13 @@ class DoorDataHandler(
         levelGeometryData: LevelGeometryData
     ) {
         if (
-            !userLocationHandler.userCanSeeTarget(myUser, door, levelGeometryData, false) ||
+            !userLocationHandler.userCanSeeTarget(
+                whoLooks = myUser,
+                target = door,
+                levelGeometryData = levelGeometryData,
+                heightAffectVision = false,
+                geometryAffectsVision = false
+            ) ||
             !visibilityByTagsHandler.userCanSeeTarget(myUser, door)
         ) {
             responseToMask.doorState = DoorUserState.CLOSED

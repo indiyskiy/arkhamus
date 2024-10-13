@@ -23,12 +23,13 @@ class UserLocationHandler(
         whoLooks: RedisGameUser,
         target: WithPoint,
         levelGeometryData: LevelGeometryData,
+        heightAffectVision: Boolean = true,
         geometryAffectsVision: Boolean = true,
     ): Boolean {
         return haveGlobalVision(whoLooks) || (
                 inVisionDistance(whoLooks, target) &&
-                        onHighGroundOrSameLevel(whoLooks, target) &&
-                        geometryCheck()
+                        (!heightAffectVision || onHighGroundOrSameLevel(whoLooks, target)) &&
+                        (!geometryAffectsVision || geometryCheck())
                 )
     }
 
