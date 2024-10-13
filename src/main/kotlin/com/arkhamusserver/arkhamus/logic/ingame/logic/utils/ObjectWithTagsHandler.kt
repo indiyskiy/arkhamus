@@ -16,6 +16,10 @@ class ObjectWithTagsHandler(
     private val madnessHandler: UserMadnessHandler,
     private val shortTimeEventHandler: ShortTimeEventHandler
 ) {
+    companion object {
+        const val PEEKABOO_CURSE_ITEM_VALUE = 20
+    }
+
     fun processObject(
         withGameTags: WithGameTags,
         user: RedisGameUser,
@@ -36,7 +40,7 @@ class ObjectWithTagsHandler(
         tag: String,
         data: GlobalGameData
     ) {
-        madnessHandler.applyMadness(user, 10)
+        madnessHandler.applyMadness(user, PEEKABOO_CURSE_ITEM_VALUE)
         inGameTagsHandler.removeTag(withGameTags, tag)
         if (withGameTags is RedisContainer) {
             shortTimeEventHandler.createShortTimeEvent(

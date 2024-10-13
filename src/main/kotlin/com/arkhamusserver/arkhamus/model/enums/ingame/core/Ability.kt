@@ -150,7 +150,7 @@ enum class Ability(
         cooldown = SECOND_IN_MILLIS * 10,
         globalCooldown = false,
         targetTypes = listOf(CLUE),
-        range = 2.0
+        range = 3.0
     ),
     ;
 
