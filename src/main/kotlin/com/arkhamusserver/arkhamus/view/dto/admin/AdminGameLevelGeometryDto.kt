@@ -7,14 +7,19 @@ data class AdminGameLevelGeometryDto(
     var levelId: Long,
     var height: Int,
     var width: Int,
-    var polygons: List<PolygonDto>,
-    var ellipses: List<EllipseDto>,
+    var banZones: ZoneDataDto,
+    var clueZones: ZoneDataDto,
     var keyPoints: List<PointDto>,
     var questGivers: List<NpcDto>,
     var tasks: List<TaskGeometryDto>,
     var voteSpots: List<VoteSpotDto>,
     var doors: List<DoorDto>,
     var thresholds: List<ThresholdDto>,
+)
+
+data class ZoneDataDto(
+    val polygons: List<PolygonDto>,
+    val ellipses: List<EllipseDto>,
 )
 
 data class PolygonDto(

@@ -2,8 +2,10 @@ package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.view.dto.admin.*
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 private const val SCREEN_ZOOM = 10
 
@@ -22,19 +24,15 @@ class AdminLevelPreviewLogic(
     private val doorRepository: DoorRepository,
     private val thresholdRepository: ThresholdRepository,
 ) {
+    @Transactional
     fun geometry(
         levelId: Long,
         filter: LevelFilterDto = LevelFilterDto.allTrue(levelId)
     ): AdminGameLevelGeometryDto {
         val level = levelRepository.findByLevelId(levelId).maxBy { it.version }
 
-        val tetragons = if (filter.zones == true) {
-            tetragonRepository.findByLevelZoneLevelId(levelId)
-        } else emptyList()
-
-        val ellipses = if (filter.zones == true) {
-            ellipsesRepository.findByLevelZoneLevelId(levelId)
-        } else emptyList()
+        val tetragons = tetragonRepository.findByLevelZoneLevelId(levelId)
+        val ellipses = ellipsesRepository.findByLevelZoneLevelId(levelId)
 
         val containers = if (filter.containers == true) {
             containerRepository.findByLevelId(levelId)
@@ -72,12 +70,29 @@ class AdminLevelPreviewLogic(
             thresholdRepository.findByLevelId(levelId)
         } else emptyList()
 
+        val banZones = if (filter.voteSpotData == true) {
+            ZoneDataDto(
+                mapPolygons(tetragons.filter { tetragon -> tetragon.levelZone.zoneType == ZoneType.BAN }),
+                mapEllipses(ellipses.filter { ellipse -> ellipse.levelZone.zoneType == ZoneType.BAN }),
+            )
+        } else {
+            ZoneDataDto(emptyList(), emptyList())
+        }
+        val clueZones = if (filter.clueZones == true) {
+            ZoneDataDto(
+                mapPolygons(tetragons.filter { tetragon -> tetragon.levelZone.zoneType == ZoneType.CLUE }),
+                mapEllipses(ellipses.filter { ellipse -> ellipse.levelZone.zoneType == ZoneType.CLUE }),
+            )
+        } else {
+            ZoneDataDto(emptyList(), emptyList())
+        }
+
         return AdminGameLevelGeometryDto(
             levelId = level.levelId,
             height = level.levelHeight.toInt() * SCREEN_ZOOM,
             width = level.levelWidth.toInt() * SCREEN_ZOOM,
-            polygons = mapPolygons(tetragons),
-            ellipses = mapEllipses(ellipses),
+            banZones = banZones,
+            clueZones = clueZones,
             keyPoints = mapKeyPoints(containers, altars, crafters, lanterns),
             questGivers = mapQuestGivers(questGivers),
             tasks = mapTasks(levelTasks),
@@ -318,7 +333,6 @@ class AdminLevelPreviewLogic(
             )
         }
     }
-
 
 }
 

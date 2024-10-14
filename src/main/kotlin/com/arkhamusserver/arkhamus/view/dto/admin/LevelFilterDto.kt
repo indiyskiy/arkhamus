@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.admin
 
 data class LevelFilterDto(
-    var zones: Boolean? = false,
+    var clueZones: Boolean? = false,
     var containers: Boolean? = false,
     var altars: Boolean? = false,
     var lanterns: Boolean? = false,

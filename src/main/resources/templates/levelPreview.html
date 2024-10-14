@@ -52,13 +52,25 @@
     <input type="submit" value="Filter">
 </form>
 <svg th:width="${levelGeometry.width}" th:height="${levelGeometry.height}">
-    <!-- Processing tetragons -->
-    <th:block th:each="poly : ${levelGeometry.polygons}">
+    <!-- Processing BAN zone -->
+        <!-- Processing tetragons -->
+    <th:block th:each="poly : ${levelGeometry.banZones.polygons}">
+        <polygon th:attr="points=${poly.polygonPoints}"
+                 th:style="'fill:' + ${poly.color.getCode()} + ';+fill-opacity:0.5' + ';stroke:black;stroke-width:1'"/>
+    </th:block>
+        <!-- Processing ellipses -->
+    <th:block th:each="ellipse : ${levelGeometry.banZones.ellipses}">
+        <ellipse th:attr="cx=${ellipse.cx},cy=${ellipse.cy},rx=${ellipse.rx},ry=${ellipse.ry}"
+                 th:style="'fill:' + ${ellipse.color.getCode()} + ';stroke:black;stroke-width:1'"/>
+    </th:block>
+    <!-- Processing CLUE zone -->
+        <!-- Processing tetragons -->
+    <th:block th:each="poly : ${levelGeometry.clueZones.polygons}">
         <polygon th:attr="points=${poly.polygonPoints}"
                  th:style="'fill:' + ${poly.color.getCode()} + ';+fill-opacity:0.5' + ';stroke:black;stroke-width:1'"/>
     </th:block>
     <!-- Processing ellipses -->
-    <th:block th:each="ellipse : ${levelGeometry.ellipses}">
+    <th:block th:each="ellipse : ${levelGeometry.clueZones.ellipses}">
         <ellipse th:attr="cx=${ellipse.cx},cy=${ellipse.cy},rx=${ellipse.rx},ry=${ellipse.ry}"
                  th:style="'fill:' + ${ellipse.color.getCode()} + ';stroke:black;stroke-width:1'"/>
     </th:block>
