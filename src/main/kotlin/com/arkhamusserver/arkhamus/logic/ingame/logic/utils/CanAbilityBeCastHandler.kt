@@ -4,8 +4,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToClassResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import org.springframework.stereotype.Component
@@ -41,14 +43,26 @@ class CanAbilityBeCastHandler(
         val fitAdditionalConditionsMap: Map<Ability, Boolean> = visibleAbilitiesList.associateWith { ability ->
             canBeCastedAtAll(ability, user, globalGameData)
         }
-
+        val summoningSickness = globalGameData.timeEvents.firstOrNull {
+            it.type == RedisTimeEventType.SUMMONING_SICKNESS &&
+                    it.state == RedisTimeEventState.ACTIVE
+        }
         val availableAbilities = visibleAbilitiesList.map {
-            val cooldown = relatedAbilityCastMap[it.id]?.timeLeftCooldown ?: 0
+            val cooldown = if (summoningSickness != null) {
+                summoningSickness.timeLeft
+            } else {
+                relatedAbilityCastMap[it.id]?.timeLeftCooldown ?: 0
+            }
+            val maxCooldown = if (summoningSickness != null) {
+                summoningSickness.type.getDefaultTime()
+            } else {
+                relatedAbilityCastMap[it.id]?.timeLeftCooldown ?: 0
+            }
             val canBeCast = (fitAdditionalConditionsMap[it] != false) && (cooldown <= 0)
             val charges = charges(it, user)
             AbilityOfUserResponse(
                 abilityId = it.id,
-                maxCooldown = it.cooldown,
+                maxCooldown = maxCooldown,
                 canBeCast = canBeCast,
                 cooldown = cooldown,
                 charges = charges
