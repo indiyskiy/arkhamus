@@ -10,4 +10,11 @@ enum class SkinColor {
     WHITE,
     BROWN,
     TEAL,
+    ORANGE,
+    SKY,
+    ASPHALT,
+    BEIGE,
+    LAVENDER,
+    LIME,
+    CORAL
 }

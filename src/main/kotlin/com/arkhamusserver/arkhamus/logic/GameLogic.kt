@@ -54,14 +54,6 @@ class GameLogic(
         return gameUpdated.toDto(player, skins)
     }
 
-    private fun startGame(
-        game: GameSession,
-        skins: Collection<UserSkinSettings>
-    ) {
-        userSkinLogic.reshuffleSkins(skins)
-        gameStartLogic.startGame(game)
-    }
-
     fun findGameNullSafe(gameId: Long): GameSession = gameSessionRepository.findById(gameId).orElseThrow {
         ArkhamusServerRequestException(
             "game not found with id $gameId",
@@ -114,7 +106,7 @@ class GameLogic(
         }
     }
 
-    fun GameSession.toDto(
+    private fun GameSession.toDto(
         currentPlayer: UserAccount,
         skins: Map<Long, UserSkinSettings>
     ): GameSessionDto =
@@ -124,4 +116,11 @@ class GameLogic(
             currentPlayer
         )
 
+    private fun startGame(
+        game: GameSession,
+        skins: Collection<UserSkinSettings>
+    ) {
+        userSkinLogic.reshuffleSkins(skins)
+        gameStartLogic.startGame(game)
+    }
 }

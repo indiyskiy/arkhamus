@@ -18,7 +18,9 @@ class UserSkinLogic(
     private val currentUserService: CurrentUserService,
     private val userSkinDtoMaker: UserSkinDtoMaker,
 ) {
-    private val random = Random(System.currentTimeMillis())
+    companion object {
+        private val random = Random(System.currentTimeMillis())
+    }
 
     fun userSkin(): UserSkinDto {
         val player = currentUserService.getCurrentUserAccount()
@@ -70,6 +72,7 @@ class UserSkinLogic(
                 skin.skinColor = colorNotInUse
             }
         }
+        repository.saveAll(skins)
     }
 
     private fun findColorNotInUse(skins: Collection<UserSkinSettings>): SkinColor {
@@ -82,6 +85,20 @@ class UserSkinLogic(
 
     private fun SkinColor.isInUse(skins: Collection<UserSkinSettings>): Boolean {
         return skins.any { it.skinColor == this }
+    }
+
+    fun fixColors(session: GameSession, account: UserAccount) {
+        val oldColors = session.usersOfGameSession.map { user ->
+            repository.findByUserAccountId(account.id!!)
+                .getOrDefault(skin(account)).skinColor
+        }.toSet()
+        val accountSkin = repository.findByUserAccountId(account.id!!).getOrDefault(skin(account))
+        val accountColor = accountSkin.skinColor
+        if (accountColor in oldColors) {
+            val possibleColors = SkinColor.values().filter { it !in oldColors }
+            accountSkin.skinColor = possibleColors.random(random)
+            repository.save(accountSkin)
+        }
     }
 }
 

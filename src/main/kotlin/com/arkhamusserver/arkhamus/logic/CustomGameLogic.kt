@@ -76,27 +76,30 @@ class CustomGameLogic(
 
     @Transactional
     fun connectToGame(gameId: Long): GameSessionDto {
+        val player = currentUserService.getCurrentUserAccount()
         val game = gameLogic.findGameNullSafe(gameId)
-        return joinToGame(game)
+        fixColors(game, player)
+        return joinToGame(game, player)
     }
 
     @Transactional
     fun connectToGameByToken(token: String): GameSessionDto {
+        val player = currentUserService.getCurrentUserAccount()
         val game = gameLogic.findGameNullSafe(token)
-        return joinToGame(game)
+        fixColors(game, player)
+        return joinToGame(game, player)
     }
 
     private fun joinToGame(
-        game: GameSession
+        game: GameSession,
+        player: UserAccount
     ): GameSessionDto {
-        val player = currentUserService.getCurrentUserAccount()
         gameValidator.checkJoinAccess(player, game)
         val connectedUser = gameLogic.connectUserToGame(player, game)
         val usersOfGameSession = game.usersOfGameSession + connectedUser
         game.usersOfGameSession = usersOfGameSession
         return game.toDto(player)
     }
-
 
     @Transactional
     fun updateLobby(gameId: Long, gameSessionSettingsDto: GameSessionSettingsDto): GameSessionDto {
@@ -110,6 +113,15 @@ class CustomGameLogic(
         gameValidator.checkUpdateAccess(player, game, gameSessionSettingsDto)
         updateSettings(game, level, gameSessionSettingsDto)
         return game.toDto(player)
+    }
+
+    private fun fixColors(
+        session: GameSession,
+        account: UserAccount
+    ) {
+        userSkinLogic.fixColors(
+            session,
+            account)
     }
 
     private fun updateSettings(
