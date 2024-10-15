@@ -17,6 +17,7 @@ class GameStartTimeEventLogic(
     fun createStartEvents(game: GameSession) {
         createFirstDay(game)
         createGodAwakenTimer(game)
+        createSummoningSickness(game)
     }
 
     private fun createGodAwakenTimer(game: GameSession) {
@@ -27,7 +28,17 @@ class GameStartTimeEventLogic(
         )
     }
 
+
+    private fun createSummoningSickness(game: GameSession) {
+        timeEventHandler.createEvent(
+            game,
+            RedisTimeEventType.SUMMONING_SICKNESS,
+            0
+        )
+    }
+
     private fun createFirstDay(game: GameSession) =
         nightTimeEventProcessor.startTheDay(game, 0L)
+
 
 }
