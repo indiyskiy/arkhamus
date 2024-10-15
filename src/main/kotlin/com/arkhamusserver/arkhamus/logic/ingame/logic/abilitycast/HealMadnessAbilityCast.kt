@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalHealMadnessCondition
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.HealMadnessCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
@@ -50,7 +50,7 @@ class HealMadnessAbilityCast(
             if (user != null && userLocationHandler.distanceLessOrEquals(
                     currentUserNotNull,
                     user,
-                    AdditionalHealMadnessCondition.MAX_DISTANCE
+                    HealMadnessCondition.MAX_DISTANCE
                 )
             ) {
                 madnessHandler.reduceMadness(user, REDUCE_VALUE)

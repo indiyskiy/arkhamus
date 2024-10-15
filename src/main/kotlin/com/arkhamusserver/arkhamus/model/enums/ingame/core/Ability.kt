@@ -13,6 +13,10 @@ import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifier
 private const val MINIMUM_COOLDOWN: Long = SECOND_IN_MILLIS
 private const val DEFAULT_INVESTIGATION_ACTIVE: Long = MINUTE_IN_MILLIS
 
+private const val CLOSE_RANGE = 4.0
+private const val MEDIUM_RANGE = 10.0
+private const val LARGE_RANGE = 20.0
+
 enum class Ability(
     val id: Int,
     val requiresItem: Boolean = false,
@@ -32,6 +36,8 @@ enum class Ability(
         id = 1001,
         classBased = true,
         cooldown = MINUTE_IN_MILLIS,
+        targetTypes = listOf(CHARACTER),
+        range = MEDIUM_RANGE
     ),
     SPAWN_LOOT(
         id = 1002,
@@ -68,7 +74,7 @@ enum class Ability(
         cooldown = SECOND_IN_MILLIS * 30,
         globalCooldown = true,
         targetTypes = listOf(CHARACTER),
-        range = 2.0
+        range = LARGE_RANGE
     ),
     SUMMON_NIGHT(
         id = 4002,
@@ -86,50 +92,50 @@ enum class Ability(
         cooldown = MINUTE_IN_MILLIS * 1,
         globalCooldown = false,
         targetTypes = listOf(CONTAINER, CRAFTER),
-        range = 5.0
+        range = CLOSE_RANGE
     ),
 
     //clue items 5***
     SEARCH_FOR_INSCRIPTION(
         id = 5001,
         requiresItem = true,
-        cooldown = MINUTE_IN_MILLIS * 2,
+        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_SOUND(
         id = 5002,
         requiresItem = true,
-        cooldown = MINUTE_IN_MILLIS * 2,
+        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_SCENT(
         id = 5003,
         requiresItem = true,
-        cooldown = MINUTE_IN_MILLIS * 2,
+        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_AURA(
         id = 5004,
         requiresItem = true,
-        cooldown = MINUTE_IN_MILLIS * 2,
+        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_CORRUPTION(
         id = 5005,
         requiresItem = true,
-        cooldown = MINUTE_IN_MILLIS * 2,
+        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_OMEN(
         id = 5006,
         requiresItem = true,
-        cooldown = MINUTE_IN_MILLIS * 2,
+        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_DISTORTION(
         id = 5007,
         requiresItem = true,
-        cooldown = MINUTE_IN_MILLIS * 2,
+        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
 
@@ -150,7 +156,7 @@ enum class Ability(
         cooldown = SECOND_IN_MILLIS * 10,
         globalCooldown = false,
         targetTypes = listOf(CLUE),
-        range = 3.0
+        range = CLOSE_RANGE
     ),
     ;
 

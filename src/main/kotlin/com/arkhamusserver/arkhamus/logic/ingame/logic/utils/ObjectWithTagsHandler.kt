@@ -17,7 +17,7 @@ class ObjectWithTagsHandler(
     private val shortTimeEventHandler: ShortTimeEventHandler
 ) {
     companion object {
-        const val PEEKABOO_CURSE_ITEM_VALUE = 20
+        const val PEEKABOO_CURSE_ITEM_VALUE = 20.0
     }
 
     fun processObject(
