@@ -89,8 +89,8 @@ class UserSkinLogic(
 
     fun fixColors(session: GameSession, account: UserAccount) {
         val oldColors = session.usersOfGameSession.map { user ->
-            repository.findByUserAccountId(account.id!!)
-                .getOrDefault(skin(account)).skinColor
+            repository.findByUserAccountId(user.userAccount.id!!)
+                .getOrDefault(skin(user.userAccount)).skinColor
         }.toSet()
         val accountSkin = repository.findByUserAccountId(account.id!!).getOrDefault(skin(account))
         val accountColor = accountSkin.skinColor
