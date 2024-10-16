@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="En">
+<head>
+    <meta charset="UTF-8">
+    <title>Abilities</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+</head>
+
+<body>
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
+</div>
+<div class="main">
+    <h1>Abilities</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Requires Item</th>
+            <th>Role-Based</th>
+            <th>Class-Based</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ability : ${abilities}">
+            <td>
+                <a th:href="@{/admin/browser/abilities/{abilityId}(abilityId=${ability.id})}"
+                   th:text="${ability.id}">ID</a>
+            </td>
+            <td th:text="${ability.name}"></td>
+            <td th:text="${ability.requiresItem}"></td>
+            <td th:text="${ability.roleBased}"></td>
+            <td th:text="${ability.classBased}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
+</div>
+</body>
+</html>

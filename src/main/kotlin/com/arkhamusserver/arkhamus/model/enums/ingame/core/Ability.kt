@@ -14,8 +14,8 @@ private const val MINIMUM_COOLDOWN: Long = SECOND_IN_MILLIS
 private const val DEFAULT_INVESTIGATION_ACTIVE: Long = MINUTE_IN_MILLIS
 
 private const val CLOSE_RANGE = 4.0
-private const val MEDIUM_RANGE = 10.0
-private const val LARGE_RANGE = 20.0
+private const val MEDIUM_RANGE = 8.0
+private const val LARGE_RANGE = 16.0
 
 enum class Ability(
     val id: Int,
@@ -29,7 +29,7 @@ enum class Ability(
     val targetTypes: List<GameObjectType>? = null,
     val range: Double? = null,
     val visibilityModifiers: Set<VisibilityModifier> = setOf(VisibilityModifier.ALL),
-    private val visibilityModifiersString: MutableSet<String> = visibilityModifiers.map { it.name }.toMutableSet(),
+    val visibilityModifiersString: MutableSet<String> = visibilityModifiers.map { it.name }.toMutableSet(),
 ) : WithVisibilityModifiers {
     // investigator ability 1***
     HEAL_MADNESS(

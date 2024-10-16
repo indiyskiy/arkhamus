@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="En">
+<head>
+    <meta charset="UTF-8">
+    <title>Classes in Game</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
+</div>
+<div class="main">
+    <h1>Classes in Game</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Role Type</th>
+            <th>Default Ability</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="classInGame : ${classesInGame}">
+            <td th:text="${classInGame.id}"></td>
+            <td th:text="${classInGame.name}"></td>
+            <td th:text="${classInGame.roleType}"></td>
+            <td>
+            <span th:if="${classInGame.defaultAbility != null}"
+                  th:text="${classInGame.defaultAbility.value}">No ability</span>
+                <span th:unless="${classInGame.defaultAbility != null}">No ability</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
+</div>
+</body>
+</html>

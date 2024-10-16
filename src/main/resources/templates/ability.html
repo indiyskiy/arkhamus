@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="En">
+<head>
+    <meta charset="UTF-8">
+    <title>Ability</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+</head>
+
+<body>
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
+</div>
+<div class="main">
+    <h1>Ability Detail: <span th:text="${ability.name}"></span></h1>
+
+    <div>
+        <h2>Basic Information</h2>
+        <div>
+            <strong>ID:</strong> <span th:text="${ability.id}"></span>
+        </div>
+        <div>
+            <strong>Name:</strong> <span th:text="${ability.name}"></span>
+        </div>
+    </div>
+
+    <div>
+        <h2>Role and Class Information</h2>
+        <div>
+            <strong>Available for Roles:</strong>
+            <span th:each="role, iterstat : ${ability.availableForRole}">
+                <span th:text="${role.name()}"></span><span th:if="${!iterstat.last}">, </span>
+            </span>
+        </div>
+        <div>
+            <strong>Class Based:</strong> <span th:text="${ability.classBased}"></span>
+        </div>
+        <div>
+            <strong>Required Classes:</strong>
+            <span th:each="requiredClass, iterstat : ${ability.requiredClasses}">
+                <span th:text="${requiredClass.name()}"></span><span th:if="${!iterstat.last}">, </span>
+            </span>
+        </div>
+    </div>
+
+    <div>
+        <h2>Item Information</h2>
+        <div>
+            <strong>Requires Item:</strong> <span th:text="${ability.requiresItem}"></span>
+        </div>
+        <div>
+            <strong>Consumes Item:</strong> <span th:text="${ability.consumesItem}"></span>
+        </div>
+        <div>
+            <strong>Require Item Info:</strong>
+            <span th:if="${ability.requireItemInfo != null}">
+        <a th:href="@{'/admin/browser/items/' + ${ability.requireItemInfo.id}}">
+            <span th:text="'[' + ${ability.requireItemInfo.id} + ']'"></span>
+        </a>
+        <span th:text="${' ' + ability.requireItemInfo.name}"></span>
+    </span>
+            <span th:if="${ability.requireItemInfo == null}">N/A</span>
+        </div>
+    </div>
+
+    <div>
+        <h2>Target Information</h2>
+        <div>
+            <strong>Requires Target:</strong> <span th:text="${ability.requiresTarget}"></span>
+        </div>
+        <div>
+            <strong>Target Types:</strong>
+            <ul>
+                <li th:each="targetType : ${ability.targetTypes}" th:text="${targetType.name()}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Cooldown and Range Information -->
+    <div>
+        <h2>Cooldown and Range Information</h2>
+        <div>
+            <strong>Active time:</strong> <span th:text="${activeFormatted ?: 'N/A'}"></span>
+        </div>
+        <div>
+            <strong>Cooldown time:</strong> <span th:text="${cooldownFormatted}"></span>
+        </div>
+        <div>
+            <strong>Global Cooldown:</strong> <span th:text="${ability.globalCooldown}"></span>
+        </div>
+        <div>
+            <strong>Range:</strong> <span th:text="${ability.range ?: 'N/A'}"></span>
+        </div>
+    </div>
+
+    <!-- Visibility Modifiers -->
+    <div>
+        <h2>Visibility Modifiers</h2>
+        <div>
+            <strong>Visibility Modifiers:</strong>
+            <span th:each="modifier : ${ability.visibilityModifiers}" th:text="${modifier}"> </span>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
+</div>
+
+</body>
+</html>
