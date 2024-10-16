@@ -78,14 +78,20 @@ class CustomGameLogic(
     fun connectToGame(gameId: Long): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         val game = gameLogic.findGameNullSafe(gameId)
-        fixColors(game, player)
-        return joinToGame(game, player)
+        return connect(game, player)
     }
 
     @Transactional
     fun connectToGameByToken(token: String): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
         val game = gameLogic.findGameNullSafe(token)
+        return connect(game, player)
+    }
+
+    private fun connect(
+        game: GameSession,
+        player: UserAccount
+    ): GameSessionDto {
         fixColors(game, player)
         return joinToGame(game, player)
     }
@@ -121,7 +127,8 @@ class CustomGameLogic(
     ) {
         userSkinLogic.fixColors(
             session,
-            account)
+            account
+        )
     }
 
     private fun updateSettings(

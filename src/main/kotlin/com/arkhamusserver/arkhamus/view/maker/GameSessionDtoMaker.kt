@@ -44,7 +44,12 @@ class GameSessionDtoMaker(
             gameType = gameSession.gameType
             gameSessionSettings = gameSessionSettingsDtoMaker.toDto(gameSession.gameSessionSettings)
             god = convertGod(gameSession, isCultist)
-            usersInGame = mapRolesByReceiverRole(gameSession, userSkins, isCultist, currentPlayer.id!!)
+            usersInGame = mapRolesByReceiverRole(
+                gameSession,
+                userSkins,
+                isCultist,
+                currentPlayer.id!!
+            )
         }
     }
 
@@ -112,7 +117,11 @@ class GameSessionDtoMaker(
             this.nickName = convertingUser.userAccount.nickName
             this.isHost = convertingUser.host
             this.role = buildRoleDto(gameSession, isCultist, convertingUser, myUserId)
-            this.gameSkin = userSkinDtoMaker.toDto(userSkins[convertingUser.userAccount.id]!!)
+            this.gameSkin = if (convertingUser.userAccount.id == myUserId) {
+                userSkinDtoMaker.toDto(userSkins[convertingUser.userAccount.id]!!)
+            } else {
+                userSkinDtoMaker.toDto(userSkins[convertingUser.userAccount.id]!!)
+            }
         }
     }
 

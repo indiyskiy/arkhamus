@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
 import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.view.dto.UserSkinDto
 import com.arkhamusserver.arkhamus.view.maker.UserSkinDtoMaker
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrDefault
@@ -20,6 +21,7 @@ class UserSkinLogic(
 ) {
     companion object {
         private val random = Random(System.currentTimeMillis())
+        private val logger = LoggerFactory.getLogger(UserSkinLogic::class.java)
     }
 
     fun userSkin(): UserSkinDto {
@@ -57,22 +59,32 @@ class UserSkinLogic(
     private fun UserSkinSettings.save(): UserSkinSettings =
         repository.save(this)
 
-    fun allSkinsOf(gameSession: GameSession): Map<Long, UserSkinSettings> {
+    fun allSkinsOf(
+        gameSession: GameSession,
+        currentUserSkin: UserSkinSettings? = null,
+    ): Map<Long, UserSkinSettings> {
         return gameSession
             .usersOfGameSession
             .map { it.userAccount }
-            .map { repository.findByUserAccountId(it.id!!).getOrDefault(skin(it)) }
+            .map {
+                if (currentUserSkin != null && currentUserSkin.userAccount?.id == it.id) {
+                    currentUserSkin
+                } else {
+                    repository.findByUserAccountId(it.id!!).getOrDefault(skin(it))
+                }
+            }
             .associateBy { it.userAccount!!.id!! }
     }
 
-    fun reshuffleSkins(skins: Collection<UserSkinSettings>) {
+    fun reshuffleSkins(skins: Collection<UserSkinSettings>): List<UserSkinSettings> {
         skins.forEach { skin ->
             if (skin.skinColor.isInUseMoreThenOnce(skins)) {
                 val colorNotInUse = findColorNotInUse(skins)
                 skin.skinColor = colorNotInUse
             }
         }
-        repository.saveAll(skins)
+        return repository.saveAll(skins).toList()
+
     }
 
     private fun findColorNotInUse(skins: Collection<UserSkinSettings>): SkinColor {
@@ -92,11 +104,15 @@ class UserSkinLogic(
             repository.findByUserAccountId(user.userAccount.id!!)
                 .getOrDefault(skin(user.userAccount)).skinColor
         }.toSet()
+        logger.info("old colors = ${oldColors.joinToString(", ")}")
         val accountSkin = repository.findByUserAccountId(account.id!!).getOrDefault(skin(account))
         val accountColor = accountSkin.skinColor
+        logger.info("current user color = $accountColor")
         if (accountColor in oldColors) {
+            logger.info("change color to random")
             val possibleColors = SkinColor.values().filter { it !in oldColors }
             accountSkin.skinColor = possibleColors.random(random)
+            logger.info("change color to ${accountSkin.skinColor}")
             repository.save(accountSkin)
         }
     }
