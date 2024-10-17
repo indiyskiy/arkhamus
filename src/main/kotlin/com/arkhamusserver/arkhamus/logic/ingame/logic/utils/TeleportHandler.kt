@@ -29,11 +29,11 @@ class TeleportHandler(
         user.stateTags.add(UserStateTag.TELEPORTATION_STUN.name)
         timeEventHandler.createEvent(
             game = game,
-            eventType = RedisTimeEventType.TELEPORTATION_STUN,
+            eventType = RedisTimeEventType.STUN,
             sourceObject = null,
             targetObject = user,
             location = Location(user.x, user.y, user.z),
-            timeLeft = RedisTimeEventType.TELEPORTATION_STUN.getDefaultTime()
+            timeLeft = RedisTimeEventType.STUN.getDefaultTime()
         )
         logger.info("user ${user.userId} teleported to ${user.x()}; ${user.y()}; ${user.z()}")
     }

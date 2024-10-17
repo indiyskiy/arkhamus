@@ -49,12 +49,14 @@ enum class Ability(
     FARSIGHT(
         id = 2001,
         classBased = true,
-        cooldown = MINUTE_IN_MILLIS / 2
+        cooldown = MINUTE_IN_MILLIS
     ),
-    SEE_THE_OMEN(
+    PARALYSE(
         id = 2002,
         classBased = true,
-        cooldown = MINUTE_IN_MILLIS * 5
+        cooldown = MINUTE_IN_MILLIS,
+        targetTypes = listOf(CHARACTER),
+        range = MEDIUM_RANGE
     ),
 
     //neutral ability 3***

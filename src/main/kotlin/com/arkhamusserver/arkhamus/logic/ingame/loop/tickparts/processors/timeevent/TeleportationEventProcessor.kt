@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @Component
 class TeleportationEventProcessor() : TimeEventProcessor {
     override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.TELEPORTATION_STUN
+        type == RedisTimeEventType.STUN
 
 
     override fun process(
