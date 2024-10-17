@@ -48,11 +48,10 @@ class GameLogic(
         val invitedUsers = game.usersOfGameSession
         gameValidator.checkStartAccess(player, game, invitedUsers)
         val skins = userSkinLogic.allSkinsOf(game)
-        val skinsReshuffled = userSkinLogic.reshuffleSkins(skins.values)
+        val skinsReshuffled = userSkinLogic.reshuffleSkins(skins.values).associateBy { it.userAccount!!.id!! }
         startGame(game)
-
         val gameUpdated = gameSessionRepository.findById(game.id!!).get()
-        return gameUpdated.toDto(player, skinsReshuffled.associateBy { it.userAccount!!.id!! })
+        return gameUpdated.toDto(player, skinsReshuffled)
     }
 
     fun findGameNullSafe(gameId: Long): GameSession = gameSessionRepository.findById(gameId).orElseThrow {

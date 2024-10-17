@@ -117,11 +117,7 @@ class GameSessionDtoMaker(
             this.nickName = convertingUser.userAccount.nickName
             this.isHost = convertingUser.host
             this.role = buildRoleDto(gameSession, isCultist, convertingUser, myUserId)
-            this.gameSkin = if (convertingUser.userAccount.id == myUserId) {
-                userSkinDtoMaker.toDto(userSkins[convertingUser.userAccount.id]!!)
-            } else {
-                userSkinDtoMaker.toDto(userSkins[convertingUser.userAccount.id]!!)
-            }
+            this.gameSkin = userSkinDtoMaker.toDto(userSkins[convertingUser.userAccount.id]!!)
         }
     }
 

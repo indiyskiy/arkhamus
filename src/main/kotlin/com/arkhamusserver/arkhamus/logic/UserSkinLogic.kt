@@ -34,6 +34,7 @@ class UserSkinLogic(
     @Transactional
     fun updateUserSkin(userSkin: UserSkinDto): UserSkinDto {
         val player = currentUserService.getCurrentUserAccount()
+        logger.info("user ${player.nickName} change skin color to ${userSkin.skinColor}")
         return repository.findByUserAccountId(player.id!!)
             .getOrDefault(skin(player))
             .mergeSkin(userSkin)
@@ -83,8 +84,8 @@ class UserSkinLogic(
                 skin.skinColor = colorNotInUse
             }
         }
+        logger.info("reshuffled skins = ${skins.joinToString(", ") { it.skinColor.name }}")
         return repository.saveAll(skins).toList()
-
     }
 
     private fun findColorNotInUse(skins: Collection<UserSkinSettings>): SkinColor {
