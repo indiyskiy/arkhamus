@@ -10,13 +10,13 @@ import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.stereotype.Component
 
 @Component
-class HealMadnessCondition(
+class HealMadnessByPillCondition(
     private val geometryUtils: GeometryUtils,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
-        return ability == Ability.HEAL_MADNESS
+        return ability == Ability.HEAL_MADNESS_BY_PILL
     }
 
     override fun canBeCastedRightNow(

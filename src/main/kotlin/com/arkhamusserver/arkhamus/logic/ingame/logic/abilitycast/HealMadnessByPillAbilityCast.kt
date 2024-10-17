@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import org.springframework.stereotype.Component
 
 @Component
-class HealMadnessAbilityCast(
+class HealMadnessByPillAbilityCast(
     private val userLocationHandler: UserLocationHandler,
     private val geometryUtils: GeometryUtils,
     private val madnessHandler: UserMadnessHandler
@@ -20,7 +20,7 @@ class HealMadnessAbilityCast(
     }
 
     override fun accept(ability: Ability): Boolean {
-        return ability == Ability.HEAL_MADNESS
+        return ability == Ability.HEAL_MADNESS_BY_PILL
     }
 
     override fun cast(
@@ -49,7 +49,7 @@ class HealMadnessAbilityCast(
             if (user != null && userLocationHandler.distanceLessOrEquals(
                     currentUserNotNull,
                     user,
-                    Ability.HEAL_MADNESS.range!!
+                    Ability.HEAL_MADNESS_BY_PILL.range!!
                 )
             ) {
                 madnessHandler.reduceMadness(user, REDUCE_VALUE)

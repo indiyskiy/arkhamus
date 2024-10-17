@@ -15,6 +15,7 @@ class AbilityToItemResolver {
             when (ability) {
                 //useful items
                 TOWN_PORTAL_BY_SCROLL -> TOWN_PORTAL_SCROLL
+                HEAL_MADNESS_BY_PILL -> PILL
                 //cultist items
                 THROW_POTATO -> CURSED_POTATO
                 SUMMON_NIGHT -> MOON_STONE
@@ -28,6 +29,8 @@ class AbilityToItemResolver {
                 SEARCH_FOR_CORRUPTION -> CORRUPTION_INVESTIGATION_ITEM
                 SEARCH_FOR_OMEN -> OMEN_INVESTIGATION_ITEM
                 SEARCH_FOR_DISTORTION -> DISTORTION_INVESTIGATION_ITEM
+                //advanced items
+                TOWN_PORTAL_BY_AMULET -> TOWN_PORTAL_AMULET
                 KINDLE_CLOAK -> CLOAK_OF_FLAMES
                 else -> null
             }

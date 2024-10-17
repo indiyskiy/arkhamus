@@ -80,7 +80,7 @@ class UserSkinLogic(
     fun reshuffleSkins(skins: Collection<UserSkinSettings>): List<UserSkinSettings> {
         skins.forEach { skin ->
             if (skin.skinColor.isInUseMoreThenOnce(skins)) {
-                val colorNotInUse = findColorNotInUse(skins)
+                val colorNotInUse = findColorNotInUse(skins, skin)
                 skin.skinColor = colorNotInUse
             }
         }
@@ -88,16 +88,19 @@ class UserSkinLogic(
         return repository.saveAll(skins).toList()
     }
 
-    private fun findColorNotInUse(skins: Collection<UserSkinSettings>): SkinColor {
-        return SkinColor.values().first { it.isInUse(skins) }
+    private fun findColorNotInUse(
+        skins: Collection<UserSkinSettings>,
+        oldSkin: UserSkinSettings,
+    ): SkinColor {
+        val allSkinColors = SkinColor.values().toSet()
+        val usedSkinColors = skins.map { it.skinColor }.toSet()
+        val availableSkinColors = allSkinColors - usedSkinColors
+        logger.info("available skin colors = ${availableSkinColors.joinToString(", ")}")
+        return availableSkinColors.takeIf { it.isNotEmpty() }?.random(random) ?: oldSkin.skinColor
     }
 
     private fun SkinColor.isInUseMoreThenOnce(skins: Collection<UserSkinSettings>): Boolean {
         return skins.count { it.skinColor == this } > 1
-    }
-
-    private fun SkinColor.isInUse(skins: Collection<UserSkinSettings>): Boolean {
-        return skins.any { it.skinColor == this }
     }
 
     fun fixColors(session: GameSession, account: UserAccount) {

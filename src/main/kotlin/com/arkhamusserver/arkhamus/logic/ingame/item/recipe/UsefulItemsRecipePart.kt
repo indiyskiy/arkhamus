@@ -14,7 +14,7 @@ class UsefulItemsRecipePart(): RecipeSourcePart {
                 Ingredient(EYE, 1)
             ).toRecipe(
                 6001,
-                item = VEIL,
+                item = PILL,
                 timeToCraft = SECOND_IN_MILLIS * 3,
                 crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
             ),

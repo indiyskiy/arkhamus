@@ -23,7 +23,8 @@ class InvestigationRelatedAbilityCondition : AdditionalAbilityCondition {
         return canBeCastedAtAll(
             ability,
             user,
-            globalGameData)
+            globalGameData
+        )
     }
 
     override fun canBeCastedAtAll(

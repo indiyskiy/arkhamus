@@ -40,7 +40,7 @@ enum class RedisTimeEventType(
 
     //tech
     TELEPORTATION_STUN(
-        SECOND_IN_MILLIS * 5,
+        SECOND_IN_MILLIS * 3,
         Visibility.NONE,
         targetType = GameObjectType.CHARACTER
     ),

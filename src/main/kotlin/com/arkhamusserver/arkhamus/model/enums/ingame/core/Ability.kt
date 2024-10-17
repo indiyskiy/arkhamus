@@ -45,13 +45,6 @@ enum class Ability(
         cooldown = MINUTE_IN_MILLIS / 2
     ),
 
-    TOWN_PORTAL_BY_SCROLL(
-        id = 1102,
-        cooldown = MINUTE_IN_MILLIS * 5,
-        requiresItem = true,
-        consumesItem = true,
-    ),
-
     //cultist ability 2***
     FARSIGHT(
         id = 2001,
@@ -65,9 +58,23 @@ enum class Ability(
     ),
 
     //neutral ability 3***
-    //cultist items spell 4***
+    //useful item ability
+    TOWN_PORTAL_BY_SCROLL(
+        id = 4002,
+        cooldown = MINUTE_IN_MILLIS * 6,
+        requiresItem = true,
+        consumesItem = true,
+    ),
+    HEAL_MADNESS_BY_PILL(
+        id = 4003,
+        cooldown = MINUTE_IN_MILLIS,
+        requiresItem = true,
+        consumesItem = true,
+    ),
+
+    //cultist items spell 5***
     THROW_POTATO(
-        id = 4001,
+        id = 5001,
         requiresItem = true,
         consumesItem = true,
         //available for everybody couse can ber re-thrown
@@ -77,7 +84,7 @@ enum class Ability(
         range = LARGE_RANGE
     ),
     SUMMON_NIGHT(
-        id = 4002,
+        id = 5002,
         requiresItem = true,
         consumesItem = true,
         availableForRole = setOf(CULTIST),
@@ -85,7 +92,7 @@ enum class Ability(
         globalCooldown = true
     ),
     PEEKABOO_CURSE_ITEM(
-        id = 4003,
+        id = 5003,
         requiresItem = true,
         consumesItem = false,
         availableForRole = setOf(CULTIST),
@@ -97,43 +104,43 @@ enum class Ability(
 
     //clue items 5***
     SEARCH_FOR_INSCRIPTION(
-        id = 5001,
+        id = 6001,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_SOUND(
-        id = 5002,
+        id = 6002,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_SCENT(
-        id = 5003,
+        id = 6003,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_AURA(
-        id = 5004,
+        id = 6004,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_CORRUPTION(
-        id = 5005,
+        id = 6005,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_OMEN(
-        id = 5006,
+        id = 6006,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     SEARCH_FOR_DISTORTION(
-        id = 5007,
+        id = 6007,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
@@ -141,15 +148,22 @@ enum class Ability(
 
     //ADVANCED_USEFUL_ITEM 9***
     KINDLE_CLOAK(
-        id = 9001,
+        id = 10001,
         requiresItem = true,
         consumesItem = false,
         cooldown = MINUTE_IN_MILLIS * DAY_LENGTH_MINUTES,
         active = MINUTE_IN_MILLIS * NIGHT_LENGTH_MINUTES / 2
     ),
+    TOWN_PORTAL_BY_AMULET(
+        id = 10002,
+        cooldown = MINUTE_IN_MILLIS * 4,
+        requiresItem = true,
+        consumesItem = false,
+    ),
+
     //advanced cultist items spell 10***
     CLEAN_UP_CLUE(
-        id = 10004,
+        id = 11004,
         requiresItem = true,
         consumesItem = true,
         availableForRole = setOf(CULTIST),
