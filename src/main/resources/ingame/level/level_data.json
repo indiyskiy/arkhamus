@@ -1266,18 +1266,18 @@
         "id": 801,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 108,
+        "x": 112,
         "y": 2,
-        "z": 3.5
+        "z": 76.5
       },
       {
         "containerTags": [],
         "id": 800,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 108,
+        "x": 112,
         "y": 2,
-        "z": 8
+        "z": 80
       },
       {
         "containerTags": [
@@ -1287,72 +1287,72 @@
         "id": 819,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 108,
+        "x": 112,
         "y": 2,
-        "z": 11
+        "z": 83
       },
       {
         "containerTags": [],
         "id": 808,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 108,
+        "x": 112,
         "y": 2,
-        "z": 14.5
+        "z": 86.5
       },
       {
         "containerTags": [],
         "id": 802,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 106,
+        "x": 110,
         "y": 2,
-        "z": 6.5
+        "z": 78.5
       },
       {
         "containerTags": [],
         "id": 803,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 110,
+        "x": 114,
         "y": 2,
-        "z": 6.5
+        "z": 78.5
       },
       {
         "containerTags": [],
         "id": 804,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 106,
+        "x": 110,
         "y": 2,
-        "z": 9.5
+        "z": 81.5
       },
       {
         "containerTags": [],
         "id": 805,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 110,
+        "x": 114,
         "y": 2,
-        "z": 9.5
+        "z": 81.5
       },
       {
         "containerTags": [],
         "id": 806,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 106,
+        "x": 110,
         "y": 2,
-        "z": 12.5
+        "z": 84.5
       },
       {
         "containerTags": [],
         "id": 807,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 110,
+        "x": 114,
         "y": 2,
-        "z": 12.5
+        "z": 84.5
       },
       {
         "containerTags": [
@@ -1478,27 +1478,27 @@
         "id": 900,
         "interactionRadius": 3.5,
         "name": "CRAFTER_NAME_01",
-        "x": 65,
+        "x": 23.9386005401611,
         "y": 0,
-        "z": 22
+        "z": 75.5330963134766
       },
       {
         "crafterType": "ADVANCED",
         "id": 901,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 84,
+        "x": 23.5,
         "y": 0,
-        "z": 72
+        "z": 22
       },
       {
         "crafterType": "CULTIST",
         "id": 902,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 30,
+        "x": 11.7822999954224,
         "y": 0,
-        "z": 26
+        "z": 34.9911003112793
       }
     ],
     "doors": [

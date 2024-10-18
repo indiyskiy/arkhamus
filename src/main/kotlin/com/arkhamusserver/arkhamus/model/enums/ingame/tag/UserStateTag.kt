@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility
 enum class UserStateTag(
     private val visibility: Visibility?
 ) {
-    TELEPORTATION_STUN(Visibility.PUBLIC),
+    STUN(Visibility.PUBLIC),
     IN_RITUAL(Visibility.PUBLIC),
     INVESTIGATING(Visibility.SOURCE),
     LUMINOUS(Visibility.PUBLIC),

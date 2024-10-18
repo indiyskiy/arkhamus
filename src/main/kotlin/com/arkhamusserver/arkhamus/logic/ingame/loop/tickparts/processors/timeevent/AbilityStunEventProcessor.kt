@@ -7,9 +7,9 @@ import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import org.springframework.stereotype.Component
 
 @Component
-class TeleportationEventProcessor() : TimeEventProcessor {
+class AbilityStunEventProcessor() : TimeEventProcessor {
     override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.TELEPORTATION_STUN
+        type == RedisTimeEventType.ABILITY_STUN
 
 
     override fun process(

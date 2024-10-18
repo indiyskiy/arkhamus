@@ -37,9 +37,14 @@ enum class RedisTimeEventType(
         Visibility.PUBLIC,
         sourceType = GameObjectType.CHARACTER
     ),
+    ABILITY_STUN(
+        SECOND_IN_MILLIS * 45,
+        Visibility.NONE,
+        targetType = GameObjectType.CHARACTER
+    ),
 
     //tech
-    STUN(
+    TELEPORTATION_STUN(
         SECOND_IN_MILLIS * 3,
         Visibility.NONE,
         targetType = GameObjectType.CHARACTER

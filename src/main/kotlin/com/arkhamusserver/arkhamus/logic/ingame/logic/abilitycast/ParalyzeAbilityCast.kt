@@ -14,6 +14,10 @@ class ParalyzeAbilityCast(
     private val timeEventHandler: TimeEventHandler,
 ) : AbilityCast {
 
+    companion object {
+
+    }
+
     override fun accept(ability: Ability): Boolean {
         return ability == Ability.PARALYSE
     }
@@ -35,11 +39,11 @@ class ParalyzeAbilityCast(
         val targetUser = abilityRequestProcessData.target as RedisGameUser
         timeEventHandler.createEvent(
             game = globalGameData.game,
-            eventType = RedisTimeEventType.STUN,
+            eventType = RedisTimeEventType.ABILITY_STUN,
             sourceObject = currentUser,
             targetObject = targetUser,
             location = Location(targetUser.x, targetUser.y, targetUser.z),
-            timeLeft = RedisTimeEventType.STUN.getDefaultTime()
+            timeLeft = RedisTimeEventType.ABILITY_STUN.getDefaultTime()
         )
     }
 }
