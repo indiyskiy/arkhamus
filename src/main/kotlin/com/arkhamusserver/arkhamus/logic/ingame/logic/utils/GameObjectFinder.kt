@@ -19,6 +19,7 @@ class GameObjectFinder {
             CONTAINER -> data.containers[id.toLong()]
             CRAFTER -> data.crafters[id.toLong()]
             CLUE -> data.clues.firstOrNull { it.id == id }
+            ALTAR -> data.altars[id.toLong()]
         }
     }
 
@@ -33,6 +34,7 @@ class GameObjectFinder {
                 CONTAINER -> data.containers.values
                 CRAFTER -> data.crafters.values
                 CLUE -> data.clues
+                ALTAR -> data.altars.values
             }
         }
     }

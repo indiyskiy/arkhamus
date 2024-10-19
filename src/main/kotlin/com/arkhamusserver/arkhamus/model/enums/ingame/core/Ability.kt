@@ -103,6 +103,16 @@ enum class Ability(
         targetTypes = listOf(CONTAINER, CRAFTER),
         range = CLOSE_RANGE
     ),
+    FAKE_VOTE(
+        id = 5004,
+        requiresItem = true,
+        consumesItem = true,
+        availableForRole = setOf(CULTIST),
+        cooldown = MINUTE_IN_MILLIS * 8,
+        globalCooldown = true,
+        targetTypes = listOf(VOTE_SPOT, ALTAR),
+        range = MEDIUM_RANGE
+    ),
 
     //clue items 5***
     SEARCH_FOR_INSCRIPTION(
