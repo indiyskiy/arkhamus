@@ -19,7 +19,7 @@ class AbilityToItemResolver {
                 //cultist items
                 THROW_POTATO -> CURSED_POTATO
                 SUMMON_NIGHT -> MOON_STONE
-                FAKE_VOTE -> MOON_STONE
+                FAKE_VOTE -> ANNOYING_BELL
                 PEEKABOO_CURSE_ITEM -> RITUAL_DAGGER
                 CLEAN_UP_CLUE -> DUST_OF_DISAPPEARANCE
                 //clue search items
