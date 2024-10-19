@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component
 
@@ -37,6 +38,9 @@ class ParalyzeAbilityCast(
     ) {
         val currentUser = abilityRequestProcessData.gameUser
         val targetUser = abilityRequestProcessData.target as RedisGameUser
+
+        if(targetUser.stateTags.contains(UserStateTag.INVULNERABILITY.name)) return
+
         timeEventHandler.createEvent(
             game = globalGameData.game,
             eventType = RedisTimeEventType.ABILITY_STUN,

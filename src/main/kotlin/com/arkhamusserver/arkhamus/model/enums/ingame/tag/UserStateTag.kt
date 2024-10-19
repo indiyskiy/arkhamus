@@ -9,6 +9,7 @@ enum class UserStateTag(
     IN_RITUAL(Visibility.PUBLIC),
     INVESTIGATING(Visibility.SOURCE),
     LUMINOUS(Visibility.PUBLIC),
+    INVULNERABILITY(Visibility.PUBLIC),
     FARSIGHT(Visibility.SOURCE);
 
     fun getVisibility(): Visibility? {

@@ -32,6 +32,7 @@ class AbilityToItemResolver {
                 //advanced items
                 TOWN_PORTAL_BY_AMULET -> TOWN_PORTAL_AMULET
                 KINDLE_CLOAK -> CLOAK_OF_FLAMES
+                INVULNERABILITY -> INVULNERABILITY_POTION
                 else -> null
             }
         }

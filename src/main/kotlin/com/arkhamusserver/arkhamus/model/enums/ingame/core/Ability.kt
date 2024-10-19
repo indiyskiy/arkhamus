@@ -162,6 +162,13 @@ enum class Ability(
         requiresItem = true,
         consumesItem = false,
     ),
+    INVULNERABILITY(
+        id = 10003,
+        requiresItem = true,
+        consumesItem = true,
+        active = MINUTE_IN_MILLIS,
+        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
+    ),
 
     //advanced cultist items spell 10***
     CLEAN_UP_CLUE(
@@ -170,7 +177,6 @@ enum class Ability(
         consumesItem = true,
         availableForRole = setOf(CULTIST),
         cooldown = SECOND_IN_MILLIS * 10,
-        globalCooldown = false,
         targetTypes = listOf(CLUE),
         range = CLOSE_RANGE
     ),

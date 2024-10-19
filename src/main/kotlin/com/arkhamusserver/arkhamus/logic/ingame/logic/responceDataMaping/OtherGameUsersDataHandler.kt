@@ -34,6 +34,7 @@ class OtherGameUsersDataHandler(
         if (!userLocationHandler.userCanSeeTarget(myUser, thatUser, levelGeometryData)) {
             responseToMask.x = null
             responseToMask.y = null
+            responseToMask.stateTags = emptySet()
         }
         responseToMask.stateTags = responseToMask.stateTags.filter {
             UserStateTag.valueOf(it).getVisibility() == Visibility.PUBLIC

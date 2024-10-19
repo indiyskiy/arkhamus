@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.ItemHolderChangeTyp
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Component
 
@@ -33,11 +34,12 @@ class ThrowPotatoAbilityCast(
     ) {
         val currentUser = abilityRequestProcessData.gameUser
         currentUser?.let { _ ->
-            val targetUser = abilityRequestProcessData.target as? RedisGameUser
-            if (targetUser != null) {
-                inventoryHandler.addItem(targetUser, Item.CURSED_POTATO)
-                rememberItemChangesForResponses(globalGameData, targetUser)
-            }
+            val targetUser = abilityRequestProcessData.target as RedisGameUser
+
+            if (targetUser.stateTags.contains(UserStateTag.INVULNERABILITY.name)) return
+
+            inventoryHandler.addItem(targetUser, Item.CURSED_POTATO)
+            rememberItemChangesForResponses(globalGameData, targetUser)
         }
     }
 

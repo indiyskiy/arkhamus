@@ -1483,22 +1483,40 @@
         "z": 75.5330963134766
       },
       {
-        "crafterType": "ADVANCED",
+        "crafterType": "REGULAR",
         "id": 901,
         "interactionRadius": 3.5,
-        "name": "INTERACTIVE_OBJECT_NAME",
+        "name": "CRAFTER_NAME_02",
+        "x": 108,
+        "y": 2,
+        "z": 10
+      },
+      {
+        "crafterType": "ADVANCED",
+        "id": 902,
+        "interactionRadius": 3.5,
+        "name": "CRAFTER_NAME_03",
         "x": 23.5,
         "y": 0,
         "z": 22
       },
       {
         "crafterType": "CULTIST",
-        "id": 902,
+        "id": 903,
         "interactionRadius": 3.5,
-        "name": "INTERACTIVE_OBJECT_NAME",
+        "name": "CRAFTER_NAME_04",
         "x": 11.7822999954224,
         "y": 0,
         "z": 34.9911003112793
+      },
+      {
+        "crafterType": "CULTIST",
+        "id": 904,
+        "interactionRadius": 3.5,
+        "name": "CRAFTER_NAME_05",
+        "x": 90,
+        "y": 0,
+        "z": 105
       }
     ],
     "doors": [
@@ -1588,27 +1606,27 @@
         "interactionRadius": 3.5,
         "lightRange": 6,
         "name": "Lantern",
-        "x": 90,
+        "x": 76,
         "y": 0,
-        "z": 90
+        "z": 92
       },
       {
         "id": 1102,
         "interactionRadius": 3.5,
         "lightRange": 6,
         "name": "Lantern",
-        "x": 51,
+        "x": 5,
         "y": 0,
-        "z": 94
+        "z": 59
       },
       {
         "id": 1103,
         "interactionRadius": 3.5,
         "lightRange": 6,
         "name": "Lantern",
-        "x": 88,
-        "y": 2,
-        "z": 16
+        "x": 103,
+        "y": 0,
+        "z": 59
       }
     ],
     "levelHeight": 120,
@@ -1970,9 +1988,9 @@
         "id": 1800,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 37,
+        "x": 65,
         "y": 0,
-        "z": 26,
+        "z": 15,
         "zoneId": 1400
       },
       {
@@ -1988,9 +2006,9 @@
         "id": 1802,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 13.6782999038696,
+        "x": 45,
         "y": 0,
-        "z": 64.413200378418,
+        "z": 95,
         "zoneId": 1402
       },
       {
