@@ -2,15 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.item.recipe
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.MINUTE_IN_MILLIS
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.BLIGHTING_JEWEL
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.CORRUPTED_TOPAZ
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.CRYSTALLIZED_BLOOD
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.CURSED_POTATO
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.DARK_ESSENCE
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.MOON_STONE
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.RITUAL_DAGGER
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.SAINT_QUARTZ
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.STRANGE_BONE
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.*
 import org.springframework.stereotype.Component
 import kotlin.math.roundToLong
 
@@ -42,6 +34,16 @@ class CultistRecipePart() : RecipeSourcePart {
                 timeToCraft = (0.2 * MINUTE_IN_MILLIS).roundToLong(),
                 numberOfItems = 1,
                 crafterTypes = listOf(CrafterType.CULTIST)
+            ),
+            listOf(
+                Ingredient(HIGGS_BOSON, 3),
+                Ingredient(SOUL_STONE, 2)
+            ).toRecipe(
+                7004,
+                item = ANNOYING_BELL,
+                timeToCraft = MINUTE_IN_MILLIS,
+                numberOfItems = 1,
+                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
             ),
         )
     }
