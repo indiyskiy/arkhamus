@@ -1,19 +1,13 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GameObjectFinder
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.FAKE_VOTE
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.stereotype.Component
 
 @Component
-class FakeVoteCurseItemCondition(
-    private val geometryUtils: GeometryUtils,
-    private val gameObjectFinder: GameObjectFinder
-) : AdditionalAbilityCondition {
+class FakeVoteCurseItemCondition() : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
         return ability == FAKE_VOTE
@@ -25,7 +19,7 @@ class FakeVoteCurseItemCondition(
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
-        return target != null
+        return true
     }
 
     override fun canBeCastedAtAll(
@@ -33,11 +27,6 @@ class FakeVoteCurseItemCondition(
         user: RedisGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
-        return gameObjectFinder.all(
-            ability.targetTypes ?: emptyList(),
-            globalGameData
-        ).any {
-            it is WithPoint && geometryUtils.distanceLessOrEquals(user, it, ability.range)
-        }
+        return true
     }
 }

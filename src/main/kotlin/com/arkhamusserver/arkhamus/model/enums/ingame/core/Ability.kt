@@ -110,8 +110,6 @@ enum class Ability(
         availableForRole = setOf(CULTIST),
         cooldown = MINUTE_IN_MILLIS * 8,
         globalCooldown = true,
-        targetTypes = listOf(VOTE_SPOT, ALTAR),
-        range = MEDIUM_RANGE
     ),
 
     //clue items 5***
