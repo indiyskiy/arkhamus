@@ -21,7 +21,6 @@ class AbilityToItemResolver {
                 SUMMON_NIGHT -> MOON_STONE
                 FAKE_VOTE -> ANNOYING_BELL
                 PEEKABOO_CURSE_ITEM -> RITUAL_DAGGER
-                CLEAN_UP_CLUE -> DUST_OF_DISAPPEARANCE
                 //clue search items
                 SEARCH_FOR_INSCRIPTION -> INSCRIPTION_INVESTIGATION_ITEM
                 SEARCH_FOR_SOUND -> SOUND_INVESTIGATION_ITEM
@@ -34,6 +33,9 @@ class AbilityToItemResolver {
                 TOWN_PORTAL_BY_AMULET -> TOWN_PORTAL_AMULET
                 KINDLE_CLOAK -> CLOAK_OF_FLAMES
                 INVULNERABILITY -> INVULNERABILITY_POTION
+                //advanced cultist items
+                CLEAN_UP_CLUE -> DUST_OF_DISAPPEARANCE
+                DARK_TEMPTATION -> CIRCLET_OF_NOBILITY
                 else -> null
             }
         }

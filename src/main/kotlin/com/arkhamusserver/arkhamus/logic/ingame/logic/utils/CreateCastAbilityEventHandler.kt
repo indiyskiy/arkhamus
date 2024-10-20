@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAbilityCastRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
@@ -18,14 +19,17 @@ class CreateCastAbilityEventHandler(
         ability: Ability,
         sourceUserId: Long,
         gameId: Long,
-        currentGameTime: Long
+        currentGameTime: Long,
+        targetId: String? = null,
+        targetType: GameObjectType? = null,
     ) {
         val abilityCast = RedisAbilityCast(
             id = Generators.timeBasedEpochGenerator().generate().toString(),
             gameId = gameId,
             abilityId = ability.id,
             sourceUserId = sourceUserId,
-            targetUserId = null,
+            targetId = targetId,
+            targetType = targetType,
             timeStart = currentGameTime,
             timePast = 0,
             timeLeftActive = ability.active ?: 0L,

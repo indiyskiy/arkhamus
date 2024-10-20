@@ -27,6 +27,7 @@ interface RedisDataAccess {
     fun getEllipses(gameId: Long): List<RedisLevelZoneEllipse>
     fun getClues(gameId: Long): List<RedisClue>
     fun getQuests(gameId: Long): List<RedisQuest>
+    fun getQuestGivers(gameId: Long): List<RedisQuestGiver>
     fun getQuestRewards(gameId: Long): List<RedisQuestReward>
     fun getUserQuestProrgesses(gameId: Long): List<RedisUserQuestProgress>
 }
@@ -60,6 +61,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     val allClues = getClues(gameId)
 
     val allQuests = getQuests(gameId)
+    val allQuestGivers = getQuestGivers(gameId)
     val allQuestRewards = getQuestRewards(gameId)
     val allUsersQuestProgresses = getUserQuestProrgesses(gameId)
 
@@ -80,6 +82,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.clues = allClues
         this.levelGeometryData = buildGeometryData(zones, tetragons, ellipses)
         this.quests = allQuests
+        this.questGivers = allQuestGivers
         this.questRewardsByQuestId = allQuestRewards.groupBy { it.questId }
         this.questProgressByUserId = allUsersQuestProgresses.groupBy { it.userId }
         this.voteSpots = allVoteSpots

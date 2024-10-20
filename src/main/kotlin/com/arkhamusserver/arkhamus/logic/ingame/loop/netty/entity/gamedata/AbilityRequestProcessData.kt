@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
@@ -22,6 +23,8 @@ class AbilityRequestProcessData(
     var executedSuccessfully: Boolean,
     var item: Item?,
     var target: Any?,
+    var targetId: String?,
+    var targetType: GameObjectType?,
     inZones: List<LevelZone>,
     clues: List<RedisClue>,
     userQuestProgresses: List<UserQuestResponse>,

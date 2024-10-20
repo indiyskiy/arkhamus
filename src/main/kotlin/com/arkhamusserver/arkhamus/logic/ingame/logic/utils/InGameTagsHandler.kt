@@ -14,4 +14,8 @@ class InGameTagsHandler {
         withTags.gameTags().remove(tag)
     }
 
+    fun removeTag(withTags: WithGameTags, tag: InGameObjectTag) {
+        withTags.gameTags().remove(tag.name)
+    }
+
 }

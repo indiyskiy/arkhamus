@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
@@ -47,7 +48,9 @@ class AbilityRequestProcessor(
                         ability,
                         requestDataHolder.userAccount.id!!,
                         requestDataHolder.gameSession!!.id!!,
-                        globalGameData.game.globalTimer
+                        globalGameData.game.globalTimer,
+                        abilityRequestProcessData.targetId,
+                        abilityRequestProcessData.targetType
                     )
                     abilityRequestProcessData.executedSuccessfully = true
                 }
@@ -59,9 +62,18 @@ class AbilityRequestProcessor(
         ability: Ability,
         userId: Long,
         gameId: Long,
-        globalTimer: Long
+        globalTimer: Long,
+        targetId: String?,
+        targetType: GameObjectType?,
     ) {
-        createCastAbilityEventHandler.createCastAbilityEvent(ability, userId, gameId, globalTimer)
+        createCastAbilityEventHandler.createCastAbilityEvent(
+            ability = ability,
+            sourceUserId = userId,
+            gameId = gameId,
+            currentGameTime = globalTimer,
+            targetId = targetId,
+            targetType = targetType
+        )
         shortTimeEventHandler.createShortTimeEvent(
             userId,
             gameId,

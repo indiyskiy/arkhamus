@@ -6,5 +6,6 @@ enum class GameObjectType {
     CONTAINER,
     CRAFTER,
     CLUE,
+    QUEST_GIVER,
     ALTAR,
 }

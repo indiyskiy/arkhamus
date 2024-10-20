@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abili
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import org.slf4j.Logger
@@ -13,14 +14,11 @@ class FarsightAbilityProcessor : ActiveAbilityProcessor {
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(FarsightAbilityProcessor::class.java)
-        val relatedSet = setOf(
-            Ability.FARSIGHT,
-        )
     }
 
     override fun accepts(castAbility: RedisAbilityCast): Boolean {
         return castAbility.abilityId.toAbility()?.let { ability ->
-            ability in relatedSet
+            ability ==  Ability.FARSIGHT
         } == true
     }
 
@@ -35,9 +33,6 @@ class FarsightAbilityProcessor : ActiveAbilityProcessor {
         val user = globalGameData.users[castAbility.sourceUserId]
         user?.stateTags?.remove(UserStateTag.FARSIGHT.name)
     }
-
-    private fun Int.toAbility(): Ability? =
-        Ability.values().firstOrNull { it.id == this }
 
 }
 

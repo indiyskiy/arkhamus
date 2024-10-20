@@ -28,6 +28,7 @@ class RedisDataAccessImpl(
     private val redisLevelEllipseRepository: RedisLevelEllipseRepository,
     private val redisClueRepository: RedisClueRepository,
     private val redisQuestRepository: RedisQuestRepository,
+    private val redisQuestGiverRepository: RedisQuestGiverRepository,
     private val redisUserQuestProgressRepository: RedisUserQuestProgressRepository,
     private val redisQuestRewardRepository: RedisQuestRewardRepository,
 ) : RedisDataAccess {
@@ -96,6 +97,10 @@ class RedisDataAccessImpl(
 
     override fun getQuests(gameId: Long): List<RedisQuest> {
         return redisQuestRepository.findByGameId(gameId)
+    }
+
+    override fun getQuestGivers(gameId: Long): List<RedisQuestGiver> {
+        return redisQuestGiverRepository.findByGameId(gameId)
     }
 
     override fun getQuestRewards(gameId: Long): List<RedisQuestReward> {

@@ -7,7 +7,8 @@ enum class InGameObjectTag(
     private val visibilityModifiersStrings: MutableSet<String> = visibilityModifiers.map { it.name }.toMutableSet(),
 ) : WithVisibilityModifiers {
 
-    PEEKABOO_CURSE(setOf(VisibilityModifier.CULTIST));
+    PEEKABOO_CURSE(setOf(VisibilityModifier.CULTIST)),
+    DARK_THOUGHTS(setOf(VisibilityModifier.CULTIST)),;
 
     override fun visibilityModifiers(): MutableSet<String> {
         return visibilityModifiersStrings

@@ -188,6 +188,16 @@ enum class Ability(
         targetTypes = listOf(CLUE),
         range = CLOSE_RANGE
     ),
+    DARK_TEMPTATION(
+        id = 11005,
+        requiresItem = true,
+        consumesItem = true,
+        availableForRole = setOf(CULTIST),
+        active = MINUTE_IN_MILLIS * 8,
+        cooldown = MINUTE_IN_MILLIS,
+        targetTypes = listOf(CLUE),
+        range = CLOSE_RANGE
+    ),
     ;
 
     override fun visibilityModifiers(): MutableSet<String> {

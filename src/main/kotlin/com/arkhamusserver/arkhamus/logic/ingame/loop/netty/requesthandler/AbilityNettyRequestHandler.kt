@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
@@ -34,7 +35,7 @@ class AbilityNettyRequestHandler(
     private val finder: GameObjectFinder
 ) : NettyRequestHandler {
 
-    companion object{
+    companion object {
         private val logger = LoggerFactory.getLogger(AbilityNettyRequestHandler::class.java)
     }
 
@@ -94,7 +95,9 @@ class AbilityNettyRequestHandler(
                     ongoingEvents,
                     globalGameData,
                     clues,
-                    target
+                    target,
+                    targetId,
+                    targetType,
                 )
             } ?: buildWrongAbilityGameData(
                 user,
@@ -119,7 +122,9 @@ class AbilityNettyRequestHandler(
         ongoingEvents: List<OngoingEvent>,
         globalGameData: GlobalGameData,
         clues: List<RedisClue>,
-        target: Any?
+        target: Any?,
+        targetId: String?,
+        targetType: GameObjectType?,
     ) = AbilityRequestProcessData(
         ability = ability,
         canBeSeen = canBeSeen,
@@ -148,7 +153,9 @@ class AbilityNettyRequestHandler(
             user,
             globalGameData.quests
         ),
-        target = target
+        target = target,
+        targetId = targetId,
+        targetType = targetType,
     )
 
 
@@ -188,5 +195,7 @@ class AbilityNettyRequestHandler(
             globalGameData.quests
         ),
         target = null,
+        targetId = null,
+        targetType = null,
     )
 }

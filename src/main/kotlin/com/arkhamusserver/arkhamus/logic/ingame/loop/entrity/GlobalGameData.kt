@@ -1,28 +1,35 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.entrity
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
-import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.model.redis.*
 
 data class GlobalGameData(
     val game: RedisGame,
-    var altarHolder: RedisAltarHolder?,
-    var altarPolling: RedisAltarPolling? = null,
-    var altars: Map<Long, RedisAltar> = emptyMap(),
-    var users: Map<Long, RedisGameUser> = emptyMap(),
-    var clues: List<RedisClue> = emptyList(),
-    var containers: Map<Long, RedisContainer> = emptyMap(),
-    var crafters: Map<Long, RedisCrafter> = emptyMap(),
-    var lanterns: List<RedisLantern> = emptyList(),
     var timeEvents: List<RedisTimeEvent> = emptyList(),
     var shortTimeEvents: List<RedisShortTimeEvent> = emptyList(),
     var castAbilities: List<RedisAbilityCast> = emptyList(),
-    var craftProcess: List<RedisCraftProcess> = emptyList(),
     var inBetweenEvents: InBetweenEventHolder = InBetweenEventHolder(),
+
+    var users: Map<Long, RedisGameUser> = emptyMap(),
+
+    var altarHolder: RedisAltarHolder?,
+    var altarPolling: RedisAltarPolling? = null,
+    var altars: Map<Long, RedisAltar> = emptyMap(),
+
+    var clues: List<RedisClue> = emptyList(),
+
+    var containers: Map<Long, RedisContainer> = emptyMap(),
+    var crafters: Map<Long, RedisCrafter> = emptyMap(),
+    var lanterns: List<RedisLantern> = emptyList(),
+
+    var craftProcess: List<RedisCraftProcess> = emptyList(),
     var levelGeometryData: LevelGeometryData = LevelGeometryData(),
+
     var quests: List<RedisQuest> = emptyList(),
     var questRewardsByQuestId: Map<Long, List<RedisQuestReward>> = emptyMap(),
     var questProgressByUserId: Map<Long, List<RedisUserQuestProgress>> = emptyMap(),
+    var questGivers: List<RedisQuestGiver> = emptyList(),
+
     var voteSpots: List<RedisVoteSpot> = emptyList(),
     var userVoteSpotsBySpotId: Map<Long, List<RedisUserVoteSpot>> = emptyMap(),
     var thresholdsByZoneId: Map<Long, List<RedisThreshold>> = emptyMap(),
@@ -74,15 +81,4 @@ data class GlobalGameData(
     }
 
 }
-
-data class LevelGeometryData(
-    var zones: List<GameDataLevelZone> = emptyList()
-)
-
-data class GameDataLevelZone(
-    val zoneId: Long,
-    val zoneType: ZoneType,
-    val tetragons: List<GeometryUtils.Tetragon>,
-    val ellipses: List<GeometryUtils.Ellipse>
-)
 

@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abili
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import org.slf4j.Logger
@@ -13,14 +14,11 @@ class KindleCloakAbilityProcessor : ActiveAbilityProcessor {
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(KindleCloakAbilityProcessor::class.java)
-        val relatedSet = setOf(
-            Ability.KINDLE_CLOAK,
-        )
     }
 
     override fun accepts(castAbility: RedisAbilityCast): Boolean {
         return castAbility.abilityId.toAbility()?.let { ability ->
-            ability in relatedSet
+            ability == Ability.KINDLE_CLOAK
         } == true
     }
 
@@ -35,9 +33,6 @@ class KindleCloakAbilityProcessor : ActiveAbilityProcessor {
         val user = globalGameData.users[castAbility.sourceUserId]
         user?.stateTags?.remove(UserStateTag.LUMINOUS.name)
     }
-
-    private fun Int.toAbility(): Ability? =
-        Ability.values().firstOrNull { it.id == this }
 
 }
 

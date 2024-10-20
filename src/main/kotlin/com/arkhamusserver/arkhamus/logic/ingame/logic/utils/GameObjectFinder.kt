@@ -15,11 +15,12 @@ class GameObjectFinder {
     ): Any? {
         return when (type) {
             CHARACTER -> data.users[id.toLong()]
-            VOTE_SPOT -> data.voteSpots.firstOrNull { it.gameId == id.toLong() }
+            VOTE_SPOT -> data.voteSpots.firstOrNull { it.inGameId() == id.toLong() }
             CONTAINER -> data.containers[id.toLong()]
             CRAFTER -> data.crafters[id.toLong()]
             CLUE -> data.clues.firstOrNull { it.id == id }
             ALTAR -> data.altars[id.toLong()]
+            QUEST_GIVER -> data.questGivers.firstOrNull { it.inGameId() == id.toLong() }
         }
     }
 
@@ -35,6 +36,7 @@ class GameObjectFinder {
                 CRAFTER -> data.crafters.values
                 CLUE -> data.clues
                 ALTAR -> data.altars.values
+                QUEST_GIVER -> data.questGivers
             }
         }
     }

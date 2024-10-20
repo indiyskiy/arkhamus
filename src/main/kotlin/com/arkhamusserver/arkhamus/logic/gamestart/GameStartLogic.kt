@@ -24,6 +24,7 @@ class GameStartLogic(
     private val gameStartVoteSpotLogic: GameStartVoteSpotLogic,
     private val gameStartThresholdLogic: GameStartThresholdLogic,
     private val gameStartDoorLogic: GameStartDoorLogic,
+    private val gameStartQuestGiverLogic: GameStartQuestGiverLogic
 ) {
 
     companion object {
@@ -45,6 +46,7 @@ class GameStartLogic(
             val zones = gameStartLevelZoneLogic.createLevelZones(levelId, game)
             gameStartClueLogic.createClues(game, zones)
             gameStartTimeEventLogic.createStartEvents(game)
+            gameStartQuestGiverLogic.createQuestGivers(levelId, game)
             gameStartQuestLogic.createQuests(levelId, game, users)
             gameStartVoteSpotLogic.createVoteSpots(levelId, game, users)
             gameStartThresholdLogic.createThresholds(levelId, game)
