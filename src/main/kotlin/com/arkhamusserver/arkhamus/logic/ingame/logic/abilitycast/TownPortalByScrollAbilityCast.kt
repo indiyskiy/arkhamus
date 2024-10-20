@@ -49,18 +49,27 @@ class TownPortalByScrollAbilityCast(
         }
 
     private fun findLastInterestPoint(data: GlobalGameData): WithPoint {
-        if (ritualGoing(data)
-        ) {
+        if (ritualGoing(data) || fakeRitualGoing(data)) {
             logger.info("teleport user to altarHolder")
             return data.altarHolder!!
         }
         val goingBanVoteCall = findCallForBan(data)
-        if (goingBanVoteCall != null) {
+
+        if (goingBanVoteCall != null ) {
             logger.info("teleport user to goingBanVoteCall")
             return Location(
                 goingBanVoteCall.xLocation!!,
                 goingBanVoteCall.yLocation!!,
                 goingBanVoteCall.zLocation!!,
+            )
+        }
+        val goingBanVoteCallFake = findCallForBanFake(data)
+        if (goingBanVoteCallFake != null ) {
+            logger.info("teleport user to fake goingBanVoteCall")
+            return Location(
+                goingBanVoteCallFake.xLocation!!,
+                goingBanVoteCallFake.yLocation!!,
+                goingBanVoteCallFake.zLocation!!,
             )
         }
         logger.info("teleport user to altarHolder - 2")
@@ -72,9 +81,19 @@ class TownPortalByScrollAbilityCast(
                 ) && it.state == RedisTimeEventState.ACTIVE
     }
 
+    private fun findCallForBanFake(data: GlobalGameData): RedisTimeEvent? = data.timeEvents.firstOrNull {
+        (it.type == RedisTimeEventType.FAKE_CALL_FOR_BAN_VOTE
+                ) && it.state == RedisTimeEventState.ACTIVE
+    }
+
     private fun ritualGoing(data: GlobalGameData): Boolean = data.timeEvents.any {
         (it.type == RedisTimeEventType.ALTAR_VOTING ||
                 it.type == RedisTimeEventType.RITUAL_GOING
+                ) && it.state == RedisTimeEventState.ACTIVE
+    }
+
+    private fun fakeRitualGoing(data: GlobalGameData): Boolean = data.timeEvents.any {
+        (it.type == RedisTimeEventType.FAKE_ALTAR_VOTING
                 ) && it.state == RedisTimeEventState.ACTIVE
     }
 }
