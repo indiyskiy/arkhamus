@@ -53,8 +53,15 @@ class LevelTaskCompleteNettyRequestHandler(
             val (quest, userQuestProgress) = questProgressHandler.questAndProgress(levelTaskId, globalGameData, userId)
 
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {
-                val rewards = globalGameData.questRewardsByQuestId[quest?.inGameId()]?.filter { it.userId == userId }
-                questRewardUtils.findOrCreate(rewards, quest!!, user, globalGameData.game.globalTimer)
+                val rewards =
+                    globalGameData.questRewardsByQuestProgressId[userQuestProgress?.id]
+                questRewardUtils.findOrCreate(
+                    rewards,
+                    quest!!,
+                    userQuestProgress!!,
+                    user,
+                    globalGameData.game.globalTimer
+                )
             } else {
                 emptyList()
             }

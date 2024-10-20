@@ -83,7 +83,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.levelGeometryData = buildGeometryData(zones, tetragons, ellipses)
         this.quests = allQuests
         this.questGivers = allQuestGivers
-        this.questRewardsByQuestId = allQuestRewards.groupBy { it.questId }
+        this.questRewardsByQuestProgressId = allQuestRewards.groupBy { it.questProgressId }
         this.questProgressByUserId = allUsersQuestProgresses.groupBy { it.userId }
         this.voteSpots = allVoteSpots
         this.userVoteSpotsBySpotId = allUserVoteSpots.groupBy { it.voteSpotId }

@@ -59,22 +59,36 @@ class QuestRewardUtils(
     fun findOrCreate(
         rewards: List<RedisQuestReward>?,
         quest: RedisQuest,
+        questProgress: RedisUserQuestProgress,
         user: RedisGameUser,
         currentGameTime: Long
     ): List<RedisQuestReward> {
         return if (rewards.isNullOrEmpty()) {
-            generateQuestRewardsForUser(quest, user, currentGameTime, emptyList())
+            generateQuestRewardsForUser(
+                quest,
+                questProgress,
+                user,
+                currentGameTime,
+                emptyList()
+            )
         } else {
             val rewardsOfUser = rewards.filter { it.userId == user.userId }
             val filtered = rewardsOfUser.filter { it.questId == quest.inGameId() }
             filtered.ifEmpty {
-                generateQuestRewardsForUser(quest, user, currentGameTime, rewardsOfUser)
+                generateQuestRewardsForUser(
+                    quest,
+                    questProgress,
+                    user,
+                    currentGameTime,
+                    rewardsOfUser
+                )
             }
         }
     }
 
     private fun generateQuestRewardsForUser(
         quest: RedisQuest,
+        questProgress: RedisUserQuestProgress,
         user: RedisGameUser,
         currentGameTime: Long,
         allRewardsOfUser: List<RedisQuestReward>
@@ -94,6 +108,7 @@ class QuestRewardUtils(
         val first =
             generateQuestRewardsForUser(
                 quest = quest,
+                questProgress = questProgress,
                 user = user,
                 i = 0,
                 previousRewards = emptyList(),
@@ -103,6 +118,7 @@ class QuestRewardUtils(
         val second =
             generateQuestRewardsForUser(
                 quest = quest,
+                questProgress = questProgress,
                 user = user,
                 i = 1,
                 previousRewards = listOf(first),
@@ -111,6 +127,7 @@ class QuestRewardUtils(
             )
         val third = generateQuestRewardsForUser(
             quest = quest,
+            questProgress = questProgress,
             user = user,
             i = 2,
             previousRewards = listOf(first, second),
@@ -119,6 +136,7 @@ class QuestRewardUtils(
         )
         val forth = generateQuestRewardsForUser(
             quest = quest,
+            questProgress = questProgress,
             user = user,
             i = 3,
             previousRewards = listOf(first, second, third),
@@ -137,6 +155,7 @@ class QuestRewardUtils(
 
     private fun generateQuestRewardsForUser(
         quest: RedisQuest,
+        questProgress: RedisUserQuestProgress,
         user: RedisGameUser,
         i: Int,
         previousRewards: List<RedisQuestReward>,
@@ -154,6 +173,7 @@ class QuestRewardUtils(
             rewardItem = rewardItem?.id,
             gameId = quest.gameId,
             questId = quest.inGameId(),
+            questProgressId = questProgress.id,
             userId = user.userId,
             creationGameTime = currentGameTime,
         )

@@ -26,7 +26,7 @@ data class GlobalGameData(
     var levelGeometryData: LevelGeometryData = LevelGeometryData(),
 
     var quests: List<RedisQuest> = emptyList(),
-    var questRewardsByQuestId: Map<Long, List<RedisQuestReward>> = emptyMap(),
+    var questRewardsByQuestProgressId: Map<String, List<RedisQuestReward>> = emptyMap(),
     var questProgressByUserId: Map<Long, List<RedisUserQuestProgress>> = emptyMap(),
     var questGivers: List<RedisQuestGiver> = emptyList(),
 

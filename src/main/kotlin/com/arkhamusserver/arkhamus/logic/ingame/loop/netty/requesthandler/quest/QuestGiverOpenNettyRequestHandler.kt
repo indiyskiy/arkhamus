@@ -33,7 +33,6 @@ class QuestGiverOpenNettyRequestHandler(
         private val reasonableStates = setOf(
             AWAITING,
             READ,
-            DECLINED,
             IN_PROGRESS,
             COMPLETED,
         )
@@ -64,10 +63,9 @@ class QuestGiverOpenNettyRequestHandler(
                 user
             )
 
-            val userQuestProgresses =
-                globalGameData.questProgressByUserId[userId]?.filter {
-                    it.questState in reasonableStates
-                }
+            val userQuestProgresses = globalGameData.questProgressByUserId[userId]?.filter {
+                it.questState in reasonableStates
+            }
             val userQuestIds = userQuestProgresses?.map {
                 it.questId
             }?.toSet() ?: emptySet()
@@ -76,24 +74,32 @@ class QuestGiverOpenNettyRequestHandler(
             }
 
             val questOptionIds = questsOptions.map { it.inGameId() }.toSet()
-            val userQuestProgressOptions =
-                userQuestProgresses?.filter {
-                    it.questId in questOptionIds && rightNpcForState(
-                        it.questId,
-                        questsOptions,
-                        it.questState,
-                        this.questGiverId
-                    )
-                }
+            val userQuestProgressOptions = userQuestProgresses?.filter {
+                (it.questId in questOptionIds) && rightNpcForState(
+                    it.questId,
+                    questsOptions,
+                    it.questState,
+                    this.questGiverId
+                )
+            }
 
             val userQuestProgress = userQuestProgress(userQuestProgressOptions)
 
-            val quest =
-                userQuestProgress?.let { progress -> questsOptions.firstOrNull { progress.questId == it.inGameId() } }
+            val quest = userQuestProgress?.let { progress ->
+                questsOptions.firstOrNull { quest ->
+                    progress.questId == quest.inGameId()
+                }
+            }
 
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {
-                val rewards = globalGameData.questRewardsByQuestId[quest?.inGameId()]?.filter { it.userId == userId }
-                questRewardUtils.findOrCreate(rewards, quest!!, user, globalGameData.game.globalTimer)
+                val rewards = globalGameData.questRewardsByQuestProgressId[userQuestProgress?.id]?.filter { it.userId == userId }
+                questRewardUtils.findOrCreate(
+                    rewards,
+                    quest!!,
+                    userQuestProgress,
+                    user,
+                    globalGameData.game.globalTimer
+                )
             } else {
                 emptyList()
             }
@@ -151,8 +157,7 @@ class QuestGiverOpenNettyRequestHandler(
                 READ,
                 IN_PROGRESS -> questGiverId == quest.startQuestGiverId
 
-                COMPLETED -> questGiverId == quest.endQuestGiverId ||
-                        questGiverId == quest.startQuestGiverId
+                COMPLETED -> questGiverId == quest.endQuestGiverId || questGiverId == quest.startQuestGiverId
 
                 FINISHED,
                 DECLINED,
