@@ -56,7 +56,7 @@ class CanAbilityBeCastHandler(
             val maxCooldown = if (summoningSickness != null) {
                 summoningSickness.type.getDefaultTime()
             } else {
-                relatedAbilityCastMap[it.id]?.timeLeftCooldown ?: 0
+                (relatedAbilityCastMap[it.id]?.let { it.timeLeftCooldown + it.timePast }?:0)
             }
             val canBeCast = (fitAdditionalConditionsMap[it] != false) && (cooldown <= 0)
             val charges = charges(it, user)
