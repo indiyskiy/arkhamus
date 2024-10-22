@@ -26,6 +26,13 @@ class QuestAcceptNettyRequestHandler(
     private val questRewardUtils: QuestRewardUtils
 ) : NettyRequestHandler {
 
+    companion object {
+        private val relevantStates = setOf(
+            UserQuestState.AWAITING,
+            UserQuestState.READ,
+        )
+    }
+
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
         nettyRequestMessage::class.java == QuestAcceptRequestMessage::class.java
 
@@ -58,10 +65,7 @@ class QuestAcceptNettyRequestHandler(
                 quest?.let { questNotNull ->
                     userQuestProgresses?.firstOrNull { userQuestProgress ->
                         userQuestProgress.questId == questNotNull.inGameId() &&
-                                userQuestProgress.questState in listOf(
-                            UserQuestState.AWAITING,
-                            UserQuestState.READ,
-                        )
+                                userQuestProgress.questState in relevantStates
                     }
                 }
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {

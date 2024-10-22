@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.TakeQuestRewardRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.quest.TakeQuestRewardRequestMessage
 import org.springframework.stereotype.Component
@@ -22,6 +23,12 @@ class TakeQuestRewardNettyRequestHandler(
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
 ) : NettyRequestHandler {
+
+    companion object {
+        private val relevantStates = setOf(
+            UserQuestState.COMPLETED,
+        )
+    }
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
         nettyRequestMessage::class.java == TakeQuestRewardRequestMessage::class.java
@@ -65,7 +72,7 @@ class TakeQuestRewardNettyRequestHandler(
                 globalGameData
                     .questProgressByUserId[userId]
                     ?.firstOrNull {
-                        it.questId == questNotNull.inGameId()
+                        it.questId == questNotNull.inGameId() && it.questState in relevantStates
                     }
             }
             val questRewards = userQuestProgress?.let { userQuestProgressNotNull ->

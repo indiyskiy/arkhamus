@@ -26,6 +26,14 @@ class QuestDeclineNettyRequestHandler(
     private val questRewardUtils: QuestRewardUtils
 ) : NettyRequestHandler {
 
+    companion object {
+        private val relevantStates = setOf(
+            UserQuestState.AWAITING,
+            UserQuestState.READ,
+            UserQuestState.IN_PROGRESS,
+        )
+    }
+
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
         nettyRequestMessage::class.java == QuestDeclineRequestMessage::class.java
 
@@ -58,15 +66,12 @@ class QuestDeclineNettyRequestHandler(
                 quest?.let { questNotNull ->
                     userQuestProgresses?.firstOrNull { userQuestProgress ->
                         userQuestProgress.questId == questNotNull.inGameId() &&
-                                userQuestProgress.questState in listOf(
-                            UserQuestState.AWAITING,
-                            UserQuestState.READ,
-                            UserQuestState.IN_PROGRESS,
-                        )
+                                userQuestProgress.questState in relevantStates
                     }
                 }
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {
-                val rewards = globalGameData.questRewardsByQuestProgressId[userQuestProgress?.id]?.filter { it.userId == userId }
+                val rewards =
+                    globalGameData.questRewardsByQuestProgressId[userQuestProgress?.id]?.filter { it.userId == userId }
                 questRewardUtils.findOrCreate(
                     rewards,
                     quest!!,

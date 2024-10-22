@@ -5,8 +5,8 @@ enum class UserQuestState {
     READ,
     DECLINED,
     IN_PROGRESS,
-    COMPLETED,
-    FINISHED,
+    COMPLETED, //ready to take reward
+    FINISHED, //reward taken, quest is finished completely
     FINISHED_AVAILABLE,
     DECLINED_AVAILABLE,
     INVALID
