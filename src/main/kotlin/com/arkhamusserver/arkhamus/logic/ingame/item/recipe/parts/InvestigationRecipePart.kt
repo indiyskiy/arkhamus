@@ -1,6 +1,9 @@
-package com.arkhamusserver.arkhamus.logic.ingame.item.recipe
+package com.arkhamusserver.arkhamus.logic.ingame.item.recipe.parts
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.MINUTE_IN_MILLIS
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Ingredient
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.toRecipe
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.AURA_INVESTIGATION_ITEM
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.BLACK_STONE
@@ -26,7 +29,12 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.TEAR
 import org.springframework.stereotype.Component
 
 @Component
-class InvestigationRecipePart(): RecipeSourcePart {
+class InvestigationRecipePart() : RecipeSourcePart {
+
+    companion object {
+        val defaultCrafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
+    }
+
     override fun recipes(): List<Recipe> {
         return listOf(
             listOf(
@@ -36,7 +44,7 @@ class InvestigationRecipePart(): RecipeSourcePart {
                 5001,
                 item = INSCRIPTION_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
+                crafterTypes = defaultCrafterTypes
             ),
             listOf(
                 Ingredient(BLACK_STONE, 1),
@@ -45,7 +53,7 @@ class InvestigationRecipePart(): RecipeSourcePart {
                 5002,
                 item = SOUND_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
+                crafterTypes = defaultCrafterTypes
             ),
             listOf(
                 Ingredient(RING, 1),
@@ -54,7 +62,7 @@ class InvestigationRecipePart(): RecipeSourcePart {
                 5003,
                 item = SCENT_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
+                crafterTypes = defaultCrafterTypes
             ),
             listOf(
                 Ingredient(TEAR, 1),
@@ -63,7 +71,7 @@ class InvestigationRecipePart(): RecipeSourcePart {
                 5004,
                 item = AURA_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
+                crafterTypes = defaultCrafterTypes
             ),
             listOf(
                 Ingredient(PLATE, 1),
@@ -72,7 +80,7 @@ class InvestigationRecipePart(): RecipeSourcePart {
                 5005,
                 item = CORRUPTION_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
+                crafterTypes = defaultCrafterTypes
             ),
             listOf(
                 Ingredient(EYE, 1),
@@ -81,7 +89,7 @@ class InvestigationRecipePart(): RecipeSourcePart {
                 5006,
                 item = OMEN_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
+                crafterTypes = defaultCrafterTypes
             ),
             listOf(
                 Ingredient(MASK, 1),
@@ -90,7 +98,7 @@ class InvestigationRecipePart(): RecipeSourcePart {
                 5007,
                 item = DISTORTION_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
+                crafterTypes = defaultCrafterTypes
             ),
         )
     }

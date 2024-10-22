@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.item.recipe
 
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.parts.RecipeSourcePart
 import org.springframework.stereotype.Component
 
 @Component

@@ -56,7 +56,7 @@ class CanAbilityBeCastHandler(
             val maxCooldown = if (summoningSickness != null) {
                 summoningSickness.type.getDefaultTime()
             } else {
-                (relatedAbilityCastMap[it.id]?.let { it.timeLeftCooldown + it.timePast }?:0)
+                (relatedAbilityCastMap[it.id]?.let { it.timeLeftCooldown + it.timePast } ?: 0)
             }
             val canBeCast = (fitAdditionalConditionsMap[it] != false) && (cooldown <= 0)
             val charges = charges(it, user)
@@ -75,10 +75,13 @@ class CanAbilityBeCastHandler(
         ability: Ability,
         user: RedisGameUser,
         globalGameData: GlobalGameData
-    ) = additionalAbilityConditions.filter { it.accepts(ability) }.let { conditions ->
-        conditions.isEmpty() || conditions.all {
-            it.canBeCastedAtAll(ability, user, globalGameData)
-        }
+    ) = additionalAbilityConditions.filter {
+        it.accepts(ability)
+    }.let { conditions ->
+        conditions.isEmpty() ||
+                conditions.all {
+                    it.canBeCastedAtAll(ability, user, globalGameData)
+                }
     }
 
     fun canBeCastedRightNow(

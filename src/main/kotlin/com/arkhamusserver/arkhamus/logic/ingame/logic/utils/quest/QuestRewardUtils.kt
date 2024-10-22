@@ -7,9 +7,13 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.toItemName
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisQuestRewardRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
+import com.arkhamusserver.arkhamus.model.redis.RedisQuestGiver
 import com.arkhamusserver.arkhamus.model.redis.RedisQuestReward
 import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestRewardResponse
@@ -18,6 +22,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import kotlin.random.Random
 
 @Component
 class QuestRewardUtils(
@@ -29,7 +34,8 @@ class QuestRewardUtils(
     private val clueHandler: ClueHandler
 ) {
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(QuestRewardUtils::class.java)
+        private var logger: Logger = LoggerFactory.getLogger(QuestRewardUtils::class.java)
+        private val random = Random(System.currentTimeMillis())
     }
 
     fun mapRewards(questRewards: List<RedisQuestReward>): List<QuestRewardResponse> {
@@ -182,15 +188,27 @@ class QuestRewardUtils(
     fun takeReward(
         user: RedisGameUser,
         reward: RedisQuestReward,
-        globalGameData: GlobalGameData
+        globalGameData: GlobalGameData,
+        questGiverGivesReward: RedisQuestGiver
     ) {
+        val tags = questGiverGivesReward.gameTags().map {
+            InGameObjectTag.valueOf(it)
+        }
         when (reward.rewardType) {
             ITEM -> {
-                takeItems(reward, user)
+                if (tags.contains(InGameObjectTag.DARK_THOUGHTS)) {
+                    takeCorruptedItems(reward, user)
+                } else {
+                    takeItems(reward, user)
+                }
             }
 
             ADD_CLUE -> {
-                clueHandler.addRandomClue(globalGameData)
+                if (tags.contains(InGameObjectTag.DARK_THOUGHTS)) {
+                    clueHandler.addRandomClue(globalGameData)
+                } else {
+                    clueHandler.removeRandomClue(globalGameData)
+                }
             }
 
             REMOVE_CLUE -> {
@@ -204,5 +222,17 @@ class QuestRewardUtils(
         user: RedisGameUser
     ) {
         inventoryHandler.addItems(user, reward.rewardItem!!.toItem(), reward.rewardAmount)
+    }
+
+    private fun takeCorruptedItems(
+        reward: RedisQuestReward,
+        user: RedisGameUser
+    ) {
+        inventoryHandler.addItems(
+            user, Item.values().filter {
+                it.itemType == ItemType.CULTIST_LOOT
+            }.random(random),
+            reward.rewardAmount
+        )
     }
 }

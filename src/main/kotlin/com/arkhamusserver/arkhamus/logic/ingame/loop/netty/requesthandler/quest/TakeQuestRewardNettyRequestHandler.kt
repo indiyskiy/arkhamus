@@ -78,6 +78,9 @@ class TakeQuestRewardNettyRequestHandler(
             val questRewards = userQuestProgress?.let { userQuestProgressNotNull ->
                 globalGameData.questRewardsByQuestProgressId[userQuestProgressNotNull.id]
             } ?: emptyList()
+            val questGiverGivesReward = quest?.endQuestGiverId?.let{ endQuestGiverId ->
+                globalGameData.questGivers.firstOrNull { it.inGameId() == endQuestGiverId }
+            }
 
             val rightQuestGiverForAction = questGiverId == quest?.endQuestGiverId
 
@@ -90,6 +93,7 @@ class TakeQuestRewardNettyRequestHandler(
                 quest = quest,
                 userQuestProgress = userQuestProgress,
                 questRewards = questRewards,
+                questGiverGivesReward = questGiverGivesReward,
                 canAccept = canAccept,
                 canDecline = canDecline,
                 canFinish = canFinish,

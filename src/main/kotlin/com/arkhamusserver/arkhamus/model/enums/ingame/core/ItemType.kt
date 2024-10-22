@@ -1,21 +1,22 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame.core
 
 enum class ItemType {
+    //not real items
     TECH_TYPE,
+    CORK,
 
-    //t1
+    //loot
     LOOT,
     RARE_LOOT,
     CULTIST_LOOT,
 
-    //2t
+    //craftable t1
     CRAFT_T2,
     INVESTIGATION,
     USEFUL_ITEM,
     CULTIST_ITEM,
 
-    //t3
-    CORK,
+    //craftable t2
     ADVANCED_USEFUL_ITEM,
     ADVANCED_CULTIST_ITEM,
 }

@@ -1,12 +1,20 @@
-package com.arkhamusserver.arkhamus.logic.ingame.item.recipe
+package com.arkhamusserver.arkhamus.logic.ingame.item.recipe.parts
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SECOND_IN_MILLIS
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Ingredient
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.toRecipe
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.*
 import org.springframework.stereotype.Component
 
 @Component
-class UsefulItemsRecipePart(): RecipeSourcePart {
+class UsefulItemsRecipePart() : RecipeSourcePart {
+
+    companion object {
+        val defaultCrafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED)
+    }
+
     override fun recipes(): List<Recipe> {
         return listOf(
             listOf(
@@ -16,7 +24,7 @@ class UsefulItemsRecipePart(): RecipeSourcePart {
                 6001,
                 item = PILL,
                 timeToCraft = SECOND_IN_MILLIS * 3,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
+                crafterTypes = defaultCrafterTypes
             ),
             listOf(
                 Ingredient(RAGS, 3),
@@ -25,7 +33,7 @@ class UsefulItemsRecipePart(): RecipeSourcePart {
                 6002,
                 item = TOWN_PORTAL_SCROLL,
                 timeToCraft = SECOND_IN_MILLIS * 3,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
+                crafterTypes = defaultCrafterTypes
             ),
             listOf(
                 Ingredient(ELDER_SIGN, 3),
@@ -34,7 +42,7 @@ class UsefulItemsRecipePart(): RecipeSourcePart {
                 6003,
                 item = VOTE_TOKEN,
                 timeToCraft = SECOND_IN_MILLIS * 3,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
+                crafterTypes = defaultCrafterTypes
             ),
             listOf(
                 Ingredient(CORRUPTED_TOPAZ, 3),
@@ -43,7 +51,7 @@ class UsefulItemsRecipePart(): RecipeSourcePart {
                 6004,
                 item = SCIENTIFIC_GIZMO,
                 timeToCraft = SECOND_IN_MILLIS * 3,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
+                crafterTypes = defaultCrafterTypes
             ),
             listOf(
                 Ingredient(CRYSTALLIZED_BLOOD, 3),
@@ -52,7 +60,7 @@ class UsefulItemsRecipePart(): RecipeSourcePart {
                 6005,
                 item = SOLARITE,
                 timeToCraft = SECOND_IN_MILLIS * 3,
-                crafterTypes = listOf(CrafterType.REGULAR, CrafterType.ADVANCED, CrafterType.CULTIST)
+                crafterTypes = defaultCrafterTypes
             ),
         )
     }

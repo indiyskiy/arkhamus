@@ -1,5 +1,8 @@
-package com.arkhamusserver.arkhamus.logic.ingame.item.recipe
+package com.arkhamusserver.arkhamus.logic.ingame.item.recipe.parts
 
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Ingredient
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.toRecipe
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.BLACK_STONE
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.BLUE_EGG

@@ -29,8 +29,9 @@ class TakeQuestRewardRequestProcessor(
             val reward = takeQuestRewardRequestProcessData.questReward
             val quest = takeQuestRewardRequestProcessData.quest
             val user = takeQuestRewardRequestProcessData.gameUser
-            if (reward != null && quest != null && user != null) {
-                questRewardUtils.takeReward(user, reward, globalGameData)
+            val questGiverGivesReward = takeQuestRewardRequestProcessData.questGiverGivesReward
+            if (reward != null && quest != null && user != null && questGiverGivesReward != null) {
+                questRewardUtils.takeReward(user, reward, globalGameData, questGiverGivesReward)
                 questProgressHandler.finishQuest(
                     globalGameData,
                     takeQuestRewardRequestProcessData

@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestRespon
 class TakeQuestRewardRequestProcessData(
     var quest: RedisQuest?,
     var questReward: RedisQuestReward?,
+    var questGiverGivesReward: RedisQuestGiver?,
     var userQuestProgress: RedisUserQuestProgress?,
     var questRewards: List<RedisQuestReward>,
     var canAccept: Boolean,

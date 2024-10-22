@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.usefullThings
 
-import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.CorkRecipePart
-import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.CraftT2RecipePart
-import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.InvestigationRecipePart
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.parts.CorkRecipePart
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.parts.CraftT2RecipePart
+import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.parts.InvestigationRecipePart
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import org.junit.jupiter.api.Test

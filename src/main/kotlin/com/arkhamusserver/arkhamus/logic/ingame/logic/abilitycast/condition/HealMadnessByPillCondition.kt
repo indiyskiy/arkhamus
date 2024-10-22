@@ -38,8 +38,10 @@ class HealMadnessByPillCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            (it is WithId && it.inGameId() != user.userId) &&
-                    (it is WithPoint && geometryUtils.distanceLessOrEquals(user, it, ability.range))
+            it is WithId &&
+                    it.inGameId() != user.inGameId() &&
+                    it is WithPoint &&
+                    geometryUtils.distanceLessOrEquals(user, it, ability.range)
         }
     }
 }
