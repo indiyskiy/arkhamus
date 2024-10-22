@@ -72,6 +72,8 @@ enum class Ability(
         cooldown = MINUTE_IN_MILLIS,
         requiresItem = true,
         consumesItem = true,
+        targetTypes = listOf(CHARACTER),
+        range = MEDIUM_RANGE
     ),
 
     //cultist items spell 5***
@@ -195,7 +197,7 @@ enum class Ability(
         availableForRole = setOf(CULTIST),
         active = MINUTE_IN_MILLIS * 8,
         cooldown = MINUTE_IN_MILLIS,
-        targetTypes = listOf(CLUE),
+        targetTypes = listOf(QUEST_GIVER),
         range = CLOSE_RANGE
     ),
     ;
