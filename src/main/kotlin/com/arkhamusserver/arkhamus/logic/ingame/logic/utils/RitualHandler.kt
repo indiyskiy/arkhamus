@@ -74,6 +74,7 @@ class RitualHandler(
         altarPolling.state = MapAltarPollingState.FAILED
         redisAltarPollingRepository.delete(altarPolling)
 
+        unlockTheGod(altarHolder)
         altarHolder?.state = MapAltarState.LOCKED
         altarHolder?.let { redisAltarHolderRepository.save(it) }
         logger.info("creating COOLDOWN event")
@@ -85,10 +86,10 @@ class RitualHandler(
 
     @Transactional
     fun finishAltarPolling(
-        altarPolling: RedisAltarPolling,
+        altarPolling: RedisAltarPolling?,
         altarHolder: RedisAltarHolder?
     ): RedisAltarHolder? {
-        redisAltarPollingRepository.delete(altarPolling)
+        altarPolling?.let{redisAltarPollingRepository.delete(it)}
         unlockTheGod(altarHolder)
         altarHolder?.state = MapAltarState.OPEN
         return altarHolder?.let { redisAltarHolderRepository.save(altarHolder) }

@@ -34,12 +34,10 @@ class AltarFailedEventProcessor(
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
-        globalGameData.altarPolling?.let {
-            ritualHandler.finishAltarPolling(
-                it,
-                globalGameData.altarHolder
-            )
-        }
+        ritualHandler.finishAltarPolling(
+            globalGameData.altarPolling,
+            globalGameData.altarHolder
+        )
     }
 
 
