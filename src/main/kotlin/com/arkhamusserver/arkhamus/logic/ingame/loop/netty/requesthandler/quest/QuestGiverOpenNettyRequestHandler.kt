@@ -83,16 +83,19 @@ class QuestGiverOpenNettyRequestHandler(
                 )
             }
 
-            val userQuestProgress = userQuestProgress(userQuestProgressOptions)
+            val userQuestProgress = userQuestProgress(
+                userQuestProgressOptions,
+                globalGameData.quests,
+                this.questGiverId
+            )
 
             val quest = userQuestProgress?.let { progress ->
-                questsOptions.firstOrNull { quest ->
-                    progress.questId == quest.inGameId()
-                }
+                findQuestById(questsOptions, progress.questId)
             }
 
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {
-                val rewards = globalGameData.questRewardsByQuestProgressId[userQuestProgress?.id]?.filter { it.userId == userId }
+                val rewards =
+                    globalGameData.questRewardsByQuestProgressId[userQuestProgress?.id]?.filter { it.userId == userId }
                 questRewardUtils.findOrCreate(
                     rewards,
                     quest!!,
@@ -150,7 +153,7 @@ class QuestGiverOpenNettyRequestHandler(
         questState: UserQuestState,
         questGiverId: Long
     ): Boolean {
-        val quest = questsOptions.firstOrNull { it.inGameId() == questId }
+        val quest = findQuestById(questsOptions, questId)
         return quest?.let {
             when (questState) {
                 AWAITING,
@@ -169,10 +172,23 @@ class QuestGiverOpenNettyRequestHandler(
 
     }
 
-    private fun userQuestProgress(userQuestProgressOptions: List<RedisUserQuestProgress>?): RedisUserQuestProgress? =
-        ((userQuestProgressOptions?.firstOrNull { it.questState == COMPLETED })
-            ?: (userQuestProgressOptions?.firstOrNull { it.questState == AWAITING })
-            ?: (userQuestProgressOptions?.firstOrNull()))
+    private fun userQuestProgress(
+        userQuestProgressOptions: List<RedisUserQuestProgress>?,
+        quests: List<RedisQuest>,
+        questGiverId: Long
+    ): RedisUserQuestProgress? =
+        userQuestProgressOptions?.firstOrNull {
+            it.questState == COMPLETED &&
+                    findQuestById(quests, it.questId)?.endQuestGiverId == questGiverId
+        } ?: userQuestProgressOptions?.firstOrNull {
+            it.questState == AWAITING &&
+                    findQuestById(quests, it.questId)?.startQuestGiverId == questGiverId
+        } ?: userQuestProgressOptions?.firstOrNull()
+
+    private fun findQuestById(
+        quests: List<RedisQuest>,
+        id: Long
+    ): RedisQuest? = quests.firstOrNull { quest -> quest.inGameId() == id }
 
 }
 
