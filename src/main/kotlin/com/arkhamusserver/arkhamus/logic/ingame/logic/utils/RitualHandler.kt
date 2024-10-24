@@ -62,17 +62,19 @@ class RitualHandler(
     }
 
     @Transactional
-    fun failRitual(
+    fun failRitualStartCooldown(
         altarHolder: RedisAltarHolder?,
-        altarPolling: RedisAltarPolling,
+        altarPolling: RedisAltarPolling?,
         events: List<RedisTimeEvent>,
         game: RedisGame
     ) {
         eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
 
-        logger.info("removing polling - fail ritual")
-        altarPolling.state = MapAltarPollingState.FAILED
-        redisAltarPollingRepository.delete(altarPolling)
+        altarPolling?.let{
+            logger.info("removing polling - fail ritual")
+            it.state = MapAltarPollingState.FAILED
+            redisAltarPollingRepository.delete(it)
+        }
 
         unlockTheGod(altarHolder)
         altarHolder?.state = MapAltarState.LOCKED
@@ -117,7 +119,7 @@ class RitualHandler(
                     game = game
                 )
             } else {
-                failRitual(
+                failRitualStartCooldown(
                     altarHolder,
                     altarPolling,
                     events,

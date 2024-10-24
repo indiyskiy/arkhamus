@@ -60,14 +60,12 @@ class RitualGoingEventProcessor(
         currentGameTime: Long
     ) {
         logger.info("RITUAL_GOING process ending")
-        globalGameData.altarPolling?.let {
-            ritualHandler.failRitual(
+            ritualHandler.failRitualStartCooldown(
                 globalGameData.altarHolder,
-                it,
+                globalGameData.altarPolling,
                 globalGameData.timeEvents,
                 globalGameData.game
             )
-        }
         logger.info("ritual failed")
         globalGameData
             .users

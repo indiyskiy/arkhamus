@@ -48,7 +48,7 @@ class AltarVotingEventProcessor(
                     globalGameData.game
                 )
             } else {
-                ritualHandler.failRitual(
+                ritualHandler.failRitualStartCooldown(
                     globalGameData.altarHolder,
                     altarPolling,
                     globalGameData.timeEvents,
