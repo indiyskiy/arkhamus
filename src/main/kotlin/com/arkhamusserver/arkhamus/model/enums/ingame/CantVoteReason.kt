@@ -5,5 +5,5 @@ enum class CantVoteReason(
 ) {
     BANNED(1000),
     MAD(100),
-    HAVE_TO_PAY(10),
+    MUST_PAY(10),
 }

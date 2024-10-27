@@ -40,7 +40,7 @@ class UserVoteHandler(
     ): List<CantVoteReason> {
         return listOf(
             mad(votingUser),
-            haveToPay(voteSpot),
+            mustPay(voteSpot),
             isUserBannedFromVoteSpot(voteSpot, votingUser),
         ).filterNotNull()
     }
@@ -50,21 +50,11 @@ class UserVoteHandler(
         votingUser: RedisGameUser
     ): CantVoteReason? = CantVoteReason.BANNED.takeIf { voteSpot?.bannedUsers?.contains(votingUser.userId) == true }
 
-    private fun haveToPay(
+    private fun mustPay(
         voteSpot: RedisVoteSpot?
-    ) = CantVoteReason.HAVE_TO_PAY.takeIf {
+    ) = CantVoteReason.MUST_PAY.takeIf {
         voteSpot?.voteSpotState == VoteSpotState.WAITING_FOR_PAYMENT
     }
-
-    fun canPay(
-        votingUser: RedisGameUser,
-        voteSpot: RedisVoteSpot?
-    ): Boolean =
-        inventoryHandler.userHaveItems(
-            votingUser,
-            voteSpot?.costItem,
-            voteSpot?.costValue ?: 0
-        )
 
     private fun mad(votingUser: RedisGameUser): CantVoteReason? =
         CantVoteReason.MAD.takeIf { madnessHandler.isCompletelyMad(votingUser) }
