@@ -16,7 +16,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-import kotlin.math.min
 import kotlin.random.Random
 
 @Component
@@ -38,11 +37,11 @@ class RandomQuestGenerator(
             return
         }
         logger.info("processing quest for level ${level.id}")
-        (0..QUESTS_ON_START * 4).map { number ->
+        val quests = (0..QUESTS_ON_START * 4).map { number ->
             val randomQuestGiverStart = questGivers.random()
             val randomQuestGiverEnd = questGivers.random()
 
-            val stepSize = random.nextInt(1, min(5, levelTasks.size + 1))
+            val stepSize = random.nextInt(1, 2)
             val textKey = TextKey(type = TextKeyType.QUEST, value = "quest$number")
             val savedTextKey = textKeyRepository.save(textKey)
             val newQuest = Quest(
@@ -66,6 +65,8 @@ class RandomQuestGenerator(
             levelDifficultyLogic.recount(newQuest)
             questRepository.save(newQuest)
             questStepRepository.saveAll(newQuest.questSteps)
+            newQuest
         }
+        quests.groupBy { it.dificulty }.map { it.key to it.value.size }
     }
 }

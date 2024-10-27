@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.VoteSpotOpenRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.banvote.VoteSpotOpenRequestMessage
 import org.springframework.stereotype.Component
@@ -65,12 +66,16 @@ class VoteSpotOpenNettyRequestHandler(
             val canVote = cantVoteReasons.isEmpty()
             val votesToBan = voteSpot?.let { voteHandler.votesToBan(globalGameData.users.values, voteSpot) } ?: 0
             val canCallForVote = voteHandler.getCanCallForVote(voteSpot, ongoingEvents, user)
+            val mustPay = voteSpot?.voteSpotState == VoteSpotState.WAITING_FOR_PAYMENT
+            val canPay = mustPay && inventoryHandler.userHaveItems(user, voteSpot?.costItem, voteSpot?.costValue?:0)
 
             return VoteSpotOpenRequestProcessData(
                 voteSpot = voteSpot,
                 currentUserVoteSpot = currentUserVoteSpot,
                 thisSpotUserInfos = thisSpotUserInfos,
                 canVote = canVote,
+                canPay = canPay,
+                mustPay = mustPay,
                 votesToBan = votesToBan,
                 cantVoteReasons = cantVoteReasons,
                 canCallForVote = canCallForVote,

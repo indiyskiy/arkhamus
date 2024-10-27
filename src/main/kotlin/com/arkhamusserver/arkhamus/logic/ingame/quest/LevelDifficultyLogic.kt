@@ -11,10 +11,10 @@ class LevelDifficultyLogic(
 ) {
     companion object {
         const val VERY_EASY = 0
-        const val EASY = 100
-        const val NORMAL = 150
-        const val HARD = 200
-        const val VERY_HARD = 250
+        const val EASY = 90
+        const val NORMAL = 100
+        const val HARD = 140
+        const val VERY_HARD = 160
     }
 
     fun recount(quest: Quest) {

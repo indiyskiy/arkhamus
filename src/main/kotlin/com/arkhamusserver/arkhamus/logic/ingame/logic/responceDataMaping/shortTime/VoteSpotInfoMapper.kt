@@ -18,6 +18,7 @@ class VoteSpotInfoMapper() {
         voteSpot?.let { voteSpotNotNull ->
             val costValue = voteSpotNotNull.costValue
             val costItem = voteSpotNotNull.costItem
+            val state = voteSpotNotNull.voteSpotState
             val usersWithBanStates = allUserIds.map { targetUserId ->
                 mapUserWithBanState(
                     targetUserId = targetUserId,
@@ -29,6 +30,7 @@ class VoteSpotInfoMapper() {
             VoteSpotInfo().apply {
                 this.costValue = costValue
                 this.costItem = costItem
+                this.state = state
                 this.usersWithBanStates = usersWithBanStates
             }
         }

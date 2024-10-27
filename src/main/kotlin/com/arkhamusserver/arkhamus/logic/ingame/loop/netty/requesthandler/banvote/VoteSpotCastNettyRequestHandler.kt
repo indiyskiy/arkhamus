@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.VoteSpotCastRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisUserVoteSpot
 import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
@@ -67,7 +68,7 @@ class VoteSpotCastNettyRequestHandler(
             }
 
             val canVote = canUserCastVote(user, voteSpot, userId!!)
-            val canPay = checkIfUserCanPay(voteSpot, user)
+            val mastPay = voteSpot?.voteSpotState == VoteSpotState.WAITING_FOR_PAYMENT
 
             logger.info("target user id: $targetUserId")
             val targetUser = globalGameData.users[targetUserId]
@@ -75,7 +76,7 @@ class VoteSpotCastNettyRequestHandler(
             val targetUserValid = targetUserValid(voteSpot, myUserVoteSpot)
 
             val canVoteForTargetUser = canVote &&
-                    canPay &&
+                    !mastPay &&
                     targetUser != null &&
                     myUserVoteSpot != null &&
                     targetUserValid
@@ -140,23 +141,6 @@ class VoteSpotCastNettyRequestHandler(
         val canVote = currentUserMad && !currentUserBanned
         logger.info("can vote: $canVote")
         return canVote
-    }
-
-    private fun checkIfUserCanPay(
-        voteSpot: RedisVoteSpot?,
-        user: RedisGameUser
-    ): Boolean {
-        val costItem = voteSpot?.costItem
-        val costValue = voteSpot?.costValue
-        val canPay = costValue != null &&
-                costItem != null &&
-                inventoryHandler.userHaveItems(
-                    user = user,
-                    requiredItemId = costItem,
-                    howManyItems = costValue
-                )
-        logger.info("can pay: $canPay")
-        return canPay
     }
 
 }

@@ -30,26 +30,26 @@ class VoteSpotCastRequestProcessor(
         ongoingEvents: List<OngoingEvent>
     ) {
         val gameData = requestDataHolder.requestProcessData as VoteSpotCastRequestProcessData
-        if (gameData.canVoteForTargetUser) {
-            val voteSpot = gameData.voteSpot
-            val currentUserVoteSpot = gameData.currentUserVoteSpot
-            val allUserVoteSpots = gameData.thisSpotUserInfos
-            val targetUser = gameData.targetUser
-            if (currentUserVoteSpot != null &&
-                targetUser != null &&
-                voteSpot != null
-            ) {
-                logger.info("casting vote from ${currentUserVoteSpot.userId} to ${targetUser.userId}")
-                voteHandler.castVote(currentUserVoteSpot, targetUser, globalGameData, requestDataHolder, voteSpot)
-                val bannedUser = voteHandler.applyBanMaybe(
-                    globalGameData.users.values,
-                    voteSpot,
-                    allUserVoteSpots,
-                    globalGameData
-                )
-                gameData.targetUserBanned = (bannedUser != null) && (bannedUser.userId == targetUser.userId)
-                gameData.successfullyVoted = true
-            }
+        val voteSpot = gameData.voteSpot
+        val currentUserVoteSpot = gameData.currentUserVoteSpot
+        val allUserVoteSpots = gameData.thisSpotUserInfos
+        val targetUser = gameData.targetUser
+        if (gameData.canVoteForTargetUser &&
+            currentUserVoteSpot != null &&
+            targetUser != null &&
+            voteSpot != null
+        ) {
+            logger.info("casting vote from ${currentUserVoteSpot.userId} to ${targetUser.userId}")
+            voteHandler.castVote(currentUserVoteSpot, targetUser, globalGameData, requestDataHolder, voteSpot)
+            val bannedUser = voteHandler.applyBanMaybe(
+                globalGameData.users.values,
+                voteSpot,
+                allUserVoteSpots,
+                globalGameData
+            )
+            gameData.targetUserBanned = (bannedUser != null) && (bannedUser.userId == targetUser.userId)
+            gameData.successfullyVoted = true
         }
     }
+
 }

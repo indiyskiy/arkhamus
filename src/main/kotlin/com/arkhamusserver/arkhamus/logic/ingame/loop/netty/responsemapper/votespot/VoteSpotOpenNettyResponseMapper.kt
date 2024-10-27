@@ -53,6 +53,8 @@ class VoteSpotOpenNettyResponseMapper(
                 allUserIds = globalGameData.users.keys.toList(),
             )
             return VoteSpotOpenNettyResponse(
+                canPay = requestProcessData.canPay,
+                mustPay = requestProcessData.mustPay,
                 voteSpotInfo = voteSpotInfo,
                 canVote = requestProcessData.canVote,
                 canCallForVote = requestProcessData.canCallForVote,
@@ -99,7 +101,7 @@ class VoteSpotOpenNettyResponseMapper(
                     it.gameUser,
                     globalGameData.lanterns,
                     globalGameData.levelGeometryData
-                ),
+                )
             )
         }
     }

@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepositor
 import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
 import com.arkhamusserver.arkhamus.model.redis.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -39,7 +40,7 @@ class UserVoteHandler(
     ): List<CantVoteReason> {
         return listOf(
             mad(votingUser),
-            cantPay(votingUser, voteSpot),
+            haveToPay(voteSpot),
             isUserBannedFromVoteSpot(voteSpot, votingUser),
         ).filterNotNull()
     }
@@ -49,16 +50,21 @@ class UserVoteHandler(
         votingUser: RedisGameUser
     ): CantVoteReason? = CantVoteReason.BANNED.takeIf { voteSpot?.bannedUsers?.contains(votingUser.userId) == true }
 
-    private fun cantPay(
+    private fun haveToPay(
+        voteSpot: RedisVoteSpot?
+    ) = CantVoteReason.HAVE_TO_PAY.takeIf {
+        voteSpot?.voteSpotState == VoteSpotState.WAITING_FOR_PAYMENT
+    }
+
+    fun canPay(
         votingUser: RedisGameUser,
         voteSpot: RedisVoteSpot?
-    ): CantVoteReason? = CantVoteReason.CANT_PAY.takeIf {
-        !inventoryHandler.userHaveItems(
+    ): Boolean =
+        inventoryHandler.userHaveItems(
             votingUser,
             voteSpot?.costItem,
             voteSpot?.costValue ?: 0
         )
-    }
 
     private fun mad(votingUser: RedisGameUser): CantVoteReason? =
         CantVoteReason.MAD.takeIf { madnessHandler.isCompletelyMad(votingUser) }
@@ -159,10 +165,6 @@ class UserVoteHandler(
         logger.debug("ban user $userId")
         voteSpot.bannedUsers += userId
         voteSpot.availableUsers -= userId
-        val value = voteSpot.costValue
-        if (value != null && value > 0) {
-            voteSpot.costValue = value + 1
-        }
         if (user.inRelatedZone(globalGameData.levelGeometryData.zones, voteSpot.zoneId)) {
             val pointToTeleport = geometryUtils.nearestPoint(user, globalGameData.thresholdsByZoneId[voteSpot.zoneId])
             pointToTeleport?.let {

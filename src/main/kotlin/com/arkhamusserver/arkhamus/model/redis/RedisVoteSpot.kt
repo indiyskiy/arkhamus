@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
@@ -18,7 +19,7 @@ data class RedisVoteSpot(
     var z: Double,
     var interactionRadius: Double = 0.0,
     var zoneId: Long,
-
+    var voteSpotState: VoteSpotState = VoteSpotState.WAITING_FOR_PAYMENT,
     var costValue: Int? = null,
     var costItem: Int? = null,
     var bannedUsers: MutableList<Long> = mutableListOf(),
