@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
-import com.arkhamusserver.arkhamus.logic.ingame.quest.LevelDifficultyLogic
+import com.arkhamusserver.arkhamus.logic.ingame.quest.QuestDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.TextKeyRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestStepRepository
@@ -23,7 +23,7 @@ class RandomQuestGenerator(
     private val questRepository: QuestRepository,
     private val textKeyRepository: TextKeyRepository,
     private val questStepRepository: QuestStepRepository,
-    private val levelDifficultyLogic: LevelDifficultyLogic,
+    private val questDifficultyLogic: QuestDifficultyLogic,
 ) {
 
     companion object {
@@ -41,7 +41,7 @@ class RandomQuestGenerator(
             val randomQuestGiverStart = questGivers.random()
             val randomQuestGiverEnd = questGivers.random()
 
-            val stepSize = random.nextInt(1, 2)
+            val stepSize = random.nextInt(1, 3)
             val textKey = TextKey(type = TextKeyType.QUEST, value = "quest$number")
             val savedTextKey = textKeyRepository.save(textKey)
             val newQuest = Quest(
@@ -61,12 +61,13 @@ class RandomQuestGenerator(
                 newQuest.addQuestStep(step)
             }
 
-            logger.info("created quest: ${newQuest.name}")
-            levelDifficultyLogic.recount(newQuest)
+//            logger.info("created quest: ${newQuest.name}")
+            questDifficultyLogic.recount(newQuest)
             questRepository.save(newQuest)
             questStepRepository.saveAll(newQuest.questSteps)
             newQuest
         }
-        quests.groupBy { it.dificulty }.map { it.key to it.value.size }
+        val statistic = quests.groupBy { it.dificulty }.map { it.key to it.value.size }
+        logger.info(statistic.joinToString { "${it.first} - ${it.second}" })
     }
 }

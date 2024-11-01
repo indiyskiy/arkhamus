@@ -34,18 +34,15 @@ class VoteSpotCastRequestProcessor(
         val currentUserVoteSpot = gameData.currentUserVoteSpot
         val allUserVoteSpots = gameData.thisSpotUserInfos
         val targetUser = gameData.targetUser
-        if (gameData.canVoteForTargetUser &&
-            currentUserVoteSpot != null &&
-            targetUser != null &&
-            voteSpot != null
-        ) {
+        if (gameData.canVoteForTargetUser && currentUserVoteSpot != null && targetUser != null && voteSpot != null) {
             logger.info("casting vote from ${currentUserVoteSpot.userId} to ${targetUser.userId}")
-            voteHandler.castVote(currentUserVoteSpot, targetUser, globalGameData, requestDataHolder, voteSpot)
-            val bannedUser = voteHandler.applyBanMaybe(
-                globalGameData.users.values,
-                voteSpot,
-                allUserVoteSpots,
-                globalGameData
+            val bannedUser = voteHandler.castVote(
+                currentUserVoteSpot = currentUserVoteSpot,
+                targetUser = targetUser,
+                users = globalGameData.users.values,
+                voteSpot = voteSpot,
+                allUserVoteSpots = allUserVoteSpots,
+                globalGameData = globalGameData
             )
             gameData.targetUserBanned = (bannedUser != null) && (bannedUser.userId == targetUser.userId)
             gameData.successfullyVoted = true

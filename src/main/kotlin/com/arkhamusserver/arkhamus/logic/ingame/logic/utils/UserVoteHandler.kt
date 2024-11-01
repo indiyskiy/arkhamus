@@ -3,7 +3,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisDoorRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
@@ -12,17 +11,13 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
 import com.arkhamusserver.arkhamus.model.redis.*
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import kotlin.collections.get
 
 @Component
 class UserVoteHandler(
     private val userVoteSpotRepository: RedisUserVoteSpotRepository,
     private val voteSpotRepository: RedisVoteSpotRepository,
-    private val inventoryHandler: InventoryHandler,
     private val madnessHandler: UserMadnessHandler,
     private val teleportHandler: TeleportHandler,
     private val zonesHandler: ZonesHandler,
@@ -30,7 +25,6 @@ class UserVoteHandler(
     private val redisDoorRepository: RedisDoorRepository
 ) {
     companion object {
-        private val logger: Logger = LoggerFactory.getLogger(UserVoteHandler::class.java)
         private val CANT_VOTE_AT_ALL = setOf(CantVoteReason.MAD, CantVoteReason.BANNED)
     }
 
@@ -63,17 +57,19 @@ class UserVoteHandler(
     fun castVote(
         currentUserVoteSpot: RedisUserVoteSpot,
         targetUser: RedisGameUser,
+        users: Collection<RedisGameUser>,
+        voteSpot: RedisVoteSpot,
+        allUserVoteSpots: List<RedisUserVoteSpot>,
         globalGameData: GlobalGameData,
-        requestDataHolder: NettyTickRequestMessageDataHolder,
-        voteSpot: RedisVoteSpot
-    ) {
+    ): RedisGameUser? {
         currentUserVoteSpot.votesForUserIds = (currentUserVoteSpot.votesForUserIds + targetUser.userId)
             .toMutableList()
         userVoteSpotRepository.save(currentUserVoteSpot)
-        inventoryHandler.consumeItems(
-            user = globalGameData.users[requestDataHolder.userAccount.id]!!,
-            item = voteSpot.costItem!!.toItem(),
-            number = voteSpot.costValue!!
+        return applyBanMaybe(
+            users,
+            voteSpot,
+            allUserVoteSpots,
+            globalGameData
         )
     }
 
@@ -97,7 +93,7 @@ class UserVoteHandler(
         if (enoughVotes) {
             if (maxVotes.size > 1) {
                 if (usersCanVoteIdsSet.size == maxValue) {
-                    reset(userVoteSpots)
+                    reset(voteSpot, userVoteSpots)
                 }
                 return null
             } else {
@@ -107,7 +103,7 @@ class UserVoteHandler(
                     allUsers.first { userToBan == it.userId },
                     globalGameData
                 )
-                reset(userVoteSpots)
+                reset(voteSpot, userVoteSpots)
                 return allUsers.first { it.userId == userToBan }
             }
         }
@@ -152,7 +148,6 @@ class UserVoteHandler(
         globalGameData: GlobalGameData
     ) {
         val userId = user.userId
-        logger.debug("ban user $userId")
         voteSpot.bannedUsers += userId
         voteSpot.availableUsers -= userId
         if (user.inRelatedZone(globalGameData.levelGeometryData.zones, voteSpot.zoneId)) {
@@ -173,7 +168,6 @@ class UserVoteHandler(
             redisDoorRepository.saveAll(it)
         }
 
-        logger.debug("ban user $userId - done")
         voteSpotRepository.save(voteSpot)
     }
 
@@ -190,7 +184,13 @@ class UserVoteHandler(
         return Pair(maxValue, userIdsWithMaxVotes)
     }
 
-    private fun reset(userVoteSpots: List<RedisUserVoteSpot>) {
+    private fun reset(
+        voteSpot: RedisVoteSpot,
+        userVoteSpots: List<RedisUserVoteSpot>
+    ) {
+        voteSpot.voteSpotState = VoteSpotState.WAITING_FOR_PAYMENT
+        voteSpotRepository.save(voteSpot)
+
         userVoteSpots.forEach {
             it.votesForUserIds = mutableListOf()
         }

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
-import com.arkhamusserver.arkhamus.logic.ingame.quest.LevelDifficultyLogic
+import com.arkhamusserver.arkhamus.logic.ingame.quest.QuestDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.TextKeyRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.TextKey
@@ -23,7 +23,7 @@ class AdminQuestLogic(
     private val stepRepository: QuestStepRepository,
     private val questGiverRepository: QuestGiverRepository,
     private val questMergeHandler: QuestMergeHandler,
-    private val levelDifficultyLogic: LevelDifficultyLogic,
+    private val questDifficultyLogic: QuestDifficultyLogic,
     private val textKeyRepository: TextKeyRepository,
 ) {
 
@@ -40,7 +40,7 @@ class AdminQuestLogic(
     fun create(levelId: Long): AdminQuestDto {
         val level = levelRepository.findByLevelId(levelId).maxBy { it.version }
         val quest = newQuest(level)
-        levelDifficultyLogic.recount(quest)
+        questDifficultyLogic.recount(quest)
         val saved = saveQuest(quest)
 
         val levelTask = defaultLevelTask(quest.level.id!!)

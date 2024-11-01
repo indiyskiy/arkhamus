@@ -3,18 +3,20 @@ package com.arkhamusserver.arkhamus.logic.ingame.quest
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
 import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class LevelDifficultyLogic(
+class QuestDifficultyLogic(
     private val geometryUtils: GeometryUtils
 ) {
     companion object {
         const val VERY_EASY = 0
-        const val EASY = 90
-        const val NORMAL = 100
-        const val HARD = 140
-        const val VERY_HARD = 160
+        const val EASY = 80
+        const val NORMAL = 130
+        const val HARD = 190
+        const val VERY_HARD = 230
+        private val logger = LoggerFactory.getLogger(QuestDifficultyLogic::class.java)
     }
 
     fun recount(quest: Quest) {
@@ -23,6 +25,7 @@ class LevelDifficultyLogic(
         } else {
             countTotalDistance(quest)
         }
+        logger.info(totalDistance.toString())
         val difficulty = difficultyByDistance(totalDistance)
         quest.dificulty = difficulty
     }

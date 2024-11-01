@@ -35,6 +35,10 @@ class InventoryHandler {
         return howManyItems(user, requiredItem) > 0
     }
 
+    fun userHaveItem(user: RedisGameUser, requiredItem: Int): Boolean {
+        return howManyItems(user, requiredItem) > 0
+    }
+
     fun howManyItems(user: RedisGameUser, requiredItem: Item?): Int {
         return howManyItems(user, requiredItem?.id)
     }
@@ -44,8 +48,12 @@ class InventoryHandler {
     }
 
     fun consumeItems(user: RedisGameUser, item: Item, number: Int) {
-        if (userHaveItem(user, item)) {
-            user.items[item.id] = user.items[item.id]!! - number
+        consumeItems(user, item.id, number)
+    }
+
+    fun consumeItems(user: RedisGameUser, item: Int?, number: Int?) {
+        if (item != null && number != null && userHaveItem(user, item)) {
+            user.items[item] = user.items[item]!! - number
         }
     }
 
