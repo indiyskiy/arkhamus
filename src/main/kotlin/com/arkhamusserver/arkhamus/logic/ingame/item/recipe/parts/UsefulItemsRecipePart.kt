@@ -37,11 +37,11 @@ class UsefulItemsRecipePart() : RecipeSourcePart {
             ),
             listOf(
                 Ingredient(ELDER_SIGN, 3),
-                Ingredient(MASK, 1)
+                Ingredient(BLIGHTING_JEWEL, 2)
             ).toRecipe(
                 6003,
                 item = VOTE_TOKEN,
-                timeToCraft = SECOND_IN_MILLIS * 3,
+                timeToCraft = SECOND_IN_MILLIS * 30,
                 crafterTypes = defaultCrafterTypes
             ),
             listOf(

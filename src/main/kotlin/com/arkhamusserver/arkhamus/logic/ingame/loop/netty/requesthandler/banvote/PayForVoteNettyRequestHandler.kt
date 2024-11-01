@@ -11,7 +11,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyR
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.banvote.PayForVoteRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.request.banvote.VoteSpotCastRequestMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -26,7 +25,7 @@ class PayForVoteNettyRequestHandler(
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
-        nettyRequestMessage::class.java == VoteSpotCastRequestMessage::class.java
+        nettyRequestMessage::class.java == PayForVoteRequestMessage::class.java
 
     override fun accept(nettyRequestMessage: NettyBaseRequestMessage): Boolean = true
 
