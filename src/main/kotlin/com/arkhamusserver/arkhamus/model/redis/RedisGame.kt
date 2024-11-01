@@ -13,6 +13,8 @@ data class RedisGame(
     var godId: Int,
     var currentTick: Long = -1,
     var globalTimer: Long = 0,
+    var serverTimeLastTick: Long = 0,
+    var serverTimeCurrentTick: Long = 0,
     var lastTimeSentResponse: Long = 0,
     var gameStart: Long = System.currentTimeMillis(),
     @Indexed var state: String = GameState.PENDING.name,

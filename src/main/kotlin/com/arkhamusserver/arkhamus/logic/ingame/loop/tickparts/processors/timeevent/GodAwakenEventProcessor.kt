@@ -18,7 +18,8 @@ class GodAwakenEventProcessor(
     override fun processStart(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
 
     }
@@ -26,7 +27,8 @@ class GodAwakenEventProcessor(
     override fun process(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
 
     }
@@ -34,7 +36,8 @@ class GodAwakenEventProcessor(
     override fun processEnd(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         event.state = RedisTimeEventState.PAST
         gameEndLogic.endTheGame(globalGameData.game, globalGameData.users, GameEndReason.GOD_AWAKEN)

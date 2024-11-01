@@ -17,7 +17,8 @@ class AltarVotingEventProcessor(
     override fun processStart(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
 
     }
@@ -25,7 +26,8 @@ class AltarVotingEventProcessor(
     override fun process(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
 
     }
@@ -34,7 +36,8 @@ class AltarVotingEventProcessor(
     override fun processEnd(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         globalGameData.altarPolling?.let { altarPolling ->
             val quorum = ritualHandler.gotQuorum(globalGameData.users.values, altarPolling)

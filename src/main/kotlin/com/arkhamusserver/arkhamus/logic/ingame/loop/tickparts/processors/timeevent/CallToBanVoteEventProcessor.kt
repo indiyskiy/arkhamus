@@ -14,7 +14,8 @@ class CallToBanVoteEventProcessor() : TimeEventProcessor {
     override fun processStart(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
 
     }
@@ -22,7 +23,8 @@ class CallToBanVoteEventProcessor() : TimeEventProcessor {
     override fun process(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
 
     }
@@ -31,7 +33,8 @@ class CallToBanVoteEventProcessor() : TimeEventProcessor {
     override fun processEnd(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
 
     }

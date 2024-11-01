@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.slf4j.LoggerFactory
@@ -12,16 +11,12 @@ import kotlin.random.Random
 class UserMadnessHandler {
     companion object {
         val logger = LoggerFactory.getLogger(UserMadnessHandler::class.java)
-        const val NIGHT_MADNESS_TICK = 1.0 * ArkhamusOneTickLogic.TICK_DELTA / 1000.0
+        const val NIGHT_MADNESS_TICK_IN_MILLIS = 1.0 / 1000.0
         private val random = Random(System.currentTimeMillis())
     }
 
-    fun applyNightMadness(gameUser: RedisGameUser) {
-        applyMadness(gameUser, NIGHT_MADNESS_TICK)
-    }
-
-    fun applyMadness(gameUser: RedisGameUser, madness: Int) {
-        applyMadness(gameUser, madness.toDouble())
+    fun applyNightMadness(gameUser: RedisGameUser, timePassedMillis: Long) {
+        applyMadness(gameUser, NIGHT_MADNESS_TICK_IN_MILLIS * timePassedMillis)
     }
 
     fun applyMadness(gameUser: RedisGameUser, madness: Double) {

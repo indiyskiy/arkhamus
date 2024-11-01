@@ -16,7 +16,8 @@ class DayTimeEventProcessor(
     override fun processStart(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
 
     }
@@ -24,7 +25,8 @@ class DayTimeEventProcessor(
     override fun process(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
 
     }
@@ -32,7 +34,8 @@ class DayTimeEventProcessor(
     override fun processEnd(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         startTheNight(event, currentGameTime)
     }

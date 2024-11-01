@@ -10,11 +10,10 @@ interface ArkhamusOneTickLogic {
 
     companion object {
         var logger: Logger = LoggerFactory.getLogger(ArkhamusOneTickLogic::class.java)
-        const val TICK_DELTA = 50L //ms
     }
 
     fun processCurrentTasks(
         currentTasks: List<NettyTickRequestMessageDataHolder>,
-        game: RedisGame
+        game: RedisGame,
     ): List<NettyResponse>
 }

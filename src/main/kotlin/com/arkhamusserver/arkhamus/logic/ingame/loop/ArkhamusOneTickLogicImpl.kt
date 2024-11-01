@@ -27,35 +27,40 @@ class ArkhamusOneTickLogicImpl(
 
     override fun processCurrentTasks(
         currentTasks: List<NettyTickRequestMessageDataHolder>,
-        game: RedisGame
+        game: RedisGame,
     ): List<NettyResponse> {
         try {
             val globalGameData = redisDataAccess.loadGlobalGameData(game)
 
-            oneTickTick.updateNextTick(game)
+            val timePassedMillis = oneTickTick.updateNextTick(game)
+
             val ongoingEvents = oneTickTimeEvent.processTimeEvents(
                 globalGameData,
                 globalGameData.timeEvents,
-                game.globalTimer
+                game.globalTimer,
+                timePassedMillis
             )
-            oneTickShortTimeEvent.processShortTimeEvents(globalGameData.shortTimeEvents)
+            oneTickShortTimeEvent.processShortTimeEvents(globalGameData.shortTimeEvents, timePassedMillis)
             onTickAbilityCast.applyAbilityCasts(
                 globalGameData,
-                globalGameData.castAbilities
+                globalGameData.castAbilities,
+                timePassedMillis
             )
             onTickCraftProcess.applyCraftProcess(
                 globalGameData,
-                globalGameData.craftProcess
+                globalGameData.craftProcess,
+                timePassedMillis
             )
             oneTickLantern.tick(
-                globalGameData
+                globalGameData,
+                timePassedMillis
             )
             val processedRequests = oneTickUserRequests.processRequests(
                 currentTasks,
                 globalGameData,
                 ongoingEvents,
             )
-            oneTickUser.processUsers(globalGameData)
+            oneTickUser.processUsers(globalGameData, timePassedMillis)
             val responses =
                 oneTickUserResponses.buildResponses(
                     globalGameData,
@@ -64,6 +69,7 @@ class ArkhamusOneTickLogicImpl(
             if (responses.isNotEmpty()) {
                 game.lastTimeSentResponse = game.globalTimer
             }
+            game.serverTimeLastTick = game.serverTimeLastTick
             oneTickTryEndGameMaybeHandler.checkIfEnd(game, globalGameData.users.values)
             afterLoopSaving.saveAll(globalGameData, game)
 

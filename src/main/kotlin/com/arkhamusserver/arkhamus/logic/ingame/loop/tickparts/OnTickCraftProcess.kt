@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.RecipesSource
-import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCraftProcessRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
@@ -29,10 +28,11 @@ class OnTickCraftProcess(
     fun applyCraftProcess(
         globalGameData: GlobalGameData,
         castAbilities: List<RedisCraftProcess>,
+        timePassedMillis: Long
     ) {
         castAbilities.forEach { craftProcess ->
             if (craftProcess.state == RedisTimeEventState.ACTIVE && craftProcess.timeLeft > 0) {
-                val timeAdd = min(craftProcess.timeLeft, ArkhamusOneTickLogic.TICK_DELTA)
+                val timeAdd = min(craftProcess.timeLeft, timePassedMillis)
                 processActiveCraftProcess(craftProcess, timeAdd)
             } else {
                 val recipe = recipesSource.byId(craftProcess.recipeId)!!

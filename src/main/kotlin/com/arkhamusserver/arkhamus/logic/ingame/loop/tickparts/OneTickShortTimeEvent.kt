@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisShortTimeEventRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
@@ -22,9 +21,10 @@ class OneTickShortTimeEvent(
     @Transactional
     fun processShortTimeEvents(
         timeEvents: List<RedisShortTimeEvent>,
+        timePassedMillis: Long
     ): List<RedisShortTimeEvent> {
         val redisTimeEvents: List<RedisShortTimeEvent> = timeEvents.mapNotNull { event ->
-            val timeAdd = min(event.timeLeft, ArkhamusOneTickLogic.TICK_DELTA)
+            val timeAdd = min(event.timeLeft, timePassedMillis)
             if (event.state == RedisTimeEventState.ACTIVE) {
                 processActiveEvent(event, timeAdd)
             } else {

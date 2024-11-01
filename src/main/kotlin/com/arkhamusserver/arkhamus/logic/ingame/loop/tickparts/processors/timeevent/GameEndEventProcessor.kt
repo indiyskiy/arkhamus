@@ -24,7 +24,8 @@ class GameEndEventProcessor(
     override fun processStart(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         logger.info("starting the end of game event")
     }
@@ -33,7 +34,8 @@ class GameEndEventProcessor(
     override fun process(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         if (globalGameData.users.values.all { it.sawTheEndOfTimes }) {
             logger.info("all users saw the end")
@@ -44,7 +46,8 @@ class GameEndEventProcessor(
     override fun processEnd(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         logger.info("end of game event ends")
         gameEndLogic.endTheGameCompletely(globalGameData.game)

@@ -15,7 +15,8 @@ class TeleportationEventProcessor() : TimeEventProcessor {
     override fun process(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         globalGameData.users[event.targetObjectId]?.stateTags?.add(UserStateTag.STUN.name)
     }
@@ -23,7 +24,8 @@ class TeleportationEventProcessor() : TimeEventProcessor {
     override fun processStart(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         globalGameData.users[event.targetObjectId]?.stateTags?.add(UserStateTag.STUN.name)
     }
@@ -31,7 +33,8 @@ class TeleportationEventProcessor() : TimeEventProcessor {
     override fun processEnd(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         globalGameData.users[event.targetObjectId]?.stateTags?.remove(UserStateTag.STUN.name)
     }

@@ -54,13 +54,15 @@ class InGameStartGameHandler(
         val users = authData.otherGameUsers
 
         updateGameSession(authData)
-        updateGame(authData)
+        updateGameOnStart(authData)
         notifyUsers(channels, user, users)
     }
 
-    private fun updateGame(authData: AuthRequestProcessData) {
+    private fun updateGameOnStart(authData: AuthRequestProcessData) {
         val game = redisGameRedisRepository.findById(authData.game!!.id.toString()).get()
         game.currentTick = 0
+        game.serverTimeLastTick = System.currentTimeMillis()
+        game.serverTimeCurrentTick = game.serverTimeLastTick
         game.state = GameState.IN_PROGRESS.name
         redisGameRedisRepository.save(game)
     }

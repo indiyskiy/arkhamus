@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent.TimeEventProcessor
@@ -27,12 +26,13 @@ class OneTickTimeEvent(
     fun processTimeEvents(
         globalGameData: GlobalGameData,
         timeEvents: List<RedisTimeEvent>,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ): List<OngoingEvent> {
         val redisTimeEvents: List<OngoingEvent> = timeEvents.mapNotNull { event ->
-            val timeAdd = min(event.timeLeft, ArkhamusOneTickLogic.TICK_DELTA)
+            val timeAdd = min(event.timeLeft, timePassedMillis)
             if (event.state == RedisTimeEventState.ACTIVE) {
-                processActiveEvent(event, globalGameData, timeAdd, currentGameTime)
+                processActiveEvent(event, globalGameData, timeAdd, currentGameTime, timePassedMillis)
             } else {
                 null
             }
@@ -44,18 +44,19 @@ class OneTickTimeEvent(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
         timeAdd: Long,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ): OngoingEvent {
         if (event.timePast == 0L) {
-            applyStartProcessors(event, globalGameData, currentGameTime)
+            applyStartProcessors(event, globalGameData, currentGameTime, timePassedMillis)
         }
         event.timePast += timeAdd
         event.timeLeft -= timeAdd
         if (event.timeLeft > 0) {
-            applyProcessors(event, globalGameData, currentGameTime)
+            applyProcessors(event, globalGameData, currentGameTime, timePassedMillis)
             timeEventRepository.save(event)
         } else {
-            applyEndProcessors(event, globalGameData, currentGameTime)
+            applyEndProcessors(event, globalGameData, currentGameTime, timePassedMillis)
             event.state = RedisTimeEventState.PAST
             timeEventRepository.delete(event)
         }
@@ -67,42 +68,45 @@ class OneTickTimeEvent(
     private fun applyStartProcessors(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         timeEventProcessors
             .filter {
                 it.accept(event.type)
             }
             .forEach {
-                it.processStart(event, globalGameData, currentGameTime)
+                it.processStart(event, globalGameData, currentGameTime, timePassedMillis)
             }
     }
 
     private fun applyEndProcessors(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         timeEventProcessors
             .filter {
                 it.accept(event.type)
             }
             .forEach {
-                it.processEnd(event, globalGameData, currentGameTime)
+                it.processEnd(event, globalGameData, currentGameTime, timePassedMillis)
             }
     }
 
     private fun applyProcessors(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         timeEventProcessors
             .filter {
                 it.accept(event.type)
             }
             .forEach {
-                it.process(event, globalGameData, currentGameTime)
+                it.process(event, globalGameData, currentGameTime, timePassedMillis)
             }
     }
 }

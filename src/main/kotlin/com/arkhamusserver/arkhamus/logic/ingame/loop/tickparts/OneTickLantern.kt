@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
-import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLanternRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState.*
@@ -15,17 +14,16 @@ class OneTickLantern(
     companion object {
         const val TICK_DELTA = 100.0 /
                 GlobalGameSettings.NIGHT_LENGTH_MINUTES /
-                GlobalGameSettings.MINUTE_IN_MILLIS *
-                ArkhamusOneTickLogic.TICK_DELTA
+                GlobalGameSettings.MINUTE_IN_MILLIS
     }
 
-    fun tick(data: GlobalGameData) {
+    fun tick(data: GlobalGameData, timePassedMillis: Long) {
         data.lanterns.forEach {
             when (it.lanternState) {
                 EMPTY -> {}
                 FILLED -> {}
                 LIT -> {
-                    it.fuel -= TICK_DELTA
+                    it.fuel -= (TICK_DELTA * timePassedMillis)
                     if (it.fuel <= 0) {
                         it.fuel = 0.0
                         it.lanternState = EMPTY

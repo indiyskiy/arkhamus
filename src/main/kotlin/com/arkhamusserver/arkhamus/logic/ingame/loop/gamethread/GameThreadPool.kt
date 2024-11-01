@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic.Companion.TICK_DELTA
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import jakarta.annotation.PreDestroy
@@ -29,6 +28,7 @@ class GameThreadPool(
         const val CORE_POOL_SIZE = 5
         const val MAX_POOL_SIZE = 1000
         const val MAX_TIME_NO_RESPONSES = 1000 * 60 * 5 // 5 min
+        const val TICK_DELTA = 50L //ms
     }
 
     init {

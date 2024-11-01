@@ -30,7 +30,7 @@ class GameTasksProcessor(
                     processGameTick(
                         tasks = taskList,
                         gameId = gameId,
-                        ongoingGame = redisGame
+                        ongoingGame = redisGame,
                     )
                 }
             } catch (e: Throwable) {
@@ -43,12 +43,12 @@ class GameTasksProcessor(
     private fun processGameTick(
         tasks: List<NettyTickRequestMessageDataHolder>,
         gameId: Long,
-        ongoingGame: RedisGame
+        ongoingGame: RedisGame,
     ) {
         try {
             val responses = tickLogic.processCurrentTasks(
                 tasks,
-                ongoingGame
+                ongoingGame,
             )
             responseSendingLoopManager.addResponses(responses, gameId)
         } catch (e: Throwable) {

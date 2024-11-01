@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.toItem
-import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -16,30 +15,32 @@ class OneTickUser(
 
     companion object {
         val logger = LoggerFactory.getLogger(OneTickUser::class.java)
-        const val POTATO_MADNESS_TICK: Double = 2.0 * ArkhamusOneTickLogic.TICK_DELTA / 1000.0
+        const val POTATO_MADNESS_TICK_MILLIS: Double = 2.0 / 1000.0
     }
 
-    fun processUsers(data: GlobalGameData) {
+    fun processUsers(data: GlobalGameData, timePassedMillis: Long) {
         data.users.forEach { user ->
-            processUser(user.value)
+            processUser(user.value, timePassedMillis)
         }
     }
 
     private fun processUser(
         user: RedisGameUser,
+        timePassedMillis: Long
     ) {
-        processInventory(user)
+        processInventory(user, timePassedMillis)
     }
 
     private fun processInventory(
         user: RedisGameUser,
+        timePassedMillis: Long
     ) {
         user.items.filter {
             it.value > 0
         }.forEach { (itemId, number) ->
             val item = itemId.toItem()
             when (item) {
-                Item.CURSED_POTATO -> madnessHandler.applyMadness(user, POTATO_MADNESS_TICK * number)
+                Item.CURSED_POTATO -> madnessHandler.applyMadness(user, POTATO_MADNESS_TICK_MILLIS * number * timePassedMillis)
                 else -> {}
             }
         }

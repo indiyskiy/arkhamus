@@ -19,7 +19,8 @@ class SummonedNightTimeEventProcessor(
     override fun processStart(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
 
     }
@@ -27,7 +28,8 @@ class SummonedNightTimeEventProcessor(
     override fun process(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         if (isCommonNight(globalGameData)) {
             return
@@ -35,14 +37,15 @@ class SummonedNightTimeEventProcessor(
         globalGameData.users.filter {
             userLocationHandler.isInDarkness(it.value, globalGameData)
         }.forEach {
-            userMadnessHandler.applyNightMadness(it.value)
+            userMadnessHandler.applyNightMadness(it.value, timePassedMillis)
         }
     }
 
     override fun processEnd(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         event.state = RedisTimeEventState.PAST
     }

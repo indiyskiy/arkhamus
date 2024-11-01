@@ -31,7 +31,8 @@ class RitualGoingEventProcessor(
     override fun processStart(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         logger.info("RITUAL_GOING process started")
         addUsersToRitual(globalGameData)
@@ -40,7 +41,8 @@ class RitualGoingEventProcessor(
     override fun process(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         addUsersToRitual(globalGameData)
     }
@@ -57,7 +59,8 @@ class RitualGoingEventProcessor(
     override fun processEnd(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long
+        currentGameTime: Long,
+        timePassedMillis: Long
     ) {
         logger.info("RITUAL_GOING process ending")
             ritualHandler.failRitualStartCooldown(
