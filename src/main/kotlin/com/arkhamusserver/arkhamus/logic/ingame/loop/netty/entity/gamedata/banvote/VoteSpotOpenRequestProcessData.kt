@@ -16,7 +16,6 @@ class VoteSpotOpenRequestProcessData(
     var thisSpotUserInfos: List<RedisUserVoteSpot>,
     var canVote: Boolean,
     var canPay: Boolean,
-    var mustPay: Boolean,
     var canCallForVote: Boolean,
     var votesToBan: Int,
     val cantVoteReasons: List<CantVoteReason>,

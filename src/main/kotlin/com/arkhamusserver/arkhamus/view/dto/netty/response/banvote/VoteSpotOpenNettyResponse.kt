@@ -12,7 +12,6 @@ class VoteSpotOpenNettyResponse(
     val voteSpotInfo: VoteSpotInfo?,
     val canVote: Boolean,
     val canPay: Boolean,
-    val mustPay: Boolean,
     val canCallForVote: Boolean,
     val votesToBan: Int,
     val cantVoteReasons: List<CantVoteReason>,

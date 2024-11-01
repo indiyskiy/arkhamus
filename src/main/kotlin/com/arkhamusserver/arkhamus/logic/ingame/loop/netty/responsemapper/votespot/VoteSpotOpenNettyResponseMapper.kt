@@ -54,7 +54,6 @@ class VoteSpotOpenNettyResponseMapper(
             )
             return VoteSpotOpenNettyResponse(
                 canPay = requestProcessData.canPay,
-                mustPay = requestProcessData.mustPay,
                 voteSpotInfo = voteSpotInfo,
                 canVote = requestProcessData.canVote,
                 canCallForVote = requestProcessData.canCallForVote,
