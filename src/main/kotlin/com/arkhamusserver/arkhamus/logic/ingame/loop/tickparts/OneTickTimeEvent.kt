@@ -30,9 +30,10 @@ class OneTickTimeEvent(
         timePassedMillis: Long
     ): List<OngoingEvent> {
         val redisTimeEvents: List<OngoingEvent> = timeEvents.mapNotNull { event ->
+//            logger.info("time left for event ${event.type}: $${event.timeLeft}")
             val timeAdd = min(event.timeLeft, timePassedMillis)
             if (event.state == RedisTimeEventState.ACTIVE) {
-                processActiveEvent(event, globalGameData, timeAdd, currentGameTime, timePassedMillis)
+                processActiveEvent(event, globalGameData, timeAdd, currentGameTime)
             } else {
                 null
             }
@@ -45,18 +46,17 @@ class OneTickTimeEvent(
         globalGameData: GlobalGameData,
         timeAdd: Long,
         currentGameTime: Long,
-        timePassedMillis: Long
     ): OngoingEvent {
         if (event.timePast == 0L) {
-            applyStartProcessors(event, globalGameData, currentGameTime, timePassedMillis)
+            applyStartProcessors(event, globalGameData, currentGameTime)
         }
         event.timePast += timeAdd
         event.timeLeft -= timeAdd
         if (event.timeLeft > 0) {
-            applyProcessors(event, globalGameData, currentGameTime, timePassedMillis)
+            applyProcessors(event, globalGameData, currentGameTime, timeAdd)
             timeEventRepository.save(event)
         } else {
-            applyEndProcessors(event, globalGameData, currentGameTime, timePassedMillis)
+            applyEndProcessors(event, globalGameData, currentGameTime, timeAdd)
             event.state = RedisTimeEventState.PAST
             timeEventRepository.delete(event)
         }
@@ -68,15 +68,14 @@ class OneTickTimeEvent(
     private fun applyStartProcessors(
         event: RedisTimeEvent,
         globalGameData: GlobalGameData,
-        currentGameTime: Long,
-        timePassedMillis: Long
+        currentGameTime: Long
     ) {
         timeEventProcessors
             .filter {
                 it.accept(event.type)
             }
             .forEach {
-                it.processStart(event, globalGameData, currentGameTime, timePassedMillis)
+                it.processStart(event, globalGameData, currentGameTime, 0)
             }
     }
 

@@ -1,12 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic.Companion.logger
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.loadGlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.*
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -25,6 +25,10 @@ class ArkhamusOneTickLogicImpl(
     private val oneTickTryEndGameMaybeHandler: OneTickTryEndGameMaybeHandler,
 ) : ArkhamusOneTickLogic {
 
+    companion object {
+        var logger = LoggerFactory.getLogger(ArkhamusOneTickLogicImpl::class.java)
+    }
+
     override fun processCurrentTasks(
         currentTasks: List<NettyTickRequestMessageDataHolder>,
         game: RedisGame,
@@ -33,7 +37,7 @@ class ArkhamusOneTickLogicImpl(
             val globalGameData = redisDataAccess.loadGlobalGameData(game)
 
             val timePassedMillis = oneTickTick.updateNextTick(game)
-
+//            logger.info("timePassedMillis for game ${game.gameId}: $timePassedMillis")
             val ongoingEvents = oneTickTimeEvent.processTimeEvents(
                 globalGameData,
                 globalGameData.timeEvents,
@@ -69,8 +73,8 @@ class ArkhamusOneTickLogicImpl(
             if (responses.isNotEmpty()) {
                 game.lastTimeSentResponse = game.globalTimer
             }
-            game.serverTimeLastTick = game.serverTimeLastTick
             oneTickTryEndGameMaybeHandler.checkIfEnd(game, globalGameData.users.values)
+            game.serverTimeLastTick = game.serverTimeCurrentTick
             afterLoopSaving.saveAll(globalGameData, game)
 
             return responses
