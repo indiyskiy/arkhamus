@@ -40,7 +40,13 @@ class AbilityShortTimeEventFilter(
         data: GlobalGameData
     ): Boolean {
         if (source == null) return false
-        if (!userLocationHandler.userCanSeeTarget(myUser, source, data.levelGeometryData)) return false
+        if (!userLocationHandler.userCanSeeTarget(
+                whoLooks = myUser,
+                target = source,
+                levelGeometryData = data.levelGeometryData,
+                affectedByBlind = true
+            )
+        ) return false
         if (!visibilityByTagsHandler.userCanSeeTarget(myUser, source)) return false
         return true
     }

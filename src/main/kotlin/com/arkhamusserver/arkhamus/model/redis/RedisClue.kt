@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
@@ -15,8 +16,12 @@ data class RedisClue(
     var levelZoneId: Long,
     var clue: Clue,
     var visibilityModifiers: MutableSet<String>,
-) : WithVisibilityModifiers {
+) : WithVisibilityModifiers, WithStringId {
     override fun visibilityModifiers(): MutableSet<String> {
         return visibilityModifiers
+    }
+
+    override fun stringId(): String {
+        return id
     }
 }

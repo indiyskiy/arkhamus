@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -35,6 +36,16 @@ class FakeVoteItemAbilityCast(
             abilityRequestProcessData.gameUser!!,
             globalGameData
         )
+        return true
+    }
+
+    override fun cast(
+        sourceUser: RedisGameUser,
+        ability: Ability,
+        target: WithStringId?,
+        globalGameData: GlobalGameData
+    ): Boolean {
+        curseItem(globalGameData.game, sourceUser, globalGameData)
         return true
     }
 

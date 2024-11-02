@@ -40,6 +40,7 @@ class LanternDataHandler(
                 whoLooks = myUser,
                 target = lantern,
                 levelGeometryData = levelGeometryData,
+                affectedByBlind = false,
                 heightAffectVision = false,
                 geometryAffectsVision = false
             )

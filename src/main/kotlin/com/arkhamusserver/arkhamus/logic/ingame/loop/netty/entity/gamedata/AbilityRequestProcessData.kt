@@ -9,6 +9,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -22,7 +23,7 @@ class AbilityRequestProcessData(
     var cooldownOf: Long?,
     var executedSuccessfully: Boolean,
     var item: Item?,
-    var target: Any?,
+    var target: WithStringId?,
     var targetId: String?,
     var targetType: GameObjectType?,
     inZones: List<LevelZone>,

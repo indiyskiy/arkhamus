@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType.*
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
 @Component
@@ -12,7 +13,7 @@ class GameObjectFinder {
         id: String,
         type: GameObjectType,
         data: GlobalGameData
-    ): Any? {
+    ): WithStringId? {
         return when (type) {
             CHARACTER -> data.users[id.toLong()]
             VOTE_SPOT -> data.voteSpots.firstOrNull { it.inGameId() == id.toLong() }
@@ -21,13 +22,15 @@ class GameObjectFinder {
             CLUE -> data.clues.firstOrNull { it.id == id }
             ALTAR -> data.altars[id.toLong()]
             QUEST_GIVER -> data.questGivers.firstOrNull { it.inGameId() == id.toLong() }
+            else -> null
+
         }
     }
 
     fun all(
         types: List<GameObjectType>,
         data: GlobalGameData
-    ): List<Any> {
+    ): List<WithStringId> {
         return types.flatMap { type ->
             when (type) {
                 CHARACTER -> data.users.values

@@ -8,16 +8,13 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
 @Component
 class ParalyzeAbilityCast(
     private val timeEventHandler: TimeEventHandler,
 ) : AbilityCast {
-
-    companion object {
-
-    }
 
     override fun accept(ability: Ability): Boolean {
         return ability == Ability.PARALYSE
@@ -32,6 +29,16 @@ class ParalyzeAbilityCast(
         return true
     }
 
+    override fun cast(
+        sourceUser: RedisGameUser,
+        ability: Ability,
+        target: WithStringId?,
+        globalGameData: GlobalGameData
+    ): Boolean {
+        paralyze(target as RedisGameUser, globalGameData, sourceUser)
+        return true
+    }
+
     private fun paralyze(
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
@@ -39,7 +46,15 @@ class ParalyzeAbilityCast(
         val currentUser = abilityRequestProcessData.gameUser
         val targetUser = abilityRequestProcessData.target as RedisGameUser
 
-        if(targetUser.stateTags.contains(UserStateTag.INVULNERABILITY.name)) return
+        paralyze(targetUser, globalGameData, currentUser)
+    }
+
+    private fun paralyze(
+        targetUser: RedisGameUser,
+        globalGameData: GlobalGameData,
+        currentUser: RedisGameUser?
+    ) {
+        if (targetUser.stateTags.contains(UserStateTag.INVULNERABILITY.name)) return
 
         timeEventHandler.createEvent(
             game = globalGameData.game,

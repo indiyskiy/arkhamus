@@ -1,17 +1,15 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
 @Component
 class HealMadnessAbilityCast(
-    private val userLocationHandler: UserLocationHandler,
-    private val geometryUtils: GeometryUtils,
     private val madnessHandler: UserMadnessHandler
 ) : AbilityCast {
 
@@ -28,32 +26,31 @@ class HealMadnessAbilityCast(
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
     ): Boolean {
-        healMadness(globalGameData, abilityRequestProcessData)
+        healMadness(abilityRequestProcessData)
+        return true
+    }
+
+    override fun cast(
+        sourceUser: RedisGameUser,
+        ability: Ability,
+        target: WithStringId?,
+        globalGameData: GlobalGameData
+    ): Boolean {
+        healMadness(target as RedisGameUser)
         return true
     }
 
     private fun healMadness(
-        globalGameData: GlobalGameData,
         abilityRequestProcessData: AbilityRequestProcessData,
     ) {
-        val currentUser = abilityRequestProcessData.gameUser
-        currentUser?.let { currentUserNotNull ->
-            val user = globalGameData.users.values.filter {
-                it.userId != abilityRequestProcessData.gameUser.userId
-            }.minByOrNull { user ->
-                geometryUtils.distance(
-                    currentUserNotNull,
-                    user,
-                )
-            }
-            if (user != null && userLocationHandler.distanceLessOrEquals(
-                    currentUserNotNull,
-                    user,
-                    Ability.HEAL_MADNESS.range!!
-                )
-            ) {
-                madnessHandler.reduceMadness(user, REDUCE_VALUE)
-            }
-        }
+        val target = abilityRequestProcessData.target as RedisGameUser
+        healMadness(target)
     }
+
+    private fun healMadness(
+        target: RedisGameUser
+    ) {
+        madnessHandler.reduceMadness(target, REDUCE_VALUE)
+    }
+
 }

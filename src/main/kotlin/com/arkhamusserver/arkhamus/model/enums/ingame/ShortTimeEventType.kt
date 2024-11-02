@@ -8,7 +8,8 @@ enum class ShortTimeEventType(
 ) {
     ABILITY_CAST(SECOND / 2, GameObjectType.CHARACTER),
     PEEKABOO_CURSE_ACTIVATED_CONTAINER(SECOND / 2, GameObjectType.CONTAINER),
-    PEEKABOO_CURSE_ACTIVATED_CRAFTER(SECOND / 2, GameObjectType.CRAFTER);
+    PEEKABOO_CURSE_ACTIVATED_CRAFTER(SECOND / 2, GameObjectType.CRAFTER),
+    MADNESS_ACT(SECOND / 2, GameObjectType.CHARACTER);
 
     fun getTime(): Long = time
     fun getSource(): GameObjectType = source

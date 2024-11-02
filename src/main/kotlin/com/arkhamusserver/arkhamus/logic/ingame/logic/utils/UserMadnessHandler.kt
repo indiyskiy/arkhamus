@@ -21,14 +21,24 @@ class UserMadnessHandler {
 
     fun applyMadness(gameUser: RedisGameUser, madness: Double) {
         val before = gameUser.madness
-        gameUser.madness += madness
+        val modifier = if (gameUser.madnessDebuffs.contains(MadnessDebuffs.PSYCHIC_UNSTABLE.name)) 1.5 else 1.0
+        gameUser.madness += (madness * modifier)
         val after = gameUser.madness
+        applyMadnessDebuffMaybe(gameUser, before, after)
+    }
+
+    private fun applyMadnessDebuffMaybe(
+        gameUser: RedisGameUser,
+        before: Double,
+        after: Double
+    ) {
         val notch = gameUser.madnessNotches.firstOrNull { it >= before && it <= after }
         val notchIndex = notch?.let { gameUser.madnessNotches.indexOf(notch) }
         if (notchIndex != null) {
-
-            gameUser.madnessDebuffs += MadnessDebuffs.values().filter { it.getStepNumber() == notchIndex }
+            val debuff = MadnessDebuffs.values().filter { it.getStepNumber() == notchIndex }
                 .random(random).name
+            gameUser.madnessDebuffs += debuff
+            logger.info("apply debuff ${debuff} to ${gameUser.userId}-${gameUser.nickName}")
         }
     }
 

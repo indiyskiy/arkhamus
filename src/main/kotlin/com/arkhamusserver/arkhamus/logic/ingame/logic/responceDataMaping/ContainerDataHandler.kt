@@ -34,7 +34,12 @@ class ContainerDataHandler(
         levelGeometryData: LevelGeometryData
     ) {
         if (
-            !userLocationHandler.userCanSeeTarget(currentUser, container, levelGeometryData) ||
+            !userLocationHandler.userCanSeeTarget(
+                whoLooks = currentUser,
+                target = container,
+                levelGeometryData = levelGeometryData,
+                affectedByBlind = true
+            ) ||
             !visibilityByTagsHandler.userCanSeeTarget(currentUser, container)
         ) {
             responseToMask.state = MapObjectState.ACTIVE

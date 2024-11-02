@@ -57,6 +57,7 @@ class DoorDataHandler(
                 whoLooks = myUser,
                 target = door,
                 levelGeometryData = levelGeometryData,
+                affectedByBlind = false,
                 heightAffectVision = false,
                 geometryAffectsVision = false
             ) ||

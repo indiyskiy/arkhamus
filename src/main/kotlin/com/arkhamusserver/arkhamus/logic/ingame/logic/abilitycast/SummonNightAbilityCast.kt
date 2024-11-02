@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
 @Component
@@ -25,6 +26,19 @@ class SummonNightAbilityCast(
         createSummonedNightEvent(
             globalGameData.game,
             abilityRequestProcessData.gameUser!!
+        )
+        return true
+    }
+
+    override fun cast(
+        sourceUser: RedisGameUser,
+        ability: Ability,
+        target: WithStringId?,
+        globalGameData: GlobalGameData
+    ): Boolean {
+        createSummonedNightEvent(
+            globalGameData.game,
+            sourceUser
         )
         return true
     }

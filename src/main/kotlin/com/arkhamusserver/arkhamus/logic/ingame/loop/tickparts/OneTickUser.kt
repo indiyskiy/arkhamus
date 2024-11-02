@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.toItem
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness.MadnessTickProcessHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.slf4j.LoggerFactory
@@ -10,7 +11,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class OneTickUser(
-    private val madnessHandler: UserMadnessHandler
+    private val madnessHandler: UserMadnessHandler,
+    private val madnessTickProcessHandler: MadnessTickProcessHandler
 ) {
 
     companion object {
@@ -20,15 +22,17 @@ class OneTickUser(
 
     fun processUsers(data: GlobalGameData, timePassedMillis: Long) {
         data.users.forEach { user ->
-            processUser(user.value, timePassedMillis)
+            processUser(user.value, data, timePassedMillis)
         }
     }
 
     private fun processUser(
         user: RedisGameUser,
+        data: GlobalGameData,
         timePassedMillis: Long
     ) {
         processInventory(user, timePassedMillis)
+        processMadness(user, data, timePassedMillis)
     }
 
     private fun processInventory(
@@ -40,9 +44,25 @@ class OneTickUser(
         }.forEach { (itemId, number) ->
             val item = itemId.toItem()
             when (item) {
-                Item.CURSED_POTATO -> madnessHandler.applyMadness(user, POTATO_MADNESS_TICK_MILLIS * number * timePassedMillis)
+                Item.CURSED_POTATO -> madnessHandler.applyMadness(
+                    user,
+                    POTATO_MADNESS_TICK_MILLIS * number * timePassedMillis
+                )
+
                 else -> {}
             }
         }
+    }
+
+    private fun processMadness(
+        user: RedisGameUser,
+        data: GlobalGameData,
+        timePassedMillis: Long
+    ) {
+        madnessTickProcessHandler.processMadness(
+            user = user,
+            data = data,
+            timePassedMillis = timePassedMillis
+        )
     }
 }

@@ -9,6 +9,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -34,18 +35,35 @@ class SpawnLootAbilityCast(
         return true
     }
 
+    override fun cast(
+        sourceUser: RedisGameUser,
+        ability: Ability,
+        target: WithStringId?,
+        globalGameData: GlobalGameData
+    ): Boolean {
+        spawnLoot(sourceUser, globalGameData)
+        return true
+    }
+
     private fun spawnLoot(
         globalGameData: GlobalGameData,
         abilityRequestProcessData: AbilityRequestProcessData,
     ) {
         val currentUser = abilityRequestProcessData.gameUser
         currentUser?.let { currentUserNotNull ->
-            val randomItem = Item.values()
-                .filter { item -> item.itemType == ItemType.LOOT }
-                .random(random)
-            inventoryHandler.addItem(currentUserNotNull, randomItem)
-            rememberItemChangesForResponses(globalGameData, currentUserNotNull)
+            spawnLoot(currentUserNotNull, globalGameData)
         }
+    }
+
+    private fun spawnLoot(
+        currentUserNotNull: RedisGameUser,
+        globalGameData: GlobalGameData
+    ) {
+        val randomItem = Item.values()
+            .filter { item -> item.itemType == ItemType.LOOT }
+            .random(random)
+        inventoryHandler.addItem(currentUserNotNull, randomItem)
+        rememberItemChangesForResponses(globalGameData, currentUserNotNull)
     }
 }
 

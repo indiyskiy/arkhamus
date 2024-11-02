@@ -4,6 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -24,9 +26,20 @@ class KindleCloakAbilityCast : AbilityCast {
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
     ): Boolean {
-        logger.info("cast $ability")
-        abilityRequestProcessData.gameUser?.stateTags?.add(UserStateTag.LUMINOUS.name)
+        abilityRequestProcessData.gameUser?.let { luminosity(it) }
         return true
     }
+
+    override fun cast(
+        sourceUser: RedisGameUser,
+        ability: Ability,
+        target: WithStringId?,
+        globalGameData: GlobalGameData
+    ): Boolean {
+        luminosity(sourceUser)
+        return true
+    }
+
+    private fun luminosity(user: RedisGameUser): Boolean = user.stateTags.add(UserStateTag.LUMINOUS.name)
 
 }

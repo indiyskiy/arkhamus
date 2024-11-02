@@ -31,7 +31,13 @@ class OtherGameUsersDataHandler(
         myUser: RedisGameUser,
         levelGeometryData: LevelGeometryData
     ) {
-        if (!userLocationHandler.userCanSeeTarget(myUser, thatUser, levelGeometryData)) {
+        if (!userLocationHandler.userCanSeeTarget(
+                whoLooks = myUser,
+                target = thatUser,
+                levelGeometryData = levelGeometryData,
+                affectedByBlind = true
+            )
+        ) {
             responseToMask.x = null
             responseToMask.y = null
             responseToMask.stateTags = emptySet()

@@ -34,7 +34,12 @@ class CrafterDataHandler(
         levelGeometryData: LevelGeometryData
     ) {
         if (
-            !userLocationHandler.userCanSeeTarget(currentUser, crafter, levelGeometryData) ||
+            !userLocationHandler.userCanSeeTarget(
+                whoLooks = currentUser,
+                target = crafter,
+                levelGeometryData = levelGeometryData,
+                affectedByBlind = true
+            ) ||
             !visibilityByTagsHandler.userCanSeeTarget(currentUser, crafter)
         ) {
             responseToMask.state = MapObjectState.ACTIVE

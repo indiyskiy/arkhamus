@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
+import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -23,11 +24,12 @@ class UserLocationHandler(
         whoLooks: RedisGameUser,
         target: WithPoint,
         levelGeometryData: LevelGeometryData,
+        affectedByBlind: Boolean,
         heightAffectVision: Boolean = true,
         geometryAffectsVision: Boolean = true,
     ): Boolean {
         return haveGlobalVision(whoLooks) || (
-                inVisionDistance(whoLooks, target) &&
+                inVisionDistance(whoLooks, target, affectedByBlind) &&
                         (!heightAffectVision || onHighGroundOrSameLevel(whoLooks, target)) &&
                         (!geometryAffectsVision || geometryCheck())
                 )
@@ -50,8 +52,14 @@ class UserLocationHandler(
     fun inVisionDistance(
         whoLooks: RedisGameUser,
         target: WithPoint,
+        affectedByBlind: Boolean,
     ): Boolean {
-        return distanceLessOrEquals(whoLooks, target, GlobalGameSettings.GLOBAL_VISION_DISTANCE)
+        val distance = if (affectedByBlind && whoLooks.madnessDebuffs.contains(MadnessDebuffs.BLIND.name)) {
+            GlobalGameSettings.GLOBAL_VISION_DISTANCE * 0.75
+        } else {
+            GlobalGameSettings.GLOBAL_VISION_DISTANCE
+        }
+        return distanceLessOrEquals(whoLooks, target, distance)
     }
 
     fun distanceLessOrEquals(

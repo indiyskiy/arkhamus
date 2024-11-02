@@ -7,8 +7,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Abili
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -34,19 +36,36 @@ class TownPortalByScrollAbilityCast(
         return true
     }
 
+    override fun cast(
+        sourceUser: RedisGameUser,
+        ability: Ability,
+        target: WithStringId?,
+        globalGameData: GlobalGameData
+    ): Boolean {
+        castTownPortalByScrollAbility(globalGameData, sourceUser)
+        return true
+    }
+
     private fun portalToLastInterestPoint(
         globalGameData: GlobalGameData,
         abilityRequestProcessData: AbilityRequestProcessData,
     ) =
         abilityRequestProcessData.gameUser?.let { userNotNull ->
-            val point = findLastInterestPoint(globalGameData)
-            logger.info("teleport user to ${point.x()}; ${point.y()}; ${point.z()}")
-            teleportHandler.forceTeleport(
-                game = globalGameData.game,
-                user = userNotNull,
-                point = point
-            )
+            castTownPortalByScrollAbility(globalGameData, userNotNull)
         }
+
+    private fun castTownPortalByScrollAbility(
+        globalGameData: GlobalGameData,
+        userNotNull: RedisGameUser
+    ) {
+        val point = findLastInterestPoint(globalGameData)
+        logger.info("teleport user to ${point.x()}; ${point.y()}; ${point.z()}")
+        teleportHandler.forceTeleport(
+            game = globalGameData.game,
+            user = userNotNull,
+            point = point
+        )
+    }
 
     private fun findLastInterestPoint(data: GlobalGameData): WithPoint {
         if (ritualGoing(data) || fakeRitualGoing(data)) {
@@ -55,7 +74,7 @@ class TownPortalByScrollAbilityCast(
         }
         val goingBanVoteCall = findCallForBan(data)
 
-        if (goingBanVoteCall != null ) {
+        if (goingBanVoteCall != null) {
             logger.info("teleport user to goingBanVoteCall")
             return Location(
                 goingBanVoteCall.xLocation!!,
@@ -64,7 +83,7 @@ class TownPortalByScrollAbilityCast(
             )
         }
         val goingBanVoteCallFake = findCallForBanFake(data)
-        if (goingBanVoteCallFake != null ) {
+        if (goingBanVoteCallFake != null) {
             logger.info("teleport user to fake goingBanVoteCall")
             return Location(
                 goingBanVoteCallFake.xLocation!!,
