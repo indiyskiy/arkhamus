@@ -16,10 +16,10 @@ class CanRecipeBeCraftedHandler(
         private val logger = LoggerFactory.getLogger(CanRecipeBeCraftedHandler::class.java)
     }
 
-    fun canUserCraft(user: RedisGameUser, recipe: Recipe, crafter: RedisCrafter): Boolean {
+    fun canUserCraft(user: RedisGameUser, recipe: Recipe, crafter: RedisCrafter, holdCrafterNeeded: Boolean = true): Boolean {
         return haveRequiredItems(recipe, crafter, user) &&
                 rightTypeOfCrafter(recipe, crafter) &&
-                crafterHoldByMe(user, crafter)
+                (!holdCrafterNeeded || crafterHoldByMe(user, crafter))
     }
 
     private fun crafterHoldByMe(user: RedisGameUser, crafter: RedisCrafter) =

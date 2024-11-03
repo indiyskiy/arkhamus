@@ -22,8 +22,6 @@ class GameObjectFinder {
             CLUE -> data.clues.firstOrNull { it.id == id }
             ALTAR -> data.altars[id.toLong()]
             QUEST_GIVER -> data.questGivers.firstOrNull { it.inGameId() == id.toLong() }
-            else -> null
-
         }
     }
 

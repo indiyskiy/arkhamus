@@ -53,6 +53,20 @@ class UserVoteHandler(
     private fun mad(votingUser: RedisGameUser): CantVoteReason? =
         CantVoteReason.MAD.takeIf { madnessHandler.isCompletelyMad(votingUser) }
 
+
+    fun canVote(
+        currentUserVoteSpot: RedisUserVoteSpot,
+        targetUser: RedisGameUser,
+        voteSpot: RedisVoteSpot,
+    ): Boolean {
+        if (cantVoteReasons(targetUser, voteSpot).isNotEmpty()) return false
+        if (voteSpot.bannedUsers.contains(targetUser.inGameId())) return false
+        if (voteSpot.bannedUsers.any { it == targetUser.inGameId() }) return false
+        if (voteSpot.availableUsers.none { it == targetUser.inGameId() }) return false
+        if (currentUserVoteSpot.votesForUserIds.any { it == targetUser.inGameId() }) return false
+        return true
+    }
+
     @Transactional
     fun castVote(
         currentUserVoteSpot: RedisUserVoteSpot,

@@ -6,6 +6,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -40,4 +42,19 @@ class SearchForScentAbilityCast(
         return false
     }
 
+    override fun cast(
+        sourceUser: RedisGameUser,
+        ability: Ability,
+        target: WithStringId?,
+        globalGameData: GlobalGameData
+    ): Boolean {
+        val user = sourceUser
+        user.stateTags.add(UserStateTag.INVESTIGATING.name)
+        val visibilityModifier = resolver.toVisibilityModifier(ability)
+        visibilityModifier?.let {
+            user.visibilityModifiers.add(it.name)
+            return true
+        }
+        return false
+    }
 }

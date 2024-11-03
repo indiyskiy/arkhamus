@@ -16,6 +16,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import org.slf4j.LoggerFactory
@@ -122,7 +123,7 @@ class AbilityNettyRequestHandler(
         ongoingEvents: List<OngoingEvent>,
         globalGameData: GlobalGameData,
         clues: List<RedisClue>,
-        target: Any?,
+        target: WithStringId?,
         targetId: String?,
         targetType: GameObjectType?,
     ) = AbilityRequestProcessData(

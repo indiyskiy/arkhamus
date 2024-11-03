@@ -26,7 +26,7 @@ class VoteSpotCastNettyRequestHandler(
     private val zonesHandler: ZonesHandler,
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
-    private val madnessHandler: UserMadnessHandler,
+    private val voteHandler: UserVoteHandler,
 ) : NettyRequestHandler {
 
     companion object {
@@ -63,30 +63,26 @@ class VoteSpotCastNettyRequestHandler(
             val thisSpotUserInfos = voteSpot?.let {
                 globalGameData.userVoteSpotsBySpotId[voteSpotId]
             } ?: emptyList()
-            val myUserVoteSpot = thisSpotUserInfos.let {
+            val currentUserVoteSpot = thisSpotUserInfos.let {
                 it.firstOrNull { it.userId == userId }
             }
+            val targetUser = globalGameData.users[targetUserId]
 
-            val canVote = canUserCastVote(user, voteSpot, userId!!)
+            val canVote = canUserCastVote(currentUserVoteSpot, voteSpot, targetUser)
             val mastPay = voteSpot?.voteSpotState == VoteSpotState.WAITING_FOR_PAYMENT
 
-            logger.info("target user id: $targetUserId")
-            val targetUser = globalGameData.users[targetUserId]
-            logger.info("target user: ${targetUser?.id ?: "null"}")
-            val targetUserValid = targetUserValid(voteSpot, myUserVoteSpot)
 
             val canVoteForTargetUser = canVote &&
                     !mastPay &&
                     targetUser != null &&
-                    myUserVoteSpot != null &&
-                    targetUserValid
+                    currentUserVoteSpot != null
 
             return VoteSpotCastRequestProcessData(
                 canVoteForTargetUser = canVoteForTargetUser,
                 targetUserBanned = false,
                 successfullyVoted = false,
                 voteSpot = voteSpot,
-                currentUserVoteSpot = myUserVoteSpot,
+                currentUserVoteSpot = currentUserVoteSpot,
                 thisSpotUserInfos = thisSpotUserInfos,
                 canVote = canVote,
                 targetUser = targetUser,
@@ -114,33 +110,14 @@ class VoteSpotCastNettyRequestHandler(
         }
     }
 
-    private fun VoteSpotCastRequestMessage.targetUserValid(
-        voteSpot: RedisVoteSpot?,
-        myUserVoteSpot: RedisUserVoteSpot?
-    ): Boolean {
-        val targetUserNotBanned = voteSpot?.let { (it.bannedUsers.none { it == this.targetUserId }) } == true
-        logger.info("target user not banned: $targetUserNotBanned")
-        val targetUserAvailable = voteSpot?.let { (it.bannedUsers.none { it == this.targetUserId }) } == true
-        logger.info("target user available: $targetUserAvailable")
-        val notAlreadyVotedForTargetUser = myUserVoteSpot?.let {
-            (myUserVoteSpot.votesForUserIds.none { it == this.targetUserId })
-        } == true
-        logger.info("not already voted for target user: $notAlreadyVotedForTargetUser")
-        val targetUserValid = targetUserNotBanned && targetUserAvailable && notAlreadyVotedForTargetUser
-        logger.info("target user valid: $targetUserValid")
-        return targetUserValid
-    }
 
     private fun canUserCastVote(
-        user: RedisGameUser,
+        userVoteSpot: RedisUserVoteSpot?,
         voteSpot: RedisVoteSpot?,
-        userId: Long
+        targetUser: RedisGameUser?
     ): Boolean {
-        val currentUserMad = !madnessHandler.isCompletelyMad(user)
-        val currentUserBanned = voteSpot?.bannedUsers?.any { it == userId } == true
-        val canVote = currentUserMad && !currentUserBanned
-        logger.info("can vote: $canVote")
-        return canVote
+        if (voteSpot == null || userVoteSpot == null || targetUser == null) return false
+        return voteHandler.canVote(userVoteSpot, targetUser, voteSpot)
     }
 
 }

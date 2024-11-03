@@ -45,28 +45,40 @@ class CraftProcessRequestProcessor(
             val canBeStarted = craftProcessRequestProcessData.canBeStarted
             logger.info("can be started = $canBeStarted")
             if (canBeStarted) {
-                val crafter = craftProcessRequestProcessData.crafter!!
-                val newSortedInventory = consumeItems(
-                    recipe,
-                    craftProcessRequestProcessData.gameUser!!,
-                    crafter,
-                    craftProcessRequestProcessData.sortedUserInventory
-                )
-                craftProcessRequestProcessData.sortedUserInventory = newSortedInventory
-                craftProcessRequestProcessData.visibleItems = newSortedInventory
-                createCraftProcess(
-                    craftProcessRequestProcessData,
-                    requestDataHolder.userAccount.id!!,
-                    requestDataHolder.gameSession!!.id!!,
-                    globalGameData.game.globalTimer
-                )
-                craftProcessRequestProcessData.executedSuccessfully = true
-                crafterRepository.save(crafter)
+                craft(craftProcessRequestProcessData, recipe, requestDataHolder, globalGameData)
             }
             logger.info("craft process for ${recipe.recipeId} end")
         } ?: {
             logger.warn("recipe is null for ${requestDataHolder.userAccount.nickName} of game ${requestDataHolder.gameSession!!.id}")
         }
+    }
+
+    private fun craft(
+        craftProcessRequestProcessData: CraftProcessRequestProcessData,
+        recipe: Recipe,
+        requestDataHolder: NettyTickRequestMessageDataHolder,
+        globalGameData: GlobalGameData
+    ) {
+        val crafter = craftProcessRequestProcessData.crafter!!
+        val user = craftProcessRequestProcessData.gameUser!!
+        val inventory =  craftProcessRequestProcessData.sortedUserInventory
+        val newSortedInventory = consumeItems(
+            recipe,
+            user,
+            crafter,
+            inventory
+        )
+        createCraftProcess(
+            craftProcessRequestProcessData,
+            requestDataHolder.userAccount.id!!,
+            requestDataHolder.gameSession!!.id!!,
+            globalGameData.game.globalTimer
+        )
+        crafterRepository.save(crafter)
+        craftProcessRequestProcessData.sortedUserInventory = newSortedInventory
+        craftProcessRequestProcessData.visibleItems = newSortedInventory
+        craftProcessRequestProcessData.executedSuccessfully = true
+
     }
 
     private fun consumeItems(

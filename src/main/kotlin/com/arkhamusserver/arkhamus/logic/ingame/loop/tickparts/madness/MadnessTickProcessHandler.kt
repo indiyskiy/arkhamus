@@ -1,15 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ShortTimeEventHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -17,8 +13,8 @@ import kotlin.random.Random
 class MadnessTickProcessHandler(
     private val curseMadnessLogic: CurseMadnessLogic,
     private val castSomethingMadnessLogic: CastSomethingMadnessLogic,
-    private val userLocationHandler: UserLocationHandler,
-    private val geometryUtils: GeometryUtils,
+    private val craftMadnessLogic: CraftMadnessLogic,
+    private val voteMadnessHandler: VoteMadnessHandler,
     private val shortTimeEventHandler: ShortTimeEventHandler,
 ) {
 
@@ -55,7 +51,7 @@ class MadnessTickProcessHandler(
                 }
 
                 MadnessDebuffs.BAN_ADDICTED -> {
-//                    banSomeone(user, data, timePassedMillis)
+                    voteForSomeoneMaybe(user, data, timePassedMillis)
                     false
                 }
 
@@ -91,12 +87,28 @@ class MadnessTickProcessHandler(
         }
     }
 
+    private fun voteForSomeoneMaybe(
+        user: RedisGameUser,
+        data: GlobalGameData,
+        timePassedMillis: Long
+    ) {
+        voteMadnessHandler.voteForSomeone(
+            user,
+            data,
+            timePassedMillis
+        )
+    }
+
     private fun craftSomethingMaybe(
         user: RedisGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
-        TODO("Not yet implemented")
+        val applyRandom = random.nextLong(500 / timePassedMillis)
+        if (applyRandom == 0L) {
+            return craftMadnessLogic.craftSomething(user, data, timePassedMillis)
+        }
+        return false
     }
 
     private fun castRandomSpellMaybe(
@@ -104,34 +116,20 @@ class MadnessTickProcessHandler(
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
-        val applyRandom = random.nextInt(50)
-        if (applyRandom == 0) {
+        val applyRandom = random.nextLong(500 / timePassedMillis)
+        if (applyRandom == 0L) {
             castSomethingMadnessLogic.castRandomSpell(user, data, timePassedMillis)
         }
         return false
     }
-
-
-    private fun canSeeAndInRange(
-        user: RedisGameUser,
-        point: WithPoint,
-        data: GlobalGameData,
-        abilityType: Ability
-    ): Boolean = (userLocationHandler.userCanSeeTarget(
-        user,
-        point,
-        data.levelGeometryData,
-        true
-    ) && geometryUtils.distanceLessOrEquals(user, point, abilityType.range)
-            )
 
     private fun curseSomethingMaybe(
         user: RedisGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
-        val applyRandom = random.nextInt(50)
-        if (applyRandom == 0) {
+        val applyRandom = random.nextLong(500 / timePassedMillis)
+        if (applyRandom == 0L) {
             return curseMadnessLogic.curseSomething(user, data, timePassedMillis)
         }
         return false
