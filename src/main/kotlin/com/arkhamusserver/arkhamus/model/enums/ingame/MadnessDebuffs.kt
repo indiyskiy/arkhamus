@@ -18,7 +18,7 @@ enum class MadnessDebuffs(private val stepNumber: Int) {
 
     //2
     UNSTABLE_POSITION(2),
-    DARK_ENTITY(2),
+//    DARK_ENTITY(2),
     PROPHET(2);
 
     fun getStepNumber(): Int {

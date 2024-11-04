@@ -1,8 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ShortTimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
+import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -17,6 +19,8 @@ class MadnessTickProcessHandler(
     private val voteMadnessHandler: VoteMadnessHandler,
     private val lightMadnessHandler: LightMadnessHandler,
     private val shortTimeEventHandler: ShortTimeEventHandler,
+    private val randomTeleportSomeoneMaybe: RandomTeleportSomeoneMaybe,
+    private val eventHandler: TimeEventHandler,
 ) {
 
     companion object {
@@ -29,6 +33,7 @@ class MadnessTickProcessHandler(
         timePassedMillis: Long
     ) {
         val madnessDebuffs = user.madnessDebuffs.map { MadnessDebuffs.valueOf(it) }
+        var madnessEffectFinal = false
         madnessDebuffs.forEach { debuff ->
             val madnessEffect: Boolean = when (debuff) {
                 MadnessDebuffs.BLIND -> {
@@ -52,7 +57,7 @@ class MadnessTickProcessHandler(
                 }
 
                 MadnessDebuffs.BAN_ADDICTED -> {
-                    voteForSomeoneMaybe(user, data, timePassedMillis)
+                    voteForSomeone(user, data, timePassedMillis)
                     false
                 }
 
@@ -62,50 +67,71 @@ class MadnessTickProcessHandler(
                 }
 
                 MadnessDebuffs.UNSTABLE_POSITION -> {
-//                    teleportMaybe(user, data, timePassedMillis)
+                    teleportMaybe(user, data, timePassedMillis)
                     false
                 }
 
-                MadnessDebuffs.DARK_ENTITY -> {
+//                MadnessDebuffs.DARK_ENTITY -> {
 //                    applyMadnessTickNearby(user, data, timePassedMillis)
-                    false
-                }
+//                    false
+//                }
 
                 MadnessDebuffs.PROPHET -> {
-//                    pushGodAwaken(user, data, timePassedMillis)
+                    pushGodAwaken(data, timePassedMillis)
                     false
                 }
             }
-            if (madnessEffect) {
-                shortTimeEventHandler.createShortTimeEvent(
-                    user.inGameId(),
-                    data.game.inGameId(),
-                    data.game.globalTimer,
-                    ShortTimeEventType.MADNESS_ACT,
-                    setOf(VisibilityModifier.ALL.name)
-                )
-            }
+            madnessEffectFinal = madnessEffectFinal || madnessEffect
         }
+        if (madnessEffectFinal) {
+            shortTimeEventHandler.createShortTimeEvent(
+                user.inGameId(),
+                data.game.inGameId(),
+                data.game.globalTimer,
+                ShortTimeEventType.MADNESS_ACT,
+                setOf(VisibilityModifier.ALL.name)
+            )
+        }
+    }
+
+    private fun pushGodAwaken(
+        data: GlobalGameData,
+        timePassedMillis: Long
+    ) {
+        val godEvent = data.timeEvents.first { it.type == RedisTimeEventType.GOD_AWAKEN }
+        eventHandler.pushEvent(godEvent, timePassedMillis)
+    }
+
+    private fun teleportMaybe(
+        user: RedisGameUser,
+        data: GlobalGameData,
+        timePassedMillis: Long
+    ): Boolean {
+        val applyRandom = random.nextLong(5000 / timePassedMillis)
+        if (applyRandom == 0L) {
+            return randomTeleportSomeoneMaybe.teleport(user, data, timePassedMillis)
+        }
+        return false
     }
 
     private fun lightSomething(
         user: RedisGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
-    ) {
-        lightMadnessHandler.lightSomething(
+    ): Boolean {
+        return lightMadnessHandler.lightSomething(
             user,
             data,
             timePassedMillis
         )
     }
 
-    private fun voteForSomeoneMaybe(
+    private fun voteForSomeone(
         user: RedisGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
-    ) {
-        voteMadnessHandler.voteForSomeone(
+    ): Boolean {
+        return voteMadnessHandler.voteForSomeone(
             user,
             data,
             timePassedMillis
@@ -131,7 +157,7 @@ class MadnessTickProcessHandler(
     ): Boolean {
         val applyRandom = random.nextLong(500 / timePassedMillis)
         if (applyRandom == 0L) {
-            castSomethingMadnessLogic.castRandomSpell(user, data, timePassedMillis)
+            return castSomethingMadnessLogic.castRandomSpell(user, data, timePassedMillis)
         }
         return false
     }

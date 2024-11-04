@@ -131,9 +131,10 @@ class TimeEventHandler(
         }
     }
 
-    fun pushEvent(ritualEvent: RedisTimeEvent, timeToAdd: Long) {
-        ritualEvent.timePast += timeToAdd
-        ritualEvent.timeLeft -= timeToAdd
-        redisTimeEventRepository.save(ritualEvent)
+    @Transactional
+    fun pushEvent(event: RedisTimeEvent, timeToAdd: Long) {
+        event.timePast += timeToAdd
+        event.timeLeft -= timeToAdd
+        redisTimeEventRepository.save(event)
     }
 }

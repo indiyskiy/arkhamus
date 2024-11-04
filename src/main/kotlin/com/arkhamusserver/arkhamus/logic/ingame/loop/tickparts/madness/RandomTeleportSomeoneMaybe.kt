@@ -1,0 +1,42 @@
+package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness
+
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TeleportHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import org.springframework.stereotype.Component
+import kotlin.random.Random
+
+@Component
+class RandomTeleportSomeoneMaybe(
+    private val teleportHandler: TeleportHandler
+) {
+
+    companion object {
+        private val random = Random(System.currentTimeMillis())
+    }
+
+    fun teleport(
+        user: RedisGameUser,
+        data: GlobalGameData,
+        timePassedMillis: Long
+    ): Boolean {
+        val stunned = user.stateTags.contains(UserStateTag.STUN.name)
+        if (stunned) return false
+        val possiblePlaces = findPlaces(data)
+        if (possiblePlaces.isEmpty()) return false
+        val place = possiblePlaces.random(random)
+        teleportHandler.forceTeleport(data.game, user, place)
+        return true
+    }
+
+    private fun findPlaces(
+        data: GlobalGameData,
+    ): List<WithPoint> {
+        val threshold: List<WithPoint> = data.thresholdsByZoneId.values.flatten()
+        val altar: WithPoint = data.altarHolder!!
+        return threshold + altar
+    }
+
+}
