@@ -37,7 +37,7 @@ class VoteMadnessHandler(
                 didSomethings = payForVotes(user, voteSpot, didSomethings)
             }
             if (voteSpot.voteSpotState == VoteSpotState.OPEN) {
-                castVote(data, voteSpot, user)
+                didSomethings = didSomethings || castVote(data, voteSpot, user)
             }
             return didSomethings
         }
@@ -48,12 +48,13 @@ class VoteMadnessHandler(
         data: GlobalGameData,
         voteSpot: RedisVoteSpot,
         user: RedisGameUser
-    ) {
+    ): Boolean {
         val userVoteSpots: List<RedisUserVoteSpot>? = data.userVoteSpotsBySpotId[voteSpot.inGameId()]
         if (userVoteSpots != null && userVoteSpots.isNotEmpty()) {
             val userVoteSpot = userVoteSpots.firstOrNull { it.userId == user.inGameId() }
             if (userVoteSpot != null) {
                 val users = data.users.values
+                var anyVotes = false
                 users.shuffled(random).forEach { targetUser ->
                     if (userVoteHandler.canVote(
                             userVoteSpot,
@@ -69,10 +70,16 @@ class VoteMadnessHandler(
                             userVoteSpots,
                             data
                         )
+                        anyVotes = true
+                        if (voteSpot.voteSpotState != VoteSpotState.OPEN) {
+                            return true
+                        }
                     }
                 }
+                return anyVotes
             }
         }
+        return false
     }
 
     private fun payForVotes(

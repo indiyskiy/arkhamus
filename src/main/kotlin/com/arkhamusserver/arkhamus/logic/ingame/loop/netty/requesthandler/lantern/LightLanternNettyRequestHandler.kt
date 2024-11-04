@@ -8,7 +8,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.LightLanternRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.lantern.LightLanternRequestMessage
 import org.springframework.stereotype.Component
@@ -22,6 +21,7 @@ class LightLanternNettyRequestHandler(
     private val zonesHandler: ZonesHandler,
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
+    private val lanternHandler: LanternHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -50,10 +50,9 @@ class LightLanternNettyRequestHandler(
                 user
             )
 
-            val lantern = globalGameData.lanterns.firstOrNull{it.inGameId() == this.lanternId}
+            val lantern = globalGameData.lanterns.firstOrNull { it.inGameId() == this.lanternId }
 
-            val lanternFull = lantern != null &&
-                    lantern.lanternState == LanternState.FILLED
+            val lanternFull = lantern != null && lanternHandler.canLight(lantern)
 
             return LightLanternRequestProcessData(
                 lantern = lantern,

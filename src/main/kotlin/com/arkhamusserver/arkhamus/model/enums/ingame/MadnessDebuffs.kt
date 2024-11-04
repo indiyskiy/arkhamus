@@ -2,6 +2,9 @@ package com.arkhamusserver.arkhamus.model.enums.ingame
 
 enum class MadnessDebuffs(private val stepNumber: Int) {
     //0
+    //fake clues
+    //fake players
+    //fake vote calls, fake ability casts (other)
     BLIND(0),  //implemented
 //    SLOW(0),
     PSYCHIC_UNSTABLE(0), //implemented

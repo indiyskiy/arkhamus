@@ -15,6 +15,7 @@ class MadnessTickProcessHandler(
     private val castSomethingMadnessLogic: CastSomethingMadnessLogic,
     private val craftMadnessLogic: CraftMadnessLogic,
     private val voteMadnessHandler: VoteMadnessHandler,
+    private val lightMadnessHandler: LightMadnessHandler,
     private val shortTimeEventHandler: ShortTimeEventHandler,
 ) {
 
@@ -56,7 +57,7 @@ class MadnessTickProcessHandler(
                 }
 
                 MadnessDebuffs.LIGHT_ADDICTED -> {
-//                    lightSomething(user, data, timePassedMillis)
+                    lightSomething(user, data, timePassedMillis)
                     false
                 }
 
@@ -85,6 +86,18 @@ class MadnessTickProcessHandler(
                 )
             }
         }
+    }
+
+    private fun lightSomething(
+        user: RedisGameUser,
+        data: GlobalGameData,
+        timePassedMillis: Long
+    ) {
+        lightMadnessHandler.lightSomething(
+            user,
+            data,
+            timePassedMillis
+        )
     }
 
     private fun voteForSomeoneMaybe(

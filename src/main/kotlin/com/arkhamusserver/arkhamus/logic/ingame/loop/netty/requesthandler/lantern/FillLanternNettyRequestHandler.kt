@@ -8,9 +8,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.FillLanternRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.lantern.FillLanternRequestMessage
 import org.springframework.stereotype.Component
@@ -24,6 +21,7 @@ class FillLanternNettyRequestHandler(
     private val zonesHandler: ZonesHandler,
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
+    private val lanternHandler: LanternHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -52,15 +50,13 @@ class FillLanternNettyRequestHandler(
                 user
             )
 
-            val lantern = globalGameData.lanterns.firstOrNull{it.inGameId() == this.lanternId}
+            val lantern = globalGameData.lanterns.firstOrNull { it.inGameId() == this.lanternId }
 
-            val canPay = checkIfUserCanPay(user)
-            val lanternEmpty = lantern != null &&
-                    lantern.lanternState == LanternState.EMPTY
+            val canFill = lanternHandler.canFill(user, lantern)
 
             return FillLanternRequestProcessData(
                 lantern = lantern,
-                canFill = canPay && lanternEmpty,
+                canFill = canFill,
                 successfullyFilled = false,
                 gameUser = user,
                 otherGameUsers = users,
@@ -84,19 +80,6 @@ class FillLanternNettyRequestHandler(
                 ),
             )
         }
-    }
-
-    private fun checkIfUserCanPay(
-        user: RedisGameUser
-    ): Boolean {
-        val costItem = Item.SOLARITE
-        val costValue = 1
-        val canPay = inventoryHandler.userHaveItems(
-            user = user,
-            requiredItemId = costItem.id,
-            howManyItems = costValue
-        )
-        return canPay
     }
 
 }
