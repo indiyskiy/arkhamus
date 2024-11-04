@@ -48,6 +48,7 @@ class AuthNettyResponseMapper(
                     nickName = "",
                     madness = 0.0,
                     madnessNotches = listOf(0.0, 0.0, 0.0),
+                    madnessDebuffs = emptySet(),
                     x = 0.0,
                     y = 0.0,
                     z = 0.0,
