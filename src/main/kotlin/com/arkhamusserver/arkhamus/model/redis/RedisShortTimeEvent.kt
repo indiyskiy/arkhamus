@@ -16,6 +16,7 @@ data class RedisShortTimeEvent(
 
     var xLocation: Double? = null,
     var yLocation: Double? = null,
+    var zLocation: Double? = null,
 
     var timeStart: Long,
     var timePast: Long,

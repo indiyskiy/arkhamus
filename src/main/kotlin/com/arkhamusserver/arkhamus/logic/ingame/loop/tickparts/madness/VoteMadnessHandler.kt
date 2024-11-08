@@ -34,7 +34,7 @@ class VoteMadnessHandler(
             val voteSpot = voteSpots.random(random)
             var didSomethings = false
             if (voteSpot.voteSpotState == VoteSpotState.WAITING_FOR_PAYMENT) {
-                didSomethings = payForVotes(user, voteSpot, didSomethings)
+                didSomethings = payForVotes(user, voteSpot)
             }
             if (voteSpot.voteSpotState == VoteSpotState.OPEN) {
                 didSomethings = didSomethings || castVote(data, voteSpot, user)
@@ -84,10 +84,8 @@ class VoteMadnessHandler(
 
     private fun payForVotes(
         user: RedisGameUser,
-        voteSpot: RedisVoteSpot,
-        didSomethings: Boolean
+        voteSpot: RedisVoteSpot
     ): Boolean {
-        var didSomethings1 = didSomethings
         if (inventoryHandler.userHaveItems(
                 user,
                 voteSpot.costItem,
@@ -101,9 +99,9 @@ class VoteMadnessHandler(
             )
             voteSpot.voteSpotState = VoteSpotState.OPEN
             voteSpotRedisVoteSpot.save(voteSpot)
-            didSomethings1 = true
+            return true
         }
-        return didSomethings1
+        return false
     }
 
     private fun voteSpots(

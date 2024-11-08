@@ -33,11 +33,10 @@ class ShortTimeEventToResponseHandler(
                 timePast = it.timePast,
                 timeLeft = it.timeLeft,
                 type = it.type,
-            ).apply {
-                sourceId = it.sourceId
-                xLocation = it.xLocation
-                yLocation = it.yLocation
-            }
+                sourceId = it.sourceId,
+                xLocation = it.xLocation,
+                yLocation = it.yLocation,
+            )
         }
     }
 }

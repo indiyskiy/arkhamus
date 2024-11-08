@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.DoorDat
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.LanternDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.OtherGameUsersDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.VoteSpotInfoMapper
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.VoteSpotInfoMapper
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData

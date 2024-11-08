@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional
 class ShortTimeEventHandler(
     private val specificShortTimeEventFilters: List<SpecificShortTimeEventFilter>,
     private val redisShortTimeEventRepository: RedisShortTimeEventRepository,
+    private val userLocationHandler: UserLocationHandler,
+    private val finder: GameObjectFinder
 ) {
 
     companion object {
@@ -30,29 +33,51 @@ class ShortTimeEventHandler(
         zones: List<LevelZone>,
         data: GlobalGameData
     ): List<RedisShortTimeEvent> {
-        return specificShortTimeEventFilters.map {
-            it.filter(
-                events,
+        val filteredByState = events.filter { it.timeLeft > 0 && it.state == RedisTimeEventState.ACTIVE }
+        val filteredByObject = filteredByState.filter {
+            it.sourceId == null || canSeeTarget(
+                it,
+                user,
+                data
+            )
+        }
+        val filterByPosition = filteredByObject.filter {
+            canSeeLocation(
+                it,
+                user,
+                data
+            )
+        }
+        return filterByPosition.filter {
+            specificShortTimeEventFilters.firstOrNull { filter ->
+                filter.accept(it)
+            }?.canSee(
+                it,
                 user,
                 zones,
                 data
-            )
-        }.flatten()
+            ) != false
+        }
     }
 
     @Transactional
     fun createShortTimeEvent(
-        userId: Long,
+        objectId: Long,
         gameId: Long,
         globalTimer: Long,
         type: ShortTimeEventType,
         visibilityModifiers: Set<String>
     ) {
+        logger.info(
+            "creating short time event ${type.name} " +
+                    "visibility modifiers: ${visibilityModifiers.joinToString()} " +
+                    "by user $objectId"
+        )
         redisShortTimeEventRepository.save(
             RedisShortTimeEvent(
                 id = Generators.timeBasedEpochGenerator().generate().toString(),
                 gameId = gameId,
-                sourceId = userId,
+                sourceId = objectId,
                 xLocation = null,
                 yLocation = null,
                 timeStart = globalTimer,
@@ -65,4 +90,55 @@ class ShortTimeEventHandler(
         )
     }
 
+    private fun canSeeTarget(
+        event: RedisShortTimeEvent,
+        user: RedisGameUser,
+        data: GlobalGameData
+    ): Boolean {
+        val target = finder.findById(event.sourceId.toString(), event.type.getSource(), data)
+        if (target == null) {
+            return false
+        }
+        if (target is WithPoint) {
+            return userLocationHandler.userCanSeeTarget(user, target, data.levelGeometryData, true)
+        }
+        return true
+    }
+
+    private fun canSeeLocation(
+        event: RedisShortTimeEvent,
+        user: RedisGameUser,
+        data: GlobalGameData
+    ): Boolean {
+        if (event.xLocation == null || event.yLocation == null || event.zLocation == null) return true
+        return userLocationHandler.userCanSeeTarget(
+            user,
+            ShortTimeEventLocation(
+                event.xLocation!!,
+                event.yLocation!!,
+                event.zLocation!!
+            ),
+            data.levelGeometryData,
+            true
+        )
+    }
+
+    data class ShortTimeEventLocation(
+        private val x: Double,
+        private val y: Double,
+        private val z: Double,
+    ) : WithPoint {
+        override fun x(): Double {
+            return x
+        }
+
+        override fun y(): Double {
+            return y
+        }
+
+        override fun z(): Double {
+            return z
+        }
+    }
 }
+

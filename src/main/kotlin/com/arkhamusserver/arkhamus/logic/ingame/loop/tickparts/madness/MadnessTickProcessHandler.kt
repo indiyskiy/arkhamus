@@ -58,12 +58,10 @@ class MadnessTickProcessHandler(
 
                 MadnessDebuffs.BAN_ADDICTED -> {
                     voteForSomeone(user, data, timePassedMillis)
-                    false
                 }
 
                 MadnessDebuffs.LIGHT_ADDICTED -> {
                     lightSomething(user, data, timePassedMillis)
-                    false
                 }
 
                 MadnessDebuffs.UNSTABLE_POSITION -> {

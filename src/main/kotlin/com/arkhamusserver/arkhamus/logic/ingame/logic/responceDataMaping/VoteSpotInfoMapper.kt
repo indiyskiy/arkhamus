@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime
+package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.BanState
 import com.arkhamusserver.arkhamus.model.redis.RedisUserVoteSpot

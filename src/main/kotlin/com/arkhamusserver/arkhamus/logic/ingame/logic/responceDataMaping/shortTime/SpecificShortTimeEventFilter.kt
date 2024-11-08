@@ -6,10 +6,14 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
 
 interface SpecificShortTimeEventFilter {
-    fun filter(
-        events: List<RedisShortTimeEvent>,
+    fun accept(
+        event: RedisShortTimeEvent,
+    ): Boolean
+
+    fun canSee(
+        event: RedisShortTimeEvent,
         user: RedisGameUser,
         zones: List<LevelZone>,
         data: GlobalGameData
-    ): List<RedisShortTimeEvent>
+    ): Boolean
 }
