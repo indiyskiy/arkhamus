@@ -73,7 +73,7 @@ class ArkhamusOneTickLogicImpl(
             if (responses.isNotEmpty()) {
                 game.lastTimeSentResponse = game.globalTimer
             }
-            oneTickTryEndGameMaybeHandler.checkIfEnd(game, globalGameData.users.values)
+            oneTickTryEndGameMaybeHandler.checkIfEnd(game, globalGameData.users.values, globalGameData.voteSpots)
             game.serverTimeLastTick = game.serverTimeCurrentTick
             afterLoopSaving.saveAll(globalGameData, game)
 

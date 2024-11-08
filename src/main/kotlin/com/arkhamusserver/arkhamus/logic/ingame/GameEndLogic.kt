@@ -94,12 +94,15 @@ class GameEndLogic(
     }
 
     private fun setWonOrLoose(
-        gameEndReason: GameEndReason, redisUsers: Map<Long, RedisGameUser>, databaseUsers: List<UserOfGameSession>
+        gameEndReason: GameEndReason,
+        redisUsers: Map<Long, RedisGameUser>,
+        databaseUsers: List<UserOfGameSession>
     ) {
         when (gameEndReason) {
             GameEndReason.GOD_AWAKEN -> cultistsWon(databaseUsers)
             GameEndReason.EVERYBODY_MAD -> cultistsWon(databaseUsers)
             GameEndReason.RITUAL_SUCCESS -> investigatorsWon(databaseUsers)
+            GameEndReason.CULTISTS_BANNED -> investigatorsWon(databaseUsers)
             GameEndReason.ABANDONED -> noOneWon(databaseUsers)
         }
         databaseUsers.forEach { databaseUser ->

@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.collections.forEach
@@ -19,13 +20,37 @@ class OneTickTryEndGameMaybeHandler(
 ) {
 
     @Transactional
-    fun checkIfEnd(game: RedisGame, users: Collection<RedisGameUser>) {
+    fun checkIfEnd(game: RedisGame, users: Collection<RedisGameUser>, voteSpots: List<RedisVoteSpot>) {
         val mad = checkIfEverybodyMad(game, users)
         if (mad) {
             return
         }
+        val allCultistsBanned = checkIfAllCultistsBanned(game, users, voteSpots)
+        if (allCultistsBanned) {
+            return
+        }
         markLeaversIfNoResponses(game, users)
         abandonIfAllLeave(game, users)
+    }
+
+    private fun checkIfAllCultistsBanned(
+        game: RedisGame,
+        users: Collection<RedisGameUser>,
+        voteSpots: List<RedisVoteSpot>
+    ): Boolean {
+        val allCultists = users.filter { it.role == RoleTypeInGame.CULTIST }
+        val allCultistsBanned = allCultists.all { cultist ->
+            voteSpots.all { voteSpot ->
+                cultist.inGameId() in voteSpot.bannedUsers
+            }
+        }
+        if(!allCultistsBanned) return false
+        val noOneElseBaned = voteSpots.all { voteSpot ->
+            allCultists.size == voteSpot.bannedUsers.size
+        }
+        if(!noOneElseBaned) return false
+        gameEndLogic.endTheGame(game, users.associateBy { it.userId }, GameEndReason.CULTISTS_BANNED)
+        return true
     }
 
     private fun checkIfEverybodyMad(
@@ -47,7 +72,12 @@ class OneTickTryEndGameMaybeHandler(
 
     private fun abandonIfAllLeave(game: RedisGame, users: Collection<RedisGameUser>) {
         if (users.all { it.leftTheGame }) {
-            gameEndLogic.endTheGame(game, users.associateBy { it.userId }, GameEndReason.ABANDONED, timeLeft = GlobalGameSettings.MINUTE_IN_MILLIS)
+            gameEndLogic.endTheGame(
+                game,
+                users.associateBy { it.userId },
+                GameEndReason.ABANDONED,
+                timeLeft = GlobalGameSettings.MINUTE_IN_MILLIS
+            )
         }
     }
 
