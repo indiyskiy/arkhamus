@@ -112,6 +112,7 @@ class UserQuestCreationHandler(
                 else -> {}
             }
         }
+        redisUserQuestProgressRepository.deleteAll(questToDelete)
         val questToDeleteIds = questToDelete.map { it.questId }.toSet()
         val newlyAvailableQuests = levelQuests.filter { it.inGameId() in questToDeleteIds }
         logger.info("newly available quests ${newlyAvailableQuests.joinToString { it.questId.toString() }}")
