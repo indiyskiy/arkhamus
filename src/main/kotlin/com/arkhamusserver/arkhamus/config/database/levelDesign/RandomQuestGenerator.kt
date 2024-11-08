@@ -37,7 +37,7 @@ class RandomQuestGenerator(
             return
         }
         logger.info("processing quest for level ${level.id}")
-        val quests = (0..QUESTS_ON_START * 4).map { number ->
+        val quests = (0..QUESTS_ON_START * 10).map { number ->
             val randomQuestGiverStart = questGivers.random()
             val randomQuestGiverEnd = questGivers.random()
 
