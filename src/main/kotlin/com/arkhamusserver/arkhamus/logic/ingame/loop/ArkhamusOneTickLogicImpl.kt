@@ -37,7 +37,6 @@ class ArkhamusOneTickLogicImpl(
             val globalGameData = redisDataAccess.loadGlobalGameData(game)
 
             val timePassedMillis = oneTickTick.updateNextTick(game)
-//            logger.info("timePassedMillis for game ${game.gameId}: $timePassedMillis")
             val ongoingEvents = oneTickTimeEvent.processTimeEvents(
                 globalGameData,
                 globalGameData.timeEvents,
