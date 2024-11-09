@@ -30,7 +30,7 @@ class AbilityLogic(
             .map { (item, ability) ->
                 ItemToAbilityDto(
                     item = itemInformationDtoMaker.convert(item!!),
-                    ability = abilityDtoMaker.convert(ability)
+                    ability = abilityDtoMaker.convert(ability, item)
                 )
             }
 

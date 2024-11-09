@@ -34,11 +34,12 @@ class AbilityToItemResolver {
                 TOWN_PORTAL_BY_AMULET -> TOWN_PORTAL_AMULET
                 KINDLE_CLOAK -> CLOAK_OF_FLAMES
                 INVULNERABILITY -> INVULNERABILITY_POTION
+                GREAT_DISPELL -> DISPELL_STICK
                 //advanced cultist items
                 CLEAN_UP_CLUE -> DUST_OF_DISAPPEARANCE
                 DARK_TEMPTATION -> CIRCLET_OF_NOBILITY
-                GREAT_DISPELL -> CIRCLET_OF_NOBILITY
-                else -> null
+                //class based abilities
+                HEAL_MADNESS, SPAWN_LOOT, FARSIGHT, PARALYSE -> null
             }
         }
 }
