@@ -155,7 +155,7 @@ class LootTableHandler {
     private fun scienceLootTable(): LootTable {
         val defaultLootRaws: List<LootRaw> = listOf(
             LootRaw(Item.HIGGS_BOSON, 100, 1.0),
-            LootRaw(Item.SCIENTIFIC_GIZMO, 100, 1.0),
+            LootRaw(Item.DISPELL_FLASK, 100, 1.0),
         )
         return LootTable(1.0, defaultLootRaws)
     }

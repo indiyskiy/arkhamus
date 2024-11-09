@@ -75,6 +75,14 @@ enum class Ability(
         targetTypes = listOf(CHARACTER),
         range = MEDIUM_RANGE
     ),
+    MINOR_DISPELL(
+        id = 4004,
+        cooldown = MINUTE_IN_MILLIS,
+        requiresItem = true,
+        consumesItem = true,
+        targetTypes = listOf(CONTAINER, CRAFTER),
+        range = CLOSE_RANGE
+    ),
 
     //cultist items spell 5***
     THROW_POTATO(
@@ -178,6 +186,15 @@ enum class Ability(
         consumesItem = true,
         active = MINUTE_IN_MILLIS,
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
+    ),
+    GREAT_DISPELL(
+        id = 10004,
+        requiresItem = true,
+        consumesItem = false,
+        active = MINUTE_IN_MILLIS,
+        cooldown = MINUTE_IN_MILLIS,
+        targetTypes = listOf(CHARACTER, CONTAINER, CRAFTER, QUEST_GIVER),
+        range = MEDIUM_RANGE
     ),
 
     //advanced cultist items spell 10***

@@ -16,6 +16,7 @@ class AbilityToItemResolver {
                 //useful items
                 TOWN_PORTAL_BY_SCROLL -> TOWN_PORTAL_SCROLL
                 HEAL_MADNESS_BY_PILL -> PILL
+                MINOR_DISPELL -> DISPELL_FLASK
                 //cultist items
                 THROW_POTATO -> CURSED_POTATO
                 SUMMON_NIGHT -> MOON_STONE
@@ -36,6 +37,7 @@ class AbilityToItemResolver {
                 //advanced cultist items
                 CLEAN_UP_CLUE -> DUST_OF_DISAPPEARANCE
                 DARK_TEMPTATION -> CIRCLET_OF_NOBILITY
+                GREAT_DISPELL -> CIRCLET_OF_NOBILITY
                 else -> null
             }
         }

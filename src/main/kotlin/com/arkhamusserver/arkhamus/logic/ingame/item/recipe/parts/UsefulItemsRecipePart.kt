@@ -46,11 +46,11 @@ class UsefulItemsRecipePart() : RecipeSourcePart {
             ),
             listOf(
                 Ingredient(CORRUPTED_TOPAZ, 3),
-                Ingredient(BLACK_STONE, 1)
+                Ingredient(HIGGS_BOSON, 1)
             ).toRecipe(
                 6004,
-                item = SCIENTIFIC_GIZMO,
-                timeToCraft = SECOND_IN_MILLIS * 3,
+                item = DISPELL_FLASK,
+                timeToCraft = SECOND_IN_MILLIS *15,
                 crafterTypes = defaultCrafterTypes
             ),
             listOf(
