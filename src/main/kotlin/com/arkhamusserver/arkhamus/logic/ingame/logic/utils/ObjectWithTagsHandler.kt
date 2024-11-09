@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -48,7 +48,7 @@ class ObjectWithTagsHandler(
                 data.game.gameId!!,
                 data.game.globalTimer,
                 ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CONTAINER,
-                Ability.PEEKABOO_CURSE_ITEM.visibilityModifiers()
+                setOf(VisibilityModifier.ALL.name)
             )
         }
         if (withGameTags is RedisCrafter) {
@@ -57,7 +57,7 @@ class ObjectWithTagsHandler(
                 data.game.gameId!!,
                 data.game.globalTimer,
                 ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CRAFTER,
-                Ability.PEEKABOO_CURSE_ITEM.visibilityModifiers()
+                setOf(VisibilityModifier.ALL.name)
             )
         }
     }

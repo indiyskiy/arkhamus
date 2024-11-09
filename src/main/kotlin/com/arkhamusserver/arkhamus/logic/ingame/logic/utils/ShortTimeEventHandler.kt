@@ -33,7 +33,9 @@ class ShortTimeEventHandler(
         zones: List<LevelZone>,
         data: GlobalGameData
     ): List<RedisShortTimeEvent> {
+        logger.info("filter ${events.size} short time events for user ${user.inGameId()}")
         val filteredByState = events.filter { it.timeLeft > 0 && it.state == RedisTimeEventState.ACTIVE }
+        logger.info("filtered by state ${filteredByState.size}")
         val filteredByObject = filteredByState.filter {
             it.sourceId == null || canSeeTarget(
                 it,
@@ -41,6 +43,7 @@ class ShortTimeEventHandler(
                 data
             )
         }
+        logger.info("filtered by object ${filteredByObject.size}")
         val filterByPosition = filteredByObject.filter {
             canSeeLocation(
                 it,
@@ -48,7 +51,8 @@ class ShortTimeEventHandler(
                 data
             )
         }
-        return filterByPosition.filter {
+        logger.info("filtered by position ${filterByPosition.size}")
+        val filteredByAdditionalFilters = filterByPosition.filter {
             specificShortTimeEventFilters.firstOrNull { filter ->
                 filter.accept(it)
             }?.canSee(
@@ -58,6 +62,8 @@ class ShortTimeEventHandler(
                 data
             ) != false
         }
+        logger.info("filtered by additional filters ${filteredByAdditionalFilters.size}")
+        return filteredByAdditionalFilters
     }
 
     @Transactional
@@ -71,7 +77,7 @@ class ShortTimeEventHandler(
         logger.info(
             "creating short time event ${type.name} " +
                     "visibility modifiers: ${visibilityModifiers.joinToString()} " +
-                    "by user $objectId"
+                    "for object $objectId"
         )
         redisShortTimeEventRepository.save(
             RedisShortTimeEvent(
