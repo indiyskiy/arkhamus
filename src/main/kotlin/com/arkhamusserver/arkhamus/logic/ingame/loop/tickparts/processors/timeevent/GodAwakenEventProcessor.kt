@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.GameEndLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import org.springframework.stereotype.Component
 
@@ -39,7 +38,6 @@ class GodAwakenEventProcessor(
         currentGameTime: Long,
         timePassedMillis: Long
     ) {
-        event.state = RedisTimeEventState.PAST
         gameEndLogic.endTheGame(globalGameData.game, globalGameData.users, GameEndReason.GOD_AWAKEN)
     }
 

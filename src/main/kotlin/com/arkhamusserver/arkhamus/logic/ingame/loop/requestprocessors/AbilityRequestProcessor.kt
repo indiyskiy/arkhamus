@@ -50,7 +50,8 @@ class AbilityRequestProcessor(
                         requestDataHolder.gameSession!!.id!!,
                         globalGameData.game.globalTimer,
                         abilityRequestProcessData.targetId,
-                        abilityRequestProcessData.targetType
+                        abilityRequestProcessData.targetType,
+                        globalGameData
                     )
                     abilityRequestProcessData.executedSuccessfully = true
                 }
@@ -65,6 +66,7 @@ class AbilityRequestProcessor(
         globalTimer: Long,
         targetId: String?,
         targetType: GameObjectType?,
+        data: GlobalGameData
     ) {
         createCastAbilityEventHandler.createCastAbilityEvent(
             ability = ability,
@@ -79,7 +81,8 @@ class AbilityRequestProcessor(
             gameId,
             globalTimer,
             ShortTimeEventType.ABILITY_CAST,
-            ability.visibilityModifiers()
+            ability.visibilityModifiers(),
+            data
         )
     }
 

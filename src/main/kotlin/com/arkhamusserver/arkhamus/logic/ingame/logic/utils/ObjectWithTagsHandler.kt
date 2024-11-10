@@ -48,7 +48,8 @@ class ObjectWithTagsHandler(
                 data.game.gameId!!,
                 data.game.globalTimer,
                 ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CONTAINER,
-                setOf(VisibilityModifier.ALL.name)
+                setOf(VisibilityModifier.ALL.name),
+                data
             )
         }
         if (withGameTags is RedisCrafter) {
@@ -57,7 +58,8 @@ class ObjectWithTagsHandler(
                 data.game.gameId!!,
                 data.game.globalTimer,
                 ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CRAFTER,
-                setOf(VisibilityModifier.ALL.name)
+                setOf(VisibilityModifier.ALL.name),
+                data
             )
         }
     }

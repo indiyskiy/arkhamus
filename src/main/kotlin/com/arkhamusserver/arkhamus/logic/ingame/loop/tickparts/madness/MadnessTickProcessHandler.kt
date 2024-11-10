@@ -87,7 +87,8 @@ class MadnessTickProcessHandler(
                 data.game.inGameId(),
                 data.game.globalTimer,
                 ShortTimeEventType.MADNESS_ACT,
-                setOf(VisibilityModifier.ALL.name)
+                setOf(VisibilityModifier.ALL.name),
+                data
             )
         }
     }

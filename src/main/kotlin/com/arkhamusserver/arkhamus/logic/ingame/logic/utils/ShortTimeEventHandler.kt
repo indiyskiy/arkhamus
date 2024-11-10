@@ -72,28 +72,29 @@ class ShortTimeEventHandler(
         gameId: Long,
         globalTimer: Long,
         type: ShortTimeEventType,
-        visibilityModifiers: Set<String>
+        visibilityModifiers: Set<String>,
+        data: GlobalGameData
     ) {
         logger.info(
             "creating short time event ${type.name} " +
                     "visibility modifiers: ${visibilityModifiers.joinToString()} " +
                     "for object $objectId"
         )
-        redisShortTimeEventRepository.save(
-            RedisShortTimeEvent(
-                id = Generators.timeBasedEpochGenerator().generate().toString(),
-                gameId = gameId,
-                sourceId = objectId,
-                xLocation = null,
-                yLocation = null,
-                timeStart = globalTimer,
-                timePast = 0,
-                timeLeft = type.getTime(),
-                type = type,
-                state = RedisTimeEventState.ACTIVE,
-                visibilityModifiers = visibilityModifiers.map { it }.toMutableSet()
-            )
+        val event =  RedisShortTimeEvent(
+            id = Generators.timeBasedEpochGenerator().generate().toString(),
+            gameId = gameId,
+            sourceId = objectId,
+            xLocation = null,
+            yLocation = null,
+            timeStart = globalTimer,
+            timePast = 0,
+            timeLeft = type.getTime(),
+            type = type,
+            state = RedisTimeEventState.ACTIVE,
+            visibilityModifiers = visibilityModifiers.map { it }.toMutableSet()
         )
+        redisShortTimeEventRepository.save(event)
+        data.shortTimeEvents += event
     }
 
     private fun canSeeTarget(

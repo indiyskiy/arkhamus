@@ -6,10 +6,10 @@ enum class ShortTimeEventType(
     private val time: Long,
     private val source: GameObjectType,
 ) {
-    ABILITY_CAST(SECOND / 2, GameObjectType.CHARACTER),
-    PEEKABOO_CURSE_ACTIVATED_CONTAINER(SECOND / 2, GameObjectType.CONTAINER),
-    PEEKABOO_CURSE_ACTIVATED_CRAFTER(SECOND / 2, GameObjectType.CRAFTER),
-    MADNESS_ACT(SECOND / 2, GameObjectType.CHARACTER);
+    ABILITY_CAST(SECOND, GameObjectType.CHARACTER),
+    PEEKABOO_CURSE_ACTIVATED_CONTAINER(SECOND, GameObjectType.CONTAINER),
+    PEEKABOO_CURSE_ACTIVATED_CRAFTER(SECOND, GameObjectType.CRAFTER),
+    MADNESS_ACT(SECOND, GameObjectType.CHARACTER);
 
     fun getTime(): Long = time
     fun getSource(): GameObjectType = source

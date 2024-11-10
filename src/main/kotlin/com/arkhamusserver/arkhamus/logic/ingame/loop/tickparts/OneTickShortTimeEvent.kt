@@ -43,6 +43,7 @@ class OneTickShortTimeEvent(
         if (event.timeLeft > 0) {
             shortTimeEventRepository.save(event)
         } else {
+            logger.info("end of life of event ${event.type}")
             event.state = RedisTimeEventState.PAST
             shortTimeEventRepository.delete(event)
         }
