@@ -8,6 +8,7 @@ enum class VisibilityModifier {
     NEUTRAL,
     //CLASSES
     //ABILITIES
+    PRETEND_CULTIST,
     //CLUES
     INSCRIPTION,
     SOUND,

@@ -17,6 +17,7 @@ class AbilityToItemResolver {
                 TOWN_PORTAL_BY_SCROLL -> TOWN_PORTAL_SCROLL
                 HEAL_MADNESS_BY_PILL -> PILL
                 MINOR_DISPELL -> DISPELL_FLASK
+                PRETEND_CULTIST -> FAKE_CULTIST_SCARF
                 //cultist items
                 THROW_POTATO -> CURSED_POTATO
                 SUMMON_NIGHT -> MOON_STONE

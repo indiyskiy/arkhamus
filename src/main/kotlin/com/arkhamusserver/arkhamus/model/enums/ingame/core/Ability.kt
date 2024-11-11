@@ -49,7 +49,8 @@ enum class Ability(
     FARSIGHT(
         id = 2001,
         classBased = true,
-        cooldown = MINUTE_IN_MILLIS
+        cooldown = MINUTE_IN_MILLIS * 2,
+        active = MINUTE_IN_MILLIS,
     ),
     PARALYSE(
         id = 2002,
@@ -82,6 +83,13 @@ enum class Ability(
         consumesItem = true,
         targetTypes = listOf(CONTAINER, CRAFTER),
         range = CLOSE_RANGE
+    ),
+    PRETEND_CULTIST(
+        id = 4005,
+        cooldown = MINUTE_IN_MILLIS * 2,
+        active = MINUTE_IN_MILLIS,
+        requiresItem = true,
+        consumesItem = false,
     ),
 
     //cultist items spell 5***

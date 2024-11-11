@@ -45,15 +45,16 @@ class InvestigationRelatedAbilityProcessor(
         val user = globalGameData.users[castAbility.sourceUserId]
         user?.let {
             val ability = castAbility.abilityId.toAbility()!!
-            it.stateTags.remove(UserStateTag.INVESTIGATING.name)
             val visibilityModifier = resolver.toVisibilityModifier(ability)
             visibilityModifier?.name?.let { visibilityModifierNotNull ->
-                val usersVisibleModifiers = it
-                    .visibilityModifiers()
-                    .filter {
-                        it != visibilityModifierNotNull
-                    }.toMutableSet()
-                it.visibilityModifiers = usersVisibleModifiers
+                it.visibilityModifiers.remove(visibilityModifierNotNull)
+                val allInvetigatingModifiers = resolver.allStrings()
+                if (it.visibilityModifiers.none {
+                        it in allInvetigatingModifiers
+                    }
+                ) {
+                    it.stateTags.remove(UserStateTag.INVESTIGATING.name)
+                }
             }
         }
     }
