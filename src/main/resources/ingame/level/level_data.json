@@ -1514,9 +1514,9 @@
         "id": 904,
         "interactionRadius": 3.5,
         "name": "CRAFTER_NAME_05",
-        "x": 90,
+        "x": 87.4337997436523,
         "y": 0,
-        "z": 105
+        "z": 91.5540008544922
       }
     ],
     "doors": [
@@ -1692,9 +1692,9 @@
         "id": 1206,
         "interactionRadius": 3.5,
         "name": "TASK_NAME_LIBRARY",
-        "x": 95,
+        "x": 96.8809967041016,
         "y": 0,
-        "z": 82
+        "z": 89.8324966430664
       },
       {
         "id": 1207,
@@ -1743,6 +1743,14 @@
         "x": 116,
         "y": 0,
         "z": 11
+      },
+      {
+        "id": 1214,
+        "interactionRadius": 3.5,
+        "name": "Bush W. George",
+        "x": 56,
+        "y": 0,
+        "z": 64
       }
     ],
     "levelVersion": 1,
@@ -1768,9 +1776,9 @@
         "id": 1302,
         "interactionRadius": 3.5,
         "name": "NPC_NAME_ARMITAGE",
-        "x": 102,
+        "x": 99.2510986328125,
         "y": 0,
-        "z": 92
+        "z": 71.4979019165039
       },
       {
         "id": 1303,
@@ -1811,6 +1819,14 @@
         "x": 10.8930997848511,
         "y": 0,
         "z": 55.3633995056152
+      },
+      {
+        "id": 1308,
+        "interactionRadius": 3.5,
+        "name": "Gardener",
+        "x": 64.5,
+        "y": 0,
+        "z": 55.5
       }
     ],
     "ritualAreas": [
@@ -2015,9 +2031,9 @@
         "id": 1803,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 100,
+        "x": 95.0263977050781,
         "y": 0,
-        "z": 77,
+        "z": 78.0417022705078,
         "zoneId": 1403
       }
     ]
