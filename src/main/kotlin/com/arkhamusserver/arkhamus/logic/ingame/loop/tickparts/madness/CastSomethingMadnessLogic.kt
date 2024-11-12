@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.AbilityCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GameObjectFinder
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GameObjectFinder.TypedGameObject
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -10,7 +11,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -37,9 +37,17 @@ class CastSomethingMadnessLogic(
             val ability = abilities.random(random)
             val abilityType = ability.abilityId!!.toAbility()
             val targetNeeded = abilityType!!.targetTypes?.isNotEmpty() == true
-            val target = findTarget(targetNeeded, abilityType, data, user)
+            val targetTyped = findTarget(targetNeeded, abilityType, data, user)
+            val target = targetTyped?.gameObject
+            val targetType = targetTyped?.type
             if (!targetNeeded || target != null) {
-                abilityCastHandler.cast(user, abilityType, target, data)
+                abilityCastHandler.cast(
+                    user,
+                    abilityType,
+                    target,
+                    data,
+                    targetType
+                )
             }
             return true
         }
@@ -51,10 +59,16 @@ class CastSomethingMadnessLogic(
         abilityType: Ability,
         data: GlobalGameData,
         user: RedisGameUser
-    ): WithStringId? = if (targetNeeded) {
-        finder.all(abilityType.targetTypes!!, data).filter {
-            it !is WithPoint || canSeeAndInRange(user, it, data, abilityType)
-        }.random(random)
+    ): TypedGameObject? = if (targetNeeded) {
+        val allTyped = finder.allTyped(abilityType.targetTypes!!, data).filter {
+            val gameObject = it.gameObject
+            gameObject !is WithPoint || canSeeAndInRange(user, gameObject, data, abilityType)
+        }
+        if (allTyped.isNotEmpty()) {
+            allTyped.random(random)
+        } else {
+            null
+        }
     } else null
 
     private fun canSeeAndInRange(

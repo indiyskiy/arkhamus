@@ -1,25 +1,15 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.AbilityCastHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CreateCastAbilityEventHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ShortTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
-import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import org.springframework.stereotype.Component
 
 @Component
 class AbilityRequestProcessor(
-    private val inventoryHandler: InventoryHandler,
     private val abilityCastHandler: AbilityCastHandler,
-    private val createCastAbilityEventHandler: CreateCastAbilityEventHandler,
-    private val shortTimeEventHandler: ShortTimeEventHandler
 ) : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is AbilityRequestProcessData
@@ -38,64 +28,17 @@ class AbilityRequestProcessor(
                         abilityRequestProcessData.fitAdditionalConditions &&
                         (abilityRequestProcessData.cooldown?.let { it <= 0 } != false)
             if (canBeCast) {
-                val casted = abilityCastHandler.cast(ability, abilityRequestProcessData, globalGameData)
+                val casted = abilityCastHandler.cast(
+                    ability,
+                    abilityRequestProcessData,
+                    globalGameData,
+                )
                 if (casted) {
-                    val item = abilityRequestProcessData.item
-                    if (item != null && ability.consumesItem) {
-                        consumeItem(ability, abilityRequestProcessData, item)
-                    }
-                    createCastAbility(
-                        ability,
-                        requestDataHolder.userAccount.id!!,
-                        requestDataHolder.gameSession!!.id!!,
-                        globalGameData.game.globalTimer,
-                        abilityRequestProcessData.targetId,
-                        abilityRequestProcessData.targetType,
-                        globalGameData
-                    )
                     abilityRequestProcessData.executedSuccessfully = true
                 }
             }
         }
     }
 
-    private fun createCastAbility(
-        ability: Ability,
-        userId: Long,
-        gameId: Long,
-        globalTimer: Long,
-        targetId: String?,
-        targetType: GameObjectType?,
-        data: GlobalGameData
-    ) {
-        createCastAbilityEventHandler.createCastAbilityEvent(
-            ability = ability,
-            sourceUserId = userId,
-            gameId = gameId,
-            currentGameTime = globalTimer,
-            targetId = targetId,
-            targetType = targetType
-        )
-        shortTimeEventHandler.createShortTimeEvent(
-            userId,
-            gameId,
-            globalTimer,
-            ShortTimeEventType.ABILITY_CAST,
-            ability.visibilityModifiers(),
-            data
-        )
-    }
 
-    private fun consumeItem(
-        ability: Ability,
-        abilityRequestProcessData: AbilityRequestProcessData,
-        item: Item
-    ) {
-        if (ability.consumesItem) {
-            inventoryHandler.consumeItem(
-                abilityRequestProcessData.gameUser!!,
-                item
-            )
-        }
-    }
 }

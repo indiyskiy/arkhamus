@@ -41,4 +41,27 @@ class GameObjectFinder {
             }
         }
     }
+
+    fun allTyped(
+        types: List<GameObjectType>,
+        data: GlobalGameData
+    ): List<TypedGameObject> {
+        return types.flatMap { type ->
+            val gameObjects = when (type) {
+                CHARACTER -> data.users.values
+                VOTE_SPOT -> data.voteSpots
+                CONTAINER -> data.containers.values
+                CRAFTER -> data.crafters.values
+                CLUE -> data.clues
+                ALTAR -> data.altars.values
+                QUEST_GIVER -> data.questGivers
+            }
+            gameObjects.map { TypedGameObject(type, it) }
+        }
+    }
+
+    data class TypedGameObject(
+        val type: GameObjectType,
+        val gameObject: WithStringId
+    )
 }
