@@ -101,6 +101,10 @@ class MockRedisDataAccess : RedisDataAccess {
         TODO("Not yet implemented")
     }
 
+    override fun getQuestGivers(gameId: Long): List<RedisQuestGiver> {
+        TODO("Not yet implemented")
+    }
+
     override fun getQuestRewards(gameId: Long): List<RedisQuestReward> {
         TODO("Not yet implemented")
     }

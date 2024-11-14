@@ -24,6 +24,11 @@ class MadnessTickProcessHandler(
 ) {
 
     companion object {
+        const val ONCE_PER_TWO_MINUTES = 120000
+        const val ONCE_PER_MINUTE = 60000
+        const val TWICE_PER_MINUTE = 30000
+        const val FOUR_TIMES_PER_MINUTE = 15000
+        const val EVERY_TIME_POSSIBLE = 15000
         private val random = Random(System.currentTimeMillis())
     }
 
@@ -98,7 +103,7 @@ class MadnessTickProcessHandler(
         timePassedMillis: Long
     ) {
         val godEvent = data.timeEvents.first { it.type == RedisTimeEventType.GOD_AWAKEN }
-        eventHandler.pushEvent(godEvent, timePassedMillis)
+        eventHandler.pushEvent(godEvent, timePassedMillis / 2)
     }
 
     private fun teleportMaybe(
@@ -106,7 +111,7 @@ class MadnessTickProcessHandler(
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
-        val applyRandom = random.nextLong(5000 / timePassedMillis)
+        val applyRandom = random.nextLong(ONCE_PER_TWO_MINUTES / timePassedMillis)
         if (applyRandom == 0L) {
             return randomTeleportSomeoneMaybe.teleport(user, data, timePassedMillis)
         }
@@ -142,7 +147,7 @@ class MadnessTickProcessHandler(
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
-        val applyRandom = random.nextLong(500 / timePassedMillis)
+        val applyRandom = random.nextLong(TWICE_PER_MINUTE / timePassedMillis)
         if (applyRandom == 0L) {
             return craftMadnessLogic.craftSomething(user, data, timePassedMillis)
         }
@@ -154,7 +159,7 @@ class MadnessTickProcessHandler(
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
-        val applyRandom = random.nextLong(500 / timePassedMillis)
+        val applyRandom = random.nextLong(TWICE_PER_MINUTE / timePassedMillis)
         if (applyRandom == 0L) {
             return castSomethingMadnessLogic.castRandomSpell(user, data, timePassedMillis)
         }
@@ -166,7 +171,7 @@ class MadnessTickProcessHandler(
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
-        val applyRandom = random.nextLong(500 / timePassedMillis)
+        val applyRandom = random.nextLong(TWICE_PER_MINUTE / timePassedMillis)
         if (applyRandom == 0L) {
             return curseMadnessLogic.curseSomething(user, data, timePassedMillis)
         }

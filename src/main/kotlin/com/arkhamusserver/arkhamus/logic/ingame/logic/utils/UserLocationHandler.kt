@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisLantern
+import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.stereotype.Component
 
@@ -33,6 +34,10 @@ class UserLocationHandler(
                         (!heightAffectVision || onHighGroundOrSameLevel(whoLooks, target)) &&
                         (!geometryAffectsVision || geometryCheck())
                 )
+    }
+
+    fun userInInteractionRadius(user: RedisGameUser, interactable: Interactable): Boolean {
+        return distanceLessOrEquals(user, interactable, interactable.interactionRadius())
     }
 
     private fun onHighGroundOrSameLevel(

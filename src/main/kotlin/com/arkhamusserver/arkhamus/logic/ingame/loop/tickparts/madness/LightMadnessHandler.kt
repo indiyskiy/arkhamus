@@ -44,6 +44,6 @@ class LightMadnessHandler(
             it,
             data.levelGeometryData,
             true
-        )
+        ) && userLocationHandler.userInInteractionRadius(user, it)
     }.toList()
 }

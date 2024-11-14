@@ -64,6 +64,7 @@ class CraftMadnessLogic(
             it,
             data.levelGeometryData,
             true
-        ) && it.state == MapObjectState.ACTIVE
+        ) && userLocationHandler.userInInteractionRadius(user, it)
+                && it.state == MapObjectState.ACTIVE
     }.toList()
 }

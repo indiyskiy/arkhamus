@@ -19,6 +19,7 @@ class LevelDesignLanternInfoProcessor(
             Lantern(
                 inGameId = lantern.id!!,
                 lightRange = lantern.lightRange,
+                interactionRadius = lantern.interactionRadius,
                 x = lantern.x!!,
                 y = lantern.y!!,
                 z = lantern.z!!,

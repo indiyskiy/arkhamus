@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
+import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
@@ -25,7 +26,7 @@ data class RedisVoteSpot(
     var bannedUsers: MutableList<Long> = mutableListOf(),
     var availableUsers: MutableList<Long> = mutableListOf(),
     var visibilityModifiers: MutableSet<String>,
-) : WithPoint, WithId, WithVisibilityModifiers {
+) : WithPoint, WithId, WithVisibilityModifiers, Interactable {
 
     override fun x(): Double {
         return x
@@ -44,5 +45,9 @@ data class RedisVoteSpot(
     }
     override fun visibilityModifiers(): MutableSet<String> {
         return visibilityModifiers
+    }
+
+    override fun interactionRadius(): Double {
+        return interactionRadius
     }
 }

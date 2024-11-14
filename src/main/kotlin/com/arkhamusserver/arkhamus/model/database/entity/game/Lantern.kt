@@ -10,6 +10,7 @@ data class Lantern(
     var id: Long? = null,
     var inGameId: Long,
     var lightRange: Double? = null,
+    var interactionRadius: Double? = null,
     var x: Double,
     var y: Double,
     var z: Double,

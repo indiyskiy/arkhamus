@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
@@ -17,7 +18,7 @@ data class RedisAltar(
     var z: Double,
     var interactionRadius: Double,
     var visibilityModifiers: MutableSet<String>,
-) : WithPoint, WithId, WithVisibilityModifiers {
+) : WithPoint, WithId, WithVisibilityModifiers, Interactable {
 
     override fun x(): Double {
         return x
@@ -37,5 +38,9 @@ data class RedisAltar(
 
     override fun visibilityModifiers(): MutableSet<String> {
         return visibilityModifiers
+    }
+
+    override fun interactionRadius(): Double {
+        return interactionRadius
     }
 }

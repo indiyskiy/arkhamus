@@ -48,6 +48,7 @@ class GameStartLanternLogic(
         y = dbLantern.y,
         z = dbLantern.z,
         lightRange = dbLantern.lightRange!!,
+        interactionRadius = dbLantern.interactionRadius!!,
         fuel = if (number < FILLED_ON_START) {
             100.0
         } else {

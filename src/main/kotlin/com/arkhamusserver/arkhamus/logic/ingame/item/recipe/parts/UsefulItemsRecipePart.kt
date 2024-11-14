@@ -62,6 +62,15 @@ class UsefulItemsRecipePart() : RecipeSourcePart {
                 timeToCraft = SECOND_IN_MILLIS * 3,
                 crafterTypes = defaultCrafterTypes
             ),
+            listOf(
+                Ingredient(ELDER_SIGN, 3),
+                Ingredient(EYE, 1)
+            ).toRecipe(
+                6006,
+                item = FAKE_CULTIST_SCARF,
+                timeToCraft = SECOND_IN_MILLIS * 3,
+                crafterTypes = defaultCrafterTypes
+            ),
         )
     }
 }

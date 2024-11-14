@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
+import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithGameTags
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
@@ -21,7 +22,7 @@ data class RedisQuestGiver(
     var interactionRadius: Double = 0.0,
     var gameTags: MutableSet<String> = mutableSetOf(),
     var visibilityModifiers: MutableSet<String>,
-) : WithPoint, WithId, WithGameTags, WithVisibilityModifiers {
+) : WithPoint, WithId, WithGameTags, WithVisibilityModifiers, Interactable {
 
     override fun x(): Double {
         return x
@@ -47,4 +48,7 @@ data class RedisQuestGiver(
         return visibilityModifiers
     }
 
+    override fun interactionRadius(): Double {
+        return interactionRadius
+    }
 }

@@ -58,6 +58,7 @@ class CurseMadnessLogic(
         ) &&
                 it.state == MapObjectState.ACTIVE &&
                 !it.gameTags.contains(InGameObjectTag.PEEKABOO_CURSE.name)
+                && userLocationHandler.userInInteractionRadius(user, it)
     }.toList()
 
     private fun nonCursedOpenCrafters(
@@ -72,5 +73,6 @@ class CurseMadnessLogic(
         ) &&
                 it.state == MapObjectState.ACTIVE &&
                 !it.gameTags.contains(InGameObjectTag.PEEKABOO_CURSE.name)
+                && userLocationHandler.userInInteractionRadius(user, it)
     }.toList()
 }
