@@ -6,11 +6,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.TextKeyReposi
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestStepRepository
 import com.arkhamusserver.arkhamus.model.database.entity.TextKey
-import com.arkhamusserver.arkhamus.model.database.entity.game.Level
-import com.arkhamusserver.arkhamus.model.database.entity.game.LevelTask
-import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
-import com.arkhamusserver.arkhamus.model.database.entity.game.QuestGiver
-import com.arkhamusserver.arkhamus.model.database.entity.game.QuestStep
+import com.arkhamusserver.arkhamus.model.database.entity.game.*
 import com.arkhamusserver.arkhamus.model.enums.TextKeyType
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import org.slf4j.Logger
@@ -37,7 +33,7 @@ class RandomQuestGenerator(
             return
         }
         logger.info("processing quest for level ${level.id}")
-        val quests = (0..QUESTS_ON_START * 10).map { number ->
+        val quests = (0..QUESTS_ON_START * 10 - 1).map { number ->
             val randomQuestGiverStart = questGivers.random()
             val randomQuestGiverEnd = questGivers.random()
 
@@ -60,14 +56,13 @@ class RandomQuestGenerator(
                 )
                 newQuest.addQuestStep(step)
             }
-
-//            logger.info("created quest: ${newQuest.name}")
-            questDifficultyLogic.recount(newQuest)
-            questRepository.save(newQuest)
-            questStepRepository.saveAll(newQuest.questSteps)
             newQuest
         }
-        val statistic = quests.groupBy { it.dificulty }.map { it.key to it.value.size }
+        questDifficultyLogic.recount(quests)
+        questRepository.saveAll(quests)
+        questStepRepository.saveAll(quests.flatMap{it.questSteps})
+
+        val statistic = quests.groupBy { it.dificulty }.map { it.key to it.value.size }.sortedBy { it.first.ordinal }
         logger.info(statistic.joinToString { "${it.first} - ${it.second}" })
     }
 }
