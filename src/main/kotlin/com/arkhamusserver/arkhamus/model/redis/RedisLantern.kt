@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
@@ -12,8 +13,8 @@ import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisLantern")
 data class RedisLantern(
-    @Id var id: String,
-    @Indexed var gameId: Long,
+    override var id: String,
+    override var gameId: Long,
     var lanternId: Long,
     var state: MapObjectState = MapObjectState.ACTIVE,
     var lanternState: LanternState,
@@ -24,7 +25,7 @@ data class RedisLantern(
     var lightRange: Double,
     var interactionRadius: Double,
     var visibilityModifiers: MutableSet<String>,
-) : WithPoint, WithId, WithVisibilityModifiers, Interactable {
+) : RedisGameEntity, WithPoint, WithId, WithVisibilityModifiers, Interactable {
 
     override fun x(): Double {
         return x

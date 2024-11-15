@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
@@ -11,10 +12,9 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed
 
-@RedisHash("RedisCrafter")
 data class RedisCrafter(
-    @Id var id: String,
-    @Indexed var gameId: Long,
+    override var id: String,
+    override var gameId: Long,
     var crafterId: Long,
     var holdingUser: Long? = null,
     var state: MapObjectState = MapObjectState.ACTIVE,
@@ -26,7 +26,7 @@ data class RedisCrafter(
     var crafterType: CrafterType,
     var gameTags: MutableSet<String> = mutableSetOf(),
     var visibilityModifiers: MutableSet<String>,
-) : WithPoint, WithId, WithGameTags, WithVisibilityModifiers, Interactable {
+) : RedisGameEntity, WithPoint, WithId, WithGameTags, WithVisibilityModifiers, Interactable {
 
     override fun x(): Double {
         return x

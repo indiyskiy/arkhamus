@@ -1,12 +1,14 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.redis
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.MyCrudRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RamCrudRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RedisGameUserRepository : MyCrudRepository<RedisGameUser> {
-    override fun findByGameId(gameId: Long): List<RedisGameUser>
-    fun findByUserIdAndGameId(userId: Long, gameId: Long): List<RedisGameUser>
-    fun findByUserId(userId: Long): List<RedisGameUser>
+class RedisGameUserRepository : RamCrudRepository<RedisGameUser>() {
+    fun findByUserIdAndGameId(userId: Long, gameId: Long): List<RedisGameUser> =
+        map.values.filter { it.userId == userId && it.gameId == gameId }
+    fun findByUserId(userId: Long): List<RedisGameUser> =
+        map.values.filter { it.userId == userId }
 }

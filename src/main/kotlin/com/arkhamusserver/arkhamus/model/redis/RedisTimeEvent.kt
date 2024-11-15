@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
@@ -7,10 +8,9 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed
 
-@RedisHash("RedisTimeEvent")
 data class RedisTimeEvent(
-    @Id var id: String,
-    @Indexed var gameId: Long,
+    override var id: String,
+    override var gameId: Long,
     var sourceObjectId: Long? = null,
     var targetObjectId: Long? = null,
     var timeStart: Long,
@@ -22,7 +22,7 @@ data class RedisTimeEvent(
     var yLocation: Double? = null,
     var zLocation: Double? = null,
     var visibilityModifiers: MutableSet<String>,
-) : WithVisibilityModifiers {
+) : RedisGameEntity, WithVisibilityModifiers {
     override fun visibilityModifiers(): MutableSet<String> {
         return visibilityModifiers
     }

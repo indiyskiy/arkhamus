@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
@@ -11,12 +12,12 @@ import org.springframework.data.redis.core.index.Indexed
 
 @RedisHash("RedisGameUser")
 data class RedisGameUser(
-    @Id var id: String,
-    @Indexed var userId: Long,
+    override var id: String,
+    var userId: Long,
     var nickName: String,
     var role: RoleTypeInGame,
     var classInGame: ClassInGame,
-    @Indexed var gameId: Long,
+    override var gameId: Long,
     var x: Double,
     var y: Double,
     var z: Double,
@@ -32,7 +33,7 @@ data class RedisGameUser(
     var connected: Boolean,
     var leftTheGame: Boolean = false,
     var visibilityModifiers: MutableSet<String>,
-) : WithPoint, WithId, WithVisibilityModifiers {
+) : RedisGameEntity, WithPoint, WithId, WithVisibilityModifiers {
 
     override fun x(): Double {
         return x

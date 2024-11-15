@@ -1,15 +1,12 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
-import org.springframework.data.annotation.Id
-import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.index.Indexed
 
-@RedisHash("RedisAbilityCast")
 data class RedisAbilityCast(
-    @Id var id: String,
-    @Indexed var gameId: Long,
+    override var id: String,
+    override var gameId: Long,
     var abilityId: Int,
     var sourceUserId: Long? = null,
     var targetId: String? = null,
@@ -21,4 +18,4 @@ data class RedisAbilityCast(
     var state: RedisTimeEventState,
     var xLocation: Double? = null,
     var yLocation: Double? = null,
-)
+): RedisGameEntity

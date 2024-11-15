@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
@@ -7,10 +8,9 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed
 
-@RedisHash("RedisShortTimeEvent")
 data class RedisShortTimeEvent(
-    @Id var id: String,
-    @Indexed var gameId: Long,
+    override var id: String,
+    override var gameId: Long,
 
     var sourceId: Long? = null,
 
@@ -26,7 +26,7 @@ data class RedisShortTimeEvent(
     var state: RedisTimeEventState,
 
     var visibilityModifiers: MutableSet<String>,
-) : WithVisibilityModifiers {
+) : RedisGameEntity, WithVisibilityModifiers {
     override fun visibilityModifiers(): MutableSet<String> {
         return visibilityModifiers
     }
