@@ -17,7 +17,6 @@ class RecipeTest() {
     @Test
     fun allItemsHaveRecipes() {
         val itemTypesWithRecipes = setOf<ItemType>(
-            CRAFT_T2,
             INVESTIGATION,
             USEFUL_ITEM,
             CULTIST_ITEM,

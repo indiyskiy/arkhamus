@@ -14,52 +14,6 @@ class RecipeGenerator {
     }
 
     @Test
-    fun generateUniqueT2Items() {
-        val itemsForRecipes = Item.values().filter { it.itemType == ItemType.CRAFT_T2 }
-        val itemsForIngridients = Item.values().filter { it.itemType == ItemType.LOOT }
-        var difference = Int.MAX_VALUE
-        var finalResult = mutableSetOf<Recipe>()
-        var distinctItems = 0
-        repeat(1000) {
-            val recipes = mutableSetOf<Recipe>()
-            itemsForRecipes.forEach {
-                val recipe = generateRecipeT2(
-                    itemToCraft = it,
-                    possibleItems = itemsForIngridients,
-                    existingRecipes = recipes
-                )
-                recipes.add(recipe)
-            }
-            val map: List<Pair<Item, Int>> = recipes.map { it.ingredients }.flatten().groupBy { it.item }
-                .map { it.key to it.value.sumOf { it.number } }
-            val itemsFromMap = map.map { it.first }.toSet()
-            val itemsNotInMap = itemsForIngridients.filter {
-                it !in itemsFromMap
-            }
-            val enrichedMap = map + itemsNotInMap.map { it to 0 }
-            val min = enrichedMap.minOf { it.second }
-            val max = enrichedMap.maxOf { it.second }
-
-            val distinctNew = enrichedMap.map { it.first }.distinct().size
-
-            if (max - min < difference) {
-                difference = max - min
-                finalResult = recipes
-                distinctItems = distinctNew
-            } else {
-                if (max - min == difference && distinctItems < distinctNew) {
-                    difference = max - min
-                    finalResult = recipes
-                    distinctItems = distinctNew
-                }
-            }
-        }
-        finalResult.forEach {
-            println("${it.item} ingrs are ${it.ingredients.joinToString { "${it.item};${it.number}" }}")
-        }
-    }
-
-    @Test
     fun generateUniqueUsefulItems() {
         val itemsForRecipes = Item.values().filter { it.itemType == ItemType.USEFUL_ITEM }
         val itemsForIngridientsLoot = Item.values().filter { it.itemType == ItemType.LOOT }

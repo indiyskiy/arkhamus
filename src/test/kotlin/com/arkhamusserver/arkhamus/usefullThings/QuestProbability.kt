@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.usefullThings
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.parts.CorkRecipePart
-import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.parts.CraftT2RecipePart
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.parts.InvestigationRecipePart
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
@@ -70,14 +69,7 @@ class QuestProbability {
     fun getExactCorkItem() {
         val distinctItems = Item.values().filter { it.itemType in setOf(ItemType.LOOT, ItemType.RARE_LOOT) }.toSet()
         val recipe = CorkRecipePart().recipes().random(random)
-        val itemsForRecipes = recipe.ingredients.map { it.item }
-            .map { item ->
-                if (item.itemType == ItemType.CRAFT_T2) {
-                    CraftT2RecipePart().recipes().first { it.item == item }.ingredients.map { it.item }
-                } else {
-                    listOf(item)
-                }
-            }.flatten().toSet()
+        val itemsForRecipes = recipe.ingredients.map { it.item }.toSet()
         val usefulItems = itemsForRecipes
 
         repeat(numberOfQuests) { currentNumberOfQuests ->
