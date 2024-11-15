@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces
 
 import java.util.*
-import kotlin.collections.HashMap
 
 open class RamCrudRepository<T: RedisGameEntity>: MyCrudRepository<T> {
 
@@ -9,13 +8,13 @@ open class RamCrudRepository<T: RedisGameEntity>: MyCrudRepository<T> {
 
     override fun findByGameId(gameId: Long): List<T> = map.values.filter { it.gameId == gameId }
 
-    override fun findById(id: String): Optional<T> = Optional.ofNullable(map.get(id))
+    override fun findById(id: String): Optional<T> = Optional.ofNullable(map[id])
 
-    override fun existsById(id: String): Boolean = map.get(id) != null
+    override fun existsById(id: String): Boolean = map[id] != null
 
     override fun findAll(): Iterable<T> = map.values
 
-    override fun findAllById(ids: Iterable<String>): Iterable<T> = ids.map{ map.get(it) }.filterNotNull()
+    override fun findAllById(ids: Iterable<String>): Iterable<T> = ids.mapNotNull { map[it] }
 
     override fun count(): Long = map.count().toLong()
 
