@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.banvote
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.InGameTagsHandler
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisQuestGiverRepository

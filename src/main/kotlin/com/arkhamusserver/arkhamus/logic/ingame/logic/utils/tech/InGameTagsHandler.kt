@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithGameTags

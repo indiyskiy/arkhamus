@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ShortTimeEventHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ShortTimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
@@ -28,7 +28,7 @@ class MadnessTickProcessHandler(
         const val ONCE_PER_MINUTE = 60000
         const val TWICE_PER_MINUTE = 30000
         const val FOUR_TIMES_PER_MINUTE = 15000
-        const val EVERY_TIME_POSSIBLE = 15000
+        const val EVERY_TIME_POSSIBLE = 3750
         private val random = Random(System.currentTimeMillis())
     }
 
@@ -149,7 +149,7 @@ class MadnessTickProcessHandler(
     ): Boolean {
         val applyRandom = random.nextLong(TWICE_PER_MINUTE / timePassedMillis)
         if (applyRandom == 0L) {
-            return craftMadnessLogic.craftSomething(user, data, timePassedMillis)
+            return craftMadnessLogic.craftSomething(user, data)
         }
         return false
     }
@@ -159,9 +159,9 @@ class MadnessTickProcessHandler(
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
-        val applyRandom = random.nextLong(TWICE_PER_MINUTE / timePassedMillis)
+        val applyRandom = random.nextLong(FOUR_TIMES_PER_MINUTE / timePassedMillis)
         if (applyRandom == 0L) {
-            return castSomethingMadnessLogic.castRandomSpell(user, data, timePassedMillis)
+            return castSomethingMadnessLogic.castRandomSpell(user, data)
         }
         return false
     }

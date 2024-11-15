@@ -1,7 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ritual
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ClueHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.GodVoteHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ZonesHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -9,7 +14,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.AltarOpenRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.toGod
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -93,9 +98,6 @@ class AltarOpenNettyRequestHandler(
         altarPolling: RedisAltarPolling?,
         user: RedisGameUser
     ) = altarPolling?.userVotes?.get(user.userId)?.toGod()
-
-    private fun Int.toGod() =
-        God.values().firstOrNull { it.getId() == this }
 }
 
 

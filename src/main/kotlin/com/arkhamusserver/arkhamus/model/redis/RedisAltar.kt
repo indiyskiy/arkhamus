@@ -1,13 +1,10 @@
 package com.arkhamusserver.arkhamus.model.redis
 
-import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
+import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
-import org.springframework.data.annotation.Id
-import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.index.Indexed
 
 data class RedisAltar(
     override var id: String,
@@ -18,7 +15,7 @@ data class RedisAltar(
     var z: Double,
     var interactionRadius: Double,
     var visibilityModifiers: MutableSet<String>,
-) : RedisGameEntity, WithPoint, WithId, WithVisibilityModifiers, Interactable {
+) : RedisGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers, Interactable {
 
     override fun x(): Double {
         return x

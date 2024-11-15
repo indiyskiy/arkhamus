@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData

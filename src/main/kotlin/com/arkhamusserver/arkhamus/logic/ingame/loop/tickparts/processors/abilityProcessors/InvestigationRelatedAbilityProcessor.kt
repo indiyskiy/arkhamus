@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ClueAbilityToVisibilityModifierResolver
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.ClueAbilityToVisibilityModifierResolver
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility

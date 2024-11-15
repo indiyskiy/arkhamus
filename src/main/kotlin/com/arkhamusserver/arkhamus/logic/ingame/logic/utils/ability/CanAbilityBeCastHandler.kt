@@ -1,8 +1,9 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToClassResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability

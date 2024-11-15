@@ -2,14 +2,7 @@ package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithGameTags
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
-import org.springframework.data.annotation.Id
-import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.index.Indexed
+import com.arkhamusserver.arkhamus.model.redis.interfaces.*
 
 data class RedisContainer(
     override var id: String,
@@ -25,7 +18,7 @@ data class RedisContainer(
     var items: MutableMap<Int, Int> = HashMap(),
     var gameTags: MutableSet<String> = mutableSetOf(),
     var visibilityModifiers: MutableSet<String>,
-) : RedisGameEntity, WithPoint, WithId, WithGameTags, WithVisibilityModifiers, Interactable {
+) : RedisGameEntity, WithPoint, WithTrueIngameId, WithGameTags, WithVisibilityModifiers, Interactable {
 
     override fun x(): Double {
         return x

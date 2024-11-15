@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent.NightTimeEventProcessor
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType

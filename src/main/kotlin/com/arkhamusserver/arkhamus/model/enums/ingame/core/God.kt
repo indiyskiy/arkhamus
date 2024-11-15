@@ -94,4 +94,10 @@ enum class God(
     fun getId(): Int =
         id
 
+    companion object {
+        private val godsMap: Map<Int, God> = values().associateBy { it.id }
+        fun getGodsMap(): Map<Int, God> = godsMap
+    }
 }
+
+ fun Int.toGod() = God.getGodsMap()[this]

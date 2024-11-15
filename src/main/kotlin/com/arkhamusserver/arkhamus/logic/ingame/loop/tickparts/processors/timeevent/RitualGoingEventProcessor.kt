@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.RitualHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL

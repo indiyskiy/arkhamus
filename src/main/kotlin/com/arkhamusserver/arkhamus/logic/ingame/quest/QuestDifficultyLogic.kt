@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.quest
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import org.slf4j.LoggerFactory

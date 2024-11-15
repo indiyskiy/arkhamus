@@ -1,11 +1,8 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
-import org.springframework.data.annotation.Id
-import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.index.Indexed
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 
 data class RedisThreshold(
     override var id: String,
@@ -15,7 +12,7 @@ data class RedisThreshold(
     var y: Double,
     var z: Double,
     var zoneId: Long,
-) : RedisGameEntity, WithPoint, WithId {
+) : RedisGameEntity, WithPoint, WithTrueIngameId {
 
     override fun x(): Double {
         return x

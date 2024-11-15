@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ZonesHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
@@ -10,7 +12,9 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
-import com.arkhamusserver.arkhamus.model.redis.*
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.RedisUserVoteSpot
+import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -32,11 +36,11 @@ class UserVoteHandler(
         votingUser: RedisGameUser,
         voteSpot: RedisVoteSpot?,
     ): List<CantVoteReason> {
-        return listOf(
+        return listOfNotNull(
             mad(votingUser),
             mustPay(voteSpot),
             isUserBannedFromVoteSpot(voteSpot, votingUser),
-        ).filterNotNull()
+        )
     }
 
     private fun isUserBannedFromVoteSpot(

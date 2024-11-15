@@ -1,10 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.RecipesSource
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanRecipeBeCraftedHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CraftProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CanRecipeBeCraftedHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CraftProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
@@ -30,7 +30,6 @@ class CraftMadnessLogic(
     fun craftSomething(
         user: RedisGameUser,
         data: GlobalGameData,
-        timePassedMillis: Long
     ): Boolean {
         val craftersNearby = openCrafters(data, user)
         if (craftersNearby.isNotEmpty()) {

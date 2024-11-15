@@ -1,7 +1,8 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Ingredient
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.slf4j.LoggerFactory

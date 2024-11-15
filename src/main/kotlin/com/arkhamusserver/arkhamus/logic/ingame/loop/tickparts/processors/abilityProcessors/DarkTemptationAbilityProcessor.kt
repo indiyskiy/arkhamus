@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GameObjectFinder
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InGameTagsHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.InGameTagsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility

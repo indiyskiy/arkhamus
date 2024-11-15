@@ -1,8 +1,9 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState.ONGOING
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
+import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState.VOTING
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
@@ -41,8 +42,8 @@ class GodVoteHandler(
         altarPolling: RedisAltarPolling?,
         altarHolder: RedisAltarHolder?
     ) =
-        (altarPolling?.state == ONGOING) &&
-                (altarHolder?.state == VOTING)
+        (altarPolling?.state == MapAltarPollingState.ONGOING) &&
+                (altarHolder?.state == MapAltarState.VOTING)
 
     fun everybodyVoted(
         allUsers: Collection<RedisGameUser>,

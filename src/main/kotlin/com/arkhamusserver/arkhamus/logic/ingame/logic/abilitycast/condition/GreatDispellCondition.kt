@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GameObjectFinder
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.GREAT_DISPELL

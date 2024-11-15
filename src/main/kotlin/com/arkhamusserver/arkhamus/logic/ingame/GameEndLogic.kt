@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository

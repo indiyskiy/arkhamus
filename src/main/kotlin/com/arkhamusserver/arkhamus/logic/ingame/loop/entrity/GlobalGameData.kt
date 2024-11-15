@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.entrity
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.model.redis.*
 
 data class GlobalGameData(

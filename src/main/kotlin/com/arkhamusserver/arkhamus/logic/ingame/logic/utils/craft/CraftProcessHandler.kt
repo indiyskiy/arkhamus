@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCraftProcessRepository

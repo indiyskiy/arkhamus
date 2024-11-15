@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft
 
 import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter

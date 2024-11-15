@@ -2,20 +2,15 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.toItem
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.toItemName
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisQuestRewardRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.toItemName
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisQuest
-import com.arkhamusserver.arkhamus.model.redis.RedisQuestGiver
-import com.arkhamusserver.arkhamus.model.redis.RedisQuestReward
-import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
+import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestRewardResponse
 import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
@@ -221,7 +216,7 @@ class QuestRewardUtils(
         reward: RedisQuestReward,
         user: RedisGameUser
     ) {
-        inventoryHandler.addItems(user, reward.rewardItem!!.toItem(), reward.rewardAmount)
+        inventoryHandler.addItems(user, reward.rewardItem!!, reward.rewardAmount)
     }
 
     private fun takeCorruptedItems(

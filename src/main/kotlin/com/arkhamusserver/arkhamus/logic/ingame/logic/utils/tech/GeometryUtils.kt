@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -78,7 +78,7 @@ class GeometryUtils {
         whoLooks: RedisGameUser,
         target: WithPoint
     ): Boolean {
-        return (whoLooks.y - target.y()) <= GlobalGameSettings.HIGH_GROUND_HEIGHT
+        return (whoLooks.y - target.y()) <= GlobalGameSettings.Companion.HIGH_GROUND_HEIGHT
     }
 
     data class Point(var x: Double, var y: Double)
@@ -87,4 +87,3 @@ class GeometryUtils {
 
     class Ellipse(val center: Point, val rz: Double, val rx: Double)
 }
-

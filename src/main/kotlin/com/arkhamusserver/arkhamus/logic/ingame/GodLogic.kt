@@ -32,6 +32,3 @@ class GodLogic(
             }
         )
 }
-
-fun Int.toGod(): God? =
-    God.values().firstOrNull { it.getId() == this }

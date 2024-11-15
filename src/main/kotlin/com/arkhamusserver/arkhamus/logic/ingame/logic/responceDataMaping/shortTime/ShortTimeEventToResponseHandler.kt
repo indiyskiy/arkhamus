@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ShortTimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ShortTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser

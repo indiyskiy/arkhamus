@@ -1,10 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.toItem
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness.MadnessTickProcessHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.toItem
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component

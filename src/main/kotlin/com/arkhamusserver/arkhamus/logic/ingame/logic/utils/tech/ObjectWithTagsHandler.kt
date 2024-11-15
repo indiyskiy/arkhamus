@@ -1,5 +1,6 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.containers.crafter
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ObjectWithTagsHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ObjectWithTagsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder

@@ -3,11 +3,11 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.logic.ingame.toGod
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.toGod
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone

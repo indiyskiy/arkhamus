@@ -1,12 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GameObjectFinder
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import org.springframework.stereotype.Component
 
 @Component
@@ -38,7 +38,7 @@ class HealMadnessByPillCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is WithId &&
+            it is WithTrueIngameId &&
                     it.inGameId() != user.inGameId() &&
                     it is WithPoint &&
                     geometryUtils.distanceLessOrEquals(user, it, ability.range)

@@ -1,7 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.banvote
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.*
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ClueHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserVoteHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ZonesHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -14,7 +19,6 @@ import com.arkhamusserver.arkhamus.model.redis.RedisUserVoteSpot
 import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.banvote.VoteSpotCastRequestMessage
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -28,10 +32,6 @@ class VoteSpotCastNettyRequestHandler(
     private val questProgressHandler: QuestProgressHandler,
     private val voteHandler: UserVoteHandler,
 ) : NettyRequestHandler {
-
-    companion object {
-        private val logger = LoggerFactory.getLogger(VoteSpotCastNettyRequestHandler::class.java)
-    }
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
         nettyRequestMessage::class.java == VoteSpotCastRequestMessage::class.java

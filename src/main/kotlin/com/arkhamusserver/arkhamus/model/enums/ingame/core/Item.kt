@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame.core
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.values
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
 
 enum class Item(
@@ -89,5 +90,16 @@ enum class Item(
     BONE_CHIMES(1001, ADVANCED_CULTIST_ITEM),
     PIPE_OF_INSIGHT(1002, ADVANCED_CULTIST_ITEM),
     CIRCLET_OF_NOBILITY(1003, ADVANCED_CULTIST_ITEM),
-    DUST_OF_DISAPPEARANCE(1004, ADVANCED_CULTIST_ITEM),
+    DUST_OF_DISAPPEARANCE(1004, ADVANCED_CULTIST_ITEM);
+
+    companion object {
+        private val idMap = values().associateBy(Item::id)
+
+        fun fromId(id: Int): Item? = idMap[id]
+    }
 }
+
+fun Int?.toItemName(): String =
+    this?.toItem()?.name ?: "-"
+
+fun Int.toItem(): Item? = Item.fromId(this)

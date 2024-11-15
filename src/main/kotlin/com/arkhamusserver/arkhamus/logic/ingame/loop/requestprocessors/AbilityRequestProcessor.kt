@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.AbilityCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.AbilityCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder

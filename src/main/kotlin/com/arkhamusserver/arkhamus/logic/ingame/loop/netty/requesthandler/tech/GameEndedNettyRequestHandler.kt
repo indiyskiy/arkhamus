@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.tech
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
@@ -13,12 +13,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.God.values
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.toGod
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.tech.GameEndedRequestMessage
 import org.springframework.stereotype.Component
-import kotlin.collections.get
 
 @Component
 class GameEndedNettyRequestHandler(
@@ -72,7 +70,4 @@ class GameEndedNettyRequestHandler(
         } ?: return ErrorGameResponse("game session id is null", globalGameData.game.currentTick)
     }
 
-    fun Int.toGod(): God? {
-        return values().firstOrNull { this == it.getId() }
-    }
 }

@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed
@@ -19,7 +19,7 @@ data class RedisGame(
     var gameStart: Long = System.currentTimeMillis(),
     @Indexed var state: String = GameState.PENDING.name,
     var gameEndReason: String? = null,
-) : WithId {
+) : WithTrueIngameId {
     override fun inGameId(): Long {
         return gameId!!
     }

@@ -3,12 +3,9 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
 import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
-import org.springframework.data.annotation.Id
-import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.index.Indexed
 
 data class RedisVoteSpot(
     override var id: String,
@@ -26,7 +23,7 @@ data class RedisVoteSpot(
     var bannedUsers: MutableList<Long> = mutableListOf(),
     var availableUsers: MutableList<Long> = mutableListOf(),
     var visibilityModifiers: MutableSet<String>,
-) : RedisGameEntity, WithPoint, WithId, WithVisibilityModifiers, Interactable {
+) : RedisGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers, Interactable {
 
     override fun x(): Double {
         return x

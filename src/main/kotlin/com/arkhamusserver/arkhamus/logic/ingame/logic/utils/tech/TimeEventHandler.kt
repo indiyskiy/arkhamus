@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
@@ -9,13 +9,12 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithId
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import kotlin.collections.listOf
 
 @Component
 class TimeEventHandler(
@@ -29,8 +28,8 @@ class TimeEventHandler(
     fun createEvent(
         game: RedisGame,
         eventType: RedisTimeEventType,
-        sourceObject: WithId? = null,
-        targetObject: WithId? = null,
+        sourceObject: WithTrueIngameId? = null,
+        targetObject: WithTrueIngameId? = null,
         location: Location? = null,
         timeLeft: Long? = null
     ) {
@@ -71,8 +70,8 @@ class TimeEventHandler(
         gameId: Long,
         eventType: RedisTimeEventType,
         startDateTime: Long,
-        sourceObject: WithId? = null,
-        targetObject: WithId? = null,
+        sourceObject: WithTrueIngameId? = null,
+        targetObject: WithTrueIngameId? = null,
         location: Location? = null,
         timeLeft: Long? = null
     ) {

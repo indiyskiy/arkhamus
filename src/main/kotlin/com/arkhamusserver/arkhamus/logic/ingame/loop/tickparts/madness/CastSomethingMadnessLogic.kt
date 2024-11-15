@@ -1,11 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.AbilityCastHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.CanAbilityBeCastHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GameObjectFinder
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GameObjectFinder.TypedGameObject
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.AbilityCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder.TypedGameObject
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
@@ -27,7 +27,7 @@ class CastSomethingMadnessLogic(
         private val random = Random(System.currentTimeMillis())
     }
 
-    fun castRandomSpell(user: RedisGameUser, data: GlobalGameData, timePassedMillis: Long): Boolean {
+    fun castRandomSpell(user: RedisGameUser, data: GlobalGameData): Boolean {
         val abilities = canAbilityBeCastHandler.abilityOfUserResponses(user, data)
             .filter {
                 it.canBeCast &&
