@@ -1,16 +1,46 @@
 [
-  {"containers":[
-    {"id":1,"interactionRadius":3.5,"x":30,"y":22},
-    {"id":2,"interactionRadius":3.5,"x":30,"y":32}],
-    "lanterns":[
-      {"id":7,"lightRange":12,"x":47,"y":27},
-      {"id":8,"lightRange":12,"x":37,"y":38}],
-    "levelHeight":54,
-    "levelId":1,
-    "levelVersion":1,
-    "levelWidth":54,
-    "startMarkers":[
-      {"x":39.5,"y":26.5},
-      {"x":10.5,"y":28.5}]
+  {
+    "containers": [
+      {
+        "id": 1,
+        "interactionRadius": 3.5,
+        "x": 30,
+        "y": 22
+      },
+      {
+        "id": 2,
+        "interactionRadius": 3.5,
+        "x": 30,
+        "y": 32
+      }
+    ],
+    "lanterns": [
+      {
+        "id": 7,
+        "lightRange": 12,
+        "x": 47,
+        "y": 27
+      },
+      {
+        "id": 8,
+        "lightRange": 12,
+        "x": 37,
+        "y": 38
+      }
+    ],
+    "levelHeight": 54,
+    "levelId": 1,
+    "levelVersion": 1,
+    "levelWidth": 54,
+    "startMarkers": [
+      {
+        "x": 39.5,
+        "y": 26.5
+      },
+      {
+        "x": 10.5,
+        "y": 28.5
+      }
+    ]
   }
 ]

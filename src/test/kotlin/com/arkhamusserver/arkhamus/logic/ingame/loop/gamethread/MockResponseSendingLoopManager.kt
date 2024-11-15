@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @Primary
-class MockResponseSendingLoopManager: ResponseSendingLoopManager {
+class MockResponseSendingLoopManager : ResponseSendingLoopManager {
 
     val collectedResponses = mutableMapOf<Long, List<NettyResponse>>()
 

@@ -4,9 +4,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEn
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
-import org.springframework.data.annotation.Id
-import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.index.Indexed
 
 data class RedisClue(
     override var id: String,

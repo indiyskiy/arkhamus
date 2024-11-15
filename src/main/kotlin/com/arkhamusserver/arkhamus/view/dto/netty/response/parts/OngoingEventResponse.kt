@@ -9,7 +9,7 @@ data class OngoingEventResponse(
     var id: String,
     var sourceObjectId: Long?,
     var targetObjectId: Long?,
-    var sourceObjectType:GameObjectType?,
+    var sourceObjectType: GameObjectType?,
     var targetObjectType: GameObjectType?,
     var timeStart: Long,
     var timePast: Long,

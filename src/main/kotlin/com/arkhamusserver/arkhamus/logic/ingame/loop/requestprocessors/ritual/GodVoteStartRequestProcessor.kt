@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
@@ -16,7 +17,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -80,7 +80,7 @@ class GodVoteStartRequestProcessor(
         val userId: Long = gameData.gameUser!!.userId
         val godId = god.getId()
         val altarPolling = RedisAltarPolling(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
+            id = generateRandomId(),
             started = globalGameData.game.globalTimer,
             altarId = altar.inGameId(),
             gameId = globalGameData.game.gameId!!,

@@ -1,9 +1,6 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
-import org.springframework.data.annotation.Id
-import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.index.Indexed
 
 data class RedisLevelZoneTetragon(
     override var id: String,
@@ -15,4 +12,4 @@ data class RedisLevelZoneTetragon(
     var point1X: Double, var point1Y: Double, var point1Z: Double,
     var point2X: Double, var point2Y: Double, var point2Z: Double,
     var point3X: Double, var point3Y: Double, var point3Z: Double,
-): RedisGameEntity
+) : RedisGameEntity

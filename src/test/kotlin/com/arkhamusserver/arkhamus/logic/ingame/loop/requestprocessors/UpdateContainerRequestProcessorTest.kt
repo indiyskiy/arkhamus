@@ -1,19 +1,23 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.MockRedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ExecutedAction
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.container.UpdateContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.containers.container.UpdateContainerRequestProcessor
-import com.arkhamusserver.arkhamus.model.database.entity.*
+import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
+import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.Container
 import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.model.database.entity.game.Role
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import com.arkhamusserver.arkhamus.model.enums.RoleName
-import com.arkhamusserver.arkhamus.model.enums.ingame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
@@ -27,7 +31,6 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
-import com.fasterxml.uuid.Generators
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -173,7 +176,8 @@ class UpdateContainerRequestProcessorTest {
         val updateContainerRequestGameData = requestContainer.requestProcessData as UpdateContainerRequestGameData
 
         assertEquals(10, resultUser[Item.SAINT_QUARTZ.id])
-        assertEquals(10,
+        assertEquals(
+            10,
             updateContainerRequestGameData.sortedUserInventory.filter {
                 it.itemId == Item.SAINT_QUARTZ.id
             }.sumOf {
@@ -454,7 +458,7 @@ class UpdateContainerRequestProcessorTest {
         val oldUserItems = createOldUserItems()
 
         val gameUser = RedisGameUser(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
+            id = generateRandomId(),
             userId = user.id!!,
             nickName = "test user",
             role = RoleTypeInGame.INVESTIGATOR,

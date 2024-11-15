@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.ContainerRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -10,7 +11,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.ContainerTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -42,7 +42,7 @@ class GameStartContainerLogic(
     private fun createContainer(
         game: GameSession, dbContainer: Container
     ) = RedisContainer(
-        id = Generators.timeBasedEpochGenerator().generate().toString(),
+        id = generateRandomId(),
         containerId = dbContainer.inGameId,
         containerTags = dbContainer.containerTags.map { it.name }.toMutableSet(),
         gameId = game.id!!,

@@ -17,7 +17,7 @@ data class QuestGiver(
     @JoinColumn(name = "levelId", nullable = false)
     var level: Level? = null,
     var name: String
-)  : WithPoint {
+) : WithPoint {
     override fun x(): Double {
         return x
     }

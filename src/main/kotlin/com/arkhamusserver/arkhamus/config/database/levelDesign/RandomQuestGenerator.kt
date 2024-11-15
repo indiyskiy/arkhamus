@@ -60,7 +60,7 @@ class RandomQuestGenerator(
         }
         questDifficultyLogic.recount(quests)
         questRepository.saveAll(quests)
-        questStepRepository.saveAll(quests.flatMap{it.questSteps})
+        questStepRepository.saveAll(quests.flatMap { it.questSteps })
 
         val statistic = quests.groupBy { it.dificulty }.map { it.key to it.value.size }.sortedBy { it.first.ordinal }
         logger.info(statistic.joinToString { "${it.first} - ${it.second}" })

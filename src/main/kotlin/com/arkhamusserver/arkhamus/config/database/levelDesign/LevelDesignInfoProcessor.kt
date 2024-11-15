@@ -1,10 +1,10 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CREATE_TEST_QUESTS
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
-import com.arkhamusserver.arkhamus.model.database.entity.game.*
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
+import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.model.enums.LevelState
-import com.arkhamusserver.arkhamus.view.levelDesign.*
+import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader

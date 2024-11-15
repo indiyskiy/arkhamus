@@ -40,6 +40,7 @@ data class RedisVoteSpot(
     override fun inGameId(): Long {
         return voteSpotId
     }
+
     override fun visibilityModifiers(): MutableSet<String> {
         return visibilityModifiers
     }

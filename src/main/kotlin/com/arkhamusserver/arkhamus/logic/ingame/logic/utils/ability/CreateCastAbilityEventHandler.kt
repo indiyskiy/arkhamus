@@ -1,11 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAbilityCastRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -24,7 +24,7 @@ class CreateCastAbilityEventHandler(
         targetType: GameObjectType? = null,
     ) {
         val abilityCast = RedisAbilityCast(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
+            id = generateRandomId(),
             gameId = gameId,
             abilityId = ability.id,
             sourceUserId = sourceUserId,

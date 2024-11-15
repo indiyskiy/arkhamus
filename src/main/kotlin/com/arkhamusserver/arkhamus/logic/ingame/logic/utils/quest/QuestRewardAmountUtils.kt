@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
+import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame

@@ -14,7 +14,7 @@ data class AbilityDto(
     val availableFor: List<RoleTypeInGame>,
     val cooldown: Long,
     val globalCooldown: Boolean,
-    val targetTypes:List<GameObjectType>?,
+    val targetTypes: List<GameObjectType>?,
     val requiresTarget: Boolean,
     val range: Double?
 )

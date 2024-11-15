@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.Container
 import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.view.levelDesign.ContainerFromJson
 import org.springframework.stereotype.Component
-import kotlin.collections.forEach
 
 @Component
 class LevelDesignContainerInfoProcessor(

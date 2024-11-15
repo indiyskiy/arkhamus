@@ -11,7 +11,7 @@ svg {
     padding: 30px;
     background: white;
     border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 polygon {
@@ -45,18 +45,22 @@ polygon {
     padding-bottom: 35px;
 }
 
-a:link{
-    color:orange;
+a:link {
+    color: orange;
 }
-a:visited{
-    color:orange;
+
+a:visited {
+    color: orange;
 }
-a:hover{
-    color:green;
+
+a:hover {
+    color: green;
 }
-a:focus{
-    color:green;
+
+a:focus {
+    color: green;
 }
-a:active{
-    color:green;
+
+a:active {
+    color: green;
 }

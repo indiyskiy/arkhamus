@@ -13,7 +13,6 @@ import com.arkhamusserver.arkhamus.view.levelDesign.TetragonFromJson
 import com.arkhamusserver.arkhamus.view.levelDesign.ZoneFromJson
 import com.arkhamusserver.arkhamus.view.validator.utils.assertTrue
 import org.springframework.stereotype.Component
-import kotlin.collections.forEach
 
 @Component
 class LevelDesignZonesInfoProcessor(

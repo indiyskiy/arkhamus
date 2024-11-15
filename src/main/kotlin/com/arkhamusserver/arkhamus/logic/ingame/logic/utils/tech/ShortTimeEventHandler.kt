@@ -10,7 +10,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEvent
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
-import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -81,8 +80,8 @@ class ShortTimeEventHandler(
                     "visibility modifiers: ${visibilityModifiers.joinToString()} " +
                     "for object $objectId"
         )
-        val event =  RedisShortTimeEvent(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
+        val event = RedisShortTimeEvent(
+            id = generateRandomId(),
             gameId = gameId,
             sourceId = objectId,
             xLocation = null,

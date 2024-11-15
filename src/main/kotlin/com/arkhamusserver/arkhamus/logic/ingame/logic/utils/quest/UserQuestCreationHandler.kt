@@ -2,13 +2,13 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_TO_REFRESH
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserQuestProgressRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.*
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
-import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -194,7 +194,7 @@ class UserQuestCreationHandler(
     ): List<RedisUserQuestProgress> {
         val userStartQuests = quests.map { quest ->
             RedisUserQuestProgress(
-                id = Generators.timeBasedEpochGenerator().generate().toString(),
+                id = generateRandomId(),
                 gameId = quest.gameId,
                 questId = quest.inGameId(),
                 userId = user.userId,

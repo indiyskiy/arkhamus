@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
@@ -9,11 +10,8 @@ import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.CULTIST
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.INVESTIGATOR
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -65,7 +63,7 @@ class GameStartUserLogic(
         val redisGameUsers = game.usersOfGameSession.map {
             val marker = startMarkers.random(GameStartLogic.random)
             val redisGameUser = RedisGameUser(
-                id = Generators.timeBasedEpochGenerator().generate().toString(),
+                id = generateRandomId(),
                 userId = it.userAccount.id!!,
                 nickName = it.userAccount.nickName,
                 gameId = game.id!!,

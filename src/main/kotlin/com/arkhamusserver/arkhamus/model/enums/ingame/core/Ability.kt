@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.NIG
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SECOND_IN_MILLIS
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.values
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers

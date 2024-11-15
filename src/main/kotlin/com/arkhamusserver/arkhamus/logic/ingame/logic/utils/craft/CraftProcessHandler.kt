@@ -1,11 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCraftProcessRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -23,7 +23,7 @@ class CraftProcessHandler(
         currentGameTime: Long
     ) {
         val craftProcessCast = RedisCraftProcess(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
+            id = generateRandomId(),
             gameId = gameId,
             recipeId = recipe.recipeId,
             sourceUserId = sourceUserId,

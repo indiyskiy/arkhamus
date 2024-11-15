@@ -1,12 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.CrafterRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.Crafter
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -33,7 +33,7 @@ class GameStartCrafterLogic(
         game: GameSession,
         dbCrafter: Crafter,
     ) = RedisCrafter(
-        id = Generators.timeBasedEpochGenerator().generate().toString(),
+        id = generateRandomId(),
         crafterId = dbCrafter.inGameId,
         gameId = game.id!!,
         crafterType = dbCrafter.crafterType,

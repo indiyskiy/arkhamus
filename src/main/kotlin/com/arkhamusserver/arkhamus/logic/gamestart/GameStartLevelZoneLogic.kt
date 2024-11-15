@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLevelEllipseRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLevelTetragonRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLevelZoneRepository
@@ -11,7 +12,6 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.LevelZone
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZoneEllipse
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZoneTetragon
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -41,7 +41,7 @@ class GameStartLevelZoneLogic(
         val tetragons = tetragonRepository.findByLevelZoneId(zone.id!!)
         tetragons.forEach {
             val redisTetragon = RedisLevelZoneTetragon(
-                id = Generators.timeBasedEpochGenerator().generate().toString(),
+                id = generateRandomId(),
                 gameId = game.id!!,
                 levelZoneId = zone.inGameId,
                 inGameTetragonId = it.inGameId,
@@ -70,7 +70,7 @@ class GameStartLevelZoneLogic(
         val ellipses = ellipseRepository.findByLevelZoneId(zone.id!!)
         ellipses.forEach {
             val redisEllipse = RedisLevelZoneEllipse(
-                id = Generators.timeBasedEpochGenerator().generate().toString(),
+                id = generateRandomId(),
                 gameId = game.id!!,
                 levelZoneId = zone.inGameId,
                 inGameTetragonId = it.inGameId,
@@ -86,7 +86,7 @@ class GameStartLevelZoneLogic(
 
     private fun createRedisLevelZone(levelZone: LevelZone, game: GameSession): RedisLevelZone {
         return RedisLevelZone(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
+            id = generateRandomId(),
             gameId = game.id!!,
             levelZoneId = levelZone.inGameId,
             zoneType = levelZone.zoneType

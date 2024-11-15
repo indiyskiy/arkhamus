@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>LevelPreview</title>
     <link rel="stylesheet" th:href="@{/css/mapPreviewStyle.css}"/>
-    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+    <link href="/icon/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body>
 
@@ -15,56 +15,56 @@
         <a th:href="@{/admin/browser/level/{levelId}(levelId=${levelGeometry.levelId})}" title="Level">Level</a>
     </footer>
 </div>
-<form th:action="@{/admin/browser/level/{levelId}/preview(levelId=${levelGeometry.levelId})}" method="post">
+<form method="post" th:action="@{/admin/browser/level/{levelId}/preview(levelId=${levelGeometry.levelId})}">
     <div class="row">
         <div class="checkbox-input">
-            <input type="checkbox" id="clueZones" name="clueZones" value="true" checked="checked">
+            <input checked="checked" id="clueZones" name="clueZones" type="checkbox" value="true">
             <label for="clueZones"> Clue zones </label>
         </div>
         <div class="checkbox-input">
-            <input type="checkbox" id="containers" name="containers" value="true" checked="checked">
+            <input checked="checked" id="containers" name="containers" type="checkbox" value="true">
             <label for="containers"> Containers </label>
         </div>
         <div class="checkbox-input">
-            <input type="checkbox" id="altars" name="altars" value="true" checked="checked">
+            <input checked="checked" id="altars" name="altars" type="checkbox" value="true">
             <label for="altars"> Altars </label>
         </div>
     </div>
     <div class="row">
         <div class="checkbox-input">
-            <input type="checkbox" id="lanterns" name="lanterns" value="true" checked="checked">
+            <input checked="checked" id="lanterns" name="lanterns" type="checkbox" value="true">
             <label for="lanterns"> Lanterns </label>
         </div>
         <div class="checkbox-input">
-            <input type="checkbox" id="questGivers" name="questGivers" value="true" checked="checked">
+            <input checked="checked" id="questGivers" name="questGivers" type="checkbox" value="true">
             <label for="questGivers"> Quest Givers </label>
         </div>
         <div class="checkbox-input">
-            <input type="checkbox" id="levelTasks" name="levelTasks" value="true" checked="checked">
+            <input checked="checked" id="levelTasks" name="levelTasks" type="checkbox" value="true">
             <label for="levelTasks"> Level Tasks </label>
         </div>
         <div class="checkbox-input">
-            <input type="checkbox" id="voteSpotData" name="voteSpotData" value="true" checked="checked">
+            <input checked="checked" id="voteSpotData" name="voteSpotData" type="checkbox" value="true">
             <label for="voteSpotData"> Vote Spot Data </label>
         </div>
     </div>
-    <input type="hidden" id="levelId" name="levelId" th:value="${levelGeometry.levelId}">
+    <input id="levelId" name="levelId" th:value="${levelGeometry.levelId}" type="hidden">
     <input type="submit" value="Filter">
 </form>
-<svg th:width="${levelGeometry.width}" th:height="${levelGeometry.height}">
+<svg th:height="${levelGeometry.height}" th:width="${levelGeometry.width}">
     <!-- Processing BAN zone -->
-        <!-- Processing tetragons -->
+    <!-- Processing tetragons -->
     <th:block th:each="poly : ${levelGeometry.banZones.polygons}">
         <polygon th:attr="points=${poly.polygonPoints}"
                  th:style="'fill:' + ${poly.color.getCode()} + ';+fill-opacity:0.5' + ';stroke:black;stroke-width:1'"/>
     </th:block>
-        <!-- Processing ellipses -->
+    <!-- Processing ellipses -->
     <th:block th:each="ellipse : ${levelGeometry.banZones.ellipses}">
         <ellipse th:attr="cx=${ellipse.cx},cy=${ellipse.cy},rx=${ellipse.rx},ry=${ellipse.ry}"
                  th:style="'fill:' + ${ellipse.color.getCode()} + ';stroke:black;stroke-width:1'"/>
     </th:block>
     <!-- Processing CLUE zone -->
-        <!-- Processing tetragons -->
+    <!-- Processing tetragons -->
     <th:block th:each="poly : ${levelGeometry.clueZones.polygons}">
         <polygon th:attr="points=${poly.polygonPoints}"
                  th:style="'fill:' + ${poly.color.getCode()} + ';+fill-opacity:0.5' + ';stroke:black;stroke-width:1'"/>
@@ -76,8 +76,8 @@
     </th:block>
     <!--Processing keypoint-->
     <th:block th:each="point : ${levelGeometry.keyPoints}">
-        <circle th:attr="cx=${point.pointX},cy=${point.pointY}" r="10" th:fill="${point.color.getCode()}" stroke="black"
-                stroke-width="1"/>
+        <circle r="10" stroke="black" stroke-width="1" th:attr="cx=${point.pointX},cy=${point.pointY}"
+                th:fill="${point.color.getCode()}"/>
     </th:block>
     <!-- Processing quests> -->
     <th:block th:each="poly : ${levelGeometry.questGivers}">

@@ -15,7 +15,8 @@ data class UserPosition(
 ) : WithPoint {
     override fun x(): Double {
         return x
-}
+    }
+
     override fun y(): Double {
         return y
     }

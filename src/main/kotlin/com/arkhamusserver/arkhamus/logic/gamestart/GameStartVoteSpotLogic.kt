@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.VoteSpotRepository
@@ -10,9 +11,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisUserVoteSpot
 import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
-import kotlin.Long
 
 @Component
 class GameStartVoteSpotLogic(
@@ -42,7 +41,7 @@ class GameStartVoteSpotLogic(
     ) {
         redisUserVoteSpotRepository.save(
             RedisUserVoteSpot(
-                id = Generators.timeBasedEpochGenerator().generate().toString(),
+                id = generateRandomId(),
                 gameId = game.id!!,
                 voteSpotId = voteSpot.voteSpotId,
                 userId = user.userId,
@@ -58,7 +57,7 @@ class GameStartVoteSpotLogic(
     ) =
         redisVoteSpotRepository.save(
             RedisVoteSpot(
-                id = Generators.timeBasedEpochGenerator().generate().toString(),
+                id = generateRandomId(),
                 gameId = game.id!!,
                 voteSpotId = voteSpot.inGameId,
                 x = voteSpot.x,

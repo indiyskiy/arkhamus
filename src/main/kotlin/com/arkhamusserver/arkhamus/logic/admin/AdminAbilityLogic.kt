@@ -2,11 +2,7 @@ package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToClassResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.*
 import com.arkhamusserver.arkhamus.view.dto.ingame.AbilityBrowserDto
 import com.arkhamusserver.arkhamus.view.dto.ingame.AbilityBrowserSimpleDto
 import com.arkhamusserver.arkhamus.view.dto.ingame.ItemInformationDto

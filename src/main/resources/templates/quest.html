@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Level</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
-    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+    <link href="/icon/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body>
 
@@ -18,49 +18,49 @@
 
 <div class="main">
     <form
-            th:action="@{/admin/browser/level/{levelId}/quest/{questId}(levelId=${quest.levelId}, questId=${quest.id})}"
             method="post"
+            th:action="@{/admin/browser/level/{levelId}/quest/{questId}(levelId=${quest.levelId}, questId=${quest.id})}"
             th:object="${quest}"
     >
 
         <div class="form-part">
-            <label for="id" hidden="hidden"></label><input type="text" th:field="${quest.id}" id="id" hidden="hidden"/>
+            <label for="id" hidden="hidden"></label><input hidden="hidden" id="id" th:field="${quest.id}" type="text"/>
 
             <label for="name">Name:</label>
-            <input type="text" th:field="${quest.name}" id="name"/>
+            <input id="name" th:field="${quest.name}" type="text"/>
 
             <label for="textKey">Text key:</label>
-            <input type="text" th:field="${quest.textKey}" id="textKey"/>
+            <input id="textKey" th:field="${quest.textKey}" type="text"/>
 
             <label for="state">State:</label>
-            <select th:field="${quest.state}" id="state">
+            <select id="state" th:field="${quest.state}">
                 <option
                         th:each="state : ${possibleStates}"
-                        th:value="${state}"
+                        th:selected="${state == quest.state.name}"
                         th:text="${state}"
-                        th:selected="${state == quest.state.name}">
+                        th:value="${state}">
                 </option>
             </select>
 
             <label for="difficulty">Difficulty:</label>
-            <select th:field="${quest.difficulty}" id="difficulty">
+            <select id="difficulty" th:field="${quest.difficulty}">
                 <option
                         th:each="difficulty : ${possibleDifficulties}"
-                        th:value="${difficulty}"
+                        th:selected="${difficulty == quest.difficulty.name}"
                         th:text="${difficulty}"
-                        th:selected="${difficulty == quest.difficulty.name}">
+                        th:value="${difficulty}">
                 </option>
             </select>
         </div>
         <!--        START QUEST GIVER-->
         <div class="form-part">
             <label for="startQuestGiver">Quest giver start</label>
-            <select th:field="${quest.startQuestGiver.id}" id="startQuestGiver">
+            <select id="startQuestGiver" th:field="${quest.startQuestGiver.id}">
                 <option
                         th:each="npc : ${possibleQuestGivers}"
-                        th:value="${npc.id}"
+                        th:selected="${npc.id == quest.startQuestGiver.id}"
                         th:text="${npc.name}"
-                        th:selected="${npc.id == quest.startQuestGiver.id}">
+                        th:value="${npc.id}">
                 </option>
             </select>
         </div>
@@ -70,15 +70,15 @@
                 <div class="form-group">
                     <label th:for="${step.number}">Number</label>
                     <label>
-                        <input type="text"
-                               th:field="*{steps[__${iterStatus.index}__].number}"
-                               th:id="${step.number}">
+                        <input th:field="*{steps[__${iterStatus.index}__].number}"
+                               th:id="${step.number}"
+                               type="text">
                     </label>
                     <label hidden="hidden">
-                        <input type="text"
+                        <input hidden="hidden"
                                th:field="*{steps[__${iterStatus.index}__].id}"
                                th:id="${step.id}"
-                               hidden="hidden"
+                               type="text"
                         >
                     </label>
                 </div>
@@ -88,8 +88,8 @@
                         <select th:field="*{steps[__${iterStatus.index}__].levelTask.id}"
                                 th:id="${step.levelTask.id}">
                             <option th:each="task : ${possibleTasks}"
-                                    th:value="${task.id}"
-                                    th:text="${task.name}">
+                                    th:text="${task.name}"
+                                    th:value="${task.id}">
                             </option>
                         </select>
                     </label>
@@ -98,25 +98,25 @@
                     <button
                             class="square-button"
                             th:onclick="'removeItem(\'' + ${levelId} + '\', \'' + ${quest.id} + '\', \'' + ${step.id} + '\');'">
-                        <img th:src="@{/icon/trash.png}" alt="Remove">
+                        <img alt="Remove" th:src="@{/icon/trash.png}">
                     </button>
                 </div>
             </div>
         </div>
         <button class="long-button"
-                type="button"
                 id="addStep"
-                th:attr="data-level-id=${levelId},data-quest-id=${quest.id}">
+                th:attr="data-level-id=${levelId},data-quest-id=${quest.id}"
+                type="button">
             Add step
         </button>
         <div class="form-part">
             <label for="endQuestGiver">Quest giver end</label>
-            <select th:field="${quest.endQuestGiver.id}" id="endQuestGiver">
+            <select id="endQuestGiver" th:field="${quest.endQuestGiver.id}">
                 <option
                         th:each="npc : ${possibleQuestGivers}"
-                        th:value="${npc.id}"
+                        th:selected="${npc.id == quest.endQuestGiver.id}"
                         th:text="${npc.name}"
-                        th:selected="${npc.id == quest.endQuestGiver.id}">
+                        th:value="${npc.id}">
                 </option>
             </select>
         </div>

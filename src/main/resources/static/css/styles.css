@@ -8,10 +8,12 @@
     font-family: 'Necrofonticon';
     src: url('../fonts/necrofonticon.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'MadnessScript';
     src: url('../fonts/madnessScript.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'Bullskrit';
     src: url('../fonts/bullskrit.ttf') format('truetype');

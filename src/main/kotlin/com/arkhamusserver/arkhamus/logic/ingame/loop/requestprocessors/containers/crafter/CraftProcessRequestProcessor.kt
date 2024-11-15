@@ -61,7 +61,7 @@ class CraftProcessRequestProcessor(
     ) {
         val crafter = craftProcessRequestProcessData.crafter!!
         val user = craftProcessRequestProcessData.gameUser!!
-        val inventory =  craftProcessRequestProcessData.sortedUserInventory
+        val inventory = craftProcessRequestProcessData.sortedUserInventory
         val newSortedInventory = consumeItems(
             recipe,
             user,

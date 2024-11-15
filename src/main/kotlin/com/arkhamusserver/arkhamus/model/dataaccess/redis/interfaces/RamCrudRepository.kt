@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces
 
 import java.util.*
 
-open class RamCrudRepository<T: RedisGameEntity>: MyCrudRepository<T> {
+open class RamCrudRepository<T : RedisGameEntity> : MyCrudRepository<T> {
 
     protected val map: MutableMap<String, T> = HashMap()
 
@@ -23,7 +23,7 @@ open class RamCrudRepository<T: RedisGameEntity>: MyCrudRepository<T> {
     }
 
     override fun deleteAllById(ids: Iterable<String>) {
-        ids.forEach{deleteById(it)}
+        ids.forEach { deleteById(it) }
     }
 
     override fun deleteAll() {
@@ -31,7 +31,7 @@ open class RamCrudRepository<T: RedisGameEntity>: MyCrudRepository<T> {
     }
 
     override fun deleteAll(entities: Iterable<T>) {
-        entities.forEach{ map.remove(it.id) }
+        entities.forEach { map.remove(it.id) }
     }
 
     override fun delete(entity: T) {
@@ -39,7 +39,7 @@ open class RamCrudRepository<T: RedisGameEntity>: MyCrudRepository<T> {
     }
 
     override fun <S : T> saveAll(entities: Iterable<S>): Iterable<S> {
-        entities.forEach{ map[it.id] = it }
+        entities.forEach { map[it.id] = it }
         return entities
     }
 

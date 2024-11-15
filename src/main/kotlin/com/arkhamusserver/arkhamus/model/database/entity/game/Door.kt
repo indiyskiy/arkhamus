@@ -1,15 +1,10 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game
 
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
 
 @Entity
-data class Door (
+data class Door(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,

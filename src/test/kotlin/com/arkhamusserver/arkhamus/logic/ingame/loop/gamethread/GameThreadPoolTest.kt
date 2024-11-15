@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ExecutedAction
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
@@ -9,17 +10,16 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.HeartbeatRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
-import com.fasterxml.uuid.Generators
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -419,7 +419,7 @@ class GameThreadPoolTest {
 
         val redisGameUsers = usersOfGameSession.map { userOfGameSession ->
             RedisGameUser(
-                id = Generators.timeBasedEpochGenerator().generate().toString(),
+                id = generateRandomId(),
                 userId = userOfGameSession.id!!,
                 nickName = "user-nickname",
                 role = RoleTypeInGame.INVESTIGATOR,
@@ -458,7 +458,7 @@ class GameThreadPoolTest {
                 x = 0.0,
                 y = 0.0,
                 z = 0.0,
-                radius =0.0,
+                radius = 0.0,
                 lockedGodId = null,
                 itemsForRitual = mutableMapOf(),
                 itemsIdToAltarId = mutableMapOf(),

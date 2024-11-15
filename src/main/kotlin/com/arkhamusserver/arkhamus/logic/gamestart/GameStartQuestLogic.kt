@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.UserQuestCreationHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisQuestRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -8,7 +9,6 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
-import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -46,7 +46,7 @@ class GameStartQuestLogic(
         game: GameSession,
         dbQuest: Quest,
     ) = RedisQuest(
-        id = Generators.timeBasedEpochGenerator().generate().toString(),
+        id = generateRandomId(),
         questId = dbQuest.id!!,
         gameId = game.id!!,
         startQuestGiverId = dbQuest.startQuestGiver.inGameId,

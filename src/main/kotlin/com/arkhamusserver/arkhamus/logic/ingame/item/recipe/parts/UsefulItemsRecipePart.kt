@@ -50,7 +50,7 @@ class UsefulItemsRecipePart() : RecipeSourcePart {
             ).toRecipe(
                 6004,
                 item = DISPELL_FLASK,
-                timeToCraft = SECOND_IN_MILLIS *15,
+                timeToCraft = SECOND_IN_MILLIS * 15,
                 crafterTypes = defaultCrafterTypes
             ),
             listOf(

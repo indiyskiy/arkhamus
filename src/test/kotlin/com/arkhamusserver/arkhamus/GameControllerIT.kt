@@ -126,7 +126,7 @@ class GameControllerIT {
                 updatedGameSession.usersInGame!!.first {
                     it.nickName == user.nickName
                 }.role!!.userRole == RoleTypeInGame.CULTIST
-                ) {
+            ) {
                 assertEquals(3, updatedGameSession.usersInGame!!.size)
                 assertEquals(1, updatedGameSession.usersInGame!!.filter { it.isHost }.size)
                 assertEquals(

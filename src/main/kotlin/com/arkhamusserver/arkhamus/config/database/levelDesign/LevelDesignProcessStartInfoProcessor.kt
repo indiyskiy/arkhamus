@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.Level
 import com.arkhamusserver.arkhamus.model.database.entity.game.StartMarker
 import com.arkhamusserver.arkhamus.view.levelDesign.JsonStartMarker
 import org.springframework.stereotype.Component
-import kotlin.collections.forEach
 
 @Component
 class LevelDesignProcessStartInfoProcessor(

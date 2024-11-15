@@ -1,10 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.tech
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.ContainerDataHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.CrafterDataHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.DoorDataHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.LanternDataHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.OtherGameUsersDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.*
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder

@@ -73,7 +73,8 @@ class QuestAcceptNettyRequestHandler(
                     }
                 }
             val questRewards = if (questRewardUtils.canBeRewarded(quest, userQuestProgress, user)) {
-                val rewards = globalGameData.questRewardsByQuestProgressId[userQuestProgress?.id]?.filter { it.userId == userId }
+                val rewards =
+                    globalGameData.questRewardsByQuestProgressId[userQuestProgress?.id]?.filter { it.userId == userId }
                 questRewardUtils.findOrCreate(
                     rewards,
                     quest!!,

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.concurrent.ConcurrentMap
 import java.util.concurrent.ScheduledFuture
-import kotlin.collections.forEach
 
 @Service
 class GameThreadCleaner(
@@ -58,7 +57,7 @@ class GameThreadCleaner(
         gameSessionId: Long,
         loopHandlerFutures: ConcurrentMap<Long, ScheduledFuture<*>>,
         tasksMap: ConcurrentMap<Long, TaskCollection>,
-        ) {
+    ) {
         loopHandlerFutures[gameSessionId]?.let {
             if (!it.isCancelled) {
                 val canceled = it.cancel(false)

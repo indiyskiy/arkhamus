@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.AltarRepository
@@ -10,7 +11,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -39,7 +39,7 @@ class GameStartAltarLogic(
 
         redisAltarHolderRepository.save(
             RedisAltarHolder(
-                id = Generators.timeBasedEpochGenerator().generate().toString(),
+                id = generateRandomId(),
                 gameId = game.id!!,
                 state = MapAltarState.OPEN,
                 altarHolderId = ritualArea.inGameId,
@@ -55,7 +55,7 @@ class GameStartAltarLogic(
         game: GameSession,
         dbAltar: Altar,
     ) = RedisAltar(
-        id = Generators.timeBasedEpochGenerator().generate().toString(),
+        id = generateRandomId(),
         altarId = dbAltar.inGameId!!,
         gameId = game.id!!,
         x = dbAltar.x,

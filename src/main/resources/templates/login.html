@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
-    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+    <link href="/icon/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body>
 <div class="header">
@@ -15,9 +15,9 @@
 <div class="main">
     <h1>Login</h1>
     <form method="post" th:action="@{/public/browser/auth}" th:object="${login}">
-        <label for="login">login</label><input id="login" placeholder="login" required type="text" th:field="*{login}"/>
-        <label for="password">password</label><input id="password" placeholder="password" required type="text"
-                                                     th:field="*{password}"/>
+        <label for="login">login</label><input id="login" placeholder="login" required th:field="*{login}" type="text"/>
+        <label for="password">password</label><input id="password" placeholder="password" required th:field="*{password}"
+                                                     type="text"/>
         <input type="submit" value="LogIn">
     </form>
 </div>

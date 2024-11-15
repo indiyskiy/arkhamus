@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame.core
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God.values
 
 enum class God(
     private val id: Int,
@@ -100,4 +101,4 @@ enum class God(
     }
 }
 
- fun Int.toGod() = God.getGodsMap()[this]
+fun Int.toGod() = God.getGodsMap()[this]

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Netty connections</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
-    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+    <link href="/icon/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body>
 <div class="header">
@@ -17,16 +17,17 @@
     <h1>Connections <span th:text="${nettyInfo.size}"></span></h1>
     <table style="border-collapse: collapse; width: 100%;">
         <tr>
-            <th >key</th>
-            <th >game ID</th>
-            <th >user</th>
+            <th>key</th>
+            <th>game ID</th>
+            <th>user</th>
         </tr>
         <tr th:each="info : ${nettyInfo.nettyInfos}">
-            <td  th:text="${info.channelId}"></td>
-            <td >
-                <a th:href="@{/admin/browser/game/{gameId}(gameId=${info.gameSessionId})}" th:text="${info.gameSessionId}"></a>
+            <td th:text="${info.channelId}"></td>
+            <td>
+                <a th:href="@{/admin/browser/game/{gameId}(gameId=${info.gameSessionId})}"
+                   th:text="${info.gameSessionId}"></a>
             </td>
-            <td >
+            <td>
                 <a th:href="@{/admin/browser/user/{userId}(userId=${info.userId})}"
                    th:text="${info.userId} + ' ' + ${info.userNickname}">
                 </a>

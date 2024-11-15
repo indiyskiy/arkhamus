@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Users</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
-    <link rel="icon" href="/icon/favicon.ico" type="image/x-icon"/>
+    <link href="/icon/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body>
 <div class="header">
@@ -15,20 +15,20 @@
     <h1>Users</h1>
     <table>
         <tr>
-            <th >Id</th>
-            <th >nick name</th>
-            <th >email</th>
-            <th >created</th>
+            <th>Id</th>
+            <th>nick name</th>
+            <th>email</th>
+            <th>created</th>
         </tr>
         <tr th:each="user : ${users}">
-            <td >
+            <td>
                 <a th:href="@{/admin/browser/user/{userId}(userId=${user.userId})}"
                    th:text="${user.userId}">
                 </a>
             </td>
-            <td  th:text="${user.nickName}"></td>
-            <td  th:text="${user.email}"></td>
-            <td  th:text="${user.creation?:''}"></td>
+            <td th:text="${user.nickName}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.creation?:''}"></td>
         </tr>
     </table>
 </div>

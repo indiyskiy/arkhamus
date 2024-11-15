@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisQuestRewardRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.*
@@ -12,7 +13,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestRewardResponse
-import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -168,7 +168,7 @@ class QuestRewardUtils(
             questRewardItemUtils.chooseItem(quest, user, rewardType, previousRewards, rewardsFromPreviousQuest)
         val rewardAmount = questRewardAmountUtils.chooseAmount(quest, user, rewardType, rewardItem)
         return RedisQuestReward(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
+            id = generateRandomId(),
             rewardType = rewardType,
             rewardAmount = rewardAmount,
             rewardItem = rewardItem?.id,

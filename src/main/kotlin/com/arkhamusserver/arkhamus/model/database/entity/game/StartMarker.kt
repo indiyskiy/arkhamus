@@ -14,7 +14,7 @@ data class StartMarker(
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
     var level: Level
-): WithPoint {
+) : WithPoint {
     override fun x(): Double {
         return x
     }

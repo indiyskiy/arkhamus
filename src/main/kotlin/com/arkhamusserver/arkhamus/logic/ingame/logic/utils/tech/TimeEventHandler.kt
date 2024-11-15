@@ -10,7 +10,6 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
-import com.fasterxml.uuid.Generators
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -97,7 +96,7 @@ class TimeEventHandler(
         timeLeft: Long? = null
     ) {
         val timer = RedisTimeEvent(
-            id = Generators.timeBasedEpochGenerator().generate().toString(),
+            id = generateRandomId(),
             gameId = gameId,
             timeStart = startDateTime,
             timePast = 0L,

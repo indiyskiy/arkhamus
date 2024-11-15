@@ -31,7 +31,7 @@ class OpenLanternNettyRequestHandler(
     private val questProgressHandler: QuestProgressHandler,
 ) : NettyRequestHandler {
 
-    companion object{
+    companion object {
         private val logger = LoggerFactory.getLogger(OpenLanternNettyRequestHandler::class.java)
     }
 
@@ -61,7 +61,7 @@ class OpenLanternNettyRequestHandler(
                 user
             )
 
-            val lantern = globalGameData.lanterns.firstOrNull{it.inGameId() == this.lanternId}
+            val lantern = globalGameData.lanterns.firstOrNull { it.inGameId() == this.lanternId }
 
             val canPay = checkIfUserCanPay(user)
             val lanternEmpty = lantern != null &&
@@ -69,7 +69,7 @@ class OpenLanternNettyRequestHandler(
 
             val canLight = lantern != null &&
                     lantern.lanternState == LanternState.FILLED
-            logger.info("lantern state is ${lantern?.lanternState?:"null"}")
+            logger.info("lantern state is ${lantern?.lanternState ?: "null"}")
 
             return OpenLanternRequestProcessData(
                 lantern = lantern,

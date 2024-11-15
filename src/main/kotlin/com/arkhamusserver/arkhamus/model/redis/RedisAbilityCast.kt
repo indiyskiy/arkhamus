@@ -10,7 +10,7 @@ data class RedisAbilityCast(
     var abilityId: Int,
     var sourceUserId: Long? = null,
     var targetId: String? = null,
-    var targetType: GameObjectType ? = null,
+    var targetType: GameObjectType? = null,
     var timeStart: Long,
     var timePast: Long,
     var timeLeftCooldown: Long,
@@ -18,4 +18,4 @@ data class RedisAbilityCast(
     var state: RedisTimeEventState,
     var xLocation: Double? = null,
     var yLocation: Double? = null,
-): RedisGameEntity
+) : RedisGameEntity

@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class MockArkhamusOneTickLogic(
     private val oneTickUserResponses: OneTickUserResponses,
     private val redisDataAccess: MockRedisDataAccess
-): ArkhamusOneTickLogic {
+) : ArkhamusOneTickLogic {
 
     // ms
     private var processingDelay: Long = 0

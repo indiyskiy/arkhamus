@@ -11,7 +11,6 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import kotlin.collections.forEach
 
 @Component
 class OneTickTryEndGameMaybeHandler(

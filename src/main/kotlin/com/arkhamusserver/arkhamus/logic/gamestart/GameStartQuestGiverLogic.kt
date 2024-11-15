@@ -1,12 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisQuestGiverRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestGiverRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisQuestGiver
-import com.fasterxml.uuid.Generators
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,7 +18,7 @@ class GameStartQuestGiverLogic(
         val questGivers = questGiverRepository.findByLevelId(levelId)
         val redisQuestGivers = questGivers.map {
             RedisQuestGiver(
-                id = Generators.timeBasedEpochGenerator().generate().toString(),
+                id = generateRandomId(),
                 gameId = game.id!!,
                 questGiverId = it.inGameId,
                 state = MapObjectState.ACTIVE,
