@@ -12,7 +12,7 @@ class AdvancedCultistRecipePart() : RecipeSourcePart {
     override fun recipes(): List<Recipe> {
         return listOf(
             listOf(
-                Ingredient(VIOLET_SCROLL, 1),
+                Ingredient(BLACK_STONE, 1),
                 Ingredient(SOUL_STONE, 1)
             ).toRecipe(
                 10001,
@@ -22,7 +22,7 @@ class AdvancedCultistRecipePart() : RecipeSourcePart {
                 crafterTypes = listOf(CrafterType.CULTIST)
             ),
             listOf(
-                Ingredient(GREEN_SCROLL, 1),
+                Ingredient(BOOK, 1),
                 Ingredient(DARK_ESSENCE, 1)
             ).toRecipe(
                 10002,
@@ -32,7 +32,7 @@ class AdvancedCultistRecipePart() : RecipeSourcePart {
                 crafterTypes = listOf(CrafterType.CULTIST)
             ),
             listOf(
-                Ingredient(BLUE_EGG, 1),
+                Ingredient(CLOCK, 1),
                 Ingredient(STRANGE_BONE, 1)
             ).toRecipe(
                 10003,
@@ -42,7 +42,7 @@ class AdvancedCultistRecipePart() : RecipeSourcePart {
                 crafterTypes = listOf(CrafterType.CULTIST)
             ),
             listOf(
-                Ingredient(ORANGE_EGG, 1),
+                Ingredient(EYE, 1),
                 Ingredient(SOUL_STONE, 1)
             ).toRecipe(
                 10004,

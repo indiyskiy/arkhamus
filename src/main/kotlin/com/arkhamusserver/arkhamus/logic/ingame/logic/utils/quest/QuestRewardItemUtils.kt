@@ -76,9 +76,9 @@ class QuestRewardItemUtils {
 
     private fun goodLoot(role: RoleTypeInGame): Set<ItemType> {
         return if (role == RoleTypeInGame.CULTIST) {
-            setOf(LOOT, CULTIST_LOOT, RARE_LOOT, CRAFT_T2)
+            setOf(LOOT, CULTIST_LOOT, RARE_LOOT)
         } else {
-            setOf(LOOT, RARE_LOOT, CRAFT_T2)
+            setOf(LOOT, RARE_LOOT)
         }
     }
 
@@ -88,7 +88,6 @@ class QuestRewardItemUtils {
                 LOOT,
                 CULTIST_LOOT,
                 RARE_LOOT,
-                CRAFT_T2,
                 USEFUL_ITEM,
                 CULTIST_ITEM
             )
@@ -96,7 +95,6 @@ class QuestRewardItemUtils {
             setOf(
                 LOOT,
                 RARE_LOOT,
-                CRAFT_T2,
                 USEFUL_ITEM
             )
         }

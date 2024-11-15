@@ -60,7 +60,6 @@ class QuestRewardAmountUtils {
             ItemType.LOOT -> 1.0
             ItemType.RARE_LOOT -> 0.2
             ItemType.CULTIST_LOOT -> 0.7
-            ItemType.CRAFT_T2 -> 0.2
             ItemType.INVESTIGATION -> 0.0
             ItemType.USEFUL_ITEM -> 0.0
             ItemType.CULTIST_ITEM -> 0.0

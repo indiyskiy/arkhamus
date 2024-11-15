@@ -11,7 +11,6 @@ enum class ItemType {
     CULTIST_LOOT,
 
     //craftable t1
-    CRAFT_T2,
     INVESTIGATION,
     USEFUL_ITEM,
     CULTIST_ITEM,

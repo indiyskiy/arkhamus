@@ -18,7 +18,7 @@ class AdvancedUsefulItemsRecipePart() : RecipeSourcePart {
     override fun recipes(): List<Recipe> {
         return listOf(
             listOf(
-                Ingredient(VIOLET_SCROLL, 1),
+                Ingredient(SAINT_QUARTZ, 3),
                 Ingredient(BLACK_STONE, 1)
             ).toRecipe(
                 9001,
@@ -27,7 +27,7 @@ class AdvancedUsefulItemsRecipePart() : RecipeSourcePart {
                 crafterTypes = defaultCrafterTypes
             ),
             listOf(
-                Ingredient(GREEN_SCROLL, 1),
+                Ingredient(CRYSTALLIZED_BLOOD, 3),
                 Ingredient(BOOK, 1)
             ).toRecipe(
                 9002,
@@ -36,7 +36,7 @@ class AdvancedUsefulItemsRecipePart() : RecipeSourcePart {
                 crafterTypes = defaultCrafterTypes
             ),
             listOf(
-                Ingredient(BLUE_EGG, 1),
+                Ingredient(ELDER_SIGN, 3),
                 Ingredient(CLOCK, 1)
             ).toRecipe(
                 9003,
@@ -45,7 +45,7 @@ class AdvancedUsefulItemsRecipePart() : RecipeSourcePart {
                 crafterTypes = defaultCrafterTypes
             ),
             listOf(
-                Ingredient(ORANGE_EGG, 1),
+                Ingredient(CORRUPTED_TOPAZ, 3),
                 Ingredient(EYE, 1)
             ).toRecipe(
                 9004,

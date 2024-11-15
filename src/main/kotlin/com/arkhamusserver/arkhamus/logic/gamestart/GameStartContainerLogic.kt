@@ -79,12 +79,11 @@ class GameStartContainerLogic(
             0L -> mapOfType(LOOT)
             1L -> mapOfType(RARE_LOOT)
             2L -> mapOfType(CULTIST_LOOT)
-            3L -> mapOfType(CRAFT_T2)
-            4L -> mapOfType(INVESTIGATION)
-            5L -> mapOfType(USEFUL_ITEM)
-            6L -> mapOfType(CULTIST_ITEM)
-            7L -> mapOfType(ADVANCED_USEFUL_ITEM)
-            8L -> mapOfType(ADVANCED_CULTIST_ITEM)
+            3L -> mapOfType(INVESTIGATION)
+            4L -> mapOfType(USEFUL_ITEM)
+            5L -> mapOfType(CULTIST_ITEM)
+            6L -> mapOfType(ADVANCED_USEFUL_ITEM)
+            7L -> mapOfType(ADVANCED_CULTIST_ITEM)
             else -> mapOfType(TECH_TYPE)
         }
     }
