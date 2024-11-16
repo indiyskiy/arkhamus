@@ -34,10 +34,6 @@ data class EllipseDto(
     var color: NiceColor
 )
 
-data class PointDto(
-    var pointX: Float, var pointY: Float, var color: NiceColor
-)
-
 data class NpcDto(
     val points: List<PointDto>,
     val polygonPoints: String = points.joinToString(" ") { "${it.pointX},${it.pointY}" },

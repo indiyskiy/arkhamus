@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.model.database.entity.game
 
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -21,6 +22,7 @@ data class GameActivity (
     var y: Double,
     var z: Double,
     val gameTime: Long,
+    val activityType: ActivityType,
     @Enumerated(EnumType.STRING)
     val relatedGameObjectType: GameObjectType?,
     val relatedGameObjectId: Long?,

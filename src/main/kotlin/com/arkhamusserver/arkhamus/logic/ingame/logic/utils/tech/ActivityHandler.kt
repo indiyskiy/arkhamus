@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisActivityRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameActivityRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
@@ -55,15 +56,14 @@ class ActivityHandler(
         return activity
     }
 
-    fun addActivity(
+    fun addUserNotTargetActivity(
         gameId: Long,
         activityType: ActivityType,
         sourceUser: RedisGameUser,
         gameTime: Long,
         relatedEventId: Long?,
-    ): RedisActivity {
-        val activity = RedisActivity(
-            id = generateRandomId(),
+    ): RedisActivity =
+        addActivity(
             gameId = gameId,
             activityType = activityType,
             sourceUserId = sourceUser.inGameId(),
@@ -75,10 +75,6 @@ class ActivityHandler(
             relatedGameObjectId = null,
             relatedEventId = relatedEventId
         )
-        redisActivityRepository.save(activity)
-        logger.info("added activity: ${activity.activityType.name}")
-        return activity
-    }
 
     fun addActivity(
         gameId: Long,
@@ -143,6 +139,7 @@ class ActivityHandler(
                 y = redisActivity.y,
                 z = redisActivity.z,
                 gameTime = redisActivity.gameTime,
+                activityType = redisActivity.activityType,
                 relatedGameObjectType = redisActivity.relatedGameObjectType,
                 relatedGameObjectId = redisActivity.relatedGameObjectId,
                 relatedEventId = redisActivity.relatedEventId,
@@ -153,5 +150,17 @@ class ActivityHandler(
         logger.info("saving ${activities.size} activities")
         gameActivityRepository.saveAll(activities)
         redisActivityRepository.deleteAll(redisActivities)
+    }
+
+    fun saveHeartbeatForUsers(data: GlobalGameData) {
+        data.users.forEach {
+            addUserNotTargetActivity(
+                gameId = data.game.inGameId(),
+                activityType = ActivityType.HEARTBEAT,
+                sourceUser = it.value,
+                gameTime = data.game.globalTimer,
+                relatedEventId = 0L
+            )
+        }
     }
 }

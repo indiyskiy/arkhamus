@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.view.controller.admin.browser
+package com.arkhamusserver.arkhamus.view.controller.admin.browser.tech
 
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
 import org.springframework.stereotype.Controller

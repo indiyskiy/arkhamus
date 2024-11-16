@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Preview</title>
+    <link rel="stylesheet" th:href="@{/css/mapPreviewStyle.css}"/>
+    <link href="/icon/favicon.ico" rel="icon" type="image/x-icon"/>
+</head>
+<body>
+
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/games}" title="Games">Levels</a>
+        <a th:href="@{/admin/browser/game/{gameId}(gameId=${gameActivities.gameId})}" title="Game">Game</a>
+    </footer>
+</div>
+
+<form method="post" th:action="@{/admin/browser/game/{gameId}/preview(gameId=${gameActivities.gameId})}">
+    <div class="row">
+        <h3>Select Users:</h3>
+        <div class="checkbox-input" th:each="user : ${users}">
+            <input type="checkbox" th:id="'user_' + ${user.id}" th:name="userIds" th:value="${user.id}"
+                   id="user_${user.id}">
+            <label th:for="'user_' + ${user.id}" for="user_${user.id}">[[${user.nickName}]]</label>
+        </div>
+
+        <h3>Select Activity Types:</h3>
+        <div class="checkbox-input" th:each="activityType : ${activityTypes}">
+            <input type="checkbox" th:id="'activity_' + ${activityType.name()}" th:name="activityTypes"
+                   th:value="${activityType.name()}" id="activity_${activityType.name()}">
+            <label th:for="'activity_' + ${activityType.name()}" for="activity_${activityType.name()}">[[${activityType.name()}]]</label>
+        </div>
+    </div>
+    <input id="levelId" name="levelId" th:value="${levelGeometry.levelId}" type="hidden">
+    <input type="submit" value="Filter">
+</form>
+
+<svg th:height="${gameActivities.height}" th:width="${gameActivities.width}">
+
+</svg>
+
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+        <a th:href="@{/admin/browser/games}" title="Games">Levels</a>
+        <a th:href="@{/admin/browser/game/{gameId}(gameId=${gameActivities.gameId})}" title="Game">Game</a>
+    </footer>
+</div>
+
+</body>
+
+</html>
+

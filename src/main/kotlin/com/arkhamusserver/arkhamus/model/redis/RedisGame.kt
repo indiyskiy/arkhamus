@@ -12,6 +12,7 @@ data class RedisGame(
     @Indexed var gameId: Long?,
     var godId: Int,
     var currentTick: Long = -1,
+    var lastTickSaveHeartbeatActivity: Long = 0,
     var globalTimer: Long = 0,
     var serverTimeLastTick: Long = 0,
     var serverTimeCurrentTick: Long = 0,

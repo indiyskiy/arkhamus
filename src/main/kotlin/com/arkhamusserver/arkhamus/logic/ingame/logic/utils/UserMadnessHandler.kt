@@ -53,7 +53,7 @@ class UserMadnessHandler(
             .random(random).name
         gameUser.madnessDebuffs += debuff
         logger.info("apply debuff ${debuff} to ${gameUser.userId}-${gameUser.nickName}")
-        activityHandler.addActivity(
+        activityHandler.addUserNotTargetActivity(
             gameId = gameUser.gameId,
             activityType = ActivityType.USER_GOT_MAD,
             sourceUser = gameUser,

@@ -17,8 +17,6 @@ import com.arkhamusserver.arkhamus.view.dto.admin.*
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
-private const val SCREEN_ZOOM = 10
-
 @Component
 class AdminLevelPreviewLogic(
     private val levelRepository: LevelRepository,
@@ -34,6 +32,11 @@ class AdminLevelPreviewLogic(
     private val doorRepository: DoorRepository,
     private val thresholdRepository: ThresholdRepository,
 ) {
+
+    companion object{
+        const val SCREEN_ZOOM = 10
+    }
+
     @Transactional
     fun geometry(
         levelId: Long,

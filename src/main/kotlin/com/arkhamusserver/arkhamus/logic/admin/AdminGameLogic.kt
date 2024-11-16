@@ -1,17 +1,18 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.logic.UserSkinLogic
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameActivityRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.database.entity.game.GameActivity
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.view.dto.admin.AdminGameSessionDto
-import com.arkhamusserver.arkhamus.view.dto.admin.AdminUserGameDataDto
-import com.arkhamusserver.arkhamus.view.dto.admin.AdminUserGameSessionDto
-import com.arkhamusserver.arkhamus.view.dto.admin.GameStatisticHolder
+import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
+import com.arkhamusserver.arkhamus.view.dto.admin.*
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class AdminGameLogic(
@@ -19,7 +20,14 @@ class AdminGameLogic(
     private val userOfGameSessionRepository: UserOfGameSessionRepository,
     private val gameSessionDtoMaker: GameSessionDtoMaker,
     private val userSkinLogic: UserSkinLogic,
+    private val activityRepository: GameActivityRepository,
 ) {
+
+    companion object {
+        const val SCREEN_ZOOM = 10
+    }
+
+
     fun all(): List<AdminGameSessionDto> {
         return gameSessionRepository
             .findAll()
@@ -73,6 +81,80 @@ class AdminGameLogic(
         val game = gameSessionRepository.findById(gameId).orElse(null)
         return adminGameSessionDto(game)
     }
+
+    @Transactional
+    fun getGameActivities(
+        gameId: Long,
+        userIds: List<Long>,
+        activityTypes: List<ActivityType>
+    ): GameActivitiesDto {
+        val colors = NiceColor.values().associateBy { it.ordinal }
+        val colorSize = colors.size
+
+        val game = gameSessionRepository.findById(gameId).orElse(null)
+        val activities = activityRepository.findByGameSessionId(gameId).filter {
+            it.userOfGameSession.userAccount.id in userIds &&
+                    it.activityType in activityTypes
+        }
+        val activityDtos = activities.map { activity ->
+            dto(colors, activity, colorSize)
+        }
+        val level = game.gameSessionSettings.level!!
+        return GameActivitiesDto(
+            gameId = gameId,
+            userIds = userIds,
+            activityTypes = activityTypes,
+            activities = activityDtos,
+            levelId = level.id!!,
+            height = level.levelHeight.toInt() * SCREEN_ZOOM,
+            width = level.levelWidth.toInt() * SCREEN_ZOOM
+        )
+    }
+
+    private fun dto(
+        colors: Map<Int, NiceColor>,
+        activity: GameActivity,
+        colorSize: Int
+    ): GameActivityDto {
+        val color = colors[activity.activityType.ordinal % colorSize]!!
+        return GameActivityDto(
+            type = activity.activityType,
+            color = color,
+            points = listOf(
+                PointDto(
+                    activity.x.toFloat() * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM - 5,
+                    activity.z.toFloat() * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM - 5,
+                    color
+                ),
+                PointDto(
+                    (activity.x * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM + 5).toFloat(),
+                    (activity.z * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM - 5).toFloat(),
+                    color
+                ),
+                PointDto(
+                    (activity.x * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM + 5).toFloat(),
+                    (activity.z * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM + 5).toFloat(),
+                    color
+                ),
+                PointDto(
+                    (activity.x * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM - 5).toFloat(),
+                    (activity.z * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM + 5).toFloat(),
+                    color
+                )
+            ),
+        )
+    }
+
+    @Transactional
+    fun getAllUsers(gameId: Long): List<SimpleUserDto> =
+        gameSessionRepository.findById(gameId).orElse(null)?.let {
+            it.usersOfGameSession.map {
+                SimpleUserDto(
+                    it.userAccount.id!!,
+                    it.userAccount.nickName,
+                )
+            }
+        } ?: emptyList()
 
     private fun adminGameSessionDto(game: GameSession?): AdminGameSessionDto {
         return game?.let {

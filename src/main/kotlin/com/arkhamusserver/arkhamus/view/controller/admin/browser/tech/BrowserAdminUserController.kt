@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.view.controller.admin.browser
+package com.arkhamusserver.arkhamus.view.controller.admin.browser.tech
 
 import com.arkhamusserver.arkhamus.logic.admin.AdminGameLogic
 import com.arkhamusserver.arkhamus.logic.admin.AdminUserLogic
