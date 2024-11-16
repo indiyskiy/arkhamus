@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.ThresholdRepository
-import com.arkhamusserver.arkhamus.model.database.entity.game.Level
-import com.arkhamusserver.arkhamus.model.database.entity.game.Threshold
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Threshold
 import com.arkhamusserver.arkhamus.view.levelDesign.ThresholdFromJson
 import org.springframework.stereotype.Component
 

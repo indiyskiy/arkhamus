@@ -1,29 +1,22 @@
-package com.arkhamusserver.arkhamus.model.database.entity.game
+package com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.tag.ContainerTag
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import jakarta.persistence.*
 
 @Entity
-data class Container(
+data class VoteSpot(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
-    var inGameId: Long,
     var x: Double,
     var y: Double,
     var z: Double,
+    var inGameId: Long,
     var interactionRadius: Double,
-
-    @ElementCollection(fetch = FetchType.EAGER, targetClass = ContainerTag::class)
-    @CollectionTable(name = "containerTags", joinColumns = [JoinColumn(name = "entity_id")])
-    @Enumerated(EnumType.STRING)
-    @Column(name = "containerTags")
-    var containerTags: Set<ContainerTag> = emptySet(),
-
+    var zoneId: Long,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
-    var level: Level? = null
+    var level: Level
 ) : WithPoint {
     override fun x(): Double {
         return x

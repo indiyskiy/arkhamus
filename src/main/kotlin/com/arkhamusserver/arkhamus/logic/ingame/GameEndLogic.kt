@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
@@ -23,7 +24,8 @@ class GameEndLogic(
     private val redisGameRepository: RedisGameRepository,
     private val gameSessionRepository: GameSessionRepository,
     private val userOfGameSessionRepository: UserOfGameSessionRepository,
-    private val timeEventHandler: TimeEventHandler
+    private val timeEventHandler: TimeEventHandler,
+    private val activityHandler: ActivityHandler
 ) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(GameEndLogic::class.java)
@@ -43,6 +45,11 @@ class GameEndLogic(
         val gameSession = endGameSession(game, gameEndReason)
         setWinnersLosers(gameSession, gameEndReason, users)
         createEndOfGameTimeEvent(game, timeLeft = timeLeft)
+        saveActivities(game.inGameId())
+    }
+
+    private fun saveActivities(gameId: Long) {
+        activityHandler.saveAll(gameId)
     }
 
     private fun createEndOfGameTimeEvent(

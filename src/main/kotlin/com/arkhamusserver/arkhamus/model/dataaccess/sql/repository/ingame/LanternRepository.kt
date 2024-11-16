@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame
 
-import com.arkhamusserver.arkhamus.model.database.entity.game.Lantern
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Lantern
 import org.springframework.data.repository.CrudRepository
 
 

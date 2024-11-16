@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.view.maker.ingame
 
-import com.arkhamusserver.arkhamus.model.database.entity.game.LevelTask
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelTask
 import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
-import com.arkhamusserver.arkhamus.model.database.entity.game.QuestGiver
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.QuestGiver
 import com.arkhamusserver.arkhamus.model.database.entity.game.QuestStep
 import com.arkhamusserver.arkhamus.view.dto.ingame.LevelTaskDto
 import com.arkhamusserver.arkhamus.view.dto.ingame.QuestDto

@@ -35,4 +35,19 @@ data class GameSession(
     @Enumerated(EnumType.STRING)
     var god: God? = null,
     var token: String? = null
-)
+) {
+    // No-arg constructor for JPA
+    constructor() : this(
+        id = null,
+        creationTimestamp = null,
+        startedTimestamp = null,
+        finishedTimestamp = null,
+        usersOfGameSession = emptyList(),
+        gameSessionSettings = GameSessionSettings(),
+        state = GameState.NEW,
+        gameEndReason = null,
+        gameType = GameType.DEFAULT,
+        god = null,
+        token = null
+    )
+}

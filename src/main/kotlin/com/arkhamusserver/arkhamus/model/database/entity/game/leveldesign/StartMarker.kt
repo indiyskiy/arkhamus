@@ -1,18 +1,16 @@
-package com.arkhamusserver.arkhamus.model.database.entity.game
+package com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign
 
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import jakarta.persistence.*
 
 @Entity
-data class Door(
+data class StartMarker(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
     var x: Double,
     var y: Double,
     var z: Double,
-    var inGameId: Long,
-    var zoneId: Long,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
     var level: Level

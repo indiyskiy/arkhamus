@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
-import com.arkhamusserver.arkhamus.model.database.entity.game.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import jakarta.persistence.*
 
 /**
@@ -17,4 +17,13 @@ data class GameSessionSettings(
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = true)
     var level: Level? = null
-)
+){
+    // No-arg constructor for JPA
+    constructor() : this(
+        id = null,
+        lobbySize = 8,
+        numberOfCultists = 2,
+        maxCallToArms = 1,
+        level = null
+    )
+}

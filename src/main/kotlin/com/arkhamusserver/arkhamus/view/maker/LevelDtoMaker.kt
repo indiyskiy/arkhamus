@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.maker
 
-import com.arkhamusserver.arkhamus.model.database.entity.game.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.view.dto.LevelDto
 import org.springframework.stereotype.Component
 

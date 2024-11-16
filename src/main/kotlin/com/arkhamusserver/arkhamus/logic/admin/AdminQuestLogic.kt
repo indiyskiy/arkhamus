@@ -5,6 +5,9 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.TextKeyReposi
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.TextKey
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelTask
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.QuestGiver
 import com.arkhamusserver.arkhamus.model.enums.TextKeyType
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminLevelTaskDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto

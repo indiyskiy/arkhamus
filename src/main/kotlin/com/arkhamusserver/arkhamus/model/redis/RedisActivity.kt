@@ -18,6 +18,7 @@ data class RedisActivity(
     val gameTime: Long,
     val relatedGameObjectType: GameObjectType?,
     val relatedGameObjectId: Long?,
+    val relatedEventId: Long?,
 ) : RedisGameEntity, WithPoint {
     override fun x(): Double = x
     override fun y(): Double = y

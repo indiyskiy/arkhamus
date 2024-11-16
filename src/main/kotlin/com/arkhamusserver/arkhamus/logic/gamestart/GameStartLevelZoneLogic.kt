@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.Ellips
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelZoneRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.TetragonRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.game.LevelZone
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelZone
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZoneEllipse
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZoneTetragon

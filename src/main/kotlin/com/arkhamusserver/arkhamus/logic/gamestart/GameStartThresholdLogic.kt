@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomI
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisThresholdRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.ThresholdRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.game.Threshold
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Threshold
 import com.arkhamusserver.arkhamus.model.redis.RedisThreshold
 import org.springframework.stereotype.Component
 

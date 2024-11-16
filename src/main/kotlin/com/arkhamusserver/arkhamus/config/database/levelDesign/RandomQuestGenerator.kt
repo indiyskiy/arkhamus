@@ -7,6 +7,9 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestR
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestStepRepository
 import com.arkhamusserver.arkhamus.model.database.entity.TextKey
 import com.arkhamusserver.arkhamus.model.database.entity.game.*
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelTask
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.QuestGiver
 import com.arkhamusserver.arkhamus.model.enums.TextKeyType
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import org.slf4j.Logger

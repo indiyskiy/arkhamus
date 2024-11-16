@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame
 
-import com.arkhamusserver.arkhamus.model.database.entity.game.VoteSpot
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.VoteSpot
 import org.springframework.data.repository.CrudRepository
 
 

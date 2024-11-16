@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserVoteSpotRepos
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.VoteSpotRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.game.VoteSpot
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.VoteSpot
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser

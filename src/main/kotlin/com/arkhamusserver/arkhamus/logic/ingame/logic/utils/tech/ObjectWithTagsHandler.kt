@@ -41,7 +41,7 @@ class ObjectWithTagsHandler(
         tag: String,
         data: GlobalGameData
     ) {
-        madnessHandler.applyMadness(user, PEEKABOO_CURSE_ITEM_VALUE)
+        madnessHandler.applyMadness(user, PEEKABOO_CURSE_ITEM_VALUE, data.game.globalTimer)
         inGameTagsHandler.removeTag(withGameTags, tag)
         if (withGameTags is RedisContainer) {
             shortTimeEventHandler.createShortTimeEvent(

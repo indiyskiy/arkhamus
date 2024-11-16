@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame
 
-import com.arkhamusserver.arkhamus.model.database.entity.game.Altar
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Altar
 import org.springframework.data.repository.CrudRepository
 
 

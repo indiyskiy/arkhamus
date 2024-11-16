@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository
 
-import com.arkhamusserver.arkhamus.model.database.entity.game.StartMarker
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.StartMarker
 import org.springframework.data.repository.CrudRepository
 
 

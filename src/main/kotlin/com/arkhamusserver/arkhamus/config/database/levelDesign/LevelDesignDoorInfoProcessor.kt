@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.DoorRepository
-import com.arkhamusserver.arkhamus.model.database.entity.game.Door
-import com.arkhamusserver.arkhamus.model.database.entity.game.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Door
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.view.levelDesign.DoorFromJson
 import org.springframework.stereotype.Component
 

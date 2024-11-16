@@ -37,7 +37,7 @@ class SummonedNightTimeEventProcessor(
         globalGameData.users.filter {
             userLocationHandler.isInDarkness(it.value, globalGameData)
         }.forEach {
-            userMadnessHandler.applyNightMadness(it.value, timePassedMillis)
+            userMadnessHandler.applyNightMadness(it.value, timePassedMillis, currentGameTime)
         }
     }
 

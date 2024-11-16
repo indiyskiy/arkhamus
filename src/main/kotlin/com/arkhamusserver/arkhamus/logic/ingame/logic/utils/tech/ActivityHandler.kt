@@ -1,17 +1,30 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisActivityRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameActivityRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
+import com.arkhamusserver.arkhamus.model.database.entity.game.GameActivity
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.redis.RedisActivity
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class ActivityHandler(
     private val redisActivityRepository: RedisActivityRepository,
+    private val gameActivityRepository: GameActivityRepository,
+    private val gameSessionRepository: GameSessionRepository
 ) {
+
+    companion object {
+        var logger = LoggerFactory.getLogger(ActivityHandler::class.java)
+    }
+
     fun addActivity(
         gameId: Long,
         activityType: ActivityType,
@@ -21,7 +34,8 @@ class ActivityHandler(
         z: Double,
         gameTime: Long,
         relatedGameObjectType: GameObjectType?,
-        relatedGameObjectId: Long?
+        relatedGameObjectId: Long?,
+        relatedEventId: Long?,
     ): RedisActivity {
         val activity = RedisActivity(
             id = generateRandomId(),
@@ -33,9 +47,36 @@ class ActivityHandler(
             z = z,
             gameTime = gameTime,
             relatedGameObjectType = relatedGameObjectType,
-            relatedGameObjectId = relatedGameObjectId
+            relatedGameObjectId = relatedGameObjectId,
+            relatedEventId = relatedEventId
         )
         redisActivityRepository.save(activity)
+        logger.info("added activity: ${activity.activityType.name}")
+        return activity
+    }
+
+    fun addActivity(
+        gameId: Long,
+        activityType: ActivityType,
+        sourceUser: RedisGameUser,
+        gameTime: Long,
+        relatedEventId: Long?,
+    ): RedisActivity {
+        val activity = RedisActivity(
+            id = generateRandomId(),
+            gameId = gameId,
+            activityType = activityType,
+            sourceUserId = sourceUser.inGameId(),
+            x = sourceUser.x(),
+            y = sourceUser.y(),
+            z = sourceUser.z(),
+            gameTime = gameTime,
+            relatedGameObjectType = null,
+            relatedGameObjectId = null,
+            relatedEventId = relatedEventId
+        )
+        redisActivityRepository.save(activity)
+        logger.info("added activity: ${activity.activityType.name}")
         return activity
     }
 
@@ -45,7 +86,8 @@ class ActivityHandler(
         sourceUserId: Long?,
         gameTime: Long,
         relatedGameObjectType: GameObjectType?,
-        withPointRelatedObject: WithPoint
+        withPointRelatedObject: WithPoint,
+        relatedEventId: Long?,
     ): RedisActivity =
         addActivity(
             gameId = gameId,
@@ -60,7 +102,8 @@ class ActivityHandler(
                 withPointRelatedObject.inGameId()
             } else {
                 null
-            }
+            },
+            relatedEventId = relatedEventId
         )
 
     fun addActivity(
@@ -71,6 +114,7 @@ class ActivityHandler(
         y: Double,
         z: Double,
         gameTime: Long,
+        relatedEventId: Long?,
     ): RedisActivity =
         addActivity(
             gameId = gameId,
@@ -81,6 +125,33 @@ class ActivityHandler(
             z = z,
             gameTime = gameTime,
             relatedGameObjectType = null,
-            relatedGameObjectId = null
+            relatedGameObjectId = null,
+            relatedEventId = relatedEventId
         )
+
+    @Transactional
+    fun saveAll(gameId: Long) {
+        val redisActivities = redisActivityRepository.findByGameId(gameId)
+        val gameSession = gameSessionRepository.findById(gameId).orElse(null)
+        if (gameSession == null) {
+            redisActivityRepository.deleteAll(redisActivities)
+            return
+        }
+        val activities = redisActivities.map { redisActivity ->
+            GameActivity(
+                x = redisActivity.x,
+                y = redisActivity.y,
+                z = redisActivity.z,
+                gameTime = redisActivity.gameTime,
+                relatedGameObjectType = redisActivity.relatedGameObjectType,
+                relatedGameObjectId = redisActivity.relatedGameObjectId,
+                relatedEventId = redisActivity.relatedEventId,
+                gameSession = gameSession,
+                userOfGameSession = gameSession.usersOfGameSession.first { it.userAccount.id == redisActivity.sourceUserId },
+            )
+        }
+        logger.info("saving ${activities.size} activities")
+        gameActivityRepository.saveAll(activities)
+        redisActivityRepository.deleteAll(redisActivities)
+    }
 }

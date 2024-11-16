@@ -31,13 +31,14 @@ class OneTickUser(
         data: GlobalGameData,
         timePassedMillis: Long
     ) {
-        processInventory(user, timePassedMillis)
+        processInventory(user, timePassedMillis, data.game.globalTimer)
         processMadness(user, data, timePassedMillis)
     }
 
     private fun processInventory(
         user: RedisGameUser,
-        timePassedMillis: Long
+        timePassedMillis: Long,
+        gameTime: Long
     ) {
         user.items.filter {
             it.value > 0
@@ -46,7 +47,8 @@ class OneTickUser(
             when (item) {
                 Item.CURSED_POTATO -> madnessHandler.applyMadness(
                     user,
-                    POTATO_MADNESS_TICK_MILLIS * number * timePassedMillis
+                    POTATO_MADNESS_TICK_MILLIS * number * timePassedMillis,
+                    gameTime,
                 )
 
                 else -> {}

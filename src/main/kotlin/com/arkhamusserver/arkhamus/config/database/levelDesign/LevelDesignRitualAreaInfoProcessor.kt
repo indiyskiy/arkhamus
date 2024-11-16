@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.RitualAreaRepository
-import com.arkhamusserver.arkhamus.model.database.entity.game.Level
-import com.arkhamusserver.arkhamus.model.database.entity.game.RitualArea
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.RitualArea
 import com.arkhamusserver.arkhamus.view.levelDesign.RitualAreaFromJson
 import org.springframework.stereotype.Component
 

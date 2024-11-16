@@ -3,10 +3,10 @@ package com.arkhamusserver.arkhamus.config.database.levelDesign
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.EllipseRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelZoneRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.TetragonRepository
-import com.arkhamusserver.arkhamus.model.database.entity.game.Ellipse
-import com.arkhamusserver.arkhamus.model.database.entity.game.Level
-import com.arkhamusserver.arkhamus.model.database.entity.game.LevelZone
-import com.arkhamusserver.arkhamus.model.database.entity.game.Tetragon
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Ellipse
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelZone
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Tetragon
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.view.levelDesign.EllipseFromJson
 import com.arkhamusserver.arkhamus.view.levelDesign.TetragonFromJson

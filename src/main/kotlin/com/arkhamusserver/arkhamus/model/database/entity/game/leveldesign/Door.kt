@@ -1,24 +1,21 @@
-package com.arkhamusserver.arkhamus.model.database.entity.game
+package com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import jakarta.persistence.*
 
 @Entity
-data class Crafter(
+data class Door(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
-    var inGameId: Long,
-    var interactionRadius: Double,
     var x: Double,
     var y: Double,
     var z: Double,
+    var inGameId: Long,
+    var zoneId: Long,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
-    var level: Level,
-    @Enumerated(EnumType.STRING)
-    var crafterType: CrafterType,
+    var level: Level
 ) : WithPoint {
     override fun x(): Double {
         return x
