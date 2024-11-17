@@ -22,6 +22,7 @@ class GameObjectFinder {
             CLUE -> data.clues.firstOrNull { it.id == id }
             ALTAR -> data.altars[id.toLong()]
             QUEST_GIVER -> data.questGivers.firstOrNull { it.inGameId() == id.toLong() }
+            LANTERN -> data.lanterns.firstOrNull { it.inGameId() == id.toLong() }
         }
     }
 
@@ -38,6 +39,7 @@ class GameObjectFinder {
                 CLUE -> data.clues
                 ALTAR -> data.altars.values
                 QUEST_GIVER -> data.questGivers
+                LANTERN -> data.lanterns
             }
         }
     }
@@ -55,6 +57,7 @@ class GameObjectFinder {
                 CLUE -> data.clues
                 ALTAR -> data.altars.values
                 QUEST_GIVER -> data.questGivers
+                LANTERN -> data.lanterns
             }
             gameObjects.map { TypedGameObject(type, it) }
         }
