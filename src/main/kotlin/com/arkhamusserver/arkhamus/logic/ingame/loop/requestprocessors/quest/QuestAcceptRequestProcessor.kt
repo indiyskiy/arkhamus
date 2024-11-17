@@ -24,6 +24,7 @@ class QuestAcceptRequestProcessor(
         val questAcceptRequestProcessData = requestDataHolder.requestProcessData as QuestAcceptRequestProcessData
         if (questAcceptRequestProcessData.canAccept) {
             questProgressHandler.acceptTheQuest(
+                globalGameData.game,
                 questAcceptRequestProcessData.userQuestProgress,
                 questAcceptRequestProcessData,
                 globalGameData.game.globalTimer

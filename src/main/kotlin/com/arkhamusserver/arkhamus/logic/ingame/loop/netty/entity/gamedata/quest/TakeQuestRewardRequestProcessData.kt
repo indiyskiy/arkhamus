@@ -18,7 +18,7 @@ class TakeQuestRewardRequestProcessData(
     var canAccept: Boolean,
     var canDecline: Boolean,
     var canFinish: Boolean,
-    var questGiverId: Long,
+    var questGiver: RedisQuestGiver?,
     var rightQuestGiverForAction: Boolean,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,

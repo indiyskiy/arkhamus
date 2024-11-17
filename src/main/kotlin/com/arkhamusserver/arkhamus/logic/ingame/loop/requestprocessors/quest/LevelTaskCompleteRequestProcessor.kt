@@ -25,8 +25,14 @@ class LevelTaskCompleteRequestProcessor(
             requestDataHolder.requestProcessData as LevelTaskCompleteRequestProcessData
         val quest = levelTaskCompleteRequestProcessData.quest
         val userQuestProgress = levelTaskCompleteRequestProcessData.userQuestProgress
+        val user = globalGameData.users[userQuestProgress?.userId]
 
-        questProgressHandler.nextStep(userQuestProgress, quest)
+        questProgressHandler.nextStep(
+            userQuestProgress,
+            quest,
+            globalGameData,
+            user
+        )
         if (questProgressHandler.isCompleted(quest, userQuestProgress)) {
             levelTaskCompleteRequestProcessData.canDecline = false
             levelTaskCompleteRequestProcessData.canFinish = true

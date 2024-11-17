@@ -17,5 +17,8 @@ data class GameActivityDto(
     var type: ActivityType,
     var color: NiceColor,
     val points: List<PointDto>,
+    val x: Long,
+    val y: Long,
+    val message: String,
     val polygonPoints: String = points.joinToString(" ") { "${it.pointX},${it.pointY}" },
 )

@@ -1,12 +1,16 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestAcceptRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestDeclineRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.TakeQuestRewardRequestProcessData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserQuestProgressRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.*
+import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisQuest
 import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
@@ -20,7 +24,8 @@ import kotlin.math.min
 @Component
 class QuestProgressHandler(
     private val questProgressRepository: RedisUserQuestProgressRepository,
-    private val userQuestCreationHandler: UserQuestCreationHandler
+    private val userQuestCreationHandler: UserQuestCreationHandler,
+    private val activityHandler: ActivityHandler
 ) {
 
     companion object {
@@ -30,6 +35,7 @@ class QuestProgressHandler(
 
     @Transactional
     fun acceptTheQuest(
+        game: RedisGame,
         userQuestProgress: RedisUserQuestProgress?,
         data: QuestAcceptRequestProcessData,
         currentGameTime: Long
@@ -39,9 +45,21 @@ class QuestProgressHandler(
             it.questCurrentStep = 0
             it.acceptanceGameTime = currentGameTime
             questProgressRepository.save(it)
+
+            data.canAccept = false
+            data.canDecline = true
+
+            activityHandler.addUserWithTargetActivity(
+                gameId = game.inGameId(),
+                activityType = ActivityType.QUEST_ACCEPTED,
+                sourceUser = data.gameUser!!,
+                gameTime = game.globalTimer,
+                relatedGameObjectType = GameObjectType.QUEST_GIVER,
+                withTrueIngameId = data.questGiver,
+                relatedEventId = it.questId
+            )
+
         }
-        data.canAccept = false
-        data.canDecline = true
     }
 
     @Transactional
@@ -53,10 +71,22 @@ class QuestProgressHandler(
             it.questState = FINISHED
             it.finishGameTime = globalGameData.game.globalTimer
             questProgressRepository.save(it)
+
+            data.canAccept = false
+            data.canDecline = false
+            data.canFinish = false
+
+            activityHandler.addUserWithTargetActivity(
+                gameId = globalGameData.game.inGameId(),
+                activityType = ActivityType.QUEST_COMPLETE,
+                sourceUser = data.gameUser!!,
+                gameTime = globalGameData.game.globalTimer,
+                relatedGameObjectType = GameObjectType.QUEST_GIVER,
+                withTrueIngameId = data.questGiver,
+                relatedEventId = it.questId
+            )
         }
-        data.canAccept = false
-        data.canDecline = false
-        data.canFinish = false
+
 
         addMoreQuestsMaybe(globalGameData, data, globalGameData.game.globalTimer)
     }
@@ -70,10 +100,20 @@ class QuestProgressHandler(
             it.questState = DECLINED
             it.finishGameTime = globalGameData.game.globalTimer
             questProgressRepository.save(it)
+            activityHandler.addUserWithTargetActivity(
+                gameId = globalGameData.game.inGameId(),
+                activityType = ActivityType.QUEST_DECLINED,
+                sourceUser = data.gameUser!!,
+                gameTime = globalGameData.game.globalTimer,
+                relatedGameObjectType = GameObjectType.QUEST_GIVER,
+                withTrueIngameId = data.questGiver,
+                relatedEventId = it.questId
+            )
+
+            data.canAccept = false
+            data.canDecline = false
+            data.canFinish = false
         }
-        data.canAccept = false
-        data.canDecline = false
-        data.canFinish = false
 
         addMoreQuestsMaybe(globalGameData, data, globalGameData.game.globalTimer)
     }
@@ -216,14 +256,32 @@ class QuestProgressHandler(
     }
 
     @Transactional
-    fun nextStep(userQuestProgress: RedisUserQuestProgress?, quest: RedisQuest?) {
+    fun nextStep(
+        userQuestProgress: RedisUserQuestProgress?,
+        quest: RedisQuest?,
+        globalGameData: GlobalGameData,
+        currentUser: RedisGameUser?,
+    ) {
         userQuestProgress?.let { progress ->
             quest?.let { questNotNull ->
-                progress.questCurrentStep = min(progress.questCurrentStep + 1, questNotNull.levelTaskIds.size)
-                if (isCompleted(quest, userQuestProgress)) {
-                    complete(userQuestProgress)
+                currentUser?.let { currentUserNotNull ->
+                    progress.questCurrentStep = min(progress.questCurrentStep + 1, questNotNull.levelTaskIds.size)
+                    if (isCompleted(quest, userQuestProgress)) {
+                        complete(userQuestProgress)
+                    }
+                    questProgressRepository.save(progress)
+
+                    val game = globalGameData.game
+                    activityHandler.addUserWithTargetActivity(
+                        gameId = game.inGameId(),
+                        activityType = ActivityType.QUEST_ACCEPTED,
+                        sourceUser = currentUserNotNull,
+                        gameTime = game.globalTimer,
+                        relatedGameObjectType = null,//GameObjectType.QUEST_GIVER,
+                        withTrueIngameId = null, //todo add redis quest steps
+                        relatedEventId = questNotNull.inGameId()
+                    )
                 }
-                questProgressRepository.save(progress)
             }
         }
     }

@@ -145,6 +145,9 @@ class AdminGameLogic(
                     color
                 )
             ),
+            x = Math.round(activity.x * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM),
+            y = Math.round(activity.z * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM),
+            message = activity.activityType.name
         )
     }
 

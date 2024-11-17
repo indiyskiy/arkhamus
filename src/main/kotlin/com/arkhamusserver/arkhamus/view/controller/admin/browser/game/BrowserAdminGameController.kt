@@ -53,6 +53,19 @@ class BrowserAdminGameController(
         return "gamePreview"
     }
 
+    @GetMapping("/admin/browser/game/{gameId}/previewBeta")
+    fun adminGamePreviewBeta(
+        @PathVariable gameId: Long,
+        model: Model
+    ): String {
+        val users = adminGameLogic.getAllUsers(gameId)
+        val types = ActivityType.values().toList()
+        model.addAttribute("users", users)
+        model.addAttribute("activityTypes", types)
+        model.addAttribute("gameActivities", adminGameLogic.getGameActivities(gameId, users.map { it.id }, types))
+        return "gamePreviewBeta"
+    }
+
     @PostMapping("/admin/browser/game/{gameId}/preview")
     fun handlePreview(
         @PathVariable gameId: Long,
@@ -69,5 +82,23 @@ class BrowserAdminGameController(
         model.addAttribute("users", adminGameLogic.getAllUsers(gameId))
         model.addAttribute("activityTypes", ActivityType.values().toList())
         return "gamePreview"
+    }
+
+    @PostMapping("/admin/browser/game/{gameId}/previewBeta")
+    fun handlePreviewBeta(
+        @PathVariable gameId: Long,
+        @RequestParam userIds: List<Long>,
+        @RequestParam activityTypes: List<ActivityType>,
+        model: Model
+    ): String {
+        val gameActivities = adminGameLogic.getGameActivities(
+            gameId = gameId,
+            userIds = userIds,
+            activityTypes = activityTypes
+        )
+        model.addAttribute("gameActivities", gameActivities)
+        model.addAttribute("users", adminGameLogic.getAllUsers(gameId))
+        model.addAttribute("activityTypes", ActivityType.values().toList())
+        return "gamePreviewBeta"
     }
 }

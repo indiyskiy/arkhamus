@@ -87,10 +87,14 @@ class QuestAcceptNettyRequestHandler(
             }
 
             val rightQuestGiverForAction = questGiverId == quest?.startQuestGiverId
+            val questGiver = globalGameData.questGivers.firstOrNull { it.inGameId() == this.questGiverId }
 
-            val canAccept = rightQuestGiverForAction && questProgressHandler.canAccept(quest, userQuestProgress)
-            val canDecline = rightQuestGiverForAction && questProgressHandler.canDecline(quest, userQuestProgress)
-            val canFinish = rightQuestGiverForAction && questProgressHandler.canFinish(quest, userQuestProgress)
+            val canAccept = questGiver!=null &&
+                    rightQuestGiverForAction && questProgressHandler.canAccept(quest, userQuestProgress)
+            val canDecline = questGiver!=null &&
+                    rightQuestGiverForAction && questProgressHandler.canDecline(quest, userQuestProgress)
+            val canFinish = questGiver!=null &&
+                    rightQuestGiverForAction && questProgressHandler.canFinish(quest, userQuestProgress)
 
             return QuestAcceptRequestProcessData(
                 quest = quest,
@@ -99,7 +103,7 @@ class QuestAcceptNettyRequestHandler(
                 canAccept = canAccept,
                 canDecline = canDecline,
                 canFinish = canFinish,
-                questGiverId = this.questGiverId,
+                questGiver =questGiver,
                 rightQuestGiverForAction = rightQuestGiverForAction,
                 gameUser = user,
                 otherGameUsers = users,

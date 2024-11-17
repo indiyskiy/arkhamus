@@ -58,9 +58,10 @@ class QuestRewardTypeUtils {
         role: RoleTypeInGame
     ): Boolean {
         return when (role) {
-            CULTIST -> type in setOf(ITEM, REMOVE_CLUE)
+//            CULTIST -> type in setOf(ITEM, REMOVE_CLUE)
+            CULTIST -> type in setOf(ITEM)
             INVESTIGATOR -> type in setOf(ITEM, ADD_CLUE)
-            NEUTRAL -> true
+            NEUTRAL -> type in setOf(ITEM, ADD_CLUE)
         }
     }
 

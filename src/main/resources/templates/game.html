@@ -22,6 +22,11 @@
                th:text="Preview">
             </a>
         </td>
+        <td>
+            <a th:href="@{/admin/browser/game/{gameId}/previewBeta(gameId=${game?.id ?: ''})}"
+               th:text="PreviewBeta">
+            </a>
+        </td>
     </table>
     <table>
         <tr>

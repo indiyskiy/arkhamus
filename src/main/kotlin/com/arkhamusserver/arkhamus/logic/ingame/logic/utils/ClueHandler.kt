@@ -1,11 +1,13 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toGod
@@ -17,7 +19,8 @@ import kotlin.random.Random
 
 @Component
 class ClueHandler(
-    private val redisClueRepository: RedisClueRepository
+    private val redisClueRepository: RedisClueRepository,
+    private val activityHandler: ActivityHandler,
 ) {
 
     companion object {
@@ -77,7 +80,11 @@ class ClueHandler(
         redisClueRepository.save(redisClue)
     }
 
-    fun addRandomClue(data: GlobalGameData) {
+    fun addRandomClue(
+        data: GlobalGameData,
+        sourceUser: RedisGameUser?,
+        createActivity: Boolean = false,
+    ) {
         val existingClues = data.clues
         val clueZones = data.levelGeometryData.zones.filter { it.zoneType == ZoneType.CLUE }
         val clueTypes = data.game.godId.toGod()?.getTypes()
@@ -96,6 +103,15 @@ class ClueHandler(
                     zone.zoneId,
                     clueType
                 )
+                if (createActivity && sourceUser != null) {
+                    activityHandler.addUserNotTargetActivity(
+                        gameId = data.game.gameId!!,
+                        activityType = ActivityType.CLUE_CREATED,
+                        sourceUser = sourceUser,
+                        gameTime = data.game.globalTimer,
+                        relatedEventId = clueType.ordinal.toLong()
+                    )
+                }
             }
         }
     }

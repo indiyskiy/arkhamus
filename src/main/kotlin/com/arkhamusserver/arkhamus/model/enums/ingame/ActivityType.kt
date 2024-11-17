@@ -7,11 +7,11 @@ enum class ActivityType {
 
     //containers
     CONTAINER_OPENED, //\/
-    CONTAINER_CLOSED,
+    CONTAINER_CLOSED, //don't want yet
 
     //crafter
     CRAFTER_OPENED, //\/
-    CRAFTER_CLOSED,
+    CRAFTER_CLOSED, //don't want yet
     CRAFT_STARTED, //\/
 
     //abilities
@@ -20,10 +20,10 @@ enum class ActivityType {
     //altar
     ALTAR_VOTE_STARTED, //\/
     ALTAR_VOTE_CASTED, //\/
-    ALTAR_VOTE_FAILED,
-    ALTAR_RITUAL_STARTED,
-    ALTAR_RITUAL_FAILED,
-    ALTAR_RITUAL_COMPLETED_WRONG,
+    ALTAR_VOTE_FAILED, //don't want yet
+    ALTAR_RITUAL_STARTED, //don't want yet
+    ALTAR_RITUAL_FAILED, //don't want yet
+    ALTAR_RITUAL_COMPLETED_WRONG, //don't want yet
 
     //ban votes
     BAN_SPOT_PAYED, //\/
@@ -37,12 +37,12 @@ enum class ActivityType {
 
     //clues
     CLUE_CREATED,
-    CLUE_DELETED,
+    CLUE_DELETED, //don't want yet - it's ability cast
 
     //quests
-    QUEST_READ,
-    QUEST_ACCEPTED,
-    TASK_DONE,
-    QUEST_REJECTED,
-    QUEST_COMPLETE
+    QUEST_READ, //don't want yet
+    QUEST_ACCEPTED, //\/
+    TASK_DONE, //\/ todo add redisQuestStep, update activity data
+    QUEST_DECLINED, //\/
+    QUEST_COMPLETE //\/
 }

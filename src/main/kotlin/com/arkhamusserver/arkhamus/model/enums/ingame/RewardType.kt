@@ -4,8 +4,7 @@ enum class RewardType(
     private val onlyOneForQuest: Boolean = false,
 ) {
     ITEM,
-    ADD_CLUE(true),
-    REMOVE_CLUE(true);
+    ADD_CLUE(true);
 
     fun getOnlyOneForQuest(): Boolean = onlyOneForQuest
 }
