@@ -9,6 +9,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -17,6 +18,10 @@ class OneTickTryEndGameMaybeHandler(
     private val gameEndLogic: GameEndLogic,
     private val madnessHandler: UserMadnessHandler,
 ) {
+
+    companion object {
+       private val logger = LoggerFactory.getLogger(OneTickTryEndGameMaybeHandler::class.java)
+    }
 
     @Transactional
     fun checkIfEnd(game: RedisGame, users: Collection<RedisGameUser>, voteSpots: List<RedisVoteSpot>) {
@@ -77,6 +82,7 @@ class OneTickTryEndGameMaybeHandler(
 
     private fun abandonIfAllLeave(game: RedisGame, users: Collection<RedisGameUser>) {
         if (users.all { it.leftTheGame }) {
+            logger.info("end the gamer - ABANDONED")
             gameEndLogic.endTheGame(
                 game,
                 users.associateBy { it.userId },
@@ -89,6 +95,9 @@ class OneTickTryEndGameMaybeHandler(
     private fun markLeaversIfNoResponses(game: RedisGame, users: Collection<RedisGameUser>) {
         if (game.globalTimer - game.lastTimeSentResponse > MAX_TIME_NO_RESPONSES) {
             users.forEach { it.leftTheGame = true }
+            logger.info(
+                "no requests for ${game.gameId} - all users left - marked them - ${users.joinToString{ it.inGameId().toString() }}"
+            )
         }
     }
 }
