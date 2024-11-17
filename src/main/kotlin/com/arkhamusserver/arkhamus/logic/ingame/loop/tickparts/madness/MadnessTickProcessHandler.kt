@@ -62,7 +62,7 @@ class MadnessTickProcessHandler(
                 }
 
                 MadnessDebuffs.BAN_ADDICTED -> {
-                    voteForSomeone(user, data, timePassedMillis)
+                    voteForSomeone(user, data)
                 }
 
                 MadnessDebuffs.LIGHT_ADDICTED -> {
@@ -133,12 +133,10 @@ class MadnessTickProcessHandler(
     private fun voteForSomeone(
         user: RedisGameUser,
         data: GlobalGameData,
-        timePassedMillis: Long
     ): Boolean {
         return voteMadnessHandler.voteForSomeone(
             user,
             data,
-            timePassedMillis
         )
     }
 

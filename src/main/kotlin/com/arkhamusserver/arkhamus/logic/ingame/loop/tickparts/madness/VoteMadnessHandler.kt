@@ -27,7 +27,6 @@ class VoteMadnessHandler(
     fun voteForSomeone(
         user: RedisGameUser,
         data: GlobalGameData,
-        timePassedMillis: Long
     ): Boolean {
         val voteSpots = voteSpots(data, user)
         if (voteSpots.isNotEmpty()) {
@@ -52,7 +51,8 @@ class VoteMadnessHandler(
         val userVoteSpots: List<RedisUserVoteSpot>? = data.userVoteSpotsBySpotId[voteSpot.inGameId()]
         if (userVoteSpots != null && userVoteSpots.isNotEmpty()) {
             val userVoteSpot = userVoteSpots.firstOrNull { it.userId == user.inGameId() }
-            if (userVoteSpot != null) {
+            val currentUser = data.users.values.firstOrNull { it.inGameId() == user.inGameId() }
+            if (userVoteSpot != null && currentUser != null) {
                 val users = data.users.values
                 var anyVotes = false
                 users.shuffled(random).forEach { targetUser ->
@@ -63,6 +63,7 @@ class VoteMadnessHandler(
                         )
                     ) {
                         userVoteHandler.castVote(
+                            currentUser,
                             userVoteSpot,
                             targetUser,
                             users,
