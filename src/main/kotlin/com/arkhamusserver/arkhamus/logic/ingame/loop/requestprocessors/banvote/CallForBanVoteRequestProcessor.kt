@@ -1,19 +1,23 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.banvote
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.CallForBanVoteRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
+import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 class CallForBanVoteRequestProcessor(
-    private val eventHandler: TimeEventHandler
+    private val eventHandler: TimeEventHandler,
+    private val activityHandler: ActivityHandler
 ) : NettyRequestProcessor {
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
@@ -31,6 +35,15 @@ class CallForBanVoteRequestProcessor(
             createEvent(gameData, globalGameData)
             gameData.gameUser?.let { it.callToArms -= 1 }
             gameData.successfullyCalled = true
+            activityHandler.addUserWithTargetActivity(
+                globalGameData.game.inGameId(),
+                ActivityType.BAN_SPOT_CALL_STARTED,
+                gameData.gameUser!!,
+                globalGameData.game.globalTimer,
+                GameObjectType.VOTE_SPOT,
+                gameData.voteSpot!!,
+                null
+            )
         }
     }
 

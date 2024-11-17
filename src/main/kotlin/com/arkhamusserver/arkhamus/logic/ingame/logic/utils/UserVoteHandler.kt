@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ZonesHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
@@ -8,7 +9,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisDoorRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
@@ -26,7 +29,8 @@ class UserVoteHandler(
     private val teleportHandler: TeleportHandler,
     private val zonesHandler: ZonesHandler,
     private val geometryUtils: GeometryUtils,
-    private val redisDoorRepository: RedisDoorRepository
+    private val redisDoorRepository: RedisDoorRepository,
+    private val activityHandler: ActivityHandler,
 ) {
     companion object {
         private val CANT_VOTE_AT_ALL = setOf(CantVoteReason.MAD, CantVoteReason.BANNED)
@@ -73,6 +77,7 @@ class UserVoteHandler(
 
     @Transactional
     fun castVote(
+        currentUser: RedisGameUser,
         currentUserVoteSpot: RedisUserVoteSpot,
         targetUser: RedisGameUser,
         users: Collection<RedisGameUser>,
@@ -80,10 +85,20 @@ class UserVoteHandler(
         allUserVoteSpots: List<RedisUserVoteSpot>,
         globalGameData: GlobalGameData,
     ): RedisGameUser? {
-        currentUserVoteSpot.votesForUserIds = (currentUserVoteSpot.votesForUserIds + targetUser.userId)
+        currentUserVoteSpot.votesForUserIds = (currentUserVoteSpot.votesForUserIds + targetUser.inGameId())
             .toMutableList()
         userVoteSpotRepository.save(currentUserVoteSpot)
+        activityHandler.addUserWithTargetActivity(
+            globalGameData.game.inGameId(),
+            ActivityType.BAN_SPOT_VOTE_CASTED,
+            currentUser,
+            globalGameData.game.globalTimer,
+            GameObjectType.VOTE_SPOT,
+            voteSpot,
+            targetUser.inGameId()
+        )
         return applyBanMaybe(
+            currentUser,
             users,
             voteSpot,
             allUserVoteSpots,
@@ -93,6 +108,7 @@ class UserVoteHandler(
 
     @Transactional
     fun applyBanMaybe(
+        currentUser: RedisGameUser,
         allUsers: Collection<RedisGameUser>,
         voteSpot: RedisVoteSpot,
         userVoteSpots: List<RedisUserVoteSpot>,
@@ -117,8 +133,9 @@ class UserVoteHandler(
             } else {
                 val userToBan = maxVotes.first()
                 banUser(
+                    currentUser,
                     voteSpot,
-                    allUsers.first { userToBan == it.userId },
+                    allUsers.first { userToBan == it.inGameId() },
                     globalGameData
                 )
                 reset(voteSpot, userVoteSpots)
@@ -161,19 +178,21 @@ class UserVoteHandler(
     }
 
     private fun banUser(
+        currentUser: RedisGameUser,
         voteSpot: RedisVoteSpot,
-        user: RedisGameUser,
+        userToBan: RedisGameUser,
         globalGameData: GlobalGameData
     ) {
-        val userId = user.userId
+        val userId = userToBan.userId
         voteSpot.bannedUsers += userId
         voteSpot.availableUsers -= userId
-        if (user.inRelatedZone(globalGameData.levelGeometryData.zones, voteSpot.zoneId)) {
-            val pointToTeleport = geometryUtils.nearestPoint(user, globalGameData.thresholdsByZoneId[voteSpot.zoneId])
+        if (userToBan.inRelatedZone(globalGameData.levelGeometryData.zones, voteSpot.zoneId)) {
+            val pointToTeleport =
+                geometryUtils.nearestPoint(userToBan, globalGameData.thresholdsByZoneId[voteSpot.zoneId])
             pointToTeleport?.let {
                 teleportHandler.forceTeleport(
                     game = globalGameData.game,
-                    user = user,
+                    user = userToBan,
                     point = it
                 )
             }
@@ -185,7 +204,15 @@ class UserVoteHandler(
             }
             redisDoorRepository.saveAll(it)
         }
-
+        activityHandler.addUserWithTargetActivity(
+            globalGameData.game.inGameId(),
+            ActivityType.BAN_SPOT_USER_BANED,
+            currentUser,
+            globalGameData.game.globalTimer,
+            GameObjectType.VOTE_SPOT,
+            voteSpot,
+            userToBan.inGameId()
+        )
         voteSpotRepository.save(voteSpot)
     }
 

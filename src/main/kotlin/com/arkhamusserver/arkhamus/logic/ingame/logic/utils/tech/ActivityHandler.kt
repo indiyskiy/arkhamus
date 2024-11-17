@@ -20,7 +20,6 @@ class ActivityHandler(
     private val gameActivityRepository: GameActivityRepository,
     private val gameSessionRepository: GameSessionRepository
 ) {
-
     companion object {
         private var logger = LoggerFactory.getLogger(ActivityHandler::class.java)
     }

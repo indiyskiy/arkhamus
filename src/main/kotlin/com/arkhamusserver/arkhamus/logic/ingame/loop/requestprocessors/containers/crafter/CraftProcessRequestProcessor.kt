@@ -53,7 +53,7 @@ class CraftProcessRequestProcessor(
                 logger.info("craft process for ${recipe.recipeId} started")
                 activityHandler.addUserWithTargetActivity(
                     globalGameData.game.inGameId(),
-                    ActivityType.CRAFTER_OPENED,
+                    ActivityType.CRAFT_STARTED,
                     craftProcessRequestProcessData.gameUser!!,
                     globalGameData.game.globalTimer,
                     GameObjectType.CRAFTER,

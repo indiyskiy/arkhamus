@@ -1,12 +1,15 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.banvote
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.PayForVoteRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -14,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class PayForVoteRequestProcessor(
     private val inventoryHandler: InventoryHandler,
-    private val redisVoteSpotRepository: RedisVoteSpotRepository
+    private val redisVoteSpotRepository: RedisVoteSpotRepository,
+    private val activityHandler: ActivityHandler
 ) : NettyRequestProcessor {
 
 
@@ -37,6 +41,16 @@ class PayForVoteRequestProcessor(
             voteSpot.voteSpotState = VoteSpotState.OPEN
             redisVoteSpotRepository.save(voteSpot)
             gameData.successfullyPaid = true
+
+            activityHandler.addUserWithTargetActivity(
+                globalGameData.game.inGameId(),
+                ActivityType.BAN_SPOT_PAYED,
+                gameData.gameUser,
+                globalGameData.game.globalTimer,
+                GameObjectType.VOTE_SPOT,
+                gameData.voteSpot,
+                null
+            )
         }
     }
 

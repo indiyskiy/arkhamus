@@ -6,9 +6,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteCastRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -16,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GodVoteCastRequestProcessor(
-    private val redisAltarPollingRepository: RedisAltarPollingRepository,
     private val ritualHandler: RitualHandler
 ) : NettyRequestProcessor {
 
@@ -46,25 +42,20 @@ class GodVoteCastRequestProcessor(
         if (god != null && altarPolling != null) {
             val canVote = godVoteCastRequestProcessData.canVote
             if (canVote) {
-                castGodVote(
+                ritualHandler.castGodVote(
                     god = god,
+                    altar = godVoteCastRequestProcessData.altar!!,
+                    currentGameUser = godVoteCastRequestProcessData.gameUser!!,
                     altarPolling = altarPolling,
-                    gameData = godVoteCastRequestProcessData
+                    gameData = godVoteCastRequestProcessData,
+                    altarHolder = altarHolder,
+                    altars = altars,
+                    game = game,
+                    allUsers = allUsers,
+                    events = events
                 )
-                ritualHandler.tryToForceStartRitual(allUsers, altarPolling, altars, altarHolder, events, game)
                 godVoteCastRequestProcessData.executedSuccessfully = true
             }
         }
-    }
-
-    private fun castGodVote(
-        god: God,
-        altarPolling: RedisAltarPolling,
-        gameData: GodVoteCastRequestProcessData
-    ) {
-        val userId: Long = gameData.gameUser!!.userId
-        val godId = god.getId()
-        altarPolling.userVotes[userId] = godId
-        redisAltarPollingRepository.save(altarPolling)
     }
 }
