@@ -2,20 +2,20 @@ package com.arkhamusserver.arkhamus.model.enums.ingame
 
 enum class ActivityType {
     //main game
-    HEARTBEAT,
-    USER_GOT_MAD,
+    HEARTBEAT, //\/
+    USER_GOT_MAD,//\/
 
     //containers
-    CONTAINER_OPENED,
+    CONTAINER_OPENED, //\/
     CONTAINER_CLOSED,
 
     //crafter
-    CRAFTER_OPENED,
+    CRAFTER_OPENED, //\/
     CRAFTER_CLOSED,
-    CRAFT_STARTED,
+    CRAFT_STARTED, //\/
 
     //abilities
-    ABILITY_CASTED,
+    ABILITY_CASTED, //\/
 
     //altar
     ALTAR_VOTE_STARTED,
@@ -32,8 +32,8 @@ enum class ActivityType {
     BAN_SPOT_USER_BANED,
 
     //lantern
-    LANTERN_FILLED,
-    LANTERN_LIT,
+    LANTERN_FILLED, //\/
+    LANTERN_LIT, //\/
 
     //clues
     CLUE_CREATED,
@@ -41,6 +41,7 @@ enum class ActivityType {
 
     //quests
     QUEST_READ,
+    QUEST_ACCEPTED,
     TASK_DONE,
     QUEST_REJECTED,
     QUEST_COMPLETE

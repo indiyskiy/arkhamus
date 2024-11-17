@@ -3,15 +3,18 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ShortTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
+import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import org.springframework.stereotype.Component
 
 @Component
@@ -20,7 +23,8 @@ class AbilityCastHandler(
     private val inventoryHandler: InventoryHandler,
     private val createCastAbilityEventHandler: CreateCastAbilityEventHandler,
     private val shortTimeEventHandler: ShortTimeEventHandler,
-    private val abilityToItemResolver: AbilityToItemResolver
+    private val abilityToItemResolver: AbilityToItemResolver,
+    private val activityHandler: ActivityHandler
 ) {
     fun cast(
         ability: Ability,
@@ -41,6 +45,20 @@ class AbilityCastHandler(
             globalGameData,
             abilityRequestProcessData.targetType
         )
+        if (casted) {
+            createActivity(
+                gameId = globalGameData.game.inGameId(),
+                sourceUser = abilityRequestProcessData.gameUser,
+                gameTime = globalGameData.game.globalTimer,
+                relatedGameObjectType = abilityRequestProcessData.targetType,
+                relatedGameObject = if (abilityRequestProcessData.target != null && abilityRequestProcessData.target is WithTrueIngameId) {
+                    abilityRequestProcessData.target as WithTrueIngameId
+                } else {
+                    null
+                },
+                ability = ability
+            )
+        }
         return casted
     }
 
@@ -65,6 +83,20 @@ class AbilityCastHandler(
             globalGameData,
             targetType
         )
+        if (casted) {
+            createActivity(
+                gameId = globalGameData.game.inGameId(),
+                sourceUser = sourceUser,
+                gameTime = globalGameData.game.globalTimer,
+                relatedGameObjectType = targetType,
+                relatedGameObject = if (target != null && target is WithTrueIngameId) {
+                    target
+                } else {
+                    null
+                },
+                ability = ability
+            )
+        }
         return casted
     }
 
@@ -131,6 +163,25 @@ class AbilityCastHandler(
             ShortTimeEventType.ABILITY_CAST,
             ability.visibilityModifiers(),
             data
+        )
+    }
+
+    private fun createActivity(
+        gameId: Long,
+        sourceUser: RedisGameUser,
+        gameTime: Long,
+        relatedGameObjectType: GameObjectType?,
+        relatedGameObject: WithTrueIngameId?,
+        ability: Ability,
+    ) {
+        activityHandler.addUserWithTargetActivity(
+            gameId,
+            ActivityType.ABILITY_CASTED,
+            sourceUser,
+            gameTime,
+            relatedGameObjectType,
+            relatedGameObject,
+            ability.id.toLong(),
         )
     }
 }

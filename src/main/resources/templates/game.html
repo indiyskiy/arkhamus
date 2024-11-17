@@ -17,6 +17,13 @@
     <h1>Game Details</h1>
 
     <table>
+        <td>
+            <a th:href="@{/admin/browser/game/{gameId}/preview(gameId=${game?.id ?: ''})}"
+               th:text="Preview">
+            </a>
+        </td>
+    </table>
+    <table>
         <tr>
             <th>ID</th>
             <th>State</th>

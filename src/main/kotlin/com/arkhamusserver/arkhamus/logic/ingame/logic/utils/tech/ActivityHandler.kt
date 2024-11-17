@@ -9,7 +9,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.redis.RedisActivity
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -23,7 +22,7 @@ class ActivityHandler(
 ) {
 
     companion object {
-        var logger = LoggerFactory.getLogger(ActivityHandler::class.java)
+        private var logger = LoggerFactory.getLogger(ActivityHandler::class.java)
     }
 
     fun addActivity(
@@ -76,29 +75,25 @@ class ActivityHandler(
             relatedEventId = relatedEventId
         )
 
-    fun addActivity(
+    fun addUserWithTargetActivity(
         gameId: Long,
         activityType: ActivityType,
-        sourceUserId: Long?,
+        sourceUser: RedisGameUser,
         gameTime: Long,
         relatedGameObjectType: GameObjectType?,
-        withPointRelatedObject: WithPoint,
+        withTrueIngameId: WithTrueIngameId?,
         relatedEventId: Long?,
     ): RedisActivity =
         addActivity(
             gameId = gameId,
             activityType = activityType,
-            sourceUserId = sourceUserId,
-            x = withPointRelatedObject.x(),
-            y = withPointRelatedObject.y(),
-            z = withPointRelatedObject.z(),
+            sourceUserId = sourceUser.inGameId(),
+            x = sourceUser.x(),
+            y = sourceUser.y(),
+            z = sourceUser.z(),
             gameTime = gameTime,
             relatedGameObjectType = relatedGameObjectType,
-            relatedGameObjectId = if (withPointRelatedObject is WithTrueIngameId) {
-                withPointRelatedObject.inGameId()
-            } else {
-                null
-            },
+            relatedGameObjectId = withTrueIngameId?.inGameId(),
             relatedEventId = relatedEventId
         )
 

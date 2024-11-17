@@ -1,17 +1,21 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.lantern
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.LanternHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.FillLanternRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
+import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 class FillLanternRequestProcessor(
     private val lanternHandler: LanternHandler,
+    private val activityHandler: ActivityHandler,
 ) : NettyRequestProcessor {
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
@@ -27,9 +31,18 @@ class FillLanternRequestProcessor(
         val gameData = requestDataHolder.requestProcessData as FillLanternRequestProcessData
         if (gameData.canFill) {
             val lantern = gameData.lantern
-            if (lantern != null) {
+            if (lantern != null && gameData.gameUser != null) {
                 lanternHandler.fillLantern(lantern, gameData)
                 gameData.successfullyFilled = true
+                activityHandler.addUserWithTargetActivity(
+                    globalGameData.game.inGameId(),
+                    ActivityType.LANTERN_FILLED,
+                    gameData.gameUser,
+                    globalGameData.game.globalTimer,
+                    GameObjectType.LANTERN,
+                    lantern,
+                    null
+                )
             }
         }
     }

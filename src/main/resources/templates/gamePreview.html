@@ -11,7 +11,7 @@
 <div class="header">
     <footer>
         <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
-        <a th:href="@{/admin/browser/games}" title="Games">Levels</a>
+        <a th:href="@{/admin/browser/game}" title="Games">Games</a>
         <a th:href="@{/admin/browser/game/{gameId}(gameId=${gameActivities.gameId})}" title="Game">Game</a>
     </footer>
 </div>
@@ -32,18 +32,21 @@
             <label th:for="'activity_' + ${activityType.name()}" for="activity_${activityType.name()}">[[${activityType.name()}]]</label>
         </div>
     </div>
-    <input id="levelId" name="levelId" th:value="${levelGeometry.levelId}" type="hidden">
+    <input id="gameId" name="gameId" th:value="${gameActivities.gameId}" type="hidden">
     <input type="submit" value="Filter">
 </form>
 
 <svg th:height="${gameActivities.height}" th:width="${gameActivities.width}">
-
+    <th:block th:each="poly : ${gameActivities.activities}">
+        <polygon th:attr="points=${poly.polygonPoints}"
+                 th:style="'fill:' + ${poly.color.getCode()} + ';stroke:black;stroke-width:1'"/>
+    </th:block>
 </svg>
 
 <div class="footer">
     <footer>
         <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
-        <a th:href="@{/admin/browser/games}" title="Games">Levels</a>
+        <a th:href="@{/admin/browser/game}" title="Games">Games</a>
         <a th:href="@{/admin/browser/game/{gameId}(gameId=${gameActivities.gameId})}" title="Game">Game</a>
     </footer>
 </div>

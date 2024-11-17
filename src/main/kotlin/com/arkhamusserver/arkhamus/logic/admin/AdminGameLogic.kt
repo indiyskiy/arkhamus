@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.view.dto.admin.*
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -25,6 +26,7 @@ class AdminGameLogic(
 
     companion object {
         const val SCREEN_ZOOM = 10
+        private val logger = LoggerFactory.getLogger(AdminGameLogic::class.java)
     }
 
 
@@ -100,6 +102,7 @@ class AdminGameLogic(
             dto(colors, activity, colorSize)
         }
         val level = game.gameSessionSettings.level!!
+        logger.info("created ${activityDtos.size} activityDtos")
         return GameActivitiesDto(
             gameId = gameId,
             userIds = userIds,

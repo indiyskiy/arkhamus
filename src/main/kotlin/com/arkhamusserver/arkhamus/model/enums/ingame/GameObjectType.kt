@@ -8,4 +8,5 @@ enum class GameObjectType {
     CLUE,
     QUEST_GIVER,
     ALTAR,
+    LANTERN,
 }

@@ -3,12 +3,15 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.containe
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CraftProcessHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter.CraftProcessRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -22,7 +25,8 @@ import kotlin.math.min
 class CraftProcessRequestProcessor(
     private val craftProcessHandler: CraftProcessHandler,
     private val inventoryHandler: InventoryHandler,
-    private val crafterRepository: RedisCrafterRepository
+    private val crafterRepository: RedisCrafterRepository,
+    private val activityHandler: ActivityHandler
 ) : NettyRequestProcessor {
 
     companion object {
@@ -46,8 +50,17 @@ class CraftProcessRequestProcessor(
             logger.info("can be started = $canBeStarted")
             if (canBeStarted) {
                 craft(craftProcessRequestProcessData, recipe, requestDataHolder, globalGameData)
+                logger.info("craft process for ${recipe.recipeId} started")
+                activityHandler.addUserWithTargetActivity(
+                    globalGameData.game.inGameId(),
+                    ActivityType.CRAFTER_OPENED,
+                    craftProcessRequestProcessData.gameUser!!,
+                    globalGameData.game.globalTimer,
+                    GameObjectType.CRAFTER,
+                    craftProcessRequestProcessData.crafter,
+                    recipe.recipeId.toLong()
+                )
             }
-            logger.info("craft process for ${recipe.recipeId} end")
         } ?: {
             logger.warn("recipe is null for ${requestDataHolder.userAccount.nickName} of game ${requestDataHolder.gameSession!!.id}")
         }

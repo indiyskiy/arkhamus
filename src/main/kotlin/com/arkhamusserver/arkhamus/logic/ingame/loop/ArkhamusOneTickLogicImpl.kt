@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool.Companion.TICK_DELTA
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.loadGlobalGameData
@@ -28,8 +29,8 @@ class ArkhamusOneTickLogicImpl(
 ) : ArkhamusOneTickLogic {
 
     companion object {
-        const val SAVE_ACTIVITY_TICK_DELTA = 1000
-        var logger = LoggerFactory.getLogger(ArkhamusOneTickLogicImpl::class.java)
+        const val SAVE_ACTIVITY_TICK_DELTA = 60 * 1000 / TICK_DELTA / 8 //8 times per minute
+        private var logger = LoggerFactory.getLogger(ArkhamusOneTickLogicImpl::class.java)
     }
 
     override fun processCurrentTasks(
@@ -69,6 +70,7 @@ class ArkhamusOneTickLogicImpl(
             oneTickUser.processUsers(globalGameData, timePassedMillis)
             if (game.currentTick - game.lastTickSaveHeartbeatActivity > SAVE_ACTIVITY_TICK_DELTA) {
                 activityHandler.saveHeartbeatForUsers(globalGameData)
+                game.lastTickSaveHeartbeatActivity = game.currentTick
             }
             val responses =
                 oneTickUserResponses.buildResponses(
