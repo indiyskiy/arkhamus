@@ -64,7 +64,7 @@ class AuthNettyRequestHandler(
     }
 
     private fun findUserOfGame(account: UserAccount): UserOfGameSession? {
-        return databaseDataAccess.findByUserAccountId(account.id!!)
+        return databaseDataAccess.findByUserAccountIdNotLeft(account.id!!)
             .filter { it.gameSession.state in allowedStates }
             .sortedByDescending { it.gameSession.creationTimestamp }
             .firstOrNull()

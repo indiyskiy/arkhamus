@@ -13,8 +13,8 @@ class DatabaseDataAccess(
     private val gameSessionRepository: GameSessionRepository
 ) {
     @Transactional
-    fun findByUserAccountId(accountId: Long): List<UserOfGameSession> {
-        return userOfGameSessionRepository.findByUserAccountId(accountId)
+    fun findByUserAccountIdNotLeft(accountId: Long): List<UserOfGameSession> {
+        return userOfGameSessionRepository.findByUserAccountIdAndLeft(accountId)
     }
 
     @Transactional

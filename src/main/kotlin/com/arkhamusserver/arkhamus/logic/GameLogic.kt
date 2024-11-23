@@ -6,7 +6,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRe
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionSettingsRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.*
-import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.GameState.NEW
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
@@ -35,7 +34,7 @@ class GameLogic(
 
     @Transactional
     fun findCurrentUserGame(player: UserAccount, gameType: GameType): GameSession? {
-        val userOfGames = userOfGameSessionRepository.findByUserAccountId(player.id!!)
+        val userOfGames = userOfGameSessionRepository.findByUserAccountIdAndLeft(player.id!!)
         return userOfGames.firstOrNull {
             it.gameSession.state == NEW && it.gameSession.gameType == gameType && it.host
         }?.gameSession
@@ -44,7 +43,7 @@ class GameLogic(
     @Transactional
     fun start(game: GameSession): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
-        val invitedUsers = game.usersOfGameSession
+        val invitedUsers = game.usersOfGameSession.filter { !it.left }
         gameValidator.checkStartAccess(player, game, invitedUsers)
         val skins = userSkinLogic.allSkinsOf(game)
         val skinsReshuffled = userSkinLogic.reshuffleSkins(skins.values).associateBy { it.userAccount!!.id!! }
@@ -60,21 +59,15 @@ class GameLogic(
 
     fun disconnect(player: UserAccount) {
         val userGames =
-            userOfGameSessionRepository.findByUserAccountId(player.id!!).filter { it.gameSession.state == NEW }
+            userOfGameSessionRepository.findByUserAccountIdAndLeft(player.id!!).filter { it.gameSession.state == NEW }
 
         userGames.forEach { userGame ->
-            if (userGame.gameSession.gameType == GameType.SINGLE || userGame.gameSession.usersOfGameSession.size < 2) {
-                userGame.gameSession.state = GameState.ABANDONED
-            } else {
-                if (userGame.host) {
-                    trySetAnotherHost(userGame, player)
-                }
-                userGame.gameSession.usersOfGameSession = userGame.gameSession.usersOfGameSession.filter {
-                    it.userAccount.id != player.id
-                }
+            if (userGame.host) {
+                trySetAnotherHost(userGame, player)
             }
+            userGame.left = true
         }
-        gameSessionRepository.saveAll(userGames.map { it.gameSession })
+        userOfGameSessionRepository.saveAll(userGames)
     }
 
     fun findGameNullSafe(gameId: Long): GameSession = gameSessionRepository.findById(gameId).orElseThrow {
@@ -92,13 +85,23 @@ class GameLogic(
         player: UserAccount, game: GameSession, host: Boolean = false
     ): UserOfGameSession {
         disconnect(player)
-        val userOfGameSession = UserOfGameSession(
-            userAccount = player,
-            gameSession = game,
-            host = host,
-        )
-        userOfGameSessionRepository.save(userOfGameSession)
-        return userOfGameSession
+        val oldUserOfTheGame = game.usersOfGameSession.firstOrNull {
+            it.userAccount.id == player.id
+        }
+        if (oldUserOfTheGame != null) {
+            oldUserOfTheGame.left = false
+            userOfGameSessionRepository.save(oldUserOfTheGame)
+            return oldUserOfTheGame
+        } else {
+            val userOfGameSession = UserOfGameSession(
+                userAccount = player,
+                gameSession = game,
+                host = host,
+                left = false
+            )
+            userOfGameSessionRepository.save(userOfGameSession)
+            return userOfGameSession
+        }
     }
 
     fun createNewGameSession(
@@ -126,12 +129,14 @@ class GameLogic(
     }
 
     private fun trySetAnotherHost(
-        session: UserOfGameSession, account: UserAccount
+        session: UserOfGameSession,
+        account: UserAccount
     ) {
         session.gameSession.usersOfGameSession.firstOrNull {
             it.userAccount.id != account.id
         }?.let {
             it.host = true
+            userOfGameSessionRepository.save(it)
         }
     }
 

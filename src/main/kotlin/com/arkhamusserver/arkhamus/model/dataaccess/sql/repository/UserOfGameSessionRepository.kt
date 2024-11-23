@@ -10,5 +10,9 @@ interface UserOfGameSessionRepository : CrudRepository<UserOfGameSession, Long> 
 
     fun findByUserAccountId(userAccountId: Long): List<UserOfGameSession>
 
+    fun findByUserAccountIdAndLeft(userAccountId: Long, left: Boolean = false): List<UserOfGameSession>
+
     fun findByGameSessionId(gameSessionId: Long): List<UserOfGameSession>
+
+    fun findByGameSessionIdAndLeft(gameSessionId: Long, left: Boolean = false): List<UserOfGameSession>
 }

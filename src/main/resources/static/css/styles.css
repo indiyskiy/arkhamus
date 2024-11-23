@@ -200,12 +200,12 @@ select:focus {
     background-color: green;
 }
 
-.status-in-game {
+.status-in_game {
     background-color: blue;
 }
 
-.status-in-lobby {
-    background-color: orange;
+.status-in_lobby {
+    background-color: darkviolet;
 }
 
 .status-afk {

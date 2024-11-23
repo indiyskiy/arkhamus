@@ -96,7 +96,10 @@ class InGameStartGameHandler(
         channels: List<ArkhamusChannel>,
         authData: AuthRequestProcessData
     ) = (channels.mapNotNull { it.userAccount?.id }.toSet() ==
-            authData.game?.usersOfGameSession?.mapNotNull { it.userAccount.id }?.toSet())
+            authData.game?.usersOfGameSession
+                ?.filter { !it.left }
+                ?.mapNotNull { it.userAccount.id }
+                ?.toSet())
 
     private fun gamePending(authData: AuthRequestProcessData) = authData.game?.state == GameState.PENDING
 }

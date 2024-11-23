@@ -349,8 +349,8 @@ class GameThreadPoolTest {
         userOfGameSession: UserOfGameSession,
         globalGameData: GlobalGameData
     ): NettyTickRequestMessageDataHolder {
-        val redisGameUser = globalGameData.users[userOfGameSession.id]!!
-        val otherGameUsers = globalGameData.users.values.filter { it.userId != userOfGameSession.id }
+        val redisGameUser = globalGameData.users[userOfGameSession.userAccount.id]!!
+        val otherGameUsers = globalGameData.users.values.filter { it.userId != userOfGameSession.userAccount.id }
         return NettyTickRequestMessageDataHolder(
             HeartbeatRequestMessage(
                 baseRequestData = BaseRequestData(
@@ -411,7 +411,8 @@ class GameThreadPoolTest {
                 host = false,
                 roleInGame = RoleTypeInGame.CULTIST,
                 classInGame = ClassInGame.ARISTOCRAT,
-                gameSession = gameSession
+                gameSession = gameSession,
+                left = false
             )
         }
 

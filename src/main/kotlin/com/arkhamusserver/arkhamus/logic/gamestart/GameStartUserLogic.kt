@@ -96,15 +96,16 @@ class GameStartUserLogic(
     fun updateInvitedUsersInfoOnGameStart(
         game: GameSession
     ) {
-        val cultists = game.usersOfGameSession
+        val notLeft = game.usersOfGameSession.filter { !it.left }
+        val cultists = notLeft
             .shuffled(random)
             .subList(
                 0,
                 game.gameSessionSettings.numberOfCultists
             )
-        val cultistsIds = cultists.map { it.id }.toSet()
-        game.usersOfGameSession.forEach {
-            if (it.id in cultistsIds) {
+        val cultistsIds = cultists.map { it.userAccount.id }.toSet()
+        notLeft.forEach {
+            if (it.userAccount.id in cultistsIds) {
                 it.roleInGame = CULTIST
                 it.classInGame = randomCultistClass()
             } else {

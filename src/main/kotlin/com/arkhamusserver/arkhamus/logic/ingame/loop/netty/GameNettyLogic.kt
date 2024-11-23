@@ -30,7 +30,7 @@ class GameNettyLogic(
 
     @Transactional
     fun markPlayerDisconnected(user: UserOfGameSession) {
-        userRepository.findByUserIdAndGameId(user.id!!, user.gameSession.id!!).firstOrNull()?.let { redisUser ->
+        userRepository.findByUserIdAndGameId(user.userAccount.id!!, user.gameSession.id!!).firstOrNull()?.let { redisUser ->
             redisUser.connected = false
             userRepository.save(redisUser)
         }
@@ -38,7 +38,7 @@ class GameNettyLogic(
 
     @Transactional
     fun markPlayerConnected(user: UserOfGameSession) {
-        userRepository.findByUserIdAndGameId(user.id!!, user.gameSession.id!!).firstOrNull()?.let { redisUser ->
+        userRepository.findByUserIdAndGameId(user.userAccount.id!!, user.gameSession.id!!).firstOrNull()?.let { redisUser ->
             redisUser.connected = true
             userRepository.save(redisUser)
         }

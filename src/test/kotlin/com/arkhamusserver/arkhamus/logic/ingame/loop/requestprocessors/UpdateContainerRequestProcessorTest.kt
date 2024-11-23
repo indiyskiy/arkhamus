@@ -424,7 +424,8 @@ class UpdateContainerRequestProcessorTest {
             userAccount = requestUserAccount,
             gameSession = gameSession,
             host = true,
-            roleInGame = RoleTypeInGame.INVESTIGATOR
+            roleInGame = RoleTypeInGame.INVESTIGATOR,
+            left = false
         )
 
         gameSession.usersOfGameSession = listOf(user)

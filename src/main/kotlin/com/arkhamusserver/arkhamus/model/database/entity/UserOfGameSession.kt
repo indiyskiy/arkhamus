@@ -26,6 +26,7 @@ data class UserOfGameSession(
     var classInGame: ClassInGame? = null,
 
     var won: Boolean? = null,
+    var left: Boolean = false,
 ) {
     override fun toString(): String {
         return "UserOfGameSession[" +
