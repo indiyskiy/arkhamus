@@ -13,4 +13,9 @@ class DefaultGameLogic(
         val game = gameLogic.findGameNullSafe(gameId)
         return gameLogic.start(game)
     }
+
+    @Transactional
+    fun disconnectTransactional() {
+       gameLogic.disconnect()
+    }
 }

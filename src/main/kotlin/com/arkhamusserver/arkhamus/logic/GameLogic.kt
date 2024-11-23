@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionSe
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.*
 import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.GameState.NEW
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
@@ -36,9 +37,7 @@ class GameLogic(
     fun findCurrentUserGame(player: UserAccount, gameType: GameType): GameSession? {
         val userOfGames = userOfGameSessionRepository.findByUserAccountId(player.id!!)
         return userOfGames.firstOrNull {
-            it.gameSession.state == GameState.NEW &&
-                    it.gameSession.gameType == gameType &&
-                    it.host
+            it.gameSession.state == NEW && it.gameSession.gameType == gameType && it.host
         }?.gameSession
     }
 
@@ -54,22 +53,45 @@ class GameLogic(
         return gameUpdated.toDto(player, skinsReshuffled)
     }
 
+    fun disconnect() {
+        val player = currentUserService.getCurrentUserAccount()
+        disconnect(player)
+    }
+
+    fun disconnect(player: UserAccount) {
+        val userGames =
+            userOfGameSessionRepository.findByUserAccountId(player.id!!).filter { it.gameSession.state == NEW }
+
+        userGames.forEach { userGame ->
+            if (userGame.gameSession.gameType == GameType.SINGLE || userGame.gameSession.usersOfGameSession.size < 2) {
+                userGame.gameSession.state = GameState.ABANDONED
+            } else {
+                if (userGame.host) {
+                    trySetAnotherHost(userGame, player)
+                }
+                userGame.gameSession.usersOfGameSession = userGame.gameSession.usersOfGameSession.filter {
+                    it.userAccount.id != player.id
+                }
+            }
+        }
+        gameSessionRepository.saveAll(userGames.map { it.gameSession })
+    }
+
     fun findGameNullSafe(gameId: Long): GameSession = gameSessionRepository.findById(gameId).orElseThrow {
         ArkhamusServerRequestException(
-            "game not found with id $gameId",
-            RELATED_ENTITY
+            "game not found with id $gameId", RELATED_ENTITY
         )
     }
 
     fun findGameNullSafe(token: String): GameSession =
         gameSessionRepository.findByToken(token).firstOrNull() ?: throw ArkhamusServerRequestException(
-            "game not found with token $token",
-            RELATED_ENTITY
+            "game not found with token $token", RELATED_ENTITY
         )
 
     fun connectUserToGame(
         player: UserAccount, game: GameSession, host: Boolean = false
     ): UserOfGameSession {
+        disconnect(player)
         val userOfGameSession = UserOfGameSession(
             userAccount = player,
             gameSession = game,
@@ -80,21 +102,18 @@ class GameLogic(
     }
 
     fun createNewGameSession(
-        lobbySize: Int,
-        cultistSize: Int,
-        gameType: GameType,
-        player: UserAccount
+        lobbySize: Int, cultistSize: Int, gameType: GameType, player: UserAccount
     ): GameSession {
+        disconnect()
         val gameSessionSettings = GameSessionSettings(
-            numberOfCultists = cultistSize,
-            lobbySize = lobbySize
+            numberOfCultists = cultistSize, lobbySize = lobbySize
         ).apply {
             this.level = null
         }.apply {
             gameSessionSettingsRepository.save(this)
         }
         return GameSession(
-            state = GameState.NEW,
+            state = NEW,
             token = RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH),
             gameType = gameType,
             gameSessionSettings = gameSessionSettings,
@@ -106,15 +125,21 @@ class GameLogic(
         }
     }
 
+    private fun trySetAnotherHost(
+        session: UserOfGameSession, account: UserAccount
+    ) {
+        session.gameSession.usersOfGameSession.firstOrNull {
+            it.userAccount.id != account.id
+        }?.let {
+            it.host = true
+        }
+    }
+
     private fun GameSession.toDto(
-        currentPlayer: UserAccount,
-        skins: Map<Long, UserSkinSettings>
-    ): GameSessionDto =
-        gameSessionDtoMaker.toDto(
-            this,
-            skins,
-            currentPlayer
-        )
+        currentPlayer: UserAccount, skins: Map<Long, UserSkinSettings>
+    ): GameSessionDto = gameSessionDtoMaker.toDto(
+        this, skins, currentPlayer
+    )
 
     private fun startGame(
         game: GameSession,

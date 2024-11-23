@@ -83,7 +83,7 @@ class GameSessionDtoMaker(
     ): GodDto? {
         return gameSession.god?.let { godNotNull ->
             when (gameSession.state) {
-                NEW -> null
+                NEW, ABANDONED -> null
                 IN_PROGRESS, PENDING -> if (isCultist) {
                     godDtoMaker.convert(godNotNull)
                 } else {
@@ -100,7 +100,7 @@ class GameSessionDtoMaker(
     ): GodDto? {
         return gameSession.god?.let { godNotNull ->
             when (gameSession.state) {
-                NEW -> null
+                NEW, ABANDONED -> null
                 IN_PROGRESS, PENDING, GAME_END_SCREEN, FINISHED -> godDtoMaker.convert(godNotNull)
             }
         }
@@ -128,7 +128,7 @@ class GameSessionDtoMaker(
         myUserId: Long,
     ): RoleDto = RoleDto().apply {
         this.userRole = when (gameSession.state) {
-            NEW -> null
+            NEW, ABANDONED -> null
             IN_PROGRESS, PENDING -> if (
                 cultistSeeCultist(isCultist, convertingUser) ||
                 convertingUser.userAccount.id == myUserId
@@ -141,7 +141,7 @@ class GameSessionDtoMaker(
             GAME_END_SCREEN, FINISHED -> convertingUser.roleInGame
         }
         when (gameSession.state) {
-            NEW -> {
+            NEW, ABANDONED -> {
                 this.userClass = null
                 this.userClassId = null
             }
@@ -176,12 +176,12 @@ class GameSessionDtoMaker(
             this.isHost = it.host
             this.role = RoleDto().apply {
                 this.userRole = when (gameSession.state) {
-                    NEW -> null
+                    NEW, ABANDONED -> null
                     IN_PROGRESS, PENDING -> it.roleInGame
                     GAME_END_SCREEN, FINISHED -> it.roleInGame
                 }
                 this.userClass = when (gameSession.state) {
-                    NEW -> null
+                    NEW, ABANDONED -> null
                     IN_PROGRESS, PENDING, GAME_END_SCREEN, FINISHED -> it.classInGame
                 }
             }

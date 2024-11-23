@@ -17,18 +17,21 @@ class GameController(
     private val singleGameLogic: SingleGameLogic,
     private val gameLogic: DefaultGameLogic,
 ) {
+    @UpdateUserState(UserState.IN_LOBBY)
     @GetMapping("{gameId}")
     fun getGame(@PathVariable gameId: Long): ResponseEntity<GameSessionDto> {
         val gameSession = customGameLogic.findGame(gameId)
         return ResponseEntity.ok(gameSession)
     }
 
+    @UpdateUserState(UserState.IN_LOBBY)
     @GetMapping("byToken/{token}")
     fun getGameByToken(@PathVariable token: String): ResponseEntity<GameSessionDto> {
         val gameSession = customGameLogic.findGame(token)
         return ResponseEntity.ok(gameSession)
     }
 
+    @UpdateUserState(UserState.IN_LOBBY)
     @GetMapping("byplayer/{playerId}")
     fun findUsersOpenGame(@PathVariable playerId: Long): ResponseEntity<GameSessionDto> {
         val gameSession = customGameLogic.findUsersOpenGame(playerId)
@@ -65,6 +68,15 @@ class GameController(
     ): ResponseEntity<GameSessionDto> {
         val gamesSession = customGameLogic.connectToGameByToken(token)
         return ResponseEntity.ok(gamesSession)
+    }
+
+    @UpdateUserState(UserState.ONLINE)
+    @PutMapping("{gameId}/disconnect")
+    fun disconnect(
+        @PathVariable gameId: Long,
+    ): ResponseEntity.BodyBuilder {
+        gameLogic.disconnectTransactional()
+        return ResponseEntity.ok()
     }
 
     @UpdateUserState(UserState.IN_LOBBY)

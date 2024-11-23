@@ -5,7 +5,8 @@ enum class GameState {
     PENDING,
     IN_PROGRESS,
     GAME_END_SCREEN,
-    FINISHED;
+    FINISHED,
+    ABANDONED;
 
     companion object {
         val gameInProgressStates = setOf(IN_PROGRESS, GAME_END_SCREEN)

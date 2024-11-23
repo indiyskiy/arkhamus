@@ -16,7 +16,6 @@ import com.arkhamusserver.arkhamus.view.validator.GameValidator
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
-
 @Component
 class CustomGameLogic(
     private val gameLogic: GameLogic,
@@ -62,10 +61,6 @@ class CustomGameLogic(
     @Transactional
     fun createGame(): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
-        val oldGame = gameLogic.findCurrentUserGame(player, GameType.CUSTOM)
-        if (oldGame != null) {
-            return oldGame.toDto(player)
-        }
         return gameLogic.createNewGameSession(
             DEFAULT_LOBBY_SIZE,
             DEFAULT_CULTIST_SIZE,
@@ -88,6 +83,20 @@ class CustomGameLogic(
         return connect(game, player)
     }
 
+    @Transactional
+    fun updateLobby(gameId: Long, gameSessionSettingsDto: GameSessionSettingsDto): GameSessionDto {
+        val player = currentUserService.getCurrentUserAccount()
+        val game = gameLogic.findGameNullSafe(gameId)
+        val level = gameSessionSettingsDto.level?.let { levelDto ->
+            levelDto.levelId?.let {
+                levelService.latestByLevelIdAndVersion(it)
+            }
+        }
+        gameValidator.checkUpdateAccess(player, game, gameSessionSettingsDto)
+        updateSettings(game, level, gameSessionSettingsDto)
+        return game.toDto(player)
+    }
+
     private fun connect(
         game: GameSession,
         player: UserAccount
@@ -104,20 +113,6 @@ class CustomGameLogic(
         val connectedUser = gameLogic.connectUserToGame(player, game)
         val usersOfGameSession = game.usersOfGameSession + connectedUser
         game.usersOfGameSession = usersOfGameSession
-        return game.toDto(player)
-    }
-
-    @Transactional
-    fun updateLobby(gameId: Long, gameSessionSettingsDto: GameSessionSettingsDto): GameSessionDto {
-        val player = currentUserService.getCurrentUserAccount()
-        val game = gameLogic.findGameNullSafe(gameId)
-        val level = gameSessionSettingsDto.level?.let { levelDto ->
-            levelDto.levelId?.let {
-                levelService.latestByLevelIdAndVersion(it)
-            }
-        }
-        gameValidator.checkUpdateAccess(player, game, gameSessionSettingsDto)
-        updateSettings(game, level, gameSessionSettingsDto)
         return game.toDto(player)
     }
 
@@ -144,6 +139,7 @@ class CustomGameLogic(
 
     private fun GameSession.toDto(currentPlayer: UserAccount): GameSessionDto =
         gameSessionDtoMaker.toDto(this, userSkinLogic.allSkinsOf(this), currentPlayer)
+
 }
 
 
