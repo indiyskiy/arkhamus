@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.view.controller
 
+import com.arkhamusserver.arkhamus.config.UpdateUserState
+import com.arkhamusserver.arkhamus.config.UserState
 import com.arkhamusserver.arkhamus.logic.CustomGameLogic
 import com.arkhamusserver.arkhamus.logic.DefaultGameLogic
 import com.arkhamusserver.arkhamus.logic.SingleGameLogic
@@ -33,18 +35,21 @@ class GameController(
         return ResponseEntity.ok(gameSession)
     }
 
+    @UpdateUserState(UserState.IN_LOBBY)
     @PostMapping
     fun createCustom(): ResponseEntity<GameSessionDto> {
         val gameSession = customGameLogic.createGame()
         return ResponseEntity.ok(gameSession)
     }
 
+    @UpdateUserState(UserState.IN_LOBBY)
     @PostMapping("single")
     fun createSingle(): ResponseEntity<GameSessionDto> {
         val gameSession = singleGameLogic.createGame()
         return ResponseEntity.ok(gameSession)
     }
 
+    @UpdateUserState(UserState.IN_LOBBY)
     @PutMapping("{gameId}/connect")
     fun connect(
         @PathVariable gameId: Long,
@@ -53,6 +58,7 @@ class GameController(
         return ResponseEntity.ok(gamesSession)
     }
 
+    @UpdateUserState(UserState.IN_LOBBY)
     @PutMapping("byToken/{token}/connect")
     fun connect(
         @PathVariable token: String,
@@ -61,6 +67,7 @@ class GameController(
         return ResponseEntity.ok(gamesSession)
     }
 
+    @UpdateUserState(UserState.IN_LOBBY)
     @PutMapping("{gameId}")
     fun update(
         @PathVariable gameId: Long,
@@ -70,6 +77,7 @@ class GameController(
         return ResponseEntity.ok(gamesSession)
     }
 
+    @UpdateUserState(UserState.IN_GAME)
     @PutMapping("{gameId}/start")
     fun start(
         @PathVariable gameId: Long,

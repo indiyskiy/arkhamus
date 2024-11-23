@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.view.controller
 
+import com.arkhamusserver.arkhamus.config.UpdateUserState
+import com.arkhamusserver.arkhamus.config.UserState
 import com.arkhamusserver.arkhamus.logic.auth.AuthenticationService
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 class AuthController(
     private val authenticationService: AuthenticationService
 ) {
+    @UpdateUserState(UserState.ONLINE)
     @PostMapping
     fun authenticate(
         @RequestBody authRequest: AuthenticationRequest
