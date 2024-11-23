@@ -7,5 +7,5 @@ data class AdminUserDto(
     val nickName: String,
     val email: String,
     val creation: String?,
-    val state: UserState
+    val status: UserState
 )
