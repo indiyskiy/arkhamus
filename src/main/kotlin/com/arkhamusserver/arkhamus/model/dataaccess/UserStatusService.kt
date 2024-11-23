@@ -18,13 +18,14 @@ class UserStatusService {
 
     private val userStatusMap: ConcurrentHashMap<Long, UserStateHolder> = ConcurrentHashMap()
 
-    fun updateUserStatus(userId: Long, state: UserState) {
+    fun updateUserStatus(userId: Long, state: UserState, force: Boolean = false) {
         val currentTime = System.currentTimeMillis()
         userStatusMap[userId] = updatedState(
             userId,
             getUserStatus(userId),
             state,
-            currentTime
+            currentTime,
+            force
         )
     }
 
@@ -32,7 +33,8 @@ class UserStatusService {
         userId: Long,
         oldHolder: UserStateHolder?,
         state: UserState,
-        currentTime: Long
+        currentTime: Long,
+        force: Boolean = false
     ): UserStateHolder {
         if (oldHolder == null) {
             logger.info("set up new user status: $userId, $state")
@@ -41,7 +43,7 @@ class UserStatusService {
         if (state == oldHolder.userState) {
             return buildNewState(userId, state, currentTime)
         }
-        if (state.forceUpdate) {
+        if (state.forceUpdate || force) {
             logger.info("force update new user state: $userId, $state")
             return buildNewState(userId, state, currentTime)
         }

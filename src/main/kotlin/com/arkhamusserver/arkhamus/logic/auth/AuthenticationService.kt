@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.auth
 
+import com.arkhamusserver.arkhamus.config.UserState
 import com.arkhamusserver.arkhamus.config.auth.JwtProperties
+import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.ArkhamusUserDetails
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.CustomUserDetailsService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.RefreshTokenRepository
@@ -22,6 +24,7 @@ class AuthenticationService(
     private val tokenService: TokenService,
     private val jwtProperties: JwtProperties,
     private val refreshTokenRepository: RefreshTokenRepository,
+    private val userStatusService: UserStatusService,
 ) {
     @Transactional
     fun authentication(authenticationRequest: AuthenticationRequest): AuthenticationResponse {
@@ -32,6 +35,7 @@ class AuthenticationService(
             )
         )
         val user = userDetailsService.loadUserByUsername(authenticationRequest.login)
+        userStatusService.updateUserStatus(user.userAccount.id!!, UserState.ONLINE, true)
         return authUser(user)
     }
 

@@ -31,8 +31,8 @@
             <td th:text="${user.email}"></td>
             <td th:text="${user.creation?:''}"></td>
             <td>
-                <div th:class="|status-circle status-${user.state.name().toLowerCase()}|"
-                     th:title="${user.state.name()}"></div>
+                <div th:class="|status-circle status-${user.status.name().toLowerCase()}|"
+                     th:title="${user.status.name()}"></div>
             </td>
         </tr>
     </table>
