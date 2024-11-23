@@ -188,3 +188,30 @@ select:focus {
     display: flex;
     justify-content: center;
 }
+
+.status-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-online {
+    background-color: green;
+}
+
+.status-in-game {
+    background-color: blue;
+}
+
+.status-in-lobby {
+    background-color: orange;
+}
+
+.status-afk {
+    background-color: yellow;
+}
+
+.status-offline {
+    background-color: red;
+}

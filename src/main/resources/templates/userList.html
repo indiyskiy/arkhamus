@@ -16,9 +16,10 @@
     <table>
         <tr>
             <th>Id</th>
-            <th>nick name</th>
-            <th>email</th>
-            <th>created</th>
+            <th>Nick Name</th>
+            <th>Email</th>
+            <th>Created</th>
+            <th>Status</th>
         </tr>
         <tr th:each="user : ${users}">
             <td>
@@ -29,6 +30,9 @@
             <td th:text="${user.nickName}"></td>
             <td th:text="${user.email}"></td>
             <td th:text="${user.creation?:''}"></td>
+            <td>
+                <div th:class="|status-circle status-${user.state.name().toLowerCase()}|"></div>
+            </td>
         </tr>
     </table>
 </div>
