@@ -15,7 +15,7 @@ class GlobalGameSettings {
         const val GAME_LENGTH: Long = FULL_DAY_MINUTES * 5
 
         //DISTANCE
-        const val GLOBAL_VISION_DISTANCE: Double = 20.0
+        const val GLOBAL_VISION_DISTANCE: Double = 15.0
         const val HIGH_GROUND_HEIGHT: Double = 1.0
 
         //QUESTS

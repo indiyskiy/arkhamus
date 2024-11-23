@@ -26,6 +26,12 @@ class AdminGameLogic(
 
     companion object {
         const val SCREEN_ZOOM = 10
+
+        const val TYPE = "Type"
+        const val USER = "User"
+        const val TARGET = "Target"
+        const val RELATED_ID = "Related ID"
+
         private val logger = LoggerFactory.getLogger(AdminGameLogic::class.java)
     }
 
@@ -117,10 +123,12 @@ class AdminGameLogic(
     private fun dto(
         colors: Map<Int, NiceColor>,
         activity: GameActivity,
-        colorSize: Int
+        colorSize: Int,
     ): GameActivityDto {
         val color = colors[activity.activityType.ordinal % colorSize]!!
         return GameActivityDto(
+            userId = activity.userOfGameSession.userAccount.id!!,
+            userNickname = activity.userOfGameSession.userAccount.nickName,
             type = activity.activityType,
             color = color,
             points = listOf(
@@ -147,7 +155,12 @@ class AdminGameLogic(
             ),
             x = Math.round(activity.x * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM),
             y = Math.round(activity.z * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM),
-            message = activity.activityType.name
+            message = listOfNotNull(
+                TYPE to activity.activityType.name,
+                USER to "[${activity.userOfGameSession.userAccount.id!!}]${activity.userOfGameSession.userAccount.nickName}",
+                (TARGET to "${activity.relatedGameObjectType}-${activity.relatedGameObjectId}").takeIf { activity.relatedGameObjectId != null },
+                (RELATED_ID to "${activity.relatedEventId}").takeIf { activity.relatedEventId != null }
+            ).toMessage()
         )
     }
 
@@ -174,4 +187,9 @@ class AdminGameLogic(
         return gameSessionDtoMaker.toDtoAsAdmin(game, skins)
     }
 
+    private fun List<Pair<String, String>>.toMessage(): String {
+        return this.joinToString("<br/>") { (key, value) -> "<b>$key:</b> $value" }
+    }
 }
+
+

@@ -14,6 +14,8 @@ data class GameActivitiesDto(
 )
 
 data class GameActivityDto(
+    var userId: Long,
+    val userNickname: String,
     var type: ActivityType,
     var color: NiceColor,
     val points: List<PointDto>,

@@ -78,7 +78,7 @@ class GeometryUtils {
         whoLooks: RedisGameUser,
         target: WithPoint
     ): Boolean {
-        return (whoLooks.y - target.y()) <= GlobalGameSettings.Companion.HIGH_GROUND_HEIGHT
+        return (whoLooks.y - target.y()) >= GlobalGameSettings.Companion.HIGH_GROUND_HEIGHT
     }
 
     data class Point(var x: Double, var y: Double)
