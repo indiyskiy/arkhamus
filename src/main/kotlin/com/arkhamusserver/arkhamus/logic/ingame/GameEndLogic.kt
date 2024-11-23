@@ -70,7 +70,7 @@ class GameEndLogic(
         users: Map<Long, RedisGameUser>
     ) {
         logger.info("set winners and losers")
-        val databaseUsers = userOfGameSessionRepository.findByGameSessionIdAndLeft(gameSession.id!!)
+        val databaseUsers = userOfGameSessionRepository.findByGameSessionIdAndLeftTheLobby(gameSession.id!!)
         logger.info("found ${databaseUsers.size} users of the game")
         setWonOrLoose(gameEndReason, users, databaseUsers)
         userOfGameSessionRepository.saveAll(databaseUsers)

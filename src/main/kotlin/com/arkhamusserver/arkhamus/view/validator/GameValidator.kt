@@ -53,7 +53,7 @@ class GameValidator {
 
     fun checkUpdateAccess(player: UserAccount, game: GameSession, gameSessionSettingsDto: GameSessionSettingsDto) {
         checkStateNew(game)
-        checkIsHost(game.usersOfGameSession.filter { !it.left }, player)
+        checkIsHost(game.usersOfGameSession.filter { !it.leftTheLobby }, player)
         val lobbySize = gameSessionSettingsDto.lobbySize
         val numberOfCultistsSize = gameSessionSettingsDto.numberOfCultists
         checkLobbySize(lobbySize, numberOfCultistsSize, game.gameType)

@@ -412,7 +412,7 @@ class GameThreadPoolTest {
                 roleInGame = RoleTypeInGame.CULTIST,
                 classInGame = ClassInGame.ARISTOCRAT,
                 gameSession = gameSession,
-                left = false
+                leftTheLobby = false
             )
         }
 

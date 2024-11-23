@@ -13,15 +13,26 @@ data class UserAccount(
     var steamId: String? = null,
     @CreationTimestamp
     var creationTimestamp: Timestamp? = null,
-    var nickName: String,
+    var nickName: String = "",
     var email: String? = null,
     var password: String? = null,
     @ManyToMany(cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
     var role: Set<Role> = emptySet(),
 ) {
+    constructor() : this(
+        id = null,
+        steamId = null,
+        creationTimestamp = null,
+        nickName = "",
+        email = null,
+        password = null,
+        role = emptySet()
+    )
+
     override fun toString(): String {
         return String.format(
             "UserAccount[id=%d, nickName='%s', email='%s']", id, nickName, email
         )
     }
+
 }

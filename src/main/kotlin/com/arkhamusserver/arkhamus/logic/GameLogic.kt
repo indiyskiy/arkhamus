@@ -34,7 +34,7 @@ class GameLogic(
 
     @Transactional
     fun findCurrentUserGame(player: UserAccount, gameType: GameType): GameSession? {
-        val userOfGames = userOfGameSessionRepository.findByUserAccountIdAndLeft(player.id!!)
+        val userOfGames = userOfGameSessionRepository.findByUserAccountIdAndLeftTheLobby(player.id!!)
         return userOfGames.firstOrNull {
             it.gameSession.state == NEW && it.gameSession.gameType == gameType && it.host
         }?.gameSession
@@ -43,7 +43,7 @@ class GameLogic(
     @Transactional
     fun start(game: GameSession): GameSessionDto {
         val player = currentUserService.getCurrentUserAccount()
-        val invitedUsers = game.usersOfGameSession.filter { !it.left }
+        val invitedUsers = game.usersOfGameSession.filter { !it.leftTheLobby }
         gameValidator.checkStartAccess(player, game, invitedUsers)
         val skins = userSkinLogic.allSkinsOf(game)
         val skinsReshuffled = userSkinLogic.reshuffleSkins(skins.values).associateBy { it.userAccount!!.id!! }
@@ -59,13 +59,13 @@ class GameLogic(
 
     fun disconnect(player: UserAccount) {
         val userGames =
-            userOfGameSessionRepository.findByUserAccountIdAndLeft(player.id!!).filter { it.gameSession.state == NEW }
+            userOfGameSessionRepository.findByUserAccountIdAndLeftTheLobby(player.id!!).filter { it.gameSession.state == NEW }
 
         userGames.forEach { userGame ->
             if (userGame.host) {
                 trySetAnotherHost(userGame, player)
             }
-            userGame.left = true
+            userGame.leftTheLobby = true
         }
         userOfGameSessionRepository.saveAll(userGames)
     }
@@ -89,7 +89,7 @@ class GameLogic(
             it.userAccount.id == player.id
         }
         if (oldUserOfTheGame != null) {
-            oldUserOfTheGame.left = false
+            oldUserOfTheGame.leftTheLobby = false
             userOfGameSessionRepository.save(oldUserOfTheGame)
             return oldUserOfTheGame
         } else {
@@ -97,7 +97,7 @@ class GameLogic(
                 userAccount = player,
                 gameSession = game,
                 host = host,
-                left = false
+                leftTheLobby = false
             )
             userOfGameSessionRepository.save(userOfGameSession)
             return userOfGameSession

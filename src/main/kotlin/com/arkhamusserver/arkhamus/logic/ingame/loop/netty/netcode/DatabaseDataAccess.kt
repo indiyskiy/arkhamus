@@ -14,7 +14,7 @@ class DatabaseDataAccess(
 ) {
     @Transactional
     fun findByUserAccountIdNotLeft(accountId: Long): List<UserOfGameSession> {
-        return userOfGameSessionRepository.findByUserAccountIdAndLeft(accountId)
+        return userOfGameSessionRepository.findByUserAccountIdAndLeftTheLobby(accountId)
     }
 
     @Transactional

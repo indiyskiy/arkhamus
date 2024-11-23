@@ -26,8 +26,19 @@ data class UserOfGameSession(
     var classInGame: ClassInGame? = null,
 
     var won: Boolean? = null,
-    var left: Boolean = false,
+    var leftTheLobby: Boolean = false,
 ) {
+    constructor() : this(
+        id = null,
+        userAccount = UserAccount(),
+        gameSession = GameSession(),
+        host = false,
+        roleInGame = null,
+        classInGame = null,
+        won = null,
+        leftTheLobby = false
+    )
+
     override fun toString(): String {
         return "UserOfGameSession[" +
                 "id=$id, " +

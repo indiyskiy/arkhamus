@@ -97,7 +97,7 @@ class InGameStartGameHandler(
         authData: AuthRequestProcessData
     ) = (channels.mapNotNull { it.userAccount?.id }.toSet() ==
             authData.game?.usersOfGameSession
-                ?.filter { !it.left }
+                ?.filter { !it.leftTheLobby }
                 ?.mapNotNull { it.userAccount.id }
                 ?.toSet())
 

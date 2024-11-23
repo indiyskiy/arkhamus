@@ -96,7 +96,7 @@ class GameStartUserLogic(
     fun updateInvitedUsersInfoOnGameStart(
         game: GameSession
     ) {
-        val notLeft = game.usersOfGameSession.filter { !it.left }
+        val notLeft = game.usersOfGameSession.filter { !it.leftTheLobby }
         val cultists = notLeft
             .shuffled(random)
             .subList(
