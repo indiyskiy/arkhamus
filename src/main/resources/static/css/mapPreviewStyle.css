@@ -1,12 +1,3 @@
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background: #eee;
-}
-
 svg {
     padding: 30px;
     background: white;
@@ -16,33 +7,6 @@ svg {
 
 polygon {
     filter: brightness(0.8);
-}
-
-.footer, .header {
-    position: fixed;
-    left: 0;
-    width: 100%;
-    background-color: #3B0054;
-    color: orange;
-    text-align: center;
-    height: 35px;
-}
-
-.footer {
-    bottom: 0;
-}
-
-.header {
-    top: 0;
-}
-
-.footer a, .header a {
-    margin: 40px;
-}
-
-.main {
-    padding-top: 35px;
-    padding-bottom: 35px;
 }
 
 a:link {
@@ -63,6 +27,53 @@ a:focus {
 
 a:active {
     color: green;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background: #eee;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #3B0054;
+    color: orange;
+    text-align: center;
+    height: 35px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #3B0054;
+    color: orange;
+    text-align: center;
+    height: 35px;
+}
+
+.footer a, .header a {
+    margin: 40px;
+}
+
+.main {
+    flex: 1; /* To make the main content area flexible */
+    padding-top: 35px;
+    padding-bottom: 35px;
+}
+
+
+.dots-container {
+    position: relative;
+    margin-top: 35px; /* Adjust top margin to account for the header height */
+    margin-bottom: 35px; /* Adjust bottom margin to account for the footer height */
+    z-index: 1; /* Ensures the dots are on top of other content */
 }
 
 .dot {

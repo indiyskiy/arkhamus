@@ -157,7 +157,7 @@ class AdminGameLogic(
             y = Math.round(activity.z * AdminLevelPreviewLogic.Companion.SCREEN_ZOOM),
             message = listOfNotNull(
                 TYPE to activity.activityType.name,
-                USER to "[${activity.userOfGameSession.userAccount.id!!}]${activity.userOfGameSession.userAccount.nickName}",
+                USER to "[${activity.userOfGameSession.userAccount.id!!}] ${activity.userOfGameSession.userAccount.nickName}",
                 (TARGET to "${activity.relatedGameObjectType}-${activity.relatedGameObjectId}").takeIf { activity.relatedGameObjectId != null },
                 (RELATED_ID to "${activity.relatedEventId}").takeIf { activity.relatedEventId != null }
             ).toMessage()
@@ -188,7 +188,7 @@ class AdminGameLogic(
     }
 
     private fun List<Pair<String, String>>.toMessage(): String {
-        return this.joinToString("<br/>") { (key, value) -> "<b>$key:</b> $value" }
+        return this.joinToString("<br/>") { (key, value) -> "<b>$key</b> $value" }
     }
 }
 

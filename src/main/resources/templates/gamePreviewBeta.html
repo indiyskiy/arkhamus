@@ -36,10 +36,11 @@
     <input type="submit" value="Filter">
 </form>
 
-<div th:style="'position: relative; width:' + ${gameActivities.width} + 'px; height:' + ${gameActivities.height} + 'px; border: 1px solid #000;'">
+<!-- Updated dots container with relative position and adjusted z-index to always stay on top -->
+<div class="dots-container" th:style="'width:' + ${gameActivities.width} + 'px; height:' + ${gameActivities.height} + 'px;'">
     <div th:each="dot : ${gameActivities.activities}">
         <div class="dot" th:style="'background-color:'+${dot.color.getCode()}+'; top:'+${dot.y}+'px; left:'+${dot.x}+'px;'">
-            <div class="tooltip" th:text="${dot.message}"></div>
+            <div class="tooltip" th:utext="${dot.message}"></div>
         </div>
     </div>
 </div>
@@ -53,6 +54,4 @@
 </div>
 
 </body>
-
 </html>
-

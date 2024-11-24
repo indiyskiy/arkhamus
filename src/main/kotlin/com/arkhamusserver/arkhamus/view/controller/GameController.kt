@@ -74,9 +74,9 @@ class GameController(
     @PutMapping("{gameId}/disconnect")
     fun disconnect(
         @PathVariable gameId: Long,
-    ): ResponseEntity.BodyBuilder {
+    ): ResponseEntity<Void> {
         gameLogic.disconnectTransactional()
-        return ResponseEntity.ok()
+        return ResponseEntity.ok().build()
     }
 
     @UpdateUserState(UserState.IN_LOBBY)

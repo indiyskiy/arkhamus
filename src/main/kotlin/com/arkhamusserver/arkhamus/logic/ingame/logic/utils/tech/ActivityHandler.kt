@@ -153,7 +153,7 @@ class ActivityHandler(
                 activityType = ActivityType.HEARTBEAT,
                 sourceUser = it.value,
                 gameTime = data.game.globalTimer,
-                relatedEventId = 0L
+                relatedEventId = null
             )
         }
     }
