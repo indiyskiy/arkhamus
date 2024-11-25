@@ -111,15 +111,17 @@ class GameSessionDtoMaker(
         userSkins: Map<Long, UserSkinSettings>,
         isCultist: Boolean,
         myUserId: Long,
-    ) = gameSession.usersOfGameSession.map { convertingUser ->
-        InGameUserDto().apply {
-            this.userId = convertingUser.userAccount.id
-            this.nickName = convertingUser.userAccount.nickName
-            this.isHost = convertingUser.host
-            this.role = buildRoleDto(gameSession, isCultist, convertingUser, myUserId)
-            this.gameSkin = userSkinDtoMaker.toDto(userSkins[convertingUser.userAccount.id]!!)
+    ) = gameSession.usersOfGameSession
+        .filter { !it.leftTheLobby }
+        .map { convertingUser ->
+            InGameUserDto().apply {
+                this.userId = convertingUser.userAccount.id
+                this.nickName = convertingUser.userAccount.nickName
+                this.isHost = convertingUser.host
+                this.role = buildRoleDto(gameSession, isCultist, convertingUser, myUserId)
+                this.gameSkin = userSkinDtoMaker.toDto(userSkins[convertingUser.userAccount.id]!!)
+            }
         }
-    }
 
     private fun buildRoleDto(
         gameSession: GameSession,
