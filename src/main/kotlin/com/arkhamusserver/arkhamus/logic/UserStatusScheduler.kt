@@ -18,7 +18,7 @@ class UserStatusScheduler(
             val minutesInactive = currentTime - it.lastActive
 
             val newState = if (minutesInactive > UserStatusService.OFFLINE_TIME) {
-                UserState.AFK
+                UserState.OFFLINE
             } else {
                 if (minutesInactive > UserStatusService.AFK_TIME) {
                     UserState.AFK
