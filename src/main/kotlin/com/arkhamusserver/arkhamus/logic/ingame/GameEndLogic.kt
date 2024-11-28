@@ -1,7 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame
 
+import com.arkhamusserver.arkhamus.config.UserState
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
+import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
@@ -25,7 +27,8 @@ class GameEndLogic(
     private val gameSessionRepository: GameSessionRepository,
     private val userOfGameSessionRepository: UserOfGameSessionRepository,
     private val timeEventHandler: TimeEventHandler,
-    private val activityHandler: ActivityHandler
+    private val activityHandler: ActivityHandler,
+    private val userStatusService: UserStatusService
 ) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(GameEndLogic::class.java)
@@ -46,6 +49,11 @@ class GameEndLogic(
         setWinnersLosers(gameSession, gameEndReason, users)
         createEndOfGameTimeEvent(game, timeLeft = timeLeft)
         saveActivities(game.inGameId())
+        users.values.forEach { user ->
+            if (!user.leftTheGame) {
+                userStatusService.updateUserStatus(user.inGameId(), UserState.ONLINE, true)
+            }
+        }
     }
 
     private fun saveActivities(gameId: Long) {

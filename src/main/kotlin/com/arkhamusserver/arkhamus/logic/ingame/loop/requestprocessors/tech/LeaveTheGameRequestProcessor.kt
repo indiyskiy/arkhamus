@@ -1,16 +1,20 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.tech
 
+import com.arkhamusserver.arkhamus.config.UserState
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.LeaveTheGameRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
+import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class LeaveTheGameRequestProcessor() : NettyRequestProcessor {
+class LeaveTheGameRequestProcessor(
+    private val userStatusService: UserStatusService
+) : NettyRequestProcessor {
 
     companion object {
         var logger: Logger = LoggerFactory.getLogger(LeaveTheGameRequestProcessor::class.java)
@@ -27,8 +31,9 @@ class LeaveTheGameRequestProcessor() : NettyRequestProcessor {
     ) {
         with(requestDataHolder.requestProcessData as LeaveTheGameRequestGameData) {
             if (this.canLeaveTheGame) {
-                logger.info("user ${this.gameUser!!.userId} left the game")
+                logger.info("user ${gameUser!!.userId} left the game")
                 this.gameUser.leftTheGame = true
+                userStatusService.updateUserStatus(gameUser.userId, UserState.ONLINE)
             }
         }
     }

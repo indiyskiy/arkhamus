@@ -94,7 +94,9 @@ class OneTickTryEndGameMaybeHandler(
 
     private fun markLeaversIfNoResponses(game: RedisGame, users: Collection<RedisGameUser>) {
         if (game.globalTimer - game.lastTimeSentResponse > MAX_TIME_NO_RESPONSES) {
-            users.forEach { it.leftTheGame = true }
+            users.forEach {
+                it.leftTheGame = true
+            }
             logger.info(
                 "no requests for ${game.gameId} - all users left - marked them - ${users.joinToString{ it.inGameId().toString() }}"
             )
