@@ -1,10 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
+import com.arkhamusserver.arkhamus.config.UserState
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
+import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -13,7 +15,8 @@ import org.springframework.stereotype.Component
 class OneTickUserRequests(
     private val nettyRequestProcessors: List<NettyRequestProcessor>,
     private val requestProcessDataBuilder: GameDataBuilder,
-    private val actionCacheHandler: ActionCacheHandler
+    private val actionCacheHandler: ActionCacheHandler,
+    private val userStatusService: UserStatusService
 ) {
 
     companion object {
@@ -25,6 +28,9 @@ class OneTickUserRequests(
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>,
     ): List<NettyTickRequestMessageDataHolder> {
+        currentTasks.forEach { task ->
+            userStatusService.updateUserStatus(task.userAccount.id!!, UserState.IN_GAME)
+        }
         val tasksByUser = currentTasks.groupBy { it.userAccount.id }
         return tasksByUser.map { entry ->
             val taskToProcess = chooseTaskToProcess(entry.value)
