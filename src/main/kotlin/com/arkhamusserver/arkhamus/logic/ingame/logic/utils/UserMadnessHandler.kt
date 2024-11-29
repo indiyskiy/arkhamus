@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.max
@@ -14,7 +15,7 @@ class UserMadnessHandler(
     private val activityHandler: ActivityHandler
 ) {
     companion object {
-        val logger = LoggerFactory.getLogger(UserMadnessHandler::class.java)
+        val logger: Logger = LoggerFactory.getLogger(UserMadnessHandler::class.java)
         const val NIGHT_MADNESS_TICK_IN_MILLIS = 1.0 / 1000.0
         private val random = Random(System.currentTimeMillis())
     }
@@ -52,7 +53,7 @@ class UserMadnessHandler(
         val debuff = MadnessDebuffs.values().filter { it.getStepNumber() == notchIndex }
             .random(random).name
         gameUser.madnessDebuffs += debuff
-        logger.info("apply debuff ${debuff} to ${gameUser.userId}-${gameUser.nickName}")
+        logger.info("apply debuff $debuff to ${gameUser.userId}-${gameUser.nickName}")
         activityHandler.addUserNotTargetActivity(
             gameId = gameUser.gameId,
             activityType = ActivityType.USER_GOT_MAD,

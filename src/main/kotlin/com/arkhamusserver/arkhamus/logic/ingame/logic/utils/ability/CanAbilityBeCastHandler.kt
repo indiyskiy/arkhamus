@@ -49,16 +49,9 @@ class CanAbilityBeCastHandler(
                     it.state == RedisTimeEventState.ACTIVE
         }
         val availableAbilities = visibleAbilitiesList.map {
-            val cooldown = if (summoningSickness != null) {
-                summoningSickness.timeLeft
-            } else {
-                relatedAbilityCastMap[it.id]?.timeLeftCooldown ?: 0
-            }
-            val maxCooldown = if (summoningSickness != null) {
-                summoningSickness.type.getDefaultTime()
-            } else {
-                (relatedAbilityCastMap[it.id]?.let { it.timeLeftCooldown + it.timePast } ?: 0)
-            }
+            val cooldown = summoningSickness?.timeLeft ?: (relatedAbilityCastMap[it.id]?.timeLeftCooldown ?: 0)
+            val maxCooldown = summoningSickness?.type?.getDefaultTime()
+                ?: (relatedAbilityCastMap[it.id]?.let { it.timeLeftCooldown + it.timePast } ?: 0)
             val canBeCast = (fitAdditionalConditionsMap[it] != false) && (cooldown <= 0)
             val charges = charges(it, user)
             AbilityOfUserResponse(

@@ -27,9 +27,7 @@ class VoteSpotInfoMapper() {
                     thisSpotUserInfos = thisSpotUserInfos
                 )
             }
-            VoteSpotInfo().apply {
-                this.costValue = costValue
-                this.costItem = costItem
+            VoteSpotInfo(costValue, costItem).apply {
                 this.state = state
                 this.usersWithBanStates = usersWithBanStates
             }

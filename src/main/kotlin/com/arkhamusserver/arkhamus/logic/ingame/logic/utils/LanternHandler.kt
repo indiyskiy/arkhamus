@@ -54,7 +54,7 @@ class LanternHandler(
         val costValue = 1
         val canPay = inventoryHandler.userHaveItems(
             user = user,
-            requiredItemId = costItem.id,
+            requiredItem = costItem,
             howManyItems = costValue
         )
         return canPay

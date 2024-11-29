@@ -28,7 +28,7 @@ class PretendCultistAbilityCast() : AbilityCast {
     ): Boolean {
         val user = abilityRequestProcessData.gameUser
         if (user == null) return false
-        user.visibilityModifiers.add(VisibilityModifier.PRETEND_CULTIST.name)
+        user.visibilityModifiers += VisibilityModifier.PRETEND_CULTIST.name
         return true
     }
 
@@ -38,7 +38,7 @@ class PretendCultistAbilityCast() : AbilityCast {
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
-        sourceUser.visibilityModifiers.add(VisibilityModifier.PRETEND_CULTIST.name)
+        sourceUser.visibilityModifiers+=VisibilityModifier.PRETEND_CULTIST.name
         return true
     }
 

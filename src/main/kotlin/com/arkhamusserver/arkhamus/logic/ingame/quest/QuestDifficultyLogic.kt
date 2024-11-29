@@ -11,7 +11,6 @@ class QuestDifficultyLogic(
     private val geometryUtils: GeometryUtils
 ) {
     companion object {
-        const val VERY_EASY = 0
         const val EASY = 113
         const val NORMAL = 135
         const val HARD = 150

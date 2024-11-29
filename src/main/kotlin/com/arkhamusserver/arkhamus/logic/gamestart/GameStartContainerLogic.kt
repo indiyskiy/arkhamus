@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.ContainerTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -59,7 +60,7 @@ class GameStartContainerLogic(
 
     private fun randomizeItems(
         dbContainer: Container
-    ): MutableMap<Int, Int> {
+    ): List<InventoryCell> {
         return if (!dbContainer.containerTags.isEmpty()) {
             randomItems(dbContainer.containerTags)
         } else {
@@ -69,11 +70,11 @@ class GameStartContainerLogic(
 
     private fun randomItems(
         containerTags: Set<ContainerTag>
-    ): MutableMap<Int, Int> {
+    ): List<InventoryCell> {
         return lootTableHandler.generateLoot(containerTags)
     }
 
-    private fun godModChest(dbContainer: Container): MutableMap<Int, Int> {
+    private fun godModChest(dbContainer: Container): List<InventoryCell> {
         val num = (dbContainer.id ?: 0) % 9
         return when (num) {
             0L -> mapOfType(LOOT)
@@ -89,6 +90,8 @@ class GameStartContainerLogic(
     }
 
     private fun mapOfType(type: ItemType) =
-        Item.values().filter { it.itemType == type }.associate { it.id to 50 }.toMutableMap()
+        Item.values().filter { it.itemType == type }.map {
+            InventoryCell(it, 50)
+        }
 
 }

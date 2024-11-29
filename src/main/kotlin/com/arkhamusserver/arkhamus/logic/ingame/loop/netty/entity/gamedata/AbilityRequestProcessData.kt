@@ -24,7 +24,6 @@ class AbilityRequestProcessData(
     var executedSuccessfully: Boolean,
     var item: Item?,
     var target: WithStringId?,
-    var targetId: String?,
     var targetType: GameObjectType?,
     inZones: List<LevelZone>,
     clues: List<RedisClue>,

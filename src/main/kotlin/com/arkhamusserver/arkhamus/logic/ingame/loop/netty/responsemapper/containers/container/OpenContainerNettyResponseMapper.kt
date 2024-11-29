@@ -46,14 +46,11 @@ class OpenContainerNettyResponseMapper(
         globalGameData: GlobalGameData
     ): OpenContainerNettyResponse {
         with(requestProcessData as OpenContainerRequestGameData) {
-            val mappedItem = this.container.items.map {
-                it.key to it.value
-            }
             val containerState = requestProcessData.container.state
             val containerHoldingUserId = requestProcessData.container.holdingUser
 
             if (containerState == MapObjectState.HOLD && containerHoldingUserId == user.id) {
-                val itemsInside = inventoryHandler.mapUsersItems(mappedItem)
+                val itemsInside = inventoryHandler.mapUsersItems(this.container.items)
                 return buildContainer(
                     itemsInside = itemsInside,
                     gameData = requestProcessData,

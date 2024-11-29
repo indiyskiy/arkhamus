@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.interfaces.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
 data class RedisContainer(
     override var id: String,
@@ -15,7 +16,7 @@ data class RedisContainer(
     var z: Double,
     var containerTags: MutableSet<String> = mutableSetOf(),
     var interactionRadius: Double = 0.0,
-    var items: MutableMap<Int, Int> = HashMap(),
+    var items: List<InventoryCell> = emptyList(),
     var gameTags: MutableSet<String> = mutableSetOf(),
     var visibilityModifiers: MutableSet<String>,
 ) : RedisGameEntity, WithPoint, WithTrueIngameId, WithGameTags, WithVisibilityModifiers, Interactable {

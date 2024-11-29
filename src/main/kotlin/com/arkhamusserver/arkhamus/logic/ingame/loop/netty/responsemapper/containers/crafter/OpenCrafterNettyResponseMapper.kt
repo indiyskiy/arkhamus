@@ -12,7 +12,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyR
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -45,15 +44,11 @@ class OpenCrafterNettyResponseMapper(
         globalGameData: GlobalGameData
     ): OpenCrafterNettyResponse {
         with(requestProcessData as OpenCrafterRequestGameData) {
-            val mappedItem = this.crafter.items.map {
-                itemMap[it.key]!! to it.value
-            }
+            val mappedItem = this.crafter.items
             val containerState = requestProcessData.crafter.state
             val containerHoldingUserId = requestProcessData.crafter.holdingUser
             val itemsInside = mappedItem.map {
-                InventoryCell(it.first.id).apply {
-                    this.number = it.second
-                }
+                InventoryCell(it.item, it.number)
             }
             if (
                 containerState == MapObjectState.HOLD &&
@@ -168,8 +163,4 @@ class OpenCrafterNettyResponseMapper(
             globalGameData.levelGeometryData
         ),
     )
-
-
-    private val itemMap = Item.values().associateBy { it.id }
-
 }

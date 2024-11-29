@@ -42,6 +42,8 @@ class FarsightAbilityCast() : AbilityCast {
     }
 
     private fun farsight(currentUser: RedisGameUser?) {
-        currentUser?.stateTags?.add(UserStateTag.FARSIGHT.name)
+        currentUser?.let {
+            it.stateTags += UserStateTag.FARSIGHT.name
+        }
     }
 }

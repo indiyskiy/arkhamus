@@ -30,7 +30,9 @@ class FarsightAbilityProcessor : ActiveAbilityProcessor {
 
     override fun finishActive(castAbility: RedisAbilityCast, globalGameData: GlobalGameData) {
         val user = globalGameData.users[castAbility.sourceUserId]
-        user?.stateTags?.remove(UserStateTag.FARSIGHT.name)
+        if (user != null) {
+            user.stateTags -= UserStateTag.FARSIGHT.name
+        }
     }
 
 }

@@ -90,7 +90,7 @@ class VoteMadnessHandler(
         if (inventoryHandler.userHaveItems(
                 user,
                 voteSpot.costItem,
-                voteSpot.costValue ?: 0
+                voteSpot.costValue
             )
         ) {
             inventoryHandler.consumeItems(

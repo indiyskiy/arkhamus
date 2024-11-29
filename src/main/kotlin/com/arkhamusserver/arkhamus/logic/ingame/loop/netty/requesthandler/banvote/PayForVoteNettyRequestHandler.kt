@@ -60,7 +60,7 @@ class PayForVoteNettyRequestHandler(
                 voteSpot != null && inventoryHandler.userHaveItems(
                     user,
                     voteSpot.costItem,
-                    voteSpot.costValue ?: 0
+                    voteSpot.costValue
                 )
             val canPay = mastPay && haveItems
 

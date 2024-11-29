@@ -66,7 +66,7 @@ class GameStartVoteSpotLogic(
                 zoneId = voteSpot.zoneId,
                 interactionRadius = voteSpot.interactionRadius,
                 costValue = 1,
-                costItem = DEFAULT_ITEM.id,
+                costItem = DEFAULT_ITEM,
                 bannedUsers = mutableListOf(),
                 availableUsers = allUsers.map { it.userId }.toMutableList(),
                 visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()

@@ -77,7 +77,7 @@ class RitualGoingEventProcessor(
                 user.stateTags.contains(IN_RITUAL.name)
             }
             .forEach { user ->
-                user.stateTags.remove(IN_RITUAL.name)
+                user.stateTags -= IN_RITUAL.name
             }
         logger.info("users from ritual removed")
         logger.info("RITUAL_GOING process ended")
@@ -114,7 +114,7 @@ class RitualGoingEventProcessor(
                     altarHolder, user, radius
                 )
             ) {
-                user.stateTags.add(IN_RITUAL.name)
+                user.stateTags += IN_RITUAL.name
             }
         }
     }

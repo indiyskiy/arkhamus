@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
@@ -15,10 +17,10 @@ data class RedisAltarHolder(
     var z: Double,
     var radius: Double = 0.0,
 
-    var lockedGodId: Int? = null,
-    var itemsForRitual: Map<Int, Int> = emptyMap(),
-    var itemsIdToAltarId: Map<Int, Long> = emptyMap(),
-    var itemsOnAltars: Map<Int, Int> = emptyMap(),
+    var lockedGod: God? = null,
+    var itemsForRitual: Map<Item, Int> = emptyMap(),
+    var itemsToAltarId: Map<Item, Long> = emptyMap(),
+    var itemsOnAltars: Map<Item, Int> = emptyMap(),
 
     var state: MapAltarState = MapAltarState.OPEN,
 ) : RedisGameEntity, WithPoint, WithTrueIngameId {

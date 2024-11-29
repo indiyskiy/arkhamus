@@ -23,91 +23,100 @@ class InventoryHandler {
     }
 
     fun addItems(user: RedisGameUser, addedItem: Item, itemsToAdd: Int = 1) {
-        addItems(user, addedItem.id, itemsToAdd)
+        val existingCell = user.items.firstOrNull { it.item == addedItem }
+        if (existingCell != null) {
+            existingCell.number += itemsToAdd
+        } else {
+            user.items += InventoryCell(
+                item = addedItem,
+                number = itemsToAdd
+            )
+        }
     }
 
-    fun addItems(user: RedisGameUser, addedItemId: Int, itemsToAdd: Int = 1) {
-        val howManyItems = howManyItems(user, addedItemId)
-        user.items[addedItemId] = howManyItems + itemsToAdd
-    }
-
-    fun userHaveItems(user: RedisGameUser, requiredItemId: Int?, howManyItems: Int): Boolean {
-        return howManyItems(user, requiredItemId) >= howManyItems
+    fun userHaveItems(user: RedisGameUser, requiredItem: Item, howManyItems: Int): Boolean {
+        return howManyItems(user, requiredItem) >= howManyItems
     }
 
     fun userHaveItem(user: RedisGameUser, requiredItem: Item): Boolean {
         return howManyItems(user, requiredItem) > 0
     }
 
-    fun userHaveItem(user: RedisGameUser, requiredItem: Int): Boolean {
-        return howManyItems(user, requiredItem) > 0
+    fun howManyItems(user: RedisGameUser, requiredItem: Item): Int {
+        return howManyItems(user.items, requiredItem)
     }
 
-    fun howManyItems(user: RedisGameUser, requiredItem: Item?): Int {
-        return howManyItems(user, requiredItem?.id)
+    fun howManyItems(inventory: List<InventoryCell>, requiredItem: Item): Int {
+        return inventory.filter { it.item == requiredItem }.sumOf { it.number }
     }
 
-    fun howManyItems(user: RedisGameUser, requiredItemId: Int?): Int {
-        return requiredItemId?.let { user.items[it] } ?: 0
-    }
-
-    fun consumeItems(user: RedisGameUser, item: Item, number: Int) {
-        consumeItems(user, item.id, number)
-    }
-
-    fun consumeItems(user: RedisGameUser, item: Int?, number: Int?) {
-        if (item != null && number != null && userHaveItem(user, item)) {
-            user.items[item] = user.items[item]!! - number
+    fun consumeItems(user: RedisGameUser, item: Item, number: Int):ConsumedItem {
+        if (userHaveItem(user, item)) {
+            var numberLeft = number
+            user.items
+                .filter { it.item == item }
+                .forEach { cell ->
+                    val numberToConsume = min(cell.number, numberLeft)
+                    cell.number -= numberToConsume
+                    numberLeft -= numberToConsume
+                    logger.info("consumed $numberToConsume from user. New value in user inventory is ${cell.number}")
+                }
+            trimInventory(user)
         }
+        return ConsumedItem(item, number)
     }
 
     fun consumeItem(user: RedisGameUser, item: Item) {
         consumeItems(user, item, 1)
     }
 
-    fun mapUsersItems(items: Map<Int, Int>): List<InventoryCell> {
+    fun mapUsersItems(items: List<InventoryCell>): List<InventoryCell> {
         return items.map {
             InventoryCell(
-                itemId = it.key,
-                number = it.value
+                item = it.item,
+                number = it.number
             )
-        }.sortedByDescending { it.itemId }
+        }.sortedByDescending { it.item.id }
     }
 
-    fun mapUsersItems(items: List<Pair<Int, Int>>): List<InventoryCell> {
-        return items.map {
-            InventoryCell(
-                itemId = it.first,
-                number = it.second
-            )
-        }.sortedByDescending { it.itemId }
-    }
-
-    fun consumeItems(recipe: Recipe, gameUser: RedisGameUser, crafter: RedisCrafter): List<ConsumedItem> {
+    fun consumeItems(recipe: Recipe, gameUser: RedisGameUser, crafter: RedisCrafter):List<ConsumedItem> {
         logger.info("consuming items for recipe ${recipe.recipeId} to create ${recipe.item.name}")
-        return recipe.ingredients.map { ingredient: Ingredient ->
+       return recipe.ingredients.map { ingredient: Ingredient ->
             consumeItem(ingredient, gameUser, crafter)
         }
     }
 
-    private fun consumeItem(ingredient: Ingredient, user: RedisGameUser, crafter: RedisCrafter): ConsumedItem {
+    private fun consumeItem(ingredient: Ingredient, user: RedisGameUser, crafter: RedisCrafter):ConsumedItem {
         logger.info("consuming ${ingredient.number} of ${ingredient.item.name}")
-        val itemToConsume = ingredient.item.id
-        val toConsumeBefore = ingredient.number
+        val itemToConsume = ingredient.item
 
-        val itemsInCrafter = crafter.items[itemToConsume] ?: 0
-        val canBeConsumedFromCrafter = min(toConsumeBefore, itemsInCrafter)
-        crafter.items[itemToConsume] = itemsInCrafter - canBeConsumedFromCrafter
-        logger.info("consumed $canBeConsumedFromCrafter from crafter. New value in crafter is ${crafter.items[itemToConsume]}, was $itemsInCrafter before")
+        var toConsumeLeft = ingredient.number
 
-        val toConsumeFromUser = toConsumeBefore - canBeConsumedFromCrafter
-        val itemsFromUser = user.items[itemToConsume] ?: 0
-        val canBeConsumedFromUser = min(itemsFromUser, toConsumeFromUser)
-        user.items[itemToConsume] = itemsFromUser - canBeConsumedFromUser
-        logger.info("consumed $canBeConsumedFromUser from user. New value in user inventory is ${user.items[itemToConsume]}, was $itemsFromUser before")
-        return ConsumedItem(itemToConsume, canBeConsumedFromUser)
+        val itemsInCrafter = crafter.items.filter { it.item == itemToConsume }
+        itemsInCrafter.forEach { cell ->
+            val canBeConsumed = min(toConsumeLeft, cell.number)
+            cell.number -= canBeConsumed
+            toConsumeLeft -= canBeConsumed
+            logger.info("consumed $canBeConsumed from crafter. New value in crafter is ${cell.number}")
+        }
+        return consumeItems(user, itemToConsume, toConsumeLeft)
     }
 
-    data class ConsumedItem(var itemId: Int, var number: Int)
+    private fun trimInventory(user: RedisGameUser) {
+        user.items = user.items.filter { it.number > 0 && it.item != Item.PURE_NOTHING }
+    }
+
+    fun haveRequiredItems(ingredient: Ingredient, crafter: RedisCrafter, user: RedisGameUser): Boolean {
+        return howManyItems(user, ingredient.item) + howManyItems(crafter, ingredient.item) >= ingredient.number
+    }
+
+    private fun howManyItems(
+        crafter: RedisCrafter,
+        item: Item
+    ): Int {
+        return crafter.items.filter { it.item == item }.sumOf { it.number }
+    }
+
+    data class ConsumedItem(var item: Item, var number: Int)
 
 }

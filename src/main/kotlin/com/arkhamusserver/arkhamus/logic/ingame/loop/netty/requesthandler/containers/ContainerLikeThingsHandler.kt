@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.containers
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Component
 import kotlin.math.min
 
 @Component
-class ContainerLikeThingsHandler {
+class ContainerLikeThingsHandler(
+    private val inventoryHandler: InventoryHandler
+) {
     fun getTrueNewInventoryContent(
         oldCrafter: RedisCrafter,
         oldGameUser: RedisGameUser,
@@ -18,17 +21,15 @@ class ContainerLikeThingsHandler {
         val oldCrafterItemsList = oldCrafter.items
         val oldGameUserItemsList = oldGameUser.items
 
-        val (summarizedItems: MutableMap<Int, Int>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
+        val (summarizedItems: MutableMap<Item, Int>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
             oldCrafterItemsList,
             oldGameUserItemsList,
-            oldGameUser,
             newInventoryContent
         )
 
         oldCrafter.items = summarizedItems
-            .filterNot { it.key == Item.PURE_NOTHING.id || it.value <= 0 }
-            .toMap()
-            .toMutableMap()
+            .filterNot { it.key == Item.PURE_NOTHING || it.value <= 0 }
+            .map{ InventoryCell(it.key, it.value) }
         oldGameUser.items = mapSimpleInventory(trueNewInventoryContent)
         return trueNewInventoryContent
     }
@@ -41,17 +42,15 @@ class ContainerLikeThingsHandler {
         val oldContainerItemsList = oldContainer.items
         val oldGameUserItemsList = oldGameUser.items
 
-        val (summarizedItems: MutableMap<Int, Int>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
+        val (summarizedItems: MutableMap<Item, Int>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
             oldContainerItemsList,
             oldGameUserItemsList,
-            oldGameUser,
             newInventoryContent
         )
 
         oldContainer.items = summarizedItems
-            .filterNot { it.key == Item.PURE_NOTHING.id || it.value <= 0 }
-            .toMap()
-            .toMutableMap()
+            .filterNot { it.key == Item.PURE_NOTHING || it.value <= 0 }
+            .map{ InventoryCell(it.key, it.value) }
 
         oldGameUser.items = mapSimpleInventory(trueNewInventoryContent)
         return trueNewInventoryContent
@@ -59,32 +58,37 @@ class ContainerLikeThingsHandler {
 
     private fun mapSimpleInventory(trueNewInventoryContent: List<InventoryCell>) =
         trueNewInventoryContent
-            .filterNot { it.itemId == Item.PURE_NOTHING.id || it.number <= 0 }
-            .groupBy { it.itemId }
-            .map { cell -> cell.key to cell.value.sumOf { it.number } }
-            .toMap()
-            .toMutableMap()
+            .filterNot { it.item == Item.PURE_NOTHING || it.number <= 0 }
+            .groupBy { it.item }
+            .map { cell ->
+                InventoryCell(cell.key, cell.value.sumOf { it.number } )
+            }
+
 
     private fun calculateInventory(
-        oldContainerItemsList: MutableMap<Int, Int>,
-        oldGameUserItemsList: MutableMap<Int, Int>,
-        oldGameUser: RedisGameUser,
+        oldContainerItemsList: List<InventoryCell>,
+        oldGameUserItemsList: List<InventoryCell>,
         newInventoryContent: List<InventoryCell>
-    ): Pair<MutableMap<Int, Int>, List<InventoryCell>> {
-        val oldContainerItems: List<Int> = oldContainerItemsList.toList().filter { it.second > 0 }.map { it.first }
-        val oldGameUserItems: List<Int> = oldGameUserItemsList.toList().filter { it.second > 0 }.map { it.first }
+    ): Pair<MutableMap<Item, Int>, List<InventoryCell>> {
+        val oldContainerItems: List<Item> = oldContainerItemsList.filter { it.number > 0 }.map { it.item }
+        val oldGameUserItems: List<Item> = oldGameUserItemsList.filter { it.number > 0 }.map { it.item }
+
         val differentItemTypes = (oldContainerItems + oldGameUserItems).distinct()
-        val summarizedItems: MutableMap<Int, Int> = differentItemTypes.associateWith {
-            ((oldContainerItemsList[it] ?: 0) + (oldGameUser.items[it] ?: 0))
+
+        val summarizedItems: MutableMap<Item, Int> = differentItemTypes.associateWith {
+            inventoryHandler.howManyItems(oldContainerItemsList, it) + inventoryHandler.howManyItems(
+                oldGameUserItemsList,
+                it
+            )
         }.toMutableMap()
         val trueNewInventoryContent: List<InventoryCell> = newInventoryContent.map {
-            val itemId = it.itemId
-            val newValue = min(it.number, summarizedItems[itemId] ?: 0)
+            val item = it.item
+            val newValue = min(it.number, summarizedItems[item] ?: 0)
             if (newValue > 0) {
-                summarizedItems[itemId] = (summarizedItems[itemId] ?: 0) - newValue
-                InventoryCell(itemId, newValue)
+                summarizedItems[item] = (summarizedItems[item] ?: 0) - newValue
+                InventoryCell(item, newValue)
             } else {
-                InventoryCell(Item.PURE_NOTHING.id, 0)
+                InventoryCell(Item.PURE_NOTHING, 0)
             }
         }
         return Pair(summarizedItems, trueNewInventoryContent)

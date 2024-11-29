@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
@@ -432,7 +433,7 @@ class GameThreadPoolTest {
                 x = 0.0,
                 y = 0.0,
                 z = 0.0,
-                items = mutableMapOf(),
+                items = listOf(),
                 stateTags = mutableSetOf(),
                 madnessDebuffs = mutableSetOf(),
                 callToArms = 0,
@@ -446,7 +447,7 @@ class GameThreadPoolTest {
         val redisGame = RedisGame(
             gameSession.id.toString(),
             gameSession.id,
-            1,
+            God.AAMON,
             currentTick = startingTick
         )
 
@@ -460,9 +461,9 @@ class GameThreadPoolTest {
                 y = 0.0,
                 z = 0.0,
                 radius = 0.0,
-                lockedGodId = null,
+                lockedGod = null,
                 itemsForRitual = mutableMapOf(),
-                itemsIdToAltarId = mutableMapOf(),
+                itemsToAltarId = mutableMapOf(),
                 itemsOnAltars = mutableMapOf(),
                 state = MapAltarState.OPEN,
             ),

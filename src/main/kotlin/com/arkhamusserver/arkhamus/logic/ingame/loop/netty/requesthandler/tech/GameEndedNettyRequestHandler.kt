@@ -13,7 +13,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.toGod
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.tech.GameEndedRequestMessage
 import org.springframework.stereotype.Component
@@ -54,7 +53,7 @@ class GameEndedNettyRequestHandler(
                 losers = losers,
                 gameUser = user,
                 otherGameUsers = users,
-                god = globalGameData.game.godId.toGod()!!,
+                god = globalGameData.game.god,
                 visibleOngoingEvents = visibleOngoingEvents,
                 availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),

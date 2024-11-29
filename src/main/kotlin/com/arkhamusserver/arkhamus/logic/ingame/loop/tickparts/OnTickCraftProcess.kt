@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -18,7 +19,7 @@ import kotlin.math.min
 class OnTickCraftProcess(
     private val redisCraftProcessRepository: RedisCraftProcessRepository,
     private val redisCrafterRepository: RedisCrafterRepository,
-    private val recipesSource: RecipesSource
+    private val recipesSource: RecipesSource,
 ) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(OnTickCraftProcess::class.java)
@@ -53,8 +54,12 @@ class OnTickCraftProcess(
         numberOfItems: Int,
         crafter: RedisCrafter
     ) {
-        val before = crafter.items[produced.id] ?: 0
-        crafter.items[produced.id] = before + numberOfItems
+        val existingCell = crafter.items.firstOrNull { it.item == produced }
+        if (existingCell != null) {
+            existingCell.number += numberOfItems
+        } else {
+            crafter.items += InventoryCell(produced, numberOfItems)
+        }
         redisCrafterRepository.save(crafter)
     }
 

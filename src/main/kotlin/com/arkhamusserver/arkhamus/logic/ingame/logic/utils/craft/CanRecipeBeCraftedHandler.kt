@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft
 
-import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Ingredient
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
@@ -47,30 +46,10 @@ class CanRecipeBeCraftedHandler(
         user: RedisGameUser
     ): Boolean {
         return recipe.ingredients.all {
-            haveRequiredItems(it, crafter, user)
+            userInventoryHandler.haveRequiredItems(it, crafter, user)
         }.also {
             logger.warn("haveRequiredItems $this")
         }
     }
-
-    private fun haveRequiredItems(
-        recipe: Ingredient,
-        crafter: RedisCrafter,
-        user: RedisGameUser
-    ): Boolean {
-        return (itemsInCrafter(crafter, recipe)
-                + ownItems(user, recipe) >= recipe.number
-                )
-    }
-
-    private fun ownItems(
-        user: RedisGameUser,
-        recipe: Ingredient
-    ) = userInventoryHandler.howManyItems(user, recipe.item)
-
-    private fun itemsInCrafter(
-        crafter: RedisCrafter,
-        recipe: Ingredient
-    ) = crafter.items[recipe.item.id] ?: 0
 
 }

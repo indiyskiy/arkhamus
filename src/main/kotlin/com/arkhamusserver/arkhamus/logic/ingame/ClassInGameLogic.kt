@@ -14,9 +14,9 @@ class ClassInGameLogic(
 ) {
 
     fun listAllClasses(): List<ClassInGameDto> {
-        val abilityMap = ClassInGame.values().map {
+        val abilityMap = ClassInGame.values().associate {
             it to resolveAbility(it)
-        }.toMap()
+        }
         return classInGameDtoMaker.convert(ClassInGame.values(), abilityMap)
     }
 

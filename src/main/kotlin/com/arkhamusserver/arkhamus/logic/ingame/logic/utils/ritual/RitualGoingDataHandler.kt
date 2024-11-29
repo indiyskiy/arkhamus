@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
@@ -20,12 +21,12 @@ class RitualGoingDataHandler {
         return RitualGoingDataResponse().apply {
             val currentGameTime = ritualEvent?.let { it.timeStart + it.timePast } ?: 0
             val gameTimeItemsNotches = countItemsNotches(ritualEvent, altarHolder)
-            val currentItemId = countCurrentItem(gameTimeItemsNotches, currentGameTime)
-            this.godId = altarHolder.lockedGodId
+            val currentItem = countCurrentItem(gameTimeItemsNotches, currentGameTime)
+            this.godId = altarHolder.lockedGod?.getId()
             this.altarsContent = mapAltarsContent(altarHolder)
-            this.currentItemId = currentItemId
-            this.currentItemMax = altarHolder.itemsForRitual[currentItemId] ?: 0
-            this.currentItemInside = altarHolder.itemsOnAltars[currentItemId] ?: 0
+            this.currentItemId = currentItem?.id ?: 0
+            this.currentItemMax = altarHolder.itemsForRitual[currentItem] ?: 0
+            this.currentItemInside = altarHolder.itemsOnAltars[currentItem] ?: 0
             this.gameTimeStart = ritualEvent?.timeStart ?: 0
             this.gameTimeEnd = (ritualEvent?.timeStart ?: 0) + RedisTimeEventType.RITUAL_GOING.getDefaultTime()
             this.gameTimeNow = currentGameTime
@@ -34,11 +35,11 @@ class RitualGoingDataHandler {
         }
     }
 
-    private fun countCurrentItem(gameTimeItemsNotches: List<ItemNotch>, currentGameTime: Long): Int {
+    private fun countCurrentItem(gameTimeItemsNotches: List<ItemNotch>, currentGameTime: Long): Item? {
         return gameTimeItemsNotches.firstOrNull {
             it.gameTimeStart <= currentGameTime &&
                     it.gameTimeEnd > currentGameTime
-        }?.itemId ?: 0
+        }?.item
     }
 
     fun countItemsNotches(
@@ -53,25 +54,23 @@ class RitualGoingDataHandler {
         return altarHolder.itemsForRitual
             .toList()
             .sortedBy { it.first }
-            .map {
-                it
-            }.mapIndexed { index, (item, _) ->
+            .mapIndexed { index, (item, _) ->
                 ItemNotch().apply {
-                    itemId = item
-                    gameTimeStart = start + (step * index)
-                    gameTimeEnd = start + (step * (index + 1))
+                    this.item = item
+                    this.gameTimeStart = start + (step * index)
+                    this.gameTimeEnd = start + (step * (index + 1))
                 }
             }
     }
 
     private fun mapAltarsContent(altarHolder: RedisAltarHolder?): List<AltarContent> {
         return altarHolder?.let { altar ->
-            altar.itemsForRitual.map { (itemId, itemNumberMax) ->
+            altar.itemsForRitual.map { (item, itemNumberMax) ->
                 AltarContent().apply {
-                    this.itemId = itemId
-                    this.altarId = altar.itemsIdToAltarId[itemId]!!
+                    this.item = item
+                    this.altarId = altar.itemsToAltarId[item]!!
                     this.itemNumberMax = itemNumberMax
-                    this.itemNumberNow = altar.itemsOnAltars[itemId]!!
+                    this.itemNumberNow = altar.itemsOnAltars[item]!!
                 }
             }
         } ?: emptyList()

@@ -66,7 +66,7 @@ class AltarOpenNettyRequestHandler(
                 altarHolder = altarHolder,
                 voteState = altarPolling?.state ?: MapAltarPollingState.NOT_STARTED,
                 votedForGod = votedForGod(altarPolling, user),
-                godLocked = globalGameData.altarHolder?.lockedGodId?.toGod(),
+                godLocked = globalGameData.altarHolder?.lockedGod,
                 voteProcessOpen = godVoteHandler.isVoteProcessOpen(altarPolling, altarHolder),
                 canVote = godVoteHandler.canVote(altarPolling, altarHolder, user),
                 canStartVote = godVoteHandler.canBeStarted(altarHolder, altar),

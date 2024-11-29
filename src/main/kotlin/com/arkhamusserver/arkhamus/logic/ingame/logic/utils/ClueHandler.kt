@@ -10,7 +10,6 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.toGod
 import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
@@ -87,8 +86,8 @@ class ClueHandler(
     ) {
         val existingClues = data.clues
         val clueZones = data.levelGeometryData.zones.filter { it.zoneType == ZoneType.CLUE }
-        val clueTypes = data.game.godId.toGod()?.getTypes()
-        clueTypes?.let { clueTypesNotNull ->
+        val clueTypes = data.game.god.getTypes()
+        clueTypes.let { clueTypesNotNull ->
             clueTypesNotNull.map { clueType ->
                 clueZones.mapNotNull { zone ->
                     if (clueExistAlready(zone, clueType, existingClues)) {

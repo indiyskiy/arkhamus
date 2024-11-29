@@ -31,7 +31,8 @@ class PretendCultistAbilityProcessor() : ActiveAbilityProcessor {
 
     override fun finishActive(castAbility: RedisAbilityCast, globalGameData: GlobalGameData) {
         val user = globalGameData.users[castAbility.sourceUserId]
-        user?.visibilityModifiers?.remove(VisibilityModifier.PRETEND_CULTIST.name)
+        if (user == null) return
+        user.visibilityModifiers -= VisibilityModifier.PRETEND_CULTIST.name
     }
 }
 

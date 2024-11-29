@@ -96,29 +96,6 @@ class ActivityHandler(
             relatedEventId = relatedEventId
         )
 
-    fun addActivity(
-        gameId: Long,
-        activityType: ActivityType,
-        sourceUserId: Long?,
-        x: Double,
-        y: Double,
-        z: Double,
-        gameTime: Long,
-        relatedEventId: Long?,
-    ): RedisActivity =
-        addActivity(
-            gameId = gameId,
-            activityType = activityType,
-            sourceUserId = sourceUserId,
-            x = x,
-            y = y,
-            z = z,
-            gameTime = gameTime,
-            relatedGameObjectType = null,
-            relatedGameObjectId = null,
-            relatedEventId = relatedEventId
-        )
-
     @Transactional
     fun saveAll(gameId: Long) {
         val redisActivities = redisActivityRepository.findByGameId(gameId)

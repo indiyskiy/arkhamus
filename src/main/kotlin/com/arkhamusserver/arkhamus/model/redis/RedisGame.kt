@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
@@ -10,7 +11,7 @@ import org.springframework.data.redis.core.index.Indexed
 data class RedisGame(
     @Id var id: String,
     @Indexed var gameId: Long?,
-    var godId: Int,
+    var god: God,
     var currentTick: Long = -1,
     var lastTickSaveHeartbeatActivity: Long = 0,
     var globalTimer: Long = 0,

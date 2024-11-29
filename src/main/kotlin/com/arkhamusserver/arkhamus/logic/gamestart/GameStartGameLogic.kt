@@ -37,7 +37,7 @@ class GameStartGameLogic(
             RedisGame(
                 id = game.id.toString(),
                 gameId = game.id,
-                godId = game.god!!.getId()
+                god = game.god!!
             )
         )
     }

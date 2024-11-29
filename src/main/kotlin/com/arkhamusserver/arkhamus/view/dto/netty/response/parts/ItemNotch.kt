@@ -1,7 +1,9 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+
 data class ItemNotch(
-    var itemId: Int = 0,
+    var item: Item? = null,
     var gameTimeStart: Long = 0,
     var gameTimeEnd: Long = 0,
 )

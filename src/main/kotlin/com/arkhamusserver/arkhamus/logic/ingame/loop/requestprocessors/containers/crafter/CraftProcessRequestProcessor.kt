@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.containe
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler.ConsumedItem
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CraftProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -107,10 +108,10 @@ class CraftProcessRequestProcessor(
 
     private fun applyChangesOnSortedUsersInventory(
         updatedUserInventory: MutableList<InventoryCell>,
-        consumedFromUser: List<InventoryHandler.ConsumedItem>
+        consumedFromUser: List<ConsumedItem>
     ): MutableList<InventoryCell> {
         updatedUserInventory.forEach { cell ->
-            val toConsume = consumedFromUser.firstOrNull { it.itemId == cell.itemId }
+            val toConsume = consumedFromUser.firstOrNull { it.item == cell.item }
             if (toConsume != null) {
                 val canBeConsumed = min(cell.number, toConsume.number)
                 toConsume.number -= canBeConsumed

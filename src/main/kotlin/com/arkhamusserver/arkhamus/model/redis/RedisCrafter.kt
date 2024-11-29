@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEn
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.interfaces.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
 data class RedisCrafter(
     override var id: String,
@@ -15,7 +16,7 @@ data class RedisCrafter(
     var y: Double,
     var z: Double,
     var interactionRadius: Double = 0.0,
-    var items: MutableMap<Int, Int> = HashMap(),
+    var items: List<InventoryCell> = emptyList(),
     var crafterType: CrafterType,
     var gameTags: MutableSet<String> = mutableSetOf(),
     var visibilityModifiers: MutableSet<String>,

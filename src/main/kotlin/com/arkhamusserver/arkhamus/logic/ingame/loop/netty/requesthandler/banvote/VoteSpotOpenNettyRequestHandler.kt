@@ -72,7 +72,9 @@ class VoteSpotOpenNettyRequestHandler(
             val votesToBan = voteSpot?.let { voteHandler.votesToBan(globalGameData.users.values, voteSpot) } ?: 0
             val canCallForVote = voteHandler.getCanCallForVote(voteSpot, ongoingEvents, user)
             val mustPay = voteSpot?.voteSpotState == VoteSpotState.WAITING_FOR_PAYMENT
-            val canPay = mustPay && inventoryHandler.userHaveItems(user, voteSpot?.costItem, voteSpot?.costValue ?: 0)
+            val canPay = mustPay &&
+                    voteSpot!=null &&
+                    inventoryHandler.userHaveItems(user, voteSpot.costItem, voteSpot.costValue)
 
             return VoteSpotOpenRequestProcessData(
                 voteSpot = voteSpot,

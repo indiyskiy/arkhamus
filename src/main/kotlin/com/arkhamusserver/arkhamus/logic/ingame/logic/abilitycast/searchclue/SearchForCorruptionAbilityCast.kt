@@ -33,10 +33,10 @@ class SearchForCorruptionAbilityCast(
         logger.info("cast $ability")
         val user = abilityRequestProcessData.gameUser
         if (user == null) return false
-        user.stateTags.add(UserStateTag.INVESTIGATING.name)
+        user.stateTags += UserStateTag.INVESTIGATING.name
         val visibilityModifier = resolver.toVisibilityModifier(ability)
         visibilityModifier?.let {
-            user.visibilityModifiers.add(it.name)
+            user.visibilityModifiers += it.name
             return true
         }
         return false
@@ -48,11 +48,10 @@ class SearchForCorruptionAbilityCast(
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
-        val user = sourceUser
-        user.stateTags.add(UserStateTag.INVESTIGATING.name)
+        sourceUser.stateTags += UserStateTag.INVESTIGATING.name
         val visibilityModifier = resolver.toVisibilityModifier(ability)
         visibilityModifier?.let {
-            user.visibilityModifiers.add(it.name)
+            sourceUser.visibilityModifiers += it.name
             return true
         }
         return false

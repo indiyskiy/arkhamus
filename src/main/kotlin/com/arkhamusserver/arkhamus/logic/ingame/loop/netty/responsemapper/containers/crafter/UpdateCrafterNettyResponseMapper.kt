@@ -52,8 +52,8 @@ class UpdateCrafterNettyResponseMapper(
                 ),
                 itemsInside = crafter.items.map {
                     InventoryCell().apply {
-                        number = it.value
-                        itemId = it.key
+                        number = it.number
+                        item = it.item
                     }
                 },
                 gameData = this,

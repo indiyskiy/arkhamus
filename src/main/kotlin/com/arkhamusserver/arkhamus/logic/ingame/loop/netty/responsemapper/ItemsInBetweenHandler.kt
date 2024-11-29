@@ -18,13 +18,13 @@ class ItemsInBetweenHandler {
         val result = itemsInside.toMutableList()
         toAdd.forEach {
             result.add(InventoryCell().apply {
-                itemId = it.item.id
+                item = it.item
                 number = it.number
             })
         }
         toRemove.forEach { remove ->
             val index = result.indexOfLast {
-                it.itemId == remove.item.id
+                it.item == remove.item
             }
             if (index != -1) {
                 val valueBefore = result[index].number
@@ -34,7 +34,7 @@ class ItemsInBetweenHandler {
                     0
                 }
                 result[index] = InventoryCell().apply {
-                    itemId = remove.item.id
+                    item = remove.item
                     number = valueAfter
                 }
             }

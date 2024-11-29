@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.ContainerTag
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -17,7 +18,7 @@ class LootTableHandler {
         val random: Random = Random(System.currentTimeMillis())
     }
 
-    fun generateLoot(tags: Set<ContainerTag>): MutableMap<Int, Int> {
+    fun generateLoot(tags: Set<ContainerTag>): List<InventoryCell> {
         val lootTable = createLootTable(tags)
         return lootByTable(lootTable)
     }
@@ -25,33 +26,35 @@ class LootTableHandler {
 
     private fun lootByTable(
         table: LootTable,
-    ): MutableMap<Int, Int> {
+    ): List<InventoryCell> {
         val size = random.nextDouble(table.size).roundToInt() + 1
         val totalWeight = table.lootRaws.sumOf { it.weight }
-        if (totalWeight < 1 || size < 1) return mutableMapOf()
-        val map = (1..size).map {
+        if (totalWeight < 1 || size < 1) return emptyList()
+        val map = (1..size).mapNotNull {
             randomWithWeight(totalWeight, table)
-        }.filter { it.second > 0 && it.first > 0 }
+        }.filter { it.second > 0 }
             .groupBy { it.first }
             .map { pair ->
                 pair.key to pair.value.sumOf { it.second }
+            }.map{
+                InventoryCell(it.first, it.second)
             }
-        return map.toMap().toMutableMap()
+        return map
     }
 
     private fun randomWithWeight(
         totalWeight: Int,
         table: LootTable
-    ): Pair<Int, Int> {
+    ): Pair<Item, Int>? {
         val randomValue = random.nextInt(totalWeight)
         var cumulativeWeight = 0
         table.lootRaws.forEach { raw ->
             cumulativeWeight += raw.weight
             if (randomValue < cumulativeWeight) {
-                return raw.item.id to (random.nextDouble(raw.weightSize).roundToInt() + 1)
+                return raw.item to (random.nextDouble(raw.weightSize).roundToInt() + 1)
             }
         }
-        return 0 to 0
+        return null
     }
 
     private fun createLootTable(tags: Set<ContainerTag>): LootTable {

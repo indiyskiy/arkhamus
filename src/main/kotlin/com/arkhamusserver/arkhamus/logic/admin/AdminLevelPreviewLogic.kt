@@ -34,7 +34,7 @@ class AdminLevelPreviewLogic(
 ) {
 
     companion object{
-        const val SCREEN_ZOOM = 10
+        const val SCREEN_ZOOM:Int = 10
     }
 
     @Transactional

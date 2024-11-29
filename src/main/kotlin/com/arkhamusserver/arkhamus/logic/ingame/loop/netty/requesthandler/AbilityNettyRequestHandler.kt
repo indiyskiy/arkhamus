@@ -103,7 +103,6 @@ class AbilityNettyRequestHandler(
                     globalGameData,
                     clues,
                     target,
-                    targetId,
                     targetType,
                 )
             } ?: buildWrongAbilityGameData(
@@ -130,7 +129,6 @@ class AbilityNettyRequestHandler(
         globalGameData: GlobalGameData,
         clues: List<RedisClue>,
         target: WithStringId?,
-        targetId: String?,
         targetType: GameObjectType?,
     ) = AbilityRequestProcessData(
         ability = ability,
@@ -161,7 +159,6 @@ class AbilityNettyRequestHandler(
             globalGameData.quests
         ),
         target = target,
-        targetId = targetId,
         targetType = targetType,
     )
 
@@ -202,7 +199,6 @@ class AbilityNettyRequestHandler(
             globalGameData.quests
         ),
         target = null,
-        targetId = null,
         targetType = null,
     )
 }

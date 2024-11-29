@@ -27,7 +27,7 @@ class TeleportHandler(
         user.x = point.x()
         user.y = point.y()
         user.z = point.z()
-        user.stateTags.add(UserStateTag.STUN.name)
+        user.stateTags+=UserStateTag.STUN.name
         timeEventHandler.createEvent(
             game = game,
             eventType = RedisTimeEventType.TELEPORTATION_STUN,

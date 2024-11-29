@@ -59,10 +59,7 @@ class OneTickTryEndGameMaybeHandler(
     }
 
     private fun singlePlayerGame(users: Collection<RedisGameUser>): Boolean {
-        if (users.size <= 1) {
-            return true
-        }
-        return false
+        return users.size <= 1
     }
 
     private fun checkIfEverybodyMad(

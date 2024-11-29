@@ -223,15 +223,15 @@ class RitualHandler(
 
         val cork = godToCorkResolver.resolve(quorum)
         val recipe = recipesSource.getAllRecipes().first { it.item == cork }
-        altarHolder?.lockedGodId = quorum.getId()
+        altarHolder?.lockedGod = quorum
         altarHolder?.itemsForRitual = recipe.ingredients.associate {
-            it.item.id to it.number
+            it.item to it.number
         }
         altarHolder?.itemsOnAltars = recipe.ingredients.associate {
-            it.item.id to 0
+            it.item to 0
         }
-        altarHolder?.itemsIdToAltarId = recipe.ingredients.mapIndexed { index, ingredient ->
-            ingredient.item.id to altars[index].inGameId()
+        altarHolder?.itemsToAltarId = recipe.ingredients.mapIndexed { index, ingredient ->
+            ingredient.item to altars[index].inGameId()
         }.toMap()
 
         altarHolder?.state = MapAltarState.GOD_LOCKED
@@ -243,9 +243,9 @@ class RitualHandler(
     }
 
     fun unlockTheGod(altarHolder: RedisAltarHolder?) {
-        altarHolder?.lockedGodId = null
+        altarHolder?.lockedGod = null
         altarHolder?.itemsForRitual = emptyMap()
-        altarHolder?.itemsIdToAltarId = emptyMap()
+        altarHolder?.itemsToAltarId = emptyMap()
         altarHolder?.itemsOnAltars = emptyMap()
     }
 
