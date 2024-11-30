@@ -30,7 +30,6 @@ class OneTickTimeEvent(
         timePassedMillis: Long
     ): List<OngoingEvent> {
         val redisTimeEvents: List<OngoingEvent> = timeEvents.mapNotNull { event ->
-//            logger.info("time left for event ${event.type}: $${event.timeLeft}")
             val timeAdd = min(event.timeLeft, timePassedMillis)
             if (event.state == RedisTimeEventState.ACTIVE) {
                 processActiveEvent(event, globalGameData, timeAdd, currentGameTime)

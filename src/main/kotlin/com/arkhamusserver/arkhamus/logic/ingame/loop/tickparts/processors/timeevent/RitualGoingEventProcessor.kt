@@ -70,29 +70,13 @@ class RitualGoingEventProcessor(
         val altarHolder = globalGameData.altarHolder
         if (altarHolder == null || !altarHolder.thmAddedThisRound) {
             logger.info("RITUAL_GOING process ending")
-            ritualHandler.failRitualStartCooldown(
-                altarHolder,
-                globalGameData.altarPolling,
-                globalGameData.timeEvents,
-                globalGameData.game
-            )
-            logger.info("ritual failed")
-            globalGameData
-                .users
-                .values
-                .filter { user ->
-                    user.stateTags.contains(IN_RITUAL.name)
-                }
-                .forEach { user ->
-                    user.stateTags -= IN_RITUAL.name
-                }
-            logger.info("users from ritual removed")
+            ritualHandler.failRitualByTime(altarHolder, globalGameData)
             logger.info("RITUAL_GOING process ended")
         } else {
+            logger.info("RITUAL_GOING process ending, but starts another round")
             ritualHandler.startAnotherRound(globalGameData, altarHolder)
         }
     }
-
 
     private fun setUsersPosition(
         values: Collection<RedisGameUser>,

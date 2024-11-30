@@ -13,6 +13,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteCastRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual.GodVoteCastRequestProcessor
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual.RitualPutItemRequestProcessor
+import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent.RitualGoingEventProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
@@ -24,6 +25,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.ItemNotch
 import org.apache.commons.lang3.math.NumberUtils.min
@@ -46,6 +48,29 @@ class RitualHandler(
 ) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(RitualHandler::class.java)
+    }
+
+    fun failRitualByTime(
+        altarHolder: RedisAltarHolder?,
+        globalGameData: GlobalGameData
+    ) {
+        failRitualStartCooldown(
+            altarHolder,
+            globalGameData.altarPolling,
+            globalGameData.timeEvents,
+            globalGameData.game
+        )
+        RitualGoingEventProcessor.Companion.logger.info("ritual failed")
+        globalGameData
+            .users
+            .values
+            .filter { user ->
+                user.stateTags.contains(IN_RITUAL.name)
+            }
+            .forEach { user ->
+                user.stateTags -= IN_RITUAL.name
+            }
+        RitualGoingEventProcessor.Companion.logger.info("users from ritual removed")
     }
 
     fun countItemsNotches(
