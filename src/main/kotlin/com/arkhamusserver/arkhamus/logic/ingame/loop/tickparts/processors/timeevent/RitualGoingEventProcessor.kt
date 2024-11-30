@@ -44,6 +44,11 @@ class RitualGoingEventProcessor(
         currentGameTime: Long,
         timePassedMillis: Long
     ) {
+        val gameTimeItemsNotches = ritualHandler.countItemsNotches(event, globalGameData.altarHolder)
+        val currentItem = ritualHandler.countCurrentItem(gameTimeItemsNotches, currentGameTime)
+        if (currentItem != null) {
+            ritualHandler.tryToShiftTime(globalGameData.altarHolder, currentItem, event)
+        }
         addUsersToRitual(globalGameData)
     }
 
@@ -62,25 +67,30 @@ class RitualGoingEventProcessor(
         currentGameTime: Long,
         timePassedMillis: Long
     ) {
-        logger.info("RITUAL_GOING process ending")
-        ritualHandler.failRitualStartCooldown(
-            globalGameData.altarHolder,
-            globalGameData.altarPolling,
-            globalGameData.timeEvents,
-            globalGameData.game
-        )
-        logger.info("ritual failed")
-        globalGameData
-            .users
-            .values
-            .filter { user ->
-                user.stateTags.contains(IN_RITUAL.name)
-            }
-            .forEach { user ->
-                user.stateTags -= IN_RITUAL.name
-            }
-        logger.info("users from ritual removed")
-        logger.info("RITUAL_GOING process ended")
+        val altarHolder = globalGameData.altarHolder
+        if (altarHolder == null || !altarHolder.thmAddedThisRound) {
+            logger.info("RITUAL_GOING process ending")
+            ritualHandler.failRitualStartCooldown(
+                altarHolder,
+                globalGameData.altarPolling,
+                globalGameData.timeEvents,
+                globalGameData.game
+            )
+            logger.info("ritual failed")
+            globalGameData
+                .users
+                .values
+                .filter { user ->
+                    user.stateTags.contains(IN_RITUAL.name)
+                }
+                .forEach { user ->
+                    user.stateTags -= IN_RITUAL.name
+                }
+            logger.info("users from ritual removed")
+            logger.info("RITUAL_GOING process ended")
+        } else {
+            ritualHandler.startAnotherRound(globalGameData, altarHolder)
+        }
     }
 
 

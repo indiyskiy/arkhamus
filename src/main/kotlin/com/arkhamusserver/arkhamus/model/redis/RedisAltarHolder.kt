@@ -22,6 +22,9 @@ data class RedisAltarHolder(
     var itemsToAltarId: Map<Item, Long> = emptyMap(),
     var itemsOnAltars: Map<Item, Int> = emptyMap(),
 
+    var thmAddedThisRound: Boolean = false,
+    var round: Int = 0,
+
     var state: MapAltarState = MapAltarState.OPEN,
 ) : RedisGameEntity, WithPoint, WithTrueIngameId {
 
