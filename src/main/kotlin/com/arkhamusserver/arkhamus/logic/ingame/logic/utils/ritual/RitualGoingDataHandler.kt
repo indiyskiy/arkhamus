@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarContent
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.ItemNotchResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.RitualGoingDataResponse
 import org.springframework.stereotype.Component
 
@@ -29,7 +30,9 @@ class RitualGoingDataHandler(
             this.gameTimeStart = ritualEvent?.timeStart ?: 0
             this.gameTimeEnd = (ritualEvent?.timeStart ?: 0) + RedisTimeEventType.RITUAL_GOING.getDefaultTime()
             this.gameTimeNow = currentGameTime
-            this.gameTimeItemsNotches = gameTimeItemsNotches
+            this.gameTimeItemsNotches = gameTimeItemsNotches.map{
+                ItemNotchResponse(it)
+            }
             this.userIdsInRitual = usersInRitual.map { it.userId }
         }
     }

@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 

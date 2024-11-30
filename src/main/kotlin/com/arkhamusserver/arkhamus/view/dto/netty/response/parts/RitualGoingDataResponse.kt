@@ -11,7 +11,7 @@ data class RitualGoingDataResponse(
     var gameTimeStart: Long = 0L,
     var gameTimeEnd: Long = 0L,
     var gameTimeNow: Long = 0L,
-    var gameTimeItemsNotches: List<ItemNotch> = emptyList(),
+    var gameTimeItemsNotches: List<ItemNotchResponse> = emptyList(),
 
     var userIdsInRitual: List<Long> = emptyList()
 )
