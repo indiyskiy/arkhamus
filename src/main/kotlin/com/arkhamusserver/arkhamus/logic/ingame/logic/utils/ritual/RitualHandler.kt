@@ -11,9 +11,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomI
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteCastRequestProcessData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual.GodVoteCastRequestProcessor
-import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.ritual.RitualPutItemRequestProcessor
-import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent.RitualGoingEventProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
@@ -60,7 +57,7 @@ class RitualHandler(
             globalGameData.timeEvents,
             globalGameData.game
         )
-        RitualGoingEventProcessor.Companion.logger.info("ritual failed")
+        logger.info("ritual failed")
         globalGameData
             .users
             .values
@@ -70,7 +67,7 @@ class RitualHandler(
             .forEach { user ->
                 user.stateTags -= IN_RITUAL.name
             }
-        RitualGoingEventProcessor.Companion.logger.info("users from ritual removed")
+        logger.info("users from ritual removed")
     }
 
     fun countItemsNotches(
@@ -136,7 +133,7 @@ class RitualHandler(
         altarHolder: RedisAltarHolder,
         ongoingEvents: List<OngoingEvent>
     ) {
-        RitualPutItemRequestProcessor.Companion.logger.info("put all item")
+        logger.info("put all item")
         if (globalGameData.game.god == altarHolder.lockedGod) {
             gameEndLogic.endTheGame(
                 globalGameData.game,
@@ -158,9 +155,8 @@ class RitualHandler(
         item: Item,
         ongoingEvents: List<OngoingEvent>
     ) {
-        RitualPutItemRequestProcessor.Companion.logger.info("trying to shift time")
+        logger.info("trying to shift time for all possible events")
         if (thisItemIsPutOnAltar(altarHolder, item)) {
-            RitualPutItemRequestProcessor.Companion.logger.info("shift time")
             shiftTimeOfEvent(ongoingEvents, item, altarHolder)
         }
     }
@@ -170,9 +166,8 @@ class RitualHandler(
         item: Item,
         ongoingEvent: RedisTimeEvent
     ) {
-        RitualPutItemRequestProcessor.Companion.logger.info("trying to shift time")
+        logger.info("trying to shift time for one event")
         if (thisItemIsPutOnAltar(altarHolder, item)) {
-            RitualPutItemRequestProcessor.Companion.logger.info("shift time")
             shiftTimeOfEvent(ongoingEvent, item, altarHolder)
         }
     }
@@ -324,7 +319,7 @@ class RitualHandler(
         events: List<RedisTimeEvent>,
         game: RedisGame
     ) {
-        GodVoteCastRequestProcessor.logger.info("tryToForceStart")
+        logger.info("tryToForceStart")
         if (godVoteHandler.everybodyVoted(allUsers, altarPolling)) {
             val quorum = gotQuorum(allUsers, altarPolling)
             if (quorum != null) {
@@ -481,6 +476,7 @@ class RitualHandler(
         altarHolder: RedisAltarHolder?,
         item: Item
     ) {
+        logger.info("shift time")
         val notches = countItemsNotches(ritualEvent, altarHolder)
         val notchOfCurrentItem = notches.firstOrNull { it.item == item }
         if (notchOfCurrentItem != null) {
