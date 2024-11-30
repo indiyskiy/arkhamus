@@ -32,7 +32,7 @@ class UserLocationHandler(
     ): Boolean {
         return haveGlobalVision(whoLooks) || (
                 inVisionDistance(whoLooks, target, affectedByBlind) &&
-                        (!heightAffectVision || onHighGroundOrSameLevel(whoLooks, target)) &&
+                        (!heightAffectVision || !onHighGround(whoLooks, target)) &&
                         (!geometryAffectsVision || geometryCheck())
                 )
     }
@@ -41,11 +41,11 @@ class UserLocationHandler(
         return distanceLessOrEquals(user, interactable, interactable.interactionRadius())
     }
 
-    private fun onHighGroundOrSameLevel(
+    private fun onHighGround(
         whoLooks: RedisGameUser,
         target: WithPoint
     ): Boolean {
-        return geometryUtils.onHighGroundOrSameLevel(whoLooks, target)
+        return geometryUtils.onHighGround(whoLooks, target)
     }
 
     private fun haveGlobalVision(whoLooks: RedisGameUser): Boolean =

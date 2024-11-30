@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.HIGH_GROUND_HEIGHT
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import org.springframework.stereotype.Component
@@ -74,11 +74,11 @@ class GeometryUtils {
         return points.minByOrNull { distance(it, point) }
     }
 
-    fun onHighGroundOrSameLevel(
+    fun onHighGround(
         whoLooks: RedisGameUser,
         target: WithPoint
     ): Boolean {
-        return (whoLooks.y - target.y()) >= GlobalGameSettings.Companion.HIGH_GROUND_HEIGHT
+        return (target.y() - whoLooks.y) >= HIGH_GROUND_HEIGHT
     }
 
     data class Point(var x: Double, var y: Double)
