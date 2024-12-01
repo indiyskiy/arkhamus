@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.min
@@ -16,7 +17,7 @@ class ContainerLikeThingsHandler(
 ) {
 
     companion object {
-        val logger = LoggerFactory.getLogger(ContainerLikeThingsHandler::class.java)
+        val logger: Logger = LoggerFactory.getLogger(ContainerLikeThingsHandler::class.java)
     }
 
     fun getTrueNewInventoryContent(

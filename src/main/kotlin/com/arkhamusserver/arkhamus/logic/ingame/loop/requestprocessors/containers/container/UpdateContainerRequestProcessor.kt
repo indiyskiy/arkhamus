@@ -41,6 +41,7 @@ class UpdateContainerRequestProcessor(
         val oldGameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
         val container = globalGameData.containers[updateContainerRequestMessage.externalInventoryId]!!
 
+        logger.info("start update container")
         if ((container.state == MapObjectState.HOLD) && (container.holdingUser == oldGameUser.userId)) {
             val sortedUserInventory =
                 containerLikeThingsHandler.getTrueNewInventoryContent(
@@ -49,9 +50,12 @@ class UpdateContainerRequestProcessor(
                     requestProcessData.sortedUserInventory
                 )
             if (updateContainerRequestMessage.close) {
+                logger.info("close container")
                 closeContainer(container)
             }
+            logger.info("save container")
             redisContainerRepository.save(container)
+            logger.info("start update container")
             requestProcessData.sortedUserInventory = sortedUserInventory
             requestProcessData.visibleItems = sortedUserInventory
         }
