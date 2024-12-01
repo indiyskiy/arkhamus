@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.min
 
@@ -13,6 +14,11 @@ import kotlin.math.min
 class ContainerLikeThingsHandler(
     private val inventoryHandler: InventoryHandler
 ) {
+
+    companion object {
+        val logger = LoggerFactory.getLogger(ContainerLikeThingsHandler::class.java)
+    }
+
     fun getTrueNewInventoryContent(
         oldCrafter: RedisCrafter,
         oldGameUser: RedisGameUser,
@@ -29,7 +35,7 @@ class ContainerLikeThingsHandler(
 
         oldCrafter.items = summarizedItems
             .filterNot { it.key == Item.PURE_NOTHING || it.value <= 0 }
-            .map{ InventoryCell(it.key, it.value) }
+            .map { InventoryCell(it.key, it.value) }
         oldGameUser.items = mapSimpleInventory(trueNewInventoryContent)
         return trueNewInventoryContent
     }
@@ -39,6 +45,7 @@ class ContainerLikeThingsHandler(
         oldGameUser: RedisGameUser,
         newInventoryContent: List<InventoryCell>
     ): List<InventoryCell> {
+        logger.info("items from request = ${newInventoryContent.joinToString { it.item.name + " " + it.number }}")
         val oldContainerItemsList = oldContainer.items
         val oldGameUserItemsList = oldGameUser.items
 
@@ -49,10 +56,12 @@ class ContainerLikeThingsHandler(
         )
 
         oldContainer.items = summarizedItems
-            .filterNot { it.key == Item.PURE_NOTHING || it.value <= 0 }
-            .map{ InventoryCell(it.key, it.value) }
+            .filter { it.key != Item.PURE_NOTHING && it.value > 0 }
+            .map { InventoryCell(it.key, it.value) }
+        logger.info("new container items = ${oldContainer.items.joinToString { it.item.name + " " + it.number }}")
 
         oldGameUser.items = mapSimpleInventory(trueNewInventoryContent)
+        logger.info("new user items = ${oldGameUser.items.joinToString { it.item.name + " " + it.number }}")
         return trueNewInventoryContent
     }
 
@@ -61,7 +70,7 @@ class ContainerLikeThingsHandler(
             .filterNot { it.item == Item.PURE_NOTHING || it.number <= 0 }
             .groupBy { it.item }
             .map { cell ->
-                InventoryCell(cell.key, cell.value.sumOf { it.number } )
+                InventoryCell(cell.key, cell.value.sumOf { it.number })
             }
 
 
