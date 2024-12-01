@@ -392,6 +392,7 @@ class RitualHandler(
         holder: RedisAltarHolder
     ) {
         holder.round++
+        holder.thmAddedThisRound = false
         redisAltarHolderRepository.save(holder)
         eventHandler.createEvent(
             data.game, RedisTimeEventType.RITUAL_GOING
