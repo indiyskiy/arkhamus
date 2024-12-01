@@ -15,6 +15,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.banvote.VoteSpotOpenN
 import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.VoteSpotInfoResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -50,7 +51,7 @@ class VoteSpotOpenNettyResponseMapper(
             )
             return VoteSpotOpenNettyResponse(
                 canPay = requestProcessData.canPay,
-                voteSpotInfo = voteSpotInfo,
+                voteSpotInfo = voteSpotInfo?.let{VoteSpotInfoResponse(it)},
                 canVote = requestProcessData.canVote,
                 canCallForVote = requestProcessData.canCallForVote,
                 cantVoteReasons = requestProcessData.cantVoteReasons.sortedByDescending { it.priority },

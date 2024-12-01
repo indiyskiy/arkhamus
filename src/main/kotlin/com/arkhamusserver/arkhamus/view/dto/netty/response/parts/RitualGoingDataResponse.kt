@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
 data class RitualGoingDataResponse(
     var godId: Int? = null,
-    var altarsContent: List<AltarContent> = emptyList(),
+    var altarsContent: List<AltarContentResponse> = emptyList(),
 
     var currentItemId: Int = 0,
     var currentItemMax: Int = 0,

@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneRes
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class VoteSpotOpenNettyResponse(
-    val voteSpotInfo: VoteSpotInfo?,
+    val voteSpotInfo: VoteSpotInfoResponse?,
     val canVote: Boolean,
     val canPay: Boolean,
     val canCallForVote: Boolean,

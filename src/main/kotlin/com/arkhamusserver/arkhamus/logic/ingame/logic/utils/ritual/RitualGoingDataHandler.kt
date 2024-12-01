@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarContent
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarContentResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.ItemNotchResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.RitualGoingDataResponse
 import org.springframework.stereotype.Component
@@ -23,7 +24,7 @@ class RitualGoingDataHandler(
             val gameTimeItemsNotches = ritualHandler.countItemsNotches(ritualEvent, altarHolder)
             val currentItem = ritualHandler.countCurrentItem(gameTimeItemsNotches, currentGameTime)
             this.godId = altarHolder.lockedGod?.getId()
-            this.altarsContent = mapAltarsContent(altarHolder)
+            this.altarsContent = mapAltarsContent(altarHolder).map { AltarContentResponse(it) }
             this.currentItemId = currentItem?.id ?: 0
             this.currentItemMax = altarHolder.itemsForRitual[currentItem] ?: 0
             this.currentItemInside = altarHolder.itemsOnAltars[currentItem] ?: 0
