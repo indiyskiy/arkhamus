@@ -17,6 +17,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.conta
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.crafter.CraftProcessRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -71,7 +72,7 @@ class CraftProcessNettyRequestHandler(
                     recipe = recipe,
                     crafter = crafter,
                     canBeStarted = canBeCrafted,
-                    sortedUserInventory = sortedUserInventory,
+                    sortedUserInventory = sortedUserInventory.map { InventoryCell(it) },
                     executedSuccessfully = false,
                     gameUser = user,
                     otherGameUsers = users,
@@ -104,7 +105,7 @@ class CraftProcessNettyRequestHandler(
                     gameUser = user,
                     otherGameUsers = users,
                     inZones = inZones,
-                    sortedUserInventory = sortedUserInventory,
+                    sortedUserInventory = sortedUserInventory.map { InventoryCell(it) },
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                     availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
                     visibleItems = inventoryHandler.mapUsersItems(user.items),

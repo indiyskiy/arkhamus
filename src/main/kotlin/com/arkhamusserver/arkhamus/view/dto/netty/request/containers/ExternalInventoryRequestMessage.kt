@@ -2,11 +2,11 @@ package com.arkhamusserver.arkhamus.view.dto.netty.request.containers
 
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCellRequest
 
 abstract class ExternalInventoryRequestMessage(
     var externalInventoryId: Long,
-    var newInventoryContent: List<InventoryCell>,
+    var newInventoryContent: List<InventoryCellRequest>,
     var close: Boolean,
     type: String,
     baseRequestData: BaseRequestData

@@ -15,6 +15,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.conta
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.crafter.UpdateCrafterRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.springframework.stereotype.Component
 
 @Component
@@ -60,7 +61,7 @@ class UpdateCrafterNettyRequestHandler(
                 otherGameUsers = users,
                 inZones = inZones,
                 executedSuccessfully = true,
-                sortedUserInventory = sortedUserInventory,
+                sortedUserInventory = sortedUserInventory.map{InventoryCell(it)},
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                 availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
                 visibleItems = inventoryHandler.mapUsersItems(user.items),

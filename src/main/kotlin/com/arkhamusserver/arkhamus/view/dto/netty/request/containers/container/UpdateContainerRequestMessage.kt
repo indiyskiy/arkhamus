@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.ActionRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.ExternalInventoryRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCellRequest
 
 class UpdateContainerRequestMessage(
     var actionId: Long,
@@ -14,7 +15,7 @@ class UpdateContainerRequestMessage(
     baseRequestData: BaseRequestData
 ) : ExternalInventoryRequestMessage(
     externalInventoryId = externalInventoryId,
-    newInventoryContent = newInventoryContent,
+    newInventoryContent = newInventoryContent.map { InventoryCellRequest(it) },
     close = close,
     type = type,
     baseRequestData = baseRequestData
@@ -26,4 +27,5 @@ class UpdateContainerRequestMessage(
     override fun updateActionId(actionId: Long) {
         this.actionId = actionId
     }
+
 }

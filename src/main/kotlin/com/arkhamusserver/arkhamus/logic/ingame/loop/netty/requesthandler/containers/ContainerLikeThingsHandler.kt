@@ -91,9 +91,9 @@ class ContainerLikeThingsHandler(
                 it
             )
         }.toMutableMap()
-        val trueNewInventoryContent: List<InventoryCell> = newInventoryContent.map {
-            val item = it.item
-            val newValue = min(it.number, summarizedItems[item] ?: 0)
+        val trueNewInventoryContent: List<InventoryCell> = newInventoryContent.map { cell ->
+            val item = cell.item
+            val newValue = min(cell.number, summarizedItems[item] ?: 0)
             if (newValue > 0) {
                 summarizedItems[item] = (summarizedItems[item] ?: 0) - newValue
                 InventoryCell(item, newValue)

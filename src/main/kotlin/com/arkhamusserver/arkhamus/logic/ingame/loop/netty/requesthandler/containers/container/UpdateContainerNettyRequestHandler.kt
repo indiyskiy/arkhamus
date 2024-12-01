@@ -15,6 +15,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.conta
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.springframework.stereotype.Component
 
 @Component
@@ -55,7 +56,7 @@ class UpdateContainerNettyRequestHandler(
             )
             return UpdateContainerRequestGameData(
                 container = container,
-                sortedUserInventory = request.newInventoryContent,
+                sortedUserInventory = request.newInventoryContent.map{InventoryCell(it)},
                 executedSuccessfully = true,
                 gameUser = user,
                 otherGameUsers = users,
