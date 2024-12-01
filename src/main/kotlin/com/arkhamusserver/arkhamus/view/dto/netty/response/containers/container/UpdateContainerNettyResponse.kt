@@ -8,8 +8,8 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.ExternalInventoryNett
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class UpdateContainerNettyResponse(
-    sortedUserInventory: List<InventoryCell>,
-    itemsInside: List<InventoryCell>,
+    sortedUserInventory: List<InventoryCellResponse>,
+    itemsInside: List<InventoryCellResponse>,
     state: MapObjectState,
     holdingUser: Long?,
     val executedSuccessfully: Boolean,
@@ -22,7 +22,7 @@ class UpdateContainerNettyResponse(
     shortTimeEvents: List<ShortTimeEventResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    userInventory: List<InventoryCell>,
+    userInventory: List<InventoryCellResponse>,
     containers: List<ContainerState>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,

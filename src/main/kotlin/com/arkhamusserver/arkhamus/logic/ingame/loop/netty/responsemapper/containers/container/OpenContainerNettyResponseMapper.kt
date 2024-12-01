@@ -17,6 +17,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.container.OpenContainerNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
@@ -113,7 +114,7 @@ class OpenContainerNettyResponseMapper(
         levelGeometryData: LevelGeometryData,
         globalGameData: GlobalGameData
     ) = OpenContainerNettyResponse(
-        itemsInside = itemsInside,
+        itemsInside = itemsInside.mapCellsToResponse(),
         state = state,
         holdingUser = containerHoldingUserId,
         tick = gameData.tick,
@@ -135,7 +136,7 @@ class OpenContainerNettyResponseMapper(
         ),
         availableAbilities = availableAbilities,
         ongoingCraftingProcess = ongoingCraftingProcess,
-        userInventory = visibleItems,
+        userInventory = visibleItems.mapCellsToResponse(),
         containers = containersDataHandler.map(
             gameUser,
             containers,

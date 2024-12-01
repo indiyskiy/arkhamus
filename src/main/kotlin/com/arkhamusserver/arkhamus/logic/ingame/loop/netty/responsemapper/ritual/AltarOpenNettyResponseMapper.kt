@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarPolling
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
@@ -69,7 +70,7 @@ class AltarOpenNettyResponseMapper(
                 ),
                 availableAbilities = requestProcessData.availableAbilities,
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
-                userInventory = requestProcessData.visibleItems,
+                userInventory = requestProcessData.visibleItems.mapCellsToResponse(),
                 containers = containersDataHandler.map(
                     it.gameUser,
                     it.containers,

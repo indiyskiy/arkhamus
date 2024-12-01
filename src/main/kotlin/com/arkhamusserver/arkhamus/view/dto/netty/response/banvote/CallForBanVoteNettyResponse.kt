@@ -17,7 +17,7 @@ class CallForBanVoteNettyResponse(
     shortTimeEvents: List<ShortTimeEventResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
-    userInventory: List<InventoryCell>,
+    userInventory: List<InventoryCellResponse>,
     containers: List<ContainerState>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,

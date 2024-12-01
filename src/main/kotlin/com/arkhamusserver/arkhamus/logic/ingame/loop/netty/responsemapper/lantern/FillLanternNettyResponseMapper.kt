@@ -13,6 +13,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.lantern.FillLanternNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.LanternStateInfo
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
@@ -72,7 +73,7 @@ class FillLanternNettyResponseMapper(
                 ),
                 availableAbilities = requestProcessData.availableAbilities,
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
-                userInventory = requestProcessData.visibleItems,
+                userInventory = requestProcessData.visibleItems.mapCellsToResponse(),
                 containers = containersDataHandler.map(
                     it.gameUser,
                     it.containers,

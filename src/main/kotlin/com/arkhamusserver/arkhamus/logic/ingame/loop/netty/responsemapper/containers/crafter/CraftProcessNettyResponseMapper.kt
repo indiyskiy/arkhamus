@@ -15,6 +15,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.CraftProcessNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
@@ -53,13 +54,13 @@ class CraftProcessNettyResponseMapper(
                 sortedUserInventory = (it.sortedUserInventory).applyInBetween(
                     inBetweenEventHolder.inBetweenItemHolderChanges,
                     user.id!!
-                ),
+                ).mapCellsToResponse(),
                 itemsInside = it.crafter?.items?.map {
                     InventoryCell().apply {
                         number = it.number
                         item = it.item
                     }
-                } ?: emptyList(),
+                }?.mapCellsToResponse() ?: emptyList(),
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!, it.userQuest),
@@ -81,7 +82,7 @@ class CraftProcessNettyResponseMapper(
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 holdingUser = it.crafter!!.holdingUser,
                 state = it.crafter?.state ?: MapObjectState.DISABLED,
-                userInventory = requestProcessData.visibleItems,
+                userInventory = requestProcessData.visibleItems.mapCellsToResponse(),
                 containers = containersDataHandler.map(
                     it.gameUser,
                     it.containers,

@@ -17,6 +17,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.UpdateCrafterNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
@@ -90,11 +91,11 @@ class UpdateCrafterNettyResponseMapper(
         shortTimeEvents: List<RedisShortTimeEvent>,
         globalGameData: GlobalGameData
     ) = UpdateCrafterNettyResponse(
-        sortedUserInventory = sortedUserInventory,
-        itemsInside = itemsInside,
+        sortedUserInventory = sortedUserInventory.mapCellsToResponse(),
+        itemsInside = itemsInside.mapCellsToResponse(),
         state = gameData.crafter.state,
         holdingUser = gameData.crafter.holdingUser,
-        userInventory = sortedUserInventory,
+        userInventory = sortedUserInventory.mapCellsToResponse(),
         tick = gameData.tick,
         userId = user.id!!,
         myGameUser = MyGameUserResponse(gameUser, userQuestProgresses),

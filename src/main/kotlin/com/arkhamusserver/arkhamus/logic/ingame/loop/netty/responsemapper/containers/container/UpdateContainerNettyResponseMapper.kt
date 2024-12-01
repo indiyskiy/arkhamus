@@ -17,6 +17,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.container.UpdateContainerNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
@@ -49,7 +50,7 @@ class UpdateContainerNettyResponseMapper(
                 sortedUserInventory = sortedUserInventory.applyInBetween(
                     inBetweenEventHolder.inBetweenItemHolderChanges,
                     user.id!!
-                ),
+                ).mapCellsToResponse(),
                 gameData = this,
                 user = user,
                 gameUser = gameUser!!,
@@ -60,7 +61,7 @@ class UpdateContainerNettyResponseMapper(
                         number = it.number
                         item = it.item
                     }
-                },
+                }.mapCellsToResponse(),
                 containers = requestProcessData.containers,
                 crafters = requestProcessData.crafters,
                 inZones = requestProcessData.inZones,
@@ -74,13 +75,13 @@ class UpdateContainerNettyResponseMapper(
     }
 
     private fun build(
-        sortedUserInventory: List<InventoryCell>,
+        sortedUserInventory: List<InventoryCellResponse>,
         gameData: UpdateContainerRequestGameData,
         user: UserAccount,
         gameUser: RedisGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
         ongoingCraftingProcess: List<CraftProcessResponse>,
-        itemsInside: List<InventoryCell>,
+        itemsInside: List<InventoryCellResponse>,
         containers: List<RedisContainer>,
         crafters: List<RedisCrafter>,
         inZones: List<LevelZone>,

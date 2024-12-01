@@ -10,7 +10,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneRes
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class OpenCrafterNettyResponse(
-    var itemsInside: List<InventoryCell> = emptyList(),
+    var itemsInside: List<InventoryCellResponse> = emptyList(),
     var state: MapObjectState,
     var crafterType: CrafterType,
     var holdingUser: Long?,
@@ -22,7 +22,7 @@ class OpenCrafterNettyResponse(
     shortTimeEvents: List<ShortTimeEventResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
-    userInventory: List<InventoryCell>,
+    userInventory: List<InventoryCellResponse>,
     containers: List<ContainerState>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,

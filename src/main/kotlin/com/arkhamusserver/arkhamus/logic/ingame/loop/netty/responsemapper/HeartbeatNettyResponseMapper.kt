@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.HeartbeatNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.OngoingEventResponse
 import org.springframework.stereotype.Component
@@ -59,7 +60,7 @@ class HeartbeatNettyResponseMapper(
                 },
                 availableAbilities = it.availableAbilities,
                 ongoingCraftingProcess = it.ongoingCraftingProcess,
-                userInventory = it.visibleItems,
+                userInventory = it.visibleItems.mapCellsToResponse(),
                 containers = containersDataHandler.map(
                     it.gameUser,
                     it.containers,

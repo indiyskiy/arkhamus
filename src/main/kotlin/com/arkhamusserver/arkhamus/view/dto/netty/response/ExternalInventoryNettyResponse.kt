@@ -6,8 +6,8 @@ import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 abstract class ExternalInventoryNettyResponse(
-    var sortedUserInventory: List<InventoryCell>,
-    var itemsInside: List<InventoryCell>,
+    var sortedUserInventory: List<InventoryCellResponse>,
+    var itemsInside: List<InventoryCellResponse>,
     var state: MapObjectState,
     var holdingUser: Long?,
     tick: Long,
@@ -18,7 +18,7 @@ abstract class ExternalInventoryNettyResponse(
     shortTimeEvents: List<ShortTimeEventResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    userInventory: List<InventoryCell>,
+    userInventory: List<InventoryCellResponse>,
     containers: List<ContainerState>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,

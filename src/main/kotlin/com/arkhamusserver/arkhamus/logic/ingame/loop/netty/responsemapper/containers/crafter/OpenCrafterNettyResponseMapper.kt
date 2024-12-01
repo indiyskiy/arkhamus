@@ -16,6 +16,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.OpenCrafterNettyResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
@@ -116,7 +117,7 @@ class OpenCrafterNettyResponseMapper(
         shortTimeEvents: List<RedisShortTimeEvent>,
         globalGameData: GlobalGameData
     ) = OpenCrafterNettyResponse(
-        itemsInside = itemsInside,
+        itemsInside = itemsInside.mapCellsToResponse(),
         state = state,
         crafterType = gameData.crafter.crafterType,
         holdingUser = containerHoldingUserId,
@@ -133,7 +134,7 @@ class OpenCrafterNettyResponseMapper(
         },
         availableAbilities = availableAbilities,
         ongoingCraftingProcess = ongoingCraftingProcess,
-        userInventory = visibleItems,
+        userInventory = visibleItems.mapCellsToResponse(),
         containers = containersDataHandler.map(
             gameUser,
             containers,
