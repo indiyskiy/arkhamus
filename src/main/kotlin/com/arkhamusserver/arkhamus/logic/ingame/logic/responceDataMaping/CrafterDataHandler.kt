@@ -42,8 +42,9 @@ class CrafterDataHandler(
             ) ||
             !visibilityByTagsHandler.userCanSeeTarget(currentUser, crafter)
         ) {
-            responseToMask.state = MapObjectState.ACTIVE
+            responseToMask.state = MapObjectState.DISABLED
             responseToMask.holdingUserId = null
+            responseToMask.gameTags = setOf()
         } else {
             responseToMask.gameTags = responseToMask.gameTags.filter {
                 visibilityByTagsHandler.userCanSeeTarget(currentUser, InGameObjectTag.valueOf(it))

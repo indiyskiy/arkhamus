@@ -42,9 +42,9 @@ class ContainerDataHandler(
             ) ||
             !visibilityByTagsHandler.userCanSeeTarget(currentUser, container)
         ) {
-            responseToMask.state = MapObjectState.ACTIVE
+            responseToMask.state = MapObjectState.DISABLED
             responseToMask.holdingUserId = null
-            responseToMask.gameTags = mutableSetOf()
+            responseToMask.gameTags = setOf()
         } else {
             responseToMask.gameTags = responseToMask.gameTags.filter {
                 visibilityByTagsHandler.userCanSeeTarget(currentUser, InGameObjectTag.valueOf(it))

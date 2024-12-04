@@ -40,6 +40,7 @@ class OtherGameUsersDataHandler(
         ) {
             responseToMask.x = null
             responseToMask.y = null
+            responseToMask.z = null
             responseToMask.stateTags = emptySet()
         }
         responseToMask.stateTags = responseToMask.stateTags.filter {
