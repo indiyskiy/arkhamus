@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TeleportHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
@@ -34,7 +35,7 @@ class RandomTeleportSomeoneMaybe(
     private fun findPlaces(
         data: GlobalGameData,
     ): List<WithPoint> {
-        val threshold: List<WithPoint> = data.thresholdsByZoneId.values.flatten()
+        val threshold: List<WithPoint> = data.thresholds.filter { it.type == ThresholdType.BAN }
         val altar: WithPoint = data.altarHolder!!
         return threshold + altar
     }

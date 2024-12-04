@@ -14,6 +14,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.CallForBanVoteRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
+import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.banvote.CallForBanVoteRequestMessage
 import org.springframework.stereotype.Component
@@ -66,7 +67,9 @@ class CallForBanVoteNettyRequestHandler(
             }
 
             val threshold = voteSpot?.let {
-                geometryUtils.nearestPoint(it, globalGameData.thresholdsByZoneId[it.zoneId])
+                geometryUtils.nearestPoint(it, globalGameData.thresholds.filter { threshold ->
+                    it.zoneId == threshold.zoneId && threshold.type == ThresholdType.BAN
+                })
             }
 
             val canCallForVote = userVoteHandler.getCanCallForVote(voteSpot, ongoingEvents, user)

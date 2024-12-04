@@ -17,6 +17,7 @@ data class LevelFromJson(
     var clueZones: List<ZoneFromJson> = emptyList(),
     var banZones: List<ZoneFromJson> = emptyList(),
     var doors: List<DoorFromJson> = emptyList(),
-    var thresholds: List<ThresholdFromJson> = emptyList(),
+    var ritualThresholds: List<ThresholdFromJson> = emptyList(),
+    var banThresholds: List<ThresholdFromJson> = emptyList(),
     var votespots: List<VoteSpotFromJson> = emptyList(),
 )

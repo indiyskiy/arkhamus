@@ -87,7 +87,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.questProgressByUserId = allUsersQuestProgresses.groupBy { it.userId }
         this.voteSpots = allVoteSpots
         this.userVoteSpotsBySpotId = allUserVoteSpots.groupBy { it.voteSpotId }
-        this.thresholdsByZoneId = thresholds.groupBy { it.zoneId }
+        this.thresholds = thresholds
         this.doorsByZoneId = doors.groupBy { it.zoneId }
     }
 }

@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool.Companion.MAX_TIME_NO_RESPONSES
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
+import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -20,11 +21,16 @@ class OneTickTryEndGameMaybeHandler(
 ) {
 
     companion object {
-       private val logger = LoggerFactory.getLogger(OneTickTryEndGameMaybeHandler::class.java)
+        private val logger = LoggerFactory.getLogger(OneTickTryEndGameMaybeHandler::class.java)
     }
 
     @Transactional
     fun checkIfEnd(game: RedisGame, users: Collection<RedisGameUser>, voteSpots: List<RedisVoteSpot>) {
+        if (game.state == GameState.GAME_END_SCREEN.name ||
+            game.state == GameState.FINISHED.name
+        ) {
+            return
+        }
         val mad = checkIfEverybodyMad(game, users)
         if (mad) {
             return
@@ -79,7 +85,7 @@ class OneTickTryEndGameMaybeHandler(
 
     private fun abandonIfAllLeave(game: RedisGame, users: Collection<RedisGameUser>) {
         if (users.all { it.leftTheGame }) {
-            logger.info("end the gamer - ABANDONED")
+            logger.info("end the game - ABANDONED")
             gameEndLogic.endTheGame(
                 game,
                 users.associateBy { it.userId },
@@ -95,7 +101,11 @@ class OneTickTryEndGameMaybeHandler(
                 it.leftTheGame = true
             }
             logger.info(
-                "no requests for ${game.gameId} - all users left - marked them - ${users.joinToString{ it.inGameId().toString() }}"
+                "no requests for ${game.gameId} - all users left - marked them - ${
+                    users.joinToString {
+                        it.inGameId().toString()
+                    }
+                }"
             )
         }
     }

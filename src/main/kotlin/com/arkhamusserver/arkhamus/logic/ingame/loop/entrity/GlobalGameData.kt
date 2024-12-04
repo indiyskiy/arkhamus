@@ -32,7 +32,7 @@ data class GlobalGameData(
 
     var voteSpots: List<RedisVoteSpot> = emptyList(),
     var userVoteSpotsBySpotId: Map<Long, List<RedisUserVoteSpot>> = emptyMap(),
-    var thresholdsByZoneId: Map<Long, List<RedisThreshold>> = emptyMap(),
+    var thresholds: List<RedisThreshold> = emptyList(),
     var doorsByZoneId: Map<Long, List<RedisDoor>> = emptyMap(),
 ) {
     fun buildGeometryData(

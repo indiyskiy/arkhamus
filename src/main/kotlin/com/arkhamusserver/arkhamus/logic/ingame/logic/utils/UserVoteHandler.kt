@@ -9,10 +9,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisDoorRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
-import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
-import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -188,7 +185,9 @@ class UserVoteHandler(
         voteSpot.availableUsers -= userId
         if (userToBan.inRelatedZone(globalGameData.levelGeometryData.zones, voteSpot.zoneId)) {
             val pointToTeleport =
-                geometryUtils.nearestPoint(userToBan, globalGameData.thresholdsByZoneId[voteSpot.zoneId])
+                geometryUtils.nearestPoint(userToBan, globalGameData.thresholds.filter {
+                    it.zoneId == voteSpot.zoneId && it.type == ThresholdType.BAN
+                })
             pointToTeleport?.let {
                 teleportHandler.forceTeleport(
                     game = globalGameData.game,

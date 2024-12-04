@@ -34,6 +34,7 @@ class GameStartThresholdLogic(
                 y = threshold.y,
                 z = threshold.z,
                 zoneId = threshold.zoneId,
+                type = threshold.type
             )
         )
 

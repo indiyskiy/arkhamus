@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandle
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
@@ -63,7 +64,9 @@ class FakeVoteItemAbilityCast(
             )
         }
         if (target is RedisVoteSpot) {
-            val threshold = (globalGameData.thresholdsByZoneId[target.zoneId]?.firstOrNull())?.let {
+            val threshold = (globalGameData.thresholds.firstOrNull {
+                it.zoneId == target.zoneId && it.type == ThresholdType.BAN
+            })?.let {
                 Location(
                     it.x,
                     it.y,

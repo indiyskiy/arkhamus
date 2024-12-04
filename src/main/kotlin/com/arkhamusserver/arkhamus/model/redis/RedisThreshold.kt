@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
+import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 
@@ -12,6 +13,7 @@ data class RedisThreshold(
     var y: Double,
     var z: Double,
     var zoneId: Long,
+    var type: ThresholdType,
 ) : RedisGameEntity, WithPoint, WithTrueIngameId {
 
     override fun x(): Double {

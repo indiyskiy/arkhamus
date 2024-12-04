@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import jakarta.persistence.*
 
@@ -13,6 +14,8 @@ data class Threshold(
     var z: Double,
     var inGameId: Long,
     var zoneId: Long,
+    @Enumerated(EnumType.STRING)
+    var type: ThresholdType,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
     var level: Level

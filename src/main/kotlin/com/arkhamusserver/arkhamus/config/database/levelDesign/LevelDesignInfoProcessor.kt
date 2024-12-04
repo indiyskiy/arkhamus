@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CRE
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.model.enums.LevelState
+import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
 import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -121,7 +122,16 @@ class LevelDesignInfoProcessor(
             randomQuestGenerator.generateRandomQuests(savedLevel, questGivers, levelTasks)
         }
         levelDesignVoteSpotInfoProcessor.processVoteSpots(levelFromJson.votespots, savedLevel)
-        levelDesignThresholdInfoProcessor.processThresholds(levelFromJson.thresholds, savedLevel)
+        levelDesignThresholdInfoProcessor.processThresholds(
+            levelFromJson.ritualThresholds,
+            ThresholdType.RITUAL,
+            savedLevel
+        )
+        levelDesignThresholdInfoProcessor.processThresholds(
+            levelFromJson.banThresholds,
+            ThresholdType.BAN,
+            savedLevel
+        )
         levelDesignDoorInfoProcessor.processDoors(levelFromJson.doors, savedLevel)
     }
 
