@@ -103,7 +103,7 @@ class LevelDesignInfoProcessor(
         levelDesignContainerInfoProcessor.processContainers(levelFromJson.containers, savedLevel)
         levelDesignLanternInfoProcessor.processLanterns(levelFromJson.lanterns, savedLevel)
         levelDesignAltarInfoProcessor.processAltars(levelFromJson.altars, savedLevel)
-        levelDesignRitualAreaInfoProcessor.processRitualArea(levelFromJson.ritualAreas, savedLevel)
+        levelDesignRitualAreaInfoProcessor.processRitualArea(levelFromJson.ritualZones, savedLevel)
         levelDesignCrafterInfoProcessor.processCrafters(levelFromJson.crafters, savedLevel)
         levelDesignProcessStartInfoProcessor.processStartMarkers(levelFromJson.startMarkers, savedLevel)
         levelDesignZonesInfoProcessor.processZones(

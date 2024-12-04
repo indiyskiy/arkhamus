@@ -11,7 +11,7 @@ data class LevelFromJson(
     var containers: List<ContainerFromJson> = emptyList(),
     var lanterns: List<LanternFromJson> = emptyList(),
     var altars: List<AltarFromJson> = emptyList(),
-    var ritualAreas: List<RitualAreaFromJson> = emptyList(),
+    var ritualZones: List<RitualAreaFromJson> = emptyList(),
     var startMarkers: List<JsonStartMarker> = emptyList(),
     var crafters: List<CrafterFromJson> = emptyList(),
     var clueZones: List<ZoneFromJson> = emptyList(),
