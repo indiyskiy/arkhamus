@@ -20,7 +20,7 @@ class AbilityStunEventProcessor() : TimeEventProcessor {
     ) {
         val user = globalGameData.users[event.targetObjectId]
         if (user == null) return
-        user.stateTags += UserStateTag.STUN.name
+        user.stateTags += UserStateTag.STUN
     }
 
     override fun processStart(
@@ -31,7 +31,7 @@ class AbilityStunEventProcessor() : TimeEventProcessor {
     ) {
         val user = globalGameData.users[event.targetObjectId]
         if (user == null) return
-        user.stateTags += UserStateTag.STUN.name
+        user.stateTags += UserStateTag.STUN
     }
 
     override fun processEnd(
@@ -42,6 +42,6 @@ class AbilityStunEventProcessor() : TimeEventProcessor {
     ) {
         val user = globalGameData.users[event.targetObjectId]
         if (user == null) return
-        user.stateTags += UserStateTag.STUN.name
+        user.stateTags += UserStateTag.STUN
     }
 }

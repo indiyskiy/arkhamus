@@ -33,7 +33,7 @@ class SearchForScentAbilityCast(
         logger.info("cast $ability")
         val user = abilityRequestProcessData.gameUser
         if (user == null) return false
-        user.stateTags+=UserStateTag.INVESTIGATING.name
+        user.stateTags+=UserStateTag.INVESTIGATING
         val visibilityModifier = resolver.toVisibilityModifier(ability)
         visibilityModifier?.let {
             user.visibilityModifiers+=it.name
@@ -49,7 +49,7 @@ class SearchForScentAbilityCast(
         globalGameData: GlobalGameData
     ): Boolean {
         val user = sourceUser
-        user.stateTags+=UserStateTag.INVESTIGATING.name
+        user.stateTags+=UserStateTag.INVESTIGATING
         val visibilityModifier = resolver.toVisibilityModifier(ability)
         visibilityModifier?.let {
             user.visibilityModifiers+=it.name

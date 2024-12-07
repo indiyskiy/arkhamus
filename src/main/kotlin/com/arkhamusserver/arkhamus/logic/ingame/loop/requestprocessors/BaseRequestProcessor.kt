@@ -12,8 +12,8 @@ class BaseRequestProcessor : NettyRequestProcessor {
 
     companion object {
         private val RESTRICTION_SET = setOf(
-            UserStateTag.IN_RITUAL.name,
-            UserStateTag.STUN.name,
+            UserStateTag.IN_RITUAL,
+            UserStateTag.STUN,
         )
     }
 

@@ -41,7 +41,7 @@ class KindleCloakAbilityCast : AbilityCast {
     }
 
     private fun luminosity(user: RedisGameUser): Boolean  {
-        user.stateTags += UserStateTag.LUMINOUS.name
+        user.stateTags += UserStateTag.LUMINOUS
         return true
     }
 

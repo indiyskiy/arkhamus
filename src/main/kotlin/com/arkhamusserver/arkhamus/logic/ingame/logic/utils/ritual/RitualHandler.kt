@@ -66,10 +66,10 @@ class RitualHandler(
             .users
             .values
             .filter { user ->
-                user.stateTags.contains(IN_RITUAL.name)
+                user.stateTags.contains(IN_RITUAL)
             }
             .forEach { user ->
-                user.stateTags -= IN_RITUAL.name
+                user.stateTags -= IN_RITUAL
             }
         logger.info("users from ritual removed")
     }
@@ -239,7 +239,7 @@ class RitualHandler(
                 teleportHandler.forceTeleport(data.game, user, it)
             }
         }
-        holder.usersToKick = emptyList()
+        holder.usersToKick = emptySet()
         holder.usersInRitual -= usersToKick
         if (holder.usersInRitual.isEmpty()) {
             failRitualStartCooldown(
@@ -334,8 +334,8 @@ class RitualHandler(
         if (altarHolder != null) {
             unlockTheGod(altarHolder)
             altarHolder.state = MapAltarState.LOCKED
-            altarHolder.usersInRitual = emptyList()
-            altarHolder.usersToKick = emptyList()
+            altarHolder.usersInRitual = emptySet()
+            altarHolder.usersToKick = emptySet()
             redisAltarHolderRepository.save(altarHolder)
         }
         logger.info("creating COOLDOWN event")

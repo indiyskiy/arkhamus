@@ -120,7 +120,7 @@ class RitualGoingEventProcessor(
                     altarHolder, user, radius
                 )
             ) {
-                user.stateTags += IN_RITUAL.name
+                user.stateTags += IN_RITUAL
                 altarHolder.usersInRitual += user.inGameId()
             }
         }

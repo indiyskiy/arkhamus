@@ -54,7 +54,7 @@ class ParalyzeAbilityCast(
         globalGameData: GlobalGameData,
         currentUser: RedisGameUser?
     ) {
-        if (targetUser.stateTags.contains(UserStateTag.INVULNERABILITY.name)) return
+        if (targetUser.stateTags.contains(UserStateTag.INVULNERABILITY)) return
 
         timeEventHandler.createEvent(
             game = globalGameData.game,

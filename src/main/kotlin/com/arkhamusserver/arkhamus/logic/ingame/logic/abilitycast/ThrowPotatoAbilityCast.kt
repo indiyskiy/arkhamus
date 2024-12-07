@@ -51,7 +51,7 @@ class ThrowPotatoAbilityCast(
         targetUser: RedisGameUser,
         globalGameData: GlobalGameData
     ) {
-        if (targetUser.stateTags.contains(UserStateTag.INVULNERABILITY.name)) return
+        if (targetUser.stateTags.contains(UserStateTag.INVULNERABILITY)) return
         inventoryHandler.addItem(targetUser, Item.CURSED_POTATO)
         rememberItemChangesForResponses(globalGameData, targetUser)
     }

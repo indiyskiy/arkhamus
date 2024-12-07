@@ -32,7 +32,7 @@ class KindleCloakAbilityProcessor : ActiveAbilityProcessor {
     override fun finishActive(castAbility: RedisAbilityCast, globalGameData: GlobalGameData) {
         val user = globalGameData.users[castAbility.sourceUserId]
         if (user == null) return
-        user.stateTags -= UserStateTag.LUMINOUS.name
+        user.stateTags -= UserStateTag.LUMINOUS
     }
 
 }

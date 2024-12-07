@@ -72,7 +72,7 @@ class RitualPutItemNettyRequestHandler(
                 currentStepItem = currentItem,
                 item = item,
                 itemNumber = this.itemNumber,
-                usersInRitual = users.filter { it.stateTags.contains(UserStateTag.IN_RITUAL.name) },
+                usersInRitual = users.filter { it.stateTags.contains(UserStateTag.IN_RITUAL) },
                 currentGameTime = globalGameData.game.globalTimer,
                 canPut = userCanPutItemOnAltar(this, user, item, globalGameData),
                 ritualEvent = ongoingEvents.firstOrNull {

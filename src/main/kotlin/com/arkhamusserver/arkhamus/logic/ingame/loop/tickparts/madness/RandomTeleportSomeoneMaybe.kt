@@ -23,7 +23,7 @@ class RandomTeleportSomeoneMaybe(
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
-        val stunned = user.stateTags.contains(UserStateTag.STUN.name)
+        val stunned = user.stateTags.contains(UserStateTag.STUN)
         if (stunned) return false
         val possiblePlaces = findPlaces(data)
         if (possiblePlaces.isEmpty()) return false

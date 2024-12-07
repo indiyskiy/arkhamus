@@ -53,7 +53,7 @@ class InvestigationRelatedAbilityProcessor(
                         it in allInvetigatingModifiers
                     }
                 ) {
-                    it.stateTags -= UserStateTag.INVESTIGATING.name
+                    it.stateTags -= UserStateTag.INVESTIGATING
                 }
             }
         }

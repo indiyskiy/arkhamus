@@ -31,6 +31,6 @@ class KindleCloakCondition : AdditionalAbilityCondition {
         user: RedisGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
-        return !user.stateTags.contains(UserStateTag.LUMINOUS.name)
+        return !user.stateTags.contains(UserStateTag.LUMINOUS)
     }
 }

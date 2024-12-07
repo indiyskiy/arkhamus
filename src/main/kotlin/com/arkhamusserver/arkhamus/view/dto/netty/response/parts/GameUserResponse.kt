@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 
 data class GameUserResponse(
@@ -8,7 +9,7 @@ data class GameUserResponse(
     var x: Double?,
     var y: Double?,
     var z: Double?,
-    var stateTags: Set<String> = emptySet(),
+    var stateTags: Set<UserStateTag> = emptySet(),
 ) {
     constructor(gameUser: RedisGameUser) : this(
         id = gameUser.inGameId(),

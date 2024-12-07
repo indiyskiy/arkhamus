@@ -49,7 +49,7 @@ class UserLocationHandler(
     }
 
     private fun haveGlobalVision(whoLooks: RedisGameUser): Boolean =
-        whoLooks.stateTags.contains(UserStateTag.FARSIGHT.name)
+        whoLooks.stateTags.contains(UserStateTag.FARSIGHT)
 
     private fun geometryCheck(
         //TODO implement true geometry handler
@@ -83,9 +83,9 @@ class UserLocationHandler(
     }
 
     private fun nearLuminousUser(user: RedisGameUser, users: Collection<RedisGameUser>): Boolean {
-        return user.stateTags.contains(UserStateTag.LUMINOUS.name) ||
+        return user.stateTags.contains(UserStateTag.LUMINOUS) ||
                 users.any { otherUser ->
-                    otherUser.stateTags.contains(UserStateTag.LUMINOUS.name) &&
+                    otherUser.stateTags.contains(UserStateTag.LUMINOUS) &&
                             geometryUtils.distanceLessOrEquals(
                                 user,
                                 otherUser,

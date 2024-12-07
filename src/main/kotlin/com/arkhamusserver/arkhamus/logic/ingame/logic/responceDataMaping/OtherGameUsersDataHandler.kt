@@ -3,7 +3,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility
-import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import org.springframework.stereotype.Component
@@ -44,7 +43,7 @@ class OtherGameUsersDataHandler(
             responseToMask.stateTags = emptySet()
         }
         responseToMask.stateTags = responseToMask.stateTags.filter {
-            UserStateTag.valueOf(it).getVisibility() == Visibility.PUBLIC
+            it.getVisibility() == Visibility.PUBLIC
         }.toSet()
     }
 }

@@ -32,6 +32,6 @@ class InvestigationRelatedAbilityCondition : AdditionalAbilityCondition {
         user: RedisGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
-        return !user.stateTags.contains(UserStateTag.INVESTIGATING.name)
+        return !user.stateTags.contains(UserStateTag.INVESTIGATING)
     }
 }
