@@ -1339,7 +1339,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 112,
-        "y": 2,
+        "y": 0,
         "z": 76.5
       },
       {
@@ -1348,7 +1348,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 112,
-        "y": 2,
+        "y": 0,
         "z": 80
       },
       {
@@ -1360,7 +1360,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 112,
-        "y": 2,
+        "y": 0,
         "z": 83
       },
       {
@@ -1369,7 +1369,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 112,
-        "y": 2,
+        "y": 0,
         "z": 86.5
       },
       {
@@ -1378,7 +1378,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 110,
-        "y": 2,
+        "y": 0,
         "z": 78.5
       },
       {
@@ -1387,7 +1387,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 114,
-        "y": 2,
+        "y": 0,
         "z": 78.5
       },
       {
@@ -1396,7 +1396,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 110,
-        "y": 2,
+        "y": 0,
         "z": 81.5
       },
       {
@@ -1405,7 +1405,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 114,
-        "y": 2,
+        "y": 0,
         "z": 81.5
       },
       {
@@ -1414,7 +1414,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 110,
-        "y": 2,
+        "y": 0,
         "z": 84.5
       },
       {
@@ -1837,22 +1837,6 @@
         "z": 13
       },
       {
-        "id": 1301,
-        "interactionRadius": 3.5,
-        "name": "Diogenes",
-        "x": 69,
-        "y": 0,
-        "z": 11
-      },
-      {
-        "id": 1302,
-        "interactionRadius": 3.5,
-        "name": "NPC_NAME_ARMITAGE",
-        "x": 99.2510986328125,
-        "y": 0,
-        "z": 66.1195983886719
-      },
-      {
         "id": 1303,
         "interactionRadius": 3.5,
         "name": "Professor Sprout",
@@ -1899,6 +1883,22 @@
         "x": 64.5,
         "y": 0,
         "z": 55.5
+      },
+      {
+        "id": 1301,
+        "interactionRadius": 3.5,
+        "name": "Diogenes",
+        "x": 67,
+        "y": 0,
+        "z": 3
+      },
+      {
+        "id": 1302,
+        "interactionRadius": 3.5,
+        "name": "NPC_NAME_ARMITAGE",
+        "x": 99.5,
+        "y": 0,
+        "z": 66
       }
     ],
     "ritualThresholds": [
