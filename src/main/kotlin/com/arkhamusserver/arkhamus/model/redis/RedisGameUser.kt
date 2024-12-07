@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
@@ -23,7 +24,7 @@ data class RedisGameUser(
     var madness: Double,
     var madnessNotches: List<Double>,
     var items: List<InventoryCell> = emptyList(),
-    var stateTags: Set<String> = emptySet(),
+    var stateTags: Set<UserStateTag> = emptySet(),
     var madnessDebuffs: Set<String> = emptySet(),
     var callToArms: Int,
     //tech

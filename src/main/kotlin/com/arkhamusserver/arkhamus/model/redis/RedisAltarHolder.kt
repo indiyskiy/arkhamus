@@ -25,8 +25,8 @@ data class RedisAltarHolder(
     var thmAddedThisRound: Boolean = false,
     var round: Int = 0,
     var currentStepItem: Item? = null,
-    var usersToKick: List<Long> = emptyList(),
-    var usersInRitual: List<Long> = emptyList(),
+    var usersToKick: Set<Long> = emptySet(),
+    var usersInRitual: Set<Long> = emptySet(),
 
     var state: MapAltarState = MapAltarState.OPEN,
 ) : RedisGameEntity, WithPoint, WithTrueIngameId {
