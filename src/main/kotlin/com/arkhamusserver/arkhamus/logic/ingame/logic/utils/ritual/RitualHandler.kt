@@ -159,7 +159,6 @@ class RitualHandler(
         item: Item,
         ongoingEvents: List<OngoingEvent>
     ) {
-        logger.info("trying to shift time for all possible events")
         if (thisItemIsPutOnAltar(altarHolder, item)) {
             shiftTimeOfEvent(ongoingEvents, item, altarHolder)
         }
@@ -170,7 +169,6 @@ class RitualHandler(
         item: Item,
         ongoingEvent: RedisTimeEvent
     ) {
-        logger.info("trying to shift time for one event")
         if (thisItemIsPutOnAltar(altarHolder, item)) {
             shiftTimeOfEvent(ongoingEvent, item, altarHolder)
         }

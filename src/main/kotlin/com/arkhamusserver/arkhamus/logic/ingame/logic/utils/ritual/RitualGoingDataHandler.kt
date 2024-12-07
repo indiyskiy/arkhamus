@@ -5,10 +5,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarContent
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarContentResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.ItemNotchResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.RitualGoingDataResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -30,7 +27,7 @@ class RitualGoingDataHandler {
             this.gameTimeStart = ritualEvent?.timeStart ?: 0
             this.gameTimeEnd = (ritualEvent?.timeStart ?: 0) + RedisTimeEventType.RITUAL_GOING.getDefaultTime()
             this.gameTimeNow = currentGameTime
-            this.gameTimeItemsNotches = gameTimeItemsNotches.map{
+            this.gameTimeItemsNotches = gameTimeItemsNotches.map {
                 ItemNotchResponse(it)
             }
             this.userIdsInRitual = usersInRitual.map { it.inGameId() }
@@ -48,5 +45,35 @@ class RitualGoingDataHandler {
                 }
             }
         } ?: emptyList()
+    }
+
+    fun buildUserData(
+        holder: RedisAltarHolder,
+        myUser: RedisGameUser
+    ): UserRitualData {
+        val inRitual = holder.usersInRitual.contains(myUser.inGameId())
+        val canLeave = inRitual && !holder.usersToKick.contains(myUser.inGameId())
+        val leftAlready = inRitual && !canLeave
+        val usersInRitual = holder.usersInRitual.size
+        val usersGoingToLeave = holder.usersToKick.size
+        val delimeter = if (leftAlready) {
+            usersGoingToLeave
+        } else {
+            usersGoingToLeave + 1
+        }
+        val madnessPenalty = if (usersInRitual >= usersGoingToLeave - 1) {
+            RitualHandler.MADNESS_PER_USER * usersInRitual / delimeter
+        } else {
+            0.0
+        }
+
+        return UserRitualData(
+            inRitual = inRitual,
+            canLeave = canLeave,
+            leftAlready = leftAlready,
+            usersInRitual = usersInRitual,
+            usersGoingToLeave = usersGoingToLeave,
+            madnessPenalty = madnessPenalty,
+        )
     }
 }

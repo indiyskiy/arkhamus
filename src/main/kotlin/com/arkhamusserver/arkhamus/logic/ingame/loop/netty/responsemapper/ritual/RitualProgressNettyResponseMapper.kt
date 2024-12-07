@@ -51,9 +51,13 @@ class RitualProgressNettyResponseMapper(
                     requestProcessData.currentStepItem,
                     requestProcessData.notches
                 ),
+                userRitualData = ritualGoingDataHandler.buildUserData(
+                    requestProcessData.altarHolder!!,
+                    it.gameUser!!
+                ),
                 tick = it.tick,
                 userId = user.id!!,
-                myGameUser = MyGameUserResponse(it.gameUser!!, it.userQuest),
+                myGameUser = MyGameUserResponse(it.gameUser, it.userQuest),
                 otherGameUsers = otherGameUsersDataHandler.map(
                     myUser = it.gameUser,
                     it.otherGameUsers,

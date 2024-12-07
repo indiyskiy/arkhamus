@@ -9,6 +9,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 
 class RitualProgressNettyResponse(
     private val ritualGoingData: RitualGoingDataResponse,
+    private val userRitualData: UserRitualData,
     tick: Long,
     userId: Long,
     myGameUser: MyGameUserResponse,
