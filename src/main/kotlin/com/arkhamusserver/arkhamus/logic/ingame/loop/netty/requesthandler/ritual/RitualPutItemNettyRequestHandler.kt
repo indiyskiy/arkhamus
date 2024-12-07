@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ZonesHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
@@ -31,6 +32,7 @@ class RitualPutItemNettyRequestHandler(
     private val zonesHandler: ZonesHandler,
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
+    private val ritualHandler: RitualHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -51,7 +53,7 @@ class RitualPutItemNettyRequestHandler(
             )
             val userId = requestDataHolder.userAccount.id
             val user = globalGameData.users[userId]!!
-            val users = globalGameData.users.values.filter { it.userId != userId }
+            val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val altarHolder = globalGameData.altarHolder
             val item = this.itemId.toItem()
             val clues = clueHandler.filterClues(
@@ -59,7 +61,15 @@ class RitualPutItemNettyRequestHandler(
                 inZones,
                 user
             )
+            val event = ongoingEvents.firstOrNull {
+                it.event.type == RedisTimeEventType.RITUAL_GOING &&
+                        it.event.state == RedisTimeEventState.ACTIVE
+            }?.event
+            val notches = ritualHandler.countItemsNotches(event, altarHolder)
+            val currentItem = ritualHandler.countCurrentItem(notches, globalGameData.game.globalTimer)
             return RitualPutItemRequestProcessData(
+                notches = notches,
+                currentStepItem = currentItem,
                 item = item,
                 itemNumber = this.itemNumber,
                 usersInRitual = users.filter { it.stateTags.contains(UserStateTag.IN_RITUAL.name) },

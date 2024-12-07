@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ZonesHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
@@ -14,7 +15,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritua
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.RitualProgressRequestMessage
 import org.springframework.stereotype.Component
@@ -28,6 +28,7 @@ class RitualProgressNettyRequestHandler(
     private val zonesHandler: ZonesHandler,
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
+    private val ritualHandler: RitualHandler
 ) : NettyRequestHandler {
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
@@ -48,20 +49,27 @@ class RitualProgressNettyRequestHandler(
             )
             val userId = requestDataHolder.userAccount.id
             val user = globalGameData.users[userId]!!
-            val users = globalGameData.users.values.filter { it.userId != userId }
+            val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val altarHolder = globalGameData.altarHolder
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,
                 user
             )
+            val event = ongoingEvents.firstOrNull {
+                it.event.type == RedisTimeEventType.RITUAL_GOING &&
+                        it.event.state == RedisTimeEventState.ACTIVE
+            }?.event
+            val notches = ritualHandler.countItemsNotches(event, altarHolder)
+            val currentItem = ritualHandler.countCurrentItem(notches, globalGameData.game.globalTimer)
             return RitualProgressRequestProcessData(
                 currentGameTime = globalGameData.game.globalTimer,
-                ritualEvent = ongoingEvents.firstOrNull {
-                    it.event.type == RedisTimeEventType.RITUAL_GOING &&
-                            it.event.state == RedisTimeEventState.ACTIVE
-                }?.event,
-                usersInRitual = users.filter { it.stateTags.contains(UserStateTag.IN_RITUAL.name) },
+                ritualEvent = event,
+                usersInRitual = globalGameData.altarHolder?.usersInRitual?.map { userInRitual ->
+                    users.first { user -> user.inGameId() == userInRitual }
+                } ?: emptyList(),
+                currentStepItem = currentItem,
+                notches = notches,
                 altarHolder = altarHolder,
                 gameUser = user,
                 otherGameUsers = users,

@@ -14,7 +14,7 @@ class CrafterProcessHandler {
         crafters: Map<Long, RedisCrafter>,
         craftProcess: List<RedisCraftProcess>
     ): List<CraftProcessResponse> {
-        val filteredCrafters = crafters.filter { it.value.holdingUser == user.userId }
+        val filteredCrafters = crafters.filter { it.value.holdingUser == user.inGameId() }
         val filteredCraftProcess = craftProcess.filterRelatedCrafters(user, filteredCrafters)
         return filteredCraftProcess.map {
             CraftProcessResponse(it)
@@ -27,7 +27,7 @@ class CrafterProcessHandler {
     ): List<RedisCraftProcess> {
         val mappedCrafters = filteredCrafters.values.map { it.inGameId() }.toSet()
         return this.filter {
-            it.targetCrafterId in mappedCrafters || it.sourceUserId == user.userId
+            it.targetCrafterId in mappedCrafters || it.sourceUserId == user.inGameId()
         }
     }
 }

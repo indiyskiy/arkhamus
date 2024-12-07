@@ -123,7 +123,7 @@ class GameEndLogic(
         databaseUsers.forEach { databaseUser ->
             val redisUser = redisUsers[databaseUser.userAccount.id]
             redisUser?.let { userNullSafe -> userNullSafe.won = databaseUser.won }
-            logger.info("redis user ${redisUser?.id ?: "null"} won? ${redisUser?.won ?: "null"}")
+            logger.info("redis user ${redisUser?.inGameId() ?: "null"} won? ${redisUser?.won ?: "null"}")
         }
     }
 

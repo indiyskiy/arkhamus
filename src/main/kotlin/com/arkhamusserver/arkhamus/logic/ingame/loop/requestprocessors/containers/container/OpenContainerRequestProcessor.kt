@@ -34,7 +34,7 @@ class OpenContainerRequestProcessor(
         val gameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
         val container = gameData.container
         if ((container.state == MapObjectState.ACTIVE) && (container.holdingUser == null)) {
-            container.holdingUser = gameUser.userId
+            container.holdingUser = gameUser.inGameId()
             container.state = MapObjectState.HOLD
             objectWithTagsHandler.processObject(container, gameUser, globalGameData)
             redisContainerRepository.save(container)

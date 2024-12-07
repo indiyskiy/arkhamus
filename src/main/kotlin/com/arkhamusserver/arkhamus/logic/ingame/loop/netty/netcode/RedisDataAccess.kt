@@ -71,7 +71,7 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     ).apply {
         this.altars = altars
         this.altarPolling = altarPolling
-        this.users = allUsers.associateBy { it.userId }
+        this.users = allUsers.associateBy { it.inGameId() }
         this.containers = allContainers.associateBy { it.inGameId() }
         this.crafters = allCrafters.associateBy { it.inGameId() }
         this.timeEvents = allEvents
@@ -93,7 +93,4 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
 }
 
 fun RedisDataAccess.getOtherGameUsers(userId: Long?, gameId: Long?): List<RedisGameUser> =
-    getGameUsers(gameId).filter { it.userId != userId }
-
-fun RedisDataAccess.getOtherGameUsers(userId: String, gameId: Long) =
-    getGameUsers(gameId).filter { it.id != userId }
+    getGameUsers(gameId).filter { it.inGameId() != userId }

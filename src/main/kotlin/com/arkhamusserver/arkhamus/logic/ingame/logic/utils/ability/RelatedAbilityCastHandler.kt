@@ -17,7 +17,7 @@ class RelatedAbilityCastHandler {
         } else {
             castAbilities.firstOrNull {
                 it.abilityId == ability.id &&
-                        it.sourceUserId == user.userId &&
+                        it.sourceUserId == user.inGameId() &&
                         it.timeLeftCooldown > 0
             }
         }

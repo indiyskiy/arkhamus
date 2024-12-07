@@ -197,7 +197,7 @@ class UserQuestCreationHandler(
                 id = generateRandomId(),
                 gameId = quest.gameId,
                 questId = quest.inGameId(),
-                userId = user.userId,
+                userId = user.inGameId(),
                 creationGameTime = currentGameTime
             )
         }

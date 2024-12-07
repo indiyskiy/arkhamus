@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.ItemNotch
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ActionProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
@@ -20,6 +21,8 @@ class RitualPutItemRequestProcessData(
     var altarHolder: RedisAltarHolder?,
     var usersInRitual: List<RedisGameUser>,
     var executedSuccessfully: Boolean,
+    var currentStepItem: Item?,
+    var notches: List<ItemNotch>,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,

@@ -11,7 +11,7 @@ data class GameUserResponse(
     var stateTags: Set<String> = emptySet(),
 ) {
     constructor(gameUser: RedisGameUser) : this(
-        id = gameUser.userId,
+        id = gameUser.inGameId(),
         nickName = gameUser.nickName,
         x = gameUser.x,
         y = gameUser.y,

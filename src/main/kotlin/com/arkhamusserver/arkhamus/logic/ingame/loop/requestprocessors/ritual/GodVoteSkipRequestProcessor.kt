@@ -51,7 +51,7 @@ class GodVoteSkipRequestProcessor(
         altarPolling: RedisAltarPolling,
         gameData: GodVoteSkipRequestProcessData
     ) {
-        val userId: Long = gameData.gameUser!!.userId
+        val userId: Long = gameData.gameUser!!.inGameId()
         altarPolling.skippedUsers += userId
         redisAltarPollingRepository.save(altarPolling)
     }

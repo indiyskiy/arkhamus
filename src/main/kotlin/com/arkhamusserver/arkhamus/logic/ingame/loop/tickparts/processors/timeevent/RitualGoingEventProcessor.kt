@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timee
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL
 import com.arkhamusserver.arkhamus.model.redis.RedisAltar
@@ -18,7 +19,8 @@ import kotlin.math.sin
 @Component
 class RitualGoingEventProcessor(
     private val ritualHandler: RitualHandler,
-    private val geometryUtils: GeometryUtils
+    private val geometryUtils: GeometryUtils,
+    private val redisAltarHolderRepository: RedisAltarHolderRepository
 ) : TimeEventProcessor {
 
     companion object {
@@ -44,8 +46,18 @@ class RitualGoingEventProcessor(
         currentGameTime: Long,
         timePassedMillis: Long
     ) {
-        val gameTimeItemsNotches = ritualHandler.countItemsNotches(event, globalGameData.altarHolder)
+        val altarHolder = globalGameData.altarHolder
+        val gameTimeItemsNotches = ritualHandler.countItemsNotches(event, altarHolder)
         val currentItem = ritualHandler.countCurrentItem(gameTimeItemsNotches, currentGameTime)
+
+        if (altarHolder != null && altarHolder.currentStepItem != currentItem) {
+            altarHolder.currentStepItem = currentItem
+            if (altarHolder.usersToKick.isNotEmpty()) {
+                ritualHandler.kickUsersFromRitual(altarHolder, globalGameData)
+            }
+            redisAltarHolderRepository.save(altarHolder)
+        }
+
         if (currentItem != null) {
             ritualHandler.tryToShiftTime(globalGameData.altarHolder, currentItem, event)
         }
@@ -83,7 +95,7 @@ class RitualGoingEventProcessor(
         altarHolder: RedisAltarHolder,
         radius: Double
     ) {
-        val usersInRitual = values.filter { it.stateTags.contains(IN_RITUAL.name) }.sortedBy { it.userId }
+        val usersInRitual = values.filter { it.inGameId() in altarHolder.usersInRitual }.sortedBy { it.inGameId() }
         val usersRadius = radius * 2 / 3
         if (usersInRitual.isNotEmpty()) {
             val step = 2 * Math.PI / usersInRitual.size
@@ -103,12 +115,13 @@ class RitualGoingEventProcessor(
         altarHolder: RedisAltarHolder,
         radius: Double
     ) {
-        users.filterNot { user -> user.inRitual() }.forEach { user ->
+        users.filterNot { user -> user.inRitual(altarHolder) }.forEach { user ->
             if (geometryUtils.distanceLessOrEquals(
                     altarHolder, user, radius
                 )
             ) {
                 user.stateTags += IN_RITUAL.name
+                altarHolder.usersInRitual += user.inGameId()
             }
         }
     }
@@ -122,7 +135,7 @@ class RitualGoingEventProcessor(
         )
     }
 
-    private fun RedisGameUser.inRitual(): Boolean =
-        this.stateTags.contains(IN_RITUAL.name)
+    private fun RedisGameUser.inRitual(altarHolder: RedisAltarHolder): Boolean =
+        altarHolder.usersInRitual.contains(this.inGameId())
 
 }

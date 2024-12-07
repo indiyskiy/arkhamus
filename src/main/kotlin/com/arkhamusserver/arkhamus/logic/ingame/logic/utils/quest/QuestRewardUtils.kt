@@ -52,7 +52,7 @@ class QuestRewardUtils(
         return quest != null &&
                 userQuestProgress != null &&
                 userQuestProgress.questId == quest.inGameId() &&
-                userQuestProgress.userId == user.userId &&
+                userQuestProgress.userId == user.inGameId() &&
                 userQuestProgress.questState !in setOf(UserQuestState.FINISHED, UserQuestState.DECLINED)
     }
 
@@ -73,7 +73,7 @@ class QuestRewardUtils(
                 emptyList()
             )
         } else {
-            val rewardsOfUser = rewards.filter { it.userId == user.userId }
+            val rewardsOfUser = rewards.filter { it.userId == user.inGameId() }
             val filtered = rewardsOfUser.filter { it.questId == quest.inGameId() }
             filtered.ifEmpty {
                 generateQuestRewardsForUser(
@@ -175,7 +175,7 @@ class QuestRewardUtils(
             gameId = quest.gameId,
             questId = quest.inGameId(),
             questProgressId = questProgress.id,
-            userId = user.userId,
+            userId = user.inGameId(),
             creationGameTime = currentGameTime,
         )
     }

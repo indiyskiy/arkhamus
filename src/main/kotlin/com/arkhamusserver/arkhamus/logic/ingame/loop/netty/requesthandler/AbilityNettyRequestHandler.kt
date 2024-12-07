@@ -65,7 +65,7 @@ class AbilityNettyRequestHandler(
             )
             val ability = Ability.byId(this.abilityId)
             val user = globalGameData.users[userId]!!
-            val users = globalGameData.users.values.filter { it.userId != userId }
+            val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,

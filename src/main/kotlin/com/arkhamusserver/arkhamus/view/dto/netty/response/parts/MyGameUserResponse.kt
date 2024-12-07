@@ -15,7 +15,7 @@ data class MyGameUserResponse(
     var quests: List<UserQuestResponse> = emptyList()
 ) {
     constructor(gameUser: RedisGameUser, quests: List<UserQuestResponse>) : this(
-        id = gameUser.userId,
+        id = gameUser.inGameId(),
         nickName = gameUser.nickName,
         madness = gameUser.madness,
         madnessNotches = gameUser.madnessNotches,

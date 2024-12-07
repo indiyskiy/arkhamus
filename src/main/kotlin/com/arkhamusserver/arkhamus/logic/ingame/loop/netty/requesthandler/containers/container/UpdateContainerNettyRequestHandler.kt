@@ -48,7 +48,7 @@ class UpdateContainerNettyRequestHandler(
             )
             val container = globalGameData.containers[this.externalInventoryId]!!
             val user = globalGameData.users[userId]!!
-            val users = globalGameData.users.values.filter { it.userId != userId }
+            val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,

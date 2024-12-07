@@ -9,7 +9,7 @@ data class EndOfGameUserResponse(
     val classInGame: String?,
 ) {
     constructor(gameUser: RedisGameUser) : this(
-        id = gameUser.userId,
+        id = gameUser.inGameId(),
         nickName = gameUser.nickName,
         role = gameUser.role.name,
         classInGame = gameUser.classInGame.name,

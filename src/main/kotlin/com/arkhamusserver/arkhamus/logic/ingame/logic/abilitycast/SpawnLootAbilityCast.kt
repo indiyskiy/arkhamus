@@ -75,7 +75,7 @@ private fun rememberItemChangesForResponses(
         InBetweenItemHolderChanges(
             item = Item.CURSED_POTATO,
             number = 1,
-            userId = user.userId,
+            userId = user.inGameId(),
             ItemHolderChangeType.TAKE
         )
     )

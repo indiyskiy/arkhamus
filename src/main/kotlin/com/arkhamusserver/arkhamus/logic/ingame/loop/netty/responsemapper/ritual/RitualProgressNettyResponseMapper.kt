@@ -47,7 +47,9 @@ class RitualProgressNettyResponseMapper(
                 ritualGoingData = ritualGoingDataHandler.build(
                     requestProcessData.ritualEvent,
                     requestProcessData.altarHolder!!,
-                    requestProcessData.usersInRitual
+                    requestProcessData.usersInRitual,
+                    requestProcessData.currentStepItem,
+                    requestProcessData.notches
                 ),
                 tick = it.tick,
                 userId = user.id!!,

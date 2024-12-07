@@ -43,7 +43,7 @@ class DoorDataHandler(
         user: RedisGameUser,
         door: RedisDoor
     ): Boolean {
-        return door.closedForUsers.contains(user.userId)
+        return door.closedForUsers.contains(user.inGameId())
     }
 
     private fun mask(

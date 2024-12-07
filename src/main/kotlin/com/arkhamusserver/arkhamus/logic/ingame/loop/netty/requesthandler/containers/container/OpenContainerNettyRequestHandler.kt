@@ -43,7 +43,7 @@ class OpenContainerNettyRequestHandler(
         with(request as OpenContainerRequestMessage) {
             val container = globalGameData.containers[this.externalInventoryId]!!
             val user = globalGameData.users[userId]!!
-            val users = globalGameData.users.values.filter { it.userId != userId }
+            val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData

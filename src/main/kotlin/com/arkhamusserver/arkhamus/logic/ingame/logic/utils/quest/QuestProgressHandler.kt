@@ -124,7 +124,7 @@ class QuestProgressHandler(
         currentGameTime: Long
     ) {
         logger.info("add more quests maybe?")
-        val userQuestProgress = globalGameData.questProgressByUserId[data.gameUser!!.userId] ?: emptyList()
+        val userQuestProgress = globalGameData.questProgressByUserId[data.gameUser!!.inGameId()] ?: emptyList()
         if (userQuestCreationHandler.needToAddQuests(userQuestProgress)) {
             logger.info("add more quests definitely")
             val newQuestProgress = userQuestCreationHandler.addQuests(
@@ -143,7 +143,7 @@ class QuestProgressHandler(
         user: RedisGameUser,
         quests: List<RedisQuest>
     ): List<UserQuestResponse> {
-        return (questProgressByUserId[user.userId] ?: emptyList()).map { userQuest ->
+        return (questProgressByUserId[user.inGameId()] ?: emptyList()).map { userQuest ->
             mapQuestProgress(quests, userQuest)
         }
     }

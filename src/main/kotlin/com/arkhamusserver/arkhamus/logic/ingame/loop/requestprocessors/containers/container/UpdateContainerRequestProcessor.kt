@@ -42,7 +42,7 @@ class UpdateContainerRequestProcessor(
         val container = globalGameData.containers[updateContainerRequestMessage.externalInventoryId]!!
 
         logger.info("start update container")
-        if ((container.state == MapObjectState.HOLD) && (container.holdingUser == oldGameUser.userId)) {
+        if ((container.state == MapObjectState.HOLD) && (container.holdingUser == oldGameUser.inGameId())) {
             val sortedUserInventory =
                 containerLikeThingsHandler.getTrueNewInventoryContent(
                     container,

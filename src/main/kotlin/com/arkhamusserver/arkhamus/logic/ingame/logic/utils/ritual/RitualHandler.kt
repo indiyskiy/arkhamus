@@ -1,11 +1,15 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual
 
 import com.arkhamusserver.arkhamus.logic.ingame.GameEndLogic
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.item.GodToCorkResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.RecipesSource
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TeleportHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -14,10 +18,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritua
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
-import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
-import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
@@ -41,8 +42,12 @@ class RitualHandler(
     private val gameEndLogic: GameEndLogic,
     private val inventoryHandler: InventoryHandler,
     private val redisAltarHolderRepository: RedisAltarHolderRepository,
+    private val madnessHandler: UserMadnessHandler,
+    private val teleportHandler: TeleportHandler,
+    private val geometryUtils: GeometryUtils
 ) {
     companion object {
+        const val MADNESS_PER_USER = GlobalGameSettings.MAX_USER_MADNESS / 12.0
         var logger: Logger = LoggerFactory.getLogger(RitualHandler::class.java)
     }
 
@@ -211,6 +216,42 @@ class RitualHandler(
         tryToForceStartRitual(allUsers, altarPolling, altars, altarHolder, events, game)
     }
 
+    fun kickUsersFromRitual(
+        holder: RedisAltarHolder,
+        data: GlobalGameData
+    ) {
+        val usersInRitual = holder.usersInRitual
+        val usersToKick = holder.usersToKick.intersect(usersInRitual)
+        if (usersToKick.isEmpty()) return
+
+        val isKickForAll = usersToKick.size == usersInRitual.size
+        val madnessApply = if (isKickForAll) {
+            0.0
+        } else {
+            MADNESS_PER_USER * usersInRitual.size / usersToKick.size
+        }
+        val ritualThresholds = data.thresholds.filter { it.type == ThresholdType.RITUAL }
+        usersToKick.forEach { userId ->
+            val user = data.users[userId]!!
+            val nearestPoint = geometryUtils.nearestPoint(user, ritualThresholds)
+            nearestPoint?.let {
+                madnessHandler.applyMadness(user, madnessApply, data.game.globalTimer)
+                teleportHandler.forceTeleport(data.game, user, it)
+            }
+        }
+        holder.usersToKick = emptyList()
+        holder.usersInRitual -= usersToKick
+        if (holder.usersInRitual.isEmpty()) {
+            failRitualStartCooldown(
+                holder,
+                data.altarPolling,
+                data.timeEvents,
+                data.game
+            )
+        }
+        redisAltarHolderRepository.save(holder)
+    }
+
     @Transactional
     fun castGodVote(
         god: God,
@@ -224,7 +265,7 @@ class RitualHandler(
         allUsers: Collection<RedisGameUser>,
         events: List<RedisTimeEvent>
     ) {
-        val userId: Long = gameData.gameUser!!.userId
+        val userId: Long = gameData.gameUser!!.inGameId()
         val godId = god.getId()
         altarPolling.userVotes[userId] = godId
         redisAltarPollingRepository.save(altarPolling)
@@ -247,7 +288,7 @@ class RitualHandler(
         altarPolling: RedisAltarPolling
     ): God? {
         val canVote = godVoteHandler.usersCanPossiblyVote(allUsers)
-        val canVoteIdsSet = canVote.map { it.userId }.toSet()
+        val canVoteIdsSet = canVote.map { it.inGameId() }.toSet()
         val votesStillRelevant = altarPolling.userVotes.filter { it.key in canVoteIdsSet }
         val votedUserIdsSet = votesStillRelevant.map { it.key }.toSet()
 
@@ -289,9 +330,14 @@ class RitualHandler(
             redisAltarPollingRepository.delete(it)
         }
 
-        unlockTheGod(altarHolder)
-        altarHolder?.state = MapAltarState.LOCKED
-        altarHolder?.let { redisAltarHolderRepository.save(it) }
+
+        if (altarHolder != null) {
+            unlockTheGod(altarHolder)
+            altarHolder.state = MapAltarState.LOCKED
+            altarHolder.usersInRitual = emptyList()
+            altarHolder.usersToKick = emptyList()
+            redisAltarHolderRepository.save(altarHolder)
+        }
         logger.info("creating COOLDOWN event")
         eventHandler.createEvent(
             game,
@@ -305,9 +351,11 @@ class RitualHandler(
         altarHolder: RedisAltarHolder?
     ): RedisAltarHolder? {
         altarPolling?.let { redisAltarPollingRepository.delete(it) }
-        unlockTheGod(altarHolder)
-        altarHolder?.state = MapAltarState.OPEN
-        return altarHolder?.let { redisAltarHolderRepository.save(altarHolder) }
+        return altarHolder?.let {
+            unlockTheGod(it)
+            it.state = MapAltarState.OPEN
+            redisAltarHolderRepository.save(it)
+        }
     }
 
     fun tryToForceStartRitual(
@@ -378,13 +426,14 @@ class RitualHandler(
         )
     }
 
-    fun unlockTheGod(altarHolder: RedisAltarHolder?) {
-        altarHolder?.lockedGod = null
-        altarHolder?.thmAddedThisRound = false
-        altarHolder?.round = 0
-        altarHolder?.itemsForRitual = emptyMap()
-        altarHolder?.itemsToAltarId = emptyMap()
-        altarHolder?.itemsOnAltars = emptyMap()
+    fun unlockTheGod(altarHolder: RedisAltarHolder) {
+        altarHolder.lockedGod = null
+        altarHolder.thmAddedThisRound = false
+        altarHolder.round = 0
+        altarHolder.itemsForRitual = emptyMap()
+        altarHolder.itemsToAltarId = emptyMap()
+        altarHolder.itemsOnAltars = emptyMap()
+        altarHolder.currentStepItem = null
     }
 
     fun startAnotherRound(
@@ -405,7 +454,7 @@ class RitualHandler(
         globalGameData: GlobalGameData,
         currentGameUser: RedisGameUser,
     ): RedisAltarPolling {
-        val userId: Long = currentGameUser.userId
+        val userId: Long = currentGameUser.inGameId()
         val godId = god.getId()
         val altarPolling = RedisAltarPolling(
             id = generateRandomId(),

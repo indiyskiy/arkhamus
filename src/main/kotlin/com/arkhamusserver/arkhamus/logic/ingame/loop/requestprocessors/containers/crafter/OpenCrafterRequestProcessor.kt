@@ -34,7 +34,7 @@ class OpenCrafterRequestProcessor(
         val user = globalGameData.users[requestDataHolder.userAccount.id]!!
         val crafter = gameData.crafter
         if ((crafter.state == MapObjectState.ACTIVE) && (crafter.holdingUser == null)) {
-            crafter.holdingUser = user.userId
+            crafter.holdingUser = user.inGameId()
             crafter.state = MapObjectState.HOLD
             objectWithTagsHandler.processObject(crafter, user, globalGameData)
             redisCrafterRepository.save(crafter)

@@ -39,7 +39,7 @@ class ThrowPotatoCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            (it is WithTrueIngameId && it.inGameId() != user.userId) &&
+            (it is WithTrueIngameId && it.inGameId() != user.inGameId()) &&
                     (it is WithPoint && geometryUtils.distanceLessOrEquals(user, it, ability.range))
         }
     }

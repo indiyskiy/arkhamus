@@ -21,11 +21,11 @@ class EventVisibilityFilter {
     private fun isTarget(
         event: OngoingEvent,
         user: RedisGameUser
-    ): Boolean = event.event.targetObjectId == user.userId
+    ): Boolean = event.event.targetObjectId == user.inGameId()
 
     private fun isSource(
         event: OngoingEvent,
         user: RedisGameUser
-    ): Boolean = event.event.sourceObjectId == user.userId
+    ): Boolean = event.event.sourceObjectId == user.inGameId()
 
 }

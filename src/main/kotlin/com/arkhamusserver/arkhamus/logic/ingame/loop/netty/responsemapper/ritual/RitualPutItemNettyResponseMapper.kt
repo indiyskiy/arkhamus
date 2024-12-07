@@ -49,7 +49,9 @@ class RitualPutItemNettyResponseMapper(
                 ritualGoingData = ritualGoingDataHandler.build(
                     requestProcessData.ritualEvent,
                     requestProcessData.altarHolder!!,
-                    requestProcessData.usersInRitual
+                    requestProcessData.usersInRitual,
+                    requestProcessData.currentStepItem,
+                    requestProcessData.notches
                 ),
                 executedSuccessfully = it.executedSuccessfully,
                 firstTime = true,

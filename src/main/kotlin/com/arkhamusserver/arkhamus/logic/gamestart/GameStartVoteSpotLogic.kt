@@ -44,7 +44,7 @@ class GameStartVoteSpotLogic(
                 id = generateRandomId(),
                 gameId = game.id!!,
                 voteSpotId = voteSpot.voteSpotId,
-                userId = user.userId,
+                userId = user.inGameId(),
                 votesForUserIds = mutableListOf()
             )
         )
@@ -68,7 +68,7 @@ class GameStartVoteSpotLogic(
                 costValue = 1,
                 costItem = DEFAULT_ITEM,
                 bannedUsers = mutableListOf(),
-                availableUsers = allUsers.map { it.userId }.toMutableList(),
+                availableUsers = allUsers.map { it.inGameId() }.toMutableList(),
                 visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
             )
         )

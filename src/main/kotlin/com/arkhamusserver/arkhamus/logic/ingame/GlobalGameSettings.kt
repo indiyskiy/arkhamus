@@ -25,5 +25,8 @@ class GlobalGameSettings {
 
         //CLUES
         const val EACH_CLUE_ON_START = 2
+
+        //MADNESS
+        const val MAX_USER_MADNESS = 600.0
     }
 }

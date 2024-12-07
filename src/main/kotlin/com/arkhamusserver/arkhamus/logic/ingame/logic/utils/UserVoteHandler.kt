@@ -47,7 +47,7 @@ class UserVoteHandler(
     private fun isUserBannedFromVoteSpot(
         voteSpot: RedisVoteSpot?,
         votingUser: RedisGameUser
-    ): CantVoteReason? = CantVoteReason.BANNED.takeIf { voteSpot?.bannedUsers?.contains(votingUser.userId) == true }
+    ): CantVoteReason? = CantVoteReason.BANNED.takeIf { voteSpot?.bannedUsers?.contains(votingUser.inGameId()) == true }
 
     private fun mustPay(
         voteSpot: RedisVoteSpot?
@@ -112,7 +112,7 @@ class UserVoteHandler(
         globalGameData: GlobalGameData,
     ): RedisGameUser? {
         val allUsersCanVoteList = usersCanPossiblyVote(allUsers, voteSpot)
-        val usersCanVoteIdsSet = allUsersCanVoteList.map { it.userId }.toSet()
+        val usersCanVoteIdsSet = allUsersCanVoteList.map { it.inGameId() }.toSet()
         val votesStillRelevant = userVoteSpots.filter { it.userId in usersCanVoteIdsSet }
 
         val (maxValue, maxVotes) = statistic(votesStillRelevant, voteSpot.availableUsers.toSet())
@@ -136,7 +136,7 @@ class UserVoteHandler(
                     globalGameData
                 )
                 reset(voteSpot, userVoteSpots)
-                return allUsers.first { it.userId == userToBan }
+                return allUsers.first { it.inGameId() == userToBan }
             }
         }
         return null
@@ -180,7 +180,7 @@ class UserVoteHandler(
         userToBan: RedisGameUser,
         globalGameData: GlobalGameData
     ) {
-        val userId = userToBan.userId
+        val userId = userToBan.inGameId()
         voteSpot.bannedUsers += userId
         voteSpot.availableUsers -= userId
         if (userToBan.inRelatedZone(globalGameData.levelGeometryData.zones, voteSpot.zoneId)) {

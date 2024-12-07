@@ -60,7 +60,7 @@ class OneTickTryEndGameMaybeHandler(
             allCultists.size == voteSpot.bannedUsers.size
         }
         if (!noOneElseBaned) return false
-        gameEndLogic.endTheGame(game, users.associateBy { it.userId }, GameEndReason.CULTISTS_BANNED)
+        gameEndLogic.endTheGame(game, users.associateBy { it.inGameId() }, GameEndReason.CULTISTS_BANNED)
         return true
     }
 
@@ -77,7 +77,7 @@ class OneTickTryEndGameMaybeHandler(
         val notLeversNotCultists = notLeavers.filter { it.role != RoleTypeInGame.CULTIST }
         val notMadNotCultists = notLeversNotCultists.filter { !madnessHandler.isCompletelyMad(it) }
         if (notMadNotCultists.isEmpty()) {
-            gameEndLogic.endTheGame(game, users.associateBy { it.userId }, GameEndReason.EVERYBODY_MAD)
+            gameEndLogic.endTheGame(game, users.associateBy { it.inGameId() }, GameEndReason.EVERYBODY_MAD)
             return true
         }
         return false
@@ -88,7 +88,7 @@ class OneTickTryEndGameMaybeHandler(
             logger.info("end the game - ABANDONED")
             gameEndLogic.endTheGame(
                 game,
-                users.associateBy { it.userId },
+                users.associateBy { it.inGameId() },
                 GameEndReason.ABANDONED,
                 timeLeft = GlobalGameSettings.MINUTE_IN_MILLIS
             )

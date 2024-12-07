@@ -28,7 +28,7 @@ class CanRecipeBeCraftedHandler(
     }
 
     private fun crafterHoldByMe(user: RedisGameUser, crafter: RedisCrafter) =
-        (crafter.holdingUser == user.userId).also {
+        (crafter.holdingUser == user.inGameId()).also {
             logger.warn("crafterHoldByMe $this")
         }
 

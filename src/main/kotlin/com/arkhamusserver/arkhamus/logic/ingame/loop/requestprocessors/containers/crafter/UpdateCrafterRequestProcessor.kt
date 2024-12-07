@@ -41,7 +41,7 @@ class UpdateCrafterRequestProcessor(
         val oldGameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
         val crafter = globalGameData.crafters[updateCrafterRequestMessage.externalInventoryId]!!
 
-        if ((crafter.state == MapObjectState.HOLD) && (crafter.holdingUser == oldGameUser.userId)) {
+        if ((crafter.state == MapObjectState.HOLD) && (crafter.holdingUser == oldGameUser.inGameId())) {
             val sortedUserInventory =
                 crafterTypeThingsHandler.getTrueNewInventoryContent(
                     crafter,

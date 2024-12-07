@@ -37,7 +37,7 @@ class ISawTheEndOfTimesNettyRequestHandler(
         val userId = requestDataHolder.userAccount.id
         requestDataHolder.gameSession?.id?.let {
             val user = globalGameData.users[userId]!!
-            val users = globalGameData.users.values.filter { it.userId != userId }
+            val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents)
             val gameEnded = globalGameData.game.state in setOf(GameState.GAME_END_SCREEN.name, GameState.FINISHED.name)
 

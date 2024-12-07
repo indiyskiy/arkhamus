@@ -37,7 +37,7 @@ class AuthNettyRequestHandler(
                     it.userAccount.id!!,
                     it.gameSession.id!!
                 ) ?: return null
-                val otherGameUsers = redisDataAccess.getOtherGameUsers(gameUser.id, it.gameSession.id!!)
+                val otherGameUsers = redisDataAccess.getOtherGameUsers(gameUser.inGameId(), it.gameSession.id!!)
                 AuthRequestProcessData(gameUser = gameUser, success = true, otherGameUsers = otherGameUsers).apply {
                     this.userOfTheGame = it
                     this.userAccount = it.userAccount

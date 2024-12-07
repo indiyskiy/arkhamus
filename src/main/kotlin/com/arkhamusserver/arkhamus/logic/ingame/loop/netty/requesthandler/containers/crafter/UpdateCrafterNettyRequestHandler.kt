@@ -48,7 +48,7 @@ class UpdateCrafterNettyRequestHandler(
             )
             val crafter = globalGameData.crafters[this.externalInventoryId]!!
             val user = globalGameData.users[userId]!!
-            val users = globalGameData.users.values.filter { it.userId != userId }
+            val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 inZones,

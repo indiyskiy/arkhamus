@@ -64,6 +64,13 @@ class GeometryUtils {
                 (dy * dy) / (ellipse.rz * ellipse.rz) <= 1
     }
 
+    fun onHighGround(
+        whoLooks: RedisGameUser,
+        target: WithPoint
+    ): Boolean {
+        return (target.y() - whoLooks.y) >= HIGH_GROUND_HEIGHT
+    }
+
     private fun det(a: Point, b: Point, c: Point) =
         a.x * (b.y - c.y) +
                 b.x * (c.y - a.y) +
@@ -72,13 +79,6 @@ class GeometryUtils {
     fun <T : WithPoint> nearestPoint(point: WithPoint, points: List<T>?): T? {
         if (points == null || points.isEmpty()) return null
         return points.minByOrNull { distance(it, point) }
-    }
-
-    fun onHighGround(
-        whoLooks: RedisGameUser,
-        target: WithPoint
-    ): Boolean {
-        return (target.y() - whoLooks.y) >= HIGH_GROUND_HEIGHT
     }
 
     data class Point(var x: Double, var y: Double)

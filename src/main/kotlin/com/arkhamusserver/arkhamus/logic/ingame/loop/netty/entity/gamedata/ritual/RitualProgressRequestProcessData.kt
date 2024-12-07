@@ -1,8 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.ItemNotch
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
@@ -14,6 +16,8 @@ class RitualProgressRequestProcessData(
     var ritualEvent: RedisTimeEvent?,
     var altarHolder: RedisAltarHolder?,
     var usersInRitual: List<RedisGameUser>,
+    var currentStepItem: Item?,
+    var notches: List<ItemNotch>,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,

@@ -53,7 +53,7 @@ class UserMadnessHandler(
         val debuff = MadnessDebuffs.values().filter { it.getStepNumber() == notchIndex }
             .random(random).name
         gameUser.madnessDebuffs += debuff
-        logger.info("apply debuff $debuff to ${gameUser.userId}-${gameUser.nickName}")
+        logger.info("apply debuff $debuff to ${gameUser.inGameId()}-${gameUser.nickName}")
         activityHandler.addUserNotTargetActivity(
             gameId = gameUser.gameId,
             activityType = ActivityType.USER_GOT_MAD,

@@ -36,6 +36,6 @@ class TeleportHandler(
             location = Location(user.x, user.y, user.z),
             timeLeft = RedisTimeEventType.TELEPORTATION_STUN.getDefaultTime()
         )
-        logger.info("user ${user.userId} teleported to ${user.x()}; ${user.y()}; ${user.z()}")
+        logger.info("user ${user.inGameId()} teleported to ${user.x()}; ${user.y()}; ${user.z()}")
     }
 }
