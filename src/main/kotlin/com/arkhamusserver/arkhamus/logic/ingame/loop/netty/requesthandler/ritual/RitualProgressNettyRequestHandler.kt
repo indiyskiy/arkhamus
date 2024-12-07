@@ -62,12 +62,13 @@ class RitualProgressNettyRequestHandler(
             }?.event
             val notches = ritualHandler.countItemsNotches(event, altarHolder)
             val currentItem = ritualHandler.countCurrentItem(notches, globalGameData.game.globalTimer)
+            val usersInRitual = globalGameData.altarHolder?.usersInRitual?.map { userInRitual ->
+                users.first { user -> user.inGameId() == userInRitual }
+            } ?: emptyList()
             return RitualProgressRequestProcessData(
                 currentGameTime = globalGameData.game.globalTimer,
                 ritualEvent = event,
-                usersInRitual = globalGameData.altarHolder?.usersInRitual?.map { userInRitual ->
-                    users.first { user -> user.inGameId() == userInRitual }
-                } ?: emptyList(),
+                usersInRitual = usersInRitual,
                 currentStepItem = currentItem,
                 notches = notches,
                 altarHolder = altarHolder,
