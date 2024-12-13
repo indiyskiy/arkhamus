@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
 @Component
-class RitualGoingDataHandler {
+class RitualMappingDataHandler {
     fun build(
         ritualEvent: RedisTimeEvent?,
         altarHolder: RedisAltarHolder,
@@ -61,7 +61,7 @@ class RitualGoingDataHandler {
         } else {
             usersGoingToLeave + 1
         }
-        val madnessPenalty = if (usersInRitual >= usersGoingToLeave - 1) {
+        val madnessPenalty = if (delimeter != 0 && usersInRitual >= usersGoingToLeave - 1) {
             RitualHandler.MADNESS_PER_USER * usersInRitual / delimeter
         } else {
             0.0

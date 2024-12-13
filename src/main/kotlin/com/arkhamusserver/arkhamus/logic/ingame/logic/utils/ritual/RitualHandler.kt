@@ -82,6 +82,7 @@ class RitualHandler(
         if (altarHolder == null) return emptyList()
         val start = ritualEvent.timeStart
         val size = altarHolder.itemsForRitual.size
+        if (size == 0) return emptyList()
         val step = (ritualEvent.timePast + ritualEvent.timeLeft) / size
         return altarHolder.itemsForRitual
             .toList()
@@ -137,7 +138,7 @@ class RitualHandler(
         altarHolder: RedisAltarHolder,
         ongoingEvents: List<OngoingEvent>
     ) {
-        logger.info("put all item")
+        logger.info("put all items")
         if (globalGameData.game.god == altarHolder.lockedGod) {
             gameEndLogic.endTheGame(
                 globalGameData.game,
@@ -235,10 +236,11 @@ class RitualHandler(
             nearestPoint?.let {
                 madnessHandler.applyMadness(user, madnessApply, data.game.globalTimer)
                 teleportHandler.forceTeleport(data.game, user, it)
+                user.stateTags -= IN_RITUAL
             }
         }
         holder.usersToKick = emptySet()
-        holder.usersInRitual -= usersToKick
+        holder.usersInRitual = usersInRitual.filter { it !in usersToKick }.toSet()
         if (holder.usersInRitual.isEmpty()) {
             failRitualStartCooldown(
                 holder,
@@ -321,13 +323,13 @@ class RitualHandler(
         game: RedisGame
     ) {
         eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
+        eventHandler.tryToDeleteEvent(RedisTimeEventType.RITUAL_GOING, events)
 
         altarPolling?.let {
             logger.info("removing polling - fail ritual")
             it.state = MapAltarPollingState.FAILED
             redisAltarPollingRepository.delete(it)
         }
-
 
         if (altarHolder != null) {
             unlockTheGod(altarHolder)

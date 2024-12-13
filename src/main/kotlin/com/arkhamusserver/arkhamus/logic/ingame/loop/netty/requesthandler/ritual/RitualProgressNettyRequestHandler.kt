@@ -18,7 +18,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEvent
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.RitualProgressRequestMessage
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -33,10 +32,6 @@ class RitualProgressNettyRequestHandler(
     private val ritualHandler: RitualHandler
 ) : NettyRequestHandler {
 
-    companion object{
-        private val logger =LoggerFactory.getLogger(RitualProgressNettyRequestHandler::class.java)
-    }
-
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =
         nettyRequestMessage::class.java == RitualProgressRequestMessage::class.java
 
@@ -49,7 +44,6 @@ class RitualProgressNettyRequestHandler(
     ): RitualProgressRequestProcessData {
         val request = requestDataHolder.nettyRequestMessage
         with(request as RitualProgressRequestMessage) {
-            logger.info("main part")
             val inZones = zonesHandler.filterByPosition(
                 requestDataHolder.nettyRequestMessage.baseRequestData.userPosition,
                 globalGameData.levelGeometryData
@@ -76,18 +70,13 @@ class RitualProgressNettyRequestHandler(
                 user,
                 globalGameData.quests
             )
-            logger.info("event")
             val event = ongoingEvents.firstOrNull {
                 it.event.type == RedisTimeEventType.RITUAL_GOING &&
                         it.event.state == RedisTimeEventState.ACTIVE
             }?.event
-            logger.info("notches")
             val notches = ritualHandler.countItemsNotches(event, altarHolder)
-            logger.info("current item")
             val currentItem = ritualHandler.countCurrentItem(notches, globalGameData.game.globalTimer)
-            logger.info("users in ritual")
             val usersInRitual = usersInRitual(globalGameData, globalGameData.users.values)
-            logger.info("build process data")
             return RitualProgressRequestProcessData(
                 currentGameTime = globalGameData.game.globalTimer,
                 ritualEvent = event,

@@ -17,7 +17,7 @@ class OneTickLantern(
                 GlobalGameSettings.MINUTE_IN_MILLIS
     }
 
-    fun tick(data: GlobalGameData, timePassedMillis: Long) {
+    fun tickLanterns(data: GlobalGameData, timePassedMillis: Long) {
         data.lanterns.forEach {
             when (it.lanternState) {
                 EMPTY -> {}

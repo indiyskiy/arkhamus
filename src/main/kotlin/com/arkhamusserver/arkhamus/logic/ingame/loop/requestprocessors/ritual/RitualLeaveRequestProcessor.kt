@@ -31,7 +31,7 @@ class RitualLeaveRequestProcessor(
         ongoingEvents: List<OngoingEvent>
     ) {
         val ritualLeaveRequestProcessData = requestDataHolder.requestProcessData as RitualLeaveRequestProcessData
-        val altarHolder = globalGameData.altarHolder
+        val altarHolder = ritualLeaveRequestProcessData.altarHolder
         val user = ritualLeaveRequestProcessData.gameUser!!
 
         if (ritualLeaveRequestProcessData.userInRitual) {

@@ -38,40 +38,50 @@ class ArkhamusOneTickLogicImpl(
         game: RedisGame,
     ): List<NettyResponse> {
         try {
+//            logger.info("loadGlobalGameData")
             val globalGameData = redisDataAccess.loadGlobalGameData(game)
-
+//            logger.info("updateNextTick")
             val timePassedMillis = oneTickTick.updateNextTick(game)
+//            logger.info("processTimeEvents")
             val ongoingEvents = oneTickTimeEvent.processTimeEvents(
                 globalGameData,
                 globalGameData.timeEvents,
                 game.globalTimer,
                 timePassedMillis
             )
+//            logger.info("processShortTimeEvents")
             oneTickShortTimeEvent.processShortTimeEvents(globalGameData.shortTimeEvents, timePassedMillis)
+//            logger.info("applyAbilityCasts")
             onTickAbilityCast.applyAbilityCasts(
                 globalGameData,
                 globalGameData.castAbilities,
                 timePassedMillis
             )
+//            logger.info("applyCraftProcess")
             onTickCraftProcess.applyCraftProcess(
                 globalGameData,
                 globalGameData.craftProcess,
                 timePassedMillis
             )
-            oneTickLantern.tick(
+//            logger.info("tickLanterns")
+            oneTickLantern.tickLanterns(
                 globalGameData,
                 timePassedMillis
             )
+//            logger.info("processRequests")
             val processedRequests = oneTickUserRequests.processRequests(
                 currentTasks,
                 globalGameData,
                 ongoingEvents,
             )
+//            logger.info("processUsers")
             oneTickUser.processUsers(globalGameData, timePassedMillis)
             if (game.currentTick - game.lastTickSaveHeartbeatActivity > SAVE_ACTIVITY_TICK_DELTA) {
+//                logger.info("saveHeartbeatForUsers")
                 activityHandler.saveHeartbeatForUsers(globalGameData)
                 game.lastTickSaveHeartbeatActivity = game.currentTick
             }
+//            logger.info("buildResponses")
             val responses =
                 oneTickUserResponses.buildResponses(
                     globalGameData,
@@ -80,6 +90,7 @@ class ArkhamusOneTickLogicImpl(
             if (responses.isNotEmpty()) {
                 game.lastTimeSentResponse = game.globalTimer
             }
+//            logger.info("checkIfEnd")
             oneTickTryEndGameMaybeHandler.checkIfEnd(game, globalGameData.users.values, globalGameData.voteSpots)
             game.serverTimeLastTick = game.serverTimeCurrentTick
             afterLoopSaving.saveAll(globalGameData, game)

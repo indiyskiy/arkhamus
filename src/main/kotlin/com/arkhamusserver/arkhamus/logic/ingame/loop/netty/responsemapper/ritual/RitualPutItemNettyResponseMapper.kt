@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.ritua
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.*
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualGoingDataHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualMappingDataHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class RitualPutItemNettyResponseMapper(
-    private val ritualGoingDataHandler: RitualGoingDataHandler,
+    private val ritualMappingDataHandler: RitualMappingDataHandler,
     private val otherGameUsersDataHandler: OtherGameUsersDataHandler,
     private val containersDataHandler: ContainerDataHandler,
     private val craftersDataHandler: CrafterDataHandler,
@@ -46,7 +46,7 @@ class RitualPutItemNettyResponseMapper(
             return RitualPutItemNettyResponse(
                 itemId = requestProcessData.item?.id,
                 itemNumber = requestProcessData.itemNumber,
-                ritualGoingData = ritualGoingDataHandler.build(
+                ritualGoingData = ritualMappingDataHandler.build(
                     requestProcessData.ritualEvent,
                     requestProcessData.altarHolder!!,
                     requestProcessData.usersInRitual,
