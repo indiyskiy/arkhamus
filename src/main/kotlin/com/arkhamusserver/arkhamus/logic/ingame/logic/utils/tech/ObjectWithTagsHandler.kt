@@ -49,7 +49,7 @@ class ObjectWithTagsHandler(
                 data.game.gameId!!,
                 data.game.globalTimer,
                 ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CONTAINER,
-                setOf(VisibilityModifier.ALL.name),
+                setOf(VisibilityModifier.ALL),
                 data
             )
         }
@@ -59,7 +59,7 @@ class ObjectWithTagsHandler(
                 data.game.gameId!!,
                 data.game.globalTimer,
                 ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CRAFTER,
-                setOf(VisibilityModifier.ALL.name),
+                setOf(VisibilityModifier.ALL),
                 data
             )
         }

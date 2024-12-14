@@ -62,7 +62,7 @@ class GameStartAltarLogic(
         y = dbAltar.y,
         z = dbAltar.z,
         interactionRadius = dbAltar.interactionRadius!!,
-        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
+        visibilityModifiers = setOf(VisibilityModifier.ALL)
     )
 
 }

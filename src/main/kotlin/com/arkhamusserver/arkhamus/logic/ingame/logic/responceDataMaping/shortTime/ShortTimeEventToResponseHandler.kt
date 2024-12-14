@@ -6,11 +6,13 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.ShortTimeEventResponse
+import com.google.gson.Gson
 import org.springframework.stereotype.Component
 
 @Component
 class ShortTimeEventToResponseHandler(
     private val shortTimeEventHandler: ShortTimeEventHandler,
+    private val gson: Gson = Gson()
 ) {
     fun filterAndMap(
         events: List<RedisShortTimeEvent>,
@@ -36,6 +38,7 @@ class ShortTimeEventToResponseHandler(
                 sourceId = it.sourceId,
                 xLocation = it.xLocation,
                 yLocation = it.yLocation,
+                additionalData = it.additionalData?.let { gson.toJson(it) }
             )
         }
     }

@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifier
 
 enum class Clue(
     val visibilityModifiers: Set<VisibilityModifier>,
-    private val visibilityModifiersString: MutableSet<String> = visibilityModifiers.map { it.name }.toMutableSet(),
 ) : WithVisibilityModifiers {
     INSCRIPTION(
         setOf(
@@ -50,7 +49,7 @@ enum class Clue(
         )
     );
 
-    override fun visibilityModifiers(): MutableSet<String> {
-        return visibilityModifiersString
+    override fun visibilityModifiers(): Set<VisibilityModifier> {
+        return visibilityModifiers
     }
 }

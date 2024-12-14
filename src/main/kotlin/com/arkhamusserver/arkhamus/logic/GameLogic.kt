@@ -47,7 +47,7 @@ class GameLogic(
         gameValidator.checkStartAccess(player, game, invitedUsers)
         val skins = userSkinLogic.allSkinsOf(game)
         val skinsReshuffled = userSkinLogic.reshuffleSkins(skins.values).associateBy { it.userAccount!!.id!! }
-        startGame(game)
+        startGame(game, skinsReshuffled)
         val gameUpdated = gameSessionRepository.findById(game.id!!).get()
         return gameUpdated.toDto(player, skinsReshuffled)
     }
@@ -148,7 +148,8 @@ class GameLogic(
 
     private fun startGame(
         game: GameSession,
+        skins: Map<Long, UserSkinSettings>
     ) {
-        gameStartLogic.startGame(game)
+        gameStartLogic.startGame(game, skins)
     }
 }

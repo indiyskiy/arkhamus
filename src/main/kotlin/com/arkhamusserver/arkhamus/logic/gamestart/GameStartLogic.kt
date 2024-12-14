@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -33,12 +34,15 @@ class GameStartLogic(
     }
 
     @Transactional
-    fun startGame(game: GameSession) {
+    fun startGame(
+        game: GameSession,
+        skins: Map<Long, UserSkinSettings>
+    ) {
         game.gameSessionSettings.level?.levelId?.let { levelId ->
             gameStartGameLogic.createTheGame(game)
             gameStartGameLogic.createTheRedisGame(game)
             gameStartUserLogic.leaveFromPreviousGames(game)
-            val users = gameStartUserLogic.createGameUsers(levelId, game)
+            val users = gameStartUserLogic.createGameUsers(levelId, game, skins)
             gameStartContainerLogic.createContainers(levelId, game)
             gameStartCrafterLogic.createCrafters(levelId, game)
             gameStartLanternLogic.createLanterns(levelId, game)

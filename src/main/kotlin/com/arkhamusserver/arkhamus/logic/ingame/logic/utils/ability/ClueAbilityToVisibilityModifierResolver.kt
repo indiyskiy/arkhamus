@@ -17,7 +17,6 @@ class ClueAbilityToVisibilityModifierResolver {
             VisibilityModifier.OMEN,
             VisibilityModifier.DISTORTION
         )
-        private val allStrings = all.map { it.name }.toSet()
     }
 
     fun toVisibilityModifier(ability: Ability) =
@@ -32,7 +31,7 @@ class ClueAbilityToVisibilityModifierResolver {
             else -> null
         }
 
-    fun allStrings(): Set<String> {
-        return allStrings
+    fun all(): Set<VisibilityModifier> {
+        return all
     }
 }

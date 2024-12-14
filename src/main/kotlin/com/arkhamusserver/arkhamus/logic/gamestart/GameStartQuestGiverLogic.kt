@@ -27,7 +27,7 @@ class GameStartQuestGiverLogic(
                 z = it.z,
                 interactionRadius = it.interactionRadius,
                 gameTags = mutableSetOf(),
-                visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
+                visibilityModifiers = setOf(VisibilityModifier.ALL)
             )
         }
         redisQuestGiverRepository.saveAll(redisQuestGivers)

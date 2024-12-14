@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.model.redis
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
@@ -16,7 +17,7 @@ data class RedisDoor(
     var zoneId: Long,
     var globalState: DoorState = DoorState.OPEN,
     var closedForUsers: MutableSet<Long> = mutableSetOf(),
-    var visibilityModifiers: MutableSet<String>,
+    var visibilityModifiers: Set<VisibilityModifier>,
 ) : RedisGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers {
 
     override fun x(): Double {
@@ -35,7 +36,7 @@ data class RedisDoor(
         return doorId
     }
 
-    override fun visibilityModifiers(): MutableSet<String> {
+    override fun visibilityModifiers(): Set<VisibilityModifier> {
         return visibilityModifiers
     }
 }

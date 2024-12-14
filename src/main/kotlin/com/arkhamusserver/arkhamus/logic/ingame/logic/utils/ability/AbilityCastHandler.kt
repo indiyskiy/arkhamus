@@ -73,6 +73,7 @@ class AbilityCastHandler(
             .first { it.accept(ability) }
             .cast(sourceUser, ability, target, globalGameData)
         val item: Item? = abilityToItemResolver.resolve(ability)
+
         processCastedSuccess(
             casted,
             item,

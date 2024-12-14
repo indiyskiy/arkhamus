@@ -35,7 +35,7 @@ class GameStartDoorLogic(
                 y = door.y,
                 z = door.z,
                 zoneId = door.zoneId,
-                visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
+                visibilityModifiers = setOf(VisibilityModifier.ALL)
             )
         )
 

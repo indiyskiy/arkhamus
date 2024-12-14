@@ -7,12 +7,14 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepositor
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.parts.RedisUserSkinSetting
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -54,12 +56,20 @@ class GameStartUserLogic(
         }
     }
 
-    fun createGameUsers(levelId: Long, game: GameSession): List<RedisGameUser> {
+    fun createGameUsers(
+        levelId: Long,
+        game: GameSession,
+        skins: Map<Long, UserSkinSettings>
+    ): List<RedisGameUser> {
         updateInvitedUsersInfoOnGameStart(game)
-        return createRedisUsers(levelId, game)
+        return createRedisUsers(levelId, game, skins)
     }
 
-    private fun createRedisUsers(levelId: Long, game: GameSession): List<RedisGameUser> {
+    private fun createRedisUsers(
+        levelId: Long,
+        game: GameSession,
+        skins: Map<Long, UserSkinSettings>
+    ): List<RedisGameUser> {
         val startMarkers = startMarkerRepository.findByLevelId(levelId)
         val redisGameUsers = game.usersOfGameSession.map {
             val marker = startMarkers.random(GameStartLogic.random)
@@ -81,7 +91,10 @@ class GameStartUserLogic(
                 z = marker.z,
                 callToArms = game.gameSessionSettings.maxCallToArms,
                 connected = true,
-                visibilityModifiers = visibleModifiersByRole(it.roleInGame!!)
+                visibilityModifiers = visibleModifiersByRole(it.roleInGame!!),
+                originalSkin = RedisUserSkinSetting(
+                    skinColor = skins[it.userAccount.id]!!.skinColor
+                ),
             )
             GameStartLogic.logger.info("user placed to $redisGameUser")
             redisGameUser
@@ -90,12 +103,12 @@ class GameStartUserLogic(
         return redisGameUsers
     }
 
-    private fun visibleModifiersByRole(game: RoleTypeInGame): MutableSet<String> =
+    private fun visibleModifiersByRole(game: RoleTypeInGame): Set<VisibilityModifier> =
         when (game) {
             CULTIST -> listOf(VisibilityModifier.ALL, VisibilityModifier.CULTIST)
             INVESTIGATOR -> listOf(VisibilityModifier.ALL, VisibilityModifier.INVESTIGATOR)
             NEUTRAL -> listOf(VisibilityModifier.ALL, VisibilityModifier.NEUTRAL)
-        }.map { it.name }.toMutableSet()
+        }.toSet()
 
 
     fun updateInvitedUsersInfoOnGameStart(

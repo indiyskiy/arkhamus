@@ -6,7 +6,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisShortTimeEventRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
@@ -33,32 +35,60 @@ class ShortTimeEventHandler(
         zones: List<LevelZone>,
         data: GlobalGameData
     ): List<RedisShortTimeEvent> {
-        val filteredByState = events.filter { it.timeLeft > 0 && it.state == RedisTimeEventState.ACTIVE }
+        val filteredByState = events.filter {
+            filterByState(it)
+        }
         val filteredByObject = filteredByState.filter {
-            it.sourceId == null || canSeeTarget(
-                it,
-                user,
-                data
-            )
+            filterByObject(it, user, data)
         }
         val filterByPosition = filteredByObject.filter {
-            canSeeLocation(
-                it,
-                user,
-                data
-            )
+            canSeeLocation(it, user, data)
         }
-        val filteredByAdditionalFilters = filterByPosition.filter {
-            specificShortTimeEventFilters.firstOrNull { filter ->
-                filter.accept(it)
-            }?.canSee(
-                it,
-                user,
-                zones,
-                data
-            ) != false
+        val filteredByVisibility = filterByPosition.filter {
+            filterByVisibility(it, user)
+        }
+        val filteredByAdditionalFilters = filteredByVisibility.filter {
+            byAdditionalFilters(it, user, zones, data)
         }
         return filteredByAdditionalFilters
+    }
+
+    private fun filterByState(event: RedisShortTimeEvent): Boolean =
+        event.timeLeft > 0 && event.state == RedisTimeEventState.ACTIVE
+
+    private fun filterByObject(
+        event: RedisShortTimeEvent,
+        user: RedisGameUser,
+        data: GlobalGameData
+    ): Boolean = event.sourceId == null || canSeeTarget(
+        event,
+        user,
+        data
+    )
+
+    private fun byAdditionalFilters(
+        event: RedisShortTimeEvent,
+        user: RedisGameUser,
+        zones: List<LevelZone>,
+        data: GlobalGameData
+    ): Boolean = specificShortTimeEventFilters.firstOrNull { filter ->
+        filter.accept(event)
+    }?.canSee(
+        event,
+        user,
+        zones,
+        data
+    ) != false
+
+    private fun filterByVisibility(
+        event: RedisShortTimeEvent,
+        user: RedisGameUser
+    ): Boolean {
+        return when (event.type.getVisibility()) {
+            Visibility.NONE, Visibility.TARGET -> false
+            Visibility.PUBLIC -> true
+            Visibility.SOURCE, Visibility.SOURCE_AND_TARGET -> user.inGameId() == event.sourceId
+        }
     }
 
     @Transactional
@@ -67,8 +97,9 @@ class ShortTimeEventHandler(
         gameId: Long,
         globalTimer: Long,
         type: ShortTimeEventType,
-        visibilityModifiers: Set<String>,
-        data: GlobalGameData
+        visibilityModifiers: Set<VisibilityModifier>,
+        data: GlobalGameData,
+        additionalData: Any? = null,
     ) {
         val event = RedisShortTimeEvent(
             id = generateRandomId(),
@@ -81,7 +112,8 @@ class ShortTimeEventHandler(
             timeLeft = type.getTime(),
             type = type,
             state = RedisTimeEventState.ACTIVE,
-            visibilityModifiers = visibilityModifiers.map { it }.toMutableSet()
+            visibilityModifiers = visibilityModifiers.map { it }.toMutableSet(),
+            additionalData = additionalData
         )
         redisShortTimeEventRepository.save(event)
         data.shortTimeEvents += event

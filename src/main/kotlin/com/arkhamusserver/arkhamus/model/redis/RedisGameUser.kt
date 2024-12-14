@@ -4,9 +4,11 @@ import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEn
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
+import com.arkhamusserver.arkhamus.model.redis.parts.RedisUserSkinSetting
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.springframework.data.redis.core.RedisHash
 
@@ -27,12 +29,13 @@ data class RedisGameUser(
     var stateTags: Set<UserStateTag> = emptySet(),
     var madnessDebuffs: Set<String> = emptySet(),
     var callToArms: Int,
+    var originalSkin: RedisUserSkinSetting,
     //tech
     var won: Boolean? = null,
     var sawTheEndOfTimes: Boolean = false,
     var connected: Boolean,
     var leftTheGame: Boolean = false,
-    var visibilityModifiers: Set<String>,
+    var visibilityModifiers: Set<VisibilityModifier>,
 ) : RedisGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers {
 
     override fun x(): Double {
@@ -51,7 +54,7 @@ data class RedisGameUser(
         return userId
     }
 
-    override fun visibilityModifiers(): Set<String> {
+    override fun visibilityModifiers(): Set<VisibilityModifier> {
         return visibilityModifiers
     }
 }

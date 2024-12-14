@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
@@ -22,7 +23,7 @@ data class RedisLantern(
     var z: Double,
     var lightRange: Double,
     var interactionRadius: Double,
-    var visibilityModifiers: MutableSet<String>,
+    var visibilityModifiers: Set<VisibilityModifier>,
 ) : RedisGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers, Interactable {
 
     override fun x(): Double {
@@ -41,7 +42,7 @@ data class RedisLantern(
         return lanternId
     }
 
-    override fun visibilityModifiers(): MutableSet<String> {
+    override fun visibilityModifiers(): Set<VisibilityModifier> {
         return visibilityModifiers
     }
 

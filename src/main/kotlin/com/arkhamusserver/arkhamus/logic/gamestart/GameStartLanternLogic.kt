@@ -58,7 +58,7 @@ class GameStartLanternLogic(
         } else {
             LanternState.EMPTY
         },
-        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
+        visibilityModifiers = listOf(VisibilityModifier.ALL).toMutableSet()
     )
 
 }

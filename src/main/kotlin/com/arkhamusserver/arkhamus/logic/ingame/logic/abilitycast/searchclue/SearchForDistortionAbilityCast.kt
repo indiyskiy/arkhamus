@@ -36,7 +36,7 @@ class SearchForDistortionAbilityCast(
         user.stateTags += UserStateTag.INVESTIGATING
         val visibilityModifier = resolver.toVisibilityModifier(ability)
         visibilityModifier?.let {
-            user.visibilityModifiers += it.name
+            user.visibilityModifiers += it
             return true
         }
         return false
@@ -52,7 +52,7 @@ class SearchForDistortionAbilityCast(
         user.stateTags+=UserStateTag.INVESTIGATING
         val visibilityModifier = resolver.toVisibilityModifier(ability)
         visibilityModifier?.let {
-            user.visibilityModifiers+=it.name
+            user.visibilityModifiers+=it
             return true
         }
         return false

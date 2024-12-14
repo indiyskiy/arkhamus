@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.INVEST
 enum class ClassInGame(val id: Int, val roleType: RoleTypeInGame) {
     MIND_HEALER(101, INVESTIGATOR),
     BREADWINNER(102, INVESTIGATOR),
+    FORENSIC_SCIENTIST(103, INVESTIGATOR),
 
     ARISTOCRAT(201, CULTIST),
     DESCENDANT(202, CULTIST)

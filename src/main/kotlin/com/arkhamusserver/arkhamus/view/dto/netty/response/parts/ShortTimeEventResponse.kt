@@ -13,4 +13,5 @@ data class ShortTimeEventResponse(
     var timePast: Long,
     var timeLeft: Long,
     var type: ShortTimeEventType,
+    var additionalData: String? = null,
 )

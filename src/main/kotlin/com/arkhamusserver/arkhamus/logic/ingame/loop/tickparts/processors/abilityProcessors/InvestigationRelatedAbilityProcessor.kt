@@ -46,9 +46,9 @@ class InvestigationRelatedAbilityProcessor(
         user?.let {
             val ability = castAbility.abilityId.toAbility()!!
             val visibilityModifier = resolver.toVisibilityModifier(ability)
-            visibilityModifier?.name?.let { visibilityModifierNotNull ->
+            visibilityModifier?.let { visibilityModifierNotNull ->
                 it.visibilityModifiers -= visibilityModifierNotNull
-                val allInvetigatingModifiers = resolver.allStrings()
+                val allInvetigatingModifiers = resolver.all()
                 if (it.visibilityModifiers.none {
                         it in allInvetigatingModifiers
                     }

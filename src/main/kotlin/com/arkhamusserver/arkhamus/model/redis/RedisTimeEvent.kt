@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
 
 data class RedisTimeEvent(
@@ -18,9 +19,9 @@ data class RedisTimeEvent(
     var xLocation: Double? = null,
     var yLocation: Double? = null,
     var zLocation: Double? = null,
-    var visibilityModifiers: MutableSet<String>,
+    var visibilityModifiers: Set<VisibilityModifier>,
 ) : RedisGameEntity, WithVisibilityModifiers {
-    override fun visibilityModifiers(): MutableSet<String> {
+    override fun visibilityModifiers(): Set<VisibilityModifier> {
         return visibilityModifiers
     }
 }

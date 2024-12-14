@@ -69,7 +69,7 @@ class GameStartVoteSpotLogic(
                 costItem = DEFAULT_ITEM,
                 bannedUsers = mutableListOf(),
                 availableUsers = allUsers.map { it.inGameId() }.toMutableList(),
-                visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
+                visibilityModifiers = setOf(VisibilityModifier.ALL)
             )
         )
 

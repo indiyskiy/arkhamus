@@ -52,7 +52,7 @@ class GameStartContainerLogic(
         z = dbContainer.z,
         interactionRadius = dbContainer.interactionRadius,
         gameTags = mutableSetOf(),
-        visibilityModifiers = listOf(VisibilityModifier.ALL.name).toMutableSet()
+        visibilityModifiers = setOf(VisibilityModifier.ALL)
     ).apply {
         this.items = randomizeItems(dbContainer)
         redisContainerRepository.save(this)

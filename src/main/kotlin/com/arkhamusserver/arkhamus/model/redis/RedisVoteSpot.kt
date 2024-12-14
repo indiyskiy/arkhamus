@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
@@ -23,7 +24,7 @@ data class RedisVoteSpot(
     var costItem: Item,
     var bannedUsers: MutableList<Long> = mutableListOf(),
     var availableUsers: MutableList<Long> = mutableListOf(),
-    var visibilityModifiers: MutableSet<String>,
+    var visibilityModifiers: Set<VisibilityModifier>,
 ) : RedisGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers, Interactable {
 
     override fun x(): Double {
@@ -42,7 +43,7 @@ data class RedisVoteSpot(
         return voteSpotId
     }
 
-    override fun visibilityModifiers(): MutableSet<String> {
+    override fun visibilityModifiers(): Set<VisibilityModifier> {
         return visibilityModifiers
     }
 

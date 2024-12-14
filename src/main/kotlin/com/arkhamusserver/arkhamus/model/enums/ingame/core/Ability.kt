@@ -30,7 +30,6 @@ enum class Ability(
     val targetTypes: List<GameObjectType>? = null,
     val range: Double? = null,
     val visibilityModifiers: Set<VisibilityModifier> = setOf(VisibilityModifier.ALL),
-    val visibilityModifiersString: MutableSet<String> = visibilityModifiers.map { it.name }.toMutableSet(),
 ) : WithVisibilityModifiers {
     // investigator ability 1***
     HEAL_MADNESS(
@@ -44,6 +43,16 @@ enum class Ability(
         id = 1002,
         classBased = true,
         cooldown = MINUTE_IN_MILLIS / 2
+    ),
+    TAKE_FINGERPRINTS(
+        id = 1003,
+        classBased = true,
+        range = CLOSE_RANGE,
+        targetTypes = listOf(
+            CONTAINER,
+            CRAFTER,
+        ),
+        cooldown = MINUTE_IN_MILLIS * 2 / 3
     ),
 
     //cultist ability 2***
@@ -228,8 +237,8 @@ enum class Ability(
     ),
     ;
 
-    override fun visibilityModifiers(): MutableSet<String> {
-        return visibilityModifiersString
+    override fun visibilityModifiers(): Set<VisibilityModifier> {
+        return visibilityModifiers
     }
 
 

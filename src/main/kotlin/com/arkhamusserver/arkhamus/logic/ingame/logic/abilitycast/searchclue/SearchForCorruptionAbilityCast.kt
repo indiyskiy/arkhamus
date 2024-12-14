@@ -36,7 +36,7 @@ class SearchForCorruptionAbilityCast(
         user.stateTags += UserStateTag.INVESTIGATING
         val visibilityModifier = resolver.toVisibilityModifier(ability)
         visibilityModifier?.let {
-            user.visibilityModifiers += it.name
+            user.visibilityModifiers += it
             return true
         }
         return false
@@ -51,7 +51,7 @@ class SearchForCorruptionAbilityCast(
         sourceUser.stateTags += UserStateTag.INVESTIGATING
         val visibilityModifier = resolver.toVisibilityModifier(ability)
         visibilityModifier?.let {
-            sourceUser.visibilityModifiers += it.name
+            sourceUser.visibilityModifiers += it
             return true
         }
         return false
