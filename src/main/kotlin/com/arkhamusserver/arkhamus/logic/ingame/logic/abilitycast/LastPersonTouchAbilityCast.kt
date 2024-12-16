@@ -14,7 +14,9 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.redis.parts.RedisUserSkinSetting
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -31,6 +33,7 @@ class LastPersonTouchAbilityCast(
             ActivityType.CRAFTER_OPENED,
             ActivityType.CRAFTER_CLOSED,
         )
+        private val logger = LoggerFactory.getLogger(LastPersonTouchAbilityCast::class.java)
     }
 
     override fun accept(ability: Ability): Boolean {
@@ -42,10 +45,12 @@ class LastPersonTouchAbilityCast(
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
     ): Boolean {
-        val result = whoTouchedLast(abilityRequestProcessData.target, globalGameData)
+        val target = abilityRequestProcessData.target
+        if(target == null || target !is WithTrueIngameId)  return false
+        val result = whoTouchedLast(target, globalGameData)
         if (result == null) return true
         createShortTimeEvent(
-            abilityRequestProcessData.target!!,
+            target,
             result,
             globalGameData,
         )
@@ -58,9 +63,10 @@ class LastPersonTouchAbilityCast(
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
+        if(target == null || target !is WithTrueIngameId)  return false
         val result = whoTouchedLast(target, globalGameData)
         if (result == null) return true
-        createShortTimeEvent(target!!, result, globalGameData)
+        createShortTimeEvent(target, result, globalGameData)
         return true
     }
 
@@ -85,7 +91,7 @@ class LastPersonTouchAbilityCast(
     }
 
     private fun whoTouchedLast(
-        target: WithStringId?,
+        target: WithTrueIngameId,
         data: GlobalGameData
     ): PersonWithTime? {
         val activity = activityRepository
@@ -93,9 +99,9 @@ class LastPersonTouchAbilityCast(
             .filter {
                 it.activityType in relatedActivityTypes &&
                         it.relatedGameObjectType in relatedTargetTypes &&
-                        it.relatedGameObjectId.toString() == target?.stringId()
+                        it.relatedGameObjectId == target.inGameId()
             }.maxByOrNull { it.gameTime }
-        return activity?.let {
+         val whoTouched = activity?.let {
             val user = it.sourceUserId?.let {
                 data.users[it]
             }
@@ -112,6 +118,12 @@ class LastPersonTouchAbilityCast(
                 eventTime = time,
             )
         }
+        if(whoTouched == null){
+            logger.info("No one touched")
+        } else {
+            logger.info("Last person touched: $whoTouched")
+        }
+        return whoTouched
     }
 
 }
