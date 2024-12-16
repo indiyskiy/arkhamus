@@ -46,10 +46,11 @@ class LastPersonTouchAbilityCast(
         globalGameData: GlobalGameData
     ): Boolean {
         val target = abilityRequestProcessData.target
-        if(target == null || target !is WithTrueIngameId)  return false
+        if (target == null || target !is WithTrueIngameId) return false
         val result = whoTouchedLast(target, globalGameData)
         if (result == null) return true
         createShortTimeEvent(
+            abilityRequestProcessData.gameUser,
             target,
             result,
             globalGameData,
@@ -63,11 +64,11 @@ class LastPersonTouchAbilityCast(
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
-        if(target == null || target !is WithTrueIngameId)  return false
+        if (target == null || target !is WithTrueIngameId) return false
         val result = whoTouchedLast(target, globalGameData)
         if (result != null) {
             logger.info("create who-touched short time event")
-            createShortTimeEvent(target, result, globalGameData)
+            createShortTimeEvent(sourceUser, target, result, globalGameData)
         } else {
             logger.info("No one touched, so no events")
         }
@@ -75,12 +76,13 @@ class LastPersonTouchAbilityCast(
     }
 
     fun createShortTimeEvent(
-        target: WithStringId,
+        sourceUser: RedisGameUser?,
+        target: WithTrueIngameId,
         result: PersonWithTime,
         globalGameData: GlobalGameData,
     ) {
         shortTimeEventHandler.createShortTimeEvent(
-            objectId = target.stringId().toLong(),
+            objectId = target.inGameId(),
             gameId = globalGameData.game.inGameId(),
             globalTimer = globalGameData.game.globalTimer,
             type = if (target is RedisCrafter) {
@@ -90,7 +92,8 @@ class LastPersonTouchAbilityCast(
             },
             visibilityModifiers = setOf(VisibilityModifier.ALL),
             data = globalGameData,
-            additionalData = result
+            additionalData = result,
+            sourceUserId = sourceUser?.inGameId(),
         )
     }
 
@@ -105,7 +108,7 @@ class LastPersonTouchAbilityCast(
                         it.relatedGameObjectType in relatedTargetTypes &&
                         it.relatedGameObjectId == target.inGameId()
             }.maxByOrNull { it.gameTime }
-         val whoTouched = activity?.let {
+        val whoTouched = activity?.let {
             val user = it.sourceUserId?.let {
                 data.users[it]
             }
@@ -122,7 +125,7 @@ class LastPersonTouchAbilityCast(
                 eventTime = time,
             )
         }
-        if(whoTouched == null){
+        if (whoTouched == null) {
             logger.info("No one touched")
         } else {
             logger.info("Last person touched: $whoTouched")

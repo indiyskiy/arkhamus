@@ -88,12 +88,13 @@ class MadnessTickProcessHandler(
         }
         if (madnessEffectFinal) {
             shortTimeEventHandler.createShortTimeEvent(
-                user.inGameId(),
-                data.game.inGameId(),
-                data.game.globalTimer,
-                ShortTimeEventType.MADNESS_ACT,
-                setOf(VisibilityModifier.ALL),
-                data
+                objectId = user.inGameId(),
+                gameId = data.game.inGameId(),
+                globalTimer = data.game.globalTimer,
+                type = ShortTimeEventType.MADNESS_ACT,
+                visibilityModifiers = setOf(VisibilityModifier.ALL),
+                data = data,
+                sourceUserId = user.inGameId()
             )
         }
     }

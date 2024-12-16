@@ -6,5 +6,6 @@ data class ClassInGameDto(
     val id: Int,
     val name: String,
     val roleType: RoleTypeInGame,
-    val defaultAbility: AbilityDto?
+    val defaultAbility: AbilityDto?,
+    val turnedOn: Boolean
 )

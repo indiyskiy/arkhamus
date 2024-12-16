@@ -158,12 +158,13 @@ class AbilityCastHandler(
             targetType = targetType
         )
         shortTimeEventHandler.createShortTimeEvent(
-            userId,
-            gameId,
-            globalTimer,
-            ShortTimeEventType.ABILITY_CAST,
-            ability.visibilityModifiers(),
-            data
+            objectId = userId,
+            gameId = gameId,
+            globalTimer = globalTimer,
+            type = ShortTimeEventType.ABILITY_CAST,
+            visibilityModifiers = ability.visibilityModifiers(),
+            data = data,
+            sourceUserId = userId
         )
     }
 

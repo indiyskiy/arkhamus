@@ -21,7 +21,8 @@ class ClassInGameDtoMaker(
             id = value.id,
             name = value.name,
             roleType = value.roleType,
-            defaultAbility = defaultAbility?.let { abilityDtoMaker.convert(it) }
+            defaultAbility = defaultAbility?.let { abilityDtoMaker.convert(it) },
+            turnedOn = value.turnedOn
         )
     }
 }

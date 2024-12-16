@@ -135,9 +135,9 @@ class GameStartUserLogic(
     }
 
     private fun randomCultistClass(): ClassInGame =
-        ClassInGame.values().filter { it.roleType == CULTIST }.random(random)
+        ClassInGame.values().filter { it.turnedOn && it.roleType == CULTIST }.random(random)
 
     private fun randomInvestigatorRole(): ClassInGame =
-        ClassInGame.values().filter { it.roleType == INVESTIGATOR }.random(random)
+        ClassInGame.values().filter { it.turnedOn && it.roleType == INVESTIGATOR }.random(random)
 
 }

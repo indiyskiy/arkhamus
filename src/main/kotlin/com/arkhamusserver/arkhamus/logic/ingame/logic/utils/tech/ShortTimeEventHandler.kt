@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisShortTimeEventRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
@@ -60,7 +61,7 @@ class ShortTimeEventHandler(
         event: RedisShortTimeEvent,
         user: RedisGameUser,
         data: GlobalGameData
-    ): Boolean = event.sourceId == null || canSeeTarget(
+    ): Boolean = event.objectId == null || canSeeTarget(
         event,
         user,
         data
@@ -85,7 +86,8 @@ class ShortTimeEventHandler(
         user: RedisGameUser
     ): Boolean {
         return when (event.type.getVisibility()) {
-            Visibility.NONE, Visibility.TARGET -> false
+            Visibility.NONE -> false
+            Visibility.TARGET -> user.inGameId() == event.objectId && event.type.getSource() == GameObjectType.CHARACTER
             Visibility.PUBLIC -> true
             Visibility.SOURCE, Visibility.SOURCE_AND_TARGET -> user.inGameId() == event.sourceId
         }
@@ -99,12 +101,14 @@ class ShortTimeEventHandler(
         type: ShortTimeEventType,
         visibilityModifiers: Set<VisibilityModifier>,
         data: GlobalGameData,
-        additionalData: Any? = null,
+        sourceUserId: Long? = null,
+        additionalData: Any? = null
     ) {
         val event = RedisShortTimeEvent(
             id = generateRandomId(),
             gameId = gameId,
-            sourceId = objectId,
+            sourceId = sourceUserId,
+            objectId = objectId,
             xLocation = null,
             yLocation = null,
             timeStart = globalTimer,
@@ -124,7 +128,7 @@ class ShortTimeEventHandler(
         user: RedisGameUser,
         data: GlobalGameData
     ): Boolean {
-        val target = finder.findById(event.sourceId.toString(), event.type.getSource(), data)
+        val target = finder.findById(event.objectId.toString(), event.type.getSource(), data)
         if (target == null) {
             return false
         }

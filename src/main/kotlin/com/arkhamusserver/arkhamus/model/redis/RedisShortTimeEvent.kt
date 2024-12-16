@@ -11,6 +11,7 @@ data class RedisShortTimeEvent(
     override var gameId: Long,
 
     var sourceId: Long? = null,
+    var objectId: Long? = null,
 
     var xLocation: Double? = null,
     var yLocation: Double? = null,

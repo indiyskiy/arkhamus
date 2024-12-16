@@ -35,7 +35,7 @@ class ShortTimeEventToResponseHandler(
                 timePast = it.timePast,
                 timeLeft = it.timeLeft,
                 type = it.type,
-                sourceId = it.sourceId,
+                sourceId = it.objectId,
                 xLocation = it.xLocation,
                 yLocation = it.yLocation,
                 additionalData = it.additionalData?.let { gson.toJson(it) }

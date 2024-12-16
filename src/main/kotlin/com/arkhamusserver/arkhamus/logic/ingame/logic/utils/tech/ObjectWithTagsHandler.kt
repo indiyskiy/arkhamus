@@ -45,22 +45,24 @@ class ObjectWithTagsHandler(
         inGameTagsHandler.removeTag(withGameTags, tag)
         if (withGameTags is RedisContainer) {
             shortTimeEventHandler.createShortTimeEvent(
-                withGameTags.inGameId(),
-                data.game.gameId!!,
-                data.game.globalTimer,
-                ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CONTAINER,
-                setOf(VisibilityModifier.ALL),
-                data
+                objectId = withGameTags.inGameId(),
+                gameId = data.game.gameId!!,
+                globalTimer = data.game.globalTimer,
+                type = ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CONTAINER,
+                visibilityModifiers = setOf(VisibilityModifier.ALL),
+                data = data,
+                sourceUserId = user.userId
             )
         }
         if (withGameTags is RedisCrafter) {
             shortTimeEventHandler.createShortTimeEvent(
-                withGameTags.inGameId(),
-                data.game.gameId!!,
-                data.game.globalTimer,
-                ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CRAFTER,
-                setOf(VisibilityModifier.ALL),
-                data
+                objectId = withGameTags.inGameId(),
+                gameId = data.game.gameId!!,
+                globalTimer = data.game.globalTimer,
+                type = ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CRAFTER,
+                visibilityModifiers = setOf(VisibilityModifier.ALL),
+                data = data,
+                sourceUserId = user.userId
             )
         }
     }
