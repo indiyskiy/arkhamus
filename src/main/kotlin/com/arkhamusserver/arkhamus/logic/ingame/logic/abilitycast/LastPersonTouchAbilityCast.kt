@@ -65,8 +65,12 @@ class LastPersonTouchAbilityCast(
     ): Boolean {
         if(target == null || target !is WithTrueIngameId)  return false
         val result = whoTouchedLast(target, globalGameData)
-        if (result == null) return true
-        createShortTimeEvent(target, result, globalGameData)
+        if (result != null) {
+            logger.info("create who-touched short time event")
+            createShortTimeEvent(target, result, globalGameData)
+        } else {
+            logger.info("No one touched, so no events")
+        }
         return true
     }
 
