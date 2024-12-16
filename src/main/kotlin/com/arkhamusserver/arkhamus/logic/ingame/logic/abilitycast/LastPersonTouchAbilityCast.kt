@@ -121,7 +121,7 @@ class LastPersonTouchAbilityCast(
                         skin = RedisUserSkinSetting(userNotNull.originalSkin)
                     )
                 },
-                currentTime = data.game.inGameId(),
+                currentTime = data.game.globalTimer,
                 eventTime = time,
             )
         }

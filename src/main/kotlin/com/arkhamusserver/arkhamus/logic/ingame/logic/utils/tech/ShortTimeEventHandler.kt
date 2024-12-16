@@ -36,21 +36,11 @@ class ShortTimeEventHandler(
         zones: List<LevelZone>,
         data: GlobalGameData
     ): List<RedisShortTimeEvent> {
-        val filteredByState = events.filter {
-            filterByState(it)
-        }
-        val filteredByObject = filteredByState.filter {
-            filterByObject(it, user, data)
-        }
-        val filterByPosition = filteredByObject.filter {
-            canSeeLocation(it, user, data)
-        }
-        val filteredByVisibility = filterByPosition.filter {
-            filterByVisibility(it, user)
-        }
-        val filteredByAdditionalFilters = filteredByVisibility.filter {
-            byAdditionalFilters(it, user, zones, data)
-        }
+        val filteredByState = events.filter { filterByState(it) }
+        val filteredByObject = filteredByState.filter { filterByObject(it, user, data) }
+        val filterByPosition = filteredByObject.filter { canSeeLocation(it, user, data) }
+        val filteredByVisibility = filterByPosition.filter { filterByVisibility(it, user) }
+        val filteredByAdditionalFilters = filteredByVisibility.filter { byAdditionalFilters(it, user, zones, data) }
         return filteredByAdditionalFilters
     }
 
@@ -61,11 +51,7 @@ class ShortTimeEventHandler(
         event: RedisShortTimeEvent,
         user: RedisGameUser,
         data: GlobalGameData
-    ): Boolean = event.objectId == null || canSeeTarget(
-        event,
-        user,
-        data
-    )
+    ): Boolean = event.objectId == null || canSeeTarget(event, user, data)
 
     private fun byAdditionalFilters(
         event: RedisShortTimeEvent,
@@ -74,12 +60,7 @@ class ShortTimeEventHandler(
         data: GlobalGameData
     ): Boolean = specificShortTimeEventFilters.firstOrNull { filter ->
         filter.accept(event)
-    }?.canSee(
-        event,
-        user,
-        zones,
-        data
-    ) != false
+    }?.canSee(event, user, zones, data) != false
 
     private fun filterByVisibility(
         event: RedisShortTimeEvent,
@@ -89,7 +70,13 @@ class ShortTimeEventHandler(
             Visibility.NONE -> false
             Visibility.TARGET -> user.inGameId() == event.objectId && event.type.getSource() == GameObjectType.CHARACTER
             Visibility.PUBLIC -> true
-            Visibility.SOURCE, Visibility.SOURCE_AND_TARGET -> user.inGameId() == event.sourceId
+            Visibility.SOURCE, Visibility.SOURCE_AND_TARGET -> {
+                logger.info("filter by source: ${event.sourceId} == ${user.inGameId()}")
+                if( event.sourceId != user.inGameId()){
+                    logger.info("$event")
+                }
+                event.sourceId == user.inGameId()
+            }
         }
     }
 
