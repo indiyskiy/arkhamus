@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
 import org.springframework.stereotype.Component
@@ -32,7 +33,8 @@ class SingleGameLogic(
             DEFAULT_LOBBY_SIZE,
             DEFAULT_CULTIST_SIZE,
             GameType.SINGLE,
-            player
+            player,
+            ClassInGame.values().filter { it.turnedOn }.toSet()
         ).toDto(player)
     }
 

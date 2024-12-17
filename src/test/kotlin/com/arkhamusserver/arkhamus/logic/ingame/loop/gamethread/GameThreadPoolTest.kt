@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
@@ -18,6 +19,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.parts.RedisUserSkinSetting
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.HeartbeatRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
@@ -388,7 +390,8 @@ class GameThreadPoolTest {
             lobbySize = usersCount,
             //TODO make sure we don't crash here later with validation
             numberOfCultists = usersCount,
-            level = null
+            level = null,
+            classesInGame = emptySet()
         )
 
         val gameSession = GameSession(
@@ -440,7 +443,8 @@ class GameThreadPoolTest {
                 won = null,
                 sawTheEndOfTimes = false,
                 leftTheGame = false,
-                visibilityModifiers = mutableSetOf()
+                visibilityModifiers = mutableSetOf(),
+                originalSkin = RedisUserSkinSetting(SkinColor.LAVENDER)
             )
         }
 

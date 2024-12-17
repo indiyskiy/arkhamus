@@ -17,6 +17,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import com.arkhamusserver.arkhamus.model.enums.RoleName
+import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
@@ -27,6 +28,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.parts.RedisUserSkinSetting
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
@@ -403,7 +405,8 @@ class UpdateContainerRequestProcessorTest {
                 id = 1,
                 lobbySize = 1,
                 numberOfCultists = 0,
-                level = level
+                level = level,
+                classesInGame = emptySet()
             ),
             state = GameState.IN_PROGRESS,
             gameType = GameType.SINGLE,
@@ -479,7 +482,8 @@ class UpdateContainerRequestProcessorTest {
             sawTheEndOfTimes = false,
             leftTheGame = false,
             madnessDebuffs = mutableSetOf(),
-            visibilityModifiers = mutableSetOf()
+            visibilityModifiers = mutableSetOf(),
+            originalSkin = RedisUserSkinSetting(SkinColor.LAVENDER)
         )
 
         val oldContainer = UpdateContainerRequestGameData(

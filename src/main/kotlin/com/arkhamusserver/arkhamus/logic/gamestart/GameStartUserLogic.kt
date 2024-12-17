@@ -125,19 +125,27 @@ class GameStartUserLogic(
         notLeft.forEach {
             if (it.userAccount.id in cultistsIds) {
                 it.roleInGame = CULTIST
-                it.classInGame = randomCultistClass()
+                it.classInGame = randomCultistClass(game.gameSessionSettings.classesInGame)
             } else {
                 it.roleInGame = INVESTIGATOR
-                it.classInGame = randomInvestigatorRole()
+                it.classInGame = randomInvestigatorRole(game.gameSessionSettings.classesInGame)
             }
             userOfGameSessionRepository.save(it)
         }
     }
 
-    private fun randomCultistClass(): ClassInGame =
-        ClassInGame.values().filter { it.turnedOn && it.roleType == CULTIST }.random(random)
+    private fun randomCultistClass(classesInGame: Set<ClassInGame>): ClassInGame =
+        if (classesInGame.none { it.roleType == CULTIST }) {
+            ClassInGame.values().filter { it.turnedOn && it.roleType == CULTIST }.random(random)
+        } else {
+            classesInGame.filter { it.turnedOn && it.roleType == CULTIST }.random(random)
+        }
 
-    private fun randomInvestigatorRole(): ClassInGame =
-        ClassInGame.values().filter { it.turnedOn && it.roleType == INVESTIGATOR }.random(random)
 
+    private fun randomInvestigatorRole(classesInGame: Set<ClassInGame>): ClassInGame =
+        if (classesInGame.none { it.roleType == INVESTIGATOR }) {
+            ClassInGame.values().filter { it.turnedOn && it.roleType == INVESTIGATOR }.random(random)
+        } else {
+            classesInGame.filter { it.turnedOn && it.roleType == INVESTIGATOR }.random(random)
+        }
 }

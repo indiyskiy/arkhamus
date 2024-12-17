@@ -48,13 +48,16 @@ class LastPersonTouchAbilityCast(
         val target = abilityRequestProcessData.target
         if (target == null || target !is WithTrueIngameId) return false
         val result = whoTouchedLast(target, globalGameData)
-        if (result == null) return true
-        createShortTimeEvent(
-            abilityRequestProcessData.gameUser,
-            target,
-            result,
-            globalGameData,
-        )
+        if (result != null) {
+            createShortTimeEvent(
+                abilityRequestProcessData.gameUser,
+                target,
+                result,
+                globalGameData,
+            )
+        } else {
+            logger.info("No one touched, so no events")
+        }
         return true
     }
 
@@ -67,7 +70,6 @@ class LastPersonTouchAbilityCast(
         if (target == null || target !is WithTrueIngameId) return false
         val result = whoTouchedLast(target, globalGameData)
         if (result != null) {
-            logger.info("create who-touched short time event")
             createShortTimeEvent(sourceUser, target, result, globalGameData)
         } else {
             logger.info("No one touched, so no events")
@@ -81,6 +83,7 @@ class LastPersonTouchAbilityCast(
         result: PersonWithTime,
         globalGameData: GlobalGameData,
     ) {
+        logger.info("create who-touched short time event")
         shortTimeEventHandler.createShortTimeEvent(
             objectId = target.inGameId(),
             gameId = globalGameData.game.inGameId(),

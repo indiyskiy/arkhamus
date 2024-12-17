@@ -8,6 +8,8 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSes
 import com.arkhamusserver.arkhamus.model.database.entity.*
 import com.arkhamusserver.arkhamus.model.enums.GameState.NEW
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
 import com.arkhamusserver.arkhamus.view.validator.GameValidator
@@ -59,7 +61,8 @@ class GameLogic(
 
     fun disconnect(player: UserAccount) {
         val userGames =
-            userOfGameSessionRepository.findByUserAccountIdAndLeftTheLobby(player.id!!).filter { it.gameSession.state == NEW }
+            userOfGameSessionRepository.findByUserAccountIdAndLeftTheLobby(player.id!!)
+                .filter { it.gameSession.state == NEW }
 
         userGames.forEach { userGame ->
             if (userGame.host) {
@@ -105,16 +108,24 @@ class GameLogic(
     }
 
     fun createNewGameSession(
-        lobbySize: Int, cultistSize: Int, gameType: GameType, player: UserAccount
+        lobbySize: Int,
+        cultistSize: Int,
+        gameType: GameType,
+        player: UserAccount,
+        availableClasses: Set<ClassInGame>
     ): GameSession {
         disconnect()
-        val gameSessionSettings = GameSessionSettings(
-            numberOfCultists = cultistSize, lobbySize = lobbySize
-        ).apply {
-            this.level = null
-        }.apply {
-            gameSessionSettingsRepository.save(this)
-        }
+        val gameSessionSettings = GameSessionSettings()
+            .apply {
+                this.numberOfCultists = cultistSize
+                this.lobbySize = lobbySize
+                this.classesInGame = buildClassesInGame(availableClasses)
+                this.level = null
+                this.maxCallToArms = 1
+            }
+            .apply {
+                gameSessionSettingsRepository.save(this)
+            }
         return GameSession(
             state = NEW,
             token = RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH),
@@ -126,6 +137,19 @@ class GameLogic(
             val host = connectUserToGame(player, it, true)
             it.usersOfGameSession = listOf(host)
         }
+    }
+
+    fun buildClassesInGame(
+        availableClasses: Set<ClassInGame>
+    ): Set<ClassInGame> {
+        val result = availableClasses.toMutableSet()
+        if (result.any { it.roleType == RoleTypeInGame.INVESTIGATOR }) {
+            result.addAll(ClassInGame.values().filter { it.turnedOn && it.roleType == RoleTypeInGame.INVESTIGATOR })
+        }
+        if (result.any { it.roleType == RoleTypeInGame.CULTIST }) {
+            result.addAll(ClassInGame.values().filter { it.turnedOn && it.roleType == RoleTypeInGame.CULTIST })
+        }
+        return result
     }
 
     private fun trySetAnotherHost(

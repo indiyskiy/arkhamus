@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.model.database.entity
 
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.ContainerTag
 import jakarta.persistence.*
 
 /**
@@ -13,6 +15,12 @@ data class GameSessionSettings(
     var id: Long? = null,
     var lobbySize: Int,
     var numberOfCultists: Int,
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = ContainerTag::class)
+    @CollectionTable(name = "classInGames", joinColumns = [JoinColumn(name = "entity_id")])
+    @Enumerated(EnumType.STRING)
+    @Column(name = "classInGames")
+    var classesInGame: Set<ClassInGame>,
+
     var maxCallToArms: Int = 1,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = true)
@@ -24,6 +32,7 @@ data class GameSessionSettings(
         lobbySize = 8,
         numberOfCultists = 2,
         maxCallToArms = 1,
-        level = null
+        level = null,
+        classesInGame = emptySet()
     )
 }

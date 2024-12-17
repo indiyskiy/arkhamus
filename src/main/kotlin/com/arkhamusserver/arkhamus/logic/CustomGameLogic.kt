@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.model.enums.GameState.NEW
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.dto.GameSessionSettingsDto
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
@@ -65,7 +66,8 @@ class CustomGameLogic(
             DEFAULT_LOBBY_SIZE,
             DEFAULT_CULTIST_SIZE,
             GameType.CUSTOM,
-            player
+            player,
+            ClassInGame.values().filter { it.turnedOn }.toSet()
         ).toDto(player)
     }
 

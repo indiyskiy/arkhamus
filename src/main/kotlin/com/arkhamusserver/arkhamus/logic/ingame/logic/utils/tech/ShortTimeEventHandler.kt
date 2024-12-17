@@ -71,10 +71,6 @@ class ShortTimeEventHandler(
             Visibility.TARGET -> user.inGameId() == event.objectId && event.type.getSource() == GameObjectType.CHARACTER
             Visibility.PUBLIC -> true
             Visibility.SOURCE, Visibility.SOURCE_AND_TARGET -> {
-                logger.info("filter by source: ${event.sourceId} == ${user.inGameId()}")
-                if( event.sourceId != user.inGameId()){
-                    logger.info("$event")
-                }
                 event.sourceId == user.inGameId()
             }
         }
@@ -120,7 +116,8 @@ class ShortTimeEventHandler(
             return false
         }
         if (target is WithPoint) {
-            return userLocationHandler.userCanSeeTarget(user, target, data.levelGeometryData, true)
+            val canSee = userLocationHandler.userCanSeeTarget(user, target, data.levelGeometryData, true)
+            return canSee
         }
         return true
     }

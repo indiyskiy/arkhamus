@@ -15,3 +15,4 @@ enum class ClassInGame(
     ARISTOCRAT(201, CULTIST),
     DESCENDANT(202, CULTIST)
 }
+

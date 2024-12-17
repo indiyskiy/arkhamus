@@ -22,7 +22,7 @@ class ClassInGameLogic(
         return classInGameDtoMaker.convert(ClassInGame.values(), abilityMap)
     }
 
-    private fun resolveAbility(classInGame: ClassInGame): Ability? {
+    fun resolveAbility(classInGame: ClassInGame): Ability? {
         return Ability.values().firstOrNull {
             abilityToClassResolver.resolve(it)?.contains(classInGame) == true
         }
