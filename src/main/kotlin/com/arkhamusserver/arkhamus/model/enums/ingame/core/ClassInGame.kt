@@ -8,8 +8,8 @@ enum class ClassInGame(
     val roleType: RoleTypeInGame,
     val turnedOn: Boolean = true
 ) {
-    MIND_HEALER(101, INVESTIGATOR, false),
-    BREADWINNER(102, INVESTIGATOR, false),
+    MIND_HEALER(101, INVESTIGATOR),
+    BREADWINNER(102, INVESTIGATOR),
     FORENSIC_SCIENTIST(103, INVESTIGATOR),
 
     ARISTOCRAT(201, CULTIST),
