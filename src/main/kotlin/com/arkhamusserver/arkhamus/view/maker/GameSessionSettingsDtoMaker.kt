@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.view.maker
 import com.arkhamusserver.arkhamus.logic.ingame.ClassInGameLogic
 import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toClassInGame
 import com.arkhamusserver.arkhamus.view.dto.GameSessionSettingsDto
 import com.arkhamusserver.arkhamus.view.maker.ingame.ClassInGameDtoMaker
@@ -31,11 +32,10 @@ class GameSessionSettingsDtoMaker(
     fun merge(gameSettings: GameSessionSettings, level: Level?, gameSessionSettingsDto: GameSessionSettingsDto) {
         gameSettings.lobbySize = gameSessionSettingsDto.lobbySize
         gameSettings.numberOfCultists = gameSessionSettingsDto.numberOfCultists
-        gameSettings.classesInGame =
-            gameSessionSettingsDto.availableClasses
-                .mapNotNull { it.id.toClassInGame() }
-                .filter { it.turnedOn }
-                .toSet()
+        val classes: Collection<ClassInGame> = gameSessionSettingsDto.availableClasses
+            ?.mapNotNull { it.id.toClassInGame() } ?: ClassInGame.values().toSet()
+        gameSettings.classesInGame = classes.filter { it.turnedOn }
+            .toSet()
         gameSettings.level = level
     }
 }

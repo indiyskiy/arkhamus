@@ -42,9 +42,7 @@ class OnTickCraftProcess(
                 val crafter = globalGameData.crafters[craftProcess.targetCrafterId]!!
                 logger.info("created $numberOfItems of ${produced.name}")
                 addItemToCrafter(produced, numberOfItems, crafter)
-                val newValueOfItemsInCrafter = crafter.items[produced.id]
                 redisCraftProcessRepository.delete(craftProcess)
-                logger.info("craft process ${craftProcess.id} finished, new value $newValueOfItemsInCrafter")
             }
         }
     }
