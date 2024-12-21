@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.ContainerState
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.ContainerStateResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,16 +19,16 @@ class ContainerDataHandler(
         myUser: RedisGameUser,
         containers: List<RedisContainer>,
         levelGeometryData: LevelGeometryData
-    ): List<ContainerState> {
+    ): List<ContainerStateResponse> {
         return containers.map { container ->
-            val response = ContainerState(container)
+            val response = ContainerStateResponse(container)
             mask(response, container, myUser, levelGeometryData)
             response
         }
     }
 
     private fun mask(
-        responseToMask: ContainerState,
+        responseToMask: ContainerStateResponse,
         container: RedisContainer,
         currentUser: RedisGameUser,
         levelGeometryData: LevelGeometryData

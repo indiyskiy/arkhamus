@@ -13,6 +13,6 @@ data class CrafterState(
         crafterId = crafter.inGameId(),
         state = crafter.state,
         holdingUserId = crafter.holdingUser,
-        gameTags = crafter.gameTags()
+        gameTags = crafter.gameTags().map { it.name }.toSet()
     )
 }

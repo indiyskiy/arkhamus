@@ -14,7 +14,7 @@ abstract class NettyResponse(
     val ongoingCraftingProcess: List<CraftProcessResponse>,
     val availableAbilities: List<AbilityOfUserResponse>,
     var userInventory: List<InventoryCellResponse>,
-    var containers: List<ContainerState>,
+    var containers: List<ContainerStateResponse>,
     var crafters: List<CrafterState>,
     var inZones: List<LevelZoneResponse>,
     var doors: List<DoorResponse>,

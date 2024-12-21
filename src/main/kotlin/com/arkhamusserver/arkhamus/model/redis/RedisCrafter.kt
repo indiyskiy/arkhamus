@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.model.redis
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.CrafterType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.interfaces.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -19,7 +20,7 @@ data class RedisCrafter(
     var interactionRadius: Double = 0.0,
     var items: List<InventoryCell> = emptyList(),
     var crafterType: CrafterType,
-    var gameTags: MutableSet<String> = mutableSetOf(),
+    var gameTags: Set<InGameObjectTag> = setOf(),
     var visibilityModifiers: Set<VisibilityModifier>,
 ) : RedisGameEntity, WithPoint, WithTrueIngameId, WithGameTags, WithVisibilityModifiers, Interactable {
 
@@ -35,8 +36,12 @@ data class RedisCrafter(
         return z
     }
 
-    override fun gameTags(): MutableSet<String> {
+    override fun gameTags(): Set<InGameObjectTag> {
         return gameTags
+    }
+
+    override fun writeGameTags(gameTags: Set<InGameObjectTag>) {
+        this.gameTags = gameTags
     }
 
     override fun inGameId(): Long {

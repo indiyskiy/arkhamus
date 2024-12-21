@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.view.levelDesign
 
-
 data class LevelFromJson(
     var levelId: Long? = null,
     var levelVersion: Long? = null,
@@ -12,7 +11,7 @@ data class LevelFromJson(
     var lanterns: List<LanternFromJson> = emptyList(),
     var altars: List<AltarFromJson> = emptyList(),
     var ritualZones: List<RitualAreaFromJson> = emptyList(),
-    var startMarkers: List<JsonStartMarker> = emptyList(),
+    var startMarkers: List<StartMarkerFromJson> = emptyList(),
     var crafters: List<CrafterFromJson> = emptyList(),
     var clueZones: List<ZoneFromJson> = emptyList(),
     var banZones: List<ZoneFromJson> = emptyList(),
@@ -20,4 +19,5 @@ data class LevelFromJson(
     var ritualThresholds: List<ThresholdFromJson> = emptyList(),
     var banThresholds: List<ThresholdFromJson> = emptyList(),
     var votespots: List<VoteSpotFromJson> = emptyList(),
+    var scentClues: List<ScentClueFromJson> = emptyList(),
 )

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.abilityresult.PersonWithTime
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.abilityresult.ShortTimeEventPersonWithTimeData
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.abilityresult.UserActivityView
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ShortTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -80,19 +80,20 @@ class LastPersonTouchAbilityCast(
     fun createShortTimeEvent(
         sourceUser: RedisGameUser?,
         target: WithTrueIngameId,
-        result: PersonWithTime,
+        result: ShortTimeEventPersonWithTimeData,
         globalGameData: GlobalGameData,
     ) {
         logger.info("create who-touched short time event")
+        val type = if (target is RedisCrafter) {
+            ShortTimeEventType.LAST_PERSON_TOUCH_CRAFTER
+        } else {
+            ShortTimeEventType.LAST_PERSON_TOUCH_CONTAINER
+        }
         shortTimeEventHandler.createShortTimeEvent(
             objectId = target.inGameId(),
             gameId = globalGameData.game.inGameId(),
             globalTimer = globalGameData.game.globalTimer,
-            type = if (target is RedisCrafter) {
-                ShortTimeEventType.LAST_PERSON_TOUCH_CRAFTER
-            } else {
-                ShortTimeEventType.LAST_PERSON_TOUCH_CONTAINER
-            },
+            type = type,
             visibilityModifiers = setOf(VisibilityModifier.ALL),
             data = globalGameData,
             additionalData = result,
@@ -103,7 +104,7 @@ class LastPersonTouchAbilityCast(
     private fun whoTouchedLast(
         target: WithTrueIngameId,
         data: GlobalGameData
-    ): PersonWithTime? {
+    ): ShortTimeEventPersonWithTimeData? {
         val activity = activityRepository
             .findByGameId(data.game.inGameId())
             .filter {
@@ -116,7 +117,7 @@ class LastPersonTouchAbilityCast(
                 data.users[it]
             }
             val time = it.gameTime
-            PersonWithTime(
+            ShortTimeEventPersonWithTimeData(
                 user = user?.let { userNotNull ->
                     UserActivityView(
                         id = userNotNull.inGameId(),

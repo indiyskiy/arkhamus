@@ -23,7 +23,7 @@ class RitualPutItemNettyResponse(
     ongoingCraftingProcess: List<CraftProcessResponse>,
     availableAbilities: List<AbilityOfUserResponse>,
     userInventory: List<InventoryCellResponse>,
-    containers: List<ContainerState>,
+    containers: List<ContainerStateResponse>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,

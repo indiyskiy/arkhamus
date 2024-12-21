@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.EACH_CLUE_ON_START
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ClueHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone

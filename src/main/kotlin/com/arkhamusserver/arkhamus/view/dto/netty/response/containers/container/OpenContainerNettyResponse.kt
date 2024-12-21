@@ -21,7 +21,7 @@ class OpenContainerNettyResponse(
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<InventoryCellResponse>,
-    containers: List<ContainerState>,
+    containers: List<ContainerStateResponse>,
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,

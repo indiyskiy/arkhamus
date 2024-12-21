@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ClueHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -186,9 +186,7 @@ class QuestRewardUtils(
         globalGameData: GlobalGameData,
         questGiverGivesReward: RedisQuestGiver
     ) {
-        val tags = questGiverGivesReward.gameTags().map {
-            InGameObjectTag.valueOf(it)
-        }
+        val tags = questGiverGivesReward.gameTags()
         when (reward.rewardType) {
             ITEM -> {
                 if (tags.contains(InGameObjectTag.DARK_THOUGHTS)) {

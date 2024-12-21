@@ -22,7 +22,7 @@ class GameEndedNettyResponse(
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     userInventory: List<InventoryCellResponse>,
-    containers: List<ContainerState>,
+    containers: List<ContainerStateResponse>,
     crafters: List<CrafterState>,
     clues: List<RedisClue>,
     inZones: List<LevelZone>,

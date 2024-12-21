@@ -28,9 +28,11 @@ class ObjectWithTagsHandler(
     ) {
         withGameTags.gameTags().forEach { tag ->
             when (tag) {
-                InGameObjectTag.PEEKABOO_CURSE.name -> {
+                InGameObjectTag.PEEKABOO_CURSE -> {
                     processPeekabooCurse(user, withGameTags, tag, data)
                 }
+                InGameObjectTag.DARK_THOUGHTS -> {}
+                InGameObjectTag.SCENT -> {}
             }
         }
     }
@@ -38,7 +40,7 @@ class ObjectWithTagsHandler(
     private fun processPeekabooCurse(
         user: RedisGameUser,
         withGameTags: WithGameTags,
-        tag: String,
+        tag: InGameObjectTag,
         data: GlobalGameData
     ) {
         madnessHandler.applyMadness(user, PEEKABOO_CURSE_ITEM_VALUE, data.game.globalTimer)

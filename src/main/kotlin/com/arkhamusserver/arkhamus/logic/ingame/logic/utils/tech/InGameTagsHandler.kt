@@ -7,15 +7,15 @@ import org.springframework.stereotype.Component
 @Component
 class InGameTagsHandler {
     fun addTag(withTags: WithGameTags, tag: InGameObjectTag) {
-        withTags.gameTags().add(tag.name)
+        withTags.gameTags().plus(tag)
     }
 
     fun removeTag(withTags: WithGameTags, tag: String) {
-        withTags.gameTags().remove(tag)
+        withTags.gameTags().minus(tag)
     }
 
     fun removeTag(withTags: WithGameTags, tag: InGameObjectTag) {
-        withTags.gameTags().remove(tag.name)
+        withTags.gameTags().minus(tag)
     }
 
 }

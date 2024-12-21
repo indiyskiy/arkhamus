@@ -36,14 +36,14 @@ class CurseMadnessLogic(
 
     private fun curseRandomItem(allObjects: List<WithGameTags>) {
         val randomObject = allObjects.random(random)
-        randomObject.gameTags().add(InGameObjectTag.PEEKABOO_CURSE.name)
+        randomObject.writeGameTags(randomObject.gameTags().plus(InGameObjectTag.PEEKABOO_CURSE))
         if (randomObject is RedisCrafter) {
             redisCrafterRepository.save(randomObject)
-        } else {
+        }
             if (randomObject is RedisContainer) {
                 redisContainerRepository.save(randomObject)
             }
-        }
+
     }
 
     private fun nonCursedOpenContainer(
@@ -57,7 +57,7 @@ class CurseMadnessLogic(
             true
         ) &&
                 it.state == MapObjectState.ACTIVE &&
-                !it.gameTags.contains(InGameObjectTag.PEEKABOO_CURSE.name)
+                !it.gameTags.contains(InGameObjectTag.PEEKABOO_CURSE)
                 && userLocationHandler.userInInteractionRadius(user, it)
     }.toList()
 
@@ -72,7 +72,7 @@ class CurseMadnessLogic(
             true
         ) &&
                 it.state == MapObjectState.ACTIVE &&
-                !it.gameTags.contains(InGameObjectTag.PEEKABOO_CURSE.name)
+                !it.gameTags.contains(InGameObjectTag.PEEKABOO_CURSE)
                 && userLocationHandler.userInInteractionRadius(user, it)
     }.toList()
 }

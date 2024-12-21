@@ -7,7 +7,8 @@ enum class InGameObjectTag(
 ) : WithVisibilityModifiers {
 
     PEEKABOO_CURSE(setOf(VisibilityModifier.CULTIST, VisibilityModifier.PRETEND_CULTIST)),
-    DARK_THOUGHTS(setOf(VisibilityModifier.CULTIST, VisibilityModifier.PRETEND_CULTIST)), ;
+    DARK_THOUGHTS(setOf(VisibilityModifier.CULTIST, VisibilityModifier.PRETEND_CULTIST)),
+    SCENT(setOf(VisibilityModifier.CULTIST));
 
     override fun visibilityModifiers(): Set<VisibilityModifier> {
         return visibilityModifiers

@@ -31,6 +31,8 @@ class AbilityToItemResolver {
                 SEARCH_FOR_CORRUPTION -> CORRUPTION_INVESTIGATION_ITEM
                 SEARCH_FOR_OMEN -> OMEN_INVESTIGATION_ITEM
                 SEARCH_FOR_DISTORTION -> DISTORTION_INVESTIGATION_ITEM
+                //clue 2.0
+                INNOVATE_SEARCH_FOR_SCENT -> INNOVATE_SCENT_INVESTIGATION_ITEM
                 //advanced items
                 TOWN_PORTAL_BY_AMULET -> TOWN_PORTAL_AMULET
                 KINDLE_CLOAK -> CLOAK_OF_FLAMES

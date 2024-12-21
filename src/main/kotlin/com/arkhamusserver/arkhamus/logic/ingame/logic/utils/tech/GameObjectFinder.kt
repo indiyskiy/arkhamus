@@ -23,6 +23,7 @@ class GameObjectFinder {
             ALTAR -> data.altars[id.toLong()]
             QUEST_GIVER -> data.questGivers.firstOrNull { it.inGameId() == id.toLong() }
             LANTERN -> data.lanterns.firstOrNull { it.inGameId() == id.toLong() }
+            SCENT_OBJECT -> data.scentObjescts.firstOrNull { it.inGameId() == id.toLong() }
         }
     }
 
@@ -31,16 +32,7 @@ class GameObjectFinder {
         data: GlobalGameData
     ): List<WithStringId> {
         return types.flatMap { type ->
-            when (type) {
-                CHARACTER -> data.users.values
-                VOTE_SPOT -> data.voteSpots
-                CONTAINER -> data.containers.values
-                CRAFTER -> data.crafters.values
-                CLUE -> data.clues
-                ALTAR -> data.altars.values
-                QUEST_GIVER -> data.questGivers
-                LANTERN -> data.lanterns
-            }
+            listByGameObjectType(type, data)
         }
     }
 
@@ -49,18 +41,24 @@ class GameObjectFinder {
         data: GlobalGameData
     ): List<TypedGameObject> {
         return types.flatMap { type ->
-            val gameObjects = when (type) {
-                CHARACTER -> data.users.values
-                VOTE_SPOT -> data.voteSpots
-                CONTAINER -> data.containers.values
-                CRAFTER -> data.crafters.values
-                CLUE -> data.clues
-                ALTAR -> data.altars.values
-                QUEST_GIVER -> data.questGivers
-                LANTERN -> data.lanterns
-            }
+            val gameObjects = listByGameObjectType(type, data)
             gameObjects.map { TypedGameObject(type, it) }
         }
+    }
+
+    private fun listByGameObjectType(
+        type: GameObjectType,
+        data: GlobalGameData
+    ): Collection<WithStringId> = when (type) {
+        CHARACTER -> data.users.values
+        VOTE_SPOT -> data.voteSpots
+        CONTAINER -> data.containers.values
+        CRAFTER -> data.crafters.values
+        CLUE -> data.clues
+        ALTAR -> data.altars.values
+        QUEST_GIVER -> data.questGivers
+        LANTERN -> data.lanterns
+        SCENT_OBJECT -> data.scentObjescts
     }
 
     data class TypedGameObject(
