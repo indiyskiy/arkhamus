@@ -27,7 +27,7 @@ class AdvancedSearchForScentAbilityCast(
     }
 
     override fun accept(ability: Ability): Boolean {
-        return ability == Ability.INNOVATE_SEARCH_FOR_SCENT
+        return ability == Ability.ADVANCED_SEARCH_FOR_SCENT
     }
 
     override fun cast(
@@ -67,7 +67,7 @@ class AdvancedSearchForScentAbilityCast(
             objectId = target.inGameId(),
             gameId = data.game.inGameId(),
             globalTimer = data.game.globalTimer,
-            type = ShortTimeEventType.SCENT_OBJECT_CHECK,
+            type = ShortTimeEventType.SCENT_CLUE_CHECK,
             visibilityModifiers = setOf(VisibilityModifier.ALL),
             data = data,
             sourceUserId = user.inGameId(),

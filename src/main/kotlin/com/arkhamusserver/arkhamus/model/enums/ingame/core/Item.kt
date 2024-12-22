@@ -102,7 +102,4 @@ enum class Item(
     }
 }
 
-fun Int?.toItemName(): String =
-    this?.toItem()?.name ?: "-"
-
 fun Int.toItem(): Item? = Item.fromId(this)

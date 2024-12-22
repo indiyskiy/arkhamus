@@ -80,6 +80,16 @@ class InvestigationRecipePart() : RecipeSourcePart {
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = defaultCrafterTypes
             ),
+            //2.0
+            listOf(
+                Ingredient(RING, 1),
+                Ingredient(CORRUPTED_TOPAZ, 5)
+            ).toRecipe(
+                5003,
+                item = INNOVATE_SCENT_INVESTIGATION_ITEM,
+                timeToCraft = MINUTE_IN_MILLIS / 2,
+                crafterTypes = defaultCrafterTypes
+            ),
         )
     }
 }

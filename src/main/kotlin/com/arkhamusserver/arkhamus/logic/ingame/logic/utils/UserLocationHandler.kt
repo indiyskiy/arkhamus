@@ -22,6 +22,20 @@ class UserLocationHandler(
         const val USER_LUMINOUS_RADIUS = 5.0 //m
     }
 
+    fun userCanSeeTargetInRange(
+        whoLooks: RedisGameUser,
+        target: WithPoint,
+        levelGeometryData: LevelGeometryData,
+        range: Double,
+        affectedByBlind: Boolean,
+        heightAffectVision: Boolean = true,
+        geometryAffectsVision: Boolean = true,
+    ): Boolean {
+        return userCanSeeTarget(
+            whoLooks, target, levelGeometryData, affectedByBlind, heightAffectVision, geometryAffectsVision
+        ) && distanceLessOrEquals(whoLooks, target, range)
+    }
+
     fun userCanSeeTarget(
         whoLooks: RedisGameUser,
         target: WithPoint,
@@ -33,7 +47,7 @@ class UserLocationHandler(
         return haveGlobalVision(whoLooks) || (
                 inVisionDistance(whoLooks, target, affectedByBlind) &&
                         (!heightAffectVision || !onHighGround(whoLooks, target)) &&
-                        (!geometryAffectsVision || geometryCheck())
+                        (!geometryAffectsVision || geometryCheck(levelGeometryData))
                 )
     }
 
@@ -52,6 +66,7 @@ class UserLocationHandler(
         whoLooks.stateTags.contains(UserStateTag.FARSIGHT)
 
     private fun geometryCheck(
+        levelGeometryData: LevelGeometryData
         //TODO implement true geometry handler
     ): Boolean = true
 

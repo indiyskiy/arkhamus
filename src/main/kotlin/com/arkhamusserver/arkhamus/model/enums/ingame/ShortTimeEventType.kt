@@ -1,20 +1,23 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility.*
+
 private const val SECOND: Long = 1000L
 private const val MIDDLE: Long = 10 * SECOND
 
 enum class ShortTimeEventType(
     private val time: Long,
     private val source: GameObjectType,
-    private val visibility: Visibility = Visibility.PUBLIC
+    private val visibility: Visibility = PUBLIC
 ) {
-    ABILITY_CAST(SECOND, GameObjectType.CHARACTER),
-    PEEKABOO_CURSE_ACTIVATED_CONTAINER(SECOND, GameObjectType.CONTAINER),
-    PEEKABOO_CURSE_ACTIVATED_CRAFTER(SECOND, GameObjectType.CRAFTER),
-    LAST_PERSON_TOUCH_CRAFTER(MIDDLE, GameObjectType.CRAFTER, Visibility.SOURCE),
-    LAST_PERSON_TOUCH_CONTAINER(MIDDLE, GameObjectType.CONTAINER, Visibility.SOURCE),
-    MADNESS_ACT(SECOND, GameObjectType.CHARACTER),
-    SCENT_OBJECT_CHECK(MIDDLE, GameObjectType.SCENT_OBJECT, Visibility.SOURCE);
+    ABILITY_CAST(SECOND, CHARACTER),
+    PEEKABOO_CURSE_ACTIVATED_CONTAINER(SECOND, CONTAINER),
+    PEEKABOO_CURSE_ACTIVATED_CRAFTER(SECOND, CRAFTER),
+    LAST_PERSON_TOUCH_CRAFTER(MIDDLE, CRAFTER, SOURCE),
+    LAST_PERSON_TOUCH_CONTAINER(MIDDLE, CONTAINER, SOURCE),
+    MADNESS_ACT(SECOND, CHARACTER),
+    SCENT_CLUE_CHECK(MIDDLE, SCENT_CLUE, SOURCE);
 
     fun getTime(): Long = time
     fun getSource(): GameObjectType = source

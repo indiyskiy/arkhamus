@@ -23,7 +23,7 @@ class GameObjectFinder {
             ALTAR -> data.altars[id.toLong()]
             QUEST_GIVER -> data.questGivers.firstOrNull { it.inGameId() == id.toLong() }
             LANTERN -> data.lanterns.firstOrNull { it.inGameId() == id.toLong() }
-            SCENT_OBJECT -> data.scentObjescts.firstOrNull { it.inGameId() == id.toLong() }
+            SCENT_CLUE -> data.scentClues.firstOrNull { it.inGameId() == id.toLong() }
         }
     }
 
@@ -58,7 +58,7 @@ class GameObjectFinder {
         ALTAR -> data.altars.values
         QUEST_GIVER -> data.questGivers
         LANTERN -> data.lanterns
-        SCENT_OBJECT -> data.scentObjescts
+        SCENT_CLUE -> data.scentClues
     }
 
     data class TypedGameObject(

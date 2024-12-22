@@ -23,7 +23,7 @@ data class GlobalGameData(
     var crafters: Map<Long, RedisCrafter> = emptyMap(),
     var lanterns: List<RedisLantern> = emptyList(),
 
-    var scentObjescts: List<RedisScentClue> = emptyList(),
+    var scentClues: List<RedisScentClue> = emptyList(),
 
     var craftProcess: List<RedisCraftProcess> = emptyList(),
     var levelGeometryData: LevelGeometryData = LevelGeometryData(),

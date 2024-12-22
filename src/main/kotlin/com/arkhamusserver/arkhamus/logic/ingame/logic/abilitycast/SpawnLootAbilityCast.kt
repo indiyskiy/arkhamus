@@ -63,20 +63,21 @@ class SpawnLootAbilityCast(
             .filter { item -> item.itemType == ItemType.LOOT }
             .random(random)
         inventoryHandler.addItem(currentUserNotNull, randomItem)
-        rememberItemChangesForResponses(globalGameData, currentUserNotNull)
+        rememberItemChangesForResponses(globalGameData, currentUserNotNull, randomItem)
     }
-}
 
-private fun rememberItemChangesForResponses(
-    globalGameData: GlobalGameData,
-    user: RedisGameUser
-) {
-    globalGameData.inBetweenEvents.inBetweenItemHolderChanges.add(
-        InBetweenItemHolderChanges(
-            item = Item.CURSED_POTATO,
-            number = 1,
-            userId = user.inGameId(),
-            ItemHolderChangeType.TAKE
+    private fun rememberItemChangesForResponses(
+        globalGameData: GlobalGameData,
+        user: RedisGameUser,
+        spawnedItem: Item,
+    ) {
+        globalGameData.inBetweenEvents.inBetweenItemHolderChanges.add(
+            InBetweenItemHolderChanges(
+                item = spawnedItem,
+                number = 1,
+                userId = user.inGameId(),
+                ItemHolderChangeType.TAKE
+            )
         )
-    )
+    }
 }

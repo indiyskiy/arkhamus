@@ -184,12 +184,12 @@ enum class Ability(
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
     //INVESTIGATION 2.0
-    INNOVATE_SEARCH_FOR_SCENT(
+    ADVANCED_SEARCH_FOR_SCENT(
         id = 60003,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 0.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE,
-        targetTypes = listOf(SCENT_OBJECT),
+        targetTypes = listOf(SCENT_CLUE),
         range = CLOSE_RANGE
     ),
 

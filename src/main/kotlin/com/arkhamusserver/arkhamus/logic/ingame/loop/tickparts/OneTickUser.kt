@@ -1,9 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness.MadnessTickProcessHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
+import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.tickuser.OneTickUserInventory
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -11,8 +10,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class OneTickUser(
-    private val madnessHandler: UserMadnessHandler,
-    private val madnessTickProcessHandler: MadnessTickProcessHandler
+    private val madnessTickProcessHandler: MadnessTickProcessHandler,
+    private val oneTickUserInventory: OneTickUserInventory
 ) {
 
     companion object {
@@ -31,28 +30,8 @@ class OneTickUser(
         data: GlobalGameData,
         timePassedMillis: Long
     ) {
-        processInventory(user, timePassedMillis, data.game.globalTimer)
+        oneTickUserInventory.processInventory(user, timePassedMillis, data.game.globalTimer)
         processMadness(user, data, timePassedMillis)
-    }
-
-    private fun processInventory(
-        user: RedisGameUser,
-        timePassedMillis: Long,
-        gameTime: Long
-    ) {
-        user.items.filter {
-            it.number > 0
-        }.forEach{ cell ->
-            val item = cell.item
-            when (item) {
-                Item.CURSED_POTATO -> madnessHandler.applyMadness(
-                    user,
-                    POTATO_MADNESS_TICK_MILLIS * cell.number * timePassedMillis,
-                    gameTime,
-                )
-                else -> {}
-            }
-        }
     }
 
     private fun processMadness(

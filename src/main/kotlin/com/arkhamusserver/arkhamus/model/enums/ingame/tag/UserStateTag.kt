@@ -8,6 +8,7 @@ enum class UserStateTag(
     STUN(Visibility.PUBLIC),
     IN_RITUAL(Visibility.PUBLIC),
     INVESTIGATING(Visibility.SOURCE),
+    INVESTIGATING_SCENT(Visibility.SOURCE),
     LUMINOUS(Visibility.PUBLIC),
     INVULNERABILITY(Visibility.PUBLIC),
     FARSIGHT(Visibility.SOURCE);
