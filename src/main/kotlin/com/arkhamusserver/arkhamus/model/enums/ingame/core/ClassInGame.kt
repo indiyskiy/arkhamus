@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.INVEST
 enum class ClassInGame(
     val id: Int,
     val roleType: RoleTypeInGame,
-    val turnedOn: Boolean = true
+    val globalTurnedOn: Boolean = true
 ) {
     MIND_HEALER(101, INVESTIGATOR),
     BREADWINNER(102, INVESTIGATOR),

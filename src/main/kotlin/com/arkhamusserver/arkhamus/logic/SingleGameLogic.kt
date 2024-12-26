@@ -34,7 +34,7 @@ class SingleGameLogic(
             DEFAULT_CULTIST_SIZE,
             GameType.SINGLE,
             player,
-            ClassInGame.values().filter { it.turnedOn }.toSet()
+            ClassInGame.values().filter { it.globalTurnedOn }.toSet()
         ).toDto(player)
     }
 

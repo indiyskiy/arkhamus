@@ -136,16 +136,16 @@ class GameStartUserLogic(
 
     private fun randomCultistClass(classesInGame: Set<ClassInGame>): ClassInGame =
         if (classesInGame.none { it.roleType == CULTIST }) {
-            ClassInGame.values().filter { it.turnedOn && it.roleType == CULTIST }.random(random)
+            ClassInGame.values().filter { it.globalTurnedOn && it.roleType == CULTIST }.random(random)
         } else {
-            classesInGame.filter { it.turnedOn && it.roleType == CULTIST }.random(random)
+            classesInGame.filter { it.globalTurnedOn && it.roleType == CULTIST }.random(random)
         }
 
 
     private fun randomInvestigatorRole(classesInGame: Set<ClassInGame>): ClassInGame =
         if (classesInGame.none { it.roleType == INVESTIGATOR }) {
-            ClassInGame.values().filter { it.turnedOn && it.roleType == INVESTIGATOR }.random(random)
+            ClassInGame.values().filter { it.globalTurnedOn && it.roleType == INVESTIGATOR }.random(random)
         } else {
-            classesInGame.filter { it.turnedOn && it.roleType == INVESTIGATOR }.random(random)
+            classesInGame.filter { it.globalTurnedOn && it.roleType == INVESTIGATOR }.random(random)
         }
 }
