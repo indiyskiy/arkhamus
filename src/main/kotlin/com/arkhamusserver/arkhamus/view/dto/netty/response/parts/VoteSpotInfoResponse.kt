@@ -7,7 +7,7 @@ data class VoteSpotInfoResponse(
     var costItemId: Int,
     var state: VoteSpotState = VoteSpotState.WAITING_FOR_PAYMENT,
     var usersWithBanStates: List<UserWithBanState> = emptyList(),
-){
+) {
     constructor(
         voteSpotInfo: VoteSpotInfo
     ) : this(

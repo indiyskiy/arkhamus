@@ -51,7 +51,7 @@ class VoteSpotOpenNettyResponseMapper(
             )
             return VoteSpotOpenNettyResponse(
                 canPay = requestProcessData.canPay,
-                voteSpotInfo = voteSpotInfo?.let{VoteSpotInfoResponse(it)},
+                voteSpotInfo = voteSpotInfo?.let { VoteSpotInfoResponse(it) },
                 canVote = requestProcessData.canVote,
                 canCallForVote = requestProcessData.canCallForVote,
                 cantVoteReasons = requestProcessData.cantVoteReasons.sortedByDescending { it.priority },

@@ -1,17 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Altar
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Container
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Crafter
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Door
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Ellipse
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Lantern
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelTask
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.QuestGiver
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Tetragon
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Threshold
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.VoteSpot
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.view.dto.admin.*
 import org.springframework.stereotype.Component
@@ -33,8 +23,8 @@ class AdminLevelPreviewLogic(
     private val thresholdRepository: ThresholdRepository,
 ) {
 
-    companion object{
-        const val SCREEN_ZOOM:Int = 10
+    companion object {
+        const val SCREEN_ZOOM: Int = 10
     }
 
     @Transactional

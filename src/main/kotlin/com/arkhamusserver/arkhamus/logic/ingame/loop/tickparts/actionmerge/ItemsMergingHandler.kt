@@ -20,7 +20,7 @@ class ItemsMergingHandler {
             val currentItem = it.item
             val mappingNumber = it.number
             val trustfulNumber = sum[currentItem]
-            it.item to newValueForMapping(mappingNumber, trustfulNumber?:0, sum, currentItem)
+            it.item to newValueForMapping(mappingNumber, trustfulNumber ?: 0, sum, currentItem)
         }.map {
             InventoryCell().apply {
                 this.item = it.first

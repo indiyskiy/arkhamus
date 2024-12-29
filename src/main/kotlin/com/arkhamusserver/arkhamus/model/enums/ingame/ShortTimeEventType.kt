@@ -1,7 +1,8 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility.PUBLIC
+import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility.SOURCE
 
 private const val SECOND: Long = 1000L
 private const val MIDDLE: Long = 10 * SECOND

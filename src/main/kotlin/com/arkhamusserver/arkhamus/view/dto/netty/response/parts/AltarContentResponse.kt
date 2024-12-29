@@ -5,7 +5,7 @@ data class AltarContentResponse(
     var itemId: Int? = null,
     var itemNumberMax: Int = 0,
     var itemNumberNow: Int = 0,
-){
+) {
     constructor(
         altarContent: AltarContent
     ) : this(

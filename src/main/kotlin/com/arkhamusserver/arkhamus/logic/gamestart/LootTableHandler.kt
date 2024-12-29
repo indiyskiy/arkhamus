@@ -36,7 +36,7 @@ class LootTableHandler {
             .groupBy { it.first }
             .map { pair ->
                 pair.key to pair.value.sumOf { it.second }
-            }.map{
+            }.map {
                 InventoryCell(it.first, it.second)
             }
         return map

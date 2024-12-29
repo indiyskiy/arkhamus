@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelTask
 import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelTask
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.QuestGiver
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
 import org.springframework.stereotype.Component

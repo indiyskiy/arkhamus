@@ -144,7 +144,8 @@ class GameLogic(
     ): Set<ClassInGame> {
         val result = availableClasses.toMutableSet()
         if (result.any { it.roleType == RoleTypeInGame.INVESTIGATOR }) {
-            result.addAll(ClassInGame.values().filter { it.globalTurnedOn && it.roleType == RoleTypeInGame.INVESTIGATOR })
+            result.addAll(
+                ClassInGame.values().filter { it.globalTurnedOn && it.roleType == RoleTypeInGame.INVESTIGATOR })
         }
         if (result.any { it.roleType == RoleTypeInGame.CULTIST }) {
             result.addAll(ClassInGame.values().filter { it.globalTurnedOn && it.roleType == RoleTypeInGame.CULTIST })

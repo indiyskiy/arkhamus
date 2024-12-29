@@ -16,6 +16,6 @@ class DefaultGameLogic(
 
     @Transactional
     fun disconnectTransactional() {
-       gameLogic.disconnect()
+        gameLogic.disconnect()
     }
 }

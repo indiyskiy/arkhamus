@@ -38,7 +38,7 @@ class PretendCultistAbilityCast() : AbilityCast {
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
-        sourceUser.visibilityModifiers+=VisibilityModifier.PRETEND_CULTIST
+        sourceUser.visibilityModifiers += VisibilityModifier.PRETEND_CULTIST
         return true
     }
 

@@ -40,9 +40,9 @@ class CurseMadnessLogic(
         if (randomObject is RedisCrafter) {
             redisCrafterRepository.save(randomObject)
         }
-            if (randomObject is RedisContainer) {
-                redisContainerRepository.save(randomObject)
-            }
+        if (randomObject is RedisContainer) {
+            redisContainerRepository.save(randomObject)
+        }
 
     }
 

@@ -4,7 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUE
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType
-import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.ADD_CLUE
+import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.ITEM
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser

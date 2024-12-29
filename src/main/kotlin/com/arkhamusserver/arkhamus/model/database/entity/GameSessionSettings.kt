@@ -24,7 +24,7 @@ data class GameSessionSettings(
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = true)
     var level: Level? = null
-){
+) {
     // No-arg constructor for JPA
     constructor() : this(
         id = null,

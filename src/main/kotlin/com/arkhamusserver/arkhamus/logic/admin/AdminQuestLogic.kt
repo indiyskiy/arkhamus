@@ -4,7 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.quest.QuestDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.TextKeyRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.database.entity.TextKey
-import com.arkhamusserver.arkhamus.model.database.entity.game.*
+import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
+import com.arkhamusserver.arkhamus.model.database.entity.game.QuestStep
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelTask
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.QuestGiver

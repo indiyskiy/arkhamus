@@ -49,10 +49,10 @@ class SearchForDistortionAbilityCast(
         globalGameData: GlobalGameData
     ): Boolean {
         val user = sourceUser
-        user.stateTags+=UserStateTag.INVESTIGATING
+        user.stateTags += UserStateTag.INVESTIGATING
         val visibilityModifier = resolver.toVisibilityModifier(ability)
         visibilityModifier?.let {
-            user.visibilityModifiers+=it
+            user.visibilityModifiers += it
             return true
         }
         return false

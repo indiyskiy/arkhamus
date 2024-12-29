@@ -50,7 +50,7 @@ class InventoryHandler {
         return inventory.filter { it.item == requiredItem }.sumOf { it.number }
     }
 
-    fun consumeItems(user: RedisGameUser, item: Item, number: Int):ConsumedItem {
+    fun consumeItems(user: RedisGameUser, item: Item, number: Int): ConsumedItem {
         if (userHaveItem(user, item)) {
             var numberLeft = number
             user.items
@@ -79,14 +79,14 @@ class InventoryHandler {
         }.sortedByDescending { it.item.id }
     }
 
-    fun consumeItems(recipe: Recipe, gameUser: RedisGameUser, crafter: RedisCrafter):List<ConsumedItem> {
+    fun consumeItems(recipe: Recipe, gameUser: RedisGameUser, crafter: RedisCrafter): List<ConsumedItem> {
         logger.info("consuming items for recipe ${recipe.recipeId} to create ${recipe.item.name}")
-       return recipe.ingredients.map { ingredient: Ingredient ->
+        return recipe.ingredients.map { ingredient: Ingredient ->
             consumeItem(ingredient, gameUser, crafter)
         }
     }
 
-    private fun consumeItem(ingredient: Ingredient, user: RedisGameUser, crafter: RedisCrafter):ConsumedItem {
+    private fun consumeItem(ingredient: Ingredient, user: RedisGameUser, crafter: RedisCrafter): ConsumedItem {
         logger.info("consuming ${ingredient.number} of ${ingredient.item.name}")
         val itemToConsume = ingredient.item
 
