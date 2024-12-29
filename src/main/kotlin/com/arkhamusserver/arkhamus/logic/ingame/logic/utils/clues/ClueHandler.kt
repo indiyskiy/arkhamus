@@ -1,24 +1,20 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
-import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisClueRepository
-import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
-import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
+import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
 @Component
 class ClueHandler(
-    private val redisClueRepository: RedisClueRepository,
+    private val advancedClueHandlers: List<AdvancedClueHandler>,
     private val activityHandler: ActivityHandler,
 ) {
 
@@ -27,56 +23,32 @@ class ClueHandler(
     }
 
     fun filterClues(
-        clues: List<RedisClue>,
-        inZones: List<LevelZone>,
+        clues: CluesContainer,
+        user: RedisGameUser,
+        levelGeometryData: LevelGeometryData,
+    ): ExtendedCluesResponse {
+        val possibleClues = mapPossibleClues(clues, user)
+        val actualClues = mapActualClues(clues, user, levelGeometryData)
+        return ExtendedCluesResponse(possibleClues, actualClues)
+    }
+
+    private fun mapActualClues(
+        container: CluesContainer,
+        user: RedisGameUser,
+        levelGeometryData: LevelGeometryData,
+    ): List<ExtendedClueResponse> {
+        return advancedClueHandlers.flatMap {
+            it.mapActualClues(container, user, levelGeometryData)
+        }
+    }
+
+    private fun mapPossibleClues(
+        container: CluesContainer,
         user: RedisGameUser
-    ): List<RedisClue> {
-        val zonesSet = inZones.filter {
-            it.zoneType == ZoneType.CLUE
-        }.map {
-            it.zoneId
-        }.toSet()
-        if (zonesSet.isEmpty()) return emptyList()
-        val possibleClues = Clue.values().filter {
-            it.visibilityModifiers().any { modifier -> modifier in user.visibilityModifiers() }
+    ): List<ExtendedClueResponse> {
+        return advancedClueHandlers.flatMap {
+            it.mapPossibleClues(container, user)
         }
-        return clues.filter { it.clue in possibleClues && it.levelZoneId in zonesSet }
-    }
-
-    fun addClues(
-        game: GameSession,
-        clueZones: List<RedisLevelZone>,
-        clue: Clue,
-        number: Int
-    ) {
-        val zoneIds = clueZones.shuffled(random).take(number).map { it.inGameId() }
-        zoneIds.forEach {
-            addClueToZone(game, it, clue)
-        }
-    }
-
-    private fun addClueToZone(
-        game: GameSession,
-        zoneId: Long,
-        clue: Clue
-    ) {
-        val gameId = game.id!!
-        addClueToZone(gameId, zoneId, clue)
-    }
-
-    private fun addClueToZone(
-        gameId: Long,
-        zoneId: Long,
-        clue: Clue
-    ) {
-        val redisClue = RedisClue(
-            id = generateRandomId(),
-            gameId = gameId,
-            levelZoneId = zoneId,
-            clue = clue,
-            visibilityModifiers = clue.visibilityModifiers
-        )
-        redisClueRepository.save(redisClue)
     }
 
     fun addRandomClue(
@@ -85,52 +57,56 @@ class ClueHandler(
         createActivity: Boolean = false,
     ) {
         val existingClues = data.clues
-        val clueZones = data.levelGeometryData.zones.filter { it.zoneType == ZoneType.CLUE }
         val clueTypes = data.game.god.getTypes()
-        clueTypes.let { clueTypesNotNull ->
-            clueTypesNotNull.map { clueType ->
-                clueZones.mapNotNull { zone ->
-                    if (clueExistAlready(zone, clueType, existingClues)) {
-                        null
-                    } else {
-                        zone to clueType
-                    }
-                }
-            }.flatten().randomOrNull()?.let { (zone, clueType) ->
-                addClueToZone(
-                    data.game.gameId!!,
-                    zone.zoneId,
-                    clueType
-                )
-                if (createActivity && sourceUser != null) {
-                    activityHandler.addUserNotTargetActivity(
-                        gameId = data.game.gameId!!,
-                        activityType = ActivityType.CLUE_CREATED,
-                        sourceUser = sourceUser,
-                        gameTime = data.game.globalTimer,
-                        relatedEventId = clueType.ordinal.toLong()
-                    )
-                }
-            }
+        val clueTypesCanBeAdded = clueTypes.filter { clueType ->
+            advancedClueHandlers.firstOrNull {
+                it.accept(clueType)
+            }?.canBeAdded(existingClues) == true
+        }
+        val clueTypeToAdd = clueTypesCanBeAdded.randomOrNull(random) ?: return
+        val added = advancedClueHandlers.firstOrNull {
+            it.accept(clueTypeToAdd)
+        }?.addClue(data)
+
+        if (added != null && sourceUser != null && createActivity) {
+            activityHandler.addUserNotTargetActivity(
+                gameId = data.game.gameId!!,
+                activityType = ActivityType.CLUE_CREATED,
+                sourceUser = sourceUser,
+                gameTime = data.game.globalTimer,
+                relatedEventId = clueTypeToAdd.ordinal.toLong()
+            )
         }
     }
 
     fun removeRandomClue(data: GlobalGameData) {
         val existingClues = data.clues
-        existingClues.randomOrNull()?.let { clue ->
-            redisClueRepository.delete(clue)
+        advancedClueHandlers.shuffled(random).firstOrNull {
+            it.canBeRemoved(existingClues)
+        }?.removeRandom(existingClues)
+    }
+
+    fun removeClue(
+        clues: CluesContainer,
+        target: WithStringId
+    ) {
+        advancedClueHandlers.firstOrNull {
+            it.accept(target)
+        }?.removeTarget(target, clues)
+    }
+
+    fun canBeRemoved(user: RedisGameUser, target: Any, data: GlobalGameData): Boolean {
+        return advancedClueHandlers.any {
+            it is WithStringId &&
+                    it.accept(target as WithStringId) &&
+                    it.canBeRemoved(user, target, data)
         }
     }
 
-    fun removeClue(clue: RedisClue) {
-        redisClueRepository.delete(clue)
+    fun anyCanBeRemoved(user: RedisGameUser, data: GlobalGameData): Boolean {
+        return advancedClueHandlers.any {
+            it.anyCanBeRemoved(user, data)
+        }
     }
 
-    private fun clueExistAlready(
-        zone: GameDataLevelZone,
-        type: Clue,
-        clues: List<RedisClue>
-    ): Boolean {
-        return clues.any { it.clue == type && it.levelZoneId == zone.zoneId }
-    }
 }

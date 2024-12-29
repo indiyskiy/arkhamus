@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ritual
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualHandler
@@ -54,8 +54,8 @@ class RitualLeaveNettyRequestHandler(
             val altarHolder = globalGameData.altarHolder
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
-                inZones,
-                user
+                user,
+                globalGameData.levelGeometryData
             )
             val event = ongoingEvents.firstOrNull {
                 it.event.type == RedisTimeEventType.RITUAL_GOING &&
@@ -63,15 +63,15 @@ class RitualLeaveNettyRequestHandler(
             }?.event
             val notches = ritualHandler.countItemsNotches(event, altarHolder)
             val currentItem = ritualHandler.countCurrentItem(notches, globalGameData.game.globalTimer)
-            val userInRitual = event!=null &&
+            val userInRitual = event != null &&
                     user.stateTags.contains(UserStateTag.IN_RITUAL) &&
-                    altarHolder!=null &&
+                    altarHolder != null &&
                     altarHolder.usersInRitual.contains(user.inGameId())
             return RitualLeaveRequestProcessData(
                 userInRitual = userInRitual,
                 notches = notches,
                 currentStepItem = currentItem,
-                usersInRitual =  altarHolder?.usersInRitual?.map{globalGameData.users[it]!!}?:emptyList(),
+                usersInRitual = altarHolder?.usersInRitual?.map { globalGameData.users[it]!! } ?: emptyList(),
                 currentGameTime = globalGameData.game.globalTimer,
                 ritualEvent = ongoingEvents.firstOrNull {
                     it.event.type == RedisTimeEventType.RITUAL_GOING &&

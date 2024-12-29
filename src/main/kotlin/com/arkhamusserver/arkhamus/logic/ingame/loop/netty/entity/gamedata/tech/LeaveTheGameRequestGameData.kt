@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class LeaveTheGameRequestGameData(
     val canLeaveTheGame: Boolean,
@@ -30,7 +31,7 @@ class LeaveTheGameRequestGameData(
     visibleItems = visibleItems,
     containers = containers,
     crafters = crafters,
-    clues = emptyList(),
+    clues = ExtendedCluesResponse(emptyList(), emptyList()),
     userQuest = emptyList(),
     tick = tick
 )

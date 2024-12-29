@@ -1,9 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.lantern
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.LanternHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ZonesHandler
@@ -51,8 +51,8 @@ class LightLanternNettyRequestHandler(
 
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
-                inZones,
-                user
+                user,
+                globalGameData.levelGeometryData
             )
 
             val lantern = globalGameData.lanterns.firstOrNull { it.inGameId() == this.lanternId }

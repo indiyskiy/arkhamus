@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.quest
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestRewardUtils
@@ -58,8 +58,8 @@ class QuestAcceptNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
-                inZones,
-                user
+                user,
+                globalGameData.levelGeometryData
             )
             val userQuestProgresses = globalGameData.questProgressByUserId[userId]
             val quest = globalGameData.quests.firstOrNull {
@@ -89,11 +89,11 @@ class QuestAcceptNettyRequestHandler(
             val rightQuestGiverForAction = questGiverId == quest?.startQuestGiverId
             val questGiver = globalGameData.questGivers.firstOrNull { it.inGameId() == this.questGiverId }
 
-            val canAccept = questGiver!=null &&
+            val canAccept = questGiver != null &&
                     rightQuestGiverForAction && questProgressHandler.canAccept(quest, userQuestProgress)
-            val canDecline = questGiver!=null &&
+            val canDecline = questGiver != null &&
                     rightQuestGiverForAction && questProgressHandler.canDecline(quest, userQuestProgress)
-            val canFinish = questGiver!=null &&
+            val canFinish = questGiver != null &&
                     rightQuestGiverForAction && questProgressHandler.canFinish(quest, userQuestProgress)
 
             return QuestAcceptRequestProcessData(
@@ -103,7 +103,7 @@ class QuestAcceptNettyRequestHandler(
                 canAccept = canAccept,
                 canDecline = canDecline,
                 canFinish = canFinish,
-                questGiver =questGiver,
+                questGiver = questGiver,
                 rightQuestGiverForAction = rightQuestGiverForAction,
                 gameUser = user,
                 otherGameUsers = users,

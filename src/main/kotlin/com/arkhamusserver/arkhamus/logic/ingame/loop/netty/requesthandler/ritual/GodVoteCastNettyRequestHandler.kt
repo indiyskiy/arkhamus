@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ritual
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.GodVoteHandler
@@ -55,8 +55,8 @@ class GodVoteCastNettyRequestHandler(
             val canVote = godVoteHandler.canVote(altarPolling, altarHolder, user)
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
-                inZones,
-                user
+                user,
+                globalGameData.levelGeometryData
             )
             return GodVoteCastRequestProcessData(
                 votedGod = this.godId.toGod(),

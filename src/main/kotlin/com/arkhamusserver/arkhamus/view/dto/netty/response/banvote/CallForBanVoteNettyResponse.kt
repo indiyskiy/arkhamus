@@ -1,11 +1,12 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.banvote
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
+
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToClueResponses
+
 import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneResponses
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class CallForBanVoteNettyResponse(
     val successfullyCalled: Boolean,
@@ -22,7 +23,7 @@ class CallForBanVoteNettyResponse(
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
-    clues: List<RedisClue>,
+    clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
@@ -38,7 +39,7 @@ class CallForBanVoteNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
-    clues = clues.convertToClueResponses(),
+    clues = clues,
     lanterns = lanterns,
     type = CallForBanVoteNettyResponse::class.java.simpleName,
 )

@@ -2,11 +2,12 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.ritual
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
+
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToClueResponses
+
 import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneResponses
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class AltarOpenNettyResponse(
     val altarPollingProgress: AltarPolling?,
@@ -28,7 +29,7 @@ class AltarOpenNettyResponse(
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
-    clues: List<RedisClue>,
+    clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
@@ -44,7 +45,7 @@ class AltarOpenNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
-    clues = clues.convertToClueResponses(),
+    clues = clues,
     lanterns = lanterns,
     type = AltarOpenNettyResponse::class.java.simpleName,
 )

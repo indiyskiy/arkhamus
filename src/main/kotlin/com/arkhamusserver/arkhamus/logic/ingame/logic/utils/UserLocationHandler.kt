@@ -32,7 +32,12 @@ class UserLocationHandler(
         geometryAffectsVision: Boolean = true,
     ): Boolean {
         return userCanSeeTarget(
-            whoLooks, target, levelGeometryData, affectedByBlind, heightAffectVision, geometryAffectsVision
+            whoLooks,
+            target,
+            levelGeometryData,
+            affectedByBlind,
+            heightAffectVision,
+            geometryAffectsVision
         ) && distanceLessOrEquals(whoLooks, target, range)
     }
 

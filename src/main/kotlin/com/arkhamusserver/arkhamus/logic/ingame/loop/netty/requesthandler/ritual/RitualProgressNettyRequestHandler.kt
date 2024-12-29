@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.ritual
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualHandler
@@ -54,8 +54,8 @@ class RitualProgressNettyRequestHandler(
             val altarHolder = globalGameData.altarHolder
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
-                inZones,
-                user
+                user,
+                globalGameData.levelGeometryData
             )
             val visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents)
             val availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData)

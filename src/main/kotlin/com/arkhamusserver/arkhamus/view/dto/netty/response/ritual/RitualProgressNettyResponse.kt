@@ -1,11 +1,12 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.ritual
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
+
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToClueResponses
+
 import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneResponses
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class RitualProgressNettyResponse(
     private val ritualGoingData: RitualGoingDataResponse,
@@ -23,7 +24,7 @@ class RitualProgressNettyResponse(
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
-    clues: List<RedisClue>,
+    clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
@@ -40,6 +41,6 @@ class RitualProgressNettyResponse(
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
     lanterns = lanterns,
-    clues = clues.convertToClueResponses(),
+    clues = clues,
     type = RitualProgressNettyResponse::class.java.simpleName,
 )

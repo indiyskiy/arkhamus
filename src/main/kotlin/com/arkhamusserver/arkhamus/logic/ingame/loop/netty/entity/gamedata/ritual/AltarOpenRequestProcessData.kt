@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserRe
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class AltarOpenRequestProcessData(
     var altar: RedisAltar?,
@@ -30,7 +31,7 @@ class AltarOpenRequestProcessData(
     visibleItems: List<InventoryCell>,
     containers: List<RedisContainer>,
     crafters: List<RedisCrafter>,
-    clues: List<RedisClue>,
+    clues: ExtendedCluesResponse,
     userQuestProgresses: List<UserQuestResponse>,
     tick: Long
 ) : GameUserData(

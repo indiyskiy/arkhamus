@@ -63,14 +63,14 @@ class OneTickUserInventory(
     private fun processInnovateScentInvestigationItem(
         user: RedisGameUser,
     ) {
-        user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_INSCRIPTION
+        user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_SCENT
         user.stateTags += UserStateTag.INVESTIGATING_SCENT
     }
 
     private fun noInnovateScentInvestigationItem(
         user: RedisGameUser,
     ) {
-        user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_INSCRIPTION
+        user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_SCENT
         user.stateTags -= UserStateTag.INVESTIGATING_SCENT
     }
 

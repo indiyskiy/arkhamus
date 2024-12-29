@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.config.UserState
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession

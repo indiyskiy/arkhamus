@@ -5,7 +5,6 @@ enum class GameObjectType {
     VOTE_SPOT,
     CONTAINER,
     CRAFTER,
-    CLUE,
     QUEST_GIVER,
     SCENT_CLUE,
     ALTAR,

@@ -20,7 +20,6 @@ enum class Clue(
     ),
     SCENT(
         setOf(
-            VisibilityModifier.SCENT,
             VisibilityModifier.CULTIST
         )
     ),

@@ -14,11 +14,15 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyR
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.redis.*
+import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.UpdateCrafterNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -85,7 +89,7 @@ class UpdateCrafterNettyResponseMapper(
         containers: List<RedisContainer>,
         crafters: List<RedisCrafter>,
         inZones: List<LevelZone>,
-        clues: List<RedisClue>,
+        clues: ExtendedCluesResponse,
         userQuestProgresses: List<UserQuestResponse>,
         levelGeometryData: LevelGeometryData,
         shortTimeEvents: List<RedisShortTimeEvent>,

@@ -1,8 +1,9 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
+
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class HeartbeatNettyResponse(
     tick: Long,
@@ -16,7 +17,7 @@ class HeartbeatNettyResponse(
     userInventory: List<InventoryCellResponse>,
     containers: List<ContainerStateResponse>,
     crafters: List<CrafterState>,
-    clues: List<RedisClue>,
+    clues: ExtendedCluesResponse,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     lanterns: List<LanternData>,
@@ -34,7 +35,7 @@ class HeartbeatNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
-    clues = clues.convertToClueResponses(),
+    clues = clues,
     lanterns = lanterns,
     type = HeartbeatNettyResponse::class.java.simpleName
 )

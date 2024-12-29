@@ -1,6 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.*
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.clues.RedisScentClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.redis.*
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
@@ -26,11 +29,11 @@ class RedisDataAccessImpl(
     private val redisLevelZoneRepository: RedisLevelZoneRepository,
     private val redisLevelTetragonRepository: RedisLevelTetragonRepository,
     private val redisLevelEllipseRepository: RedisLevelEllipseRepository,
-    private val redisClueRepository: RedisClueRepository,
     private val redisQuestRepository: RedisQuestRepository,
     private val redisQuestGiverRepository: RedisQuestGiverRepository,
     private val redisUserQuestProgressRepository: RedisUserQuestProgressRepository,
     private val redisQuestRewardRepository: RedisQuestRewardRepository,
+    private val redisScentClueRepository: RedisScentClueRepository
 ) : RedisDataAccess {
 
     override fun getGameUser(userId: Long?, gameId: Long?) =
@@ -91,8 +94,9 @@ class RedisDataAccessImpl(
         return redisLevelTetragonRepository.findByGameId(gameId)
     }
 
-    override fun getClues(gameId: Long): List<RedisClue> {
-        return redisClueRepository.findByGameId(gameId)
+    override fun getClues(gameId: Long): CluesContainer {
+        val scent = redisScentClueRepository.findByGameId(gameId)
+        return CluesContainer(scent)
     }
 
     override fun getQuests(gameId: Long): List<RedisQuest> {

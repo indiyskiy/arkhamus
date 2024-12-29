@@ -2,8 +2,9 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
+
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 abstract class ExternalInventoryNettyResponse(
     var sortedUserInventory: List<InventoryCellResponse>,
@@ -23,7 +24,7 @@ abstract class ExternalInventoryNettyResponse(
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
-    clues: List<RedisClue>,
+    clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
     type: String
 ) : NettyResponse(
@@ -40,7 +41,7 @@ abstract class ExternalInventoryNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
-    clues = clues.convertToClueResponses(),
+    clues = clues,
     lanterns = lanterns,
     type = type
 )

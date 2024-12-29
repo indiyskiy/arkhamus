@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.config.redis
 
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.NonGenericMyCrudRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import jakarta.annotation.PostConstruct
 import org.springframework.data.repository.CrudRepository

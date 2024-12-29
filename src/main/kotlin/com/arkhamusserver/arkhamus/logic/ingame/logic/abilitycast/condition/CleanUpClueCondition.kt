@@ -1,11 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ZonesHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.CLEAN_UP_CLUE
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component
 @Component
 class CleanUpClueCondition(
     private val gameObjectFinder: GameObjectFinder,
-    private val zonesHandler: ZonesHandler
+    private val userLocationHandler: UserLocationHandler,
+    private val clueHandler: ClueHandler
 ) : AdditionalAbilityCondition {
 
     companion object {
@@ -31,14 +32,8 @@ class CleanUpClueCondition(
         globalGameData: GlobalGameData
     ): Boolean {
         if (target == null) return false
-        val inTheZone =
-            zonesHandler.inSameZone(
-                user,
-                target as RedisClue,
-                globalGameData.levelGeometryData
-            )
-        logger.info("inTheZone: $inTheZone")
-        return inTheZone
+        val canBeRemoved = clueHandler.canBeRemoved(user, target, globalGameData)
+        return canBeRemoved
     }
 
     override fun canBeCastedAtAll(
@@ -46,15 +41,6 @@ class CleanUpClueCondition(
         user: RedisGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
-        return gameObjectFinder.all(
-            ability.targetTypes ?: emptyList(),
-            globalGameData
-        ).any {
-            zonesHandler.inSameZone(
-                user,
-                it as RedisClue,
-                globalGameData.levelGeometryData
-            )
-        }
+        return clueHandler.anyCanBeRemoved(user, globalGameData)
     }
 }

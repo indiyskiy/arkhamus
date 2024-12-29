@@ -2,10 +2,11 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.containers.container
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
+
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ActionResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.ExternalInventoryNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class UpdateContainerNettyResponse(
     sortedUserInventory: List<InventoryCellResponse>,
@@ -27,7 +28,7 @@ class UpdateContainerNettyResponse(
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
-    clues: List<RedisClue>,
+    clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
 ) : ExternalInventoryNettyResponse(
     sortedUserInventory = sortedUserInventory,

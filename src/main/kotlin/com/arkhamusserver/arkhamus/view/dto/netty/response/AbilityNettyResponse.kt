@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class AbilityNettyResponse(
     private val abilityId: Int?,
@@ -22,7 +22,7 @@ class AbilityNettyResponse(
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     lanterns: List<LanternData>,
-    clues: List<RedisClue>,
+    clues: ExtendedCluesResponse,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -37,7 +37,7 @@ class AbilityNettyResponse(
     crafters = crafters,
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
-    clues = clues.convertToClueResponses(),
+    clues = clues,
     lanterns = lanterns,
     type = AbilityNettyResponse::class.java.simpleName
 ), ActionResponse {

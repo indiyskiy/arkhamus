@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class AuthRequestProcessData(
     var reason: String? = null,
@@ -23,7 +24,7 @@ class AuthRequestProcessData(
     visibleItems = emptyList(),
     ongoingCraftingProcess = emptyList(),
     containers = emptyList(),
-    clues = emptyList(),
+    clues = ExtendedCluesResponse(emptyList(), emptyList()),
     crafters = emptyList(),
     userQuest = emptyList(),
     tick = -1L

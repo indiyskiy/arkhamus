@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.redis.*
 import org.springframework.transaction.annotation.Transactional
@@ -25,7 +26,7 @@ interface RedisDataAccess {
     fun getZones(gameId: Long): List<RedisLevelZone>
     fun getTetragons(gameId: Long): List<RedisLevelZoneTetragon>
     fun getEllipses(gameId: Long): List<RedisLevelZoneEllipse>
-    fun getClues(gameId: Long): List<RedisClue>
+    fun getClues(gameId: Long): CluesContainer
     fun getQuests(gameId: Long): List<RedisQuest>
     fun getQuestGivers(gameId: Long): List<RedisQuestGiver>
     fun getQuestRewards(gameId: Long): List<RedisQuestReward>

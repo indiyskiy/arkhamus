@@ -1,11 +1,12 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.quest
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
+
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToClueResponses
+
 import com.arkhamusserver.arkhamus.view.dto.netty.response.convertToLevelZoneResponses
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class TakeQuestRewardNettyResponse(
     var questInfo: QuestInfoResponse?,
@@ -22,7 +23,7 @@ class TakeQuestRewardNettyResponse(
     crafters: List<CrafterState>,
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
-    clues: List<RedisClue>,
+    clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
 ) : NettyResponse(
     tick = tick,
@@ -39,6 +40,6 @@ class TakeQuestRewardNettyResponse(
     inZones = inZones.convertToLevelZoneResponses(),
     doors = doors,
     lanterns = lanterns,
-    clues = clues.convertToClueResponses(),
+    clues = clues,
     type = TakeQuestRewardNettyResponse::class.java.simpleName,
 )

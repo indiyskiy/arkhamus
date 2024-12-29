@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 abstract class NettyResponse(
     val tick: Long,
@@ -19,18 +19,12 @@ abstract class NettyResponse(
     var inZones: List<LevelZoneResponse>,
     var doors: List<DoorResponse>,
     var lanterns: List<LanternData>,
-    var clues: List<ClueResponse>,
+    var clues: ExtendedCluesResponse,
     val type: String
 )
 
 fun List<LevelZone>.convertToLevelZoneResponses(): List<LevelZoneResponse> {
     return this.map { levelZone ->
         LevelZoneResponse(levelZone)
-    }
-}
-
-fun List<RedisClue>.convertToClueResponses(): List<ClueResponse> {
-    return this.map { redisClue ->
-        ClueResponse(redisClue)
     }
 }

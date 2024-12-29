@@ -1,10 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.RelatedAbilityCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
@@ -20,11 +20,11 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -68,8 +68,8 @@ class AbilityNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
-                inZones,
-                user
+                user,
+                globalGameData.levelGeometryData
             )
             return ability?.let {
                 val relatedAbility =
@@ -127,7 +127,7 @@ class AbilityNettyRequestHandler(
         inZones: List<LevelZone>,
         ongoingEvents: List<OngoingEvent>,
         globalGameData: GlobalGameData,
-        clues: List<RedisClue>,
+        clues: ExtendedCluesResponse,
         target: WithStringId?,
         targetType: GameObjectType?,
     ) = AbilityRequestProcessData(
@@ -169,7 +169,7 @@ class AbilityNettyRequestHandler(
         ongoingEvents: List<OngoingEvent>,
         inZones: List<LevelZone>,
         globalGameData: GlobalGameData,
-        clues: List<RedisClue>,
+        clues: ExtendedCluesResponse
     ) = AbilityRequestProcessData(
         ability = null,
         canBeSeen = false,

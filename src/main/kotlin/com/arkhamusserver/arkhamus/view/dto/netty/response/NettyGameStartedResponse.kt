@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response
 
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class NettyGameStartedResponse(
     val message: String = "STARTED",
@@ -23,7 +24,7 @@ class NettyGameStartedResponse(
     crafters = emptyList(),
     inZones = emptyList(),
     doors = emptyList(),
-    clues = emptyList(),
+    clues = ExtendedCluesResponse(emptyList(), emptyList()),
     lanterns = emptyList(),
     type = NettyGameStartedResponse::class.java.simpleName
 )

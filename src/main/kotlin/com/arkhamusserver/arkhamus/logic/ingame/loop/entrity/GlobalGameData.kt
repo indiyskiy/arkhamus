@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.entrity
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.model.redis.*
-import com.arkhamusserver.arkhamus.model.redis.clues.RedisScentClue
 
 data class GlobalGameData(
     val game: RedisGame,
@@ -17,13 +16,11 @@ data class GlobalGameData(
     var altarPolling: RedisAltarPolling? = null,
     var altars: Map<Long, RedisAltar> = emptyMap(),
 
-    var clues: List<RedisClue> = emptyList(),
+    var clues: CluesContainer = CluesContainer(emptyList()),
 
     var containers: Map<Long, RedisContainer> = emptyMap(),
     var crafters: Map<Long, RedisCrafter> = emptyMap(),
     var lanterns: List<RedisLantern> = emptyList(),
-
-    var scentClues: List<RedisScentClue> = emptyList(),
 
     var craftProcess: List<RedisCraftProcess> = emptyList(),
     var levelGeometryData: LevelGeometryData = LevelGeometryData(),

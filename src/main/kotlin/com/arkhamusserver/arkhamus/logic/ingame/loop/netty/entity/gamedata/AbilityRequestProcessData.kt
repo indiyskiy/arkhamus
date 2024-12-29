@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisContainer
 import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -14,6 +13,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserRe
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class AbilityRequestProcessData(
     var ability: Ability?,
@@ -26,7 +26,7 @@ class AbilityRequestProcessData(
     var target: WithStringId?,
     var targetType: GameObjectType?,
     inZones: List<LevelZone>,
-    clues: List<RedisClue>,
+    clues: ExtendedCluesResponse,
     userQuestProgresses: List<UserQuestResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
     gameUser: RedisGameUser,

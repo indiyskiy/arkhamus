@@ -19,11 +19,10 @@ class GameObjectFinder {
             VOTE_SPOT -> data.voteSpots.firstOrNull { it.inGameId() == id.toLong() }
             CONTAINER -> data.containers[id.toLong()]
             CRAFTER -> data.crafters[id.toLong()]
-            CLUE -> data.clues.firstOrNull { it.id == id }
             ALTAR -> data.altars[id.toLong()]
             QUEST_GIVER -> data.questGivers.firstOrNull { it.inGameId() == id.toLong() }
             LANTERN -> data.lanterns.firstOrNull { it.inGameId() == id.toLong() }
-            SCENT_CLUE -> data.scentClues.firstOrNull { it.inGameId() == id.toLong() }
+            SCENT_CLUE -> data.clues.scent.firstOrNull { it.inGameId() == id.toLong() }
         }
     }
 
@@ -54,11 +53,10 @@ class GameObjectFinder {
         VOTE_SPOT -> data.voteSpots
         CONTAINER -> data.containers.values
         CRAFTER -> data.crafters.values
-        CLUE -> data.clues
         ALTAR -> data.altars.values
         QUEST_GIVER -> data.questGivers
         LANTERN -> data.lanterns
-        SCENT_CLUE -> data.scentClues
+        SCENT_CLUE -> data.clues.scent
     }
 
     data class TypedGameObject(

@@ -183,6 +183,7 @@ enum class Ability(
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
+
     //INVESTIGATION 2.0
     ADVANCED_SEARCH_FOR_SCENT(
         id = 60003,
@@ -224,14 +225,14 @@ enum class Ability(
         range = MEDIUM_RANGE
     ),
 
-    //advanced cultist items spell 10***
+    //advanced cultist items spell 11***
     CLEAN_UP_CLUE(
         id = 11004,
         requiresItem = true,
         consumesItem = true,
         availableForRole = setOf(CULTIST),
         cooldown = SECOND_IN_MILLIS * 10,
-        targetTypes = listOf(CLUE),
+        targetTypes = listOf(SCENT_CLUE),
         range = CLOSE_RANGE
     ),
     DARK_TEMPTATION(

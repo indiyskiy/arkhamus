@@ -1,10 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.redis.RedisClue
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
 import org.springframework.stereotype.Component
@@ -22,7 +22,12 @@ class CleanUpClueAbilityCast(
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
     ): Boolean {
-        cleanUpClue(abilityRequestProcessData)
+        val target = abilityRequestProcessData.target
+        if (target == null) return false
+        cleanUpClue(
+            globalGameData.clues,
+            target
+        )
         return true
     }
 
@@ -32,21 +37,19 @@ class CleanUpClueAbilityCast(
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
-        cleanUpClue(target)
+        if (target == null) return false
+        cleanUpClue(globalGameData.clues, target)
         return true
     }
 
     private fun cleanUpClue(
-        abilityData: AbilityRequestProcessData,
+        clues: CluesContainer,
+        target: WithStringId
     ) {
-        val target = abilityData.target
-        cleanUpClue(target)
-    }
-
-    private fun cleanUpClue(target: Any?) {
-        if (target != null) {
-            clueHandler.removeClue(target as RedisClue)
-        }
+        clueHandler.removeClue(
+            clues,
+            target
+        )
     }
 
 }

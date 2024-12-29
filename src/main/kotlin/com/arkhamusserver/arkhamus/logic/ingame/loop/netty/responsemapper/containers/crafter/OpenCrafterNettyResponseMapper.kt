@@ -13,11 +13,15 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.redis.*
+import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
+import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.crafter.OpenCrafterNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -110,7 +114,7 @@ class OpenCrafterNettyResponseMapper(
         containerHoldingUserId: Long?,
         containers: List<RedisContainer>,
         crafters: List<RedisCrafter>,
-        clues: List<RedisClue>,
+        clues: ExtendedCluesResponse,
         userQuestProgresses: List<UserQuestResponse>,
         inZones: List<LevelZone>,
         levelGeometryData: LevelGeometryData,

@@ -1,9 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.banvote
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserVoteHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CrafterProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ZonesHandler
@@ -52,8 +52,8 @@ class VoteSpotOpenNettyRequestHandler(
 
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
-                inZones,
-                user
+                user,
+                globalGameData.levelGeometryData
             )
 
             val voteSpot = globalGameData.voteSpots.firstOrNull { it.voteSpotId == voteSpotId }
@@ -73,7 +73,7 @@ class VoteSpotOpenNettyRequestHandler(
             val canCallForVote = voteHandler.getCanCallForVote(voteSpot, ongoingEvents, user)
             val mustPay = voteSpot?.voteSpotState == VoteSpotState.WAITING_FOR_PAYMENT
             val canPay = mustPay &&
-                    voteSpot!=null &&
+                    voteSpot != null &&
                     inventoryHandler.userHaveItems(user, voteSpot.costItem, voteSpot.costValue)
 
             return VoteSpotOpenRequestProcessData(

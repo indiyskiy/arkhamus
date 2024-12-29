@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.model.enums.AuthState
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class NettyResponseAuth(
     val message: AuthState = AuthState.FAIL,
@@ -26,7 +27,7 @@ class NettyResponseAuth(
     crafters = emptyList(),
     inZones = emptyList(),
     doors = emptyList(),
-    clues = emptyList(),
+    clues = ExtendedCluesResponse(emptyList(), emptyList()),
     lanterns = emptyList(),
     type = NettyResponseAuth::class.java.simpleName
 )
