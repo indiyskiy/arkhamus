@@ -31,7 +31,7 @@ interface AdvancedClueHandler {
     ): List<ExtendedClueResponse>
 
     fun accept(clues: List<Clue>): Boolean
-    fun accept(clues: Clue): Boolean
+    fun accept(clue: Clue): Boolean
     fun accept(target: WithStringId): Boolean
     fun canBeAdded(container: CluesContainer): Boolean
     fun addClue(data: GlobalGameData)

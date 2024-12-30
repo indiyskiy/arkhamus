@@ -189,7 +189,6 @@ enum class Ability(
         id = 60003,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 0.5).toLong(),
-        active = DEFAULT_INVESTIGATION_ACTIVE,
         targetTypes = listOf(SCENT_CLUE),
         range = CLOSE_RANGE
     ),
@@ -219,7 +218,6 @@ enum class Ability(
         id = 10004,
         requiresItem = true,
         consumesItem = false,
-        active = MINUTE_IN_MILLIS,
         cooldown = MINUTE_IN_MILLIS,
         targetTypes = listOf(CHARACTER, CONTAINER, CRAFTER, QUEST_GIVER),
         range = MEDIUM_RANGE

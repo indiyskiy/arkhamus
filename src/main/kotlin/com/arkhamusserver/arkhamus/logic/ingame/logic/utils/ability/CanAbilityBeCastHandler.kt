@@ -84,7 +84,6 @@ class CanAbilityBeCastHandler(
         target: Any?,
         globalGameData: GlobalGameData
     ) = additionalAbilityConditions.filter { it.accepts(ability) }.let { conditions ->
-
         conditions.isEmpty() || conditions.all {
             it.canBeCastedRightNow(
                 ability,

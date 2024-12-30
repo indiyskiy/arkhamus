@@ -54,8 +54,8 @@ class ScentClueHandler(
         return clue == Clue.SCENT
     }
 
-    override fun accept(withStringId: WithStringId): Boolean {
-        return withStringId is RedisScentClue
+    override fun accept(target: WithStringId): Boolean {
+        return target is RedisScentClue
     }
 
     override fun canBeAdded(container: CluesContainer): Boolean {
@@ -135,7 +135,6 @@ class ScentClueHandler(
                 interactionRadius = it.interactionRadius,
                 visibilityModifiers = setOf(
                     VisibilityModifier.HAVE_ITEM_SCENT,
-                    VisibilityModifier.CULTIST,
                 ),
                 scent = false
             )
@@ -145,8 +144,8 @@ class ScentClueHandler(
             turnedOn.forEach {
                 it.scent = true
             }
-            redisScentClueRepository.saveAll(redisScentClues)
         }
+        redisScentClueRepository.saveAll(redisScentClues)
     }
 
     override fun mapActualClues(
@@ -178,9 +177,11 @@ class ScentClueHandler(
         container: CluesContainer,
         user: RedisGameUser
     ): List<ExtendedClueResponse> {
-        return container.scent.filter {
+        val scentOptions = container.scent
+        val filteredByVisibilityTags = scentOptions.filter {
             visibilityByTagsHandler.userCanSeeTarget(user, it)
-        }.map {
+        }
+        return filteredByVisibilityTags.map {
             ExtendedClueResponse(
                 id = it.id,
                 clue = Clue.SCENT,

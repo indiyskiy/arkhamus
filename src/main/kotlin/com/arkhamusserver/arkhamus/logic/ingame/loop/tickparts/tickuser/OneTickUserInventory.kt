@@ -29,16 +29,6 @@ class OneTickUserInventory(
         }
     }
 
-    private fun processNoItem(
-        user: RedisGameUser,
-        item: Item,
-    ) {
-        when (item) {
-            INNOVATE_SCENT_INVESTIGATION_ITEM -> noInnovateScentInvestigationItem(user)
-            else -> {}
-        }
-    }
-
     private fun processItem(
         user: RedisGameUser,
         item: Item,
@@ -53,9 +43,17 @@ class OneTickUserInventory(
                 timePassedMillis,
                 gameTime
             )
-
             INNOVATE_SCENT_INVESTIGATION_ITEM -> processInnovateScentInvestigationItem(user)
+            else -> {}
+        }
+    }
 
+    private fun processNoItem(
+        user: RedisGameUser,
+        item: Item,
+    ) {
+        when (item) {
+            INNOVATE_SCENT_INVESTIGATION_ITEM -> noInnovateScentInvestigationItem(user)
             else -> {}
         }
     }

@@ -1708,7 +1708,7 @@
         "id": 1213,
         "interactionRadius": 3.5,
         "name": "Secret Conversation",
-        "x": 101,
+        "x": 110,
         "y": 2,
         "z": 29
       },
@@ -1848,7 +1848,7 @@
         "id": 1304,
         "interactionRadius": 3.5,
         "name": "Mysterious Lady",
-        "x": 101,
+        "x": 110,
         "y": 2,
         "z": 29
       },
@@ -1947,7 +1947,7 @@
         "id": 1902,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 101,
+        "x": 110,
         "y": 2,
         "z": 29
       },
