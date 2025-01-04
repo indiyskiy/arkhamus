@@ -1,6 +1,6 @@
-package com.arkhamusserver.arkhamus.config.database.levelDesign
+package com.arkhamusserver.arkhamus.config.database.levelDesign.clues
 
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.ScentClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.ScentClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.ScentClue
 import com.arkhamusserver.arkhamus.view.levelDesign.ScentClueFromJson

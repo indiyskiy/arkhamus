@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
+import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignScentClueInfoProcessor
+import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignSoundClueInfoProcessor
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CREATE_TEST_QUESTS
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
@@ -33,6 +35,7 @@ class LevelDesignInfoProcessor(
     private val levelDesignThresholdInfoProcessor: LevelDesignThresholdInfoProcessor,
     private val levelDesignDoorInfoProcessor: LevelDesignDoorInfoProcessor,
     private val levelDesignScentClueInfoProcessor: LevelDesignScentClueInfoProcessor,
+    private val levelDesignSoundClueInfoProcessor: LevelDesignSoundClueInfoProcessor,
     private val randomQuestGenerator: RandomQuestGenerator,
 ) {
     companion object {
@@ -110,6 +113,7 @@ class LevelDesignInfoProcessor(
         levelDesignZonesInfoProcessor.processZones(
             clueZones = levelFromJson.clueZones,
             banZones = levelFromJson.banZones,
+            soundZones = levelFromJson.soundClueZones,
             level = savedLevel
         )
 
@@ -135,6 +139,11 @@ class LevelDesignInfoProcessor(
         )
         levelDesignDoorInfoProcessor.processDoors(levelFromJson.doors, savedLevel)
         levelDesignScentClueInfoProcessor.processClueInfos(levelFromJson.scentClues, savedLevel)
+        levelDesignSoundClueInfoProcessor.processSoundInfos(
+            levelFromJson.soundClues,
+            levelFromJson.soundClueJammers,
+            savedLevel
+        )
     }
 
     private fun findSameLevel(levelFromJson: LevelFromJson, levelsFromDb: List<Level>): Level? =

@@ -20,9 +20,15 @@ class LevelDesignZonesInfoProcessor(
     private val tetragonRepository: TetragonRepository,
     private val ellipseRepository: EllipseRepository,
 ) {
-    fun processZones(clueZones: List<ZoneFromJson>, banZones: List<ZoneFromJson>, level: Level) {
+    fun processZones(
+        clueZones: List<ZoneFromJson>,
+        banZones: List<ZoneFromJson>,
+        soundZones: List<ZoneFromJson>,
+        level: Level
+    ) {
         processClueZones(clueZones, level)
         processBanZones(banZones, level)
+        processSoundZones(soundZones, level)
     }
 
     private fun processClueZones(clueZones: List<ZoneFromJson>, savedLevel: Level) {
@@ -50,6 +56,20 @@ class LevelDesignZonesInfoProcessor(
             }
             processClueTetragons(clueZone.tetragons, banZone)
             processClueEllipses(clueZone.ellipses, banZone)
+        }
+    }
+
+    private fun processSoundZones(soundZones: List<ZoneFromJson>, savedLevel: Level) {
+        soundZones.forEach { soundZone ->
+            val banZone = LevelZone(
+                inGameId = soundZone.zoneId!!,
+                zoneType = ZoneType.SOUND,
+                level = savedLevel,
+            ).apply {
+                levelZoneRepository.save(this)
+            }
+            processClueTetragons(soundZone.tetragons, banZone)
+            processClueEllipses(soundZone.ellipses, banZone)
         }
     }
 

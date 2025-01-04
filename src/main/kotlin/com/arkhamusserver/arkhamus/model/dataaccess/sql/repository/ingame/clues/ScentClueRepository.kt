@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame
+package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues
 
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.ScentClue
 import org.springframework.data.repository.CrudRepository

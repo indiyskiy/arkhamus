@@ -14,10 +14,13 @@ data class LevelFromJson(
     var startMarkers: List<StartMarkerFromJson> = emptyList(),
     var crafters: List<CrafterFromJson> = emptyList(),
     var clueZones: List<ZoneFromJson> = emptyList(),
+    var soundClueZones: List<ZoneFromJson> = emptyList(),
     var banZones: List<ZoneFromJson> = emptyList(),
     var doors: List<DoorFromJson> = emptyList(),
     var ritualThresholds: List<ThresholdFromJson> = emptyList(),
     var banThresholds: List<ThresholdFromJson> = emptyList(),
     var votespots: List<VoteSpotFromJson> = emptyList(),
     var scentClues: List<ScentClueFromJson> = emptyList(),
+    var soundClues: List<JsonSoundClue>,
+    var soundClueJammers: List<JsonSoundClueJammer>,
 )
