@@ -5,6 +5,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.clues.RedisSoundClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.SoundClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -17,7 +19,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class AdvancedSearchForSoundAbilityCast(
-    private val timeEventHandler: TimeEventHandler
+    private val timeEventHandler: TimeEventHandler,
+    private val redisSoundClueRepository: RedisSoundClueRepository
 ) : AbilityCast {
 
     companion object {
@@ -61,7 +64,12 @@ class AdvancedSearchForSoundAbilityCast(
         data: GlobalGameData
     ) {
         with(target as RedisSoundClueJammer) {
+
             this.turnedOn = false
+            val soundClue = data.clues.sound.first { it.id == this.id }
+            soundClue.soundClueJammers.first { it.inGameId == this.inGameId }.turnedOn = false
+            redisSoundClueRepository.save(soundClue)
+
             timeEventHandler.createEvent(
                 game = data.game,
                 eventType = RedisTimeEventType.SOUND_CLUE_JAMMER_TURN_OFF,

@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.SoundClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
+import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
@@ -177,7 +178,12 @@ class SoundClueHandler(
         return container.sound.filter {
             it.turnedOn == true
         }.filter {
-            userLocationHandler.userCanSeeTarget(user, it, levelGeometryData, true)
+            zonesHandler.inSameZone(
+                user,
+                it,
+                levelGeometryData,
+                types = setOf(ZoneType.SOUND)
+            )
         }.filter {
             visibilityByTagsHandler.userCanSeeTarget(user, Clue.SOUND)
         }.map {
@@ -216,7 +222,14 @@ class SoundClueHandler(
                 z = null,
                 possibleRadius = 0.0,
                 additionalData = fillPossibleAdditionalData(it, user, levelGeometryData),
-                turnedOn = it.turnedOn && it.soundClueJammers.all { !it.turnedOn }
+                turnedOn = it.turnedOn &&
+                        it.soundClueJammers.all { !it.turnedOn } &&
+                        zonesHandler.inSameZone(
+                            user,
+                            it,
+                            levelGeometryData,
+                            types = setOf(ZoneType.SOUND)
+                        )
             )
         }
     }
@@ -229,7 +242,12 @@ class SoundClueHandler(
         return clue.soundClueJammers.filter {
             visibilityByTagsHandler.userCanSeeTarget(user, it)
         }.filter {
-            zonesHandler.inSameZone(user, it, data)
+            zonesHandler.inSameZone(
+                user,
+                it,
+                data,
+                types = setOf(ZoneType.SOUND)
+            )
         }.map {
             SoundClueJammerResponse(
                 id = it.inGameId(),
@@ -249,7 +267,12 @@ class SoundClueHandler(
         return clue.soundClueJammers.filter {
             visibilityByTagsHandler.userCanSeeTarget(user, it)
         }.filter {
-            zonesHandler.inSameZone(user, it, data)
+            zonesHandler.inSameZone(
+                user,
+                it,
+                data,
+                types = setOf(ZoneType.SOUND)
+            )
         }.map {
             SoundClueJammerResponse(
                 id = it.inGameId(),
