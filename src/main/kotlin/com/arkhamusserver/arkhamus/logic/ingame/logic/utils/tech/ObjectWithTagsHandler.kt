@@ -34,6 +34,7 @@ class ObjectWithTagsHandler(
 
                 InGameObjectTag.DARK_THOUGHTS -> {}
                 InGameObjectTag.SCENT -> {}
+                InGameObjectTag.SOUND -> {}
             }
         }
     }

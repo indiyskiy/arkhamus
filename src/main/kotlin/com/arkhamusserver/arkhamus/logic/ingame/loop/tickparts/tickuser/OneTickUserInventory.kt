@@ -3,8 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.tickuser
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.OneTickUser.Companion.POTATO_MADNESS_TICK_MILLIS
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.CURSED_POTATO
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.INNOVATE_SCENT_INVESTIGATION_ITEM
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
@@ -44,6 +43,7 @@ class OneTickUserInventory(
                 gameTime
             )
             INNOVATE_SCENT_INVESTIGATION_ITEM -> processInnovateScentInvestigationItem(user)
+            INNOVATE_SOUND_INVESTIGATION_ITEM -> processInnovateSoundInvestigationItem(user)
             else -> {}
         }
     }
@@ -54,6 +54,7 @@ class OneTickUserInventory(
     ) {
         when (item) {
             INNOVATE_SCENT_INVESTIGATION_ITEM -> noInnovateScentInvestigationItem(user)
+            INNOVATE_SOUND_INVESTIGATION_ITEM -> noInnovateSoundInvestigationItem(user)
             else -> {}
         }
     }
@@ -70,6 +71,20 @@ class OneTickUserInventory(
     ) {
         user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_SCENT
         user.stateTags -= UserStateTag.INVESTIGATING_SCENT
+    }
+
+    private fun processInnovateSoundInvestigationItem(
+        user: RedisGameUser,
+    ) {
+        user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_SOUND
+        user.stateTags += UserStateTag.INVESTIGATING_SOUND
+    }
+
+    private fun noInnovateSoundInvestigationItem(
+        user: RedisGameUser,
+    ) {
+        user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_SOUND
+        user.stateTags -= UserStateTag.INVESTIGATING_SOUND
     }
 
     private fun processCursedPotato(
