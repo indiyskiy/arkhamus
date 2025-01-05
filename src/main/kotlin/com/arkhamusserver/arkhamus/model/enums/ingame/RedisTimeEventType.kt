@@ -51,6 +51,11 @@ enum class RedisTimeEventType(
         Visibility.NONE,
         targetType = GameObjectType.CHARACTER
     ),
+    SOUND_CLUE_JAMMER_TURN_OFF(
+        MINUTE_IN_MILLIS * 3,
+        Visibility.SOURCE,
+        targetType = GameObjectType.SOUND_CLUE_JAMMER
+    ),
 
     //tech
     TELEPORTATION_STUN(

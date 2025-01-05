@@ -7,6 +7,8 @@ enum class GameObjectType {
     CRAFTER,
     QUEST_GIVER,
     SCENT_CLUE,
+    SOUND_CLUE,
+    SOUND_CLUE_JAMMER,
     ALTAR,
     LANTERN,
 }

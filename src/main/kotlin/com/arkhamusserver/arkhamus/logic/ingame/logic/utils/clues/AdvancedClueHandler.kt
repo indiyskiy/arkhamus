@@ -27,7 +27,8 @@ interface AdvancedClueHandler {
 
     fun mapPossibleClues(
         container: CluesContainer,
-        user: RedisGameUser
+        user: RedisGameUser,
+        levelGeometryData: LevelGeometryData,
     ): List<ExtendedClueResponse>
 
     fun accept(clues: List<Clue>): Boolean

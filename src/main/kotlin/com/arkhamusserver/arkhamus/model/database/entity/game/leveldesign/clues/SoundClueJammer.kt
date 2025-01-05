@@ -17,7 +17,7 @@ class SoundClueJammer(
     var x: Double,
     var y: Double,
     var z: Double,
-    var inGameId: Int,
+    var inGameId: Long,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
     var level: Level? = null

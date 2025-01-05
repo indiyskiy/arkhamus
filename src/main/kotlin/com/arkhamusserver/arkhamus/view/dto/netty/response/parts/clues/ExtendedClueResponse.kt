@@ -12,4 +12,6 @@ data class ExtendedClueResponse(
     val y: Double?,
     val z: Double?,
     val possibleRadius: Double?,
+    val turnedOn: Boolean = false,
+    val additionalData: Any? = null,
 )

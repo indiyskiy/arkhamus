@@ -41,7 +41,7 @@ class ScentClueHandler(
             return false
         }
         if (target is RedisScentClue) {
-            return target.scent
+            return target.turnedOn
         }
         return false
     }
@@ -59,20 +59,20 @@ class ScentClueHandler(
     }
 
     override fun canBeAdded(container: CluesContainer): Boolean {
-        return container.scent.any { !it.scent }
+        return container.scent.any { !it.turnedOn }
     }
 
     override fun addClue(
         data: GlobalGameData
     ) {
-        data.clues.scent.filter { !it.scent }.random(random).apply {
-            scent = true
+        data.clues.scent.filter { !it.turnedOn }.random(random).apply {
+            turnedOn = true
             redisScentClueRepository.save(this)
         }
     }
 
     override fun canBeRemoved(container: CluesContainer): Boolean {
-        return container.scent.any { it.scent }
+        return container.scent.any { it.turnedOn }
     }
 
     override fun canBeRemoved(
@@ -100,9 +100,9 @@ class ScentClueHandler(
     }
 
     override fun removeRandom(container: CluesContainer) {
-        val scentClue = container.scent.filter { it.scent }.randomOrNull()
+        val scentClue = container.scent.filter { it.turnedOn }.randomOrNull()
         scentClue?.let {
-            it.scent = false
+            it.turnedOn = false
             redisScentClueRepository.save(it)
         }
     }
@@ -112,7 +112,7 @@ class ScentClueHandler(
         container: CluesContainer
     ) {
         val scentClue = container.scent.find { it.inGameId() == target.stringId().toLong() } ?: return
-        scentClue.scent = false
+        scentClue.turnedOn = false
         redisScentClueRepository.save(scentClue)
     }
 
@@ -136,13 +136,13 @@ class ScentClueHandler(
                 visibilityModifiers = setOf(
                     VisibilityModifier.HAVE_ITEM_SCENT,
                 ),
-                scent = false
+                turnedOn = false
             )
         }
         if (god.getTypes().contains(Clue.SCENT)) {
             val turnedOn = redisScentClues.shuffled(random).take(activeCluesOnStart)
             turnedOn.forEach {
-                it.scent = true
+                it.turnedOn = true
             }
         }
         redisScentClueRepository.saveAll(redisScentClues)
@@ -154,7 +154,7 @@ class ScentClueHandler(
         levelGeometryData: LevelGeometryData,
     ): List<ExtendedClueResponse> {
         return container.scent.filter {
-            it.scent == true
+            it.turnedOn == true
         }.filter {
             userLocationHandler.userCanSeeTarget(user, it, levelGeometryData, true)
         }.filter {
@@ -168,14 +168,16 @@ class ScentClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                possibleRadius = 0.0
+                possibleRadius = 0.0,
+                turnedOn = true,
             )
         }
     }
 
     override fun mapPossibleClues(
         container: CluesContainer,
-        user: RedisGameUser
+        user: RedisGameUser,
+        levelGeometryData: LevelGeometryData,
     ): List<ExtendedClueResponse> {
         val scentOptions = container.scent
         val filteredByVisibilityTags = scentOptions.filter {
@@ -190,7 +192,8 @@ class ScentClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                possibleRadius = 0.0
+                possibleRadius = 0.0,
+                turnedOn = false
             )
         }
     }

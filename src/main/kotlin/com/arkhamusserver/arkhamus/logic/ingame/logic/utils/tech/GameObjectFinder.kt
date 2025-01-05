@@ -23,6 +23,9 @@ class GameObjectFinder {
             QUEST_GIVER -> data.questGivers.firstOrNull { it.inGameId() == id.toLong() }
             LANTERN -> data.lanterns.firstOrNull { it.inGameId() == id.toLong() }
             SCENT_CLUE -> data.clues.scent.firstOrNull { it.inGameId() == id.toLong() }
+            SOUND_CLUE -> data.clues.sound.firstOrNull { it.inGameId() == id.toLong() }
+            SOUND_CLUE_JAMMER -> data.clues.sound.map { it.soundClueJammers }.flatten()
+                .firstOrNull { it.inGameId() == id.toLong() }
         }
     }
 
@@ -57,6 +60,8 @@ class GameObjectFinder {
         QUEST_GIVER -> data.questGivers
         LANTERN -> data.lanterns
         SCENT_CLUE -> data.clues.scent
+        SOUND_CLUE -> data.clues.sound
+        SOUND_CLUE_JAMMER -> data.clues.sound.map { it.soundClueJammers }.flatten()
     }
 
     data class TypedGameObject(

@@ -12,6 +12,17 @@ class ZonesHandler(
     private val geometryUtils: GeometryUtils
 ) {
 
+    fun inSameZone(
+        withPoint1: WithPoint,
+        withPoint2: WithPoint,
+        levelGeometryData: LevelGeometryData,
+        types: Set<ZoneType> = emptySet()
+    ): Boolean {
+        return filterByPosition(withPoint1, levelGeometryData, types).intersect(
+            filterByPosition(withPoint2, levelGeometryData, types)
+        ).isNotEmpty()
+    }
+
     fun filterByPosition(
         withPoint: WithPoint,
         levelGeometryData: LevelGeometryData,

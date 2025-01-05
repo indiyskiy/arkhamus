@@ -16,7 +16,7 @@ data class GlobalGameData(
     var altarPolling: RedisAltarPolling? = null,
     var altars: Map<Long, RedisAltar> = emptyMap(),
 
-    var clues: CluesContainer = CluesContainer(emptyList()),
+    var clues: CluesContainer = CluesContainer(emptyList(), emptyList()),
 
     var containers: Map<Long, RedisContainer> = emptyMap(),
     var crafters: Map<Long, RedisCrafter> = emptyMap(),

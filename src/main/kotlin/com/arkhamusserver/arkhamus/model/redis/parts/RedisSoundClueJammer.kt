@@ -1,24 +1,23 @@
-package com.arkhamusserver.arkhamus.model.redis.clues
+package com.arkhamusserver.arkhamus.model.redis.parts
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
 
-data class RedisScentClue(
+data class RedisSoundClueJammer(
     override val id: String,
     override val gameId: Long,
-    val redisScentId: Long,
-    val x: Double,
-    val y: Double,
-    val z: Double,
-    val interactionRadius: Double,
-    val visibilityModifiers: Set<VisibilityModifier>,
-    var turnedOn: Boolean,
-) : RedisGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers, Interactable {
-
+    var x: Double,
+    var y: Double,
+    var z: Double,
+    var inGameId: Long,
+    var visibilityModifiers: Set<VisibilityModifier>,
+    var soundClueId: Long,
+    var zoneId: Long,
+    var turnedOn : Boolean
+) : RedisGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers {
     override fun x(): Double {
         return x
     }
@@ -32,14 +31,10 @@ data class RedisScentClue(
     }
 
     override fun inGameId(): Long {
-        return redisScentId
+        return inGameId
     }
 
     override fun visibilityModifiers(): Set<VisibilityModifier> {
         return visibilityModifiers
-    }
-
-    override fun interactionRadius(): Double {
-        return interactionRadius
     }
 }

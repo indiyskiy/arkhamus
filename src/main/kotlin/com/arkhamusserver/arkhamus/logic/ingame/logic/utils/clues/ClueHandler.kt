@@ -27,7 +27,7 @@ class ClueHandler(
         user: RedisGameUser,
         levelGeometryData: LevelGeometryData,
     ): ExtendedCluesResponse {
-        val possibleClues = mapPossibleClues(clues, user)
+        val possibleClues = mapPossibleClues(clues, user, levelGeometryData)
         val actualClues = mapActualClues(clues, user, levelGeometryData)
         return ExtendedCluesResponse(possibleClues, actualClues)
     }
@@ -44,10 +44,11 @@ class ClueHandler(
 
     private fun mapPossibleClues(
         container: CluesContainer,
-        user: RedisGameUser
+        user: RedisGameUser,
+        levelGeometryData: LevelGeometryData,
     ): List<ExtendedClueResponse> {
         return advancedClueHandlers.flatMap {
-            it.mapPossibleClues(container, user)
+            it.mapPossibleClues(container, user, levelGeometryData)
         }
     }
 
