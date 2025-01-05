@@ -42,7 +42,7 @@ class AdvancedSearchForSoundAbilityCondition(
             user,
             target,
             globalGameData.levelGeometryData,
-            ability.range ?: 0.0,
+            target.interactionRadius,
             true
         )
         if (!canSeeAndInRange) {

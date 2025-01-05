@@ -150,6 +150,7 @@ class SoundClueHandler(
                         visibilityModifiers = setOf(VisibilityModifier.HAVE_ITEM_SOUND),
                         soundClueId = it.inGameId,
                         zoneId = it.zone!!.inGameId,
+                        interactionRadius = jammer.interactionRadius,
                         turnedOn = false
                     )
                 }
@@ -240,23 +241,26 @@ class SoundClueHandler(
         data: LevelGeometryData
     ): List<SoundClueJammerResponse> {
         return clue.soundClueJammers.filter {
-            visibilityByTagsHandler.userCanSeeTarget(user, it)
-        }.filter {
-            zonesHandler.inSameZone(
-                user,
-                it,
-                data,
-                types = setOf(ZoneType.SOUND)
-            )
-        }.map {
-            SoundClueJammerResponse(
-                id = it.inGameId(),
-                x = it.x,
-                y = it.y,
-                z = it.z,
-                turnedOn = it.turnedOn
-            )
+            it.turnedOn
         }
+            .filter {
+                visibilityByTagsHandler.userCanSeeTarget(user, it)
+            }.filter {
+                zonesHandler.inSameZone(
+                    user,
+                    it,
+                    data,
+                    types = setOf(ZoneType.SOUND)
+                )
+            }.map {
+                SoundClueJammerResponse(
+                    id = it.inGameId(),
+                    x = it.x,
+                    y = it.y,
+                    z = it.z,
+                    turnedOn = it.turnedOn
+                )
+            }
     }
 
     private fun fillActualAdditionalData(

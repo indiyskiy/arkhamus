@@ -14,6 +14,7 @@ data class RedisSoundClueJammer(
     var z: Double,
     var inGameId: Long,
     var visibilityModifiers: Set<VisibilityModifier>,
+    var interactionRadius: Double,
     var soundClueId: Long,
     var zoneId: Long,
     var turnedOn : Boolean
