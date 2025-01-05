@@ -14,7 +14,6 @@ enum class Clue(
     ),
     SOUND(
         setOf(
-            VisibilityModifier.SOUND,
             VisibilityModifier.CULTIST
         )
     ),
