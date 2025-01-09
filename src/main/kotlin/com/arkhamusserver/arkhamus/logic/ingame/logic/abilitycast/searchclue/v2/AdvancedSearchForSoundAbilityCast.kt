@@ -63,11 +63,19 @@ class AdvancedSearchForSoundAbilityCast(
         data: GlobalGameData
     ) {
         with(target as RedisSoundClueJammer) {
-
             this.turnedOn = false
-            val soundClue = data.clues.sound.first { it.id == this.id }
-            soundClue.soundClueJammers.first { it.inGameId == this.inGameId }.turnedOn = false
-            redisSoundClueRepository.save(soundClue)
+            val soundClue = data.clues.sound.firstOrNull {
+                it.soundClueJammers.any {
+                    it.inGameId() == this.inGameId()
+                }
+            }
+            soundClue?.let { soundClueNotNull ->
+                soundClueNotNull.soundClueJammers.first {
+                    it.inGameId() == this.inGameId()
+                }.turnedOn = false
+                redisSoundClueRepository.save(soundClueNotNull)
+            }
+
 
             timeEventHandler.createEvent(
                 game = data.game,

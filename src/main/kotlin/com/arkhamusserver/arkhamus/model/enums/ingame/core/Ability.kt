@@ -237,7 +237,7 @@ enum class Ability(
         consumesItem = true,
         availableForRole = setOf(CULTIST),
         cooldown = SECOND_IN_MILLIS * 10,
-        targetTypes = listOf(SCENT_CLUE),
+        targetTypes = listOf(SCENT_CLUE, SOUND_CLUE),
         range = CLOSE_RANGE
     ),
     DARK_TEMPTATION(
