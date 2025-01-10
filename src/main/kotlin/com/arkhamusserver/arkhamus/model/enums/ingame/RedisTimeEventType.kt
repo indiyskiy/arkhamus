@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.GAM
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.MINUTE_IN_MILLIS
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.NIGHT_LENGTH_MINUTES
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SECOND_IN_MILLIS
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.TEST_MODE
 
 enum class RedisTimeEventType(
     private val defaultTime: Long,
@@ -18,7 +19,14 @@ enum class RedisTimeEventType(
     GOD_AWAKEN(GAME_LENGTH * MINUTE_IN_MILLIS, Visibility.PUBLIC), //5 day-night cycles
     DAY(DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS, Visibility.PUBLIC),
     NIGHT(NIGHT_LENGTH_MINUTES * MINUTE_IN_MILLIS, Visibility.PUBLIC),
-    SUMMONING_SICKNESS(NIGHT_LENGTH_MINUTES * MINUTE_IN_MILLIS, Visibility.PUBLIC),
+    SUMMONING_SICKNESS(
+        if (TEST_MODE) {
+            NIGHT_LENGTH_MINUTES * MINUTE_IN_MILLIS / 8
+        } else {
+            NIGHT_LENGTH_MINUTES * MINUTE_IN_MILLIS
+        },
+        Visibility.PUBLIC
+    ),
 
     //altar
     ALTAR_VOTING(DAY_LENGTH_MINUTES * MINUTE_IN_MILLIS / 4, Visibility.PUBLIC),

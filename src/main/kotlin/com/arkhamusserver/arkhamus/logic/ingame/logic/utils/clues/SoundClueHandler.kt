@@ -241,9 +241,6 @@ class SoundClueHandler(
         data: LevelGeometryData
     ): List<SoundClueJammerResponse> {
         return clue.soundClueJammers.filter {
-            it.turnedOn
-        }
-            .filter {
                 visibilityByTagsHandler.userCanSeeTarget(user, it)
             }.filter {
                 zonesHandler.inSameZone(

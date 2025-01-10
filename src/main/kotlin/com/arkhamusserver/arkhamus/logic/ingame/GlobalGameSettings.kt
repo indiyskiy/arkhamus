@@ -4,6 +4,7 @@ class GlobalGameSettings {
 
     companion object {
         //TEST
+        const val TEST_MODE = true
         const val CREATE_TEST_QUESTS = true
 
         //TIMINGS
