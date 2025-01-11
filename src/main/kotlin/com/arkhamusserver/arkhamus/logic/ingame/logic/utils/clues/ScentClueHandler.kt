@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
@@ -169,7 +170,7 @@ class ScentClueHandler(
                 y = null,
                 z = null,
                 possibleRadius = 0.0,
-                turnedOn = true,
+                state = InnovateClueState.ACTIVE_CLUE,
             )
         }
     }
@@ -193,7 +194,7 @@ class ScentClueHandler(
                 y = null,
                 z = null,
                 possibleRadius = 0.0,
-                turnedOn = false
+                state = InnovateClueState.ACTIVE_UNKNOWN,
             )
         }
     }

@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
 
 data class ExtendedClueResponse(
     val id: String,
@@ -12,6 +13,6 @@ data class ExtendedClueResponse(
     val y: Double?,
     val z: Double?,
     val possibleRadius: Double?,
-    val turnedOn: Boolean = false,
+    var state: InnovateClueState,
     val additionalData: Any? = null,
 )

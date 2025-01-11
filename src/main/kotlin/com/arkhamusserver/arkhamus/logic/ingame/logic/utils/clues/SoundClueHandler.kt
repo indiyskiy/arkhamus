@@ -16,6 +16,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
@@ -198,7 +199,7 @@ class SoundClueHandler(
                 z = null,
                 possibleRadius = 0.0,
                 additionalData = fillActualAdditionalData(it, user, levelGeometryData),
-                turnedOn = true
+                state = InnovateClueState.ACTIVE_CLUE
             )
         }
     }
@@ -223,16 +224,28 @@ class SoundClueHandler(
                 z = null,
                 possibleRadius = 0.0,
                 additionalData = fillPossibleAdditionalData(it, user, levelGeometryData),
-                turnedOn = it.turnedOn &&
-                        it.soundClueJammers.all { !it.turnedOn } &&
-                        zonesHandler.inSameZone(
-                            user,
-                            it,
-                            levelGeometryData,
-                            types = setOf(ZoneType.SOUND)
-                        )
+                state = countState(it, user, levelGeometryData),
             )
         }
+    }
+
+    private fun countState(
+        clue: RedisSoundClue,
+        user: RedisGameUser,
+        levelGeometryData: LevelGeometryData
+    ): InnovateClueState {
+        val turnedOn = clue.turnedOn
+        val jammersTurnedOff = clue.soundClueJammers.all { !it.turnedOn }
+        val inSameZone = zonesHandler.inSameZone(
+            user,
+            clue,
+            levelGeometryData,
+            types = setOf(ZoneType.SOUND)
+        )
+        if (!jammersTurnedOff || !inSameZone) {
+            return InnovateClueState.ACTIVE_UNKNOWN
+        }
+        return if (turnedOn) InnovateClueState.ACTIVE_CLUE else InnovateClueState.ACTIVE_NO_CLUE
     }
 
     private fun fillPossibleAdditionalData(
@@ -241,23 +254,23 @@ class SoundClueHandler(
         data: LevelGeometryData
     ): List<SoundClueJammerResponse> {
         return clue.soundClueJammers.filter {
-                visibilityByTagsHandler.userCanSeeTarget(user, it)
-            }.filter {
-                zonesHandler.inSameZone(
-                    user,
-                    it,
-                    data,
-                    types = setOf(ZoneType.SOUND)
-                )
-            }.map {
-                SoundClueJammerResponse(
-                    id = it.inGameId(),
-                    x = it.x,
-                    y = it.y,
-                    z = it.z,
-                    turnedOn = it.turnedOn
-                )
-            }
+            visibilityByTagsHandler.userCanSeeTarget(user, it)
+        }.filter {
+            zonesHandler.inSameZone(
+                user,
+                it,
+                data,
+                types = setOf(ZoneType.SOUND)
+            )
+        }.map {
+            SoundClueJammerResponse(
+                id = it.inGameId(),
+                x = it.x,
+                y = it.y,
+                z = it.z,
+                turnedOn = it.turnedOn
+            )
+        }
     }
 
     private fun fillActualAdditionalData(
