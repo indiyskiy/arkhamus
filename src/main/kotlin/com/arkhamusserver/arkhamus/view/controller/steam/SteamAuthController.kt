@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.view.controller.steam
 
 import com.arkhamusserver.arkhamus.logic.steam.SteamAuthLogic
 import com.arkhamusserver.arkhamus.logic.steam.SteamStartServerLogic
+import com.arkhamusserver.arkhamus.view.dto.steam.SteamAuthRequestDto
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamServerIdDto
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
 import org.slf4j.LoggerFactory
@@ -34,11 +35,13 @@ class SteamAuthController(
     // Authenticate a client by SteamID and auth ticket
     @PostMapping("/authenticate-client")
     fun authenticateClient(
-        @RequestParam clientSteamID: String,
-        @RequestBody authTicket: ByteArray
+        @RequestBody steamAuthRequestDto: SteamAuthRequestDto
     ): AuthenticationResponse {
-        logger.info("Received request to authenticate client with SteamID: {}", clientSteamID)
-        return steamAuthLogic.authenticateClient(clientSteamID, authTicket)
+        logger.info("Received request to authenticate client with SteamID: {}", steamAuthRequestDto.clientSteamID)
+        return steamAuthLogic.authenticateClient(
+            steamAuthRequestDto.clientSteamID,
+            steamAuthRequestDto.authTicket
+        )
     }
 
     // Handle client disconnection

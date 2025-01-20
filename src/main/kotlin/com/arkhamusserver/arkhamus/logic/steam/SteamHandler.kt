@@ -1,13 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.steam
 
-import com.arkhamusserver.arkhamus.view.dto.steam.PlayerData
-import com.arkhamusserver.arkhamus.view.dto.steam.SteamResponseBody
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamServerIdDto
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamUserResponse
 import com.codedisaster.steamworks.SteamAuth
 import com.codedisaster.steamworks.SteamGameServer
 import com.codedisaster.steamworks.SteamGameServerAPI
 import com.codedisaster.steamworks.SteamID
+import com.google.gson.Gson
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
@@ -179,7 +178,10 @@ class SteamHandler(
     }
 
     // Authenticate a client using the provided authentication ticket
-    fun authenticateClientTicket(clientSteamID: String, authTicket: ByteArray): Boolean {
+    fun authenticateClientTicket(
+        clientSteamID: String,
+        authTicket: ByteArray
+    ): Boolean {
         if (!isLoggedOn) {
             logger.error("Cannot authenticate client. Game server is not logged on!")
             return false
@@ -188,8 +190,8 @@ class SteamHandler(
         try {
             // Parse the client's SteamID
             val steamID =
-                SteamID.createFromNativeHandle(clientSteamID.toLong()) // If there's a better method, replace this.
-            val authTicketBuffer = ByteBuffer.wrap(authTicket) // Auth ticket needs to be passed as a ByteBuffer
+                SteamID.createFromNativeHandle(clientSteamID.toLong())
+            val authTicketBuffer = createDirectBuffer(authTicket) // Auth ticket needs to be passed as a ByteBuffer
 
             // Begin authentication session
             val result = steamServer.beginAuthSession(authTicketBuffer, steamID)
@@ -210,6 +212,14 @@ class SteamHandler(
             return false
         }
     }
+
+    fun createDirectBuffer(authTicket: ByteArray): ByteBuffer {
+        val directBuffer = ByteBuffer.allocateDirect(authTicket.size)
+        directBuffer.put(authTicket)
+        directBuffer.flip()
+        return directBuffer
+    }
+
 
     // End the authentication session for a specific client
     fun endClientAuthSession(clientSteamID: String) {
@@ -245,7 +255,6 @@ class SteamHandler(
             val steamUserResponse = parseSteamResponse(response)
             logger.info("Received valid response from Steam API for SteamID: {}", steamId)
             return steamUserResponse
-
         } catch (e: Exception) {
             logger.error("Error during Steam API call: {}", e.message)
             return null
@@ -267,22 +276,8 @@ class SteamHandler(
 
     private fun parseSteamResponse(response: String): SteamUserResponse? {
         logger.info("parse Steam response: $response")
-        return SteamUserResponse(
-            SteamResponseBody(
-                listOf(
-                    PlayerData(
-                        steamId = "test",
-                        personaName = "test",
-                        avatar = "test",
-                        avatarMedium = "test",
-                        avatarFull = "test",
-                        profileUrl = "test",
-                        lastLogOff = 0L,
-                        timeCreated = 0L
-                    )
-                )
-            )
-        )
+        val gson = Gson()
+        return gson.fromJson(response, SteamUserResponse::class.java)
     }
 
     private fun String.toDecimalValue(): Long = this.toULong(16).toLong()

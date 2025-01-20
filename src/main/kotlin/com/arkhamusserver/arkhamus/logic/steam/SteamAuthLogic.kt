@@ -15,10 +15,16 @@ class SteamAuthLogic(
     }
 
     // Authenticate a connecting client
-    fun authenticateClient(clientSteamID: String, authTicket: ByteArray): AuthenticationResponse {
+    fun authenticateClient(
+        clientSteamID: String,
+        authTicket: String
+    ): AuthenticationResponse {
         try {
             // Authenticate the client using the SteamHandler
-            val isAuthenticated = steamHandler.authenticateClientTicket(clientSteamID, authTicket)
+            val isAuthenticated = steamHandler.authenticateClientTicket(
+                clientSteamID,
+                authTicket.parseToByteArray()
+            )
             if (isAuthenticated) {
                 logger.info("Client authenticated successfully. SteamID: {}", clientSteamID)
                 return steamAuthService.authenticateSteam(clientSteamID)
@@ -54,4 +60,9 @@ class SteamAuthLogic(
         }
     }
 
+    private fun String.parseToByteArray(): ByteArray {
+        val numbers = this.removeSurrounding("[", "]").split(",").map { it.trim().toInt() }
+        return numbers.map { it.toByte() }.toByteArray()
+
+    }
 }

@@ -48,8 +48,8 @@ class SteamAuthService(
                 val newUser = createNewUser(steamId)
                 return authenticationService.authUser(
                     ArkhamusUserDetails(
-                        newUser.email ?: "",
-                        newUser.password ?: "",
+                        newUser.email!!,
+                        newUser.password!!,
                         newUser.role,
                         newUser
                     )
@@ -79,10 +79,10 @@ class SteamAuthService(
 
         return UserAccount(
             id = null,
-            steamId = player.steamId,
+            steamId = player.steamid,
             creationTimestamp = null,
-            nickName = player.personaName ?: "Unknown",
-            email = player.personaName, // You might need a separate property for email if Steam API provides one
+            nickName = player.personaname,
+            email = player.personaname,
             password = encoder.encode(generateRandomPassword()),
             role = setOf(roleRepository.findByName("ROLE_${RoleName.USER.name}").orElseThrow {
                 IllegalStateException("Default user role not found in the database.")

@@ -9,12 +9,19 @@ data class SteamResponseBody(
 )
 
 data class PlayerData(
-    val steamId: String,
-    val personaName: String?,
-    val avatar: String?,
-    val avatarMedium: String?,
-    val avatarFull: String?,
-    val profileUrl: String?,
-    val lastLogOff: Long?,
-    val timeCreated: Long?
+    val steamid: String,
+    val communityvisibilitystate: Int,
+    val profilestate: Int,
+    val personaname: String,
+    val profileurl: String,
+    val avatar: String,
+    val avatarmedium: String,
+    val avatarfull: String,
+    val avatarhash: String,
+    val lastlogoff: Long,
+    val personastate: Int,
+    val primaryclanid: String,
+    val timecreated: Long,
+    val personastateflags: Int,
+    val loccountrycode: String?
 )
