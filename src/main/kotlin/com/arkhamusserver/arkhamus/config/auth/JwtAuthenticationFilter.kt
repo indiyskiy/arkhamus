@@ -1,103 +1,36 @@
 package com.arkhamusserver.arkhamus.config.auth
 
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.CustomUserDetailsService
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.TokenService
-import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
-import io.jsonwebtoken.ExpiredJwtException
+import com.arkhamusserver.arkhamus.config.auth.logic.AdminAuthLogic
+import com.arkhamusserver.arkhamus.config.auth.logic.BearerAuthLogic
 import jakarta.servlet.FilterChain
-import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthenticationFilter(
-    private val userDetailsService: CustomUserDetailsService,
-    private val tokenService: TokenService,
-    private val userAccountRepository: UserAccountRepository
+    private val bearerAuthLogic: BearerAuthLogic,
+    private val adminAuthLogic: AdminAuthLogic,
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain
     ) {
         try {
-            val cookies: Array<Cookie>? = request.cookies
-            val tokenCookie = cookies?.firstOrNull { cookie -> cookie.name.equals("token") }
+            val tokenCookie = adminAuthLogic.getAdminAuthData(request)
             if (tokenCookie != null) {
                 val jwtToken: String? = tokenCookie.value
                 if (!jwtToken.isNullOrEmpty()) {
-                    try {
-                        processToken(jwtToken, request, filterChain, response)
-                    } catch (e: ExpiredJwtException) {
-                        response.addCookie(
-                            Cookie("token", null).apply {
-                                maxAge = 0
-                                isHttpOnly = true
-                                path = "/"
-                            }
-                        )
-                    }
+                    adminAuthLogic.processAdminAuth(jwtToken, request, filterChain, response)
                 } else {
-                    tryBearer(request, filterChain, response)
+                    bearerAuthLogic.tryBearer(request, filterChain, response)
                 }
             } else {
-                tryBearer(request, filterChain, response)
+                bearerAuthLogic.tryBearer(request, filterChain, response)
             }
         } catch (e: Exception) {
             logger.error(e)
             throw e
         }
-    }
-
-    private fun tryBearer(
-        request: HttpServletRequest, filterChain: FilterChain, response: HttpServletResponse
-    ) {
-        val authHeader: String? = request.getHeader("Authorization")
-        if (authHeader.doesNotContainBearerToken()) {
-            filterChain.doFilter(request, response)
-        } else {
-            val jwtToken = authHeader!!.extractTokenValue()
-            processToken(jwtToken, request, filterChain, response)
-        }
-    }
-
-    private fun processToken(
-        jwtToken: String,
-        request: HttpServletRequest,
-        filterChain: FilterChain,
-        response: HttpServletResponse
-    ) {
-        val email = tokenService.extractEmail(jwtToken)
-        if (email != null && SecurityContextHolder.getContext().authentication == null) {
-            val player = userAccountRepository.findByEmail(email)
-            val foundUser = userDetailsService.mapToUserDetails(player)
-            if (tokenService.isValid(jwtToken, foundUser)) updateContext(player.get(), foundUser, request)
-            filterChain.doFilter(request, response)
-        }
-    }
-
-    private fun String?.doesNotContainBearerToken() = this == null || !this.startsWith("Bearer ")
-
-    private fun String.extractTokenValue() = this.substringAfter("Bearer ")
-
-    private fun updateContext(
-        player: UserAccount,
-        foundUser: UserDetails,
-        request: HttpServletRequest
-    ) {
-        val authToken = UsernamePasswordAuthenticationToken(
-            foundUser,
-            null,
-            foundUser.authorities
-        )
-        authToken.details = ArkhamusWebAuthenticationDetails(
-            userAccount = player,
-            context = request
-        )
-        SecurityContextHolder.getContext().authentication = authToken
     }
 }

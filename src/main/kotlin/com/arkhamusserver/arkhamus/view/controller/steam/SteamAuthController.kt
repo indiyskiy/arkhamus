@@ -1,33 +1,57 @@
 package com.arkhamusserver.arkhamus.view.controller.steam
 
-import com.arkhamusserver.arkhamus.logic.steam.SteamLogic
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
-import org.springframework.http.HttpStatus
+import com.arkhamusserver.arkhamus.logic.steam.SteamAuthLogic
+import com.arkhamusserver.arkhamus.logic.steam.SteamStartServerLogic
+import com.arkhamusserver.arkhamus.view.dto.steam.SteamServerIdDto
+import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
+import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/steam/auth")
+@RequestMapping("/public/steam")
 class SteamAuthController(
-    private val steamLogic: SteamLogic
+    private val steamAuthLogic: SteamAuthLogic,
+    private val steamStartServerLogic: SteamStartServerLogic,
 ) {
+    companion object {
+        private val logger = LoggerFactory.getLogger(SteamAuthController::class.java)
+    }
 
-    @PostMapping("verifySteamTicket")
-    fun verifySteamTicket(
-        @RequestBody authTicket: ByteArray
-    ): ResponseEntity<String> {
-        val responseFromSteam = steamLogic.authFromClient(authTicket)
-        return if (responseFromSteam.statusCode == HttpStatus.OK) {
-            ResponseEntity.ok("Steam ID: ${responseFromSteam.body}")
-        } else {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid auth ticket")
+    // Retrieve the Steam game server's SteamID
+    @GetMapping("/server-steamid")
+    fun getServerSteamID(): SteamServerIdDto {
+        try {
+            logger.info("Received request to get server SteamID.")
+            val serverSteamID = steamStartServerLogic.getServerSteamID()
+            return serverSteamID ?: throw Exception("Failed to retrieve Server SteamID.")
+        } catch (e: Exception) {
+            logger.error("Failed to retrieve Server SteamID: {}", e.message)
+            throw e
         }
     }
 
-    @GetMapping("redirect")
-    fun redirectToSteamLogin(request: HttpServletRequest, response: HttpServletResponse) {
-        val requestUrl = steamLogic.buildSteamAuthUrl()
-        response.sendRedirect(requestUrl)
+    // Authenticate a client by SteamID and auth ticket
+    @PostMapping("/authenticate-client")
+    fun authenticateClient(
+        @RequestParam clientSteamID: String,
+        @RequestBody authTicket: ByteArray
+    ): AuthenticationResponse {
+        logger.info("Received request to authenticate client with SteamID: {}", clientSteamID)
+        return steamAuthLogic.authenticateClient(clientSteamID, authTicket)
     }
+
+    // Handle client disconnection
+    @PostMapping("/disconnect-client")
+    fun handleClientDisconnect(@RequestParam clientSteamID: String): ResponseEntity<String> {
+        return try {
+            logger.info("Received request to disconnect client with SteamID: {}", clientSteamID)
+            steamAuthLogic.handleClientDisconnect(clientSteamID)
+            ResponseEntity.ok("Client disconnected and session ended. SteamID: $clientSteamID")
+        } catch (e: Exception) {
+            logger.error("Error while disconnecting client. SteamID: {}, Error: {}", clientSteamID, e.message)
+            ResponseEntity.internalServerError().body("Error disconnecting client: ${e.message}")
+        }
+    }
+
 }

@@ -53,6 +53,9 @@ dependencies {
     implementation("org.openid4java:openid4java:1.0.0")
     implementation("org.apache.httpcomponents:fluent-hc:4.5.14")
     implementation("net.sourceforge.nekohtml:nekohtml:1.9.22")
+    implementation("com.code-disaster.steamworks4j:steamworks4j:1.9.0")
+    implementation("com.code-disaster.steamworks4j:steamworks4j-server:1.9.0")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -86,4 +89,9 @@ tasks.withType<Test> {
 tasks.bootBuildImage {
     builder.set("paketobuildpacks/builder-jammy-base:latest")
 }
+
+tasks.withType<JavaExec> {
+    jvmArgs = listOf("-Djava.library.path=/home/steam/steamworks_sdk/sdk/redistributable_bin")
+}
+
 
