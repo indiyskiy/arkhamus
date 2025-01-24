@@ -46,7 +46,11 @@ class AuthenticationService(
         return AuthenticationResponse(
             accessToken = accessToken,
             refreshToken = refreshToken,
-            UserDto(user.userAccount.id!!, user.userAccount.nickName)
+            UserDto(
+                user.userAccount.id!!,
+                user.userAccount.steamId,
+                user.userAccount.nickName
+            )
         )
     }
 

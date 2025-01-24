@@ -9,6 +9,10 @@ class UserLogic(
 ) {
     fun whoAmI(): UserDto {
         val currentUser = currentUserService.getCurrentUserAccount()
-        return UserDto(currentUser.id!!, currentUser.nickName)
+        return UserDto(
+            currentUser.id!!,
+            currentUser.steamId,
+            currentUser.nickName
+        )
     }
 }
