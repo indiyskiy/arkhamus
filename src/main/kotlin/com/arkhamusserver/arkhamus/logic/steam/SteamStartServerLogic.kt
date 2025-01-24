@@ -23,7 +23,7 @@ class SteamStartServerLogic(
     // Initialize the Steam game server
     fun startServer() {
         try {
-            // Initialize the SteamHandler and start the server
+            steamHandler.initSteamBaseFunctions()
             steamHandler.initSteamServer()
         } catch (e: Exception) {
             logger.error("Failed to start Steam server: {}", e.message)

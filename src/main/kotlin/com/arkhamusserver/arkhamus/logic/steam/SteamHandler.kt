@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.steam
 
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamServerIdDto
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamUserResponse
+import com.codedisaster.steamworks.SteamAPI
 import com.codedisaster.steamworks.SteamAuth
 import com.codedisaster.steamworks.SteamGameServer
 import com.codedisaster.steamworks.SteamGameServerAPI
@@ -21,7 +22,10 @@ class SteamHandler(
     companion object {
         private val logger = LoggerFactory.getLogger(SteamHandler::class.java)
         private val baseUrl = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/"
-        private val apiKey = "CCCF25C2E631257F00C93AAED8D7037D" // Replace with your Steam API key
+        val STEAM_API_KEY = "CCCF25C2E631257F00C93AAED8D7037D" // Replace with your Steam API key
+        val STEAM_GAME_ID = 3348260
+        private val GAME_PORT: Short = 27015 // Game port for player connections
+        private val QUERY_PORT: Short = 27016 // Query port for Steam server list communication
     }
 
     private lateinit var steamServer: SteamGameServer
@@ -30,24 +34,28 @@ class SteamHandler(
     private var isLoggedOn: Boolean = false
     private var isServerRunning: Boolean = true
 
+    fun initSteamBaseFunctions(){
+        if (!SteamAPI.init()) {
+            logger.error("Failed to initialize Steam API")
+            return
+        }
+
+    }
 
     // Initialize the Steam Game Server
     fun initSteamServer() {
         logger.info("Initializing Steam Game Server...")
         SteamGameServerAPI.loadLibraries()
-        val gamePort: Short = 27015 // Game port for player connections
-        val queryPort: Short = 27016 // Query port for Steam server list communication
 
         checkSteamAppIdFile()
-        isPortAvailable(gamePort)
-        isPortAvailable(queryPort)
+        isPortAvailable(GAME_PORT)
+        isPortAvailable(QUERY_PORT)
 
         // Initialize the Steam Game Server
         val isInitialized = SteamGameServerAPI.init(
-//            ip,
             0,
-            gamePort,
-            queryPort,
+            GAME_PORT,
+            QUERY_PORT,
             SteamGameServerAPI.ServerMode.Authentication,
             "1.0.0"
         )
@@ -117,7 +125,7 @@ class SteamHandler(
     fun isPortAvailable(port: Short): Boolean {
         return try {
             // Attempt to bind to the port
-            ServerSocket(port.toInt()).use { socket ->
+            ServerSocket(port.toInt()).use { _ ->
                 logger.info("Port {} is available.", port)
                 true
             }
@@ -265,7 +273,7 @@ class SteamHandler(
         return webClient.build()
             .get()
             .uri(baseUrl) {
-                it.queryParam("key", apiKey)
+                it.queryParam("key", STEAM_API_KEY)
                     .queryParam("steamids", steamId)
                     .build()
             }
