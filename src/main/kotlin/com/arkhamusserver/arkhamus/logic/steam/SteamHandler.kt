@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.steam
 
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamServerIdDto
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamUserResponse
-import com.codedisaster.steamworks.SteamAPI
 import com.codedisaster.steamworks.SteamAuth
 import com.codedisaster.steamworks.SteamGameServer
 import com.codedisaster.steamworks.SteamGameServerAPI
@@ -33,14 +32,6 @@ class SteamHandler(
     private var serverSteamID: SteamID? = null
     private var isLoggedOn: Boolean = false
     private var isServerRunning: Boolean = true
-
-    fun initSteamBaseFunctions(){
-        if (!SteamAPI.init()) {
-            logger.error("Failed to initialize Steam API")
-            return
-        }
-
-    }
 
     // Initialize the Steam Game Server
     fun initSteamServer() {
