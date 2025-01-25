@@ -29,32 +29,24 @@ class SteamAuthService(
     @Transactional
     fun authenticateSteam(steamId: String): AuthenticationResponse {
         logger.info("Authenticating Steam user with SteamID: {}", steamId)
-
         try {
             val userBySteamId = userAccountRepository.findBySteamId(steamId)
-            if (userBySteamId.isPresent) {
+            val user = if (userBySteamId.isPresent) {
                 val existingUser = userBySteamId.get()
                 logger.info("User found for SteamID {}: {}", steamId, existingUser)
-                return authenticationService.authUser(
-                    ArkhamusUserDetails(
-                        existingUser.email ?: "",
-                        existingUser.password ?: "",
-                        existingUser.role,
-                        existingUser
-                    )
-                )
+                existingUser
             } else {
                 logger.info("No user found for SteamID: {}, creating a new user.", steamId)
-                val newUser = createNewUser(steamId)
-                return authenticationService.authUser(
-                    ArkhamusUserDetails(
-                        newUser.email!!,
-                        newUser.password!!,
-                        newUser.role,
-                        newUser
-                    )
-                )
+                createNewUser(steamId)
             }
+            return authenticationService.authUser(
+                ArkhamusUserDetails(
+                    user.email ?: "",
+                    user.password ?: "",
+                    user.role,
+                    user
+                )
+            )
         } catch (e: Exception) {
             logger.error("Error during Steam authentication for SteamID: {}: {}", steamId, e.message)
             throw RuntimeException("Steam authentication failed for SteamID: $steamId", e)

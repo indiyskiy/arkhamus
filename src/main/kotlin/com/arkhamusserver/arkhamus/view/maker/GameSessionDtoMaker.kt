@@ -116,6 +116,7 @@ class GameSessionDtoMaker(
         .map { convertingUser ->
             InGameUserDto().apply {
                 this.userId = convertingUser.userAccount.id
+                this.steamId = convertingUser.userAccount.steamId
                 this.nickName = convertingUser.userAccount.nickName
                 this.isHost = convertingUser.host
                 this.role = buildRoleDto(gameSession, isCultist, convertingUser, myUserId)
@@ -174,6 +175,7 @@ class GameSessionDtoMaker(
     ) = gameSession.usersOfGameSession.map {
         InGameUserDto().apply {
             this.userId = it.userAccount.id
+            this.steamId = it.userAccount.steamId
             this.nickName = it.userAccount.nickName
             this.isHost = it.host
             this.role = RoleDto().apply {
