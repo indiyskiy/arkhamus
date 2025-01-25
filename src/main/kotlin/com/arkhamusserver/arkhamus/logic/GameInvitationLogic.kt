@@ -14,6 +14,7 @@ import com.arkhamusserver.arkhamus.view.dto.GameInvitationDto
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.maker.GameInvitationDtoMaker
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
 
 @Component
@@ -31,6 +32,7 @@ class GameInvitationLogic(
         const val RELATED_ENTITY = "GameInvitation"
     }
 
+    @Transactional
     fun myInvitations(): List<GameInvitationDto> {
         val currentUser = currentUserService.getCurrentUserAccount()
         val invitations =
@@ -41,6 +43,7 @@ class GameInvitationLogic(
         return invitations.map { gameInvitationDtoMaker.convert(it) }
     }
 
+    @Transactional
     fun gameInvitations(gameId: Long): List<GameInvitationDto> {
         val currentUser = currentUserService.getCurrentUserAccount()
         val game = gameSessionRepository.findById(gameId).orElseThrow()
@@ -57,6 +60,7 @@ class GameInvitationLogic(
         }
     }
 
+    @Transactional
     fun createInvitation(gameId: Long, targetUserId: Long): GameInvitationDto {
         val currentUser = currentUserService.getCurrentUserAccount()
         val game = gameSessionRepository.findById(gameId).orElseThrow {
@@ -74,6 +78,7 @@ class GameInvitationLogic(
         return gameInvitationDtoMaker.convert(invitation)
     }
 
+    @Transactional
     fun acceptInvitation(invitationId: Long): GameSessionDto {
         val currentUser = currentUserService.getCurrentUserAccount()
         val invitation = gameInvitationRepository.findById(invitationId).orElseThrow {
@@ -96,6 +101,7 @@ class GameInvitationLogic(
         return gamesSession
     }
 
+    @Transactional
     fun rejectInvitation(invitationId: Long): GameInvitationDto {
         val currentUser = currentUserService.getCurrentUserAccount()
         val invitation = gameInvitationRepository.findById(invitationId).orElseThrow {
