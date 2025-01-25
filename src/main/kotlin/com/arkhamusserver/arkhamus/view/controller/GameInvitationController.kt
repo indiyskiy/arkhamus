@@ -48,7 +48,7 @@ class GameInvitationController(
 
     @UpdateUserState(UserState.ONLINE)
     @PostMapping("{invitationId}/reject")
-    fun declineInvitation(
+    fun rejectInvitation(
         @PathVariable invitationId: Long,
     ): ResponseEntity<GameInvitationDto> {
         val invitation = gameInvitationLogic.rejectInvitation(invitationId)

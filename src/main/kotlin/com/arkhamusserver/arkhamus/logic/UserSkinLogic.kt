@@ -104,12 +104,13 @@ class UserSkinLogic(
     }
 
     fun fixColors(session: GameSession, account: UserAccount) {
-        val oldColors = session.usersOfGameSession.map { user ->
+        val oldSkins = session.usersOfGameSession.map { user ->
             repository.findByUserAccountId(user.userAccount.id!!)
-                .getOrDefault(skin(user.userAccount).save()).skinColor
-        }.toSet()
+                .getOrDefault(skin(user.userAccount).save())
+        }
+        val oldColors = oldSkins.map { it.skinColor }.toSet()
         logger.info("old colors = ${oldColors.joinToString(", ")}")
-        val accountSkin = repository.findByUserAccountId(account.id!!).getOrDefault(skin(account).save())
+        val accountSkin = oldSkins.firstOrNull { it.userAccount?.id == account.id } ?: skin(account).save()
         val accountColor = accountSkin.skinColor
         logger.info("current user color = $accountColor")
         if (accountColor in oldColors) {
