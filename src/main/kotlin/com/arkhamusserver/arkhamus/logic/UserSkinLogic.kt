@@ -27,7 +27,7 @@ class UserSkinLogic(
     fun userSkin(): UserSkinDto {
         val player = currentUserService.getCurrentUserAccount()
         return repository.findByUserAccountId(player.id!!)
-            .getOrDefault(skin(player))
+            .getOrDefault(skin(player).save())
             .toDto()
     }
 
@@ -71,7 +71,7 @@ class UserSkinLogic(
                 if (currentUserSkin != null && currentUserSkin.userAccount?.id == it.id) {
                     currentUserSkin
                 } else {
-                    repository.findByUserAccountId(it.id!!).getOrDefault(skin(it))
+                    repository.findByUserAccountId(it.id!!).getOrDefault(skin(it).save())
                 }
             }
             .associateBy { it.userAccount!!.id!! }
@@ -106,10 +106,10 @@ class UserSkinLogic(
     fun fixColors(session: GameSession, account: UserAccount) {
         val oldColors = session.usersOfGameSession.map { user ->
             repository.findByUserAccountId(user.userAccount.id!!)
-                .getOrDefault(skin(user.userAccount)).skinColor
+                .getOrDefault(skin(user.userAccount).save()).skinColor
         }.toSet()
         logger.info("old colors = ${oldColors.joinToString(", ")}")
-        val accountSkin = repository.findByUserAccountId(account.id!!).getOrDefault(skin(account))
+        val accountSkin = repository.findByUserAccountId(account.id!!).getOrDefault(skin(account).save())
         val accountColor = accountSkin.skinColor
         logger.info("current user color = $accountColor")
         if (accountColor in oldColors) {
