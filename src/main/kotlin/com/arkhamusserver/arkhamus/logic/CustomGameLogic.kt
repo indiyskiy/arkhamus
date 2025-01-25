@@ -73,8 +73,13 @@ class CustomGameLogic(
 
     @Transactional
     fun connectToGame(gameId: Long): GameSessionDto {
-        val player = currentUserService.getCurrentUserAccount()
         val game = gameLogic.findGameNullSafe(gameId)
+        return connectToGame(game)
+    }
+
+    @Transactional
+    fun connectToGame(game: GameSession): GameSessionDto {
+        val player = currentUserService.getCurrentUserAccount()
         return connect(game, player)
     }
 

@@ -8,24 +8,27 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameInvitation
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.InvitationState.PENDING
+import com.arkhamusserver.arkhamus.model.enums.InvitationState.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.view.dto.GameInvitationDto
+import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import com.arkhamusserver.arkhamus.view.maker.GameInvitationDtoMaker
 import org.springframework.stereotype.Component
+import java.sql.Timestamp
 
 @Component
 class GameInvitationLogic(
-    private val gameSessionRepository: GameSessionRepository,
     private val gameInvitationRepository: GameInvitationRepository,
-    private val gameInvitationDtoMaker: GameInvitationDtoMaker,
-    private val currentUserService: CurrentUserService,
+    private val gameSessionRepository: GameSessionRepository,
     private val userAccountRepository: UserAccountRepository,
+    private val currentUserService: CurrentUserService,
+    private val customGameLogic: CustomGameLogic,
+    private val gameInvitationDtoMaker: GameInvitationDtoMaker,
 ) {
 
     companion object {
         const val MAX_PENDING_INVITATIONS = 16 * 2
-        const val RELATED_ENTITY = "Game"
+        const val RELATED_ENTITY = "GameInvitation"
     }
 
     fun myInvitations(): List<GameInvitationDto> {
@@ -54,17 +57,6 @@ class GameInvitationLogic(
         }
     }
 
-    private fun createNewInvitation(
-        session: GameSession,
-        source: UserAccount,
-        target: UserAccount
-    ): GameInvitation = GameInvitation().apply {
-        this.gameSession = session
-        this.sourceUserAccount = source
-        this.targetUserAccount = target
-        this.state = PENDING
-    }.let { gameInvitationRepository.save(it) }
-
     fun createInvitation(gameId: Long, targetUserId: Long): GameInvitationDto {
         val currentUser = currentUserService.getCurrentUserAccount()
         val game = gameSessionRepository.findById(gameId).orElseThrow {
@@ -82,12 +74,55 @@ class GameInvitationLogic(
         return gameInvitationDtoMaker.convert(invitation)
     }
 
+    fun acceptInvitation(invitationId: Long): GameSessionDto {
+        val currentUser = currentUserService.getCurrentUserAccount()
+        val invitation = gameInvitationRepository.findById(invitationId).orElseThrow {
+            ArkhamusServerRequestException("Invitation not found", RELATED_ENTITY)
+        }
+        if(currentUser.id != invitation.targetUserAccount?.id) {
+            throw ArkhamusServerRequestException(
+                "can't accept other user invitation", RELATED_ENTITY
+            )
+        }
+        if(invitation.state != PENDING) {
+            throw ArkhamusServerRequestException(
+                "invitation is not pending", RELATED_ENTITY
+            )
+        }
+        val gamesSession = customGameLogic.connectToGame(invitation.gameSession!!)
+        invitation.state = ACCEPTED
+        invitation.finishedTimestamp = Timestamp(System.currentTimeMillis())
+        gameInvitationRepository.save(invitation)
+        return gamesSession
+    }
+
+    fun rejectInvitation(invitationId: Long): GameInvitationDto {
+        val currentUser = currentUserService.getCurrentUserAccount()
+        val invitation = gameInvitationRepository.findById(invitationId).orElseThrow {
+            ArkhamusServerRequestException("Invitation not found", RELATED_ENTITY)
+        }
+        if(currentUser.id != invitation.targetUserAccount?.id) {
+            throw ArkhamusServerRequestException(
+                "can't reject other user invitation", RELATED_ENTITY
+            )
+        }
+        if(invitation.state != PENDING) {
+            throw ArkhamusServerRequestException(
+                "invitation is not pending", RELATED_ENTITY
+            )
+        }
+        invitation.state = REJECTED
+        invitation.finishedTimestamp = Timestamp(System.currentTimeMillis())
+        gameInvitationRepository.save(invitation)
+        return gameInvitationDtoMaker.convert(invitation)
+    }
+
     private fun validate(
         game: GameSession,
         sourceUserInvitations: List<GameInvitation>,
         currentUser: UserAccount
     ) {
-        if (game.state !in setOf(GameState.PENDING, GameState.NEW)) {
+        if (game.state !in setOf(GameState.NEW)) {
             throw ArkhamusServerRequestException(
                 "Wrong game state", RELATED_ENTITY
             )
@@ -108,4 +143,16 @@ class GameInvitationLogic(
             )
         }
     }
+
+    private fun createNewInvitation(
+        session: GameSession,
+        source: UserAccount,
+        target: UserAccount
+    ): GameInvitation = GameInvitation().apply {
+        this.gameSession = session
+        this.sourceUserAccount = source
+        this.targetUserAccount = target
+        this.state = PENDING
+    }.let { gameInvitationRepository.save(it) }
+
 }

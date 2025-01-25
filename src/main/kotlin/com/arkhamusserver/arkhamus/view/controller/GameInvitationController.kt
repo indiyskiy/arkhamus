@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.config.UpdateUserState
 import com.arkhamusserver.arkhamus.config.UserState
 import com.arkhamusserver.arkhamus.logic.GameInvitationLogic
 import com.arkhamusserver.arkhamus.view.dto.GameInvitationDto
+import com.arkhamusserver.arkhamus.view.dto.GameSessionDto
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 class GameInvitationController(
     private val gameInvitationLogic: GameInvitationLogic,
 ) {
-    @UpdateUserState(UserState.IN_LOBBY)
+    @UpdateUserState(UserState.ONLINE)
     @GetMapping
     fun myInvitations(): ResponseEntity<List<GameInvitationDto>> {
         val invitations = gameInvitationLogic.myInvitations()
@@ -33,6 +34,24 @@ class GameInvitationController(
         @PathVariable userId: Long,
     ): ResponseEntity<GameInvitationDto> {
         val invitation = gameInvitationLogic.createInvitation(gameId, userId)
+        return ResponseEntity.ok(invitation)
+    }
+
+    @UpdateUserState(UserState.ONLINE)
+    @PostMapping("{invitationId}/accept")
+    fun acceptInvitation(
+        @PathVariable invitationId: Long,
+    ): ResponseEntity<GameSessionDto> {
+        val invitation = gameInvitationLogic.acceptInvitation(invitationId)
+        return ResponseEntity.ok(invitation)
+    }
+
+    @UpdateUserState(UserState.ONLINE)
+    @PostMapping("{invitationId}/reject")
+    fun declineInvitation(
+        @PathVariable invitationId: Long,
+    ): ResponseEntity<GameInvitationDto> {
+        val invitation = gameInvitationLogic.rejectInvitation(invitationId)
         return ResponseEntity.ok(invitation)
     }
 
