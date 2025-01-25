@@ -62,17 +62,14 @@ class UserSkinLogic(
 
     fun allSkinsOf(
         gameSession: GameSession,
-        currentUserSkin: UserSkinSettings? = null,
     ): Map<Long, UserSkinSettings> {
         return gameSession
             .usersOfGameSession
             .map { it.userAccount }
-            .map {
-                if (currentUserSkin != null && currentUserSkin.userAccount?.id == it.id) {
-                    currentUserSkin
-                } else {
-                    repository.findByUserAccountId(it.id!!).getOrDefault(skin(it).save())
-                }
+            .map { user ->
+                repository
+                    .findByUserAccountId(user.id!!)
+                    .getOrDefault(skin(user).save())
             }
             .associateBy { it.userAccount!!.id!! }
     }

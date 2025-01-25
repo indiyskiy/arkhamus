@@ -38,8 +38,10 @@ class SingleGameLogic(
         ).toDto(player)
     }
 
-    fun GameSession.toDto(currentPlayer: UserAccount): GameSessionDto =
-        gameSessionDtoMaker.toDto(this, userSkinLogic.allSkinsOf(this), currentPlayer)
+    fun GameSession.toDto(currentPlayer: UserAccount): GameSessionDto {
+        val skins = userSkinLogic.allSkinsOf(this)
+        return gameSessionDtoMaker.toDto(this, skins, currentPlayer)
+    }
 
 }
 

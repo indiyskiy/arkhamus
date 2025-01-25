@@ -3,15 +3,19 @@ package com.arkhamusserver.arkhamus.logic.auth
 import com.arkhamusserver.arkhamus.logic.steam.SteamReaderLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.RoleRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserSkinRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.ArkhamusUserDetails
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
 import com.arkhamusserver.arkhamus.model.enums.RoleName
+import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamUserResponse
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
 import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.random.Random
 
 @Service
 class SteamAuthService(
@@ -19,11 +23,13 @@ class SteamAuthService(
     private val userAccountRepository: UserAccountRepository,
     private val roleRepository: RoleRepository,
     private val encoder: PasswordEncoder,
-    private val steamReaderLogic: SteamReaderLogic
+    private val steamReaderLogic: SteamReaderLogic,
+    private val userSkinRepository: UserSkinRepository,
 ) {
 
     companion object {
         private val logger = LoggerFactory.getLogger(SteamAuthService::class.java)
+        private val random = Random(System.currentTimeMillis())
     }
 
     @Transactional
@@ -58,6 +64,9 @@ class SteamAuthService(
 
         val steamUserData = steamReaderLogic.readSteamUserData(steamId)
         val userAccount = buildUser(steamUserData)
+        userSkinRepository.save(
+            generateSkin(userAccount)
+        )
 
         logger.info("Saving new user to the database: {}", userAccount)
         return userAccountRepository.save(userAccount)
@@ -80,6 +89,17 @@ class SteamAuthService(
                 IllegalStateException("Default user role not found in the database.")
             })
         )
+    }
+
+    private fun generateSkin(userAccount: UserAccount): UserSkinSettings {
+        return UserSkinSettings(
+            skinColor = randomSkinColor(),
+            userAccount = userAccount
+        )
+    }
+
+    private fun randomSkinColor(): SkinColor {
+        return SkinColor.values().random(random)
     }
 
     private fun generateRandomPassword(): String {
