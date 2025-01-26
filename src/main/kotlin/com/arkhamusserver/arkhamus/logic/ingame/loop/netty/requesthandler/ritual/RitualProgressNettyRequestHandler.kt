@@ -55,7 +55,7 @@ class RitualProgressNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
             val visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents)
             val availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData)

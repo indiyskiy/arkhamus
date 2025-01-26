@@ -25,7 +25,7 @@ class CleanUpClueAbilityCast(
         val target = abilityRequestProcessData.target
         if (target == null) return false
         cleanUpClue(
-            globalGameData.clues,
+            globalGameData,
             target
         )
         return true
@@ -38,16 +38,16 @@ class CleanUpClueAbilityCast(
         globalGameData: GlobalGameData
     ): Boolean {
         if (target == null) return false
-        cleanUpClue(globalGameData.clues, target)
+        cleanUpClue(globalGameData, target)
         return true
     }
 
     private fun cleanUpClue(
-        clues: CluesContainer,
+        data: GlobalGameData,
         target: WithStringId
     ) {
         clueHandler.removeClue(
-            clues,
+            data,
             target
         )
     }

@@ -199,6 +199,13 @@ enum class Ability(
         targetTypes = listOf(SOUND_CLUE_JAMMER),
         range = CLOSE_RANGE
     ),
+    ADVANCED_SEARCH_FOR_OMEN(
+        id = 60005,
+        requiresItem = true,
+        cooldown = (MINUTE_IN_MILLIS * 0.25).toLong(),
+        targetTypes = listOf(CHARACTER),
+        range = CLOSE_RANGE
+    ),
 
     //ADVANCED_USEFUL_ITEM 9***
     KINDLE_CLOAK(

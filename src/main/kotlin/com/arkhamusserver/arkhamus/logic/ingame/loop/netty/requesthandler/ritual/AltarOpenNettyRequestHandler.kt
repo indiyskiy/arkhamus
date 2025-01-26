@@ -58,7 +58,7 @@ class AltarOpenNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
             return AltarOpenRequestProcessData(
                 altar = altar,

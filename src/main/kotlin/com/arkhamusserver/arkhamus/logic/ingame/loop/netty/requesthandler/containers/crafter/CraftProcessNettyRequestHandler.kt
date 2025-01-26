@@ -62,7 +62,7 @@ class CraftProcessNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
             val sortedUserInventory = request.newInventoryContent
 

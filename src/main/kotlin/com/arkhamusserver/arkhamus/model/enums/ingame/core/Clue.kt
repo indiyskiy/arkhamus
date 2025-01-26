@@ -36,7 +36,6 @@ enum class Clue(
     ),
     OMEN(
         setOf(
-            VisibilityModifier.OMEN,
             VisibilityModifier.CULTIST
         )
     ),

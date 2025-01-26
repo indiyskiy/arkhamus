@@ -69,7 +69,7 @@ class SoundClueHandler(
         }
     }
 
-    override fun canBeRemoved(container: CluesContainer): Boolean {
+    override fun canBeRemovedRabdomly(container: CluesContainer): Boolean {
         return container.sound.any { it.turnedOn }
     }
 
@@ -79,7 +79,7 @@ class SoundClueHandler(
         data: GlobalGameData
     ): Boolean {
         val sound = target as RedisSoundClue
-        return userLocationHandler.userCanSeeTargetInRange(
+        return sound.turnedOn && userLocationHandler.userCanSeeTargetInRange(
             whoLooks = user,
             target = sound,
             levelGeometryData = data.levelGeometryData,
@@ -109,9 +109,9 @@ class SoundClueHandler(
 
     override fun removeTarget(
         target: WithStringId,
-        container: CluesContainer
+        data: GlobalGameData
     ) {
-        val soundClue = container.sound.find { it.inGameId() == target.stringId().toLong() } ?: return
+        val soundClue = data.clues.sound.find { it.inGameId() == target.stringId().toLong() } ?: return
         soundClue.turnedOn = false
         redisSoundClueRepository.save(soundClue)
     }
@@ -175,7 +175,7 @@ class SoundClueHandler(
     override fun mapActualClues(
         container: CluesContainer,
         user: RedisGameUser,
-        levelGeometryData: LevelGeometryData,
+        data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return container.sound.filter {
             it.turnedOn == true
@@ -183,7 +183,7 @@ class SoundClueHandler(
             zonesHandler.inSameZone(
                 user,
                 it,
-                levelGeometryData,
+                data.levelGeometryData,
                 types = setOf(ZoneType.SOUND)
             )
         }.filter {
@@ -198,7 +198,7 @@ class SoundClueHandler(
                 y = null,
                 z = null,
                 possibleRadius = 0.0,
-                additionalData = fillActualAdditionalData(it, user, levelGeometryData),
+                additionalData = fillActualAdditionalData(it, user, data.levelGeometryData),
                 state = InnovateClueState.ACTIVE_CLUE
             )
         }
@@ -207,7 +207,7 @@ class SoundClueHandler(
     override fun mapPossibleClues(
         container: CluesContainer,
         user: RedisGameUser,
-        levelGeometryData: LevelGeometryData,
+        data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         val soundOptions = container.sound
         val filteredByVisibilityTags = soundOptions.filter {
@@ -223,8 +223,8 @@ class SoundClueHandler(
                 y = null,
                 z = null,
                 possibleRadius = 0.0,
-                additionalData = fillPossibleAdditionalData(it, user, levelGeometryData),
-                state = countState(it, user, levelGeometryData),
+                additionalData = fillPossibleAdditionalData(it, user, data.levelGeometryData),
+                state = countState(it, user, data.levelGeometryData),
             )
         }
     }

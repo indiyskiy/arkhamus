@@ -50,7 +50,7 @@ class HeartbeatNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
             return HeartbeatRequestGameData(
                 gameUser = user,

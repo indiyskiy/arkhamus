@@ -52,7 +52,7 @@ class LightLanternNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
 
             val lantern = globalGameData.lanterns.firstOrNull { it.inGameId() == this.lanternId }

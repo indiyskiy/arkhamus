@@ -51,7 +51,7 @@ class OpenContainerNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
             return OpenContainerRequestGameData(
                 container = container,

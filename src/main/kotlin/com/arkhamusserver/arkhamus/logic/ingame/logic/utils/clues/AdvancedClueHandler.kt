@@ -22,13 +22,13 @@ interface AdvancedClueHandler {
     fun mapActualClues(
         container: CluesContainer,
         user: RedisGameUser,
-        levelGeometryData: LevelGeometryData,
+        data: GlobalGameData,
     ): List<ExtendedClueResponse>
 
     fun mapPossibleClues(
         container: CluesContainer,
         user: RedisGameUser,
-        levelGeometryData: LevelGeometryData,
+        data: GlobalGameData,
     ): List<ExtendedClueResponse>
 
     fun accept(clues: List<Clue>): Boolean
@@ -36,12 +36,12 @@ interface AdvancedClueHandler {
     fun accept(target: WithStringId): Boolean
     fun canBeAdded(container: CluesContainer): Boolean
     fun addClue(data: GlobalGameData)
-    fun canBeRemoved(container: CluesContainer): Boolean
+    fun canBeRemovedRabdomly(container: CluesContainer): Boolean
     fun canBeRemoved(user: RedisGameUser, target: Any, data: GlobalGameData): Boolean
     fun anyCanBeRemoved(user: RedisGameUser, data: GlobalGameData): Boolean
     fun removeRandom(container: CluesContainer)
     fun removeTarget(
         target: WithStringId,
-        container: CluesContainer
+        data: GlobalGameData
     )
 }

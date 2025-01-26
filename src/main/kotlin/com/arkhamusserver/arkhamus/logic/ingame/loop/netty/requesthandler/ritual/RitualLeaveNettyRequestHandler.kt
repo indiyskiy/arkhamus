@@ -55,7 +55,7 @@ class RitualLeaveNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
             val event = ongoingEvents.firstOrNull {
                 it.event.type == RedisTimeEventType.RITUAL_GOING &&

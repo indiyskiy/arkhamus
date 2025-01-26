@@ -56,7 +56,7 @@ class TakeQuestRewardNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
 
             val questGiverId = this.questGiverId

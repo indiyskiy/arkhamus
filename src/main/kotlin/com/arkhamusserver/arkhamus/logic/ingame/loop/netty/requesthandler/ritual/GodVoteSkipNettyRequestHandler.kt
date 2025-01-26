@@ -55,7 +55,7 @@ class GodVoteSkipNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
             return GodVoteSkipRequestProcessData(
                 altar = altar,

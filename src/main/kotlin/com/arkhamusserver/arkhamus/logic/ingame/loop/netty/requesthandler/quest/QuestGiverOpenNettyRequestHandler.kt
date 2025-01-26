@@ -64,7 +64,7 @@ class QuestGiverOpenNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
 
             val userQuestProgresses = globalGameData.questProgressByUserId[userId]?.filter {

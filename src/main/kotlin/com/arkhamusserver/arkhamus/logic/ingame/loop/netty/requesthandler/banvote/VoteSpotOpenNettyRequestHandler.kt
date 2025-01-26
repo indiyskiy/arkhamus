@@ -53,7 +53,7 @@ class VoteSpotOpenNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
 
             val voteSpot = globalGameData.voteSpots.firstOrNull { it.voteSpotId == voteSpotId }

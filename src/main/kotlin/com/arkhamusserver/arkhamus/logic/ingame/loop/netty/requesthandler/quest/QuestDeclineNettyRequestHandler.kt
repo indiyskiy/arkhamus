@@ -60,7 +60,7 @@ class QuestDeclineNettyRequestHandler(
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,
-                globalGameData.levelGeometryData
+                globalGameData
             )
             val userQuestProgresses = globalGameData.questProgressByUserId[userId]
             val quest = globalGameData.quests.firstOrNull {

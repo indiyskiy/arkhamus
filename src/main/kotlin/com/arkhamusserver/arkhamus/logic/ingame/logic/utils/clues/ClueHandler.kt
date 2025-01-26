@@ -3,7 +3,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
@@ -25,30 +24,30 @@ class ClueHandler(
     fun filterClues(
         clues: CluesContainer,
         user: RedisGameUser,
-        levelGeometryData: LevelGeometryData,
+        data: GlobalGameData,
     ): ExtendedCluesResponse {
-        val possibleClues = mapPossibleClues(clues, user, levelGeometryData)
-        val actualClues = mapActualClues(clues, user, levelGeometryData)
+        val possibleClues = mapPossibleClues(clues, user, data)
+        val actualClues = mapActualClues(clues, user, data)
         return ExtendedCluesResponse(possibleClues, actualClues)
     }
 
     private fun mapActualClues(
         container: CluesContainer,
         user: RedisGameUser,
-        levelGeometryData: LevelGeometryData,
+        data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return advancedClueHandlers.flatMap {
-            it.mapActualClues(container, user, levelGeometryData)
+            it.mapActualClues(container, user, data)
         }
     }
 
     private fun mapPossibleClues(
         container: CluesContainer,
         user: RedisGameUser,
-        levelGeometryData: LevelGeometryData,
+        data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return advancedClueHandlers.flatMap {
-            it.mapPossibleClues(container, user, levelGeometryData)
+            it.mapPossibleClues(container, user, data)
         }
     }
 
@@ -83,20 +82,24 @@ class ClueHandler(
     fun removeRandomClue(data: GlobalGameData) {
         val existingClues = data.clues
         advancedClueHandlers.shuffled(random).firstOrNull {
-            it.canBeRemoved(existingClues)
+            it.canBeRemovedRabdomly(existingClues)
         }?.removeRandom(existingClues)
     }
 
     fun removeClue(
-        clues: CluesContainer,
+        data: GlobalGameData,
         target: WithStringId
     ) {
         advancedClueHandlers.firstOrNull {
             it.accept(target)
-        }?.removeTarget(target, clues)
+        }?.removeTarget(target, data)
     }
 
-    fun canBeRemoved(user: RedisGameUser, target: Any, data: GlobalGameData): Boolean {
+    fun canBeRemoved(
+        user: RedisGameUser,
+        target: Any,
+        data: GlobalGameData
+    ): Boolean {
         return advancedClueHandlers.any {
             it is WithStringId &&
                     it.accept(target as WithStringId) &&
