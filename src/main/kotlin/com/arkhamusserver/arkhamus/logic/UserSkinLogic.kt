@@ -72,7 +72,7 @@ class UserSkinLogic(
         }
         val oldColors = oldSkins.map { it.skinColor }.toSet()
         logger.info("old colors = ${oldColors.joinToString(", ")}")
-        val accountSkin = oldSkins.first { it.userAccount?.id == account.id }
+        val accountSkin = account.userSkinSettings!!
         val accountColor = accountSkin.skinColor
         logger.info("current user color = $accountColor")
         if (accountColor in oldColors) {
