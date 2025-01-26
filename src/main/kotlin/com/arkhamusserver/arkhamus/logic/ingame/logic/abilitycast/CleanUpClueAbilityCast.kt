@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
-import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability

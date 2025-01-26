@@ -2,8 +2,6 @@ package com.arkhamusserver.arkhamus.model.redis.clues
 
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
 

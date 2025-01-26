@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.CLEAN_UP_CLUE
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

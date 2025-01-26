@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame.core
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.values
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
 
 enum class Item(

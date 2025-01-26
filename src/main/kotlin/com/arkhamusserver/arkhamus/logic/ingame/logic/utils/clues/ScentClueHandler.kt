@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.VisibilityByTag
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.clues.RedisScentClueRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.ScentClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession

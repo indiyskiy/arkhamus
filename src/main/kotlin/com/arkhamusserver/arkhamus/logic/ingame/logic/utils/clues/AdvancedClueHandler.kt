@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
