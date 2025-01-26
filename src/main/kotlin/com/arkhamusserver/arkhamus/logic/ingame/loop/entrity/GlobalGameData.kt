@@ -39,6 +39,7 @@ data class GlobalGameData(
         zones: List<RedisLevelZone>,
         tetragons: List<RedisLevelZoneTetragon>,
         ellipses: List<RedisLevelZoneEllipse>,
+        redisVisibilityMap: RedisVisibilityMap
     ): LevelGeometryData {
         val tetragonsMap = tetragons.groupBy { it.levelZoneId }
         val ellipsesMap = ellipses.groupBy { it.levelZoneId }
@@ -52,6 +53,7 @@ data class GlobalGameData(
         }
         return LevelGeometryData().apply {
             this.zones = zonesMap
+            this.visibilityMap = redisVisibilityMap.visibilityMap
         }
     }
 
