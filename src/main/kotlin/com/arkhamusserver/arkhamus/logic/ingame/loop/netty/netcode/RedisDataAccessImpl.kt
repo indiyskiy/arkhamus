@@ -36,6 +36,7 @@ class RedisDataAccessImpl(
     private val redisUserQuestProgressRepository: RedisUserQuestProgressRepository,
     private val redisQuestRewardRepository: RedisQuestRewardRepository,
     private val redisScentClueRepository: RedisScentClueRepository,
+    private val redisVisibilityMapRepository: RedisVisibilityMapRepository,
     private val redisSoundClueRepository: RedisSoundClueRepository,
     private val redisOmenClueRepository: RedisOmenClueRepository
 ) : RedisDataAccess {
@@ -123,6 +124,10 @@ class RedisDataAccessImpl(
 
     override fun getEllipses(gameId: Long): List<RedisLevelZoneEllipse> {
         return redisLevelEllipseRepository.findByGameId(gameId)
+    }
+
+    override fun getRedisVisibilityMap(gameId: Long): RedisVisibilityMap? {
+        return redisVisibilityMapRepository.findByGameId(gameId).firstOrNull()
     }
 
 }

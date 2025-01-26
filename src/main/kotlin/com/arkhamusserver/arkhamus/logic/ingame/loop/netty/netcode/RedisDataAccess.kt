@@ -31,6 +31,7 @@ interface RedisDataAccess {
     fun getQuestGivers(gameId: Long): List<RedisQuestGiver>
     fun getQuestRewards(gameId: Long): List<RedisQuestReward>
     fun getUserQuestProrgesses(gameId: Long): List<RedisUserQuestProgress>
+    fun getRedisVisibilityMap(gameId: Long): RedisVisibilityMap?
 }
 
 @Transactional(readOnly = true)
@@ -66,6 +67,8 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
     val allQuestRewards = getQuestRewards(gameId)
     val allUsersQuestProgresses = getUserQuestProrgesses(gameId)
 
+    val visibilityMap = getRedisVisibilityMap(gameId)
+
     return GlobalGameData(
         game = game,
         altarHolder = altarHolder,
@@ -81,7 +84,8 @@ fun RedisDataAccess.loadGlobalGameData(game: RedisGame): GlobalGameData {
         this.craftProcess = craftProcess
         this.lanterns = allLanterns
         this.clues = allClues
-        this.levelGeometryData = buildGeometryData(zones, tetragons, ellipses)
+        // TODO get rid of these '!!'
+        this.levelGeometryData = buildGeometryData(zones, tetragons, ellipses, visibilityMap!!)
         this.quests = allQuests
         this.questGivers = allQuestGivers
         this.questRewardsByQuestProgressId = allQuestRewards.groupBy { it.questProgressId }
