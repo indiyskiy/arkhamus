@@ -18,6 +18,8 @@ data class UserAccount(
     var password: String? = null,
     @ManyToMany(cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
     var role: Set<Role> = emptySet(),
+    @OneToOne(mappedBy = "userAccount", cascade = [CascadeType.PERSIST, CascadeType.MERGE], orphanRemoval = true)
+    var userSkinSettings: UserSkinSettings? = null
 ) {
     constructor() : this(
         id = null,
@@ -26,12 +28,17 @@ data class UserAccount(
         nickName = "",
         email = null,
         password = null,
-        role = emptySet()
+        role = emptySet(),
+        userSkinSettings = null
     )
 
     override fun toString(): String {
         return String.format(
-            "UserAccount[id=%d, nickName='%s', email='%s']", id, nickName, email
+            "UserAccount[id=%d, nickName='%s', email='%s', roles='%s']",
+            id,
+            nickName,
+            email,
+            role.joinToString { it.id.toString() + "-" + it.name }
         )
     }
 

@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.auth.SteamAuthService
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class SteamAuthLogic(
@@ -14,6 +15,7 @@ class SteamAuthLogic(
         private val logger = LoggerFactory.getLogger(SteamAuthLogic::class.java)
     }
 
+   @Transactional
     // Authenticate a connecting client
     fun authenticateClient(
         clientSteamID: String,

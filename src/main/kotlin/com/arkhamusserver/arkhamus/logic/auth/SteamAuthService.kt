@@ -3,7 +3,6 @@ package com.arkhamusserver.arkhamus.logic.auth
 import com.arkhamusserver.arkhamus.logic.steam.SteamReaderLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.RoleRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserSkinRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.ArkhamusUserDetails
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
@@ -24,7 +23,6 @@ class SteamAuthService(
     private val roleRepository: RoleRepository,
     private val encoder: PasswordEncoder,
     private val steamReaderLogic: SteamReaderLogic,
-    private val userSkinRepository: UserSkinRepository,
 ) {
 
     companion object {
@@ -36,47 +34,61 @@ class SteamAuthService(
     fun authenticateSteam(steamId: String): AuthenticationResponse {
         logger.info("Authenticating Steam user with SteamID: {}", steamId)
         try {
-            val userBySteamId = userAccountRepository.findBySteamId(steamId)
-            val user = if (userBySteamId.isPresent) {
-                val existingUser = userBySteamId.get()
-                logger.info("User found for SteamID {}: {}", steamId, existingUser)
-                existingUser
-            } else {
-                logger.info("No user found for SteamID: {}, creating a new user.", steamId)
-                createNewUser(steamId)
-            }
-            return authenticationService.authUser(
-                ArkhamusUserDetails(
-                    user.email ?: "",
-                    user.password ?: "",
-                    user.role,
-                    user
+            synchronized(steamId.intern()) {
+                val userBySteamId = userAccountRepository.findBySteamId(steamId)
+                val user = if (userBySteamId.isPresent) {
+                    val existingUser = userBySteamId.get()
+                    logger.info("User found for SteamID {}: {}", steamId, existingUser)
+                    existingUser
+                } else {
+                    logger.info("No user found for SteamID: {}, creating a new user.", steamId)
+                    createNewUser(steamId)
+                }
+
+                val auth = authenticationService.authUser(
+                    ArkhamusUserDetails(
+                        user.email ?: "",
+                        user.password ?: "",
+                        user.role,
+                        user
+                    )
                 )
-            )
+                return auth
+            }
         } catch (e: Exception) {
             logger.error("Error during Steam authentication for SteamID: {}: {}", steamId, e.message)
             throw RuntimeException("Steam authentication failed for SteamID: $steamId", e)
         }
     }
 
+
     private fun createNewUser(steamId: String): UserAccount {
         logger.info("Fetching Steam user data for SteamID: {}", steamId)
-
+        // Fetch and build the new UserAccount object from Steam data
         val steamUserData = steamReaderLogic.readSteamUserData(steamId)
         val userAccount = buildUser(steamUserData)
-        userSkinRepository.save(
-            generateSkin(userAccount)
-        )
-
         logger.info("Saving new user to the database: {}", userAccount)
-        return userAccountRepository.save(userAccount)
+        // Create a UserSkinSettings object linked to the saved UserAccount
+        val skin = generateSkin(userAccount)
+        userAccount.userSkinSettings = skin
+        val accountSaved = userAccountRepository.save(userAccount)
+        logger.info("Saved new user to the database: {}", accountSaved)
+        return accountSaved
     }
+
 
     private fun buildUser(response: SteamUserResponse): UserAccount {
         logger.info("Building UserAccount from Steam user data: {}", response)
 
         val player = response.response?.players?.firstOrNull()
             ?: throw IllegalArgumentException("Invalid user data received from Steam.")
+        logger.info("Creating role set")
+        val role = roleRepository.findByName(RoleName.USER.securityValue).orElseThrow {
+            IllegalStateException("Default user role not found in the database.")
+        }
+        val roleSet = setOf(role)
+        logger.info("Creating password")
+        val password = encoder.encode(generateRandomPassword())
 
         return UserAccount(
             id = null,
@@ -84,19 +96,19 @@ class SteamAuthService(
             creationTimestamp = null,
             nickName = player.personaname,
             email = player.personaname,
-            password = encoder.encode(generateRandomPassword()),
-            role = setOf(roleRepository.findByName("ROLE_${RoleName.USER.name}").orElseThrow {
-                IllegalStateException("Default user role not found in the database.")
-            })
+            password = password,
+            role = roleSet
         )
     }
 
     private fun generateSkin(userAccount: UserAccount): UserSkinSettings {
         return UserSkinSettings(
+            id = null,
             skinColor = randomSkinColor(),
             userAccount = userAccount
         )
     }
+
 
     private fun randomSkinColor(): SkinColor {
         return SkinColor.values().random(random)

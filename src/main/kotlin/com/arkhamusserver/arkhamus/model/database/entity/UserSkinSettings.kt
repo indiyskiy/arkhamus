@@ -9,8 +9,14 @@ data class UserSkinSettings(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
     @Enumerated(EnumType.STRING)
-    var skinColor: SkinColor,
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userAccountId")
+    var skinColor: SkinColor = SkinColor.SKY,
+    @OneToOne
+    @JoinColumn(
+        name = "user_account_id",
+        nullable = false
+    )
     var userAccount: UserAccount? = null
-)
+
+) {
+    constructor() : this(null, SkinColor.SKY, null)
+}

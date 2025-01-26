@@ -10,7 +10,6 @@ import com.arkhamusserver.arkhamus.view.maker.UserSkinDtoMaker
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import kotlin.jvm.optionals.getOrDefault
 import kotlin.random.Random
 
 @Component
@@ -26,39 +25,23 @@ class UserSkinLogic(
 
     fun userSkin(): UserSkinDto {
         val player = currentUserService.getCurrentUserAccount()
-        return repository.findByUserAccountId(player.id!!)
-            .getOrDefault(skin(player).save())
-            .toDto()
+        return player.userSkinSettings!!.toDto()
     }
 
     @Transactional
     fun updateUserSkin(userSkin: UserSkinDto): UserSkinDto {
         val player = currentUserService.getCurrentUserAccount()
         logger.info("user ${player.nickName} change skin color to ${userSkin.skinColor}")
-        return repository.findByUserAccountId(player.id!!)
-            .getOrDefault(skin(player))
+        return player.userSkinSettings!!
             .mergeSkin(userSkin)
             .save()
             .toDto()
-    }
-
-    private fun skin(user: UserAccount): UserSkinSettings {
-        return UserSkinSettings(
-            skinColor = SkinColor.values().random(random),
-            userAccount = user
-        )
     }
 
     private fun UserSkinSettings.mergeSkin(userSkin: UserSkinDto): UserSkinSettings {
         this.skinColor = userSkin.skinColor!!
         return this
     }
-
-    private fun UserSkinSettings.toDto(): UserSkinDto =
-        userSkinDtoMaker.toDto(this)
-
-    private fun UserSkinSettings.save(): UserSkinSettings =
-        repository.save(this)
 
     fun allSkinsOf(
         gameSession: GameSession,
@@ -67,9 +50,7 @@ class UserSkinLogic(
             .usersOfGameSession
             .map { it.userAccount }
             .map { user ->
-                repository
-                    .findByUserAccountId(user.id!!)
-                    .getOrDefault(skin(user).save())
+                user.userSkinSettings!!
             }
             .associateBy { it.userAccount!!.id!! }
     }
@@ -84,6 +65,30 @@ class UserSkinLogic(
         logger.info("reshuffled skins = ${skins.joinToString(", ") { it.skinColor.name }}")
         return repository.saveAll(skins).toList()
     }
+
+    fun fixColors(session: GameSession, account: UserAccount) {
+        val oldSkins = session.usersOfGameSession.map { user ->
+            user.userAccount.userSkinSettings!!
+        }
+        val oldColors = oldSkins.map { it.skinColor }.toSet()
+        logger.info("old colors = ${oldColors.joinToString(", ")}")
+        val accountSkin = oldSkins.first { it.userAccount?.id == account.id }
+        val accountColor = accountSkin.skinColor
+        logger.info("current user color = $accountColor")
+        if (accountColor in oldColors) {
+            logger.info("change color to random")
+            val possibleColors = SkinColor.values().filter { it !in oldColors }
+            accountSkin.skinColor = possibleColors.random(random)
+            logger.info("change color to ${accountSkin.skinColor}")
+            repository.save(accountSkin)
+        }
+    }
+
+    private fun UserSkinSettings.toDto(): UserSkinDto =
+        userSkinDtoMaker.toDto(this)
+
+    private fun UserSkinSettings.save(): UserSkinSettings =
+        repository.save(this)
 
     private fun findColorNotInUse(
         skins: Collection<UserSkinSettings>,
@@ -100,24 +105,6 @@ class UserSkinLogic(
         return skins.count { it.skinColor == this } > 1
     }
 
-    fun fixColors(session: GameSession, account: UserAccount) {
-        val oldSkins = session.usersOfGameSession.map { user ->
-            repository.findByUserAccountId(user.userAccount.id!!)
-                .getOrDefault(skin(user.userAccount).save())
-        }
-        val oldColors = oldSkins.map { it.skinColor }.toSet()
-        logger.info("old colors = ${oldColors.joinToString(", ")}")
-        val accountSkin = oldSkins.firstOrNull { it.userAccount?.id == account.id } ?: skin(account).save()
-        val accountColor = accountSkin.skinColor
-        logger.info("current user color = $accountColor")
-        if (accountColor in oldColors) {
-            logger.info("change color to random")
-            val possibleColors = SkinColor.values().filter { it !in oldColors }
-            accountSkin.skinColor = possibleColors.random(random)
-            logger.info("change color to ${accountSkin.skinColor}")
-            repository.save(accountSkin)
-        }
-    }
 }
 
 

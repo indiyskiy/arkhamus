@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.TokenSer
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
 import com.arkhamusserver.arkhamus.view.dto.user.UserDto
+import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
@@ -26,6 +27,11 @@ class AuthenticationService(
     private val refreshTokenRepository: RefreshTokenRepository,
     private val userStatusService: UserStatusService,
 ) {
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(AuthenticationService::class.java)
+    }
+
     @Transactional
     fun authentication(authenticationRequest: AuthenticationRequest): AuthenticationResponse {
         authManager.authenticate(
@@ -40,8 +46,10 @@ class AuthenticationService(
     }
 
     fun authUser(user: ArkhamusUserDetails): AuthenticationResponse {
+        logger.info("Authenticating user: {}", user.username)
         val accessToken = createAccessToken(user)
         val refreshToken = createRefreshToken(user)
+        logger.info("Authenticating user: {}", user.username)
         refreshTokenRepository.save(refreshToken, user)
         return AuthenticationResponse(
             accessToken = accessToken,
