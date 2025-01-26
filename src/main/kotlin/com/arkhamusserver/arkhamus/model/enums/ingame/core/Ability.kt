@@ -6,7 +6,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.NIG
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SECOND_IN_MILLIS
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.values
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
@@ -188,7 +187,8 @@ enum class Ability(
     ADVANCED_SEARCH_FOR_SCENT(
         id = 60003,
         requiresItem = true,
-        cooldown = (MINUTE_IN_MILLIS * 0.5).toLong(),
+        active = DEFAULT_INVESTIGATION_ACTIVE,
+        cooldown = DEFAULT_INVESTIGATION_ACTIVE + 1,
         targetTypes = listOf(SCENT_CLUE),
         range = CLOSE_RANGE
     ),

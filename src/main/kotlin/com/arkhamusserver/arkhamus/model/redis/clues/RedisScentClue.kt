@@ -17,6 +17,7 @@ data class RedisScentClue(
     val interactionRadius: Double,
     val visibilityModifiers: Set<VisibilityModifier>,
     var turnedOn: Boolean,
+    var castedAbilityUsers: Set<Long> = setOf()
 ) : RedisGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers, Interactable {
 
     override fun x(): Double {

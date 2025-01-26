@@ -18,7 +18,6 @@ import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
 import com.arkhamusserver.arkhamus.model.redis.clues.RedisScentClue
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import org.springframework.stereotype.Component
 import kotlin.random.Random
@@ -34,17 +33,6 @@ class ScentClueHandler(
     companion object {
         const val MAX_ON_GAME = 7
         private val random: Random = Random(System.currentTimeMillis())
-    }
-
-    fun isTargetScentBad(target: WithTrueIngameId, data: GlobalGameData): Boolean {
-        val godScent = data.game.god.getTypes().contains(Clue.SCENT)
-        if (!godScent) {
-            return false
-        }
-        if (target is RedisScentClue) {
-            return target.turnedOn
-        }
-        return false
     }
 
     override fun accept(clues: List<Clue>): Boolean {
@@ -194,8 +182,23 @@ class ScentClueHandler(
                 y = null,
                 z = null,
                 possibleRadius = 0.0,
-                state = InnovateClueState.ACTIVE_UNKNOWN,
+                state = countState(it, user),
             )
+        }
+    }
+
+    private fun countState(
+        clue: RedisScentClue,
+        user: RedisGameUser,
+    ): InnovateClueState {
+        return if (clue.castedAbilityUsers.contains(user.inGameId())) {
+            if (clue.turnedOn) {
+                InnovateClueState.ACTIVE_CLUE
+            } else {
+                InnovateClueState.ACTIVE_NO_CLUE
+            }
+        } else {
+            InnovateClueState.ACTIVE_UNKNOWN
         }
     }
 

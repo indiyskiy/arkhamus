@@ -1,7 +1,8 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors
+package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.clueProcessor
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.ClueAbilityToVisibilityModifierResolver
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
@@ -9,6 +10,8 @@ import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import kotlin.collections.get
+import kotlin.collections.minus
 
 @Component
 class InvestigationRelatedAbilityProcessor(
@@ -53,10 +56,9 @@ class InvestigationRelatedAbilityProcessor(
                         it in allInvetigatingModifiers
                     }
                 ) {
-                    it.stateTags -= UserStateTag.INVESTIGATING
+                    it.stateTags - UserStateTag.INVESTIGATING
                 }
             }
         }
     }
 }
-
