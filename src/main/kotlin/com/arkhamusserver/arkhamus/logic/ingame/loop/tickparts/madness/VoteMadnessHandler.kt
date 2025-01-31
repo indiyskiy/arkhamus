@@ -4,11 +4,11 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserVoteHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisUserVoteSpot
-import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUserVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -16,7 +16,7 @@ import kotlin.random.Random
 class VoteMadnessHandler(
     private val userLocationHandler: UserLocationHandler,
     private val inventoryHandler: InventoryHandler,
-    private val voteSpotRedisVoteSpot: RedisVoteSpotRepository,
+    private val inGameVoteSpot: InGameVoteSpotRepository,
     private val userVoteHandler: UserVoteHandler,
 ) {
 
@@ -25,7 +25,7 @@ class VoteMadnessHandler(
     }
 
     fun voteForSomeone(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): Boolean {
         val voteSpots = voteSpots(data, user)
@@ -45,10 +45,10 @@ class VoteMadnessHandler(
 
     private fun castVote(
         data: GlobalGameData,
-        voteSpot: RedisVoteSpot,
-        user: RedisGameUser
+        voteSpot: InGameVoteSpot,
+        user: InGameGameUser
     ): Boolean {
-        val userVoteSpots: List<RedisUserVoteSpot>? = data.userVoteSpotsBySpotId[voteSpot.inGameId()]
+        val userVoteSpots: List<InGameUserVoteSpot>? = data.userVoteSpotsBySpotId[voteSpot.inGameId()]
         if (userVoteSpots != null && userVoteSpots.isNotEmpty()) {
             val userVoteSpot = userVoteSpots.firstOrNull { it.userId == user.inGameId() }
             val currentUser = data.users.values.firstOrNull { it.inGameId() == user.inGameId() }
@@ -84,8 +84,8 @@ class VoteMadnessHandler(
     }
 
     private fun payForVotes(
-        user: RedisGameUser,
-        voteSpot: RedisVoteSpot
+        user: InGameGameUser,
+        voteSpot: InGameVoteSpot
     ): Boolean {
         if (inventoryHandler.userHaveItems(
                 user,
@@ -99,7 +99,7 @@ class VoteMadnessHandler(
                 voteSpot.costValue
             )
             voteSpot.voteSpotState = VoteSpotState.OPEN
-            voteSpotRedisVoteSpot.save(voteSpot)
+            inGameVoteSpot.save(voteSpot)
             return true
         }
         return false
@@ -107,8 +107,8 @@ class VoteMadnessHandler(
 
     private fun voteSpots(
         data: GlobalGameData,
-        user: RedisGameUser
-    ): List<RedisVoteSpot> = data.voteSpots.filter {
+        user: InGameGameUser
+    ): List<InGameVoteSpot> = data.voteSpots.filter {
         userLocationHandler.userCanSeeTarget(
             user,
             it,

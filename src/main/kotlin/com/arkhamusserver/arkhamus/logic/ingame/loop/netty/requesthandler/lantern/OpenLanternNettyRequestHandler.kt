@@ -14,7 +14,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lante
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.lantern.OpenLanternRequestMessage
 import org.slf4j.LoggerFactory
@@ -100,7 +100,7 @@ class OpenLanternNettyRequestHandler(
     }
 
     private fun checkIfUserCanPay(
-        user: RedisGameUser
+        user: InGameGameUser
     ): Boolean {
         val costItem = Item.SOLARITE
         val costValue = 1

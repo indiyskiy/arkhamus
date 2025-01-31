@@ -6,14 +6,14 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameU
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestAcceptRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.QuestDeclineRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.TakeQuestRewardRequestProcessData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserQuestProgressRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameUserQuestProgressRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.*
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisQuest
-import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
+import com.arkhamusserver.arkhamus.model.ingame.InGameUserQuestProgress
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -23,7 +23,7 @@ import kotlin.math.min
 
 @Component
 class QuestProgressHandler(
-    private val questProgressRepository: RedisUserQuestProgressRepository,
+    private val questProgressRepository: InGameUserQuestProgressRepository,
     private val userQuestCreationHandler: UserQuestCreationHandler,
     private val activityHandler: ActivityHandler
 ) {
@@ -35,8 +35,8 @@ class QuestProgressHandler(
 
     @Transactional
     fun acceptTheQuest(
-        game: RedisGame,
-        userQuestProgress: RedisUserQuestProgress?,
+        game: InRamGame,
+        userQuestProgress: InGameUserQuestProgress?,
         data: QuestAcceptRequestProcessData,
         currentGameTime: Long
     ) {
@@ -139,9 +139,9 @@ class QuestProgressHandler(
     }
 
     fun mapQuestProgresses(
-        questProgressByUserId: Map<Long, List<RedisUserQuestProgress>>,
-        user: RedisGameUser,
-        quests: List<RedisQuest>
+        questProgressByUserId: Map<Long, List<InGameUserQuestProgress>>,
+        user: InGameGameUser,
+        quests: List<InGameQuest>
     ): List<UserQuestResponse> {
         return (questProgressByUserId[user.inGameId()] ?: emptyList()).map { userQuest ->
             mapQuestProgress(quests, userQuest)
@@ -149,16 +149,16 @@ class QuestProgressHandler(
     }
 
     fun mapQuestProgress(
-        quests: List<RedisQuest>,
-        userQuest: RedisUserQuestProgress
+        quests: List<InGameQuest>,
+        userQuest: InGameUserQuestProgress
     ): UserQuestResponse {
         val quest = quests.firstOrNull { it.inGameId() == userQuest.questId }
         return mapQuestProgress(quest, userQuest)
     }
 
     fun mapQuestProgress(
-        quest: RedisQuest?,
-        userQuest: RedisUserQuestProgress,
+        quest: InGameQuest?,
+        userQuest: InGameUserQuestProgress,
     ): UserQuestResponse {
         return if (quest != null && questTaken(userQuest)) {
             UserQuestResponse(
@@ -193,7 +193,7 @@ class QuestProgressHandler(
         }
     }
 
-    fun canAccept(quest: RedisQuest?, userQuestProgress: RedisUserQuestProgress?): Boolean =
+    fun canAccept(quest: InGameQuest?, userQuestProgress: InGameUserQuestProgress?): Boolean =
         quest != null &&
                 userQuestProgress != null &&
                 userQuestProgress.questState in setOf(
@@ -201,7 +201,7 @@ class QuestProgressHandler(
             READ
         )
 
-    fun canDecline(quest: RedisQuest?, userQuestProgress: RedisUserQuestProgress?): Boolean =
+    fun canDecline(quest: InGameQuest?, userQuestProgress: InGameUserQuestProgress?): Boolean =
         quest != null &&
                 userQuestProgress != null &&
                 userQuestProgress.questState in setOf(
@@ -210,13 +210,13 @@ class QuestProgressHandler(
             IN_PROGRESS
         )
 
-    fun isCompleted(quest: RedisQuest?, userQuestProgress: RedisUserQuestProgress?): Boolean =
+    fun isCompleted(quest: InGameQuest?, userQuestProgress: InGameUserQuestProgress?): Boolean =
         quest != null &&
                 userQuestProgress != null &&
                 userQuestProgress.questState in setOf(IN_PROGRESS, COMPLETED) &&
                 userQuestProgress.questCurrentStep == quest.levelTaskIds.size
 
-    fun canFinish(quest: RedisQuest?, userQuestProgress: RedisUserQuestProgress?): Boolean =
+    fun canFinish(quest: InGameQuest?, userQuestProgress: InGameUserQuestProgress?): Boolean =
         quest != null &&
                 userQuestProgress != null &&
                 userQuestProgress.questState in setOf(COMPLETED) &&
@@ -224,7 +224,7 @@ class QuestProgressHandler(
 
     @Transactional
     fun readTheQuest(
-        userQuestProgress: RedisUserQuestProgress?,
+        userQuestProgress: InGameUserQuestProgress?,
         currentGameTime: Long
     ) {
         userQuestProgress?.let {
@@ -238,7 +238,7 @@ class QuestProgressHandler(
         levelTaskId: Long,
         globalGameData: GlobalGameData,
         userId: Long?
-    ): Pair<RedisQuest?, RedisUserQuestProgress?> {
+    ): Pair<InGameQuest?, InGameUserQuestProgress?> {
 
         val questSteps =
             globalGameData.questProgressByUserId[userId]?.filter { it.questState == IN_PROGRESS }
@@ -257,10 +257,10 @@ class QuestProgressHandler(
 
     @Transactional
     fun nextStep(
-        userQuestProgress: RedisUserQuestProgress?,
-        quest: RedisQuest?,
+        userQuestProgress: InGameUserQuestProgress?,
+        quest: InGameQuest?,
         globalGameData: GlobalGameData,
-        currentUser: RedisGameUser?,
+        currentUser: InGameGameUser?,
     ) {
         userQuestProgress?.let { progress ->
             quest?.let { questNotNull ->
@@ -278,7 +278,7 @@ class QuestProgressHandler(
                         sourceUser = currentUserNotNull,
                         gameTime = game.globalTimer,
                         relatedGameObjectType = null,//GameObjectType.QUEST_GIVER,
-                        withTrueIngameId = null, //todo add redis quest steps
+                        withTrueIngameId = null, //todo add inGame quest steps
                         relatedEventId = questNotNull.inGameId()
                     )
                 }
@@ -296,12 +296,12 @@ class QuestProgressHandler(
         return levelTaskIds[stepNumber]
     }
 
-    private fun questTaken(userQuest: RedisUserQuestProgress): Boolean {
+    private fun questTaken(userQuest: InGameUserQuestProgress): Boolean {
         return userQuest.questState !in notTakenStates
     }
 
     private fun complete(
-        userQuestProgress: RedisUserQuestProgress?
+        userQuestProgress: InGameUserQuestProgress?
     ) {
         userQuestProgress?.questState = COMPLETED
     }

@@ -3,8 +3,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Ingredient
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,11 +18,11 @@ class InventoryHandler {
         var logger: Logger = LoggerFactory.getLogger(InventoryHandler::class.java)
     }
 
-    fun addItem(user: RedisGameUser, addedItem: Item) {
+    fun addItem(user: InGameGameUser, addedItem: Item) {
         addItems(user, addedItem)
     }
 
-    fun addItems(user: RedisGameUser, addedItem: Item, itemsToAdd: Int = 1) {
+    fun addItems(user: InGameGameUser, addedItem: Item, itemsToAdd: Int = 1) {
         val existingCell = user.items.firstOrNull { it.item == addedItem }
         if (existingCell != null) {
             existingCell.number += itemsToAdd
@@ -34,15 +34,15 @@ class InventoryHandler {
         }
     }
 
-    fun userHaveItems(user: RedisGameUser, requiredItem: Item, howManyItems: Int): Boolean {
+    fun userHaveItems(user: InGameGameUser, requiredItem: Item, howManyItems: Int): Boolean {
         return howManyItems(user, requiredItem) >= howManyItems
     }
 
-    fun userHaveItem(user: RedisGameUser, requiredItem: Item): Boolean {
+    fun userHaveItem(user: InGameGameUser, requiredItem: Item): Boolean {
         return howManyItems(user, requiredItem) > 0
     }
 
-    fun howManyItems(user: RedisGameUser, requiredItem: Item): Int {
+    fun howManyItems(user: InGameGameUser, requiredItem: Item): Int {
         return howManyItems(user.items, requiredItem)
     }
 
@@ -50,7 +50,7 @@ class InventoryHandler {
         return inventory.filter { it.item == requiredItem }.sumOf { it.number }
     }
 
-    fun consumeItems(user: RedisGameUser, item: Item, number: Int): ConsumedItem {
+    fun consumeItems(user: InGameGameUser, item: Item, number: Int): ConsumedItem {
         if (userHaveItem(user, item)) {
             var numberLeft = number
             user.items
@@ -66,7 +66,7 @@ class InventoryHandler {
         return ConsumedItem(item, number)
     }
 
-    fun consumeItem(user: RedisGameUser, item: Item) {
+    fun consumeItem(user: InGameGameUser, item: Item) {
         consumeItems(user, item, 1)
     }
 
@@ -79,14 +79,14 @@ class InventoryHandler {
         }.sortedByDescending { it.item.id }
     }
 
-    fun consumeItems(recipe: Recipe, gameUser: RedisGameUser, crafter: RedisCrafter): List<ConsumedItem> {
+    fun consumeItems(recipe: Recipe, gameUser: InGameGameUser, crafter: InGameCrafter): List<ConsumedItem> {
         logger.info("consuming items for recipe ${recipe.recipeId} to create ${recipe.item.name}")
         return recipe.ingredients.map { ingredient: Ingredient ->
             consumeItem(ingredient, gameUser, crafter)
         }
     }
 
-    private fun consumeItem(ingredient: Ingredient, user: RedisGameUser, crafter: RedisCrafter): ConsumedItem {
+    private fun consumeItem(ingredient: Ingredient, user: InGameGameUser, crafter: InGameCrafter): ConsumedItem {
         logger.info("consuming ${ingredient.number} of ${ingredient.item.name}")
         val itemToConsume = ingredient.item
 
@@ -102,16 +102,16 @@ class InventoryHandler {
         return consumeItems(user, itemToConsume, toConsumeLeft)
     }
 
-    private fun trimInventory(user: RedisGameUser) {
+    private fun trimInventory(user: InGameGameUser) {
         user.items = user.items.filter { it.number > 0 && it.item != Item.PURE_NOTHING }
     }
 
-    fun haveRequiredItems(ingredient: Ingredient, crafter: RedisCrafter, user: RedisGameUser): Boolean {
+    fun haveRequiredItems(ingredient: Ingredient, crafter: InGameCrafter, user: InGameGameUser): Boolean {
         return howManyItems(user, ingredient.item) + howManyItems(crafter, ingredient.item) >= ingredient.number
     }
 
     private fun howManyItems(
-        crafter: RedisCrafter,
+        crafter: InGameCrafter,
         item: Item
     ): Int {
         return crafter.items.filter { it.item == item }.sumOf { it.number }

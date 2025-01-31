@@ -4,8 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 import org.springframework.stereotype.Component
@@ -23,7 +23,7 @@ class ClueHandler(
 
     fun filterClues(
         clues: CluesContainer,
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): ExtendedCluesResponse {
         val possibleClues = mapPossibleClues(clues, user, data)
@@ -33,7 +33,7 @@ class ClueHandler(
 
     private fun mapActualClues(
         container: CluesContainer,
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return advancedClueHandlers.flatMap {
@@ -43,7 +43,7 @@ class ClueHandler(
 
     private fun mapPossibleClues(
         container: CluesContainer,
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return advancedClueHandlers.flatMap {
@@ -53,7 +53,7 @@ class ClueHandler(
 
     fun addRandomClue(
         data: GlobalGameData,
-        sourceUser: RedisGameUser?,
+        sourceUser: InGameGameUser?,
         createActivity: Boolean = false,
     ) {
         val existingClues = data.clues
@@ -96,7 +96,7 @@ class ClueHandler(
     }
 
     fun canBeRemoved(
-        user: RedisGameUser,
+        user: InGameGameUser,
         target: Any,
         data: GlobalGameData
     ): Boolean {
@@ -107,7 +107,7 @@ class ClueHandler(
         }
     }
 
-    fun anyCanBeRemoved(user: RedisGameUser, data: GlobalGameData): Boolean {
+    fun anyCanBeRemoved(user: InGameGameUser, data: GlobalGameData): Boolean {
         return advancedClueHandlers.any {
             it.anyCanBeRemoved(user, data)
         }

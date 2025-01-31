@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithVisibilityModifiers
 
 private const val MINIMUM_COOLDOWN: Long = SECOND_IN_MILLIS
 private const val DEFAULT_INVESTIGATION_ACTIVE: Long = MINUTE_IN_MILLIS

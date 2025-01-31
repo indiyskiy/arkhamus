@@ -6,9 +6,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter.UpdateCrafterRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.containers.ContainerLikeThingsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameCrafterRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.crafter.UpdateCrafterRequestMessage
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class UpdateCrafterRequestProcessor(
-    private val redisCrafterRepository: RedisCrafterRepository,
+    private val inGameCrafterRepository: InGameCrafterRepository,
     private val crafterTypeThingsHandler: ContainerLikeThingsHandler
 ) : NettyRequestProcessor {
 
@@ -51,13 +51,13 @@ class UpdateCrafterRequestProcessor(
             if (updateCrafterRequestMessage.close) {
                 closeCrafter(crafter)
             }
-            redisCrafterRepository.save(crafter)
+            inGameCrafterRepository.save(crafter)
             requestProcessData.sortedUserInventory = sortedUserInventory
             requestProcessData.visibleItems = sortedUserInventory
         }
     }
 
-    private fun closeCrafter(crafter: RedisCrafter) {
+    private fun closeCrafter(crafter: InGameCrafter) {
         crafter.holdingUser = null
         crafter.state = MapObjectState.ACTIVE
     }

@@ -4,17 +4,17 @@ import com.arkhamusserver.arkhamus.config.UserState
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.InRamGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -23,7 +23,7 @@ import java.sql.Timestamp
 
 @Component
 class GameEndLogic(
-    private val redisGameRepository: RedisGameRepository,
+    private val inRamGameRepository: InRamGameRepository,
     private val gameSessionRepository: GameSessionRepository,
     private val userOfGameSessionRepository: UserOfGameSessionRepository,
     private val timeEventHandler: TimeEventHandler,
@@ -36,8 +36,8 @@ class GameEndLogic(
 
     @Transactional
     fun endTheGame(
-        game: RedisGame,
-        users: Map<Long, RedisGameUser>,
+        game: InRamGame,
+        users: Map<Long, InGameGameUser>,
         gameEndReason: GameEndReason,
         timeLeft: Long? = null
     ) {
@@ -61,13 +61,13 @@ class GameEndLogic(
     }
 
     private fun createEndOfGameTimeEvent(
-        game: RedisGame,
+        game: InRamGame,
         timeLeft: Long? = null
     ) {
         logger.info("creating end of the game event")
         timeEventHandler.createEvent(
             game,
-            RedisTimeEventType.GAME_END,
+            InGameTimeEventType.GAME_END,
             timeLeft = timeLeft
         )
     }
@@ -75,7 +75,7 @@ class GameEndLogic(
     private fun setWinnersLosers(
         gameSession: GameSession,
         gameEndReason: GameEndReason,
-        users: Map<Long, RedisGameUser>
+        users: Map<Long, InGameGameUser>
     ) {
         logger.info("set winners and losers")
         val databaseUsers = userOfGameSessionRepository.findByGameSessionIdAndLeftTheLobby(gameSession.id!!)
@@ -85,17 +85,17 @@ class GameEndLogic(
     }
 
     private fun saveGameState(
-        game: RedisGame,
+        game: InRamGame,
         gameEndReason: GameEndReason
     ) {
         logger.info("saving end game state")
         game.state = GameState.GAME_END_SCREEN.name
         game.gameEndReason = gameEndReason.name
-        redisGameRepository.save(game)
+        inRamGameRepository.save(game)
     }
 
     private fun endGameSession(
-        game: RedisGame,
+        game: InRamGame,
         gameEndReason: GameEndReason
     ): GameSession {
         logger.info("ending game session")
@@ -110,7 +110,7 @@ class GameEndLogic(
 
     private fun setWonOrLoose(
         gameEndReason: GameEndReason,
-        redisUsers: Map<Long, RedisGameUser>,
+        inGameUsers: Map<Long, InGameGameUser>,
         databaseUsers: List<UserOfGameSession>
     ) {
         when (gameEndReason) {
@@ -121,9 +121,9 @@ class GameEndLogic(
             GameEndReason.ABANDONED -> noOneWon(databaseUsers)
         }
         databaseUsers.forEach { databaseUser ->
-            val redisUser = redisUsers[databaseUser.userAccount.id]
-            redisUser?.let { userNullSafe -> userNullSafe.won = databaseUser.won }
-            logger.info("redis user ${redisUser?.inGameId() ?: "null"} won? ${redisUser?.won ?: "null"}")
+            val inGameUser = inGameUsers[databaseUser.userAccount.id]
+            inGameUser?.let { userNullSafe -> userNullSafe.won = databaseUser.won }
+            logger.info("in-game user ${inGameUser?.inGameId() ?: "null"} won? ${inGameUser?.won ?: "null"}")
         }
     }
 
@@ -185,10 +185,10 @@ class GameEndLogic(
     }
 
     @Transactional
-    fun endTheGameCompletely(game: RedisGame) {
+    fun endTheGameCompletely(game: InRamGame) {
         logger.info("ending the game completely ${game.gameId}")
         game.state = GameState.FINISHED.name
-        redisGameRepository.save(game)
+        inRamGameRepository.save(game)
 
         val gameSession = gameSessionRepository.findById(game.gameId!!).get()
         gameSession.state = GameState.FINISHED

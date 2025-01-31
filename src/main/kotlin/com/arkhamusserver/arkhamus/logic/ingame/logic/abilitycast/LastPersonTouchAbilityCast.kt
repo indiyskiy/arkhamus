@@ -5,23 +5,23 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.abilityresult.
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ShortTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisActivityRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameActivityRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
-import com.arkhamusserver.arkhamus.model.redis.parts.RedisUserSkinSetting
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
+import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class LastPersonTouchAbilityCast(
-    private val activityRepository: RedisActivityRepository,
+    private val activityRepository: InGameActivityRepository,
     private val shortTimeEventHandler: ShortTimeEventHandler
 ) : AbilityCast {
 
@@ -62,7 +62,7 @@ class LastPersonTouchAbilityCast(
     }
 
     override fun cast(
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -78,13 +78,13 @@ class LastPersonTouchAbilityCast(
     }
 
     fun createShortTimeEvent(
-        sourceUser: RedisGameUser?,
+        sourceUser: InGameGameUser?,
         target: WithTrueIngameId,
         result: ShortTimeEventPersonWithTimeData,
         globalGameData: GlobalGameData,
     ) {
         logger.info("create who-touched short time event")
-        val type = if (target is RedisCrafter) {
+        val type = if (target is InGameCrafter) {
             ShortTimeEventType.LAST_PERSON_TOUCH_CRAFTER
         } else {
             ShortTimeEventType.LAST_PERSON_TOUCH_CONTAINER
@@ -122,7 +122,7 @@ class LastPersonTouchAbilityCast(
                     UserActivityView(
                         id = userNotNull.inGameId(),
                         nickName = userNotNull.nickName,
-                        skin = RedisUserSkinSetting(userNotNull.originalSkin)
+                        skin = InGameUserSkinSetting(userNotNull.originalSkin)
                     )
                 },
                 currentTime = data.game.globalTimer,

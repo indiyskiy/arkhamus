@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import org.springframework.stereotype.Component
 
 @Component
@@ -14,7 +14,7 @@ class OneTickUserInventory(
     private val madnessHandler: UserMadnessHandler,
 ) {
     fun processInventory(
-        user: RedisGameUser,
+        user: InGameGameUser,
         timePassedMillis: Long,
         gameTime: Long
     ) {
@@ -29,7 +29,7 @@ class OneTickUserInventory(
     }
 
     private fun processItem(
-        user: RedisGameUser,
+        user: InGameGameUser,
         item: Item,
         numberOfItems: Int,
         timePassedMillis: Long,
@@ -49,7 +49,7 @@ class OneTickUserInventory(
     }
 
     private fun processNoItem(
-        user: RedisGameUser,
+        user: InGameGameUser,
         item: Item,
     ) {
         when (item) {
@@ -60,35 +60,35 @@ class OneTickUserInventory(
     }
 
     private fun processInnovateScentInvestigationItem(
-        user: RedisGameUser,
+        user: InGameGameUser,
     ) {
         user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_SCENT
         user.stateTags += UserStateTag.INVESTIGATING_SCENT
     }
 
     private fun noInnovateScentInvestigationItem(
-        user: RedisGameUser,
+        user: InGameGameUser,
     ) {
         user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_SCENT
         user.stateTags -= UserStateTag.INVESTIGATING_SCENT
     }
 
     private fun processInnovateSoundInvestigationItem(
-        user: RedisGameUser,
+        user: InGameGameUser,
     ) {
         user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_SOUND
         user.stateTags += UserStateTag.INVESTIGATING_SOUND
     }
 
     private fun noInnovateSoundInvestigationItem(
-        user: RedisGameUser,
+        user: InGameGameUser,
     ) {
         user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_SOUND
         user.stateTags -= UserStateTag.INVESTIGATING_SOUND
     }
 
     private fun processCursedPotato(
-        user: RedisGameUser,
+        user: InGameGameUser,
         numberOfItems: Int,
         timePassedMillis: Long,
         gameTime: Long

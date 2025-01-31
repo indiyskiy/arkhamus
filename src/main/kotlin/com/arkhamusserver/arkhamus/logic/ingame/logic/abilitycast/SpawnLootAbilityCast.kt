@@ -8,8 +8,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Abili
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -36,7 +36,7 @@ class SpawnLootAbilityCast(
     }
 
     override fun cast(
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -56,7 +56,7 @@ class SpawnLootAbilityCast(
     }
 
     private fun spawnLoot(
-        currentUserNotNull: RedisGameUser,
+        currentUserNotNull: InGameGameUser,
         globalGameData: GlobalGameData
     ) {
         val randomItem = Item.values()
@@ -68,7 +68,7 @@ class SpawnLootAbilityCast(
 
     private fun rememberItemChangesForResponses(
         globalGameData: GlobalGameData,
-        user: RedisGameUser,
+        user: InGameGameUser,
         spawnedItem: Item,
     ) {
         globalGameData.inBetweenEvents.inBetweenItemHolderChanges.add(

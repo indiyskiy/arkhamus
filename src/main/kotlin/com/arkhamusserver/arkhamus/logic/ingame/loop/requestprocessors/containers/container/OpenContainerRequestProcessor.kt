@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.container.OpenContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameContainerRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class OpenContainerRequestProcessor(
-    private val redisContainerRepository: RedisContainerRepository,
+    private val inGameContainerRepository: InGameContainerRepository,
     private val objectWithTagsHandler: ObjectWithTagsHandler,
     private val activityHandler: ActivityHandler
 ) : NettyRequestProcessor {
@@ -37,7 +37,7 @@ class OpenContainerRequestProcessor(
             container.holdingUser = gameUser.inGameId()
             container.state = MapObjectState.HOLD
             objectWithTagsHandler.processObject(container, gameUser, globalGameData)
-            redisContainerRepository.save(container)
+            inGameContainerRepository.save(container)
             activityHandler.addUserWithTargetActivity(
                 globalGameData.game.inGameId(),
                 ActivityType.CONTAINER_OPENED,

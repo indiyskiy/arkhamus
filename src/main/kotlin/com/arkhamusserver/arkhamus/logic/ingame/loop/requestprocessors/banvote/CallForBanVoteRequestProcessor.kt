@@ -10,7 +10,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvo
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -55,11 +55,11 @@ class CallForBanVoteRequestProcessor(
         val threshold = gameData.threshold
         eventHandler.createEvent(
             game = globalGameData.game,
-            eventType = RedisTimeEventType.CALL_FOR_BAN_VOTE,
+            eventType = InGameTimeEventType.CALL_FOR_BAN_VOTE,
             sourceObject = gameData.gameUser,
             targetObject = voteSpot,
             location = threshold?.let { Location(it.x, it.y, it.z) },
-            timeLeft = RedisTimeEventType.CALL_FOR_BAN_VOTE.getDefaultTime()
+            timeLeft = InGameTimeEventType.CALL_FOR_BAN_VOTE.getDefaultTime()
         )
     }
 }

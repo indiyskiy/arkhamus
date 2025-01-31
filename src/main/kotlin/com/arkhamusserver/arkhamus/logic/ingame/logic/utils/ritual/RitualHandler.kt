@@ -15,16 +15,16 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomI
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteCastRequestProcessData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAltarHolderRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAltarPollingRepository
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.ingame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL
-import com.arkhamusserver.arkhamus.model.redis.*
+import com.arkhamusserver.arkhamus.model.ingame.*
 import org.apache.commons.lang3.math.NumberUtils.min
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -34,14 +34,14 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class RitualHandler(
     private val eventHandler: TimeEventHandler,
-    private val redisAltarPollingRepository: RedisAltarPollingRepository,
+    private val inGameAltarPollingRepository: InGameAltarPollingRepository,
     private val godVoteHandler: GodVoteHandler,
     private val godToCorkResolver: GodToCorkResolver,
     private val recipesSource: RecipesSource,
     private val activityHandler: ActivityHandler,
     private val gameEndLogic: GameEndLogic,
     private val inventoryHandler: InventoryHandler,
-    private val redisAltarHolderRepository: RedisAltarHolderRepository,
+    private val inGameAltarHolderRepository: InGameAltarHolderRepository,
     private val madnessHandler: UserMadnessHandler,
     private val teleportHandler: TeleportHandler,
     private val geometryUtils: GeometryUtils
@@ -52,7 +52,7 @@ class RitualHandler(
     }
 
     fun failRitualByTime(
-        altarHolder: RedisAltarHolder?,
+        altarHolder: InGameAltarHolder?,
         globalGameData: GlobalGameData
     ) {
         failRitualStartCooldown(
@@ -75,8 +75,8 @@ class RitualHandler(
     }
 
     fun countItemsNotches(
-        ritualEvent: RedisTimeEvent?,
-        altarHolder: RedisAltarHolder?,
+        ritualEvent: InGameTimeEvent?,
+        altarHolder: InGameAltarHolder?,
     ): List<ItemNotch> {
         if (ritualEvent == null) return emptyList()
         if (altarHolder == null) return emptyList()
@@ -106,8 +106,8 @@ class RitualHandler(
     fun takeItemForRitual(
         item: Item,
         itemNumber: Int,
-        altarHolder: RedisAltarHolder?,
-        user: RedisGameUser
+        altarHolder: InGameAltarHolder?,
+        user: InGameGameUser
     ) {
         val itemsNeeded = (altarHolder?.itemsForRitual?.get(item) ?: 0) -
                 (altarHolder?.itemsOnAltars?.get(item) ?: 0)
@@ -127,7 +127,7 @@ class RitualHandler(
             }
             altarHolder?.itemsOnAltars = newItemMap
             altarHolder?.thmAddedThisRound = true
-            altarHolder?.let { redisAltarHolderRepository.save(it) }
+            altarHolder?.let { inGameAltarHolderRepository.save(it) }
 
             inventoryHandler.consumeItems(user, item, itemsToTake)
         }
@@ -135,7 +135,7 @@ class RitualHandler(
 
     fun processAllItemsPut(
         globalGameData: GlobalGameData,
-        altarHolder: RedisAltarHolder,
+        altarHolder: InGameAltarHolder,
         ongoingEvents: List<OngoingEvent>
     ) {
         logger.info("put all items")
@@ -150,13 +150,13 @@ class RitualHandler(
         }
     }
 
-    fun isAllItemsPut(altarHolder: RedisAltarHolder): Boolean =
+    fun isAllItemsPut(altarHolder: InGameAltarHolder): Boolean =
         altarHolder.itemsForRitual.all { (itemId, number) ->
             altarHolder.itemsOnAltars[itemId] == number
         }
 
     fun tryToShiftTime(
-        altarHolder: RedisAltarHolder?,
+        altarHolder: InGameAltarHolder?,
         item: Item,
         ongoingEvents: List<OngoingEvent>
     ) {
@@ -166,9 +166,9 @@ class RitualHandler(
     }
 
     fun tryToShiftTime(
-        altarHolder: RedisAltarHolder?,
+        altarHolder: InGameAltarHolder?,
         item: Item,
-        ongoingEvent: RedisTimeEvent
+        ongoingEvent: InGameTimeEvent
     ) {
         if (thisItemIsPutOnAltar(altarHolder, item)) {
             shiftTimeOfEvent(ongoingEvent, item, altarHolder)
@@ -178,14 +178,14 @@ class RitualHandler(
     @Transactional
     fun godVoteStart(
         globalGameData: GlobalGameData,
-        altar: RedisAltar,
+        altar: InGameAltar,
         god: God,
-        currentGameUser: RedisGameUser,
-        allUsers: Collection<RedisGameUser>,
-        altars: Map<Long, RedisAltar>,
-        altarHolder: RedisAltarHolder?,
-        events: List<RedisTimeEvent>,
-        game: RedisGame
+        currentGameUser: InGameGameUser,
+        allUsers: Collection<InGameGameUser>,
+        altars: Map<Long, InGameAltar>,
+        altarHolder: InGameAltarHolder?,
+        events: List<InGameTimeEvent>,
+        game: InRamGame
     ) {
         createGodVoteStartProcess(
             gameId = game.gameId!!,
@@ -200,7 +200,7 @@ class RitualHandler(
             currentGameUser = currentGameUser,
         )
         globalGameData.altarHolder?.state = MapAltarState.VOTING
-        globalGameData.altarHolder?.let { redisAltarHolderRepository.save(it) }
+        globalGameData.altarHolder?.let { inGameAltarHolderRepository.save(it) }
 
         activityHandler.addUserWithTargetActivity(
             game.inGameId(),
@@ -216,7 +216,7 @@ class RitualHandler(
     }
 
     fun kickUsersFromRitual(
-        holder: RedisAltarHolder,
+        holder: InGameAltarHolder,
         data: GlobalGameData
     ) {
         val usersInRitual = holder.usersInRitual
@@ -249,26 +249,26 @@ class RitualHandler(
                 data.game
             )
         }
-        redisAltarHolderRepository.save(holder)
+        inGameAltarHolderRepository.save(holder)
     }
 
     @Transactional
     fun castGodVote(
         god: God,
-        altar: RedisAltar,
-        currentGameUser: RedisGameUser,
-        altarPolling: RedisAltarPolling,
+        altar: InGameAltar,
+        currentGameUser: InGameGameUser,
+        altarPolling: InGameAltarPolling,
         gameData: GodVoteCastRequestProcessData,
-        altarHolder: RedisAltarHolder?,
-        altars: Map<Long, RedisAltar>,
-        game: RedisGame,
-        allUsers: Collection<RedisGameUser>,
-        events: List<RedisTimeEvent>
+        altarHolder: InGameAltarHolder?,
+        altars: Map<Long, InGameAltar>,
+        game: InRamGame,
+        allUsers: Collection<InGameGameUser>,
+        events: List<InGameTimeEvent>
     ) {
         val userId: Long = gameData.gameUser!!.inGameId()
         val godId = god.getId()
         altarPolling.userVotes[userId] = godId
-        redisAltarPollingRepository.save(altarPolling)
+        inGameAltarPollingRepository.save(altarPolling)
 
         activityHandler.addUserWithTargetActivity(
             game.inGameId(),
@@ -284,8 +284,8 @@ class RitualHandler(
     }
 
     fun gotQuorum(
-        allUsers: Collection<RedisGameUser>,
-        altarPolling: RedisAltarPolling
+        allUsers: Collection<InGameGameUser>,
+        altarPolling: InGameAltarPolling
     ): God? {
         val canVote = godVoteHandler.usersCanPossiblyVote(allUsers)
         val canVoteIdsSet = canVote.map { it.inGameId() }.toSet()
@@ -317,18 +317,18 @@ class RitualHandler(
     }
 
     fun failRitualStartCooldown(
-        altarHolder: RedisAltarHolder?,
-        altarPolling: RedisAltarPolling?,
-        events: List<RedisTimeEvent>,
-        game: RedisGame
+        altarHolder: InGameAltarHolder?,
+        altarPolling: InGameAltarPolling?,
+        events: List<InGameTimeEvent>,
+        game: InRamGame
     ) {
-        eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
-        eventHandler.tryToDeleteEvent(RedisTimeEventType.RITUAL_GOING, events)
+        eventHandler.tryToDeleteEvent(InGameTimeEventType.ALTAR_VOTING, events)
+        eventHandler.tryToDeleteEvent(InGameTimeEventType.RITUAL_GOING, events)
 
         altarPolling?.let {
             logger.info("removing polling - fail ritual")
             it.state = MapAltarPollingState.FAILED
-            redisAltarPollingRepository.delete(it)
+            inGameAltarPollingRepository.delete(it)
         }
 
         if (altarHolder != null) {
@@ -336,35 +336,35 @@ class RitualHandler(
             altarHolder.state = MapAltarState.LOCKED
             altarHolder.usersInRitual = emptySet()
             altarHolder.usersToKick = emptySet()
-            redisAltarHolderRepository.save(altarHolder)
+            inGameAltarHolderRepository.save(altarHolder)
         }
         logger.info("creating COOLDOWN event")
         eventHandler.createEvent(
             game,
-            RedisTimeEventType.ALTAR_VOTING_COOLDOWN,
+            InGameTimeEventType.ALTAR_VOTING_COOLDOWN,
         )
     }
 
     @Transactional
     fun finishAltarPolling(
-        altarPolling: RedisAltarPolling?,
-        altarHolder: RedisAltarHolder?
-    ): RedisAltarHolder? {
-        altarPolling?.let { redisAltarPollingRepository.delete(it) }
+        altarPolling: InGameAltarPolling?,
+        altarHolder: InGameAltarHolder?
+    ): InGameAltarHolder? {
+        altarPolling?.let { inGameAltarPollingRepository.delete(it) }
         return altarHolder?.let {
             unlockTheGod(it)
             it.state = MapAltarState.OPEN
-            redisAltarHolderRepository.save(it)
+            inGameAltarHolderRepository.save(it)
         }
     }
 
     fun tryToForceStartRitual(
-        allUsers: Collection<RedisGameUser>,
-        altarPolling: RedisAltarPolling,
-        altars: Map<Long, RedisAltar>,
-        altarHolder: RedisAltarHolder?,
-        events: List<RedisTimeEvent>,
-        game: RedisGame
+        allUsers: Collection<InGameGameUser>,
+        altarPolling: InGameAltarPolling,
+        altars: Map<Long, InGameAltar>,
+        altarHolder: InGameAltarHolder?,
+        events: List<InGameTimeEvent>,
+        game: InRamGame
     ) {
         logger.info("tryToForceStart")
         if (godVoteHandler.everybodyVoted(allUsers, altarPolling)) {
@@ -391,17 +391,17 @@ class RitualHandler(
 
     fun lockTheGod(
         quorum: God,
-        altars: List<RedisAltar>,
-        altarPolling: RedisAltarPolling,
-        altarHolder: RedisAltarHolder?,
-        events: List<RedisTimeEvent>,
-        game: RedisGame
+        altars: List<InGameAltar>,
+        altarPolling: InGameAltarPolling,
+        altarHolder: InGameAltarHolder?,
+        events: List<InGameTimeEvent>,
+        game: InRamGame
     ) {
-        eventHandler.tryToDeleteEvent(RedisTimeEventType.ALTAR_VOTING, events)
+        eventHandler.tryToDeleteEvent(InGameTimeEventType.ALTAR_VOTING, events)
 
         logger.info("removing polling - god locked")
         altarPolling.state = MapAltarPollingState.FIXED
-        redisAltarPollingRepository.delete(altarPolling)
+        inGameAltarPollingRepository.delete(altarPolling)
 
         val cork = godToCorkResolver.resolve(quorum)
         val recipe = recipesSource.getAllRecipes().first { it.item == cork }
@@ -419,14 +419,14 @@ class RitualHandler(
         }.toMap()
 
         altarHolder?.state = MapAltarState.GOD_LOCKED
-        altarHolder?.let { redisAltarHolderRepository.save(it) }
+        altarHolder?.let { inGameAltarHolderRepository.save(it) }
 
         eventHandler.createEvent(
-            game, RedisTimeEventType.RITUAL_GOING
+            game, InGameTimeEventType.RITUAL_GOING
         )
     }
 
-    fun unlockTheGod(altarHolder: RedisAltarHolder) {
+    fun unlockTheGod(altarHolder: InGameAltarHolder) {
         altarHolder.lockedGod = null
         altarHolder.thmAddedThisRound = false
         altarHolder.round = 0
@@ -438,25 +438,25 @@ class RitualHandler(
 
     fun startAnotherRound(
         data: GlobalGameData,
-        holder: RedisAltarHolder
+        holder: InGameAltarHolder
     ) {
         holder.round++
         holder.thmAddedThisRound = false
-        redisAltarHolderRepository.save(holder)
+        inGameAltarHolderRepository.save(holder)
         eventHandler.createEvent(
-            data.game, RedisTimeEventType.RITUAL_GOING
+            data.game, InGameTimeEventType.RITUAL_GOING
         )
     }
 
     private fun createGodVote(
         god: God,
-        altar: RedisAltar,
+        altar: InGameAltar,
         globalGameData: GlobalGameData,
-        currentGameUser: RedisGameUser,
-    ): RedisAltarPolling {
+        currentGameUser: InGameGameUser,
+    ): InGameAltarPolling {
         val userId: Long = currentGameUser.inGameId()
         val godId = god.getId()
-        val altarPolling = RedisAltarPolling(
+        val altarPolling = InGameAltarPolling(
             id = generateRandomId(),
             started = globalGameData.game.globalTimer,
             altarId = altar.inGameId(),
@@ -465,7 +465,7 @@ class RitualHandler(
             userVotes = mutableMapOf(userId to godId),
             state = MapAltarPollingState.ONGOING
         )
-        redisAltarPollingRepository.save(altarPolling)
+        inGameAltarPollingRepository.save(altarPolling)
         return altarPolling
     }
 
@@ -473,11 +473,11 @@ class RitualHandler(
         gameId: Long,
         globalTimer: Long,
         sourceUserId: Long,
-        altar: RedisAltar
+        altar: InGameAltar
     ) {
         eventHandler.createEvent(
             gameId = gameId,
-            eventType = RedisTimeEventType.ALTAR_VOTING,
+            eventType = InGameTimeEventType.ALTAR_VOTING,
             startDateTime = globalTimer,
             sourceObjectId = sourceUserId,
             location = Location(altar.x, altar.y, altar.z),
@@ -486,14 +486,14 @@ class RitualHandler(
 
     private fun findRitualEvent(ongoingEvents: List<OngoingEvent>) =
         ongoingEvents.filter {
-            it.event.type == RedisTimeEventType.RITUAL_GOING &&
-                    it.event.state == RedisTimeEventState.ACTIVE
+            it.event.type == InGameTimeEventType.RITUAL_GOING &&
+                    it.event.state == InGameTimeEventState.ACTIVE
         }
 
     private fun shiftTimeOfEvent(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         item: Item,
-        altarHolder: RedisAltarHolder?
+        altarHolder: InGameAltarHolder?
     ) {
         pushEvent(event, altarHolder, item)
     }
@@ -501,7 +501,7 @@ class RitualHandler(
     private fun shiftTimeOfEvent(
         ongoingEvents: List<OngoingEvent>,
         item: Item,
-        altarHolder: RedisAltarHolder?
+        altarHolder: InGameAltarHolder?
     ) {
         findRitualEvent(ongoingEvents).forEach { event ->
             pushEvent(event.event, altarHolder, item)
@@ -521,8 +521,8 @@ class RitualHandler(
     }
 
     private fun pushEvent(
-        ritualEvent: RedisTimeEvent,
-        altarHolder: RedisAltarHolder?,
+        ritualEvent: InGameTimeEvent,
+        altarHolder: InGameAltarHolder?,
         item: Item
     ) {
         logger.info("shift time")
@@ -537,7 +537,7 @@ class RitualHandler(
     }
 
     private fun thisItemIsPutOnAltar(
-        altarHolder: RedisAltarHolder?,
+        altarHolder: InGameAltarHolder?,
         item: Item
     ) = (altarHolder?.itemsOnAltars?.get(item) ?: 0) >= (altarHolder?.itemsForRitual?.get(item) ?: 0)
 

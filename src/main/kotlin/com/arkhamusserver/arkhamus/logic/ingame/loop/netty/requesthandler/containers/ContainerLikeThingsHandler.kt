@@ -2,9 +2,9 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.conta
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,8 +21,8 @@ class ContainerLikeThingsHandler(
     }
 
     fun getTrueNewInventoryContent(
-        oldCrafter: RedisCrafter,
-        oldGameUser: RedisGameUser,
+        oldCrafter: InGameCrafter,
+        oldGameUser: InGameGameUser,
         newInventoryContent: List<InventoryCell>
     ): List<InventoryCell> {
         val oldCrafterItemsList = oldCrafter.items
@@ -42,8 +42,8 @@ class ContainerLikeThingsHandler(
     }
 
     fun getTrueNewInventoryContent(
-        oldContainer: RedisContainer,
-        oldGameUser: RedisGameUser,
+        oldContainer: InGameContainer,
+        oldGameUser: InGameGameUser,
         newInventoryContent: List<InventoryCell>
     ): List<InventoryCell> {
         logger.info("items from request = ${newInventoryContent.joinToString { it.item.name + " " + it.number }}")

@@ -5,10 +5,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithGameTags
+import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithGameTags
 import org.springframework.stereotype.Component
 
 @Component
@@ -23,7 +23,7 @@ class ObjectWithTagsHandler(
 
     fun processObject(
         withGameTags: WithGameTags,
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData
     ) {
         withGameTags.gameTags().forEach { tag ->
@@ -40,14 +40,14 @@ class ObjectWithTagsHandler(
     }
 
     private fun processPeekabooCurse(
-        user: RedisGameUser,
+        user: InGameGameUser,
         withGameTags: WithGameTags,
         tag: InGameObjectTag,
         data: GlobalGameData
     ) {
         madnessHandler.applyMadness(user, PEEKABOO_CURSE_ITEM_VALUE, data.game.globalTimer)
         inGameTagsHandler.removeTag(withGameTags, tag)
-        if (withGameTags is RedisContainer) {
+        if (withGameTags is InGameContainer) {
             shortTimeEventHandler.createShortTimeEvent(
                 objectId = withGameTags.inGameId(),
                 gameId = data.game.gameId!!,
@@ -58,7 +58,7 @@ class ObjectWithTagsHandler(
                 sourceUserId = user.userId
             )
         }
-        if (withGameTags is RedisCrafter) {
+        if (withGameTags is InGameCrafter) {
             shortTimeEventHandler.createShortTimeEvent(
                 objectId = withGameTags.inGameId(),
                 gameId = data.game.gameId!!,

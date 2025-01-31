@@ -5,8 +5,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.VisibilityByTag
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorUserState
-import com.arkhamusserver.arkhamus.model.redis.RedisDoor
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameDoor
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.DoorResponse
 import org.springframework.stereotype.Component
 
@@ -16,8 +16,8 @@ class DoorDataHandler(
     private val visibilityByTagsHandler: VisibilityByTagsHandler
 ) {
     fun map(
-        myUser: RedisGameUser,
-        doors: Collection<RedisDoor>,
+        myUser: InGameGameUser,
+        doors: Collection<InGameDoor>,
         levelGeometryData: LevelGeometryData
     ): List<DoorResponse> {
         return doors.map { door ->
@@ -40,16 +40,16 @@ class DoorDataHandler(
     }
 
     private fun inBanList(
-        user: RedisGameUser,
-        door: RedisDoor
+        user: InGameGameUser,
+        door: InGameDoor
     ): Boolean {
         return door.closedForUsers.contains(user.inGameId())
     }
 
     private fun mask(
         responseToMask: DoorResponse,
-        door: RedisDoor,
-        myUser: RedisGameUser,
+        door: InGameDoor,
+        myUser: InGameGameUser,
         levelGeometryData: LevelGeometryData
     ) {
         if (

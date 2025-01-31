@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banv
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.redis.*
+import com.arkhamusserver.arkhamus.model.ingame.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -11,20 +11,20 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestRespon
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class CallForBanVoteRequestProcessData(
-    var voteSpot: RedisVoteSpot?,
-    var threshold: RedisThreshold?,
-    var currentUserVoteSpot: RedisUserVoteSpot?,
+    var voteSpot: InGameVoteSpot?,
+    var threshold: InGameThreshold?,
+    var currentUserVoteSpot: InGameUserVoteSpot?,
     var canCallForVote: Boolean,
     var successfullyCalled: Boolean,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    gameUser: RedisGameUser,
-    otherGameUsers: List<RedisGameUser>,
+    gameUser: InGameGameUser,
+    otherGameUsers: List<InGameGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,
-    containers: List<RedisContainer>,
-    crafters: List<RedisCrafter>,
+    containers: List<InGameContainer>,
+    crafters: List<InGameCrafter>,
     clues: ExtendedCluesResponse,
     userQuestProgresses: List<UserQuestResponse>,
     tick: Long

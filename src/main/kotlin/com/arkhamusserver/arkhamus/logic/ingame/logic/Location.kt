@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic
 
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 
 data class Location(
     var x: Double,

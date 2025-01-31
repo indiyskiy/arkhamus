@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
+import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -16,19 +16,19 @@ class FarsightAbilityProcessor : ActiveAbilityProcessor {
         val logger: Logger = LoggerFactory.getLogger(FarsightAbilityProcessor::class.java)
     }
 
-    override fun accepts(castAbility: RedisAbilityCast): Boolean {
+    override fun accepts(castAbility: InGameAbilityCast): Boolean {
         return castAbility.abilityId.toAbility()?.let { ability ->
             ability == Ability.FARSIGHT
         } == true
     }
 
     override fun processActive(
-        castAbility: RedisAbilityCast, globalGameData: GlobalGameData
+        castAbility: InGameAbilityCast, globalGameData: GlobalGameData
     ) {
 
     }
 
-    override fun finishActive(castAbility: RedisAbilityCast, globalGameData: GlobalGameData) {
+    override fun finishActive(castAbility: InGameAbilityCast, globalGameData: GlobalGameData) {
         val user = globalGameData.users[castAbility.sourceUserId]
         if (user != null) {
             user.stateTags -= UserStateTag.FARSIGHT

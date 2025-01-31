@@ -1,26 +1,26 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lantern.FillLanternRequestProcessData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLanternRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameLanternRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisLantern
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameLantern
 import org.springframework.stereotype.Component
 
 @Component
 class LanternHandler(
     private val inventoryHandler: InventoryHandler,
-    private val redisLanternRepository: RedisLanternRepository
+    private val inGameLanternRepository: InGameLanternRepository
 ) {
-    fun lightLantern(lantern: RedisLantern) {
+    fun lightLantern(lantern: InGameLantern) {
         lantern.lanternState = LanternState.LIT
-        redisLanternRepository.save(lantern)
+        inGameLanternRepository.save(lantern)
     }
 
     fun canFill(
-        user: RedisGameUser,
-        lantern: RedisLantern?
+        user: InGameGameUser,
+        lantern: InGameLantern?
     ): Boolean {
         val canPay = checkIfUserCanPay(user)
         val lanternEmpty = lantern != null &&
@@ -30,7 +30,7 @@ class LanternHandler(
     }
 
     fun fillLantern(
-        lantern: RedisLantern,
+        lantern: InGameLantern,
         gameData: FillLanternRequestProcessData
     ) {
         val user = gameData.gameUser!!
@@ -38,17 +38,17 @@ class LanternHandler(
     }
 
     fun fillLantern(
-        user: RedisGameUser,
-        lantern: RedisLantern,
+        user: InGameGameUser,
+        lantern: InGameLantern,
     ) {
         lantern.fuel = 100.0
         lantern.lanternState = LanternState.FILLED
-        redisLanternRepository.save(lantern)
+        inGameLanternRepository.save(lantern)
         inventoryHandler.consumeItem(user, Item.SOLARITE)
     }
 
     private fun checkIfUserCanPay(
-        user: RedisGameUser
+        user: InGameGameUser
     ): Boolean {
         val costItem = Item.SOLARITE
         val costValue = 1
@@ -60,7 +60,7 @@ class LanternHandler(
         return canPay
     }
 
-    fun canLight(lantern: RedisLantern) =
+    fun canLight(lantern: InGameLantern) =
         lantern.lanternState == LanternState.FILLED
 
 }

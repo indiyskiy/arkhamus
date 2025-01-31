@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.MockRedisDataAccess
+import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.MockInGameDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ExecutedAction
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.container.UpdateContainerRequestGameData
@@ -24,11 +24,11 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.parts.RedisUserSkinSetting
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
+import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
@@ -43,7 +43,7 @@ import java.sql.Timestamp
 @SpringBootTest
 class UpdateContainerRequestProcessorTest {
     @Autowired
-    private lateinit var redisDataAccess: MockRedisDataAccess
+    private lateinit var redisDataAccess: MockInGameDataAccess
 
     @Autowired
     private lateinit var updateContainerRequestProcessor: UpdateContainerRequestProcessor
@@ -342,7 +342,7 @@ class UpdateContainerRequestProcessorTest {
 
         val requestMessage = UpdateContainerRequestMessage(
             actionId = 1000,
-            externalInventoryId = data.redisContainer.inGameId(),
+            externalInventoryId = data.inGameContainer.inGameId(),
             newInventoryContent = newInventoryContent,
             type = "CloseContainerRequestMessage",
             close = true,
@@ -413,7 +413,7 @@ class UpdateContainerRequestProcessorTest {
             god = God.AAMON,
             token = "gametoken"
         )
-        val redisGame = RedisGame(
+        val inRamGame = InRamGame(
             id = gameSession.id.toString(),
             gameId = gameSession.id,
             currentTick = 100L,
@@ -444,7 +444,7 @@ class UpdateContainerRequestProcessorTest {
         )
         val inContainerItems = createContainersItems()
 
-        val redisContainer = RedisContainer(
+        val inGameContainer = InGameContainer(
             id = "${gameSession.id}::${container.id}",
             containerId = container.id!!,
             gameId = gameSession.id!!,
@@ -462,7 +462,7 @@ class UpdateContainerRequestProcessorTest {
 
         val oldUserItems = createOldUserItems()
 
-        val gameUser = RedisGameUser(
+        val gameUser = InGameGameUser(
             id = generateRandomId(),
             userId = user.id!!,
             nickName = "test user",
@@ -483,11 +483,11 @@ class UpdateContainerRequestProcessorTest {
             leftTheGame = false,
             madnessDebuffs = mutableSetOf(),
             visibilityModifiers = mutableSetOf(),
-            originalSkin = RedisUserSkinSetting(SkinColor.LAVENDER)
+            originalSkin = InGameUserSkinSetting(SkinColor.LAVENDER)
         )
 
         val oldContainer = UpdateContainerRequestGameData(
-            container = redisContainer,
+            container = inGameContainer,
             sortedUserInventory = newInventoryContent,
             executedSuccessfully = true,
             gameUser = gameUser,
@@ -505,10 +505,10 @@ class UpdateContainerRequestProcessorTest {
         )
 
         val globalGameData = GlobalGameData(
-            game = redisGame,
-            altarHolder = RedisAltarHolder(
+            game = inRamGame,
+            altarHolder = InGameAltarHolder(
                 id = "altarHolder",
-                gameId = redisGame.gameId!!,
+                gameId = inRamGame.gameId!!,
                 altarHolderId = 0L,
                 x = 50.0,
                 y = 50.0,
@@ -519,11 +519,11 @@ class UpdateContainerRequestProcessorTest {
                 itemsToAltarId = emptyMap(),
             ),
             users = mapOf(gameUser.userId to gameUser),
-            containers = mapOf(redisContainer.inGameId() to redisContainer),
+            containers = mapOf(inGameContainer.inGameId() to inGameContainer),
             timeEvents = emptyList(),
             crafters = emptyMap()
         )
-        val data = Data(redisContainer, gameUser, requestUserAccount, gameSession, user, oldContainer, globalGameData)
+        val data = Data(inGameContainer, gameUser, requestUserAccount, gameSession, user, oldContainer, globalGameData)
         return data
     }
 
@@ -548,8 +548,8 @@ class UpdateContainerRequestProcessorTest {
     }
 
     data class Data(
-        val redisContainer: RedisContainer,
-        val gameUser: RedisGameUser,
+        val inGameContainer: InGameContainer,
+        val gameUser: InGameGameUser,
         val requestUserAccount: UserAccount,
         val gameSession: GameSession,
         val user: UserOfGameSession,

@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
+import com.arkhamusserver.arkhamus.model.ingame.InGameCraftProcess
 
 data class CraftProcessResponse(
     var id: String,
@@ -11,9 +11,9 @@ data class CraftProcessResponse(
     var timeStart: Long,
     var timePast: Long,
     var timeLeft: Long,
-    var state: RedisTimeEventState,
+    var state: InGameTimeEventState,
 ) {
-    constructor(craftProcess: RedisCraftProcess) : this(
+    constructor(craftProcess: InGameCraftProcess) : this(
         id = craftProcess.id,
         recipeId = craftProcess.recipeId,
         targetCrafterId = craftProcess.targetCrafterId,

@@ -2,17 +2,17 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortT
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameShortTimeEvent
 
 interface SpecificShortTimeEventFilter {
     fun accept(
-        event: RedisShortTimeEvent,
+        event: InGameShortTimeEvent,
     ): Boolean
 
     fun canSee(
-        event: RedisShortTimeEvent,
-        user: RedisGameUser,
+        event: InGameShortTimeEvent,
+        user: InGameGameUser,
         zones: List<LevelZone>,
         data: GlobalGameData
     ): Boolean

@@ -1,46 +1,46 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLevelEllipseRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLevelTetragonRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLevelZoneRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameLevelEllipseRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameLevelTetragonRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameLevelZoneRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.EllipseRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelZoneRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.TetragonRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelZone
-import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
-import com.arkhamusserver.arkhamus.model.redis.RedisLevelZoneEllipse
-import com.arkhamusserver.arkhamus.model.redis.RedisLevelZoneTetragon
+import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
+import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZoneEllipse
+import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZoneTetragon
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GameStartLevelZoneLogic(
     private val levelZoneRepository: LevelZoneRepository,
-    private val redisLevelZoneRepository: RedisLevelZoneRepository,
+    private val inGameLevelZoneRepository: InGameLevelZoneRepository,
     private val tetragonRepository: TetragonRepository,
     private val ellipseRepository: EllipseRepository,
-    private val redisLevelTetragonRepository: RedisLevelTetragonRepository,
-    private val redisLevelEllipseRepository: RedisLevelEllipseRepository,
+    private val inGameLevelTetragonRepository: InGameLevelTetragonRepository,
+    private val inGameLevelEllipseRepository: InGameLevelEllipseRepository,
 ) {
 
     @Transactional
-    fun createLevelZones(levelId: Long, game: GameSession): List<RedisLevelZone> {
+    fun createLevelZones(levelId: Long, game: GameSession): List<InGameLevelZone> {
         val levelZones = levelZoneRepository.findByLevelId(levelId)
         val zones = levelZones.map {
-            val zone = createRedisLevelZone(it, game)
-            createRedisTetragons(it, game)
-            createRedisEllipses(it, game)
+            val zone = createInGameLevelZone(it, game)
+            createInGameTetragons(it, game)
+            createInGameEllipses(it, game)
             zone
         }
         return zones
     }
 
-    private fun createRedisTetragons(zone: LevelZone, game: GameSession) {
+    private fun createInGameTetragons(zone: LevelZone, game: GameSession) {
         val tetragons = tetragonRepository.findByLevelZoneId(zone.id!!)
         tetragons.forEach {
-            val redisTetragon = RedisLevelZoneTetragon(
+            val inGameTetragon = InGameLevelZoneTetragon(
                 id = generateRandomId(),
                 gameId = game.id!!,
                 levelZoneId = zone.inGameId,
@@ -62,14 +62,14 @@ class GameStartLevelZoneLogic(
                 point3Y = it.point3Y,
                 point3Z = it.point3Z,
             )
-            redisLevelTetragonRepository.save(redisTetragon)
+            inGameLevelTetragonRepository.save(inGameTetragon)
         }
     }
 
-    private fun createRedisEllipses(zone: LevelZone, game: GameSession) {
+    private fun createInGameEllipses(zone: LevelZone, game: GameSession) {
         val ellipses = ellipseRepository.findByLevelZoneId(zone.id!!)
         ellipses.forEach {
-            val redisEllipse = RedisLevelZoneEllipse(
+            val inGameEllipse = InGameLevelZoneEllipse(
                 id = generateRandomId(),
                 gameId = game.id!!,
                 levelZoneId = zone.inGameId,
@@ -80,18 +80,18 @@ class GameStartLevelZoneLogic(
                 height = it.height,
                 width = it.width,
             )
-            redisLevelEllipseRepository.save(redisEllipse)
+            inGameLevelEllipseRepository.save(inGameEllipse)
         }
     }
 
-    private fun createRedisLevelZone(levelZone: LevelZone, game: GameSession): RedisLevelZone {
-        return RedisLevelZone(
+    private fun createInGameLevelZone(levelZone: LevelZone, game: GameSession): InGameLevelZone {
+        return InGameLevelZone(
             id = generateRandomId(),
             gameId = game.id!!,
             levelZoneId = levelZone.inGameId,
             zoneType = levelZone.zoneType
         ).apply {
-            redisLevelZoneRepository.save(this)
+            inGameLevelZoneRepository.save(this)
         }
     }
 }

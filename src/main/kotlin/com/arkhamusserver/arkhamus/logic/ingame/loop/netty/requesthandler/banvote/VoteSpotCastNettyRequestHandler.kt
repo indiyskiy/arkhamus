@@ -14,9 +14,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.VoteSpotCastRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisUserVoteSpot
-import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUserVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.banvote.VoteSpotCastRequestMessage
 import org.springframework.stereotype.Component
@@ -112,9 +112,9 @@ class VoteSpotCastNettyRequestHandler(
 
 
     private fun canUserCastVote(
-        userVoteSpot: RedisUserVoteSpot?,
-        voteSpot: RedisVoteSpot?,
-        targetUser: RedisGameUser?
+        userVoteSpot: InGameUserVoteSpot?,
+        voteSpot: InGameVoteSpot?,
+        targetUser: InGameGameUser?
     ): Boolean {
         if (voteSpot == null || userVoteSpot == null || targetUser == null) return false
         return voteHandler.canVote(userVoteSpot, targetUser, voteSpot)

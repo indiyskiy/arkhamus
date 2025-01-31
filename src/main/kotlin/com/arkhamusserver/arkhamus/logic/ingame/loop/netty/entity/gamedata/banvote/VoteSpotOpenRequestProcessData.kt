@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.CantVoteReason
-import com.arkhamusserver.arkhamus.model.redis.*
+import com.arkhamusserver.arkhamus.model.ingame.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -12,9 +12,9 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestRespon
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class VoteSpotOpenRequestProcessData(
-    var voteSpot: RedisVoteSpot?,
-    var currentUserVoteSpot: RedisUserVoteSpot?,
-    var thisSpotUserInfos: List<RedisUserVoteSpot>,
+    var voteSpot: InGameVoteSpot?,
+    var currentUserVoteSpot: InGameUserVoteSpot?,
+    var thisSpotUserInfos: List<InGameUserVoteSpot>,
     var canVote: Boolean,
     var canPay: Boolean,
     var canCallForVote: Boolean,
@@ -22,13 +22,13 @@ class VoteSpotOpenRequestProcessData(
     val cantVoteReasons: List<CantVoteReason>,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    gameUser: RedisGameUser,
-    otherGameUsers: List<RedisGameUser>,
+    gameUser: InGameGameUser,
+    otherGameUsers: List<InGameGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,
-    containers: List<RedisContainer>,
-    crafters: List<RedisCrafter>,
+    containers: List<InGameContainer>,
+    crafters: List<InGameCrafter>,
     clues: ExtendedCluesResponse,
     userQuestProgresses: List<UserQuestResponse>,
     tick: Long

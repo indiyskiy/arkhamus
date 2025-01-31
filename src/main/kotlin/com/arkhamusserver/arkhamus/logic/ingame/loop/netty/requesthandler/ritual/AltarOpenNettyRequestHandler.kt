@@ -15,8 +15,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritua
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toGod
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltarPolling
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.AltarOpenRequestMessage
 import org.springframework.stereotype.Component
@@ -95,8 +95,8 @@ class AltarOpenNettyRequestHandler(
     }
 
     private fun votedForGod(
-        altarPolling: RedisAltarPolling?,
-        user: RedisGameUser
+        altarPolling: InGameAltarPolling?,
+        user: InGameGameUser
     ) = altarPolling?.userVotes?.get(user.inGameId())?.toGod()
 }
 

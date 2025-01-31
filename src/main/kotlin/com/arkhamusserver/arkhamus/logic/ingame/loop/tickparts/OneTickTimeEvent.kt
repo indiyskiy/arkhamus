@@ -3,9 +3,9 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent.TimeEventProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameTimeEventRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -14,7 +14,7 @@ import kotlin.math.min
 
 @Component
 class OneTickTimeEvent(
-    private val timeEventRepository: RedisTimeEventRepository,
+    private val timeEventRepository: InGameTimeEventRepository,
     private val timeEventProcessors: List<TimeEventProcessor>
 ) {
 
@@ -25,23 +25,23 @@ class OneTickTimeEvent(
     @Transactional
     fun processTimeEvents(
         globalGameData: GlobalGameData,
-        timeEvents: List<RedisTimeEvent>,
+        timeEvents: List<InGameTimeEvent>,
         currentGameTime: Long,
         timePassedMillis: Long
     ): List<OngoingEvent> {
-        val redisTimeEvents: List<OngoingEvent> = timeEvents.mapNotNull { event ->
+        val inGameTimeEvents: List<OngoingEvent> = timeEvents.mapNotNull { event ->
             val timeAdd = min(event.timeLeft, timePassedMillis)
-            if (event.state == RedisTimeEventState.ACTIVE) {
+            if (event.state == InGameTimeEventState.ACTIVE) {
                 processActiveEvent(event, globalGameData, timeAdd, currentGameTime)
             } else {
                 null
             }
         }
-        return redisTimeEvents
+        return inGameTimeEvents
     }
 
     private fun processActiveEvent(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         timeAdd: Long,
         currentGameTime: Long,
@@ -56,7 +56,7 @@ class OneTickTimeEvent(
             timeEventRepository.save(event)
         } else {
             applyEndProcessors(event, globalGameData, currentGameTime, timeAdd)
-            event.state = RedisTimeEventState.PAST
+            event.state = InGameTimeEventState.PAST
             timeEventRepository.delete(event)
         }
         return OngoingEvent(
@@ -65,7 +65,7 @@ class OneTickTimeEvent(
     }
 
     private fun applyStartProcessors(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long
     ) {
@@ -79,7 +79,7 @@ class OneTickTimeEvent(
     }
 
     private fun applyEndProcessors(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -94,7 +94,7 @@ class OneTickTimeEvent(
     }
 
     private fun applyProcessors(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long

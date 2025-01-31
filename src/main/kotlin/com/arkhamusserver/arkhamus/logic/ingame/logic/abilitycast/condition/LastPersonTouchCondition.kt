@@ -4,10 +4,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -27,7 +27,7 @@ class LastPersonTouchCondition(
 
     override fun canBeCastedRightNow(
         ability: Ability,
-        user: RedisGameUser,
+        user: InGameGameUser,
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
@@ -39,7 +39,7 @@ class LastPersonTouchCondition(
             logger.info("target is not WithPoint")
             return false
         }
-        if (target !is RedisContainer && target !is RedisCrafter) {
+        if (target !is InGameContainer && target !is InGameCrafter) {
             logger.info("target is not right")
             return false
         }
@@ -49,7 +49,7 @@ class LastPersonTouchCondition(
 
     override fun canBeCastedAtAll(
         ability: Ability,
-        user: RedisGameUser,
+        user: InGameGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
         return gameObjectFinder.all(

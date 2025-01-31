@@ -3,13 +3,13 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timee
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAltarHolderRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL
-import com.arkhamusserver.arkhamus.model.redis.RedisAltar
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -20,18 +20,18 @@ import kotlin.math.sin
 class RitualGoingEventProcessor(
     private val ritualHandler: RitualHandler,
     private val geometryUtils: GeometryUtils,
-    private val redisAltarHolderRepository: RedisAltarHolderRepository
+    private val inGameAltarHolderRepository: InGameAltarHolderRepository
 ) : TimeEventProcessor {
 
     companion object {
         var logger: Logger = LoggerFactory.getLogger(RitualGoingEventProcessor::class.java)
     }
 
-    override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.RITUAL_GOING
+    override fun accept(type: InGameTimeEventType): Boolean =
+        type == InGameTimeEventType.RITUAL_GOING
 
     override fun processStart(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -41,7 +41,7 @@ class RitualGoingEventProcessor(
     }
 
     override fun process(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -55,7 +55,7 @@ class RitualGoingEventProcessor(
             if (altarHolder.usersToKick.isNotEmpty()) {
                 ritualHandler.kickUsersFromRitual(altarHolder, globalGameData)
             }
-            redisAltarHolderRepository.save(altarHolder)
+            inGameAltarHolderRepository.save(altarHolder)
         }
 
         if (currentItem != null) {
@@ -74,7 +74,7 @@ class RitualGoingEventProcessor(
     }
 
     override fun processEnd(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -91,28 +91,28 @@ class RitualGoingEventProcessor(
     }
 
     private fun setUsersPosition(
-        values: Collection<RedisGameUser>,
-        altarHolder: RedisAltarHolder,
+        values: Collection<InGameGameUser>,
+        altarHolder: InGameAltarHolder,
         radius: Double
     ) {
         val usersInRitual = values.filter { it.inGameId() in altarHolder.usersInRitual }.sortedBy { it.inGameId() }
         val usersRadius = radius * 2 / 3
         if (usersInRitual.isNotEmpty()) {
             val step = 2 * Math.PI / usersInRitual.size
-            usersInRitual.mapIndexed { index, redisGameUser ->
+            usersInRitual.mapIndexed { index, inGameUser ->
                 val x = usersRadius * cos(index * step) + altarHolder.x
                 val y = altarHolder.y
                 val z = usersRadius * sin(index * step) + altarHolder.z
-                redisGameUser.x = x
-                redisGameUser.y = y
-                redisGameUser.z = z
+                inGameUser.x = x
+                inGameUser.y = y
+                inGameUser.z = z
             }
         }
     }
 
     private fun addUsersToRitual(
-        users: Collection<RedisGameUser>,
-        altarHolder: RedisAltarHolder,
+        users: Collection<InGameGameUser>,
+        altarHolder: InGameAltarHolder,
         radius: Double
     ) {
         users.filterNot { user -> user.inRitual(altarHolder) }.forEach { user ->
@@ -127,15 +127,15 @@ class RitualGoingEventProcessor(
     }
 
     private fun distance(
-        altar: RedisAltar,
-        altarHolder: RedisAltarHolder
+        altar: InGameAltar,
+        altarHolder: InGameAltarHolder
     ): Double {
         return geometryUtils.distance(
             altar, altarHolder
         )
     }
 
-    private fun RedisGameUser.inRitual(altarHolder: RedisAltarHolder): Boolean =
+    private fun InGameGameUser.inRitual(altarHolder: InGameAltarHolder): Boolean =
         altarHolder.usersInRitual.contains(this.inGameId())
 
 }

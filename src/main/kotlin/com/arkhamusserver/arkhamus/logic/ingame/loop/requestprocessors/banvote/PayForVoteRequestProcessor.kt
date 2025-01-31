@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.PayForVoteRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class PayForVoteRequestProcessor(
     private val inventoryHandler: InventoryHandler,
-    private val redisVoteSpotRepository: RedisVoteSpotRepository,
+    private val inGameVoteSpotRepository: InGameVoteSpotRepository,
     private val activityHandler: ActivityHandler
 ) : NettyRequestProcessor {
 
@@ -39,7 +39,7 @@ class PayForVoteRequestProcessor(
         ) {
             inventoryHandler.consumeItems(gameData.gameUser!!, voteSpot.costItem, voteSpot.costValue)
             voteSpot.voteSpotState = VoteSpotState.OPEN
-            redisVoteSpotRepository.save(voteSpot)
+            inGameVoteSpotRepository.save(voteSpot)
             gameData.successfullyPaid = true
 
             activityHandler.addUserWithTargetActivity(

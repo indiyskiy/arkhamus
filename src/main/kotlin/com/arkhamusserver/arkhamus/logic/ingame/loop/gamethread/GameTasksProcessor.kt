@@ -3,16 +3,16 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool.Companion.logger
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.InGameDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ResponseSendingLoopManager
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GameTasksProcessor(
-    private val redisDataAccess: RedisDataAccess,
+    private val inGameDataAccess: InGameDataAccess,
     private val responseSendingLoopManager: ResponseSendingLoopManager,
     private val tickLogic: ArkhamusOneTickLogic,
 ) {
@@ -24,13 +24,13 @@ class GameTasksProcessor(
                 val taskList = synchronized(taskCollectionNotNull) {
                     taskCollectionNotNull.getList().also { taskCollectionNotNull.resetList() }
                 }
-                val redisGame = redisDataAccess.getGame(gameId)
+                val inRamGame = inGameDataAccess.getGame(gameId)
                 // TODO better state handling - e.g. we might want to support pause somehow and other stuff later
-                if (redisGame != null && redisGame.state in GameState.gameInProgressStateStrings) {
+                if (inRamGame != null && inRamGame.state in GameState.gameInProgressStateStrings) {
                     processGameTick(
                         tasks = taskList,
                         gameId = gameId,
-                        ongoingGame = redisGame,
+                        ongoingGame = inRamGame,
                     )
                 }
             } catch (e: Throwable) {
@@ -43,7 +43,7 @@ class GameTasksProcessor(
     private fun processGameTick(
         tasks: List<NettyTickRequestMessageDataHolder>,
         gameId: Long,
-        ongoingGame: RedisGame,
+        ongoingGame: InRamGame,
     ) {
         try {
             val responses = tickLogic.processCurrentTasks(

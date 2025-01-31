@@ -7,9 +7,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool.C
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -25,7 +25,7 @@ class OneTickTryEndGameMaybeHandler(
     }
 
     @Transactional
-    fun checkIfEnd(game: RedisGame, users: Collection<RedisGameUser>, voteSpots: List<RedisVoteSpot>) {
+    fun checkIfEnd(game: InRamGame, users: Collection<InGameGameUser>, voteSpots: List<InGameVoteSpot>) {
         if (game.state == GameState.GAME_END_SCREEN.name ||
             game.state == GameState.FINISHED.name
         ) {
@@ -44,9 +44,9 @@ class OneTickTryEndGameMaybeHandler(
     }
 
     private fun checkIfAllCultistsBanned(
-        game: RedisGame,
-        users: Collection<RedisGameUser>,
-        voteSpots: List<RedisVoteSpot>
+        game: InRamGame,
+        users: Collection<InGameGameUser>,
+        voteSpots: List<InGameVoteSpot>
     ): Boolean {
         if (singlePlayerGame(users)) return false
         val allCultists = users.filter { it.role == RoleTypeInGame.CULTIST }
@@ -64,13 +64,13 @@ class OneTickTryEndGameMaybeHandler(
         return true
     }
 
-    private fun singlePlayerGame(users: Collection<RedisGameUser>): Boolean {
+    private fun singlePlayerGame(users: Collection<InGameGameUser>): Boolean {
         return users.size <= 1
     }
 
     private fun checkIfEverybodyMad(
-        game: RedisGame,
-        users: Collection<RedisGameUser>
+        game: InRamGame,
+        users: Collection<InGameGameUser>
     ): Boolean {
         if (singlePlayerGame(users)) return false
         val notLeavers = users.filter { !it.leftTheGame }
@@ -83,7 +83,7 @@ class OneTickTryEndGameMaybeHandler(
         return false
     }
 
-    private fun abandonIfAllLeave(game: RedisGame, users: Collection<RedisGameUser>) {
+    private fun abandonIfAllLeave(game: InRamGame, users: Collection<InGameGameUser>) {
         if (users.all { it.leftTheGame }) {
             logger.info("end the game - ABANDONED")
             gameEndLogic.endTheGame(
@@ -95,7 +95,7 @@ class OneTickTryEndGameMaybeHandler(
         }
     }
 
-    private fun markLeaversIfNoResponses(game: RedisGame, users: Collection<RedisGameUser>) {
+    private fun markLeaversIfNoResponses(game: InRamGame, users: Collection<InGameGameUser>) {
         if (game.globalTimer - game.lastTimeSentResponse > MAX_TIME_NO_RESPONSES) {
             users.forEach {
                 it.leftTheGame = true

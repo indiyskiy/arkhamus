@@ -4,9 +4,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -26,7 +26,7 @@ class HealMadnessCondition(
 
     override fun canBeCastedRightNow(
         ability: Ability,
-        user: RedisGameUser,
+        user: InGameGameUser,
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
@@ -34,7 +34,7 @@ class HealMadnessCondition(
             logger.info("target is null")
             return false
         }
-        if (target !is RedisGameUser) {
+        if (target !is InGameGameUser) {
             logger.info("target is not user")
             return false
         }
@@ -47,7 +47,7 @@ class HealMadnessCondition(
 
     override fun canBeCastedAtAll(
         ability: Ability,
-        user: RedisGameUser,
+        user: InGameGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
         return gameObjectFinder.all(

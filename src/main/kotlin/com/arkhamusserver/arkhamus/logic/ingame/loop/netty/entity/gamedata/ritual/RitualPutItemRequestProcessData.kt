@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Actio
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.redis.*
+import com.arkhamusserver.arkhamus.model.ingame.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -18,21 +18,21 @@ class RitualPutItemRequestProcessData(
     var itemNumber: Int,
     var canPut: Boolean,
     var currentGameTime: Long,
-    var ritualEvent: RedisTimeEvent?,
-    var altarHolder: RedisAltarHolder?,
-    var usersInRitual: List<RedisGameUser>,
+    var ritualEvent: InGameTimeEvent?,
+    var altarHolder: InGameAltarHolder?,
+    var usersInRitual: List<InGameGameUser>,
     var executedSuccessfully: Boolean,
     var currentStepItem: Item?,
     var notches: List<ItemNotch>,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    gameUser: RedisGameUser,
-    otherGameUsers: List<RedisGameUser>,
+    gameUser: InGameGameUser,
+    otherGameUsers: List<InGameGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,
-    containers: List<RedisContainer>,
-    crafters: List<RedisCrafter>,
+    containers: List<InGameContainer>,
+    crafters: List<InGameCrafter>,
     clues: ExtendedCluesResponse,
     userQuestProgresses: List<UserQuestResponse>,
     tick: Long

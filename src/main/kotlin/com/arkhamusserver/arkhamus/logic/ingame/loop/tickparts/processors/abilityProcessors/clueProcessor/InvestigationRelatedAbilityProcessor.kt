@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilit
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
+import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -31,20 +31,20 @@ class InvestigationRelatedAbilityProcessor(
         )
     }
 
-    override fun accepts(castAbility: RedisAbilityCast): Boolean {
+    override fun accepts(castAbility: InGameAbilityCast): Boolean {
         return castAbility.abilityId.toAbility()?.let { ability ->
             ability in relatedSet
         } == true
     }
 
     override fun processActive(
-        castAbility: RedisAbilityCast,
+        castAbility: InGameAbilityCast,
         globalGameData: GlobalGameData
     ) {
 
     }
 
-    override fun finishActive(castAbility: RedisAbilityCast, globalGameData: GlobalGameData) {
+    override fun finishActive(castAbility: InGameAbilityCast, globalGameData: GlobalGameData) {
         val user = globalGameData.users[castAbility.sourceUserId]
         user?.let {
             val ability = castAbility.abilityId.toAbility()!!

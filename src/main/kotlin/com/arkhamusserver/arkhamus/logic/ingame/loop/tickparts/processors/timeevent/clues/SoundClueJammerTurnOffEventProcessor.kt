@@ -2,21 +2,21 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timee
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent.TimeEventProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.clues.RedisSoundClueRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameSoundClueRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import org.springframework.stereotype.Component
 
 @Component
 class SoundClueJammerTurnOffEventProcessor(
-    private val redisSoundClueRepository: RedisSoundClueRepository
+    private val inGameSoundClueRepository: InGameSoundClueRepository
 ) : TimeEventProcessor {
-    override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.SOUND_CLUE_JAMMER_TURN_OFF
+    override fun accept(type: InGameTimeEventType): Boolean =
+        type == InGameTimeEventType.SOUND_CLUE_JAMMER_TURN_OFF
 
 
     override fun process(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -25,7 +25,7 @@ class SoundClueJammerTurnOffEventProcessor(
     }
 
     override fun processStart(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -34,7 +34,7 @@ class SoundClueJammerTurnOffEventProcessor(
     }
 
     override fun processEnd(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -44,7 +44,7 @@ class SoundClueJammerTurnOffEventProcessor(
 
     private fun switchJammer(
         globalGameData: GlobalGameData,
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         turnedOn: Boolean
     ) {
         val clue = globalGameData.clues.sound.first {
@@ -56,6 +56,6 @@ class SoundClueJammerTurnOffEventProcessor(
             it.inGameId == event.targetObjectId
         }
         jammer.turnedOn = turnedOn
-        redisSoundClueRepository.save(clue)
+        inGameSoundClueRepository.save(clue)
     }
 }

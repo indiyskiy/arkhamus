@@ -3,11 +3,11 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
 @Component
@@ -31,7 +31,7 @@ class SummonNightAbilityCast(
     }
 
     override fun cast(
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -44,12 +44,12 @@ class SummonNightAbilityCast(
     }
 
     private fun createSummonedNightEvent(
-        game: RedisGame,
-        sourceUser: RedisGameUser
+        game: InRamGame,
+        sourceUser: InGameGameUser
     ) {
         timeEventHandler.createEvent(
             game,
-            RedisTimeEventType.SUMMONED_NIGHT,
+            InGameTimeEventType.SUMMONED_NIGHT,
             sourceUser
         )
     }

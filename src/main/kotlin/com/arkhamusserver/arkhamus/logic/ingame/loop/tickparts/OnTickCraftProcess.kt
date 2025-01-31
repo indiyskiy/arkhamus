@@ -2,12 +2,12 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.RecipesSource
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCraftProcessRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameCraftProcessRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameCrafterRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
+import com.arkhamusserver.arkhamus.model.ingame.InGameCraftProcess
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,8 +17,8 @@ import kotlin.math.min
 
 @Component
 class OnTickCraftProcess(
-    private val redisCraftProcessRepository: RedisCraftProcessRepository,
-    private val redisCrafterRepository: RedisCrafterRepository,
+    private val inGameCraftProcessRepository: InGameCraftProcessRepository,
+    private val inGameCrafterRepository: InGameCrafterRepository,
     private val recipesSource: RecipesSource,
 ) {
     companion object {
@@ -28,11 +28,11 @@ class OnTickCraftProcess(
     @Transactional
     fun applyCraftProcess(
         globalGameData: GlobalGameData,
-        castAbilities: List<RedisCraftProcess>,
+        castAbilities: List<InGameCraftProcess>,
         timePassedMillis: Long
     ) {
         castAbilities.forEach { craftProcess ->
-            if (craftProcess.state == RedisTimeEventState.ACTIVE && craftProcess.timeLeft > 0) {
+            if (craftProcess.state == InGameTimeEventState.ACTIVE && craftProcess.timeLeft > 0) {
                 val timeAdd = min(craftProcess.timeLeft, timePassedMillis)
                 processActiveCraftProcess(craftProcess, timeAdd)
             } else {
@@ -42,7 +42,7 @@ class OnTickCraftProcess(
                 val crafter = globalGameData.crafters[craftProcess.targetCrafterId]!!
                 logger.info("created $numberOfItems of ${produced.name}")
                 addItemToCrafter(produced, numberOfItems, crafter)
-                redisCraftProcessRepository.delete(craftProcess)
+                inGameCraftProcessRepository.delete(craftProcess)
             }
         }
     }
@@ -50,7 +50,7 @@ class OnTickCraftProcess(
     private fun addItemToCrafter(
         produced: Item,
         numberOfItems: Int,
-        crafter: RedisCrafter
+        crafter: InGameCrafter
     ) {
         val existingCell = crafter.items.firstOrNull { it.item == produced }
         if (existingCell != null) {
@@ -58,11 +58,11 @@ class OnTickCraftProcess(
         } else {
             crafter.items += InventoryCell(produced, numberOfItems)
         }
-        redisCrafterRepository.save(crafter)
+        inGameCrafterRepository.save(crafter)
     }
 
     private fun processActiveCraftProcess(
-        craftProcess: RedisCraftProcess,
+        craftProcess: InGameCraftProcess,
         timeAdd: Long,
     ) {
         if (craftProcess.timeLeft > 0) {
@@ -70,8 +70,8 @@ class OnTickCraftProcess(
             craftProcess.timeLeft -= timeAdd
         }
         if (craftProcess.timeLeft <= 0) {
-            craftProcess.state = RedisTimeEventState.PAST
+            craftProcess.state = InGameTimeEventState.PAST
         }
-        redisCraftProcessRepository.save(craftProcess)
+        inGameCraftProcessRepository.save(craftProcess)
     }
 }

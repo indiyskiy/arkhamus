@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameU
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
-import com.arkhamusserver.arkhamus.model.redis.*
+import com.arkhamusserver.arkhamus.model.ingame.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -13,9 +13,9 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestRespon
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class AltarOpenRequestProcessData(
-    var altar: RedisAltar?,
-    var altarHolder: RedisAltarHolder?,
-    var altarPolling: RedisAltarPolling?,
+    var altar: InGameAltar?,
+    var altarHolder: InGameAltarHolder?,
+    var altarPolling: InGameAltarPolling?,
     var voteProcessOpen: Boolean,
     var canVote: Boolean,
     var canStartVote: Boolean,
@@ -24,13 +24,13 @@ class AltarOpenRequestProcessData(
     var godLocked: God?,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    gameUser: RedisGameUser,
-    otherGameUsers: List<RedisGameUser>,
+    gameUser: InGameGameUser,
+    otherGameUsers: List<InGameGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,
-    containers: List<RedisContainer>,
-    crafters: List<RedisCrafter>,
+    containers: List<InGameContainer>,
+    crafters: List<InGameCrafter>,
     clues: ExtendedCluesResponse,
     userQuestProgresses: List<UserQuestResponse>,
     tick: Long

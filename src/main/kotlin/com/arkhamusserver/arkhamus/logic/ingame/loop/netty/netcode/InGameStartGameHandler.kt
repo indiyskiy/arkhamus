@@ -4,10 +4,10 @@ import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.globalutils.toJson
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.AuthRequestProcessData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.InRamGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameStartedResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class InGameStartGameHandler(
     private val channelRepository: ChannelRepository,
-    private val redisGameRedisRepository: RedisGameRepository,
+    private val inRamGameRepository: InRamGameRepository,
     private val gameSessionRepository: GameSessionRepository
 ) {
     companion object {
@@ -59,12 +59,12 @@ class InGameStartGameHandler(
     }
 
     private fun updateGameOnStart(authData: AuthRequestProcessData) {
-        val game = redisGameRedisRepository.findById(authData.game!!.id.toString()).get()
+        val game = inRamGameRepository.findById(authData.game!!.id.toString()).get()
         game.currentTick = 0
         game.serverTimeLastTick = System.currentTimeMillis()
         game.serverTimeCurrentTick = game.serverTimeLastTick
         game.state = GameState.IN_PROGRESS.name
-        redisGameRedisRepository.save(game)
+        inRamGameRepository.save(game)
     }
 
     private fun updateGameSession(authData: AuthRequestProcessData) {
@@ -76,8 +76,8 @@ class InGameStartGameHandler(
 
     private fun notifyUsers(
         channels: List<ArkhamusChannel>,
-        user: RedisGameUser?,
-        users: List<RedisGameUser>,
+        user: InGameGameUser?,
+        users: List<InGameGameUser>,
     ) {
         channels.map {
             it.channel to NettyGameStartedResponse(

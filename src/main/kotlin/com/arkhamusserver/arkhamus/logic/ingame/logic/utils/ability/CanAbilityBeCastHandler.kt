@@ -5,11 +5,11 @@ import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import org.springframework.stereotype.Component
 
@@ -22,14 +22,14 @@ class CanAbilityBeCastHandler(
     private val additionalAbilityConditions: List<AdditionalAbilityCondition>
 ) {
 
-    fun canUserSeeAbility(user: RedisGameUser, ability: Ability, requiredItem: Item?): Boolean {
+    fun canUserSeeAbility(user: InGameGameUser, ability: Ability, requiredItem: Item?): Boolean {
         return haveRequiredItem(ability, requiredItem, user) &&
                 haveRelatedRole(ability, user) &&
                 haveRelatedClass(ability, user)
     }
 
     fun abilityOfUserResponses(
-        user: RedisGameUser,
+        user: InGameGameUser,
         globalGameData: GlobalGameData
     ): List<AbilityOfUserResponse> {
         val visibleAbilitiesList = Ability.values().filter { canUserSeeAbility(user, it) }
@@ -45,8 +45,8 @@ class CanAbilityBeCastHandler(
             canBeCastedAtAll(ability, user, globalGameData)
         }
         val summoningSickness = globalGameData.timeEvents.firstOrNull {
-            it.type == RedisTimeEventType.SUMMONING_SICKNESS &&
-                    it.state == RedisTimeEventState.ACTIVE
+            it.type == InGameTimeEventType.SUMMONING_SICKNESS &&
+                    it.state == InGameTimeEventState.ACTIVE
         }
         val availableAbilities = visibleAbilitiesList.map {
             val cooldown = summoningSickness?.timeLeft ?: (relatedAbilityCastMap[it.id]?.timeLeftCooldown ?: 0)
@@ -67,7 +67,7 @@ class CanAbilityBeCastHandler(
 
     fun canBeCastedAtAll(
         ability: Ability,
-        user: RedisGameUser,
+        user: InGameGameUser,
         globalGameData: GlobalGameData
     ) = additionalAbilityConditions.filter {
         it.accepts(ability)
@@ -80,7 +80,7 @@ class CanAbilityBeCastHandler(
 
     fun canBeCastedRightNow(
         ability: Ability,
-        user: RedisGameUser,
+        user: InGameGameUser,
         target: Any?,
         globalGameData: GlobalGameData
     ) = additionalAbilityConditions.filter { it.accepts(ability) }.let { conditions ->
@@ -94,27 +94,27 @@ class CanAbilityBeCastHandler(
         }
     }
 
-    private fun canUserSeeAbility(user: RedisGameUser, ability: Ability): Boolean {
+    private fun canUserSeeAbility(user: InGameGameUser, ability: Ability): Boolean {
         return canUserSeeAbility(user, ability, abilityToItemResolver.resolve(ability))
     }
 
     private fun charges(
         ability: Ability,
-        user: RedisGameUser
+        user: InGameGameUser
     ) = if (ability.consumesItem) {
         abilityToItemResolver.resolve(ability)?.let { item -> numberOfRequiredItems(ability, item, user) }
     } else null
 
-    private fun haveRelatedClass(ability: Ability, user: RedisGameUser): Boolean =
+    private fun haveRelatedClass(ability: Ability, user: InGameGameUser): Boolean =
         (!ability.classBased) || (abilityToClassResolver.resolve(ability)?.contains(user.classInGame) == true)
 
-    private fun haveRelatedRole(ability: Ability, user: RedisGameUser): Boolean =
+    private fun haveRelatedRole(ability: Ability, user: InGameGameUser): Boolean =
         user.role in ability.availableForRole
 
-    private fun haveRequiredItem(ability: Ability, requiredItem: Item?, user: RedisGameUser): Boolean =
+    private fun haveRequiredItem(ability: Ability, requiredItem: Item?, user: InGameGameUser): Boolean =
         !ability.requiresItem || requiredItem == null || userInventoryHandler.userHaveItem(user, requiredItem)
 
-    private fun numberOfRequiredItems(ability: Ability, requiredItem: Item?, user: RedisGameUser): Int? {
+    private fun numberOfRequiredItems(ability: Ability, requiredItem: Item?, user: InGameGameUser): Int? {
         if (!ability.requiresItem) {
             return null
         }

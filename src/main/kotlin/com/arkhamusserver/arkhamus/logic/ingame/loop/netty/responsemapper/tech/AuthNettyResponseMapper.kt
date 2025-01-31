@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.tech
 
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.InGameDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.getOtherGameUsers
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class AuthNettyResponseMapper(
-    private val redisDataAccess: RedisDataAccess
+    private val inGameDataAccess: InGameDataAccess
 ) {
     fun process(
         user: UserAccount?,
@@ -25,8 +25,8 @@ class AuthNettyResponseMapper(
         if (
             user?.id != null && gameSession != null && userRole != null && success
         ) {
-            val gameUser = redisDataAccess.getGameUser(user.id, gameSession.id) ?: return null
-            val otherUsers = redisDataAccess.getOtherGameUsers(user.id, gameSession.id)
+            val gameUser = inGameDataAccess.getGameUser(user.id, gameSession.id) ?: return null
+            val otherUsers = inGameDataAccess.getOtherGameUsers(user.id, gameSession.id)
 
             return NettyResponseAuth(
                 message = AuthState.SUCCESS,

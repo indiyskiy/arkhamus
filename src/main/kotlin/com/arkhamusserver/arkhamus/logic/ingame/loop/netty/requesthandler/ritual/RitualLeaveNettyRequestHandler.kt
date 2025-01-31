@@ -13,8 +13,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.RitualLeaveRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.RitualLeaveRequestMessage
@@ -58,8 +58,8 @@ class RitualLeaveNettyRequestHandler(
                 globalGameData
             )
             val event = ongoingEvents.firstOrNull {
-                it.event.type == RedisTimeEventType.RITUAL_GOING &&
-                        it.event.state == RedisTimeEventState.ACTIVE
+                it.event.type == InGameTimeEventType.RITUAL_GOING &&
+                        it.event.state == InGameTimeEventState.ACTIVE
             }?.event
             val notches = ritualHandler.countItemsNotches(event, altarHolder)
             val currentItem = ritualHandler.countCurrentItem(notches, globalGameData.game.globalTimer)
@@ -74,8 +74,8 @@ class RitualLeaveNettyRequestHandler(
                 usersInRitual = altarHolder?.usersInRitual?.map { globalGameData.users[it]!! } ?: emptyList(),
                 currentGameTime = globalGameData.game.globalTimer,
                 ritualEvent = ongoingEvents.firstOrNull {
-                    it.event.type == RedisTimeEventType.RITUAL_GOING &&
-                            it.event.state == RedisTimeEventState.ACTIVE
+                    it.event.type == InGameTimeEventType.RITUAL_GOING &&
+                            it.event.state == InGameTimeEventState.ACTIVE
                 }?.event,
                 altarHolder = altarHolder,
                 executedSuccessfully = false,

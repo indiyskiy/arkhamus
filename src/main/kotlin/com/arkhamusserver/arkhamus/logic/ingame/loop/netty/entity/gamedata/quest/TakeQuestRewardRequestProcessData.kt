@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ques
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.redis.*
+import com.arkhamusserver.arkhamus.model.ingame.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -11,25 +11,25 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestRespon
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class TakeQuestRewardRequestProcessData(
-    var quest: RedisQuest?,
-    var questReward: RedisQuestReward?,
-    var questGiverGivesReward: RedisQuestGiver?,
-    var userQuestProgress: RedisUserQuestProgress?,
-    var questRewards: List<RedisQuestReward>,
+    var quest: InGameQuest?,
+    var questReward: InGameQuestReward?,
+    var questGiverGivesReward: InGameQuestGiver?,
+    var userQuestProgress: InGameUserQuestProgress?,
+    var questRewards: List<InGameQuestReward>,
     var canAccept: Boolean,
     var canDecline: Boolean,
     var canFinish: Boolean,
-    var questGiver: RedisQuestGiver?,
+    var questGiver: InGameQuestGiver?,
     var rightQuestGiverForAction: Boolean,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    gameUser: RedisGameUser,
-    otherGameUsers: List<RedisGameUser>,
+    gameUser: InGameGameUser,
+    otherGameUsers: List<InGameGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,
-    containers: List<RedisContainer>,
-    crafters: List<RedisCrafter>,
+    containers: List<InGameContainer>,
+    crafters: List<InGameCrafter>,
     clues: ExtendedCluesResponse,
     userQuestProgresses: List<UserQuestResponse>,
     tick: Long

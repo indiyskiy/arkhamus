@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomI
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.clues.RedisSoundClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameSoundClueRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.SoundClueJammerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.SoundClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -18,11 +18,11 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
-import com.arkhamusserver.arkhamus.model.redis.clues.RedisSoundClue
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
-import com.arkhamusserver.arkhamus.model.redis.parts.RedisSoundClueJammer
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameSoundClue
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.parts.InGameSoundClueJammer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.SoundClueJammerResponse
 import org.springframework.stereotype.Component
@@ -32,7 +32,7 @@ import kotlin.random.Random
 class SoundClueHandler(
     private val soundClueRepository: SoundClueRepository,
     private val soundClueJammerRepository: SoundClueJammerRepository,
-    private val redisSoundClueRepository: RedisSoundClueRepository,
+    private val inGameSoundClueRepository: InGameSoundClueRepository,
     private val userLocationHandler: UserLocationHandler,
     private val visibilityByTagsHandler: VisibilityByTagsHandler,
     private val zonesHandler: ZonesHandler
@@ -53,7 +53,7 @@ class SoundClueHandler(
     }
 
     override fun accept(target: WithStringId): Boolean {
-        return target is RedisSoundClue
+        return target is InGameSoundClue
     }
 
     override fun canBeAdded(container: CluesContainer): Boolean {
@@ -65,7 +65,7 @@ class SoundClueHandler(
     ) {
         data.clues.sound.filter { !it.turnedOn }.random(random).apply {
             turnedOn = true
-            redisSoundClueRepository.save(this)
+            inGameSoundClueRepository.save(this)
         }
     }
 
@@ -74,11 +74,11 @@ class SoundClueHandler(
     }
 
     override fun canBeRemoved(
-        user: RedisGameUser,
+        user: InGameGameUser,
         target: Any,
         data: GlobalGameData
     ): Boolean {
-        val sound = target as RedisSoundClue
+        val sound = target as InGameSoundClue
         return sound.turnedOn && userLocationHandler.userCanSeeTargetInRange(
             whoLooks = user,
             target = sound,
@@ -91,7 +91,7 @@ class SoundClueHandler(
     }
 
     override fun anyCanBeRemoved(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData
     ): Boolean {
         return data.clues.sound.any {
@@ -103,7 +103,7 @@ class SoundClueHandler(
         val soundClue = container.sound.filter { it.turnedOn }.randomOrNull()
         soundClue?.let {
             it.turnedOn = false
-            redisSoundClueRepository.save(it)
+            inGameSoundClueRepository.save(it)
         }
     }
 
@@ -113,23 +113,23 @@ class SoundClueHandler(
     ) {
         val soundClue = data.clues.sound.find { it.inGameId() == target.stringId().toLong() } ?: return
         soundClue.turnedOn = false
-        redisSoundClueRepository.save(soundClue)
+        inGameSoundClueRepository.save(soundClue)
     }
 
     override fun addClues(
         session: GameSession,
         god: God,
-        zones: List<RedisLevelZone>,
+        zones: List<InGameLevelZone>,
         activeCluesOnStart: Int
     ) {
         val soundClues = soundClueRepository.findByLevelId(session.gameSessionSettings.level!!.id!!)
         val soundClueJammers = soundClueJammerRepository.findByLevelId(session.gameSessionSettings.level!!.id!!)
         val soundCluesForGameSession = soundClues.shuffled(random).take(MAX_ON_GAME)
-        val redisSoundClues = soundCluesForGameSession.map {
-            val clue = RedisSoundClue(
+        val inGameSoundClues = soundCluesForGameSession.map {
+            val clue = InGameSoundClue(
                 id = generateRandomId(),
                 gameId = session.id!!,
-                redisSoundId = it.inGameId,
+                inGameSoundId = it.inGameId,
                 x = it.x,
                 y = it.y,
                 z = it.z,
@@ -141,7 +141,7 @@ class SoundClueHandler(
                 soundClueJammers = soundClueJammers.filter { jammer ->
                     it.inGameId == jammer.relatedClue!!.inGameId
                 }.map { jammer ->
-                    RedisSoundClueJammer(
+                    InGameSoundClueJammer(
                         id = generateRandomId(),
                         gameId = session.id!!,
                         x = jammer.x(),
@@ -164,17 +164,17 @@ class SoundClueHandler(
             clue
         }
         if (god.getTypes().contains(Clue.SOUND)) {
-            val turnedOn = redisSoundClues.shuffled(random).take(activeCluesOnStart)
+            val turnedOn = inGameSoundClues.shuffled(random).take(activeCluesOnStart)
             turnedOn.forEach {
                 it.turnedOn = true
             }
         }
-        redisSoundClueRepository.saveAll(redisSoundClues)
+        inGameSoundClueRepository.saveAll(inGameSoundClues)
     }
 
     override fun mapActualClues(
         container: CluesContainer,
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return container.sound.filter {
@@ -206,7 +206,7 @@ class SoundClueHandler(
 
     override fun mapPossibleClues(
         container: CluesContainer,
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         val soundOptions = container.sound
@@ -230,8 +230,8 @@ class SoundClueHandler(
     }
 
     private fun countState(
-        clue: RedisSoundClue,
-        user: RedisGameUser,
+        clue: InGameSoundClue,
+        user: InGameGameUser,
         levelGeometryData: LevelGeometryData
     ): InnovateClueState {
         val turnedOn = clue.turnedOn
@@ -249,8 +249,8 @@ class SoundClueHandler(
     }
 
     private fun fillPossibleAdditionalData(
-        clue: RedisSoundClue,
-        user: RedisGameUser,
+        clue: InGameSoundClue,
+        user: InGameGameUser,
         data: LevelGeometryData
     ): List<SoundClueJammerResponse> {
         return clue.soundClueJammers.filter {
@@ -274,8 +274,8 @@ class SoundClueHandler(
     }
 
     private fun fillActualAdditionalData(
-        clue: RedisSoundClue,
-        user: RedisGameUser,
+        clue: InGameSoundClue,
+        user: InGameGameUser,
         data: LevelGeometryData
     ): List<SoundClueJammerResponse> {
         return clue.soundClueJammers.filter {

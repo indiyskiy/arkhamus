@@ -13,12 +13,12 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.RitualPutItemRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toItem
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.RitualPutItemRequestMessage
 import org.springframework.stereotype.Component
@@ -62,8 +62,8 @@ class RitualPutItemNettyRequestHandler(
                 globalGameData
             )
             val event = ongoingEvents.firstOrNull {
-                it.event.type == RedisTimeEventType.RITUAL_GOING &&
-                        it.event.state == RedisTimeEventState.ACTIVE
+                it.event.type == InGameTimeEventType.RITUAL_GOING &&
+                        it.event.state == InGameTimeEventState.ACTIVE
             }?.event
             val notches = ritualHandler.countItemsNotches(event, altarHolder)
             val currentItem = ritualHandler.countCurrentItem(notches, globalGameData.game.globalTimer)
@@ -76,8 +76,8 @@ class RitualPutItemNettyRequestHandler(
                 currentGameTime = globalGameData.game.globalTimer,
                 canPut = userCanPutItemOnAltar(this, user, item, globalGameData),
                 ritualEvent = ongoingEvents.firstOrNull {
-                    it.event.type == RedisTimeEventType.RITUAL_GOING &&
-                            it.event.state == RedisTimeEventState.ACTIVE
+                    it.event.type == InGameTimeEventType.RITUAL_GOING &&
+                            it.event.state == InGameTimeEventState.ACTIVE
                 }?.event,
                 altarHolder = altarHolder,
                 executedSuccessfully = false,
@@ -107,7 +107,7 @@ class RitualPutItemNettyRequestHandler(
 
     private fun userCanPutItemOnAltar(
         request: RitualPutItemRequestMessage,
-        user: RedisGameUser,
+        user: InGameGameUser,
         item: Item?,
         globalGameData: GlobalGameData
     ) = item != null &&

@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.BanState
-import com.arkhamusserver.arkhamus.model.redis.RedisUserVoteSpot
-import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.InGameUserVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserWithBanState
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.VoteSpotInfo
 import org.springframework.stereotype.Component
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component
 @Component
 class VoteSpotInfoMapper() {
     fun map(
-        voteSpot: RedisVoteSpot?,
-        currentUserVoteSpot: RedisUserVoteSpot?,
-        thisSpotUserInfos: List<RedisUserVoteSpot>,
+        voteSpot: InGameVoteSpot?,
+        currentUserVoteSpot: InGameUserVoteSpot?,
+        thisSpotUserInfos: List<InGameUserVoteSpot>,
         allUserIds: List<Long>,
     ): VoteSpotInfo? =
         voteSpot?.let { voteSpotNotNull ->
@@ -36,9 +36,9 @@ class VoteSpotInfoMapper() {
 
     private fun mapUserWithBanState(
         targetUserId: Long,
-        voteSpotNotNull: RedisVoteSpot,
-        currentUserVoteSpot: RedisUserVoteSpot?,
-        thisSpotUserInfos: List<RedisUserVoteSpot>
+        voteSpotNotNull: InGameVoteSpot,
+        currentUserVoteSpot: InGameUserVoteSpot?,
+        thisSpotUserInfos: List<InGameUserVoteSpot>
     ): UserWithBanState =
         UserWithBanState(
             userId = targetUserId,
@@ -49,7 +49,7 @@ class VoteSpotInfoMapper() {
 
     private fun countVotes(
         userId: Long,
-        spots: List<RedisUserVoteSpot>
+        spots: List<InGameUserVoteSpot>
     ): Int =
         spots.count { it.votesForUserIds.contains(userId) }
 
@@ -57,7 +57,7 @@ class VoteSpotInfoMapper() {
     private fun banState(
         userId: Long,
         bannedUsers: List<Long>,
-        voteSpot: RedisVoteSpot,
+        voteSpot: InGameVoteSpot,
     ): BanState =
         if (bannedUsers.any { it == userId }) {
             BanState.BANNED

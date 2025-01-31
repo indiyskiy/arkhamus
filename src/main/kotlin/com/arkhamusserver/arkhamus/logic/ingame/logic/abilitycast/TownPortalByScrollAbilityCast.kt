@@ -4,13 +4,13 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TeleportHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -37,7 +37,7 @@ class TownPortalByScrollAbilityCast(
     }
 
     override fun cast(
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -56,7 +56,7 @@ class TownPortalByScrollAbilityCast(
 
     private fun castTownPortalByScrollAbility(
         globalGameData: GlobalGameData,
-        userNotNull: RedisGameUser
+        userNotNull: InGameGameUser
     ) {
         val point = findLastInterestPoint(globalGameData)
         logger.info("teleport user to ${point.x()}; ${point.y()}; ${point.z()}")
@@ -95,24 +95,24 @@ class TownPortalByScrollAbilityCast(
         return data.altarHolder!!
     }
 
-    private fun findCallForBan(data: GlobalGameData): RedisTimeEvent? = data.timeEvents.firstOrNull {
-        (it.type == RedisTimeEventType.CALL_FOR_BAN_VOTE
-                ) && it.state == RedisTimeEventState.ACTIVE
+    private fun findCallForBan(data: GlobalGameData): InGameTimeEvent? = data.timeEvents.firstOrNull {
+        (it.type == InGameTimeEventType.CALL_FOR_BAN_VOTE
+                ) && it.state == InGameTimeEventState.ACTIVE
     }
 
-    private fun findCallForBanFake(data: GlobalGameData): RedisTimeEvent? = data.timeEvents.firstOrNull {
-        (it.type == RedisTimeEventType.FAKE_CALL_FOR_BAN_VOTE
-                ) && it.state == RedisTimeEventState.ACTIVE
+    private fun findCallForBanFake(data: GlobalGameData): InGameTimeEvent? = data.timeEvents.firstOrNull {
+        (it.type == InGameTimeEventType.FAKE_CALL_FOR_BAN_VOTE
+                ) && it.state == InGameTimeEventState.ACTIVE
     }
 
     private fun ritualGoing(data: GlobalGameData): Boolean = data.timeEvents.any {
-        (it.type == RedisTimeEventType.ALTAR_VOTING ||
-                it.type == RedisTimeEventType.RITUAL_GOING
-                ) && it.state == RedisTimeEventState.ACTIVE
+        (it.type == InGameTimeEventType.ALTAR_VOTING ||
+                it.type == InGameTimeEventType.RITUAL_GOING
+                ) && it.state == InGameTimeEventState.ACTIVE
     }
 
     private fun fakeRitualGoing(data: GlobalGameData): Boolean = data.timeEvents.any {
-        (it.type == RedisTimeEventType.FAKE_ALTAR_VOTING
-                ) && it.state == RedisTimeEventState.ACTIVE
+        (it.type == InGameTimeEventType.FAKE_ALTAR_VOTING
+                ) && it.state == InGameTimeEventState.ACTIVE
     }
 }

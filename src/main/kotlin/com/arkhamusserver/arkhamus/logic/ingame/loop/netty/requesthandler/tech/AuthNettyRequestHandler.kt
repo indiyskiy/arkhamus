@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.AuthRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.DatabaseDataAccess
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.InGameDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.getOtherGameUsers
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.NettyAuthService
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
@@ -18,7 +18,7 @@ class AuthNettyRequestHandler(
     private val nettyAuthService: NettyAuthService,
     private val channelRepository: ChannelRepository,
     private val databaseDataAccess: DatabaseDataAccess,
-    private val redisDataAccess: RedisDataAccess
+    private val inGameDataAccess: InGameDataAccess
 ) {
 
     companion object {
@@ -33,11 +33,11 @@ class AuthNettyRequestHandler(
             val userOfTheGame = findUserOfGame(account)
             userOfTheGame?.let {
                 val game = databaseDataAccess.findByGameId(it.gameSession.id!!)
-                val gameUser = redisDataAccess.getGameUser(
+                val gameUser = inGameDataAccess.getGameUser(
                     it.userAccount.id!!,
                     it.gameSession.id!!
                 ) ?: return null
-                val otherGameUsers = redisDataAccess.getOtherGameUsers(gameUser.inGameId(), it.gameSession.id!!)
+                val otherGameUsers = inGameDataAccess.getOtherGameUsers(gameUser.inGameId(), it.gameSession.id!!)
                 AuthRequestProcessData(gameUser = gameUser, success = true, otherGameUsers = otherGameUsers).apply {
                     this.userOfTheGame = it
                     this.userAccount = it.userAccount

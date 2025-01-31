@@ -6,27 +6,27 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ZonesHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GameDataLevelZone
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisDoorRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserVoteSpotRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameDoorRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameUserVoteSpotRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisUserVoteSpot
-import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUserVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 class UserVoteHandler(
-    private val userVoteSpotRepository: RedisUserVoteSpotRepository,
-    private val voteSpotRepository: RedisVoteSpotRepository,
+    private val userVoteSpotRepository: InGameUserVoteSpotRepository,
+    private val voteSpotRepository: InGameVoteSpotRepository,
     private val madnessHandler: UserMadnessHandler,
     private val teleportHandler: TeleportHandler,
     private val zonesHandler: ZonesHandler,
     private val geometryUtils: GeometryUtils,
-    private val redisDoorRepository: RedisDoorRepository,
+    private val inGameDoorRepository: InGameDoorRepository,
     private val activityHandler: ActivityHandler,
 ) {
     companion object {
@@ -34,8 +34,8 @@ class UserVoteHandler(
     }
 
     fun cantVoteReasons(
-        votingUser: RedisGameUser,
-        voteSpot: RedisVoteSpot?,
+        votingUser: InGameGameUser,
+        voteSpot: InGameVoteSpot?,
     ): List<CantVoteReason> {
         return listOfNotNull(
             mad(votingUser),
@@ -45,24 +45,24 @@ class UserVoteHandler(
     }
 
     private fun isUserBannedFromVoteSpot(
-        voteSpot: RedisVoteSpot?,
-        votingUser: RedisGameUser
+        voteSpot: InGameVoteSpot?,
+        votingUser: InGameGameUser
     ): CantVoteReason? = CantVoteReason.BANNED.takeIf { voteSpot?.bannedUsers?.contains(votingUser.inGameId()) == true }
 
     private fun mustPay(
-        voteSpot: RedisVoteSpot?
+        voteSpot: InGameVoteSpot?
     ) = CantVoteReason.MUST_PAY.takeIf {
         voteSpot?.voteSpotState == VoteSpotState.WAITING_FOR_PAYMENT
     }
 
-    private fun mad(votingUser: RedisGameUser): CantVoteReason? =
+    private fun mad(votingUser: InGameGameUser): CantVoteReason? =
         CantVoteReason.MAD.takeIf { madnessHandler.isCompletelyMad(votingUser) }
 
 
     fun canVote(
-        currentUserVoteSpot: RedisUserVoteSpot,
-        targetUser: RedisGameUser,
-        voteSpot: RedisVoteSpot,
+        currentUserVoteSpot: InGameUserVoteSpot,
+        targetUser: InGameGameUser,
+        voteSpot: InGameVoteSpot,
     ): Boolean {
         if (cantVoteReasons(targetUser, voteSpot).isNotEmpty()) return false
         if (voteSpot.bannedUsers.contains(targetUser.inGameId())) return false
@@ -74,14 +74,14 @@ class UserVoteHandler(
 
     @Transactional
     fun castVote(
-        currentUser: RedisGameUser,
-        currentUserVoteSpot: RedisUserVoteSpot,
-        targetUser: RedisGameUser,
-        users: Collection<RedisGameUser>,
-        voteSpot: RedisVoteSpot,
-        allUserVoteSpots: List<RedisUserVoteSpot>,
+        currentUser: InGameGameUser,
+        currentUserVoteSpot: InGameUserVoteSpot,
+        targetUser: InGameGameUser,
+        users: Collection<InGameGameUser>,
+        voteSpot: InGameVoteSpot,
+        allUserVoteSpots: List<InGameUserVoteSpot>,
         globalGameData: GlobalGameData,
-    ): RedisGameUser? {
+    ): InGameGameUser? {
         currentUserVoteSpot.votesForUserIds = (currentUserVoteSpot.votesForUserIds + targetUser.inGameId())
             .toMutableList()
         userVoteSpotRepository.save(currentUserVoteSpot)
@@ -105,12 +105,12 @@ class UserVoteHandler(
 
     @Transactional
     fun applyBanMaybe(
-        currentUser: RedisGameUser,
-        allUsers: Collection<RedisGameUser>,
-        voteSpot: RedisVoteSpot,
-        userVoteSpots: List<RedisUserVoteSpot>,
+        currentUser: InGameGameUser,
+        allUsers: Collection<InGameGameUser>,
+        voteSpot: InGameVoteSpot,
+        userVoteSpots: List<InGameUserVoteSpot>,
         globalGameData: GlobalGameData,
-    ): RedisGameUser? {
+    ): InGameGameUser? {
         val allUsersCanVoteList = usersCanPossiblyVote(allUsers, voteSpot)
         val usersCanVoteIdsSet = allUsersCanVoteList.map { it.inGameId() }.toSet()
         val votesStillRelevant = userVoteSpots.filter { it.userId in usersCanVoteIdsSet }
@@ -143,41 +143,41 @@ class UserVoteHandler(
     }
 
     fun votesToBan(
-        allUsers: Collection<RedisGameUser>,
-        voteSpot: RedisVoteSpot,
+        allUsers: Collection<InGameGameUser>,
+        voteSpot: InGameVoteSpot,
     ): Int {
         val allUsersCanVoteList = usersCanPossiblyVote(allUsers, voteSpot)
         return votesToBan(allUsersCanVoteList.size)
     }
 
     fun getCanCallForVote(
-        voteSpot: RedisVoteSpot?,
+        voteSpot: InGameVoteSpot?,
         ongoingEvents: List<OngoingEvent>,
-        user: RedisGameUser
+        user: InGameGameUser
     ): Boolean = voteSpot != null &&
             callForVoteEventInProgress(ongoingEvents) &&
             user.callToArms > 0
 
     private fun callForVoteEventInProgress(ongoingEvents: List<OngoingEvent>): Boolean = !ongoingEvents.any {
-        it.event.type == RedisTimeEventType.CALL_FOR_BAN_VOTE &&
-                it.event.state == RedisTimeEventState.ACTIVE
+        it.event.type == InGameTimeEventType.CALL_FOR_BAN_VOTE &&
+                it.event.state == InGameTimeEventState.ACTIVE
     }
 
     private fun votesToBan(size: Int): Int = (size / 2) + 1
 
     private fun usersCanPossiblyVote(
-        users: Collection<RedisGameUser>,
-        voteSpot: RedisVoteSpot,
-    ): List<RedisGameUser> {
+        users: Collection<InGameGameUser>,
+        voteSpot: InGameVoteSpot,
+    ): List<InGameGameUser> {
         return users.filter {
             !cantVoteReasons(it, voteSpot).any { it in CANT_VOTE_AT_ALL }
         }
     }
 
     private fun banUser(
-        currentUser: RedisGameUser,
-        voteSpot: RedisVoteSpot,
-        userToBan: RedisGameUser,
+        currentUser: InGameGameUser,
+        voteSpot: InGameVoteSpot,
+        userToBan: InGameGameUser,
         globalGameData: GlobalGameData
     ) {
         val userId = userToBan.inGameId()
@@ -201,7 +201,7 @@ class UserVoteHandler(
             it.forEach { door ->
                 door.closedForUsers += userId
             }
-            redisDoorRepository.saveAll(it)
+            inGameDoorRepository.saveAll(it)
         }
         activityHandler.addUserWithTargetActivity(
             globalGameData.game.inGameId(),
@@ -216,7 +216,7 @@ class UserVoteHandler(
     }
 
     private fun statistic(
-        votesStillRelevant: List<RedisUserVoteSpot>,
+        votesStillRelevant: List<InGameUserVoteSpot>,
         availableUserIds: Set<Long>
     ): Pair<Int?, Set<Long>?> {
         val allVotes: List<Long> = votesStillRelevant.map { it.votesForUserIds }.flatten()
@@ -229,8 +229,8 @@ class UserVoteHandler(
     }
 
     private fun reset(
-        voteSpot: RedisVoteSpot,
-        userVoteSpots: List<RedisUserVoteSpot>
+        voteSpot: InGameVoteSpot,
+        userVoteSpots: List<InGameUserVoteSpot>
     ) {
         voteSpot.voteSpotState = VoteSpotState.WAITING_FOR_PAYMENT
         voteSpotRepository.save(voteSpot)
@@ -241,7 +241,7 @@ class UserVoteHandler(
         userVoteSpotRepository.saveAll(userVoteSpots)
     }
 
-    private fun RedisGameUser.inRelatedZone(
+    private fun InGameGameUser.inRelatedZone(
         zones: List<GameDataLevelZone>,
         zoneId: Long
     ): Boolean {

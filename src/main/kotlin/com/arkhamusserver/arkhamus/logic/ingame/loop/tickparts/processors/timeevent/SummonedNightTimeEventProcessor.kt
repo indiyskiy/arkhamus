@@ -3,9 +3,9 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timee
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,11 +13,11 @@ class SummonedNightTimeEventProcessor(
     private val userLocationHandler: UserLocationHandler,
     private val userMadnessHandler: UserMadnessHandler,
 ) : TimeEventProcessor {
-    override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.SUMMONED_NIGHT
+    override fun accept(type: InGameTimeEventType): Boolean =
+        type == InGameTimeEventType.SUMMONED_NIGHT
 
     override fun processStart(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -26,7 +26,7 @@ class SummonedNightTimeEventProcessor(
     }
 
     override fun process(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -42,17 +42,17 @@ class SummonedNightTimeEventProcessor(
     }
 
     override fun processEnd(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
     ) {
-        event.state = RedisTimeEventState.PAST
+        event.state = InGameTimeEventState.PAST
     }
 
     private fun isCommonNight(globalGameData: GlobalGameData) =
         globalGameData.timeEvents.any {
-            it.state == RedisTimeEventState.ACTIVE &&
-                    it.type == RedisTimeEventType.NIGHT
+            it.state == InGameTimeEventState.ACTIVE &&
+                    it.type == InGameTimeEventType.NIGHT
         }
 }

@@ -5,8 +5,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.VisibilityByTag
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CrafterState
 import org.springframework.stereotype.Component
 
@@ -16,8 +16,8 @@ class CrafterDataHandler(
     private val visibilityByTagsHandler: VisibilityByTagsHandler
 ) {
     fun map(
-        currentUser: RedisGameUser,
-        crafters: List<RedisCrafter>,
+        currentUser: InGameGameUser,
+        crafters: List<InGameCrafter>,
         levelGeometryData: LevelGeometryData
     ): List<CrafterState> {
         return crafters.map { crafter ->
@@ -29,8 +29,8 @@ class CrafterDataHandler(
 
     private fun mask(
         responseToMask: CrafterState,
-        crafter: RedisCrafter,
-        currentUser: RedisGameUser,
+        crafter: InGameCrafter,
+        currentUser: InGameGameUser,
         levelGeometryData: LevelGeometryData
     ) {
         if (

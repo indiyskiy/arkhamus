@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent.NightTimeEventProcessor
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -23,7 +23,7 @@ class GameStartTimeEventLogic(
     private fun createGodAwakenTimer(game: GameSession) {
         timeEventHandler.createEvent(
             game,
-            RedisTimeEventType.GOD_AWAKEN,
+            InGameTimeEventType.GOD_AWAKEN,
             0
         )
     }
@@ -32,7 +32,7 @@ class GameStartTimeEventLogic(
     private fun createSummoningSickness(game: GameSession) {
         timeEventHandler.createEvent(
             game,
-            RedisTimeEventType.SUMMONING_SICKNESS,
+            InGameTimeEventType.SUMMONING_SICKNESS,
             0
         )
     }

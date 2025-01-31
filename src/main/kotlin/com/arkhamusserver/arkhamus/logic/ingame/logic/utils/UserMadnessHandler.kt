@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -20,11 +20,11 @@ class UserMadnessHandler(
         private val random = Random(System.currentTimeMillis())
     }
 
-    fun applyNightMadness(gameUser: RedisGameUser, timePassedMillis: Long, gameTime: Long) {
+    fun applyNightMadness(gameUser: InGameGameUser, timePassedMillis: Long, gameTime: Long) {
         applyMadness(gameUser, NIGHT_MADNESS_TICK_IN_MILLIS * timePassedMillis, gameTime)
     }
 
-    fun applyMadness(gameUser: RedisGameUser, madness: Double, gameTime: Long) {
+    fun applyMadness(gameUser: InGameGameUser, madness: Double, gameTime: Long) {
         val before = gameUser.madness
         val modifier = if (gameUser.madnessDebuffs.contains(MadnessDebuffs.PSYCHIC_UNSTABLE.name)) 1.5 else 1.0
         gameUser.madness += (madness * modifier)
@@ -33,7 +33,7 @@ class UserMadnessHandler(
     }
 
     private fun applyMadnessDebuffMaybe(
-        gameUser: RedisGameUser,
+        gameUser: InGameGameUser,
         before: Double,
         after: Double,
         gameTime: Long
@@ -47,7 +47,7 @@ class UserMadnessHandler(
 
     private fun applyMadnessDebuff(
         notchIndex: Int,
-        gameUser: RedisGameUser,
+        gameUser: InGameGameUser,
         gameTime: Long
     ) {
         val debuff = MadnessDebuffs.values().filter { it.getStepNumber() == notchIndex }
@@ -63,13 +63,13 @@ class UserMadnessHandler(
         )
     }
 
-    fun filterNotMad(gameUsers: Collection<RedisGameUser>): List<RedisGameUser> =
+    fun filterNotMad(gameUsers: Collection<InGameGameUser>): List<InGameGameUser> =
         gameUsers.filterNot { isCompletelyMad(it) }
 
-    fun isCompletelyMad(gameUser: RedisGameUser): Boolean =
+    fun isCompletelyMad(gameUser: InGameGameUser): Boolean =
         gameUser.madness >= gameUser.madnessNotches.max()
 
-    fun reduceMadness(user: RedisGameUser, reduceValue: Double) {
+    fun reduceMadness(user: InGameGameUser, reduceValue: Double) {
         val notch = currentMinNotch(user)
         notch?.let {
             val afterReduced = max(user.madness - reduceValue, notch)
@@ -77,7 +77,7 @@ class UserMadnessHandler(
         }
     }
 
-    private fun currentMinNotch(user: RedisGameUser): Double? {
+    private fun currentMinNotch(user: InGameGameUser): Double? {
         val madness = user.madness
         val notch = user.madnessNotches.filter { it <= madness }.maxOrNull()
         return notch

@@ -4,8 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisLantern
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameLantern
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.LanternData
 import org.springframework.stereotype.Component
 
@@ -14,8 +14,8 @@ class LanternDataHandler(
     private val userLocationHandler: UserLocationHandler,
 ) {
     fun map(
-        myUser: RedisGameUser,
-        lanterns: Collection<RedisLantern>,
+        myUser: InGameGameUser,
+        lanterns: Collection<InGameLantern>,
         levelGeometryData: LevelGeometryData
     ): List<LanternData> {
         return lanterns.map { lantern ->
@@ -32,8 +32,8 @@ class LanternDataHandler(
 
     private fun mask(
         responseToMask: LanternData,
-        lantern: RedisLantern,
-        myUser: RedisGameUser,
+        lantern: InGameLantern,
+        myUser: InGameGameUser,
         levelGeometryData: LevelGeometryData
     ) {
         if (!userLocationHandler.userCanSeeTarget(

@@ -2,13 +2,13 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLanternRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameLanternRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState.*
 import org.springframework.stereotype.Component
 
 @Component
 class OneTickLantern(
-    private val lanternRepository: RedisLanternRepository
+    private val lanternRepository: InGameLanternRepository
 ) {
 
     companion object {

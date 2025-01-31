@@ -6,10 +6,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CanRecipeBeCraftedHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CraftProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameCrafterRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -20,7 +20,7 @@ class CraftMadnessLogic(
     private val recipesSource: RecipesSource,
     private val canRecipeBeCraftedHandler: CanRecipeBeCraftedHandler,
     private val craftProcessHandler: CraftProcessHandler,
-    private val crafterRepository: RedisCrafterRepository
+    private val crafterRepository: InGameCrafterRepository
 ) {
 
     companion object {
@@ -28,7 +28,7 @@ class CraftMadnessLogic(
     }
 
     fun craftSomething(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): Boolean {
         val craftersNearby = openCrafters(data, user)
@@ -56,8 +56,8 @@ class CraftMadnessLogic(
 
     private fun openCrafters(
         data: GlobalGameData,
-        user: RedisGameUser
-    ): List<RedisCrafter> = data.crafters.values.filter {
+        user: InGameGameUser
+    ): List<InGameCrafter> = data.crafters.values.filter {
         userLocationHandler.userCanSeeTarget(
             user,
             it,

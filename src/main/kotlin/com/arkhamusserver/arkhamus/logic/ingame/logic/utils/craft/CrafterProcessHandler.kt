@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft
 
-import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameCraftProcess
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import org.springframework.stereotype.Component
 
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component
 class CrafterProcessHandler {
 
     fun filterAndMap(
-        user: RedisGameUser,
-        crafters: Map<Long, RedisCrafter>,
-        craftProcess: List<RedisCraftProcess>
+        user: InGameGameUser,
+        crafters: Map<Long, InGameCrafter>,
+        craftProcess: List<InGameCraftProcess>
     ): List<CraftProcessResponse> {
         val filteredCrafters = crafters.filter { it.value.holdingUser == user.inGameId() }
         val filteredCraftProcess = craftProcess.filterRelatedCrafters(user, filteredCrafters)
@@ -21,10 +21,10 @@ class CrafterProcessHandler {
         }
     }
 
-    private fun List<RedisCraftProcess>.filterRelatedCrafters(
-        user: RedisGameUser,
-        filteredCrafters: Map<Long, RedisCrafter>
-    ): List<RedisCraftProcess> {
+    private fun List<InGameCraftProcess>.filterRelatedCrafters(
+        user: InGameGameUser,
+        filteredCrafters: Map<Long, InGameCrafter>
+    ): List<InGameCraftProcess> {
         val mappedCrafters = filteredCrafters.values.map { it.inGameId() }.toSet()
         return this.filter {
             it.targetCrafterId in mappedCrafters || it.sourceUserId == user.inGameId()

@@ -1,18 +1,18 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameCrafterRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.CrafterRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Crafter
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GameStartCrafterLogic(
-    private val redisCrafterRepository: RedisCrafterRepository,
+    private val inGameCrafterRepository: InGameCrafterRepository,
     private val crafterRepository: CrafterRepository,
 ) {
 
@@ -24,7 +24,7 @@ class GameStartCrafterLogic(
         val allLevelCrafters = crafterRepository.findByLevelId(levelId)
         allLevelCrafters.forEach { dbCrafter ->
             with(createCrafter(game, dbCrafter)) {
-                redisCrafterRepository.save(this)
+                inGameCrafterRepository.save(this)
             }
         }
     }
@@ -32,7 +32,7 @@ class GameStartCrafterLogic(
     private fun createCrafter(
         game: GameSession,
         dbCrafter: Crafter,
-    ) = RedisCrafter(
+    ) = InGameCrafter(
         id = generateRandomId(),
         crafterId = dbCrafter.inGameId,
         gameId = game.id!!,

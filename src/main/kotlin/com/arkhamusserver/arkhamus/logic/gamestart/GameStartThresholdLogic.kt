@@ -1,17 +1,17 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisThresholdRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameThresholdRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.ThresholdRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Threshold
-import com.arkhamusserver.arkhamus.model.redis.RedisThreshold
+import com.arkhamusserver.arkhamus.model.ingame.InGameThreshold
 import org.springframework.stereotype.Component
 
 @Component
 class GameStartThresholdLogic(
     private val thresholdRepository: ThresholdRepository,
-    private val redisThresholdRepository: RedisThresholdRepository,
+    private val inGameThresholdRepository: InGameThresholdRepository,
 ) {
 
     fun createThresholds(levelId: Long, game: GameSession) {
@@ -25,8 +25,8 @@ class GameStartThresholdLogic(
         threshold: Threshold,
         game: GameSession,
     ) =
-        redisThresholdRepository.save(
-            RedisThreshold(
+        inGameThresholdRepository.save(
+            InGameThreshold(
                 id = generateRandomId(),
                 gameId = game.id!!,
                 thresholdId = threshold.inGameId,

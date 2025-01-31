@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.loadGlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.OneTickUserResponses
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger
 @Primary
 class MockArkhamusOneTickLogic(
     private val oneTickUserResponses: OneTickUserResponses,
-    private val redisDataAccess: MockRedisDataAccess
+    private val redisDataAccess: MockInGameDataAccess
 ) : ArkhamusOneTickLogic {
 
     // ms
@@ -23,7 +23,7 @@ class MockArkhamusOneTickLogic(
 
     override fun processCurrentTasks(
         currentTasks: List<NettyTickRequestMessageDataHolder>,
-        game: RedisGame
+        game: InRamGame
     ): List<NettyResponse> {
         val currentId = processingId.getAndIncrement()
         println("Processing $currentId: received tasks $currentTasks for processing")

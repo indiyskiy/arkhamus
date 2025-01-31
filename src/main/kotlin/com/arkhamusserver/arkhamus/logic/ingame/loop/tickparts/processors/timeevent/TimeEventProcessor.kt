@@ -1,28 +1,28 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 
 interface TimeEventProcessor {
-    fun accept(type: RedisTimeEventType): Boolean
+    fun accept(type: InGameTimeEventType): Boolean
 
     fun process(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
     )
 
     fun processStart(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
     )
 
     fun processEnd(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long

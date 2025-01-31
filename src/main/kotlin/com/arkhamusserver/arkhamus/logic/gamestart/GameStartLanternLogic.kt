@@ -1,20 +1,20 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisLanternRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameLanternRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LanternRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Lantern
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisLantern
+import com.arkhamusserver.arkhamus.model.ingame.InGameLantern
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.random.Random
 
 @Component
 class GameStartLanternLogic(
-    private val redisLanternRepository: RedisLanternRepository,
+    private val inGameLanternRepository: InGameLanternRepository,
     private val lanternRepository: LanternRepository,
 ) {
     companion object {
@@ -30,7 +30,7 @@ class GameStartLanternLogic(
         val allLevelLanterns = lanternRepository.findByLevelId(levelId)
         allLevelLanterns.shuffled(random).forEachIndexed { i, dbLantern ->
             with(createLantern(game, dbLantern, i)) {
-                redisLanternRepository.save(this)
+                inGameLanternRepository.save(this)
             }
         }
     }
@@ -39,7 +39,7 @@ class GameStartLanternLogic(
         game: GameSession,
         dbLantern: Lantern,
         number: Int
-    ) = RedisLantern(
+    ) = InGameLantern(
         id = generateRandomId(),
         lanternId = dbLantern.inGameId,
         gameId = game.id!!,

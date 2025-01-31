@@ -15,8 +15,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.*
-import com.arkhamusserver.arkhamus.model.redis.RedisQuest
-import com.arkhamusserver.arkhamus.model.redis.RedisUserQuestProgress
+import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
+import com.arkhamusserver.arkhamus.model.ingame.InGameUserQuestProgress
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.quest.QuestGiverOpenRequestMessage
 import org.springframework.stereotype.Component
@@ -153,7 +153,7 @@ class QuestGiverOpenNettyRequestHandler(
 
     private fun rightNpcForState(
         questId: Long,
-        questsOptions: List<RedisQuest>,
+        questsOptions: List<InGameQuest>,
         questState: UserQuestState,
         questGiverId: Long
     ): Boolean {
@@ -177,10 +177,10 @@ class QuestGiverOpenNettyRequestHandler(
     }
 
     private fun userQuestProgress(
-        userQuestProgressOptions: List<RedisUserQuestProgress>?,
-        quests: List<RedisQuest>,
+        userQuestProgressOptions: List<InGameUserQuestProgress>?,
+        quests: List<InGameQuest>,
         questGiverId: Long
-    ): RedisUserQuestProgress? =
+    ): InGameUserQuestProgress? =
         userQuestProgressOptions?.firstOrNull {
             it.questState == COMPLETED &&
                     findQuestById(quests, it.questId)?.endQuestGiverId == questGiverId
@@ -190,9 +190,9 @@ class QuestGiverOpenNettyRequestHandler(
         } ?: userQuestProgressOptions?.firstOrNull()
 
     private fun findQuestById(
-        quests: List<RedisQuest>,
+        quests: List<InGameQuest>,
         id: Long
-    ): RedisQuest? = quests.firstOrNull { quest -> quest.inGameId() == id }
+    ): InGameQuest? = quests.firstOrNull { quest -> quest.inGameId() == id }
 
 }
 

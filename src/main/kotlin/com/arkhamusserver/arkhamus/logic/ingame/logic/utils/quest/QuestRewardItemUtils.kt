@@ -6,9 +6,9 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisQuest
-import com.arkhamusserver.arkhamus.model.redis.RedisQuestReward
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
+import com.arkhamusserver.arkhamus.model.ingame.InGameQuestReward
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -23,10 +23,10 @@ class QuestRewardItemUtils {
     }
 
     fun chooseItem(
-        quest: RedisQuest,
-        user: RedisGameUser,
+        quest: InGameQuest,
+        user: InGameGameUser,
         rewardType: RewardType,
-        previousRewards: List<RedisQuestReward>,
+        previousRewards: List<InGameQuestReward>,
         rewardsFromPreviousQuest: List<Item>
     ): Item? {
         if (rewardType != RewardType.ITEM) {

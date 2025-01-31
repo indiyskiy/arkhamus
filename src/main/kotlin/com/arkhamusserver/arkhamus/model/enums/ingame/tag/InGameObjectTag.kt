@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame.tag
 
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithVisibilityModifiers
 
 enum class InGameObjectTag(
     private val visibilityModifiers: Set<VisibilityModifier>,

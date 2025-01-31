@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.VisibilityByTag
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.clues.RedisOmenClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameOmenClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
@@ -14,17 +14,17 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
-import com.arkhamusserver.arkhamus.model.redis.clues.RedisOmenClue
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameOmenClue
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
 @Component
 class OmenClueHandler(
-    private val redisOmenClueRepository: RedisOmenClueRepository,
+    private val inGameOmenClueRepository: InGameOmenClueRepository,
     private val userLocationHandler: UserLocationHandler,
     private val visibilityByTagsHandler: VisibilityByTagsHandler,
     private val gameObjectFinder: GameObjectFinder
@@ -44,7 +44,7 @@ class OmenClueHandler(
     }
 
     override fun accept(target: WithStringId): Boolean {
-        return target is RedisGameUser
+        return target is InGameGameUser
     }
 
     override fun canBeAdded(container: CluesContainer): Boolean {
@@ -56,7 +56,7 @@ class OmenClueHandler(
     ) {
         data.clues.omen.filter { !it.turnedOn }.random(random).apply {
             turnedOn = true
-            redisOmenClueRepository.save(this)
+            inGameOmenClueRepository.save(this)
         }
     }
 
@@ -65,11 +65,11 @@ class OmenClueHandler(
     }
 
     override fun canBeRemoved(
-        user: RedisGameUser,
+        user: InGameGameUser,
         target: Any,
         data: GlobalGameData
     ): Boolean {
-        val targetUser = (target as? RedisGameUser) ?: return false
+        val targetUser = (target as? InGameGameUser) ?: return false
         val omen = data.clues.omen.find { it.userId == targetUser.inGameId() } ?: return false
         return omen.turnedOn && userLocationHandler.userCanSeeTargetInRange(
             whoLooks = user,
@@ -81,7 +81,7 @@ class OmenClueHandler(
     }
 
     override fun anyCanBeRemoved(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData
     ): Boolean {
         return data.users.any {
@@ -93,7 +93,7 @@ class OmenClueHandler(
         val omenClue = container.omen.filter { it.turnedOn }.randomOrNull()
         omenClue?.let {
             it.turnedOn = false
-            redisOmenClueRepository.save(it)
+            inGameOmenClueRepository.save(it)
         }
     }
 
@@ -101,25 +101,25 @@ class OmenClueHandler(
         target: WithStringId,
         data: GlobalGameData
     ) {
-        val gameUser = (gameObjectFinder.findById(target.stringId(), GameObjectType.CHARACTER, data) as? RedisGameUser) ?: return
+        val gameUser = (gameObjectFinder.findById(target.stringId(), GameObjectType.CHARACTER, data) as? InGameGameUser) ?: return
         val omenClue = data.clues.omen.find { it.userId == gameUser.inGameId() } ?: return
         omenClue.turnedOn = false
-        redisOmenClueRepository.save(omenClue)
+        inGameOmenClueRepository.save(omenClue)
     }
 
     override fun addClues(
         session: GameSession,
         god: God,
-        zones: List<RedisLevelZone>,
+        zones: List<InGameLevelZone>,
         activeCluesOnStart: Int
     ) {
         val users = session.usersOfGameSession
         val omenCluesForGameSession = users.shuffled(random).take(MAX_ON_GAME)
-        val redisOmenClues = omenCluesForGameSession.map {
-            RedisOmenClue(
+        val inGameOmenClues = omenCluesForGameSession.map {
+            InGameOmenClue(
                 id = generateRandomId(),
                 gameId = session.id!!,
-                redisOmenId = it.id!!,
+                inGameOmenId = it.id!!,
                 interactionRadius = Ability.ADVANCED_SEARCH_FOR_OMEN.range!!,
                 visibilityModifiers = setOf(
                     VisibilityModifier.HAVE_ITEM_OMEN,
@@ -129,17 +129,17 @@ class OmenClueHandler(
             )
         }
         if (god.getTypes().contains(Clue.OMEN)) {
-            val turnedOn = redisOmenClues.shuffled(random).take(activeCluesOnStart)
+            val turnedOn = inGameOmenClues.shuffled(random).take(activeCluesOnStart)
             turnedOn.forEach {
                 it.turnedOn = true
             }
         }
-        redisOmenClueRepository.saveAll(redisOmenClues)
+        inGameOmenClueRepository.saveAll(inGameOmenClues)
     }
 
     override fun mapActualClues(
         container: CluesContainer,
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return container.omen.filter {
@@ -166,7 +166,7 @@ class OmenClueHandler(
 
     override fun mapPossibleClues(
         container: CluesContainer,
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         val omenOptions = container.omen
@@ -189,8 +189,8 @@ class OmenClueHandler(
     }
 
     private fun countState(
-        clue: RedisOmenClue,
-        user: RedisGameUser,
+        clue: InGameOmenClue,
+        user: InGameGameUser,
     ): InnovateClueState {
         return if (clue.castedAbilityUsers.contains(user.inGameId())) {
             if (clue.turnedOn) {

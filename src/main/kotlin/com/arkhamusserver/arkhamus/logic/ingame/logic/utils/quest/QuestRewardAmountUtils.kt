@@ -5,8 +5,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisQuest
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -22,8 +22,8 @@ class QuestRewardAmountUtils {
     }
 
     fun chooseAmount(
-        quest: RedisQuest,
-        user: RedisGameUser,
+        quest: InGameQuest,
+        user: InGameGameUser,
         rewardType: RewardType,
         rewardItem: Item?,
     ): Int {
@@ -40,15 +40,15 @@ class QuestRewardAmountUtils {
     }
 
 
-    private fun luckComponent(user: RedisGameUser): Double {
+    private fun luckComponent(user: InGameGameUser): Double {
         return 1.0 + (0.1 * random.nextInt(3 + userLuck(user)))
     }
 
-    private fun userLuck(user: RedisGameUser): Int {
+    private fun userLuck(user: InGameGameUser): Int {
         return 0
     }
 
-    private fun userModifier(user: RedisGameUser): Double {
+    private fun userModifier(user: InGameGameUser): Double {
         return when (user.role) {
             RoleTypeInGame.CULTIST -> 1.0
             RoleTypeInGame.INVESTIGATOR -> 1.0
@@ -70,7 +70,7 @@ class QuestRewardAmountUtils {
         }
     }
 
-    private fun difficultyModifier(quest: RedisQuest): Double {
+    private fun difficultyModifier(quest: InGameQuest): Double {
         return when (quest.difficulty) {
             QuestDifficulty.VERY_EASY -> 0.25
             QuestDifficulty.EASY -> 0.5

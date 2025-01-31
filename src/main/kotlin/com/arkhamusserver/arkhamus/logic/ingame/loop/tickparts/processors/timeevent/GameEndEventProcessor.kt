@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timee
 
 import com.arkhamusserver.arkhamus.logic.ingame.GameEndLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -18,11 +18,11 @@ class GameEndEventProcessor(
         var logger: Logger = LoggerFactory.getLogger(GameEndLogic::class.java)
     }
 
-    override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.GAME_END
+    override fun accept(type: InGameTimeEventType): Boolean =
+        type == InGameTimeEventType.GAME_END
 
     override fun processStart(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -32,7 +32,7 @@ class GameEndEventProcessor(
 
     @Transactional
     override fun process(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -44,7 +44,7 @@ class GameEndEventProcessor(
     }
 
     override fun processEnd(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long

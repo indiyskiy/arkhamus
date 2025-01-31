@@ -4,14 +4,14 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisQuestRewardRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameQuestRewardRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.ADD_CLUE
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.ITEM
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
-import com.arkhamusserver.arkhamus.model.redis.*
+import com.arkhamusserver.arkhamus.model.ingame.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestRewardResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,7 +21,7 @@ import kotlin.random.Random
 
 @Component
 class QuestRewardUtils(
-    private val questRewardRepository: RedisQuestRewardRepository,
+    private val questRewardRepository: InGameQuestRewardRepository,
     private val questRewardTypeUtils: QuestRewardTypeUtils,
     private val questRewardItemUtils: QuestRewardItemUtils,
     private val questRewardAmountUtils: QuestRewardAmountUtils,
@@ -33,7 +33,7 @@ class QuestRewardUtils(
         private val random = Random(System.currentTimeMillis())
     }
 
-    fun mapRewards(questRewards: List<RedisQuestReward>): List<QuestRewardResponse> {
+    fun mapRewards(questRewards: List<InGameQuestReward>): List<QuestRewardResponse> {
         return questRewards.map {
             QuestRewardResponse(
                 rewardId = it.id,
@@ -45,9 +45,9 @@ class QuestRewardUtils(
     }
 
     fun canBeRewarded(
-        quest: RedisQuest?,
-        userQuestProgress: RedisUserQuestProgress?,
-        user: RedisGameUser
+        quest: InGameQuest?,
+        userQuestProgress: InGameUserQuestProgress?,
+        user: InGameGameUser
     ): Boolean {
         return quest != null &&
                 userQuestProgress != null &&
@@ -58,12 +58,12 @@ class QuestRewardUtils(
 
     @Transactional
     fun findOrCreate(
-        rewards: List<RedisQuestReward>?,
-        quest: RedisQuest,
-        questProgress: RedisUserQuestProgress,
-        user: RedisGameUser,
+        rewards: List<InGameQuestReward>?,
+        quest: InGameQuest,
+        questProgress: InGameUserQuestProgress,
+        user: InGameGameUser,
         currentGameTime: Long
-    ): List<RedisQuestReward> {
+    ): List<InGameQuestReward> {
         return if (rewards.isNullOrEmpty()) {
             generateQuestRewardsForUser(
                 quest,
@@ -88,12 +88,12 @@ class QuestRewardUtils(
     }
 
     private fun generateQuestRewardsForUser(
-        quest: RedisQuest,
-        questProgress: RedisUserQuestProgress,
-        user: RedisGameUser,
+        quest: InGameQuest,
+        questProgress: InGameUserQuestProgress,
+        user: InGameGameUser,
         currentGameTime: Long,
-        allRewardsOfUser: List<RedisQuestReward>
-    ): List<RedisQuestReward> {
+        allRewardsOfUser: List<InGameQuestReward>
+    ): List<InGameQuestReward> {
         logger.info("generating rewards for: ${quest.difficulty} ${quest.inGameId()}")
         val lastReward = allRewardsOfUser
             .filter {
@@ -155,19 +155,19 @@ class QuestRewardUtils(
     }
 
     private fun generateQuestRewardsForUser(
-        quest: RedisQuest,
-        questProgress: RedisUserQuestProgress,
-        user: RedisGameUser,
+        quest: InGameQuest,
+        questProgress: InGameUserQuestProgress,
+        user: InGameGameUser,
         i: Int,
-        previousRewards: List<RedisQuestReward>,
+        previousRewards: List<InGameQuestReward>,
         currentGameTime: Long,
         rewardsFromPreviousQuest: List<Item>
-    ): RedisQuestReward {
+    ): InGameQuestReward {
         val rewardType = questRewardTypeUtils.chooseType(quest, user, i, previousRewards)
         val rewardItem =
             questRewardItemUtils.chooseItem(quest, user, rewardType, previousRewards, rewardsFromPreviousQuest)
         val rewardAmount = questRewardAmountUtils.chooseAmount(quest, user, rewardType, rewardItem)
-        return RedisQuestReward(
+        return InGameQuestReward(
             id = generateRandomId(),
             rewardType = rewardType,
             rewardAmount = rewardAmount,
@@ -181,10 +181,10 @@ class QuestRewardUtils(
     }
 
     fun takeReward(
-        user: RedisGameUser,
-        reward: RedisQuestReward,
+        user: InGameGameUser,
+        reward: InGameQuestReward,
         globalGameData: GlobalGameData,
-        questGiverGivesReward: RedisQuestGiver
+        questGiverGivesReward: InGameQuestGiver
     ) {
         val tags = questGiverGivesReward.gameTags()
         when (reward.rewardType) {
@@ -208,8 +208,8 @@ class QuestRewardUtils(
     }
 
     private fun takeItems(
-        reward: RedisQuestReward,
-        user: RedisGameUser
+        reward: InGameQuestReward,
+        user: InGameGameUser
     ) {
         if (reward.rewardItem != null) {
             inventoryHandler.addItems(user, reward.rewardItem!!, reward.rewardAmount)
@@ -217,8 +217,8 @@ class QuestRewardUtils(
     }
 
     private fun takeCorruptedItems(
-        reward: RedisQuestReward,
-        user: RedisGameUser
+        reward: InGameQuestReward,
+        user: InGameGameUser
     ) {
         inventoryHandler.addItems(
             user, Item.values().filter {

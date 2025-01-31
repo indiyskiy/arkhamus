@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import org.springframework.stereotype.Component
 
@@ -12,8 +12,8 @@ class OtherGameUsersDataHandler(
     private val userLocationHandler: UserLocationHandler
 ) {
     fun map(
-        myUser: RedisGameUser,
-        otherGameUsers: List<RedisGameUser>,
+        myUser: InGameGameUser,
+        otherGameUsers: List<InGameGameUser>,
         levelGeometryData: LevelGeometryData
     ): List<GameUserResponse> {
         val allUsers = otherGameUsers.map { thatUser ->
@@ -26,8 +26,8 @@ class OtherGameUsersDataHandler(
 
     private fun mask(
         responseToMask: GameUserResponse,
-        thatUser: RedisGameUser,
-        myUser: RedisGameUser,
+        thatUser: InGameGameUser,
+        myUser: InGameGameUser,
         levelGeometryData: LevelGeometryData
     ) {
         if (!userLocationHandler.userCanSeeTarget(

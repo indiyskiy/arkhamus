@@ -4,11 +4,11 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
 @Component
@@ -30,12 +30,12 @@ class ParalyzeAbilityCast(
     }
 
     override fun cast(
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
-        paralyze(target as RedisGameUser, globalGameData, sourceUser)
+        paralyze(target as InGameGameUser, globalGameData, sourceUser)
         return true
     }
 
@@ -44,25 +44,25 @@ class ParalyzeAbilityCast(
         globalGameData: GlobalGameData
     ) {
         val currentUser = abilityRequestProcessData.gameUser
-        val targetUser = abilityRequestProcessData.target as RedisGameUser
+        val targetUser = abilityRequestProcessData.target as InGameGameUser
 
         paralyze(targetUser, globalGameData, currentUser)
     }
 
     private fun paralyze(
-        targetUser: RedisGameUser,
+        targetUser: InGameGameUser,
         globalGameData: GlobalGameData,
-        currentUser: RedisGameUser?
+        currentUser: InGameGameUser?
     ) {
         if (targetUser.stateTags.contains(UserStateTag.INVULNERABILITY)) return
 
         timeEventHandler.createEvent(
             game = globalGameData.game,
-            eventType = RedisTimeEventType.ABILITY_STUN,
+            eventType = InGameTimeEventType.ABILITY_STUN,
             sourceObject = currentUser,
             targetObject = targetUser,
             location = Location(targetUser.x, targetUser.y, targetUser.z),
-            timeLeft = RedisTimeEventType.ABILITY_STUN.getDefaultTime()
+            timeLeft = InGameTimeEventType.ABILITY_STUN.getDefaultTime()
         )
     }
 }

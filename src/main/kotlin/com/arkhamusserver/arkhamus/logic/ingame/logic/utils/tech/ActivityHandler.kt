@@ -1,22 +1,22 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisActivityRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameActivityRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameActivityRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.game.GameActivity
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
-import com.arkhamusserver.arkhamus.model.redis.RedisActivity
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
+import com.arkhamusserver.arkhamus.model.ingame.InGameActivity
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 class ActivityHandler(
-    private val redisActivityRepository: RedisActivityRepository,
+    private val inGameActivityRepository: InGameActivityRepository,
     private val gameActivityRepository: GameActivityRepository,
     private val gameSessionRepository: GameSessionRepository
 ) {
@@ -35,8 +35,8 @@ class ActivityHandler(
         relatedGameObjectType: GameObjectType?,
         relatedGameObjectId: Long?,
         relatedEventId: Long?,
-    ): RedisActivity {
-        val activity = RedisActivity(
+    ): InGameActivity {
+        val activity = InGameActivity(
             id = generateRandomId(),
             gameId = gameId,
             activityType = activityType,
@@ -49,7 +49,7 @@ class ActivityHandler(
             relatedGameObjectId = relatedGameObjectId,
             relatedEventId = relatedEventId
         )
-        redisActivityRepository.save(activity)
+        inGameActivityRepository.save(activity)
         logger.info("added activity: ${activity.activityType.name}")
         return activity
     }
@@ -57,10 +57,10 @@ class ActivityHandler(
     fun addUserNotTargetActivity(
         gameId: Long,
         activityType: ActivityType,
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         gameTime: Long,
         relatedEventId: Long?,
-    ): RedisActivity =
+    ): InGameActivity =
         addActivity(
             gameId = gameId,
             activityType = activityType,
@@ -77,12 +77,12 @@ class ActivityHandler(
     fun addUserWithTargetActivity(
         gameId: Long,
         activityType: ActivityType,
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         gameTime: Long,
         relatedGameObjectType: GameObjectType?,
         withTrueIngameId: WithTrueIngameId?,
         relatedEventId: Long?,
-    ): RedisActivity =
+    ): InGameActivity =
         addActivity(
             gameId = gameId,
             activityType = activityType,
@@ -98,29 +98,29 @@ class ActivityHandler(
 
     @Transactional
     fun saveAll(gameId: Long) {
-        val redisActivities = redisActivityRepository.findByGameId(gameId)
+        val inGameActivities = inGameActivityRepository.findByGameId(gameId)
         val gameSession = gameSessionRepository.findById(gameId).orElse(null)
         if (gameSession == null) {
-            redisActivityRepository.deleteAll(redisActivities)
+            inGameActivityRepository.deleteAll(inGameActivities)
             return
         }
-        val activities = redisActivities.map { redisActivity ->
+        val activities = inGameActivities.map { inGameActivity ->
             GameActivity(
-                x = redisActivity.x,
-                y = redisActivity.y,
-                z = redisActivity.z,
-                gameTime = redisActivity.gameTime,
-                activityType = redisActivity.activityType,
-                relatedGameObjectType = redisActivity.relatedGameObjectType,
-                relatedGameObjectId = redisActivity.relatedGameObjectId,
-                relatedEventId = redisActivity.relatedEventId,
+                x = inGameActivity.x,
+                y = inGameActivity.y,
+                z = inGameActivity.z,
+                gameTime = inGameActivity.gameTime,
+                activityType = inGameActivity.activityType,
+                relatedGameObjectType = inGameActivity.relatedGameObjectType,
+                relatedGameObjectId = inGameActivity.relatedGameObjectId,
+                relatedEventId = inGameActivity.relatedEventId,
                 gameSession = gameSession,
-                userOfGameSession = gameSession.usersOfGameSession.first { it.userAccount.id == redisActivity.sourceUserId },
+                userOfGameSession = gameSession.usersOfGameSession.first { it.userAccount.id == inGameActivity.sourceUserId },
             )
         }
         logger.info("saving ${activities.size} activities")
         gameActivityRepository.saveAll(activities)
-        redisActivityRepository.deleteAll(redisActivities)
+        inGameActivityRepository.deleteAll(inGameActivities)
     }
 
     fun saveHeartbeatForUsers(data: GlobalGameData) {

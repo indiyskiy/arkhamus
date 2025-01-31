@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 
 data class ContainerStateResponse(
     var containerId: Long,
@@ -9,7 +9,7 @@ data class ContainerStateResponse(
     var holdingUserId: Long?,
     var gameTags: Set<String>
 ) {
-    constructor(container: RedisContainer) : this(
+    constructor(container: InGameContainer) : this(
         containerId = container.inGameId(),
         state = container.state,
         holdingUserId = container.holdingUser,

@@ -2,9 +2,9 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAbilityCastRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState.*
-import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAbilityCastRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState.*
+import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class OnTickAbilityCast(
-    private val redisAbilityCastRepository: RedisAbilityCastRepository,
+    private val inGameAbilityCastRepository: InGameAbilityCastRepository,
     private val activeAbilityProcessors: List<ActiveAbilityProcessor>
 ) {
     companion object {
@@ -22,7 +22,7 @@ class OnTickAbilityCast(
     @Transactional
     fun applyAbilityCasts(
         globalGameData: GlobalGameData,
-        castAbilities: List<RedisAbilityCast>,
+        castAbilities: List<InGameAbilityCast>,
         timePassedMillis: Long
     ) {
         castAbilities.forEach { castAbility ->
@@ -30,12 +30,12 @@ class OnTickAbilityCast(
                 ACTIVE -> {
                     handleActiveEvent(castAbility, globalGameData)
                     pushActive(castAbility, globalGameData, timePassedMillis)
-                    redisAbilityCastRepository.save(castAbility)
+                    inGameAbilityCastRepository.save(castAbility)
                 }
 
                 ON_COOLDOWN -> {
                     pushCooldown(castAbility, timePassedMillis)
-                    redisAbilityCastRepository.save(castAbility)
+                    inGameAbilityCastRepository.save(castAbility)
                 }
 
                 else -> {}
@@ -44,7 +44,7 @@ class OnTickAbilityCast(
     }
 
     private fun pushActive(
-        castAbility: RedisAbilityCast,
+        castAbility: InGameAbilityCast,
         globalGameData: GlobalGameData,
         timePassedMillis: Long
     ) {
@@ -60,7 +60,7 @@ class OnTickAbilityCast(
     }
 
     private fun transitActiveToCooldown(
-        castAbility: RedisAbilityCast,
+        castAbility: InGameAbilityCast,
         globalGameData: GlobalGameData
     ) {
         endActiveEvent(castAbility, globalGameData)
@@ -71,7 +71,7 @@ class OnTickAbilityCast(
     }
 
 
-    private fun pushCooldown(castAbility: RedisAbilityCast, timePassedMillis: Long) {
+    private fun pushCooldown(castAbility: InGameAbilityCast, timePassedMillis: Long) {
         if (castAbility.timeLeftCooldown > 0) {
             pushNotPastEvent(castAbility, timePassedMillis)
             if (castAbility.timeLeftCooldown <= 0) {
@@ -84,7 +84,7 @@ class OnTickAbilityCast(
 
 
     private fun handleActiveEvent(
-        castAbility: RedisAbilityCast,
+        castAbility: InGameAbilityCast,
         globalGameData: GlobalGameData
     ) {
         activeAbilityProcessors.filter {
@@ -95,7 +95,7 @@ class OnTickAbilityCast(
     }
 
     private fun endActiveEvent(
-        castAbility: RedisAbilityCast,
+        castAbility: InGameAbilityCast,
         globalGameData: GlobalGameData
     ) {
         activeAbilityProcessors.filter {
@@ -106,7 +106,7 @@ class OnTickAbilityCast(
     }
 
     private fun pushNotPastEvent(
-        abilityCast: RedisAbilityCast,
+        abilityCast: InGameAbilityCast,
         timePassedMillis: Long
     ) {
         abilityCast.timePast += timePassedMillis

@@ -1,19 +1,19 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import org.springframework.stereotype.Component
 
 @Component
 class TeleportationEventProcessor() : TimeEventProcessor {
-    override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.TELEPORTATION_STUN
+    override fun accept(type: InGameTimeEventType): Boolean =
+        type == InGameTimeEventType.TELEPORTATION_STUN
 
 
     override fun process(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -24,7 +24,7 @@ class TeleportationEventProcessor() : TimeEventProcessor {
     }
 
     override fun processStart(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -35,7 +35,7 @@ class TeleportationEventProcessor() : TimeEventProcessor {
     }
 
     override fun processEnd(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long

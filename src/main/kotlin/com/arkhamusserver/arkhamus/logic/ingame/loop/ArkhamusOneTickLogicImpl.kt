@@ -3,10 +3,10 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool.Companion.TICK_DELTA
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.InGameDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.loadGlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.*
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 @Component
 class ArkhamusOneTickLogicImpl(
     private val oneTickUserResponses: OneTickUserResponses,
-    private val redisDataAccess: RedisDataAccess,
+    private val inGameDataAccess: InGameDataAccess,
     private val oneTickUserRequests: OneTickUserRequests,
     private val oneTickUser: OneTickUser,
     private val oneTickTick: OneTickTick,
@@ -35,11 +35,11 @@ class ArkhamusOneTickLogicImpl(
 
     override fun processCurrentTasks(
         currentTasks: List<NettyTickRequestMessageDataHolder>,
-        game: RedisGame,
+        game: InRamGame,
     ): List<NettyResponse> {
         try {
 //            logger.info("loadGlobalGameData")
-            val globalGameData = redisDataAccess.loadGlobalGameData(game)
+            val globalGameData = inGameDataAccess.loadGlobalGameData(game)
 //            logger.info("updateNextTick")
             val timePassedMillis = oneTickTick.updateNextTick(game)
 //            logger.info("processTimeEvents")

@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.RitualLeaveRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAltarHolderRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class RitualLeaveRequestProcessor(
-    private val redisAltarHolderRepository: RedisAltarHolderRepository
+    private val inGameAltarHolderRepository: InGameAltarHolderRepository
 ) : NettyRequestProcessor {
 
     companion object {
@@ -38,7 +38,7 @@ class RitualLeaveRequestProcessor(
             logger.info("leave ritual")
             if (altarHolder != null) {
                 altarHolder.usersToKick += user.inGameId()
-                redisAltarHolderRepository.save(altarHolder)
+                inGameAltarHolderRepository.save(altarHolder)
             }
             ritualLeaveRequestProcessData.executedSuccessfully = true
         }

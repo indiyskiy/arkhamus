@@ -1,45 +1,45 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.entrity
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
-import com.arkhamusserver.arkhamus.model.redis.*
+import com.arkhamusserver.arkhamus.model.ingame.*
 
 data class GlobalGameData(
-    val game: RedisGame,
-    var timeEvents: List<RedisTimeEvent> = emptyList(),
-    var shortTimeEvents: List<RedisShortTimeEvent> = emptyList(),
-    var castAbilities: List<RedisAbilityCast> = emptyList(),
+    val game: InRamGame,
+    var timeEvents: List<InGameTimeEvent> = emptyList(),
+    var shortTimeEvents: List<InGameShortTimeEvent> = emptyList(),
+    var castAbilities: List<InGameAbilityCast> = emptyList(),
     var inBetweenEvents: InBetweenEventHolder = InBetweenEventHolder(),
 
-    var users: Map<Long, RedisGameUser> = emptyMap(),
+    var users: Map<Long, InGameGameUser> = emptyMap(),
 
-    var altarHolder: RedisAltarHolder?,
-    var altarPolling: RedisAltarPolling? = null,
-    var altars: Map<Long, RedisAltar> = emptyMap(),
+    var altarHolder: InGameAltarHolder?,
+    var altarPolling: InGameAltarPolling? = null,
+    var altars: Map<Long, InGameAltar> = emptyMap(),
 
     var clues: CluesContainer = CluesContainer(emptyList(), emptyList(), emptyList()),
 
-    var containers: Map<Long, RedisContainer> = emptyMap(),
-    var crafters: Map<Long, RedisCrafter> = emptyMap(),
-    var lanterns: List<RedisLantern> = emptyList(),
+    var containers: Map<Long, InGameContainer> = emptyMap(),
+    var crafters: Map<Long, InGameCrafter> = emptyMap(),
+    var lanterns: List<InGameLantern> = emptyList(),
 
-    var craftProcess: List<RedisCraftProcess> = emptyList(),
+    var craftProcess: List<InGameCraftProcess> = emptyList(),
     var levelGeometryData: LevelGeometryData = LevelGeometryData(),
 
-    var quests: List<RedisQuest> = emptyList(),
-    var questRewardsByQuestProgressId: Map<String, List<RedisQuestReward>> = emptyMap(),
-    var questProgressByUserId: Map<Long, List<RedisUserQuestProgress>> = emptyMap(),
-    var questGivers: List<RedisQuestGiver> = emptyList(),
+    var quests: List<InGameQuest> = emptyList(),
+    var questRewardsByQuestProgressId: Map<String, List<InGameQuestReward>> = emptyMap(),
+    var questProgressByUserId: Map<Long, List<InGameUserQuestProgress>> = emptyMap(),
+    var questGivers: List<InGameQuestGiver> = emptyList(),
 
-    var voteSpots: List<RedisVoteSpot> = emptyList(),
-    var userVoteSpotsBySpotId: Map<Long, List<RedisUserVoteSpot>> = emptyMap(),
-    var thresholds: List<RedisThreshold> = emptyList(),
-    var doorsByZoneId: Map<Long, List<RedisDoor>> = emptyMap(),
+    var voteSpots: List<InGameVoteSpot> = emptyList(),
+    var userVoteSpotsBySpotId: Map<Long, List<InGameUserVoteSpot>> = emptyMap(),
+    var thresholds: List<InGameThreshold> = emptyList(),
+    var doorsByZoneId: Map<Long, List<InGameDoor>> = emptyMap(),
 ) {
     fun buildGeometryData(
-        zones: List<RedisLevelZone>,
-        tetragons: List<RedisLevelZoneTetragon>,
-        ellipses: List<RedisLevelZoneEllipse>,
-        redisVisibilityMap: RedisVisibilityMap
+        zones: List<InGameLevelZone>,
+        tetragons: List<InGameLevelZoneTetragon>,
+        ellipses: List<InGameLevelZoneEllipse>,
+        inGameVisibilityMap: InGameVisibilityMap
     ): LevelGeometryData {
         val tetragonsMap = tetragons.groupBy { it.levelZoneId }
         val ellipsesMap = ellipses.groupBy { it.levelZoneId }
@@ -53,14 +53,14 @@ data class GlobalGameData(
         }
         return LevelGeometryData().apply {
             this.zones = zonesMap
-            this.visibilityMap = redisVisibilityMap.visibilityMap
+            this.visibilityMap = inGameVisibilityMap.visibilityMap
         }
     }
 
     private fun mapTetragons(
-        redisLevelZoneTetragons: List<RedisLevelZoneTetragon>
+        inGameLevelZoneTetragons: List<InGameLevelZoneTetragon>
     ): List<GeometryUtils.Tetragon> {
-        return redisLevelZoneTetragons.map { tetragon ->
+        return inGameLevelZoneTetragons.map { tetragon ->
             GeometryUtils.Tetragon(
                 p0 = GeometryUtils.Point(tetragon.point0X, tetragon.point0Z),
                 p1 = GeometryUtils.Point(tetragon.point1X, tetragon.point1Z),
@@ -71,9 +71,9 @@ data class GlobalGameData(
     }
 
     private fun mapEllipses(
-        redisLevelZoneEllipses: List<RedisLevelZoneEllipse>
+        inGameLevelZoneEllips: List<InGameLevelZoneEllipse>
     ): List<GeometryUtils.Ellipse> {
-        return redisLevelZoneEllipses.map { ellipse ->
+        return inGameLevelZoneEllips.map { ellipse ->
             GeometryUtils.Ellipse(
                 center = GeometryUtils.Point(ellipse.pointX, ellipse.pointZ),
                 rz = ellipse.height / 2,

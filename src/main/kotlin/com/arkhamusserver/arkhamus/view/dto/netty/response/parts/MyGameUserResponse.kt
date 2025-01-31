@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 
 data class MyGameUserResponse(
     val id: Long,
@@ -15,7 +15,7 @@ data class MyGameUserResponse(
     val stateTags: Set<UserStateTag> = emptySet(),
     var quests: List<UserQuestResponse> = emptyList()
 ) {
-    constructor(gameUser: RedisGameUser, quests: List<UserQuestResponse>) : this(
+    constructor(gameUser: InGameGameUser, quests: List<UserQuestResponse>) : this(
         id = gameUser.inGameId(),
         nickName = gameUser.nickName,
         madness = gameUser.madness,

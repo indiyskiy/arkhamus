@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame.core
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithVisibilityModifiers
 
 enum class Clue(
     val visibilityModifiers: Set<VisibilityModifier>,

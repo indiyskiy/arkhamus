@@ -5,13 +5,13 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.clues.RedisSoundClueRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameSoundClueRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
-import com.arkhamusserver.arkhamus.model.redis.parts.RedisSoundClueJammer
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
+import com.arkhamusserver.arkhamus.model.ingame.parts.InGameSoundClueJammer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component
 @Component
 class AdvancedSearchForSoundAbilityCast(
     private val timeEventHandler: TimeEventHandler,
-    private val redisSoundClueRepository: RedisSoundClueRepository
+    private val inGameSoundClueRepository: InGameSoundClueRepository
 ) : AbilityCast {
 
     companion object {
@@ -45,7 +45,7 @@ class AdvancedSearchForSoundAbilityCast(
     }
 
     override fun cast(
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -58,11 +58,11 @@ class AdvancedSearchForSoundAbilityCast(
     }
 
     private fun castAbility(
-        user: RedisGameUser,
+        user: InGameGameUser,
         target: WithTrueIngameId,
         data: GlobalGameData
     ) {
-        with(target as RedisSoundClueJammer) {
+        with(target as InGameSoundClueJammer) {
             this.turnedOn = false
             val soundClue = data.clues.sound.firstOrNull {
                 it.soundClueJammers.any {
@@ -73,17 +73,17 @@ class AdvancedSearchForSoundAbilityCast(
                 soundClueNotNull.soundClueJammers.first {
                     it.inGameId() == this.inGameId()
                 }.turnedOn = false
-                redisSoundClueRepository.save(soundClueNotNull)
+                inGameSoundClueRepository.save(soundClueNotNull)
             }
 
 
             timeEventHandler.createEvent(
                 game = data.game,
-                eventType = RedisTimeEventType.SOUND_CLUE_JAMMER_TURN_OFF,
+                eventType = InGameTimeEventType.SOUND_CLUE_JAMMER_TURN_OFF,
                 sourceObject = user,
                 targetObject = target,
                 location = Location(this.x, this.y, this.z),
-                timeLeft = RedisTimeEventType.SOUND_CLUE_JAMMER_TURN_OFF.getDefaultTime()
+                timeLeft = InGameTimeEventType.SOUND_CLUE_JAMMER_TURN_OFF.getDefaultTime()
             )
         }
     }

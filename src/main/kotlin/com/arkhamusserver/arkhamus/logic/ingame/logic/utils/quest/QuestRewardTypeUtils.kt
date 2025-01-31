@@ -8,9 +8,9 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.ADD_CLUE
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.ITEM
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisQuest
-import com.arkhamusserver.arkhamus.model.redis.RedisQuestReward
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
+import com.arkhamusserver.arkhamus.model.ingame.InGameQuestReward
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -25,10 +25,10 @@ class QuestRewardTypeUtils {
     }
 
     fun chooseType(
-        quest: RedisQuest,
-        user: RedisGameUser,
+        quest: InGameQuest,
+        user: InGameGameUser,
         i: Int,
-        previousRewards: List<RedisQuestReward>
+        previousRewards: List<InGameQuestReward>
     ): RewardType {
         val previousRewardTypes = previousRewards
             .map { it.rewardType }
@@ -49,7 +49,7 @@ class QuestRewardTypeUtils {
 
     private fun availableByUser(
         type: RewardType,
-        user: RedisGameUser
+        user: InGameGameUser
     ): Boolean {
         return byRole(type, user.role) //&& byClass(type, user.classInGame)
     }

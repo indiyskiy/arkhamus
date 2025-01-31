@@ -1,23 +1,23 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarHolderRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAltarHolderRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAltarRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.AltarRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.RitualAreaRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Altar
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisAltar
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GameStartAltarLogic(
-    private val redisAltarRepository: RedisAltarRepository,
-    private val redisAltarHolderRepository: RedisAltarHolderRepository,
+    private val inGameAltarRepository: InGameAltarRepository,
+    private val inGameAltarHolderRepository: InGameAltarHolderRepository,
     private val altarRepository: AltarRepository,
     private val ritualAreaRepository: RitualAreaRepository,
 ) {
@@ -29,7 +29,7 @@ class GameStartAltarLogic(
     ) {
         val allLevelAltars = altarRepository.findByLevelId(levelId)
         allLevelAltars.forEach { dbAltar ->
-            redisAltarRepository.save(createAltar(game, dbAltar))
+            inGameAltarRepository.save(createAltar(game, dbAltar))
         }
         createAltarHolder(game, levelId)
     }
@@ -37,8 +37,8 @@ class GameStartAltarLogic(
     private fun createAltarHolder(game: GameSession, levelId: Long) {
         val ritualArea = ritualAreaRepository.findByLevelId(levelId).first()
 
-        redisAltarHolderRepository.save(
-            RedisAltarHolder(
+        inGameAltarHolderRepository.save(
+            InGameAltarHolder(
                 id = generateRandomId(),
                 gameId = game.id!!,
                 state = MapAltarState.OPEN,
@@ -54,7 +54,7 @@ class GameStartAltarLogic(
     private fun createAltar(
         game: GameSession,
         dbAltar: Altar,
-    ) = RedisAltar(
+    ) = InGameAltar(
         id = generateRandomId(),
         altarId = dbAltar.inGameId!!,
         gameId = game.id!!,

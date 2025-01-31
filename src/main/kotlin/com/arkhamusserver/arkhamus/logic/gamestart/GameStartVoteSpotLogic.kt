@@ -1,46 +1,46 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisUserVoteSpotRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisVoteSpotRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameUserVoteSpotRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.VoteSpotRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.VoteSpot
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisUserVoteSpot
-import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUserVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import org.springframework.stereotype.Component
 
 @Component
 class GameStartVoteSpotLogic(
     private val voteSpotRepository: VoteSpotRepository,
-    private val redisVoteSpotRepository: RedisVoteSpotRepository,
-    private val redisUserVoteSpotRepository: RedisUserVoteSpotRepository
+    private val inGameVoteSpotRepository: InGameVoteSpotRepository,
+    private val inGameUserVoteSpotRepository: InGameUserVoteSpotRepository
 ) {
 
     companion object {
         private val DEFAULT_ITEM = Item.VOTE_TOKEN
     }
 
-    fun createVoteSpots(levelId: Long, game: GameSession, users: List<RedisGameUser>) {
+    fun createVoteSpots(levelId: Long, game: GameSession, users: List<InGameGameUser>) {
         val voteSpots = voteSpotRepository.findByLevelId(levelId)
         voteSpots.forEach { voteSpot ->
-            val redisVoteSpot = createVoteSpot(voteSpot, game, users)
+            val inGameVoteSpot = createVoteSpot(voteSpot, game, users)
             users.forEach { user ->
-                createUserVoteSpot(redisVoteSpot, game, user)
+                createUserVoteSpot(inGameVoteSpot, game, user)
             }
         }
     }
 
     private fun createUserVoteSpot(
-        voteSpot: RedisVoteSpot,
+        voteSpot: InGameVoteSpot,
         game: GameSession,
-        user: RedisGameUser
+        user: InGameGameUser
     ) {
-        redisUserVoteSpotRepository.save(
-            RedisUserVoteSpot(
+        inGameUserVoteSpotRepository.save(
+            InGameUserVoteSpot(
                 id = generateRandomId(),
                 gameId = game.id!!,
                 voteSpotId = voteSpot.voteSpotId,
@@ -53,10 +53,10 @@ class GameStartVoteSpotLogic(
     private fun createVoteSpot(
         voteSpot: VoteSpot,
         game: GameSession,
-        allUsers: List<RedisGameUser>
+        allUsers: List<InGameGameUser>
     ) =
-        redisVoteSpotRepository.save(
-            RedisVoteSpot(
+        inGameVoteSpotRepository.save(
+            InGameVoteSpot(
                 id = generateRandomId(),
                 gameId = game.id!!,
                 voteSpotId = voteSpot.inGameId,

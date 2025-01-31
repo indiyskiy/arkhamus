@@ -1,18 +1,18 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisDoorRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameDoorRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.DoorRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Door
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisDoor
+import com.arkhamusserver.arkhamus.model.ingame.InGameDoor
 import org.springframework.stereotype.Component
 
 @Component
 class GameStartDoorLogic(
     private val doorRepository: DoorRepository,
-    private val redisDoorRepository: RedisDoorRepository,
+    private val inGameDoorRepository: InGameDoorRepository,
 ) {
 
     fun createDoors(levelId: Long, game: GameSession) {
@@ -26,8 +26,8 @@ class GameStartDoorLogic(
         door: Door,
         game: GameSession,
     ) =
-        redisDoorRepository.save(
-            RedisDoor(
+        inGameDoorRepository.save(
+            InGameDoor(
                 id = generateRandomId(),
                 gameId = game.id!!,
                 doorId = door.inGameId,

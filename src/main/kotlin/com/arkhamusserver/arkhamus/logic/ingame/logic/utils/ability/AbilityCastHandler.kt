@@ -12,9 +12,9 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import org.springframework.stereotype.Component
 
 @Component
@@ -63,7 +63,7 @@ class AbilityCastHandler(
     }
 
     fun cast(
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData,
@@ -103,7 +103,7 @@ class AbilityCastHandler(
 
     private fun consumeItem(
         ability: Ability,
-        gameUser: RedisGameUser,
+        gameUser: InGameGameUser,
         item: Item
     ) {
         if (ability.consumesItem) {
@@ -119,7 +119,7 @@ class AbilityCastHandler(
         item: Item?,
         ability: Ability,
         target: WithStringId?,
-        userAccount: RedisGameUser,
+        userAccount: InGameGameUser,
         gameId: Long,
         globalGameData: GlobalGameData,
         targetType: GameObjectType? = null,
@@ -170,7 +170,7 @@ class AbilityCastHandler(
 
     private fun createActivity(
         gameId: Long,
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         gameTime: Long,
         relatedGameObjectType: GameObjectType?,
         relatedGameObject: WithTrueIngameId?,

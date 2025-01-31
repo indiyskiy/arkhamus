@@ -6,14 +6,14 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteSkipRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisAltarPollingRepository
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAltarPollingRepository
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltarPolling
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GodVoteSkipRequestProcessor(
-    private val redisAltarPollingRepository: RedisAltarPollingRepository,
+    private val inGameAltarPollingRepository: InGameAltarPollingRepository,
     private val ritualHandler: RitualHandler
 ) : NettyRequestProcessor {
 
@@ -48,11 +48,11 @@ class GodVoteSkipRequestProcessor(
     }
 
     private fun skipVote(
-        altarPolling: RedisAltarPolling,
+        altarPolling: InGameAltarPolling,
         gameData: GodVoteSkipRequestProcessData
     ) {
         val userId: Long = gameData.gameUser!!.inGameId()
         altarPolling.skippedUsers += userId
-        redisAltarPollingRepository.save(altarPolling)
+        inGameAltarPollingRepository.save(altarPolling)
     }
 }

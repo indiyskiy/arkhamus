@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import org.springframework.stereotype.Component
 
 @Component
@@ -35,11 +35,11 @@ class BaseRequestProcessor : NettyRequestProcessor {
         }
     }
 
-    private fun RedisGameUser.notRestricted(): Boolean {
+    private fun InGameGameUser.notRestricted(): Boolean {
         return !restricted()
     }
 
-    private fun RedisGameUser.restricted(): Boolean {
+    private fun InGameGameUser.restricted(): Boolean {
         return RESTRICTION_SET.any { stateTags.contains(it) }
     }
 }

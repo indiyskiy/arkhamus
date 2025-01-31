@@ -4,8 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.TeleportHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -19,7 +19,7 @@ class RandomTeleportSomeoneMaybe(
     }
 
     fun teleport(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {

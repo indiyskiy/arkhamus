@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timee
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional
 class AltarVotingEventProcessor(
     private val ritualHandler: RitualHandler,
 ) : TimeEventProcessor {
-    override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.ALTAR_VOTING
+    override fun accept(type: InGameTimeEventType): Boolean =
+        type == InGameTimeEventType.ALTAR_VOTING
 
     override fun processStart(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -24,7 +24,7 @@ class AltarVotingEventProcessor(
     }
 
     override fun process(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -34,7 +34,7 @@ class AltarVotingEventProcessor(
 
     @Transactional
     override fun processEnd(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long

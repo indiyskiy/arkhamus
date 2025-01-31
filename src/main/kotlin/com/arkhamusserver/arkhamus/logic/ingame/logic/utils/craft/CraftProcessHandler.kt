@@ -2,27 +2,27 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCraftProcessRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.redis.RedisCraftProcess
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameCraftProcessRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
+import com.arkhamusserver.arkhamus.model.ingame.InGameCraftProcess
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 class CraftProcessHandler(
-    private val redisCraftProcessRepository: RedisCraftProcessRepository
+    private val inGameCraftProcessRepository: InGameCraftProcessRepository
 ) {
 
     @Transactional
     fun startCraftProcess(
         recipe: Recipe,
-        crafter: RedisCrafter,
+        crafter: InGameCrafter,
         sourceUserId: Long,
         gameId: Long,
         currentGameTime: Long
     ) {
-        val craftProcessCast = RedisCraftProcess(
+        val craftProcessCast = InGameCraftProcess(
             id = generateRandomId(),
             gameId = gameId,
             recipeId = recipe.recipeId,
@@ -31,9 +31,9 @@ class CraftProcessHandler(
             timeStart = currentGameTime,
             timePast = 0,
             timeLeft = recipe.timeToCraft,
-            state = RedisTimeEventState.ACTIVE,
+            state = InGameTimeEventState.ACTIVE,
         )
-        redisCraftProcessRepository.save(craftProcessCast)
+        inGameCraftProcessRepository.save(craftProcessCast)
     }
 
 }

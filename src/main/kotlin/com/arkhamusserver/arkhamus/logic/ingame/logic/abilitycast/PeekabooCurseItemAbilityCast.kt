@@ -3,22 +3,22 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.InGameTagsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameContainerRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameCrafterRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithGameTags
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithGameTags
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
 @Component
 class PeekabooCurseItemAbilityCast(
     private val inGameTagsHandler: InGameTagsHandler,
-    private val redisContainerRepository: RedisContainerRepository,
-    private val redisCrafterRepository: RedisCrafterRepository,
+    private val inGameContainerRepository: InGameContainerRepository,
+    private val inGameCrafterRepository: InGameCrafterRepository,
 ) : AbilityCast {
     override fun accept(ability: Ability): Boolean {
         return ability == Ability.PEEKABOO_CURSE_ITEM
@@ -34,7 +34,7 @@ class PeekabooCurseItemAbilityCast(
     }
 
     override fun cast(
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -53,11 +53,11 @@ class PeekabooCurseItemAbilityCast(
     private fun curseItem(target: WithStringId?) {
         if (target != null) {
             inGameTagsHandler.addTag(target as WithGameTags, InGameObjectTag.PEEKABOO_CURSE)
-            if (target is RedisContainer) {
-                redisContainerRepository.save(target)
+            if (target is InGameContainer) {
+                inGameContainerRepository.save(target)
             }
-            if (target is RedisCrafter) {
-                redisCrafterRepository.save(target)
+            if (target is InGameCrafter) {
+                inGameCrafterRepository.save(target)
             }
         }
     }

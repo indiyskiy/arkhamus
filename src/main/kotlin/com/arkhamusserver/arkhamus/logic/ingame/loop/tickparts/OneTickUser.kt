@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness.MadnessTickProcessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.tickuser.OneTickUserInventory
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -26,7 +26,7 @@ class OneTickUser(
     }
 
     private fun processUser(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ) {
@@ -35,7 +35,7 @@ class OneTickUser(
     }
 
     private fun processMadness(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ) {

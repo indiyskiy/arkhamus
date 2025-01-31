@@ -1,19 +1,19 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual
 
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
 @Component
 class RitualMappingDataHandler {
     fun build(
-        ritualEvent: RedisTimeEvent?,
-        altarHolder: RedisAltarHolder,
-        usersInRitual: List<RedisGameUser>,
+        ritualEvent: InGameTimeEvent?,
+        altarHolder: InGameAltarHolder,
+        usersInRitual: List<InGameGameUser>,
         currentItem: Item?,
         gameTimeItemsNotches: List<ItemNotch>
     ): RitualGoingDataResponse {
@@ -25,7 +25,7 @@ class RitualMappingDataHandler {
             this.currentItemMax = altarHolder.itemsForRitual[currentItem] ?: 0
             this.currentItemInside = altarHolder.itemsOnAltars[currentItem] ?: 0
             this.gameTimeStart = ritualEvent?.timeStart ?: 0
-            this.gameTimeEnd = (ritualEvent?.timeStart ?: 0) + RedisTimeEventType.RITUAL_GOING.getDefaultTime()
+            this.gameTimeEnd = (ritualEvent?.timeStart ?: 0) + InGameTimeEventType.RITUAL_GOING.getDefaultTime()
             this.gameTimeNow = currentGameTime
             this.gameTimeItemsNotches = gameTimeItemsNotches.map {
                 ItemNotchResponse(it)
@@ -34,7 +34,7 @@ class RitualMappingDataHandler {
         }
     }
 
-    private fun mapAltarsContent(altarHolder: RedisAltarHolder?): List<AltarContent> {
+    private fun mapAltarsContent(altarHolder: InGameAltarHolder?): List<AltarContent> {
         return altarHolder?.let { altar ->
             altar.itemsForRitual.map { (item, itemNumberMax) ->
                 AltarContent().apply {
@@ -48,8 +48,8 @@ class RitualMappingDataHandler {
     }
 
     fun buildUserData(
-        holder: RedisAltarHolder,
-        myUser: RedisGameUser
+        holder: InGameAltarHolder,
+        myUser: InGameGameUser
     ): UserRitualData {
         val inRitual = holder.usersInRitual.contains(myUser.inGameId())
         val canLeave = inRitual && !holder.usersToKick.contains(myUser.inGameId())

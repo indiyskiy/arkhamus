@@ -14,10 +14,10 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameShortTimeEvent
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.container.OpenContainerNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
@@ -103,17 +103,17 @@ class OpenContainerNettyResponseMapper(
         itemsInside: List<InventoryCell>,
         gameData: OpenContainerRequestGameData,
         user: UserAccount,
-        gameUser: RedisGameUser,
+        gameUser: InGameGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
         ongoingCraftingProcess: List<CraftProcessResponse>,
         visibleItems: List<InventoryCell>,
         state: MapObjectState,
         containerHoldingUserId: Long?,
-        containers: List<RedisContainer>,
-        crafters: List<RedisCrafter>,
+        containers: List<InGameContainer>,
+        crafters: List<InGameCrafter>,
         clues: ExtendedCluesResponse,
         userQuestProgresses: List<UserQuestResponse>,
-        shortTimeEvents: List<RedisShortTimeEvent>,
+        shortTimeEvents: List<InGameShortTimeEvent>,
         inZones: List<LevelZone>,
         levelGeometryData: LevelGeometryData,
         globalGameData: GlobalGameData

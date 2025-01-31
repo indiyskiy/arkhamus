@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import jakarta.persistence.*
 
 @Entity

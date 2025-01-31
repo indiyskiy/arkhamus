@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,7 +15,7 @@ class TownPortalByScrollCondition(
 
     override fun canBeCastedRightNow(
         ability: Ability,
-        user: RedisGameUser,
+        user: InGameGameUser,
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
@@ -28,7 +28,7 @@ class TownPortalByScrollCondition(
 
     override fun canBeCastedAtAll(
         ability: Ability,
-        user: RedisGameUser,
+        user: InGameGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
         return true

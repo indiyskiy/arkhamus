@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter.OpenCrafterRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisCrafterRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameCrafterRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class OpenCrafterRequestProcessor(
-    private val redisCrafterRepository: RedisCrafterRepository,
+    private val inGameCrafterRepository: InGameCrafterRepository,
     private val objectWithTagsHandler: ObjectWithTagsHandler,
     private val activityHandler: ActivityHandler
 ) : NettyRequestProcessor {
@@ -37,7 +37,7 @@ class OpenCrafterRequestProcessor(
             crafter.holdingUser = user.inGameId()
             crafter.state = MapObjectState.HOLD
             objectWithTagsHandler.processObject(crafter, user, globalGameData)
-            redisCrafterRepository.save(crafter)
+            inGameCrafterRepository.save(crafter)
 
             activityHandler.addUserWithTargetActivity(
                 globalGameData.game.inGameId(),

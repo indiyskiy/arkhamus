@@ -4,10 +4,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
-import com.arkhamusserver.arkhamus.model.redis.RedisAltar
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltarPolling
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -22,15 +22,15 @@ class GodVoteHandler(
     }
 
     fun canBeStarted(
-        altarHolder: RedisAltarHolder?,
-        altar: RedisAltar?,
+        altarHolder: InGameAltarHolder?,
+        altar: InGameAltar?,
     ): Boolean =
         getAltarIsOpen(altarHolder) && getAltarExist(altar)
 
     fun canVote(
-        altarPolling: RedisAltarPolling?,
-        altarHolder: RedisAltarHolder?,
-        user: RedisGameUser
+        altarPolling: InGameAltarPolling?,
+        altarHolder: InGameAltarHolder?,
+        user: InGameGameUser
     ) = altarPolling != null &&
             altarHolder != null &&
             isVoteProcessOpen(altarPolling, altarHolder) &&
@@ -39,15 +39,15 @@ class GodVoteHandler(
             !skipped(altarPolling, user.inGameId())
 
     fun isVoteProcessOpen(
-        altarPolling: RedisAltarPolling?,
-        altarHolder: RedisAltarHolder?
+        altarPolling: InGameAltarPolling?,
+        altarHolder: InGameAltarHolder?
     ) =
         (altarPolling?.state == MapAltarPollingState.ONGOING) &&
                 (altarHolder?.state == MapAltarState.VOTING)
 
     fun everybodyVoted(
-        allUsers: Collection<RedisGameUser>,
-        altarPolling: RedisAltarPolling
+        allUsers: Collection<InGameGameUser>,
+        altarPolling: InGameAltarPolling
     ): Boolean {
         logger.info("everybodyVoted?")
         val canVote = usersCanPossiblyVote(allUsers)
@@ -67,17 +67,17 @@ class GodVoteHandler(
         return result
     }
 
-    fun usersCanPossiblyVote(allUsers: Collection<RedisGameUser>) =
+    fun usersCanPossiblyVote(allUsers: Collection<InGameGameUser>) =
         madnessHandler.filterNotMad(allUsers)
 
-    fun usersCanPossiblyVote(user: RedisGameUser) =
+    fun usersCanPossiblyVote(user: InGameGameUser) =
         !madnessHandler.isCompletelyMad(user)
 
-    private fun skipped(altarPolling: RedisAltarPolling, userId: Long): Boolean =
+    private fun skipped(altarPolling: InGameAltarPolling, userId: Long): Boolean =
         altarPolling.skippedUsers.contains(userId)
 
-    private fun getAltarExist(altar: RedisAltar?) = altar != null
+    private fun getAltarExist(altar: InGameAltar?) = altar != null
 
-    private fun getAltarIsOpen(altarHolder: RedisAltarHolder?) =
+    private fun getAltarIsOpen(altarHolder: InGameAltarHolder?) =
         altarHolder?.state == MapAltarState.OPEN
 }

@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameU
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class AuthRequestProcessData(
@@ -13,8 +13,8 @@ class AuthRequestProcessData(
     var userAccount: UserAccount? = null,
     var game: GameSession? = null,
     var userOfTheGame: UserOfGameSession? = null,
-    gameUser: RedisGameUser?,
-    otherGameUsers: List<RedisGameUser> = emptyList(),
+    gameUser: InGameGameUser?,
+    otherGameUsers: List<InGameGameUser> = emptyList(),
 ) : GameUserData(
     gameUser = gameUser,
     otherGameUsers = otherGameUsers,

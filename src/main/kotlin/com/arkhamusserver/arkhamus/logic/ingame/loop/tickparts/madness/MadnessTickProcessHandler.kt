@@ -4,10 +4,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ShortTimeEventH
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -33,7 +33,7 @@ class MadnessTickProcessHandler(
     }
 
     fun processMadness(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ) {
@@ -103,12 +103,12 @@ class MadnessTickProcessHandler(
         data: GlobalGameData,
         timePassedMillis: Long
     ) {
-        val godEvent = data.timeEvents.first { it.type == RedisTimeEventType.GOD_AWAKEN }
+        val godEvent = data.timeEvents.first { it.type == InGameTimeEventType.GOD_AWAKEN }
         eventHandler.pushEvent(godEvent, timePassedMillis / 2)
     }
 
     private fun teleportMaybe(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
@@ -120,7 +120,7 @@ class MadnessTickProcessHandler(
     }
 
     private fun lightSomething(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
@@ -132,7 +132,7 @@ class MadnessTickProcessHandler(
     }
 
     private fun voteForSomeone(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): Boolean {
         return voteMadnessHandler.voteForSomeone(
@@ -142,7 +142,7 @@ class MadnessTickProcessHandler(
     }
 
     private fun craftSomethingMaybe(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
@@ -154,7 +154,7 @@ class MadnessTickProcessHandler(
     }
 
     private fun castRandomSpellMaybe(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
@@ -166,7 +166,7 @@ class MadnessTickProcessHandler(
     }
 
     private fun curseSomethingMaybe(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {

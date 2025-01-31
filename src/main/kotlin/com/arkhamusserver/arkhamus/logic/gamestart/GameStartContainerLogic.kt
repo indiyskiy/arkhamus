@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameContainerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.ContainerRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Container
@@ -10,7 +10,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.ContainerTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,7 +20,7 @@ import kotlin.random.Random
 
 @Component
 class GameStartContainerLogic(
-    private val redisContainerRepository: RedisContainerRepository,
+    private val inGameContainerRepository: InGameContainerRepository,
     private val containerRepository: ContainerRepository,
     private val lootTableHandler: LootTableHandler
 ) {
@@ -42,7 +42,7 @@ class GameStartContainerLogic(
 
     private fun createContainer(
         game: GameSession, dbContainer: Container
-    ) = RedisContainer(
+    ) = InGameContainer(
         id = generateRandomId(),
         containerId = dbContainer.inGameId,
         containerTags = dbContainer.containerTags.map { it.name }.toMutableSet(),
@@ -55,7 +55,7 @@ class GameStartContainerLogic(
         visibilityModifiers = setOf(VisibilityModifier.ALL)
     ).apply {
         this.items = randomizeItems(dbContainer)
-        redisContainerRepository.save(this)
+        inGameContainerRepository.save(this)
     }
 
     private fun randomizeItems(

@@ -5,8 +5,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.VisibilityByTag
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.ContainerStateResponse
 import org.springframework.stereotype.Component
 
@@ -16,8 +16,8 @@ class ContainerDataHandler(
     private val visibilityByTagsHandler: VisibilityByTagsHandler
 ) {
     fun map(
-        myUser: RedisGameUser,
-        containers: List<RedisContainer>,
+        myUser: InGameGameUser,
+        containers: List<InGameContainer>,
         levelGeometryData: LevelGeometryData
     ): List<ContainerStateResponse> {
         return containers.map { container ->
@@ -29,8 +29,8 @@ class ContainerDataHandler(
 
     private fun mask(
         responseToMask: ContainerStateResponse,
-        container: RedisContainer,
-        currentUser: RedisGameUser,
+        container: InGameContainer,
+        currentUser: InGameGameUser,
         levelGeometryData: LevelGeometryData
     ) {
         if (

@@ -10,7 +10,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyR
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarPolling
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltarPolling
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AltarPolling
@@ -100,7 +100,7 @@ class AltarOpenNettyResponseMapper(
 
 }
 
-private fun RedisAltarPolling?.mapVotes(
+private fun InGameAltarPolling?.mapVotes(
     isVoteProcessOpen: Boolean
 ): AltarPolling? =
     if (isVoteProcessOpen) {

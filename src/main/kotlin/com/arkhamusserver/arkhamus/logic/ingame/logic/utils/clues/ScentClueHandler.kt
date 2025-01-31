@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.VisibilityByTag
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.clues.RedisScentClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameScentClueRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.ScentClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
@@ -13,10 +13,10 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisLevelZone
-import com.arkhamusserver.arkhamus.model.redis.clues.RedisScentClue
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameScentClue
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import org.springframework.stereotype.Component
 import kotlin.random.Random
@@ -24,7 +24,7 @@ import kotlin.random.Random
 @Component
 class ScentClueHandler(
     private val scentClueRepository: ScentClueRepository,
-    private val redisScentClueRepository: RedisScentClueRepository,
+    private val inGameScentClueRepository: InGameScentClueRepository,
     private val userLocationHandler: UserLocationHandler,
     private val visibilityByTagsHandler: VisibilityByTagsHandler
 ) : AdvancedClueHandler {
@@ -43,7 +43,7 @@ class ScentClueHandler(
     }
 
     override fun accept(target: WithStringId): Boolean {
-        return target is RedisScentClue
+        return target is InGameScentClue
     }
 
     override fun canBeAdded(container: CluesContainer): Boolean {
@@ -55,7 +55,7 @@ class ScentClueHandler(
     ) {
         data.clues.scent.filter { !it.turnedOn }.random(random).apply {
             turnedOn = true
-            redisScentClueRepository.save(this)
+            inGameScentClueRepository.save(this)
         }
     }
 
@@ -64,11 +64,11 @@ class ScentClueHandler(
     }
 
     override fun canBeRemoved(
-        user: RedisGameUser,
+        user: InGameGameUser,
         target: Any,
         data: GlobalGameData
     ): Boolean {
-        val scent = target as RedisScentClue
+        val scent = target as InGameScentClue
         return scent.turnedOn && userLocationHandler.userCanSeeTargetInRange(
             whoLooks = user,
             target = scent,
@@ -79,7 +79,7 @@ class ScentClueHandler(
     }
 
     override fun anyCanBeRemoved(
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData
     ): Boolean {
         return data.clues.scent.any {
@@ -91,7 +91,7 @@ class ScentClueHandler(
         val scentClue = container.scent.filter { it.turnedOn }.randomOrNull()
         scentClue?.let {
             it.turnedOn = false
-            redisScentClueRepository.save(it)
+            inGameScentClueRepository.save(it)
         }
     }
 
@@ -101,22 +101,22 @@ class ScentClueHandler(
     ) {
         val scentClue = data.clues.scent.find { it.inGameId() == target.stringId().toLong() } ?: return
         scentClue.turnedOn = false
-        redisScentClueRepository.save(scentClue)
+        inGameScentClueRepository.save(scentClue)
     }
 
     override fun addClues(
         session: GameSession,
         god: God,
-        zones: List<RedisLevelZone>,
+        zones: List<InGameLevelZone>,
         activeCluesOnStart: Int
     ) {
         val scentClues = scentClueRepository.findByLevelId(session.gameSessionSettings.level!!.id!!)
         val scentCluesForGameSession = scentClues.shuffled(random).take(MAX_ON_GAME)
-        val redisScentClues = scentCluesForGameSession.map {
-            RedisScentClue(
+        val inGameScentClues = scentCluesForGameSession.map {
+            InGameScentClue(
                 id = generateRandomId(),
                 gameId = session.id!!,
-                redisScentId = it.inGameId,
+                inGameScentId = it.inGameId,
                 x = it.x,
                 y = it.y,
                 z = it.z,
@@ -128,17 +128,17 @@ class ScentClueHandler(
             )
         }
         if (god.getTypes().contains(Clue.SCENT)) {
-            val turnedOn = redisScentClues.shuffled(random).take(activeCluesOnStart)
+            val turnedOn = inGameScentClues.shuffled(random).take(activeCluesOnStart)
             turnedOn.forEach {
                 it.turnedOn = true
             }
         }
-        redisScentClueRepository.saveAll(redisScentClues)
+        inGameScentClueRepository.saveAll(inGameScentClues)
     }
 
     override fun mapActualClues(
         container: CluesContainer,
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return container.scent.filter {
@@ -164,7 +164,7 @@ class ScentClueHandler(
 
     override fun mapPossibleClues(
         container: CluesContainer,
-        user: RedisGameUser,
+        user: InGameGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         val scentOptions = container.scent
@@ -187,8 +187,8 @@ class ScentClueHandler(
     }
 
     private fun countState(
-        clue: RedisScentClue,
-        user: RedisGameUser,
+        clue: InGameScentClue,
+        user: InGameGameUser,
     ): InnovateClueState {
         return if (clue.castedAbilityUsers.contains(user.inGameId())) {
             if (clue.turnedOn) {

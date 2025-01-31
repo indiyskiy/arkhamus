@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
-import com.arkhamusserver.arkhamus.model.redis.RedisCrafter
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -17,9 +17,9 @@ class CanRecipeBeCraftedHandler(
     }
 
     fun canUserCraft(
-        user: RedisGameUser,
+        user: InGameGameUser,
         recipe: Recipe,
-        crafter: RedisCrafter,
+        crafter: InGameCrafter,
         holdCrafterNeeded: Boolean = true
     ): Boolean {
         return haveRequiredItems(recipe, crafter, user) &&
@@ -27,14 +27,14 @@ class CanRecipeBeCraftedHandler(
                 (!holdCrafterNeeded || crafterHoldByMe(user, crafter))
     }
 
-    private fun crafterHoldByMe(user: RedisGameUser, crafter: RedisCrafter) =
+    private fun crafterHoldByMe(user: InGameGameUser, crafter: InGameCrafter) =
         (crafter.holdingUser == user.inGameId()).also {
             logger.warn("crafterHoldByMe $this")
         }
 
     private fun rightTypeOfCrafter(
         recipe: Recipe,
-        crafter: RedisCrafter
+        crafter: InGameCrafter
     ): Boolean =
         (crafter.crafterType in recipe.crafterTypes).also {
             logger.warn("rightTypeOfCrafter $this")
@@ -42,8 +42,8 @@ class CanRecipeBeCraftedHandler(
 
     private fun haveRequiredItems(
         recipe: Recipe,
-        crafter: RedisCrafter,
-        user: RedisGameUser
+        crafter: InGameCrafter,
+        user: InGameGameUser
     ): Boolean {
         return recipe.ingredients.all {
             userInventoryHandler.haveRequiredItems(it, crafter, user)

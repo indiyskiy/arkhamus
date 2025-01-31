@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 
 data class OngoingEventResponse(
     var id: String,
@@ -14,8 +14,8 @@ data class OngoingEventResponse(
     var timeStart: Long,
     var timePast: Long,
     var timeLeft: Long,
-    var type: RedisTimeEventType,
-    var state: RedisTimeEventState,
+    var type: InGameTimeEventType,
+    var state: InGameTimeEventState,
     var xLocation: Double?,
     var yLocation: Double?,
     var zLocation: Double?,

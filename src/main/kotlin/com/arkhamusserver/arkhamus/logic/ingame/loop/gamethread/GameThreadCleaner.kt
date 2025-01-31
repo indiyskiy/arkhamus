@@ -1,11 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
-import com.arkhamusserver.arkhamus.config.redis.RedisCleaner
+import com.arkhamusserver.arkhamus.config.repository.InGameRepositoryCleaner
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool.Companion.logger
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.RedisDataAccess
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.InGameDataAccess
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.concurrent.ConcurrentMap
@@ -13,9 +13,9 @@ import java.util.concurrent.ScheduledFuture
 
 @Service
 class GameThreadCleaner(
-    private val redisDataAccess: RedisDataAccess,
+    private val inGameDataAccess: InGameDataAccess,
     private val channelRepository: ChannelRepository,
-    private val redisCleaner: RedisCleaner,
+    private val inGameRepositoryCleaner: InGameRepositoryCleaner,
 ) {
 
     @Transactional
@@ -24,29 +24,29 @@ class GameThreadCleaner(
         loopHandlerFutures: ConcurrentMap<Long, ScheduledFuture<*>>,
         tasksMap: ConcurrentMap<Long, TaskCollection>
     ) {
-        val redisGameSession = redisDataAccess.getGame(gameSessionId)
-        closeFinished(redisGameSession, gameSessionId, loopHandlerFutures, tasksMap)
+        val inRamGameSession = inGameDataAccess.getGame(gameSessionId)
+        closeFinished(inRamGameSession, gameSessionId, loopHandlerFutures, tasksMap)
     }
 
     private fun closeFinished(
-        redisGameSession: RedisGame?,
+        inRamGameSession: InRamGame?,
         gameSessionId: Long,
         loopHandlerFutures: ConcurrentMap<Long, ScheduledFuture<*>>,
         tasksMap: ConcurrentMap<Long, TaskCollection>
     ) {
-        if (redisGameSession?.state == GameState.FINISHED.name) {
+        if (inRamGameSession?.state == GameState.FINISHED.name) {
             logger.info("Trying to end $gameSessionId")
             cleanGameLoopFuture(gameSessionId, loopHandlerFutures, tasksMap)
             logger.info("close all connections")
-            redisGameSession.gameId.let {
+            inRamGameSession.gameId.let {
                 val channels = channelRepository.getByGameId(it)
                 channels.forEach {
                     channelRepository.closeAndRemove(it)
                 }
             }
-            logger.info("cleaning redis database")
-            redisGameSession.gameId.let {
-                redisCleaner.cleanGame(it)
+            logger.info("cleaning in-ram database")
+            inRamGameSession.gameId.let {
+                inGameRepositoryCleaner.cleanGame(it)
             }
         }
     }

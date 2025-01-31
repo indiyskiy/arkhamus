@@ -2,11 +2,11 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -20,8 +20,8 @@ class TeleportHandler(
     }
 
     fun forceTeleport(
-        game: RedisGame,
-        user: RedisGameUser,
+        game: InRamGame,
+        user: InGameGameUser,
         point: WithPoint
     ) {
         user.x = point.x()
@@ -30,11 +30,11 @@ class TeleportHandler(
         user.stateTags += UserStateTag.STUN
         timeEventHandler.createEvent(
             game = game,
-            eventType = RedisTimeEventType.TELEPORTATION_STUN,
+            eventType = InGameTimeEventType.TELEPORTATION_STUN,
             sourceObject = null,
             targetObject = user,
             location = Location(user.x, user.y, user.z),
-            timeLeft = RedisTimeEventType.TELEPORTATION_STUN.getDefaultTime()
+            timeLeft = InGameTimeEventType.TELEPORTATION_STUN.getDefaultTime()
         )
         logger.info("user ${user.inGameId()} teleported to ${user.x()}; ${user.y()}; ${user.z()}")
     }

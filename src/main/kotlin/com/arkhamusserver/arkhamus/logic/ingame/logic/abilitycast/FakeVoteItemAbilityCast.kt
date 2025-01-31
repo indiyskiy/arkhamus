@@ -4,14 +4,14 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.redis.RedisAltar
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisVoteSpot
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -41,7 +41,7 @@ class FakeVoteItemAbilityCast(
     }
 
     override fun cast(
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -51,19 +51,19 @@ class FakeVoteItemAbilityCast(
     }
 
     private fun curseItem(
-        game: RedisGame,
-        sourceUser: RedisGameUser,
+        game: InRamGame,
+        sourceUser: InGameGameUser,
         globalGameData: GlobalGameData
     ) {
         val target = (globalGameData.voteSpots + globalGameData.altars.values.random(random)).random(random)
-        if (target is RedisAltar) {
+        if (target is InGameAltar) {
             timeEventHandler.createEvent(
                 game,
-                RedisTimeEventType.FAKE_ALTAR_VOTING,
+                InGameTimeEventType.FAKE_ALTAR_VOTING,
                 sourceUser
             )
         }
-        if (target is RedisVoteSpot) {
+        if (target is InGameVoteSpot) {
             val threshold = (globalGameData.thresholds.firstOrNull {
                 it.zoneId == target.zoneId && it.type == ThresholdType.BAN
             })?.let {
@@ -75,11 +75,11 @@ class FakeVoteItemAbilityCast(
             }
             timeEventHandler.createEvent(
                 game = game,
-                eventType = RedisTimeEventType.FAKE_CALL_FOR_BAN_VOTE,
+                eventType = InGameTimeEventType.FAKE_CALL_FOR_BAN_VOTE,
                 sourceObject = sourceUser,
                 targetObject = target,
                 location = threshold,
-                timeLeft = RedisTimeEventType.CALL_FOR_BAN_VOTE.getDefaultTime()
+                timeLeft = InGameTimeEventType.CALL_FOR_BAN_VOTE.getDefaultTime()
             )
         }
     }

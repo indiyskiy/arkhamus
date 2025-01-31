@@ -4,15 +4,15 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTi
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisShortTimeEventRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameShortTimeEventRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisShortTimeEvent
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameShortTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class ShortTimeEventHandler(
     private val specificShortTimeEventFilters: List<SpecificShortTimeEventFilter>,
-    private val redisShortTimeEventRepository: RedisShortTimeEventRepository,
+    private val inGameShortTimeEventRepository: InGameShortTimeEventRepository,
     private val userLocationHandler: UserLocationHandler,
     private val finder: GameObjectFinder
 ) {
@@ -31,11 +31,11 @@ class ShortTimeEventHandler(
     }
 
     fun filter(
-        events: List<RedisShortTimeEvent>,
-        user: RedisGameUser,
+        events: List<InGameShortTimeEvent>,
+        user: InGameGameUser,
         zones: List<LevelZone>,
         data: GlobalGameData
-    ): List<RedisShortTimeEvent> {
+    ): List<InGameShortTimeEvent> {
         val filteredByState = events.filter { filterByState(it) }
         val filteredByObject = filteredByState.filter { filterByObject(it, user, data) }
         val filterByPosition = filteredByObject.filter { canSeeLocation(it, user, data) }
@@ -44,18 +44,18 @@ class ShortTimeEventHandler(
         return filteredByAdditionalFilters
     }
 
-    private fun filterByState(event: RedisShortTimeEvent): Boolean =
-        event.timeLeft > 0 && event.state == RedisTimeEventState.ACTIVE
+    private fun filterByState(event: InGameShortTimeEvent): Boolean =
+        event.timeLeft > 0 && event.state == InGameTimeEventState.ACTIVE
 
     private fun filterByObject(
-        event: RedisShortTimeEvent,
-        user: RedisGameUser,
+        event: InGameShortTimeEvent,
+        user: InGameGameUser,
         data: GlobalGameData
     ): Boolean = event.objectId == null || canSeeTarget(event, user, data)
 
     private fun byAdditionalFilters(
-        event: RedisShortTimeEvent,
-        user: RedisGameUser,
+        event: InGameShortTimeEvent,
+        user: InGameGameUser,
         zones: List<LevelZone>,
         data: GlobalGameData
     ): Boolean = specificShortTimeEventFilters.firstOrNull { filter ->
@@ -63,8 +63,8 @@ class ShortTimeEventHandler(
     }?.canSee(event, user, zones, data) != false
 
     private fun filterByVisibility(
-        event: RedisShortTimeEvent,
-        user: RedisGameUser
+        event: InGameShortTimeEvent,
+        user: InGameGameUser
     ): Boolean {
         return when (event.type.getVisibility()) {
             Visibility.NONE -> false
@@ -87,7 +87,7 @@ class ShortTimeEventHandler(
         sourceUserId: Long? = null,
         additionalData: Any? = null
     ) {
-        val event = RedisShortTimeEvent(
+        val event = InGameShortTimeEvent(
             id = generateRandomId(),
             gameId = gameId,
             sourceId = sourceUserId,
@@ -98,17 +98,17 @@ class ShortTimeEventHandler(
             timePast = 0,
             timeLeft = type.getTime(),
             type = type,
-            state = RedisTimeEventState.ACTIVE,
+            state = InGameTimeEventState.ACTIVE,
             visibilityModifiers = visibilityModifiers.map { it }.toMutableSet(),
             additionalData = additionalData
         )
-        redisShortTimeEventRepository.save(event)
+        inGameShortTimeEventRepository.save(event)
         data.shortTimeEvents += event
     }
 
     private fun canSeeTarget(
-        event: RedisShortTimeEvent,
-        user: RedisGameUser,
+        event: InGameShortTimeEvent,
+        user: InGameGameUser,
         data: GlobalGameData
     ): Boolean {
         val target = finder.findById(event.objectId.toString(), event.type.getSource(), data)
@@ -123,8 +123,8 @@ class ShortTimeEventHandler(
     }
 
     private fun canSeeLocation(
-        event: RedisShortTimeEvent,
-        user: RedisGameUser,
+        event: InGameShortTimeEvent,
+        user: InGameGameUser,
         data: GlobalGameData
     ): Boolean {
         if (event.xLocation == null || event.yLocation == null || event.zLocation == null) return true

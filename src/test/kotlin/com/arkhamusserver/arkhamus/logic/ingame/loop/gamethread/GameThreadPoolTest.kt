@@ -16,10 +16,10 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
-import com.arkhamusserver.arkhamus.model.redis.RedisAltarHolder
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.parts.RedisUserSkinSetting
+import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.HeartbeatRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
@@ -41,7 +41,7 @@ class GameThreadPoolTest {
     private lateinit var threadPool: GameThreadPool
 
     @Autowired
-    private lateinit var redisDataAccess: MockRedisDataAccess
+    private lateinit var redisDataAccess: MockInGameDataAccess
 
     @Autowired
     private lateinit var responseSendingLoopManager: MockResponseSendingLoopManager
@@ -422,8 +422,8 @@ class GameThreadPoolTest {
 
         gameSession.usersOfGameSession = usersOfGameSession
 
-        val redisGameUsers = usersOfGameSession.map { userOfGameSession ->
-            RedisGameUser(
+        val inGameGameUsers = usersOfGameSession.map { userOfGameSession ->
+            InGameGameUser(
                 id = generateRandomId(),
                 userId = userOfGameSession.id!!,
                 nickName = "user-nickname",
@@ -444,11 +444,11 @@ class GameThreadPoolTest {
                 sawTheEndOfTimes = false,
                 leftTheGame = false,
                 visibilityModifiers = mutableSetOf(),
-                originalSkin = RedisUserSkinSetting(SkinColor.LAVENDER)
+                originalSkin = InGameUserSkinSetting(SkinColor.LAVENDER)
             )
         }
 
-        val redisGame = RedisGame(
+        val inRamGame = InRamGame(
             gameSession.id.toString(),
             gameSession.id,
             God.AAMON,
@@ -456,10 +456,10 @@ class GameThreadPoolTest {
         )
 
         val globalGameData = GlobalGameData(
-            game = redisGame,
-            altarHolder = RedisAltarHolder(
+            game = inRamGame,
+            altarHolder = InGameAltarHolder(
                 id = "altar holder",
-                gameId = redisGame.gameId!!,
+                gameId = inRamGame.gameId!!,
                 altarHolderId = 0L,
                 x = 0.0,
                 y = 0.0,
@@ -471,7 +471,7 @@ class GameThreadPoolTest {
                 itemsOnAltars = mutableMapOf(),
                 state = MapAltarState.OPEN,
             ),
-            users = redisGameUsers.associateBy { user -> user.userId },
+            users = inGameGameUsers.associateBy { user -> user.userId },
         )
 
         redisDataAccess.setUp(listOf(globalGameData))

@@ -1,15 +1,15 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisTimeEventRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameTimeEventRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisGame
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class TimeEventHandler(
-    private val redisTimeEventRepository: RedisTimeEventRepository
+    private val inGameTimeEventRepository: InGameTimeEventRepository
 ) {
     companion object {
         var logger: Logger = LoggerFactory.getLogger(TimeEventHandler::class.java)
@@ -25,8 +25,8 @@ class TimeEventHandler(
 
     @Transactional
     fun createEvent(
-        game: RedisGame,
-        eventType: RedisTimeEventType,
+        game: InRamGame,
+        eventType: InGameTimeEventType,
         sourceObject: WithTrueIngameId? = null,
         targetObject: WithTrueIngameId? = null,
         location: Location? = null,
@@ -46,10 +46,10 @@ class TimeEventHandler(
     @Transactional
     fun createEvent(
         game: GameSession,
-        eventType: RedisTimeEventType,
+        eventType: InGameTimeEventType,
         startDateTime: Long,
-        sourceUser: RedisGameUser? = null,
-        targetUser: RedisGameUser? = null,
+        sourceUser: InGameGameUser? = null,
+        targetUser: InGameGameUser? = null,
         location: Location? = null,
         timeLeft: Long? = null
     ) {
@@ -67,7 +67,7 @@ class TimeEventHandler(
     @Transactional
     fun createEvent(
         gameId: Long,
-        eventType: RedisTimeEventType,
+        eventType: InGameTimeEventType,
         startDateTime: Long,
         sourceObject: WithTrueIngameId? = null,
         targetObject: WithTrueIngameId? = null,
@@ -88,14 +88,14 @@ class TimeEventHandler(
     @Transactional
     fun createEvent(
         gameId: Long,
-        eventType: RedisTimeEventType,
+        eventType: InGameTimeEventType,
         startDateTime: Long,
         sourceObjectId: Long? = null,
         targetObjectId: Long? = null,
         location: Location? = null,
         timeLeft: Long? = null
     ) {
-        val timer = RedisTimeEvent(
+        val timer = InGameTimeEvent(
             id = generateRandomId(),
             gameId = gameId,
             timeStart = startDateTime,
@@ -104,19 +104,19 @@ class TimeEventHandler(
             sourceObjectId = sourceObjectId,
             targetObjectId = targetObjectId,
             type = eventType,
-            state = RedisTimeEventState.ACTIVE,
+            state = InGameTimeEventState.ACTIVE,
             xLocation = location?.x,
             yLocation = location?.y,
             zLocation = location?.z,
             visibilityModifiers = setOf(VisibilityModifier.ALL)
         )
-        redisTimeEventRepository.save(timer)
+        inGameTimeEventRepository.save(timer)
     }
 
     @Transactional
     fun tryToDeleteEvent(
-        eventType: RedisTimeEventType,
-        allEvents: List<RedisTimeEvent>
+        eventType: InGameTimeEventType,
+        allEvents: List<InGameTimeEvent>
     ) {
         logger.info("deleting ${eventType.name} event")
         allEvents.filter {
@@ -124,15 +124,15 @@ class TimeEventHandler(
         }.forEach {
             it.timePast += it.timeLeft
             it.timeLeft = 0
-            it.state = RedisTimeEventState.PAST
-            redisTimeEventRepository.delete(it)
+            it.state = InGameTimeEventState.PAST
+            inGameTimeEventRepository.delete(it)
         }
     }
 
     @Transactional
-    fun pushEvent(event: RedisTimeEvent, timeToAdd: Long) {
+    fun pushEvent(event: InGameTimeEvent, timeToAdd: Long) {
         event.timePast += timeToAdd
         event.timeLeft -= timeToAdd
-        redisTimeEventRepository.save(event)
+        inGameTimeEventRepository.save(event)
     }
 }

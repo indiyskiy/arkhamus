@@ -5,9 +5,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.RedisTimeEventState
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import org.springframework.stereotype.Component
 
 @Component
@@ -16,11 +16,11 @@ class NightTimeEventProcessor(
     private val userMadnessHandler: UserMadnessHandler,
     private val timeEventHandler: TimeEventHandler,
 ) : TimeEventProcessor {
-    override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.NIGHT
+    override fun accept(type: InGameTimeEventType): Boolean =
+        type == InGameTimeEventType.NIGHT
 
     override fun processStart(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -29,7 +29,7 @@ class NightTimeEventProcessor(
     }
 
     override fun process(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -42,16 +42,16 @@ class NightTimeEventProcessor(
     }
 
     override fun processEnd(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
     ) {
-        event.state = RedisTimeEventState.PAST
+        event.state = InGameTimeEventState.PAST
         startTheDay(event, currentGameTime)
     }
 
-    fun startTheDay(event: RedisTimeEvent, currentGameTime: Long) {
+    fun startTheDay(event: InGameTimeEvent, currentGameTime: Long) {
         createDay(event.gameId, currentGameTime)
     }
 
@@ -62,7 +62,7 @@ class NightTimeEventProcessor(
     private fun createDay(gameId: Long, currentGameTime: Long) {
         timeEventHandler.createEvent(
             gameId,
-            RedisTimeEventType.DAY,
+            InGameTimeEventType.DAY,
             currentGameTime,
             sourceObject = null
         )

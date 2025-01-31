@@ -2,21 +2,21 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 
 interface AdditionalAbilityCondition {
     fun accepts(ability: Ability): Boolean
 
     fun canBeCastedRightNow(
         ability: Ability,
-        user: RedisGameUser,
+        user: InGameGameUser,
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean
 
     fun canBeCastedAtAll(
         ability: Ability,
-        user: RedisGameUser,
+        user: InGameGameUser,
         globalGameData: GlobalGameData
     ): Boolean
 }

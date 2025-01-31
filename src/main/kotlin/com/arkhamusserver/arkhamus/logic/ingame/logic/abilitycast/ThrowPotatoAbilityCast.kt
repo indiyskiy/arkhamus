@@ -8,8 +8,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Abili
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
 @Component
@@ -30,12 +30,12 @@ class ThrowPotatoAbilityCast(
     }
 
     override fun cast(
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
-        throwPotatoAtUser(target as RedisGameUser, globalGameData)
+        throwPotatoAtUser(target as InGameGameUser, globalGameData)
         return true
     }
 
@@ -43,12 +43,12 @@ class ThrowPotatoAbilityCast(
         globalGameData: GlobalGameData,
         abilityRequestProcessData: AbilityRequestProcessData,
     ) {
-        val targetUser = abilityRequestProcessData.target as RedisGameUser
+        val targetUser = abilityRequestProcessData.target as InGameGameUser
         throwPotatoAtUser(targetUser, globalGameData)
     }
 
     private fun throwPotatoAtUser(
-        targetUser: RedisGameUser,
+        targetUser: InGameGameUser,
         globalGameData: GlobalGameData
     ) {
         if (targetUser.stateTags.contains(UserStateTag.INVULNERABILITY)) return
@@ -58,7 +58,7 @@ class ThrowPotatoAbilityCast(
 
     private fun rememberItemChangesForResponses(
         globalGameData: GlobalGameData,
-        user: RedisGameUser
+        user: InGameGameUser
     ) {
         globalGameData.inBetweenEvents.inBetweenItemHolderChanges.add(
             InBetweenItemHolderChanges(

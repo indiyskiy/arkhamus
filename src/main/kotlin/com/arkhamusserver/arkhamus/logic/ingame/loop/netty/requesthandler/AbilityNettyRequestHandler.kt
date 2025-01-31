@@ -19,9 +19,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.redis.RedisAbilityCast
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
@@ -120,10 +120,10 @@ class AbilityNettyRequestHandler(
         ability: Ability,
         canBeSeen: Boolean,
         canBeCast: Boolean,
-        relatedAbility: RedisAbilityCast?,
+        relatedAbility: InGameAbilityCast?,
         requiredItem: Item?,
-        user: RedisGameUser,
-        users: List<RedisGameUser>,
+        user: InGameGameUser,
+        users: List<InGameGameUser>,
         inZones: List<LevelZone>,
         ongoingEvents: List<OngoingEvent>,
         globalGameData: GlobalGameData,
@@ -164,8 +164,8 @@ class AbilityNettyRequestHandler(
 
 
     private fun buildWrongAbilityGameData(
-        user: RedisGameUser,
-        users: List<RedisGameUser>,
+        user: InGameGameUser,
+        users: List<InGameGameUser>,
         ongoingEvents: List<OngoingEvent>,
         inZones: List<LevelZone>,
         globalGameData: GlobalGameData,

@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisGameUserRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameGameUserRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.InRamGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.StartMarkerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserOfGameSessionRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -13,8 +13,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.parts.RedisUserSkinSetting
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -23,10 +23,10 @@ import kotlin.random.Random
 
 @Component
 class GameStartUserLogic(
-    private val redisGameUserRepository: RedisGameUserRepository,
+    private val inGameGameUserRepository: InGameGameUserRepository,
     private val startMarkerRepository: StartMarkerRepository,
     private val userOfGameSessionRepository: UserOfGameSessionRepository,
-    private val redisGameRepository: RedisGameRepository
+    private val inRamGameRepository: InRamGameRepository
 ) {
 
     companion object {
@@ -37,11 +37,11 @@ class GameStartUserLogic(
     @Transactional
     fun leaveFromPreviousGames(game: GameSession) {
         game.usersOfGameSession.forEach { userOfGameSession ->
-            val usersInGames = redisGameUserRepository.findByUserId(userOfGameSession.userAccount.id!!)
+            val usersInGames = inGameGameUserRepository.findByUserId(userOfGameSession.userAccount.id!!)
             usersInGames.forEach { userInGame ->
                 if (userInGame.gameId != game.id) {
-                    val redisGame = redisGameRepository.findByGameId(userInGame.gameId).first()
-                    if (redisGame.state in setOf(
+                    val inRamGame = inRamGameRepository.findByGameId(userInGame.gameId).first()
+                    if (inRamGame.state in setOf(
                             GameState.NEW.name,
                             GameState.PENDING.name,
                             GameState.IN_PROGRESS.name,
@@ -49,7 +49,7 @@ class GameStartUserLogic(
                     ) {
                         logger.info("user ${userInGame.inGameId()} started another game so he disconnected from ${userInGame.gameId}")
                         userInGame.leftTheGame = true
-                        redisGameUserRepository.save(userInGame)
+                        inGameGameUserRepository.save(userInGame)
                     }
                 }
             }
@@ -60,20 +60,20 @@ class GameStartUserLogic(
         levelId: Long,
         game: GameSession,
         skins: Map<Long, UserSkinSettings>
-    ): List<RedisGameUser> {
+    ): List<InGameGameUser> {
         updateInvitedUsersInfoOnGameStart(game)
-        return createRedisUsers(levelId, game, skins)
+        return createInGameUsers(levelId, game, skins)
     }
 
-    private fun createRedisUsers(
+    private fun createInGameUsers(
         levelId: Long,
         game: GameSession,
         skins: Map<Long, UserSkinSettings>
-    ): List<RedisGameUser> {
+    ): List<InGameGameUser> {
         val startMarkers = startMarkerRepository.findByLevelId(levelId)
-        val redisGameUsers = game.usersOfGameSession.map {
+        val inGameUsers = game.usersOfGameSession.map {
             val marker = startMarkers.random(GameStartLogic.random)
-            val redisGameUser = RedisGameUser(
+            val inGameGameUser = InGameGameUser(
                 id = generateRandomId(),
                 userId = it.userAccount.id!!,
                 nickName = it.userAccount.nickName,
@@ -92,15 +92,15 @@ class GameStartUserLogic(
                 callToArms = game.gameSessionSettings.maxCallToArms,
                 connected = true,
                 visibilityModifiers = visibleModifiersByRole(it.roleInGame!!),
-                originalSkin = RedisUserSkinSetting(
+                originalSkin = InGameUserSkinSetting(
                     skinColor = skins[it.userAccount.id]!!.skinColor
                 ),
             )
-            GameStartLogic.logger.info("user placed to $redisGameUser")
-            redisGameUser
+            GameStartLogic.logger.info("user placed to $inGameGameUser")
+            inGameGameUser
         }
-        redisGameUserRepository.saveAll(redisGameUsers)
-        return redisGameUsers
+        inGameGameUserRepository.saveAll(inGameUsers)
+        return inGameUsers
     }
 
     private fun visibleModifiersByRole(game: RoleTypeInGame): Set<VisibilityModifier> =

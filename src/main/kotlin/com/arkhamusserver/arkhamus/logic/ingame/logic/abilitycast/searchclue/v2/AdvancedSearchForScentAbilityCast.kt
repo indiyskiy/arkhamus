@@ -3,18 +3,18 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.searchclue.v2
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.clues.RedisScentClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameScentClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
-import com.arkhamusserver.arkhamus.model.redis.clues.RedisScentClue
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameScentClue
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class AdvancedSearchForScentAbilityCast(
-    private val redisScentClueRepository: RedisScentClueRepository
+    private val inGameScentClueRepository: InGameScentClueRepository
 ) : AbilityCast {
 
     companion object {
@@ -33,30 +33,30 @@ class AdvancedSearchForScentAbilityCast(
         logger.info("cast $ability")
         val user = abilityRequestProcessData.gameUser
         if (user == null) return false
-        val targetWithGameTags = abilityRequestProcessData.target as? RedisScentClue
+        val targetWithGameTags = abilityRequestProcessData.target as? InGameScentClue
         if (targetWithGameTags == null) return false
         castAbility(user, targetWithGameTags)
         return true
     }
 
     override fun cast(
-        sourceUser: RedisGameUser,
+        sourceUser: InGameGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
         val user = sourceUser
-        val scent = target as? RedisScentClue
+        val scent = target as? InGameScentClue
         if (scent == null) return false
         castAbility(user, scent)
         return true
     }
 
     private fun castAbility(
-        user: RedisGameUser,
-        target: RedisScentClue,
+        user: InGameGameUser,
+        target: InGameScentClue,
     ) {
         target.castedAbilityUsers += user.inGameId()
-        redisScentClueRepository.save(target)
+        inGameScentClueRepository.save(target)
     }
 }

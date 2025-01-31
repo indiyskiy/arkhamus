@@ -6,9 +6,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.container.UpdateContainerRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.containers.ContainerLikeThingsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.redis.RedisContainerRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameContainerRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
-import com.arkhamusserver.arkhamus.model.redis.RedisContainer
+import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class UpdateContainerRequestProcessor(
-    private val redisContainerRepository: RedisContainerRepository,
+    private val inGameContainerRepository: InGameContainerRepository,
     private val containerLikeThingsHandler: ContainerLikeThingsHandler
 ) : NettyRequestProcessor {
 
@@ -54,7 +54,7 @@ class UpdateContainerRequestProcessor(
                 closeContainer(container)
             }
             logger.info("save container")
-            redisContainerRepository.save(container)
+            inGameContainerRepository.save(container)
             logger.info("start update container")
             requestProcessData.sortedUserInventory = sortedUserInventory
             requestProcessData.visibleItems = sortedUserInventory
@@ -62,7 +62,7 @@ class UpdateContainerRequestProcessor(
     }
 
 
-    private fun closeContainer(container: RedisContainer) {
+    private fun closeContainer(container: InGameContainer) {
         container.holdingUser = null
         container.state = MapObjectState.ACTIVE
     }

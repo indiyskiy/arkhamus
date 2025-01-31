@@ -2,19 +2,19 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timee
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.enums.ingame.RedisTimeEventType
-import com.arkhamusserver.arkhamus.model.redis.RedisTimeEvent
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import org.springframework.stereotype.Component
 
 @Component
 class DayTimeEventProcessor(
     private val timeEventHandler: TimeEventHandler,
 ) : TimeEventProcessor {
-    override fun accept(type: RedisTimeEventType): Boolean =
-        type == RedisTimeEventType.DAY
+    override fun accept(type: InGameTimeEventType): Boolean =
+        type == InGameTimeEventType.DAY
 
     override fun processStart(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -23,7 +23,7 @@ class DayTimeEventProcessor(
     }
 
     override fun process(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -32,7 +32,7 @@ class DayTimeEventProcessor(
     }
 
     override fun processEnd(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         globalGameData: GlobalGameData,
         currentGameTime: Long,
         timePassedMillis: Long
@@ -41,12 +41,12 @@ class DayTimeEventProcessor(
     }
 
     private fun startTheNight(
-        event: RedisTimeEvent,
+        event: InGameTimeEvent,
         currentGameTime: Long
     ) {
         timeEventHandler.createEvent(
             event.gameId,
-            RedisTimeEventType.NIGHT,
+            InGameTimeEventType.NIGHT,
             currentGameTime,
             sourceObject = null
         )

@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues
 
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
-import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import jakarta.persistence.*
 
 @Entity
