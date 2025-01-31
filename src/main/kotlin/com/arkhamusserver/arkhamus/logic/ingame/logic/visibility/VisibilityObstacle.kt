@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.VisibilityDoor
 import com.arkhamusserver.arkhamus.model.database.entity.game.VisibilityWall
 import com.arkhamusserver.arkhamus.model.redis.RedisGameUser
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
+import kotlin.math.abs
 
 sealed interface VisibilityObstacle {
     fun blocksVision(from: WithPoint, to: WithPoint): Boolean
@@ -32,6 +33,7 @@ sealed interface VisibilityObstacle {
 
 data class Interval(val x1: Double, val z1: Double, val x2: Double, val z2: Double, val blockVisionChecker: (RedisGameUser) -> Boolean ): VisibilityObstacle {
     override fun blocksVision(from: WithPoint, to: WithPoint): Boolean {
+        if (from is RedisGameUser && !blockVisionChecker(from)) return false
         // replicating solution from https://en.wikipedia.org/wiki/Intersection_(geometry)#Two_line_segments
         val x3 = from.x()
         val z3 = from.z()
@@ -45,7 +47,7 @@ data class Interval(val x1: Double, val z1: Double, val x2: Double, val z2: Doub
         val c2 = z3 - z1
         val divider = a1 * b2 - a2 * b1
         // TODO better accuracy?
-        if (divider < 0.005) return false
+        if (abs(divider) < 0.005) return false
         val s0 = (c1 * b2 - c2 * b1) / divider
         val t0 = (a1 * c2 - a2 * c1) / divider
         val res = s0 in 0.0..1.0 && t0 in 0.0 .. 1.0
