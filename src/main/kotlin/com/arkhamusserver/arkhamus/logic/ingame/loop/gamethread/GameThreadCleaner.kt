@@ -38,18 +38,16 @@ class GameThreadCleaner(
             logger.info("Trying to end $gameSessionId")
             cleanGameLoopFuture(gameSessionId, loopHandlerFutures, tasksMap)
             logger.info("close all connections")
-            redisGameSession.gameId?.let {
+            redisGameSession.gameId.let {
                 val channels = channelRepository.getByGameId(it)
                 channels.forEach {
                     channelRepository.closeAndRemove(it)
                 }
             }
             logger.info("cleaning redis database")
-            redisGameSession.gameId?.let {
+            redisGameSession.gameId.let {
                 redisCleaner.cleanGame(it)
-            } ?: redisCleaner.cleanGameWithoutGameId(
-                redisGameSession
-            )
+            }
         }
     }
 

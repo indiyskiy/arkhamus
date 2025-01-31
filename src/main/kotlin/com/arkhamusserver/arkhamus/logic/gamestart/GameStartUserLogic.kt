@@ -40,7 +40,7 @@ class GameStartUserLogic(
             val usersInGames = redisGameUserRepository.findByUserId(userOfGameSession.userAccount.id!!)
             usersInGames.forEach { userInGame ->
                 if (userInGame.gameId != game.id) {
-                    val redisGame = redisGameRepository.findByGameId(userInGame.gameId)
+                    val redisGame = redisGameRepository.findByGameId(userInGame.gameId).first()
                     if (redisGame.state in setOf(
                             GameState.NEW.name,
                             GameState.PENDING.name,

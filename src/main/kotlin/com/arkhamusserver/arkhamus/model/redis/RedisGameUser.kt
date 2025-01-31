@@ -10,9 +10,7 @@ import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
 import com.arkhamusserver.arkhamus.model.redis.parts.RedisUserSkinSetting
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
-import org.springframework.data.redis.core.RedisHash
 
-@RedisHash("RedisGameUser")
 data class RedisGameUser(
     override var id: String,
     var userId: Long,

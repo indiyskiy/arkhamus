@@ -32,7 +32,7 @@ class RedisCleaner(
                 (repo as CrudRepository<Any, String>).deleteAll(entities as MutableIterable<*>)
             }
         }
-        redisGameRepository.delete(redisGameRepository.findByGameId(gameId))
+        redisGameRepository.delete(redisGameRepository.findByGameId(gameId).first())
     }
 
     @Transactional

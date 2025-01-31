@@ -36,7 +36,7 @@ class GameStartGameLogic(
         gameRepository.save(
             RedisGame(
                 id = game.id.toString(),
-                gameId = game.id,
+                gameId = game.id!!,
                 god = game.god!!
             )
         )

@@ -1,16 +1,14 @@
 package com.arkhamusserver.arkhamus.model.redis
 
+import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameEntity
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
-import org.springframework.data.annotation.Id
-import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed
 
-@RedisHash("RedisGame")
 data class RedisGame(
-    @Id var id: String,
-    @Indexed var gameId: Long?,
+    override var id: String,
+    override var gameId: Long,
     var god: God,
     var currentTick: Long = -1,
     var lastTickSaveHeartbeatActivity: Long = 0,
@@ -21,8 +19,8 @@ data class RedisGame(
     var gameStart: Long = System.currentTimeMillis(),
     @Indexed var state: String = GameState.PENDING.name,
     var gameEndReason: String? = null,
-) : WithTrueIngameId {
+) : WithTrueIngameId, RedisGameEntity {
     override fun inGameId(): Long {
-        return gameId!!
+        return gameId
     }
 }

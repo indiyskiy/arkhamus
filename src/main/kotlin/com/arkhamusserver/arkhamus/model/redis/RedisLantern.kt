@@ -8,9 +8,7 @@ import com.arkhamusserver.arkhamus.model.redis.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.redis.interfaces.WithVisibilityModifiers
-import org.springframework.data.redis.core.RedisHash
 
-@RedisHash("RedisLantern")
 data class RedisLantern(
     override var id: String,
     override var gameId: Long,
