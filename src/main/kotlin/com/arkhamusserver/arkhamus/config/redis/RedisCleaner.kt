@@ -1,9 +1,12 @@
 package com.arkhamusserver.arkhamus.config.redis
 
+import com.arkhamusserver.arkhamus.config.netty.TcpNettyServer
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.NonGenericMyCrudRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.redis.interfaces.RedisGameRepository
 import com.arkhamusserver.arkhamus.model.redis.RedisGame
 import jakarta.annotation.PostConstruct
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -32,12 +35,14 @@ class RedisCleaner(
                 (repo as CrudRepository<Any, String>).deleteAll(entities as MutableIterable<*>)
             }
         }
-        redisGameRepository.delete(redisGameRepository.findByGameId(gameId).first())
+        redisGameRepository.findByGameId(gameId).firstOrNull()?.let { redisGameRepository.delete(it) } ?: {
+            logger.warn("Game repository contains no game for id $gameId")
+        }
+
     }
 
-    @Transactional
-    fun cleanGameWithoutGameId(redisGameSession: RedisGame) {
-        redisGameRepository.delete(redisGameSession)
+    companion object {
+        var logger: Logger = LoggerFactory.getLogger(RedisCleaner::class.java)
     }
 
 }
