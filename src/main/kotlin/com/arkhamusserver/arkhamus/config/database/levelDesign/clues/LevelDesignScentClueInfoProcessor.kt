@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 class LevelDesignScentClueInfoProcessor(
     private val scentClueRepository: ScentClueRepository
 ) {
-    fun processClueInfos(scentClues: List<ScentClueFromJson>, savedLevel: Level) {
+    fun processScentClueInfos(scentClues: List<ScentClueFromJson>, savedLevel: Level) {
         scentClues.forEach { scentClue ->
             ScentClue(
                 x = scentClue.x,

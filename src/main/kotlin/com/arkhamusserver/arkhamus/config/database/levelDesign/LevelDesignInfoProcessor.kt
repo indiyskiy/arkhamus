@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
+import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignCorruptionClueInfoProcessor
 import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignScentClueInfoProcessor
 import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignSoundClueInfoProcessor
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CREATE_TEST_QUESTS
@@ -36,6 +37,7 @@ class LevelDesignInfoProcessor(
     private val levelDesignDoorInfoProcessor: LevelDesignDoorInfoProcessor,
     private val levelDesignScentClueInfoProcessor: LevelDesignScentClueInfoProcessor,
     private val levelDesignSoundClueInfoProcessor: LevelDesignSoundClueInfoProcessor,
+    private val levelDesignCorruptionClueInfoProcessor: LevelDesignCorruptionClueInfoProcessor,
     private val levelDesignVisibilityProcessor: LevelDesignVisibilityProcessor,
     private val randomQuestGenerator: RandomQuestGenerator,
 ) {
@@ -139,10 +141,14 @@ class LevelDesignInfoProcessor(
             savedLevel
         )
         levelDesignDoorInfoProcessor.processDoors(levelFromJson.doors, savedLevel)
-        levelDesignScentClueInfoProcessor.processClueInfos(levelFromJson.scentClues, savedLevel)
+        levelDesignScentClueInfoProcessor.processScentClueInfos(levelFromJson.scentClues, savedLevel)
         levelDesignSoundClueInfoProcessor.processSoundInfos(
             levelFromJson.soundClues,
             levelFromJson.soundClueJammers,
+            savedLevel
+        )
+        levelDesignCorruptionClueInfoProcessor.processCorruptionClueInfos(
+            levelFromJson.corruptionClues,
             savedLevel
         )
         levelDesignVisibilityProcessor.processVisibilityObjects(levelFromJson, savedLevel)

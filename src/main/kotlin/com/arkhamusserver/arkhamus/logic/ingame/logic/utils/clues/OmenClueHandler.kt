@@ -129,7 +129,7 @@ class OmenClueHandler(
                     VisibilityModifier.HAVE_ITEM_OMEN,
                 ),
                 turnedOn = false,
-                userId = userForOmen.id!!,
+                userId = userForOmen.userAccount.id!!,
             )
         }
         if (god.getTypes().contains(Clue.OMEN)) {

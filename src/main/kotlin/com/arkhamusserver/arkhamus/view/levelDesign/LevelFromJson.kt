@@ -22,6 +22,7 @@ data class LevelFromJson(
     var votespots: List<VoteSpotFromJson> = emptyList(),
     var scentClues: List<ScentClueFromJson> = emptyList(),
     var soundClues: List<JsonSoundClue>,
+    var corruptionClues: List<JsonCorruptionClue>,
     var soundClueJammers: List<JsonSoundClueJammer>,
     var visibilityDoors: List<VisibilityDoorFromJson>,
     var visibilityWalls: List<List<PointJson>>
