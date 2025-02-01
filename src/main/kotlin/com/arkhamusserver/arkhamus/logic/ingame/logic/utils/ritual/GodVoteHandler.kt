@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarPolling
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -30,7 +30,7 @@ class GodVoteHandler(
     fun canVote(
         altarPolling: InGameAltarPolling?,
         altarHolder: InGameAltarHolder?,
-        user: InGameGameUser
+        user: InGameUser
     ) = altarPolling != null &&
             altarHolder != null &&
             isVoteProcessOpen(altarPolling, altarHolder) &&
@@ -46,7 +46,7 @@ class GodVoteHandler(
                 (altarHolder?.state == MapAltarState.VOTING)
 
     fun everybodyVoted(
-        allUsers: Collection<InGameGameUser>,
+        allUsers: Collection<InGameUser>,
         altarPolling: InGameAltarPolling
     ): Boolean {
         logger.info("everybodyVoted?")
@@ -67,10 +67,10 @@ class GodVoteHandler(
         return result
     }
 
-    fun usersCanPossiblyVote(allUsers: Collection<InGameGameUser>) =
+    fun usersCanPossiblyVote(allUsers: Collection<InGameUser>) =
         madnessHandler.filterNotMad(allUsers)
 
-    fun usersCanPossiblyVote(user: InGameGameUser) =
+    fun usersCanPossiblyVote(user: InGameUser) =
         !madnessHandler.isCompletelyMad(user)
 
     private fun skipped(altarPolling: InGameAltarPolling, userId: Long): Boolean =

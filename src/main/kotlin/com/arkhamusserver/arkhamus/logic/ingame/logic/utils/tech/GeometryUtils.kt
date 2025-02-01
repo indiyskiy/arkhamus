@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.HIGH_GROUND_HEIGHT
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.springframework.stereotype.Component
 import java.awt.geom.Point2D
@@ -65,7 +65,7 @@ class GeometryUtils {
     }
 
     fun onHighGround(
-        whoLooks: InGameGameUser,
+        whoLooks: InGameUser,
         target: WithPoint
     ): Boolean {
         return (target.y() - whoLooks.y) >= HIGH_GROUND_HEIGHT

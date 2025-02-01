@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.InGameDataAccess
 import com.arkhamusserver.arkhamus.model.ingame.*
@@ -10,18 +11,18 @@ import org.springframework.stereotype.Service
 @Primary
 class MockInGameDataAccess : InGameDataAccess {
 
-    private var gameUsers = listOf<InGameGameUser>()
+    private var gameUsers = listOf<InGameUser>()
     private var games = listOf<InRamGame>()
     private var containers = listOf<InGameContainer>()
     private var crafters = listOf<InGameCrafter>()
     private var globalGameDatas = listOf<GlobalGameData>()
     private var timeEvents = mutableMapOf<Long, List<InGameTimeEvent>>()
 
-    override fun getGameUser(userId: Long?, gameId: Long?): InGameGameUser {
+    override fun getGameUser(userId: Long?, gameId: Long?): InGameUser {
         return gameUsers.find { it.userId == userId && it.gameId == gameId }!!
     }
 
-    override fun getGameUsers(gameId: Long?): List<InGameGameUser> {
+    override fun getGameUsers(gameId: Long?): List<InGameUser> {
         return gameUsers.filter { it.gameId == gameId }
     }
 
@@ -93,7 +94,7 @@ class MockInGameDataAccess : InGameDataAccess {
         TODO("Not yet implemented")
     }
 
-    override fun getClues(gameId: Long): List<RedisClue> {
+    override fun getClues(gameId: Long): CluesContainer {
         TODO("Not yet implemented")
     }
 
@@ -110,6 +111,10 @@ class MockInGameDataAccess : InGameDataAccess {
     }
 
     override fun getUserQuestProrgesses(gameId: Long): List<InGameUserQuestProgress> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getVisibilityMap(gameId: Long): InGameVisibilityMap? {
         TODO("Not yet implemented")
     }
 

@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithGameTags
 import org.springframework.stereotype.Component
 
@@ -23,7 +23,7 @@ class ObjectWithTagsHandler(
 
     fun processObject(
         withGameTags: WithGameTags,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData
     ) {
         withGameTags.gameTags().forEach { tag ->
@@ -40,7 +40,7 @@ class ObjectWithTagsHandler(
     }
 
     private fun processPeekabooCurse(
-        user: InGameGameUser,
+        user: InGameUser,
         withGameTags: WithGameTags,
         tag: InGameObjectTag,
         data: GlobalGameData

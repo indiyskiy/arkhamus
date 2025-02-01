@@ -14,7 +14,7 @@ import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -37,7 +37,7 @@ class GameEndLogic(
     @Transactional
     fun endTheGame(
         game: InRamGame,
-        users: Map<Long, InGameGameUser>,
+        users: Map<Long, InGameUser>,
         gameEndReason: GameEndReason,
         timeLeft: Long? = null
     ) {
@@ -75,7 +75,7 @@ class GameEndLogic(
     private fun setWinnersLosers(
         gameSession: GameSession,
         gameEndReason: GameEndReason,
-        users: Map<Long, InGameGameUser>
+        users: Map<Long, InGameUser>
     ) {
         logger.info("set winners and losers")
         val databaseUsers = userOfGameSessionRepository.findByGameSessionIdAndLeftTheLobby(gameSession.id!!)
@@ -110,7 +110,7 @@ class GameEndLogic(
 
     private fun setWonOrLoose(
         gameEndReason: GameEndReason,
-        inGameUsers: Map<Long, InGameGameUser>,
+        inGameUsers: Map<Long, InGameUser>,
         databaseUsers: List<UserOfGameSession>
     ) {
         when (gameEndReason) {

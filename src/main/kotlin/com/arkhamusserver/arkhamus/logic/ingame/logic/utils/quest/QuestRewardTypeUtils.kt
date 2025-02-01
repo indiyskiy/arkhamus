@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.ADD_CLUE
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.ITEM
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuestReward
 import org.slf4j.Logger
@@ -26,7 +26,7 @@ class QuestRewardTypeUtils {
 
     fun chooseType(
         quest: InGameQuest,
-        user: InGameGameUser,
+        user: InGameUser,
         i: Int,
         previousRewards: List<InGameQuestReward>
     ): RewardType {
@@ -49,7 +49,7 @@ class QuestRewardTypeUtils {
 
     private fun availableByUser(
         type: RewardType,
-        user: InGameGameUser
+        user: InGameUser
     ): Boolean {
         return byRole(type, user.role) //&& byClass(type, user.classInGame)
     }

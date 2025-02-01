@@ -13,7 +13,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameScentClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
@@ -64,7 +64,7 @@ class ScentClueHandler(
     }
 
     override fun canBeRemoved(
-        user: InGameGameUser,
+        user: InGameUser,
         target: Any,
         data: GlobalGameData
     ): Boolean {
@@ -79,7 +79,7 @@ class ScentClueHandler(
     }
 
     override fun anyCanBeRemoved(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData
     ): Boolean {
         return data.clues.scent.any {
@@ -138,7 +138,7 @@ class ScentClueHandler(
 
     override fun mapActualClues(
         container: CluesContainer,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return container.scent.filter {
@@ -164,7 +164,7 @@ class ScentClueHandler(
 
     override fun mapPossibleClues(
         container: CluesContainer,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         val scentOptions = container.scent
@@ -188,7 +188,7 @@ class ScentClueHandler(
 
     private fun countState(
         clue: InGameScentClue,
-        user: InGameGameUser,
+        user: InGameUser,
     ): InnovateClueState {
         return if (clue.castedAbilityUsers.contains(user.inGameId())) {
             if (clue.turnedOn) {

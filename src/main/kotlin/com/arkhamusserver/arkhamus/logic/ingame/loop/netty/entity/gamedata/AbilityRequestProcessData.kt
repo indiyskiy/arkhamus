@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
@@ -29,8 +29,8 @@ class AbilityRequestProcessData(
     clues: ExtendedCluesResponse,
     userQuestProgresses: List<UserQuestResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    gameUser: InGameGameUser,
-    otherGameUsers: List<InGameGameUser>,
+    gameUser: InGameUser,
+    otherGameUsers: List<InGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,

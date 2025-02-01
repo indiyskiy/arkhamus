@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestR
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -29,7 +29,7 @@ class GameStartQuestLogic(
     fun createQuests(
         levelId: Long,
         game: GameSession,
-        users: List<InGameGameUser>,
+        users: List<InGameUser>,
     ) {
         val allLevelQuests = questRepository.findByLevelIdAndQuestState(levelId, QuestState.ACTIVE)
         val createdInGameQuests = allLevelQuests.map { dbQuest ->

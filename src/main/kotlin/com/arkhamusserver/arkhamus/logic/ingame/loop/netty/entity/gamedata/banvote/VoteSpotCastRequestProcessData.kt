@@ -11,7 +11,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestRespon
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 
 class VoteSpotCastRequestProcessData(
-    var targetUser: InGameGameUser?,
+    var targetUser: InGameUser?,
     var voteSpot: InGameVoteSpot?,
     var currentUserVoteSpot: InGameUserVoteSpot?,
     var thisSpotUserInfos: List<InGameUserVoteSpot>,
@@ -21,8 +21,8 @@ class VoteSpotCastRequestProcessData(
     var canVote: Boolean,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    gameUser: InGameGameUser,
-    otherGameUsers: List<InGameGameUser>,
+    gameUser: InGameUser,
+    otherGameUsers: List<InGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,

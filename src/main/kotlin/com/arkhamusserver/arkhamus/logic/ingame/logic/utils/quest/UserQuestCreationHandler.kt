@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomI
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameUserQuestProgressRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.*
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
 import com.arkhamusserver.arkhamus.model.ingame.InGameUserQuestProgress
 import org.slf4j.Logger
@@ -81,7 +81,7 @@ class UserQuestCreationHandler(
     }
 
     fun setStartsQuestsForUser(
-        user: InGameGameUser,
+        user: InGameUser,
         createdInGameQuests: List<InGameQuest>
     ) {
         val quests = getQuestsWithUniqueQuestGivers(createdInGameQuests)
@@ -189,7 +189,7 @@ class UserQuestCreationHandler(
 
     private fun addQuestsForUser(
         quests: List<InGameQuest>,
-        user: InGameGameUser,
+        user: InGameUser,
         currentGameTime: Long
     ): List<InGameUserQuestProgress> {
         val userStartQuests = quests.map { quest ->

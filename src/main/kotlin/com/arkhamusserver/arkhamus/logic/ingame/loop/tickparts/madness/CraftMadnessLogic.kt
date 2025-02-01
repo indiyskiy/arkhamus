@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameCrafterRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -28,7 +28,7 @@ class CraftMadnessLogic(
     }
 
     fun craftSomething(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): Boolean {
         val craftersNearby = openCrafters(data, user)
@@ -56,7 +56,7 @@ class CraftMadnessLogic(
 
     private fun openCrafters(
         data: GlobalGameData,
-        user: InGameGameUser
+        user: InGameUser
     ): List<InGameCrafter> = data.crafters.values.filter {
         userLocationHandler.userCanSeeTarget(
             user,

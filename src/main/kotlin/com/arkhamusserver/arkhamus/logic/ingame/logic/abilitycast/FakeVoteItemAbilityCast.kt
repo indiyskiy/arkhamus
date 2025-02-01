@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
@@ -41,7 +41,7 @@ class FakeVoteItemAbilityCast(
     }
 
     override fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -52,7 +52,7 @@ class FakeVoteItemAbilityCast(
 
     private fun curseItem(
         game: InRamGame,
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         globalGameData: GlobalGameData
     ) {
         val target = (globalGameData.voteSpots + globalGameData.altars.values.random(random)).random(random)

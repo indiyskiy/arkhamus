@@ -12,7 +12,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
@@ -62,7 +62,7 @@ class LastPersonTouchAbilityCast(
     }
 
     override fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -78,7 +78,7 @@ class LastPersonTouchAbilityCast(
     }
 
     fun createShortTimeEvent(
-        sourceUser: InGameGameUser?,
+        sourceUser: InGameUser?,
         target: WithTrueIngameId,
         result: ShortTimeEventPersonWithTimeData,
         globalGameData: GlobalGameData,

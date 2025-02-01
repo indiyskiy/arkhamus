@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Abili
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
@@ -31,7 +31,7 @@ class SummonNightAbilityCast(
     }
 
     override fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -45,7 +45,7 @@ class SummonNightAbilityCast(
 
     private fun createSummonedNightEvent(
         game: InRamGame,
-        sourceUser: InGameGameUser
+        sourceUser: InGameUser
     ) {
         timeEventHandler.createEvent(
             game,

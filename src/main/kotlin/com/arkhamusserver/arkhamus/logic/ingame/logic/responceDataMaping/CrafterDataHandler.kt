@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CrafterState
 import org.springframework.stereotype.Component
 
@@ -16,7 +16,7 @@ class CrafterDataHandler(
     private val visibilityByTagsHandler: VisibilityByTagsHandler
 ) {
     fun map(
-        currentUser: InGameGameUser,
+        currentUser: InGameUser,
         crafters: List<InGameCrafter>,
         levelGeometryData: LevelGeometryData
     ): List<CrafterState> {
@@ -30,7 +30,7 @@ class CrafterDataHandler(
     private fun mask(
         responseToMask: CrafterState,
         crafter: InGameCrafter,
-        currentUser: InGameGameUser,
+        currentUser: InGameUser,
         levelGeometryData: LevelGeometryData
     ) {
         if (

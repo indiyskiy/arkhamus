@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.visibility
 
 import com.arkhamusserver.arkhamus.model.database.entity.game.VisibilityDoor
 import com.arkhamusserver.arkhamus.model.database.entity.game.VisibilityWall
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import kotlin.math.abs
 
@@ -11,7 +11,7 @@ sealed interface VisibilityObstacle {
 
     fun intersectsRect(xMin: Double, zMin: Double, xMax: Double, zMax: Double): Boolean
 
-    fun blocksVisionFor(observer: InGameGameUser): Boolean
+    fun blocksVisionFor(observer: InGameUser): Boolean
 
     companion object {
         fun fromWall(wall: VisibilityWall): VisibilityObstacle = Interval(
@@ -31,9 +31,9 @@ sealed interface VisibilityObstacle {
     }
 }
 
-data class Interval(val x1: Double, val z1: Double, val x2: Double, val z2: Double, val blockVisionChecker: (InGameGameUser) -> Boolean ): VisibilityObstacle {
+data class Interval(val x1: Double, val z1: Double, val x2: Double, val z2: Double, val blockVisionChecker: (InGameUser) -> Boolean ): VisibilityObstacle {
     override fun blocksVision(from: WithPoint, to: WithPoint): Boolean {
-        if (from is InGameGameUser && !blockVisionChecker(from)) return false
+        if (from is InGameUser && !blockVisionChecker(from)) return false
         // replicating solution from https://en.wikipedia.org/wiki/Intersection_(geometry)#Two_line_segments
         val x3 = from.x()
         val z3 = from.z()
@@ -71,5 +71,5 @@ data class Interval(val x1: Double, val z1: Double, val x2: Double, val z2: Doub
         return marker1 + marker2 + marker3 + marker4 >= 2
     }
 
-    override fun blocksVisionFor(observer: InGameGameUser) = blockVisionChecker(observer)
+    override fun blocksVisionFor(observer: InGameUser) = blockVisionChecker(observer)
 }

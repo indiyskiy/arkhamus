@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithGameTags
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
@@ -34,7 +34,7 @@ class PeekabooCurseItemAbilityCast(
     }
 
     override fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData

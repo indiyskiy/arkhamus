@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortT
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameShortTimeEvent
 
 interface SpecificShortTimeEventFilter {
@@ -12,7 +12,7 @@ interface SpecificShortTimeEventFilter {
 
     fun canSee(
         event: InGameShortTimeEvent,
-        user: InGameGameUser,
+        user: InGameUser,
         zones: List<LevelZone>,
         data: GlobalGameData
     ): Boolean

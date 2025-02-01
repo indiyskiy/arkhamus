@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
@@ -13,7 +13,7 @@ class RitualMappingDataHandler {
     fun build(
         ritualEvent: InGameTimeEvent?,
         altarHolder: InGameAltarHolder,
-        usersInRitual: List<InGameGameUser>,
+        usersInRitual: List<InGameUser>,
         currentItem: Item?,
         gameTimeItemsNotches: List<ItemNotch>
     ): RitualGoingDataResponse {
@@ -49,7 +49,7 @@ class RitualMappingDataHandler {
 
     fun buildUserData(
         holder: InGameAltarHolder,
-        myUser: InGameGameUser
+        myUser: InGameUser
     ): UserRitualData {
         val inRitual = holder.usersInRitual.contains(myUser.inGameId())
         val canLeave = inRitual && !holder.usersToKick.contains(myUser.inGameId())

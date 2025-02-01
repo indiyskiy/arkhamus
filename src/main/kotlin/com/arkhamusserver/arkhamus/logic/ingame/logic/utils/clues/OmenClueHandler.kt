@@ -14,8 +14,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameOmenClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
@@ -44,7 +44,7 @@ class OmenClueHandler(
     }
 
     override fun accept(target: WithStringId): Boolean {
-        return target is InGameGameUser
+        return target is InGameOmenClue
     }
 
     override fun canBeAdded(container: CluesContainer): Boolean {
@@ -65,27 +65,27 @@ class OmenClueHandler(
     }
 
     override fun canBeRemoved(
-        user: InGameGameUser,
+        user: InGameUser,
         target: Any,
         data: GlobalGameData
     ): Boolean {
-        val targetUser = (target as? InGameGameUser) ?: return false
-        val omen = data.clues.omen.find { it.userId == targetUser.inGameId() } ?: return false
-        return omen.turnedOn && userLocationHandler.userCanSeeTargetInRange(
+        val targetOmen = (target as? InGameOmenClue) ?: return false
+        val targetUser = data.users[targetOmen.userId] ?: return false
+        return targetOmen.turnedOn && userLocationHandler.userCanSeeTargetInRange(
             whoLooks = user,
             target = targetUser,
             levelGeometryData = data.levelGeometryData,
-            range = omen.interactionRadius,
+            range = targetOmen.interactionRadius,
             affectedByBlind = true,
         )
     }
 
     override fun anyCanBeRemoved(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData
     ): Boolean {
-        return data.users.any {
-            canBeRemoved(user, it.value, data)
+        return data.clues.omen.any {
+            canBeRemoved(user, it, data)
         }
     }
 
@@ -101,8 +101,13 @@ class OmenClueHandler(
         target: WithStringId,
         data: GlobalGameData
     ) {
-        val gameUser = (gameObjectFinder.findById(target.stringId(), GameObjectType.CHARACTER, data) as? InGameGameUser) ?: return
-        val omenClue = data.clues.omen.find { it.userId == gameUser.inGameId() } ?: return
+        val omenClue = (
+                gameObjectFinder.findById(
+                    target.stringId(),
+                    GameObjectType.OMEN_CLUE,
+                    data
+                ) as? InGameOmenClue
+                ) ?: return
         omenClue.turnedOn = false
         inGameOmenClueRepository.save(omenClue)
     }
@@ -114,18 +119,17 @@ class OmenClueHandler(
         activeCluesOnStart: Int
     ) {
         val users = session.usersOfGameSession
-        val omenCluesForGameSession = users.shuffled(random).take(MAX_ON_GAME)
-        val inGameOmenClues = omenCluesForGameSession.map {
+        val usersForOmens = users.shuffled(random).take(MAX_ON_GAME)
+        val inGameOmenClues = usersForOmens.map { userForOmen ->
             InGameOmenClue(
                 id = generateRandomId(),
                 gameId = session.id!!,
-                inGameOmenId = it.id!!,
                 interactionRadius = Ability.ADVANCED_SEARCH_FOR_OMEN.range!!,
                 visibilityModifiers = setOf(
                     VisibilityModifier.HAVE_ITEM_OMEN,
                 ),
                 turnedOn = false,
-                userId = it.id!!,
+                userId = userForOmen.id!!,
             )
         }
         if (god.getTypes().contains(Clue.OMEN)) {
@@ -139,7 +143,7 @@ class OmenClueHandler(
 
     override fun mapActualClues(
         container: CluesContainer,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return container.omen.filter {
@@ -166,7 +170,7 @@ class OmenClueHandler(
 
     override fun mapPossibleClues(
         container: CluesContainer,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         val omenOptions = container.omen
@@ -190,7 +194,7 @@ class OmenClueHandler(
 
     private fun countState(
         clue: InGameOmenClue,
-        user: InGameGameUser,
+        user: InGameUser,
     ): InnovateClueState {
         return if (clue.castedAbilityUsers.contains(user.inGameId())) {
             if (clue.turnedOn) {

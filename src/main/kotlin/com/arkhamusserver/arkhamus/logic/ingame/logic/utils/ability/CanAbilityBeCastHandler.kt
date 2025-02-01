@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import org.springframework.stereotype.Component
 
@@ -22,14 +22,14 @@ class CanAbilityBeCastHandler(
     private val additionalAbilityConditions: List<AdditionalAbilityCondition>
 ) {
 
-    fun canUserSeeAbility(user: InGameGameUser, ability: Ability, requiredItem: Item?): Boolean {
+    fun canUserSeeAbility(user: InGameUser, ability: Ability, requiredItem: Item?): Boolean {
         return haveRequiredItem(ability, requiredItem, user) &&
                 haveRelatedRole(ability, user) &&
                 haveRelatedClass(ability, user)
     }
 
     fun abilityOfUserResponses(
-        user: InGameGameUser,
+        user: InGameUser,
         globalGameData: GlobalGameData
     ): List<AbilityOfUserResponse> {
         val visibleAbilitiesList = Ability.values().filter { canUserSeeAbility(user, it) }
@@ -67,7 +67,7 @@ class CanAbilityBeCastHandler(
 
     fun canBeCastedAtAll(
         ability: Ability,
-        user: InGameGameUser,
+        user: InGameUser,
         globalGameData: GlobalGameData
     ) = additionalAbilityConditions.filter {
         it.accepts(ability)
@@ -80,7 +80,7 @@ class CanAbilityBeCastHandler(
 
     fun canBeCastedRightNow(
         ability: Ability,
-        user: InGameGameUser,
+        user: InGameUser,
         target: Any?,
         globalGameData: GlobalGameData
     ) = additionalAbilityConditions.filter { it.accepts(ability) }.let { conditions ->
@@ -94,27 +94,27 @@ class CanAbilityBeCastHandler(
         }
     }
 
-    private fun canUserSeeAbility(user: InGameGameUser, ability: Ability): Boolean {
+    private fun canUserSeeAbility(user: InGameUser, ability: Ability): Boolean {
         return canUserSeeAbility(user, ability, abilityToItemResolver.resolve(ability))
     }
 
     private fun charges(
         ability: Ability,
-        user: InGameGameUser
+        user: InGameUser
     ) = if (ability.consumesItem) {
         abilityToItemResolver.resolve(ability)?.let { item -> numberOfRequiredItems(ability, item, user) }
     } else null
 
-    private fun haveRelatedClass(ability: Ability, user: InGameGameUser): Boolean =
+    private fun haveRelatedClass(ability: Ability, user: InGameUser): Boolean =
         (!ability.classBased) || (abilityToClassResolver.resolve(ability)?.contains(user.classInGame) == true)
 
-    private fun haveRelatedRole(ability: Ability, user: InGameGameUser): Boolean =
+    private fun haveRelatedRole(ability: Ability, user: InGameUser): Boolean =
         user.role in ability.availableForRole
 
-    private fun haveRequiredItem(ability: Ability, requiredItem: Item?, user: InGameGameUser): Boolean =
+    private fun haveRequiredItem(ability: Ability, requiredItem: Item?, user: InGameUser): Boolean =
         !ability.requiresItem || requiredItem == null || userInventoryHandler.userHaveItem(user, requiredItem)
 
-    private fun numberOfRequiredItems(ability: Ability, requiredItem: Item?, user: InGameGameUser): Int? {
+    private fun numberOfRequiredItems(ability: Ability, requiredItem: Item?, user: InGameUser): Int? {
         if (!ability.requiresItem) {
             return null
         }

@@ -107,7 +107,7 @@ class RitualHandler(
         item: Item,
         itemNumber: Int,
         altarHolder: InGameAltarHolder?,
-        user: InGameGameUser
+        user: InGameUser
     ) {
         val itemsNeeded = (altarHolder?.itemsForRitual?.get(item) ?: 0) -
                 (altarHolder?.itemsOnAltars?.get(item) ?: 0)
@@ -180,8 +180,8 @@ class RitualHandler(
         globalGameData: GlobalGameData,
         altar: InGameAltar,
         god: God,
-        currentGameUser: InGameGameUser,
-        allUsers: Collection<InGameGameUser>,
+        currentGameUser: InGameUser,
+        allUsers: Collection<InGameUser>,
         altars: Map<Long, InGameAltar>,
         altarHolder: InGameAltarHolder?,
         events: List<InGameTimeEvent>,
@@ -256,13 +256,13 @@ class RitualHandler(
     fun castGodVote(
         god: God,
         altar: InGameAltar,
-        currentGameUser: InGameGameUser,
+        currentGameUser: InGameUser,
         altarPolling: InGameAltarPolling,
         gameData: GodVoteCastRequestProcessData,
         altarHolder: InGameAltarHolder?,
         altars: Map<Long, InGameAltar>,
         game: InRamGame,
-        allUsers: Collection<InGameGameUser>,
+        allUsers: Collection<InGameUser>,
         events: List<InGameTimeEvent>
     ) {
         val userId: Long = gameData.gameUser!!.inGameId()
@@ -284,7 +284,7 @@ class RitualHandler(
     }
 
     fun gotQuorum(
-        allUsers: Collection<InGameGameUser>,
+        allUsers: Collection<InGameUser>,
         altarPolling: InGameAltarPolling
     ): God? {
         val canVote = godVoteHandler.usersCanPossiblyVote(allUsers)
@@ -359,7 +359,7 @@ class RitualHandler(
     }
 
     fun tryToForceStartRitual(
-        allUsers: Collection<InGameGameUser>,
+        allUsers: Collection<InGameUser>,
         altarPolling: InGameAltarPolling,
         altars: Map<Long, InGameAltar>,
         altarHolder: InGameAltarHolder?,
@@ -452,7 +452,7 @@ class RitualHandler(
         god: God,
         altar: InGameAltar,
         globalGameData: GlobalGameData,
-        currentGameUser: InGameGameUser,
+        currentGameUser: InGameUser,
     ): InGameAltarPolling {
         val userId: Long = currentGameUser.inGameId()
         val godId = god.getId()

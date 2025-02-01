@@ -17,12 +17,13 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.HeartbeatRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -376,7 +377,7 @@ class GameThreadPoolTest {
                 containers = emptyList(),
                 crafters = emptyList(),
                 inZones = emptyList(),
-                clues = emptyList(),
+                clues = ExtendedCluesResponse(emptyList(), emptyList()),
                 userQuestProgresses = emptyList(),
                 tick = tick + 1
             ),
@@ -422,8 +423,8 @@ class GameThreadPoolTest {
 
         gameSession.usersOfGameSession = usersOfGameSession
 
-        val inGameGameUsers = usersOfGameSession.map { userOfGameSession ->
-            InGameGameUser(
+        val inGameUsers = usersOfGameSession.map { userOfGameSession ->
+            InGameUser(
                 id = generateRandomId(),
                 userId = userOfGameSession.id!!,
                 nickName = "user-nickname",
@@ -450,7 +451,7 @@ class GameThreadPoolTest {
 
         val inRamGame = InRamGame(
             gameSession.id.toString(),
-            gameSession.id,
+            gameSession.id!!,
             God.AAMON,
             currentTick = startingTick
         )
@@ -459,7 +460,7 @@ class GameThreadPoolTest {
             game = inRamGame,
             altarHolder = InGameAltarHolder(
                 id = "altar holder",
-                gameId = inRamGame.gameId!!,
+                gameId = inRamGame.gameId,
                 altarHolderId = 0L,
                 x = 0.0,
                 y = 0.0,
@@ -471,7 +472,7 @@ class GameThreadPoolTest {
                 itemsOnAltars = mutableMapOf(),
                 state = MapAltarState.OPEN,
             ),
-            users = inGameGameUsers.associateBy { user -> user.userId },
+            users = inGameUsers.associateBy { user -> user.userId },
         )
 
         redisDataAccess.setUp(listOf(globalGameData))

@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -31,7 +31,7 @@ class KindleCloakAbilityCast : AbilityCast {
     }
 
     override fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -40,7 +40,7 @@ class KindleCloakAbilityCast : AbilityCast {
         return true
     }
 
-    private fun luminosity(user: InGameGameUser): Boolean {
+    private fun luminosity(user: InGameUser): Boolean {
         user.stateTags += UserStateTag.LUMINOUS
         return true
     }

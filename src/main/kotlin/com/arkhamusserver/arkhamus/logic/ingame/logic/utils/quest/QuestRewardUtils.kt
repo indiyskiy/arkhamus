@@ -47,7 +47,7 @@ class QuestRewardUtils(
     fun canBeRewarded(
         quest: InGameQuest?,
         userQuestProgress: InGameUserQuestProgress?,
-        user: InGameGameUser
+        user: InGameUser
     ): Boolean {
         return quest != null &&
                 userQuestProgress != null &&
@@ -61,7 +61,7 @@ class QuestRewardUtils(
         rewards: List<InGameQuestReward>?,
         quest: InGameQuest,
         questProgress: InGameUserQuestProgress,
-        user: InGameGameUser,
+        user: InGameUser,
         currentGameTime: Long
     ): List<InGameQuestReward> {
         return if (rewards.isNullOrEmpty()) {
@@ -90,7 +90,7 @@ class QuestRewardUtils(
     private fun generateQuestRewardsForUser(
         quest: InGameQuest,
         questProgress: InGameUserQuestProgress,
-        user: InGameGameUser,
+        user: InGameUser,
         currentGameTime: Long,
         allRewardsOfUser: List<InGameQuestReward>
     ): List<InGameQuestReward> {
@@ -157,7 +157,7 @@ class QuestRewardUtils(
     private fun generateQuestRewardsForUser(
         quest: InGameQuest,
         questProgress: InGameUserQuestProgress,
-        user: InGameGameUser,
+        user: InGameUser,
         i: Int,
         previousRewards: List<InGameQuestReward>,
         currentGameTime: Long,
@@ -181,7 +181,7 @@ class QuestRewardUtils(
     }
 
     fun takeReward(
-        user: InGameGameUser,
+        user: InGameUser,
         reward: InGameQuestReward,
         globalGameData: GlobalGameData,
         questGiverGivesReward: InGameQuestGiver
@@ -209,7 +209,7 @@ class QuestRewardUtils(
 
     private fun takeItems(
         reward: InGameQuestReward,
-        user: InGameGameUser
+        user: InGameUser
     ) {
         if (reward.rewardItem != null) {
             inventoryHandler.addItems(user, reward.rewardItem!!, reward.rewardAmount)
@@ -218,7 +218,7 @@ class QuestRewardUtils(
 
     private fun takeCorruptedItems(
         reward: InGameQuestReward,
-        user: InGameGameUser
+        user: InGameUser
     ) {
         inventoryHandler.addItems(
             user, Item.values().filter {

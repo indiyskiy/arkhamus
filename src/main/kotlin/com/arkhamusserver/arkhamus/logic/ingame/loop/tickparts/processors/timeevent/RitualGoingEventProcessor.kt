@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -91,7 +91,7 @@ class RitualGoingEventProcessor(
     }
 
     private fun setUsersPosition(
-        values: Collection<InGameGameUser>,
+        values: Collection<InGameUser>,
         altarHolder: InGameAltarHolder,
         radius: Double
     ) {
@@ -111,7 +111,7 @@ class RitualGoingEventProcessor(
     }
 
     private fun addUsersToRitual(
-        users: Collection<InGameGameUser>,
+        users: Collection<InGameUser>,
         altarHolder: InGameAltarHolder,
         radius: Double
     ) {
@@ -135,7 +135,7 @@ class RitualGoingEventProcessor(
         )
     }
 
-    private fun InGameGameUser.inRitual(altarHolder: InGameAltarHolder): Boolean =
+    private fun InGameUser.inRitual(altarHolder: InGameAltarHolder): Boolean =
         altarHolder.usersInRitual.contains(this.inGameId())
 
 }

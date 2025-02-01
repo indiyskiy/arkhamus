@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -15,11 +15,11 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedC
 class GameEndedRequestGameData(
     val gameEnded: Boolean,
     val gameEndReason: GameEndReason?,
-    val winners: List<InGameGameUser>?,
-    val losers: List<InGameGameUser>?,
+    val winners: List<InGameUser>?,
+    val losers: List<InGameUser>?,
     val god: God,
-    gameUser: InGameGameUser,
-    otherGameUsers: List<InGameGameUser>,
+    gameUser: InGameUser,
+    otherGameUsers: List<InGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,

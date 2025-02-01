@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -17,7 +17,7 @@ class CanRecipeBeCraftedHandler(
     }
 
     fun canUserCraft(
-        user: InGameGameUser,
+        user: InGameUser,
         recipe: Recipe,
         crafter: InGameCrafter,
         holdCrafterNeeded: Boolean = true
@@ -27,7 +27,7 @@ class CanRecipeBeCraftedHandler(
                 (!holdCrafterNeeded || crafterHoldByMe(user, crafter))
     }
 
-    private fun crafterHoldByMe(user: InGameGameUser, crafter: InGameCrafter) =
+    private fun crafterHoldByMe(user: InGameUser, crafter: InGameCrafter) =
         (crafter.holdingUser == user.inGameId()).also {
             logger.warn("crafterHoldByMe $this")
         }
@@ -43,7 +43,7 @@ class CanRecipeBeCraftedHandler(
     private fun haveRequiredItems(
         recipe: Recipe,
         crafter: InGameCrafter,
-        user: InGameGameUser
+        user: InGameUser
     ): Boolean {
         return recipe.ingredients.all {
             userInventoryHandler.haveRequiredItems(it, crafter, user)

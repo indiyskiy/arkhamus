@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import org.slf4j.Logger
@@ -48,8 +48,8 @@ class TimeEventHandler(
         game: GameSession,
         eventType: InGameTimeEventType,
         startDateTime: Long,
-        sourceUser: InGameGameUser? = null,
-        targetUser: InGameGameUser? = null,
+        sourceUser: InGameUser? = null,
+        targetUser: InGameUser? = null,
         location: Location? = null,
         timeLeft: Long? = null
     ) {

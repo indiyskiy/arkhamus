@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandle
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -21,7 +21,7 @@ class TeleportHandler(
 
     fun forceTeleport(
         game: InRamGame,
-        user: InGameGameUser,
+        user: InGameUser,
         point: WithPoint
     ) {
         user.x = point.x()

@@ -20,7 +20,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.request.AbilityRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -122,8 +122,8 @@ class AbilityNettyRequestHandler(
         canBeCast: Boolean,
         relatedAbility: InGameAbilityCast?,
         requiredItem: Item?,
-        user: InGameGameUser,
-        users: List<InGameGameUser>,
+        user: InGameUser,
+        users: List<InGameUser>,
         inZones: List<LevelZone>,
         ongoingEvents: List<OngoingEvent>,
         globalGameData: GlobalGameData,
@@ -164,8 +164,8 @@ class AbilityNettyRequestHandler(
 
 
     private fun buildWrongAbilityGameData(
-        user: InGameGameUser,
-        users: List<InGameGameUser>,
+        user: InGameUser,
+        users: List<InGameUser>,
         ongoingEvents: List<OngoingEvent>,
         inZones: List<LevelZone>,
         globalGameData: GlobalGameData,

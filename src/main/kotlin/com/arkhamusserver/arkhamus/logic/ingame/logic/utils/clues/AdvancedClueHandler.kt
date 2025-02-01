@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
@@ -20,13 +20,13 @@ interface AdvancedClueHandler {
 
     fun mapActualClues(
         container: CluesContainer,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse>
 
     fun mapPossibleClues(
         container: CluesContainer,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse>
 
@@ -36,8 +36,8 @@ interface AdvancedClueHandler {
     fun canBeAdded(container: CluesContainer): Boolean
     fun addClue(data: GlobalGameData)
     fun canBeRemovedRabdomly(container: CluesContainer): Boolean
-    fun canBeRemoved(user: InGameGameUser, target: Any, data: GlobalGameData): Boolean
-    fun anyCanBeRemoved(user: InGameGameUser, data: GlobalGameData): Boolean
+    fun canBeRemoved(user: InGameUser, target: Any, data: GlobalGameData): Boolean
+    fun anyCanBeRemoved(user: InGameUser, data: GlobalGameData): Boolean
     fun removeRandom(container: CluesContainer)
     fun removeTarget(
         target: WithStringId,

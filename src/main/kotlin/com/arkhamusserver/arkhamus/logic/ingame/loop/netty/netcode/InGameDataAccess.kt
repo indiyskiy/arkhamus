@@ -6,8 +6,8 @@ import com.arkhamusserver.arkhamus.model.ingame.*
 import org.springframework.transaction.annotation.Transactional
 
 interface InGameDataAccess {
-    fun getGameUser(userId: Long?, gameId: Long?): InGameGameUser?
-    fun getGameUsers(gameId: Long?): List<InGameGameUser>
+    fun getGameUser(userId: Long?, gameId: Long?): InGameUser?
+    fun getGameUsers(gameId: Long?): List<InGameUser>
     fun getGame(gameId: Long): InRamGame?
     fun getContainers(gameId: Long): List<InGameContainer>
     fun getCrafters(gameId: Long): List<InGameCrafter>
@@ -97,5 +97,5 @@ fun InGameDataAccess.loadGlobalGameData(game: InRamGame): GlobalGameData {
     }
 }
 
-fun InGameDataAccess.getOtherGameUsers(userId: Long?, gameId: Long?): List<InGameGameUser> =
+fun InGameDataAccess.getOtherGameUsers(userId: Long?, gameId: Long?): List<InGameUser> =
     getGameUsers(gameId).filter { it.inGameId() != userId }

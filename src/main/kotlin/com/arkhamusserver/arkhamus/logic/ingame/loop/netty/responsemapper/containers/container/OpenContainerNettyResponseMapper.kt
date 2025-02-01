@@ -16,7 +16,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameShortTimeEvent
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.containers.container.OpenContainerNettyResponse
@@ -103,7 +103,7 @@ class OpenContainerNettyResponseMapper(
         itemsInside: List<InventoryCell>,
         gameData: OpenContainerRequestGameData,
         user: UserAccount,
-        gameUser: InGameGameUser,
+        gameUser: InGameUser,
         availableAbilities: List<AbilityOfUserResponse>,
         ongoingCraftingProcess: List<CraftProcessResponse>,
         visibleItems: List<InventoryCell>,

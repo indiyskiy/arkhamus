@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.LanternHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLantern
 import org.springframework.stereotype.Component
 
@@ -14,7 +14,7 @@ class LightMadnessHandler(
 ) {
 
     fun lightSomething(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
@@ -37,7 +37,7 @@ class LightMadnessHandler(
 
     private fun lanterns(
         data: GlobalGameData,
-        user: InGameGameUser
+        user: InGameUser
     ): List<InGameLantern> = data.lanterns.filter {
         userLocationHandler.userCanSeeTarget(
             user,

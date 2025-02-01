@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -22,8 +22,8 @@ class GodVoteStartRequestProcessData(
     var executedSuccessfully: Boolean,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
-    gameUser: InGameGameUser,
-    otherGameUsers: List<InGameGameUser>,
+    gameUser: InGameUser,
+    otherGameUsers: List<InGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
     visibleItems: List<InventoryCell>,

@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Abili
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameQuestGiverRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuestGiver
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithGameTags
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
@@ -31,7 +31,7 @@ class DarkTemptationAbilityCast(
     }
 
     override fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData

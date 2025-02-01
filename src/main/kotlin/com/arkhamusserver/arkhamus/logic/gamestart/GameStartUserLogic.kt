@@ -13,7 +13,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -60,7 +60,7 @@ class GameStartUserLogic(
         levelId: Long,
         game: GameSession,
         skins: Map<Long, UserSkinSettings>
-    ): List<InGameGameUser> {
+    ): List<InGameUser> {
         updateInvitedUsersInfoOnGameStart(game)
         return createInGameUsers(levelId, game, skins)
     }
@@ -69,11 +69,11 @@ class GameStartUserLogic(
         levelId: Long,
         game: GameSession,
         skins: Map<Long, UserSkinSettings>
-    ): List<InGameGameUser> {
+    ): List<InGameUser> {
         val startMarkers = startMarkerRepository.findByLevelId(levelId)
         val inGameUsers = game.usersOfGameSession.map {
             val marker = startMarkers.random(GameStartLogic.random)
-            val inGameGameUser = InGameGameUser(
+            val inGameUser = InGameUser(
                 id = generateRandomId(),
                 userId = it.userAccount.id!!,
                 nickName = it.userAccount.nickName,
@@ -96,8 +96,8 @@ class GameStartUserLogic(
                     skinColor = skins[it.userAccount.id]!!.skinColor
                 ),
             )
-            GameStartLogic.logger.info("user placed to $inGameGameUser")
-            inGameGameUser
+            GameStartLogic.logger.info("user placed to $inGameUser")
+            inGameUser
         }
         inGameGameUserRepository.saveAll(inGameUsers)
         return inGameUsers

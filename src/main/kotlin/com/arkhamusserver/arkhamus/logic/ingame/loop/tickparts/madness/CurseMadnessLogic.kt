@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithGameTags
 import org.springframework.stereotype.Component
 import kotlin.random.Random
@@ -23,7 +23,7 @@ class CurseMadnessLogic(
         private val random = Random(System.currentTimeMillis())
     }
 
-    fun curseSomething(user: InGameGameUser, data: GlobalGameData, timePassedMillis: Long): Boolean {
+    fun curseSomething(user: InGameUser, data: GlobalGameData, timePassedMillis: Long): Boolean {
         val validCrafters = nonCursedOpenCrafters(data, user)
         val validContainers = nonCursedOpenContainer(data, user)
         val allObjects: List<WithGameTags> = validCrafters + validContainers
@@ -48,7 +48,7 @@ class CurseMadnessLogic(
 
     private fun nonCursedOpenContainer(
         data: GlobalGameData,
-        user: InGameGameUser
+        user: InGameUser
     ): List<InGameContainer> = data.containers.values.filter {
         userLocationHandler.userCanSeeTarget(
             user,
@@ -63,7 +63,7 @@ class CurseMadnessLogic(
 
     private fun nonCursedOpenCrafters(
         data: GlobalGameData,
-        user: InGameGameUser
+        user: InGameUser
     ): List<InGameCrafter> = data.crafters.values.filter {
         userLocationHandler.userCanSeeTarget(
             user,

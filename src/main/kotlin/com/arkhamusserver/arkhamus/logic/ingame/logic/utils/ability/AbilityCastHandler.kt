@@ -12,7 +12,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import org.springframework.stereotype.Component
@@ -63,7 +63,7 @@ class AbilityCastHandler(
     }
 
     fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData,
@@ -103,7 +103,7 @@ class AbilityCastHandler(
 
     private fun consumeItem(
         ability: Ability,
-        gameUser: InGameGameUser,
+        gameUser: InGameUser,
         item: Item
     ) {
         if (ability.consumesItem) {
@@ -119,7 +119,7 @@ class AbilityCastHandler(
         item: Item?,
         ability: Ability,
         target: WithStringId?,
-        userAccount: InGameGameUser,
+        userAccount: InGameUser,
         gameId: Long,
         globalGameData: GlobalGameData,
         targetType: GameObjectType? = null,
@@ -170,7 +170,7 @@ class AbilityCastHandler(
 
     private fun createActivity(
         gameId: Long,
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         gameTime: Long,
         relatedGameObjectType: GameObjectType?,
         relatedGameObject: WithTrueIngameId?,

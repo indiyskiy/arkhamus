@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.ContainerStateResponse
 import org.springframework.stereotype.Component
 
@@ -16,7 +16,7 @@ class ContainerDataHandler(
     private val visibilityByTagsHandler: VisibilityByTagsHandler
 ) {
     fun map(
-        myUser: InGameGameUser,
+        myUser: InGameUser,
         containers: List<InGameContainer>,
         levelGeometryData: LevelGeometryData
     ): List<ContainerStateResponse> {
@@ -30,7 +30,7 @@ class ContainerDataHandler(
     private fun mask(
         responseToMask: ContainerStateResponse,
         container: InGameContainer,
-        currentUser: InGameGameUser,
+        currentUser: InGameUser,
         levelGeometryData: LevelGeometryData
     ) {
         if (

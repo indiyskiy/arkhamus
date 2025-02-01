@@ -11,7 +11,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.*
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
 import com.arkhamusserver.arkhamus.model.ingame.InGameUserQuestProgress
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
@@ -140,7 +140,7 @@ class QuestProgressHandler(
 
     fun mapQuestProgresses(
         questProgressByUserId: Map<Long, List<InGameUserQuestProgress>>,
-        user: InGameGameUser,
+        user: InGameUser,
         quests: List<InGameQuest>
     ): List<UserQuestResponse> {
         return (questProgressByUserId[user.inGameId()] ?: emptyList()).map { userQuest ->
@@ -260,7 +260,7 @@ class QuestProgressHandler(
         userQuestProgress: InGameUserQuestProgress?,
         quest: InGameQuest?,
         globalGameData: GlobalGameData,
-        currentUser: InGameGameUser?,
+        currentUser: InGameUser?,
     ) {
         userQuestProgress?.let { progress ->
             quest?.let { questNotNull ->

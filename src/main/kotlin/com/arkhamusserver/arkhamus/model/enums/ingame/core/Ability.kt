@@ -146,18 +146,6 @@ enum class Ability(
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
-    SEARCH_FOR_SOUND(
-        id = 6002,
-        requiresItem = true,
-        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
-        active = DEFAULT_INVESTIGATION_ACTIVE
-    ),
-    SEARCH_FOR_SCENT(
-        id = 6003,
-        requiresItem = true,
-        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
-        active = DEFAULT_INVESTIGATION_ACTIVE
-    ),
     SEARCH_FOR_AURA(
         id = 6004,
         requiresItem = true,
@@ -166,12 +154,6 @@ enum class Ability(
     ),
     SEARCH_FOR_CORRUPTION(
         id = 6005,
-        requiresItem = true,
-        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
-        active = DEFAULT_INVESTIGATION_ACTIVE
-    ),
-    SEARCH_FOR_OMEN(
-        id = 6006,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
@@ -203,7 +185,7 @@ enum class Ability(
         id = 60005,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 0.25).toLong(),
-        targetTypes = listOf(CHARACTER),
+        targetTypes = listOf(OMEN_CLUE),
         range = CLOSE_RANGE
     ),
 
@@ -244,7 +226,11 @@ enum class Ability(
         consumesItem = true,
         availableForRole = setOf(CULTIST),
         cooldown = SECOND_IN_MILLIS * 10,
-        targetTypes = listOf(SCENT_CLUE, SOUND_CLUE),
+        targetTypes = listOf(
+            SCENT_CLUE,
+            SOUND_CLUE,
+            OMEN_CLUE
+        ),
         range = CLOSE_RANGE
     ),
     DARK_TEMPTATION(

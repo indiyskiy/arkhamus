@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.VoteSpot
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameUserVoteSpot
 import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import org.springframework.stereotype.Component
@@ -24,7 +24,7 @@ class GameStartVoteSpotLogic(
         private val DEFAULT_ITEM = Item.VOTE_TOKEN
     }
 
-    fun createVoteSpots(levelId: Long, game: GameSession, users: List<InGameGameUser>) {
+    fun createVoteSpots(levelId: Long, game: GameSession, users: List<InGameUser>) {
         val voteSpots = voteSpotRepository.findByLevelId(levelId)
         voteSpots.forEach { voteSpot ->
             val inGameVoteSpot = createVoteSpot(voteSpot, game, users)
@@ -37,7 +37,7 @@ class GameStartVoteSpotLogic(
     private fun createUserVoteSpot(
         voteSpot: InGameVoteSpot,
         game: GameSession,
-        user: InGameGameUser
+        user: InGameUser
     ) {
         inGameUserVoteSpotRepository.save(
             InGameUserVoteSpot(
@@ -53,7 +53,7 @@ class GameStartVoteSpotLogic(
     private fun createVoteSpot(
         voteSpot: VoteSpot,
         game: GameSession,
-        allUsers: List<InGameGameUser>
+        allUsers: List<InGameUser>
     ) =
         inGameVoteSpotRepository.save(
             InGameVoteSpot(

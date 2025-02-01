@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.PEEKABOO_CURSE_ITEM
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.springframework.stereotype.Component
 
@@ -21,7 +21,7 @@ class PeekabooCurseItemCondition(
 
     override fun canBeCastedRightNow(
         ability: Ability,
-        user: InGameGameUser,
+        user: InGameUser,
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
@@ -30,7 +30,7 @@ class PeekabooCurseItemCondition(
 
     override fun canBeCastedAtAll(
         ability: Ability,
-        user: InGameGameUser,
+        user: InGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
         return gameObjectFinder.all(

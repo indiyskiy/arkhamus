@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
@@ -31,24 +31,24 @@ class HealMadnessAbilityCast(
     }
 
     override fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
-        healMadness(target as InGameGameUser)
+        healMadness(target as InGameUser)
         return true
     }
 
     private fun healMadness(
         abilityRequestProcessData: AbilityRequestProcessData,
     ) {
-        val target = abilityRequestProcessData.target as InGameGameUser
+        val target = abilityRequestProcessData.target as InGameUser
         healMadness(target)
     }
 
     private fun healMadness(
-        target: InGameGameUser
+        target: InGameUser
     ) {
         madnessHandler.reduceMadness(target, REDUCE_VALUE)
     }

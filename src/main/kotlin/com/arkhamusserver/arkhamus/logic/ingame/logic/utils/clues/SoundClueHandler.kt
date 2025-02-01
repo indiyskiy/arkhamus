@@ -18,7 +18,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameSoundClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
@@ -74,7 +74,7 @@ class SoundClueHandler(
     }
 
     override fun canBeRemoved(
-        user: InGameGameUser,
+        user: InGameUser,
         target: Any,
         data: GlobalGameData
     ): Boolean {
@@ -91,7 +91,7 @@ class SoundClueHandler(
     }
 
     override fun anyCanBeRemoved(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData
     ): Boolean {
         return data.clues.sound.any {
@@ -174,7 +174,7 @@ class SoundClueHandler(
 
     override fun mapActualClues(
         container: CluesContainer,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return container.sound.filter {
@@ -206,7 +206,7 @@ class SoundClueHandler(
 
     override fun mapPossibleClues(
         container: CluesContainer,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         val soundOptions = container.sound
@@ -231,7 +231,7 @@ class SoundClueHandler(
 
     private fun countState(
         clue: InGameSoundClue,
-        user: InGameGameUser,
+        user: InGameUser,
         levelGeometryData: LevelGeometryData
     ): InnovateClueState {
         val turnedOn = clue.turnedOn
@@ -250,7 +250,7 @@ class SoundClueHandler(
 
     private fun fillPossibleAdditionalData(
         clue: InGameSoundClue,
-        user: InGameGameUser,
+        user: InGameUser,
         data: LevelGeometryData
     ): List<SoundClueJammerResponse> {
         return clue.soundClueJammers.filter {
@@ -275,7 +275,7 @@ class SoundClueHandler(
 
     private fun fillActualAdditionalData(
         clue: InGameSoundClue,
-        user: InGameGameUser,
+        user: InGameUser,
         data: LevelGeometryData
     ): List<SoundClueJammerResponse> {
         return clue.soundClueJammers.filter {

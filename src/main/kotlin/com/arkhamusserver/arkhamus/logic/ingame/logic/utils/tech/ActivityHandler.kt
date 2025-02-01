@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.GameActivity
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.ingame.InGameActivity
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -57,7 +57,7 @@ class ActivityHandler(
     fun addUserNotTargetActivity(
         gameId: Long,
         activityType: ActivityType,
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         gameTime: Long,
         relatedEventId: Long?,
     ): InGameActivity =
@@ -77,7 +77,7 @@ class ActivityHandler(
     fun addUserWithTargetActivity(
         gameId: Long,
         activityType: ActivityType,
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         gameTime: Long,
         relatedGameObjectType: GameObjectType?,
         withTrueIngameId: WithTrueIngameId?,

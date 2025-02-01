@@ -27,12 +27,13 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -415,7 +416,7 @@ class UpdateContainerRequestProcessorTest {
         )
         val inRamGame = InRamGame(
             id = gameSession.id.toString(),
-            gameId = gameSession.id,
+            gameId = gameSession.id!!,
             currentTick = 100L,
             globalTimer = 10000L,
             gameStart = System.currentTimeMillis(),
@@ -462,7 +463,7 @@ class UpdateContainerRequestProcessorTest {
 
         val oldUserItems = createOldUserItems()
 
-        val gameUser = InGameGameUser(
+        val gameUser = InGameUser(
             id = generateRandomId(),
             userId = user.id!!,
             nickName = "test user",
@@ -498,7 +499,7 @@ class UpdateContainerRequestProcessorTest {
             availableAbilities = emptyList(),
             tick = 100L,
             containers = emptyList(),
-            clues = emptyList(),
+            clues = ExtendedCluesResponse(emptyList(), emptyList()),
             inZones = emptyList(),
             crafters = emptyList(),
             userQuestProgresses = emptyList()
@@ -508,7 +509,7 @@ class UpdateContainerRequestProcessorTest {
             game = inRamGame,
             altarHolder = InGameAltarHolder(
                 id = "altarHolder",
-                gameId = inRamGame.gameId!!,
+                gameId = inRamGame.gameId,
                 altarHolderId = 0L,
                 x = 50.0,
                 y = 50.0,
@@ -549,7 +550,7 @@ class UpdateContainerRequestProcessorTest {
 
     data class Data(
         val inGameContainer: InGameContainer,
-        val gameUser: InGameGameUser,
+        val gameUser: InGameUser,
         val requestUserAccount: UserAccount,
         val gameSession: GameSession,
         val user: UserOfGameSession,

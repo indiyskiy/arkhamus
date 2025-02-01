@@ -15,7 +15,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritua
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.RitualProgressRequestMessage
 import org.springframework.stereotype.Component
@@ -102,8 +102,8 @@ class RitualProgressNettyRequestHandler(
 
     private fun usersInRitual(
         globalGameData: GlobalGameData,
-        users: Collection<InGameGameUser>
-    ): List<InGameGameUser> = globalGameData.altarHolder?.usersInRitual?.map { userInRitual ->
+        users: Collection<InGameUser>
+    ): List<InGameUser> = globalGameData.altarHolder?.usersInRitual?.map { userInRitual ->
         users.first { user -> user.inGameId() == userInRitual }
     } ?: emptyList()
 

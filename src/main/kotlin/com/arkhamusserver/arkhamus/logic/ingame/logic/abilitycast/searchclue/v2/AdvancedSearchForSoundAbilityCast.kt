@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Abili
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameSoundClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameSoundClueJammer
@@ -45,7 +45,7 @@ class AdvancedSearchForSoundAbilityCast(
     }
 
     override fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -58,7 +58,7 @@ class AdvancedSearchForSoundAbilityCast(
     }
 
     private fun castAbility(
-        user: InGameGameUser,
+        user: InGameUser,
         target: WithTrueIngameId,
         data: GlobalGameData
     ) {

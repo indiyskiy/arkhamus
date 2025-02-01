@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameSoundClueJammer
 import org.slf4j.LoggerFactory
@@ -26,7 +26,7 @@ class AdvancedSearchForSoundAbilityCondition(
 
     override fun canBeCastedRightNow(
         ability: Ability,
-        user: InGameGameUser,
+        user: InGameUser,
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
@@ -54,7 +54,7 @@ class AdvancedSearchForSoundAbilityCondition(
 
     override fun canBeCastedAtAll(
         ability: Ability,
-        user: InGameGameUser,
+        user: InGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
         return gameObjectFinder.all(

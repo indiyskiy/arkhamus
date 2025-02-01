@@ -11,7 +11,7 @@ import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithVisibilityModifie
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 
-data class InGameGameUser(
+data class InGameUser(
     override var id: String,
     var userId: Long,
     var nickName: String,

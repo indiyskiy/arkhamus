@@ -14,7 +14,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.VoteSpotCastRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameUserVoteSpot
 import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -114,7 +114,7 @@ class VoteSpotCastNettyRequestHandler(
     private fun canUserCastVote(
         userVoteSpot: InGameUserVoteSpot?,
         voteSpot: InGameVoteSpot?,
-        targetUser: InGameGameUser?
+        targetUser: InGameUser?
     ): Boolean {
         if (voteSpot == null || userVoteSpot == null || targetUser == null) return false
         return voteHandler.canVote(userVoteSpot, targetUser, voteSpot)

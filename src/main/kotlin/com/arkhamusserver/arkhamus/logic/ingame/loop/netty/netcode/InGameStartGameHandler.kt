@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.InRamGameRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameStartedResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
@@ -76,8 +76,8 @@ class InGameStartGameHandler(
 
     private fun notifyUsers(
         channels: List<ArkhamusChannel>,
-        user: InGameGameUser?,
-        users: List<InGameGameUser>,
+        user: InGameUser?,
+        users: List<InGameUser>,
     ) {
         channels.map {
             it.channel to NettyGameStartedResponse(

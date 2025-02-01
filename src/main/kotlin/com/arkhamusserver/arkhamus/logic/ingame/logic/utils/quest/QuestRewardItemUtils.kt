@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuestReward
 import org.slf4j.Logger
@@ -24,7 +24,7 @@ class QuestRewardItemUtils {
 
     fun chooseItem(
         quest: InGameQuest,
-        user: InGameGameUser,
+        user: InGameUser,
         rewardType: RewardType,
         previousRewards: List<InGameQuestReward>,
         rewardsFromPreviousQuest: List<Item>

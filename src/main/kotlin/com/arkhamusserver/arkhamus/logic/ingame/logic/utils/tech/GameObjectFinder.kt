@@ -26,6 +26,10 @@ class GameObjectFinder {
             SOUND_CLUE -> data.clues.sound.firstOrNull { it.inGameId() == id.toLong() }
             SOUND_CLUE_JAMMER -> data.clues.sound.map { it.soundClueJammers }.flatten()
                 .firstOrNull { it.inGameId() == id.toLong() }
+
+            OMEN_CLUE -> data.clues.omen.firstOrNull {
+                it.stringId() == id
+            }
         }
     }
 
@@ -62,6 +66,7 @@ class GameObjectFinder {
         SCENT_CLUE -> data.clues.scent
         SOUND_CLUE -> data.clues.sound
         SOUND_CLUE_JAMMER -> data.clues.sound.map { it.soundClueJammers }.flatten()
+        OMEN_CLUE -> data.clues.omen
     }
 
     data class TypedGameObject(

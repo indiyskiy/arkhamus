@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -33,7 +33,7 @@ class MadnessTickProcessHandler(
     }
 
     fun processMadness(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ) {
@@ -108,7 +108,7 @@ class MadnessTickProcessHandler(
     }
 
     private fun teleportMaybe(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
@@ -120,7 +120,7 @@ class MadnessTickProcessHandler(
     }
 
     private fun lightSomething(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
@@ -132,7 +132,7 @@ class MadnessTickProcessHandler(
     }
 
     private fun voteForSomeone(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): Boolean {
         return voteMadnessHandler.voteForSomeone(
@@ -142,7 +142,7 @@ class MadnessTickProcessHandler(
     }
 
     private fun craftSomethingMaybe(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
@@ -154,7 +154,7 @@ class MadnessTickProcessHandler(
     }
 
     private fun castRandomSpellMaybe(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {
@@ -166,7 +166,7 @@ class MadnessTickProcessHandler(
     }
 
     private fun curseSomethingMaybe(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
         timePassedMillis: Long
     ): Boolean {

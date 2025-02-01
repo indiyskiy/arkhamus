@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,7 +15,7 @@ class KindleCloakCondition : AdditionalAbilityCondition {
 
     override fun canBeCastedRightNow(
         ability: Ability,
-        user: InGameGameUser,
+        user: InGameUser,
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
@@ -28,7 +28,7 @@ class KindleCloakCondition : AdditionalAbilityCondition {
 
     override fun canBeCastedAtAll(
         ability: Ability,
-        user: InGameGameUser,
+        user: InGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
         return !user.stateTags.contains(UserStateTag.LUMINOUS)

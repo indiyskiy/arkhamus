@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lante
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameLanternRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLantern
 import org.springframework.stereotype.Component
 
@@ -19,7 +19,7 @@ class LanternHandler(
     }
 
     fun canFill(
-        user: InGameGameUser,
+        user: InGameUser,
         lantern: InGameLantern?
     ): Boolean {
         val canPay = checkIfUserCanPay(user)
@@ -38,7 +38,7 @@ class LanternHandler(
     }
 
     fun fillLantern(
-        user: InGameGameUser,
+        user: InGameUser,
         lantern: InGameLantern,
     ) {
         lantern.fuel = 100.0
@@ -48,7 +48,7 @@ class LanternHandler(
     }
 
     private fun checkIfUserCanPay(
-        user: InGameGameUser
+        user: InGameUser
     ): Boolean {
         val costItem = Item.SOLARITE
         val costValue = 1

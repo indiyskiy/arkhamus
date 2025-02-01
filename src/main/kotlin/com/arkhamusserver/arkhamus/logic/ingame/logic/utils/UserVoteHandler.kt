@@ -12,7 +12,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameVoteSpotReposit
 import com.arkhamusserver.arkhamus.model.enums.ingame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameUserVoteSpot
 import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import org.springframework.stereotype.Component
@@ -34,7 +34,7 @@ class UserVoteHandler(
     }
 
     fun cantVoteReasons(
-        votingUser: InGameGameUser,
+        votingUser: InGameUser,
         voteSpot: InGameVoteSpot?,
     ): List<CantVoteReason> {
         return listOfNotNull(
@@ -46,7 +46,7 @@ class UserVoteHandler(
 
     private fun isUserBannedFromVoteSpot(
         voteSpot: InGameVoteSpot?,
-        votingUser: InGameGameUser
+        votingUser: InGameUser
     ): CantVoteReason? = CantVoteReason.BANNED.takeIf { voteSpot?.bannedUsers?.contains(votingUser.inGameId()) == true }
 
     private fun mustPay(
@@ -55,13 +55,13 @@ class UserVoteHandler(
         voteSpot?.voteSpotState == VoteSpotState.WAITING_FOR_PAYMENT
     }
 
-    private fun mad(votingUser: InGameGameUser): CantVoteReason? =
+    private fun mad(votingUser: InGameUser): CantVoteReason? =
         CantVoteReason.MAD.takeIf { madnessHandler.isCompletelyMad(votingUser) }
 
 
     fun canVote(
         currentUserVoteSpot: InGameUserVoteSpot,
-        targetUser: InGameGameUser,
+        targetUser: InGameUser,
         voteSpot: InGameVoteSpot,
     ): Boolean {
         if (cantVoteReasons(targetUser, voteSpot).isNotEmpty()) return false
@@ -74,14 +74,14 @@ class UserVoteHandler(
 
     @Transactional
     fun castVote(
-        currentUser: InGameGameUser,
+        currentUser: InGameUser,
         currentUserVoteSpot: InGameUserVoteSpot,
-        targetUser: InGameGameUser,
-        users: Collection<InGameGameUser>,
+        targetUser: InGameUser,
+        users: Collection<InGameUser>,
         voteSpot: InGameVoteSpot,
         allUserVoteSpots: List<InGameUserVoteSpot>,
         globalGameData: GlobalGameData,
-    ): InGameGameUser? {
+    ): InGameUser? {
         currentUserVoteSpot.votesForUserIds = (currentUserVoteSpot.votesForUserIds + targetUser.inGameId())
             .toMutableList()
         userVoteSpotRepository.save(currentUserVoteSpot)
@@ -105,12 +105,12 @@ class UserVoteHandler(
 
     @Transactional
     fun applyBanMaybe(
-        currentUser: InGameGameUser,
-        allUsers: Collection<InGameGameUser>,
+        currentUser: InGameUser,
+        allUsers: Collection<InGameUser>,
         voteSpot: InGameVoteSpot,
         userVoteSpots: List<InGameUserVoteSpot>,
         globalGameData: GlobalGameData,
-    ): InGameGameUser? {
+    ): InGameUser? {
         val allUsersCanVoteList = usersCanPossiblyVote(allUsers, voteSpot)
         val usersCanVoteIdsSet = allUsersCanVoteList.map { it.inGameId() }.toSet()
         val votesStillRelevant = userVoteSpots.filter { it.userId in usersCanVoteIdsSet }
@@ -143,7 +143,7 @@ class UserVoteHandler(
     }
 
     fun votesToBan(
-        allUsers: Collection<InGameGameUser>,
+        allUsers: Collection<InGameUser>,
         voteSpot: InGameVoteSpot,
     ): Int {
         val allUsersCanVoteList = usersCanPossiblyVote(allUsers, voteSpot)
@@ -153,7 +153,7 @@ class UserVoteHandler(
     fun getCanCallForVote(
         voteSpot: InGameVoteSpot?,
         ongoingEvents: List<OngoingEvent>,
-        user: InGameGameUser
+        user: InGameUser
     ): Boolean = voteSpot != null &&
             callForVoteEventInProgress(ongoingEvents) &&
             user.callToArms > 0
@@ -166,18 +166,18 @@ class UserVoteHandler(
     private fun votesToBan(size: Int): Int = (size / 2) + 1
 
     private fun usersCanPossiblyVote(
-        users: Collection<InGameGameUser>,
+        users: Collection<InGameUser>,
         voteSpot: InGameVoteSpot,
-    ): List<InGameGameUser> {
+    ): List<InGameUser> {
         return users.filter {
             !cantVoteReasons(it, voteSpot).any { it in CANT_VOTE_AT_ALL }
         }
     }
 
     private fun banUser(
-        currentUser: InGameGameUser,
+        currentUser: InGameUser,
         voteSpot: InGameVoteSpot,
-        userToBan: InGameGameUser,
+        userToBan: InGameUser,
         globalGameData: GlobalGameData
     ) {
         val userId = userToBan.inGameId()
@@ -241,7 +241,7 @@ class UserVoteHandler(
         userVoteSpotRepository.saveAll(userVoteSpots)
     }
 
-    private fun InGameGameUser.inRelatedZone(
+    private fun InGameUser.inRelatedZone(
         zones: List<GameDataLevelZone>,
         zoneId: Long
     ): Boolean {

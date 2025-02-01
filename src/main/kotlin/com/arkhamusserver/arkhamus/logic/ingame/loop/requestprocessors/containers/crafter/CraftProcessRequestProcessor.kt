@@ -14,7 +14,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameCrafterReposito
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -97,7 +97,7 @@ class CraftProcessRequestProcessor(
 
     private fun consumeItems(
         recipe: Recipe,
-        gameUser: InGameGameUser,
+        gameUser: InGameUser,
         crafter: InGameCrafter,
         sortedUserInventory: List<InventoryCell>
     ): List<InventoryCell> {

@@ -8,12 +8,11 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLantern
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.springframework.stereotype.Component
-import java.lang.RuntimeException
 
 @Component
 class UserLocationHandler(
@@ -25,7 +24,7 @@ class UserLocationHandler(
     }
 
     fun userCanSeeTargetInRange(
-        whoLooks: InGameGameUser,
+        whoLooks: InGameUser,
         target: WithPoint,
         levelGeometryData: LevelGeometryData,
         range: Double,
@@ -44,7 +43,7 @@ class UserLocationHandler(
     }
 
     fun userCanSeeTarget(
-        whoLooks: InGameGameUser,
+        whoLooks: InGameUser,
         target: WithPoint,
         levelGeometryData: LevelGeometryData,
         affectedByBlind: Boolean,
@@ -58,22 +57,22 @@ class UserLocationHandler(
                 )
     }
 
-    fun userInInteractionRadius(user: InGameGameUser, interactable: Interactable): Boolean {
+    fun userInInteractionRadius(user: InGameUser, interactable: Interactable): Boolean {
         return distanceLessOrEquals(user, interactable, interactable.interactionRadius())
     }
 
     private fun onHighGround(
-        whoLooks: InGameGameUser,
+        whoLooks: InGameUser,
         target: WithPoint
     ): Boolean {
         return geometryUtils.onHighGround(whoLooks, target)
     }
 
-    private fun haveGlobalVision(whoLooks: InGameGameUser): Boolean =
+    private fun haveGlobalVision(whoLooks: InGameUser): Boolean =
         whoLooks.stateTags.contains(UserStateTag.FARSIGHT)
 
     private fun geometryCheck(
-        whoLooks: InGameGameUser,
+        whoLooks: InGameUser,
         target: WithPoint,
         levelGeometryData: LevelGeometryData
     ): Boolean {
@@ -81,7 +80,7 @@ class UserLocationHandler(
     }
 
     fun inVisionDistance(
-        whoLooks: InGameGameUser,
+        whoLooks: InGameUser,
         target: WithPoint,
         affectedByBlind: Boolean,
     ): Boolean {
@@ -101,13 +100,13 @@ class UserLocationHandler(
         return geometryUtils.distanceLessOrEquals(point1, point2, maxDistance)
     }
 
-    fun isInDarkness(user: InGameGameUser, globalGameData: GlobalGameData): Boolean {
+    fun isInDarkness(user: InGameUser, globalGameData: GlobalGameData): Boolean {
         val nearLantern = nearLantern(user, globalGameData.lanterns)
         val nearLuminousUser = nearLuminousUser(user, globalGameData.users.values)
         return !(nearLantern || nearLuminousUser)
     }
 
-    private fun nearLuminousUser(user: InGameGameUser, users: Collection<InGameGameUser>): Boolean {
+    private fun nearLuminousUser(user: InGameUser, users: Collection<InGameUser>): Boolean {
         return user.stateTags.contains(UserStateTag.LUMINOUS) ||
                 users.any { otherUser ->
                     otherUser.stateTags.contains(UserStateTag.LUMINOUS) &&
@@ -119,7 +118,7 @@ class UserLocationHandler(
                 }
     }
 
-    private fun nearLantern(user: InGameGameUser, lanterns: Collection<InGameLantern>): Boolean {
+    private fun nearLantern(user: InGameUser, lanterns: Collection<InGameLantern>): Boolean {
         return lanterns.any { lantern ->
             geometryUtils.distanceLessOrEquals(
                 user,

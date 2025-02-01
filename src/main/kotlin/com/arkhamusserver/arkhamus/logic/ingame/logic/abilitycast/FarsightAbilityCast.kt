@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
@@ -25,7 +25,7 @@ class FarsightAbilityCast() : AbilityCast {
     }
 
     override fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -41,7 +41,7 @@ class FarsightAbilityCast() : AbilityCast {
         farsight(currentUser)
     }
 
-    private fun farsight(currentUser: InGameGameUser?) {
+    private fun farsight(currentUser: InGameUser?) {
         currentUser?.let {
             it.stateTags += UserStateTag.FARSIGHT
         }

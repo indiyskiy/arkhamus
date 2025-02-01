@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.springframework.stereotype.Component
 import kotlin.random.Random
@@ -27,7 +27,7 @@ class CastSomethingMadnessLogic(
         private val random = Random(System.currentTimeMillis())
     }
 
-    fun castRandomSpell(user: InGameGameUser, data: GlobalGameData): Boolean {
+    fun castRandomSpell(user: InGameUser, data: GlobalGameData): Boolean {
         val abilities = canAbilityBeCastHandler.abilityOfUserResponses(user, data)
             .filter {
                 it.canBeCast &&
@@ -58,7 +58,7 @@ class CastSomethingMadnessLogic(
         targetNeeded: Boolean,
         abilityType: Ability,
         data: GlobalGameData,
-        user: InGameGameUser
+        user: InGameUser
     ): TypedGameObject? = if (targetNeeded) {
         val allTyped = finder.allTyped(abilityType.targetTypes!!, data).filter {
             val gameObject = it.gameObject
@@ -72,7 +72,7 @@ class CastSomethingMadnessLogic(
     } else null
 
     private fun canSeeAndInRange(
-        user: InGameGameUser,
+        user: InGameUser,
         point: WithPoint,
         data: GlobalGameData,
         abilityType: Ability

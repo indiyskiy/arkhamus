@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Abili
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
@@ -37,7 +37,7 @@ class TownPortalByScrollAbilityCast(
     }
 
     override fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
@@ -56,7 +56,7 @@ class TownPortalByScrollAbilityCast(
 
     private fun castTownPortalByScrollAbility(
         globalGameData: GlobalGameData,
-        userNotNull: InGameGameUser
+        userNotNull: InGameUser
     ) {
         val point = findLastInterestPoint(globalGameData)
         logger.info("teleport user to ${point.x()}; ${point.y()}; ${point.z()}")

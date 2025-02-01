@@ -10,7 +10,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameShortTimeEvent
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.slf4j.Logger
@@ -32,7 +32,7 @@ class ShortTimeEventHandler(
 
     fun filter(
         events: List<InGameShortTimeEvent>,
-        user: InGameGameUser,
+        user: InGameUser,
         zones: List<LevelZone>,
         data: GlobalGameData
     ): List<InGameShortTimeEvent> {
@@ -49,13 +49,13 @@ class ShortTimeEventHandler(
 
     private fun filterByObject(
         event: InGameShortTimeEvent,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData
     ): Boolean = event.objectId == null || canSeeTarget(event, user, data)
 
     private fun byAdditionalFilters(
         event: InGameShortTimeEvent,
-        user: InGameGameUser,
+        user: InGameUser,
         zones: List<LevelZone>,
         data: GlobalGameData
     ): Boolean = specificShortTimeEventFilters.firstOrNull { filter ->
@@ -64,7 +64,7 @@ class ShortTimeEventHandler(
 
     private fun filterByVisibility(
         event: InGameShortTimeEvent,
-        user: InGameGameUser
+        user: InGameUser
     ): Boolean {
         return when (event.type.getVisibility()) {
             Visibility.NONE -> false
@@ -108,7 +108,7 @@ class ShortTimeEventHandler(
 
     private fun canSeeTarget(
         event: InGameShortTimeEvent,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData
     ): Boolean {
         val target = finder.findById(event.objectId.toString(), event.type.getSource(), data)
@@ -124,7 +124,7 @@ class ShortTimeEventHandler(
 
     private fun canSeeLocation(
         event: InGameShortTimeEvent,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData
     ): Boolean {
         if (event.xLocation == null || event.yLocation == null || event.zLocation == null) return true

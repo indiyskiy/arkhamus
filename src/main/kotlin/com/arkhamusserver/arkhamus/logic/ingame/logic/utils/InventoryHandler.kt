@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Ingredient
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,11 +18,11 @@ class InventoryHandler {
         var logger: Logger = LoggerFactory.getLogger(InventoryHandler::class.java)
     }
 
-    fun addItem(user: InGameGameUser, addedItem: Item) {
+    fun addItem(user: InGameUser, addedItem: Item) {
         addItems(user, addedItem)
     }
 
-    fun addItems(user: InGameGameUser, addedItem: Item, itemsToAdd: Int = 1) {
+    fun addItems(user: InGameUser, addedItem: Item, itemsToAdd: Int = 1) {
         val existingCell = user.items.firstOrNull { it.item == addedItem }
         if (existingCell != null) {
             existingCell.number += itemsToAdd
@@ -34,15 +34,15 @@ class InventoryHandler {
         }
     }
 
-    fun userHaveItems(user: InGameGameUser, requiredItem: Item, howManyItems: Int): Boolean {
+    fun userHaveItems(user: InGameUser, requiredItem: Item, howManyItems: Int): Boolean {
         return howManyItems(user, requiredItem) >= howManyItems
     }
 
-    fun userHaveItem(user: InGameGameUser, requiredItem: Item): Boolean {
+    fun userHaveItem(user: InGameUser, requiredItem: Item): Boolean {
         return howManyItems(user, requiredItem) > 0
     }
 
-    fun howManyItems(user: InGameGameUser, requiredItem: Item): Int {
+    fun howManyItems(user: InGameUser, requiredItem: Item): Int {
         return howManyItems(user.items, requiredItem)
     }
 
@@ -50,7 +50,7 @@ class InventoryHandler {
         return inventory.filter { it.item == requiredItem }.sumOf { it.number }
     }
 
-    fun consumeItems(user: InGameGameUser, item: Item, number: Int): ConsumedItem {
+    fun consumeItems(user: InGameUser, item: Item, number: Int): ConsumedItem {
         if (userHaveItem(user, item)) {
             var numberLeft = number
             user.items
@@ -66,7 +66,7 @@ class InventoryHandler {
         return ConsumedItem(item, number)
     }
 
-    fun consumeItem(user: InGameGameUser, item: Item) {
+    fun consumeItem(user: InGameUser, item: Item) {
         consumeItems(user, item, 1)
     }
 
@@ -79,14 +79,14 @@ class InventoryHandler {
         }.sortedByDescending { it.item.id }
     }
 
-    fun consumeItems(recipe: Recipe, gameUser: InGameGameUser, crafter: InGameCrafter): List<ConsumedItem> {
+    fun consumeItems(recipe: Recipe, gameUser: InGameUser, crafter: InGameCrafter): List<ConsumedItem> {
         logger.info("consuming items for recipe ${recipe.recipeId} to create ${recipe.item.name}")
         return recipe.ingredients.map { ingredient: Ingredient ->
             consumeItem(ingredient, gameUser, crafter)
         }
     }
 
-    private fun consumeItem(ingredient: Ingredient, user: InGameGameUser, crafter: InGameCrafter): ConsumedItem {
+    private fun consumeItem(ingredient: Ingredient, user: InGameUser, crafter: InGameCrafter): ConsumedItem {
         logger.info("consuming ${ingredient.number} of ${ingredient.item.name}")
         val itemToConsume = ingredient.item
 
@@ -102,11 +102,11 @@ class InventoryHandler {
         return consumeItems(user, itemToConsume, toConsumeLeft)
     }
 
-    private fun trimInventory(user: InGameGameUser) {
+    private fun trimInventory(user: InGameUser) {
         user.items = user.items.filter { it.number > 0 && it.item != Item.PURE_NOTHING }
     }
 
-    fun haveRequiredItems(ingredient: Ingredient, crafter: InGameCrafter, user: InGameGameUser): Boolean {
+    fun haveRequiredItems(ingredient: Ingredient, crafter: InGameCrafter, user: InGameUser): Boolean {
         return howManyItems(user, ingredient.item) + howManyItems(crafter, ingredient.item) >= ingredient.number
     }
 

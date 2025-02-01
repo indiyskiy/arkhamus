@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts
 
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.CraftProcessResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -16,8 +16,8 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedC
 class OpenCrafterRequestGameData(
     var crafter: InGameCrafter,
     inZones: List<LevelZone>,
-    gameUser: InGameGameUser,
-    otherGameUsers: List<InGameGameUser>,
+    gameUser: InGameUser,
+    otherGameUsers: List<InGameUser>,
     visibleOngoingEvents: List<OngoingEvent>,
     availableAbilities: List<AbilityOfUserResponse>,
     ongoingCraftingProcess: List<CraftProcessResponse>,

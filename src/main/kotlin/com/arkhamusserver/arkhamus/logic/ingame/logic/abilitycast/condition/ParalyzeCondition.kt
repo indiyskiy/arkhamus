@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import org.springframework.stereotype.Component
@@ -21,7 +21,7 @@ class ParalyzeCondition(
 
     override fun canBeCastedRightNow(
         ability: Ability,
-        user: InGameGameUser,
+        user: InGameUser,
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
@@ -31,7 +31,7 @@ class ParalyzeCondition(
 
     override fun canBeCastedAtAll(
         ability: Ability,
-        user: InGameGameUser,
+        user: InGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
         return gameObjectFinder.all(

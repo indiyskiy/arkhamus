@@ -2,12 +2,12 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility.*
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 
 @Component
 class EventVisibilityFilter {
-    fun filter(user: InGameGameUser, ongoingEvents: List<OngoingEvent>): List<OngoingEvent> =
+    fun filter(user: InGameUser, ongoingEvents: List<OngoingEvent>): List<OngoingEvent> =
         ongoingEvents.filter {
             when (it.event.type.getVisibility()) {
                 PUBLIC -> true
@@ -20,12 +20,12 @@ class EventVisibilityFilter {
 
     private fun isTarget(
         event: OngoingEvent,
-        user: InGameGameUser
+        user: InGameUser
     ): Boolean = event.event.targetObjectId == user.inGameId()
 
     private fun isSource(
         event: OngoingEvent,
-        user: InGameGameUser
+        user: InGameUser
     ): Boolean = event.event.sourceObjectId == user.inGameId()
 
 }

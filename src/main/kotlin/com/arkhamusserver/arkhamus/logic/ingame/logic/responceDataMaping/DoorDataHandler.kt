@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorUserState
 import com.arkhamusserver.arkhamus.model.ingame.InGameDoor
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.DoorResponse
 import org.springframework.stereotype.Component
 
@@ -16,7 +16,7 @@ class DoorDataHandler(
     private val visibilityByTagsHandler: VisibilityByTagsHandler
 ) {
     fun map(
-        myUser: InGameGameUser,
+        myUser: InGameUser,
         doors: Collection<InGameDoor>,
         levelGeometryData: LevelGeometryData
     ): List<DoorResponse> {
@@ -40,7 +40,7 @@ class DoorDataHandler(
     }
 
     private fun inBanList(
-        user: InGameGameUser,
+        user: InGameUser,
         door: InGameDoor
     ): Boolean {
         return door.closedForUsers.contains(user.inGameId())
@@ -49,7 +49,7 @@ class DoorDataHandler(
     private fun mask(
         responseToMask: DoorResponse,
         door: InGameDoor,
-        myUser: InGameGameUser,
+        myUser: InGameUser,
         levelGeometryData: LevelGeometryData
     ) {
         if (

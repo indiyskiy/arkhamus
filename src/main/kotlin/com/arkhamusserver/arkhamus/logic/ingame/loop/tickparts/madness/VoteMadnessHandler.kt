@@ -6,7 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserVoteHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameVoteSpotRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameUserVoteSpot
 import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import org.springframework.stereotype.Component
@@ -25,7 +25,7 @@ class VoteMadnessHandler(
     }
 
     fun voteForSomeone(
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): Boolean {
         val voteSpots = voteSpots(data, user)
@@ -46,7 +46,7 @@ class VoteMadnessHandler(
     private fun castVote(
         data: GlobalGameData,
         voteSpot: InGameVoteSpot,
-        user: InGameGameUser
+        user: InGameUser
     ): Boolean {
         val userVoteSpots: List<InGameUserVoteSpot>? = data.userVoteSpotsBySpotId[voteSpot.inGameId()]
         if (userVoteSpots != null && userVoteSpots.isNotEmpty()) {
@@ -84,7 +84,7 @@ class VoteMadnessHandler(
     }
 
     private fun payForVotes(
-        user: InGameGameUser,
+        user: InGameUser,
         voteSpot: InGameVoteSpot
     ): Boolean {
         if (inventoryHandler.userHaveItems(
@@ -107,7 +107,7 @@ class VoteMadnessHandler(
 
     private fun voteSpots(
         data: GlobalGameData,
-        user: InGameGameUser
+        user: InGameUser
     ): List<InGameVoteSpot> = data.voteSpots.filter {
         userLocationHandler.userCanSeeTarget(
             user,

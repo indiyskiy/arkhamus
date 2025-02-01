@@ -18,7 +18,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toItem
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.ritual.RitualPutItemRequestMessage
 import org.springframework.stereotype.Component
@@ -107,7 +107,7 @@ class RitualPutItemNettyRequestHandler(
 
     private fun userCanPutItemOnAltar(
         request: RitualPutItemRequestMessage,
-        user: InGameGameUser,
+        user: InGameUser,
         item: Item?,
         globalGameData: GlobalGameData
     ) = item != null &&

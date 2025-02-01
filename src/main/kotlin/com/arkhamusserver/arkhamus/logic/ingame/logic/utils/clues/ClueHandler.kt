@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
@@ -23,7 +23,7 @@ class ClueHandler(
 
     fun filterClues(
         clues: CluesContainer,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): ExtendedCluesResponse {
         val possibleClues = mapPossibleClues(clues, user, data)
@@ -33,7 +33,7 @@ class ClueHandler(
 
     private fun mapActualClues(
         container: CluesContainer,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return advancedClueHandlers.flatMap {
@@ -43,7 +43,7 @@ class ClueHandler(
 
     private fun mapPossibleClues(
         container: CluesContainer,
-        user: InGameGameUser,
+        user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         return advancedClueHandlers.flatMap {
@@ -53,7 +53,7 @@ class ClueHandler(
 
     fun addRandomClue(
         data: GlobalGameData,
-        sourceUser: InGameGameUser?,
+        sourceUser: InGameUser?,
         createActivity: Boolean = false,
     ) {
         val existingClues = data.clues
@@ -96,7 +96,7 @@ class ClueHandler(
     }
 
     fun canBeRemoved(
-        user: InGameGameUser,
+        user: InGameUser,
         target: Any,
         data: GlobalGameData
     ): Boolean {
@@ -107,7 +107,7 @@ class ClueHandler(
         }
     }
 
-    fun anyCanBeRemoved(user: InGameGameUser, data: GlobalGameData): Boolean {
+    fun anyCanBeRemoved(user: InGameUser, data: GlobalGameData): Boolean {
         return advancedClueHandlers.any {
             it.anyCanBeRemoved(user, data)
         }

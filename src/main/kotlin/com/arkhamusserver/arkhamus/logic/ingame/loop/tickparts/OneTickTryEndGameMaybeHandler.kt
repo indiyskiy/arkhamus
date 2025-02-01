@@ -8,7 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -25,7 +25,7 @@ class OneTickTryEndGameMaybeHandler(
     }
 
     @Transactional
-    fun checkIfEnd(game: InRamGame, users: Collection<InGameGameUser>, voteSpots: List<InGameVoteSpot>) {
+    fun checkIfEnd(game: InRamGame, users: Collection<InGameUser>, voteSpots: List<InGameVoteSpot>) {
         if (game.state == GameState.GAME_END_SCREEN.name ||
             game.state == GameState.FINISHED.name
         ) {
@@ -45,7 +45,7 @@ class OneTickTryEndGameMaybeHandler(
 
     private fun checkIfAllCultistsBanned(
         game: InRamGame,
-        users: Collection<InGameGameUser>,
+        users: Collection<InGameUser>,
         voteSpots: List<InGameVoteSpot>
     ): Boolean {
         if (singlePlayerGame(users)) return false
@@ -64,13 +64,13 @@ class OneTickTryEndGameMaybeHandler(
         return true
     }
 
-    private fun singlePlayerGame(users: Collection<InGameGameUser>): Boolean {
+    private fun singlePlayerGame(users: Collection<InGameUser>): Boolean {
         return users.size <= 1
     }
 
     private fun checkIfEverybodyMad(
         game: InRamGame,
-        users: Collection<InGameGameUser>
+        users: Collection<InGameUser>
     ): Boolean {
         if (singlePlayerGame(users)) return false
         val notLeavers = users.filter { !it.leftTheGame }
@@ -83,7 +83,7 @@ class OneTickTryEndGameMaybeHandler(
         return false
     }
 
-    private fun abandonIfAllLeave(game: InRamGame, users: Collection<InGameGameUser>) {
+    private fun abandonIfAllLeave(game: InRamGame, users: Collection<InGameUser>) {
         if (users.all { it.leftTheGame }) {
             logger.info("end the game - ABANDONED")
             gameEndLogic.endTheGame(
@@ -95,7 +95,7 @@ class OneTickTryEndGameMaybeHandler(
         }
     }
 
-    private fun markLeaversIfNoResponses(game: InRamGame, users: Collection<InGameGameUser>) {
+    private fun markLeaversIfNoResponses(game: InRamGame, users: Collection<InGameUser>) {
         if (game.globalTimer - game.lastTimeSentResponse > MAX_TIME_NO_RESPONSES) {
             users.forEach {
                 it.leftTheGame = true

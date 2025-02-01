@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -23,7 +23,7 @@ class QuestRewardAmountUtils {
 
     fun chooseAmount(
         quest: InGameQuest,
-        user: InGameGameUser,
+        user: InGameUser,
         rewardType: RewardType,
         rewardItem: Item?,
     ): Int {
@@ -40,15 +40,15 @@ class QuestRewardAmountUtils {
     }
 
 
-    private fun luckComponent(user: InGameGameUser): Double {
+    private fun luckComponent(user: InGameUser): Double {
         return 1.0 + (0.1 * random.nextInt(3 + userLuck(user)))
     }
 
-    private fun userLuck(user: InGameGameUser): Int {
+    private fun userLuck(user: InGameUser): Int {
         return 0
     }
 
-    private fun userModifier(user: InGameGameUser): Double {
+    private fun userModifier(user: InGameUser): Double {
         return when (user.role) {
             RoleTypeInGame.CULTIST -> 1.0
             RoleTypeInGame.INVESTIGATOR -> 1.0

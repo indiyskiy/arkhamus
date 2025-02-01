@@ -10,7 +10,7 @@ data class GlobalGameData(
     var castAbilities: List<InGameAbilityCast> = emptyList(),
     var inBetweenEvents: InBetweenEventHolder = InBetweenEventHolder(),
 
-    var users: Map<Long, InGameGameUser> = emptyMap(),
+    var users: Map<Long, InGameUser> = emptyMap(),
 
     var altarHolder: InGameAltarHolder?,
     var altarPolling: InGameAltarPolling? = null,

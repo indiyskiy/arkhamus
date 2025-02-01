@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Abili
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.ingame.InGameGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.springframework.stereotype.Component
 
@@ -30,12 +30,12 @@ class ParalyzeAbilityCast(
     }
 
     override fun cast(
-        sourceUser: InGameGameUser,
+        sourceUser: InGameUser,
         ability: Ability,
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
-        paralyze(target as InGameGameUser, globalGameData, sourceUser)
+        paralyze(target as InGameUser, globalGameData, sourceUser)
         return true
     }
 
@@ -44,15 +44,15 @@ class ParalyzeAbilityCast(
         globalGameData: GlobalGameData
     ) {
         val currentUser = abilityRequestProcessData.gameUser
-        val targetUser = abilityRequestProcessData.target as InGameGameUser
+        val targetUser = abilityRequestProcessData.target as InGameUser
 
         paralyze(targetUser, globalGameData, currentUser)
     }
 
     private fun paralyze(
-        targetUser: InGameGameUser,
+        targetUser: InGameUser,
         globalGameData: GlobalGameData,
-        currentUser: InGameGameUser?
+        currentUser: InGameUser?
     ) {
         if (targetUser.stateTags.contains(UserStateTag.INVULNERABILITY)) return
 
