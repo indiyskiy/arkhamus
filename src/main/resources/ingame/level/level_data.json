@@ -895,6 +895,32 @@
         "z": 100
       }
     ],
+    "corruptionClues": [
+      {
+        "id": 2400,
+        "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 30,
+        "y": 0,
+        "z": 34
+      },
+      {
+        "id": 2401,
+        "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 3.2,
+        "y": 0,
+        "z": 36.6
+      },
+      {
+        "id": 2402,
+        "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 42.7,
+        "y": 0,
+        "z": 41.39
+      }
+    ],
     "crafters": [
       {
         "crafterType": "REGULAR",

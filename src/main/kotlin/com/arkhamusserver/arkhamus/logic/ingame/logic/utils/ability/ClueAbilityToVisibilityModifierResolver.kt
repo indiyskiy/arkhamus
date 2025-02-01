@@ -23,7 +23,6 @@ class ClueAbilityToVisibilityModifierResolver {
         when (ability) {
             Ability.SEARCH_FOR_INSCRIPTION -> VisibilityModifier.INSCRIPTION
             Ability.SEARCH_FOR_AURA -> VisibilityModifier.AURA
-            Ability.SEARCH_FOR_CORRUPTION -> VisibilityModifier.CORRUPTION
             Ability.SEARCH_FOR_DISTORTION -> VisibilityModifier.DISTORTION
             else -> null
         }

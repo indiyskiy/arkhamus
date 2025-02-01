@@ -36,15 +36,6 @@ class InvestigationRecipePart() : RecipeSourcePart {
                 crafterTypes = defaultCrafterTypes
             ),
             listOf(
-                Ingredient(PLATE, 1),
-                Ingredient(CRYSTALLIZED_BLOOD, 5)
-            ).toRecipe(
-                5005,
-                item = CORRUPTION_INVESTIGATION_ITEM,
-                timeToCraft = MINUTE_IN_MILLIS / 2,
-                crafterTypes = defaultCrafterTypes
-            ),
-            listOf(
                 Ingredient(MASK, 1),
                 Ingredient(BLIGHTING_JEWEL, 5)
             ).toRecipe(
@@ -78,6 +69,15 @@ class InvestigationRecipePart() : RecipeSourcePart {
             ).toRecipe(
                 50003,
                 item = INNOVATE_OMEN_INVESTIGATION_ITEM,
+                timeToCraft = MINUTE_IN_MILLIS / 2,
+                crafterTypes = defaultCrafterTypes
+            ),
+            listOf(
+                Ingredient(PLATE, 1),
+                Ingredient(CRYSTALLIZED_BLOOD, 5)
+            ).toRecipe(
+                50003,
+                item = INNOVATE_CORRUPTION_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = defaultCrafterTypes
             ),

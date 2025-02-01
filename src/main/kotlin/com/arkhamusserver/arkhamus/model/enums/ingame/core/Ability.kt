@@ -152,12 +152,6 @@ enum class Ability(
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
-    SEARCH_FOR_CORRUPTION(
-        id = 6005,
-        requiresItem = true,
-        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
-        active = DEFAULT_INVESTIGATION_ACTIVE
-    ),
     SEARCH_FOR_DISTORTION(
         id = 6007,
         requiresItem = true,
@@ -167,7 +161,7 @@ enum class Ability(
 
     //INVESTIGATION 2.0
     ADVANCED_SEARCH_FOR_SCENT(
-        id = 60003,
+        id = 60001,
         requiresItem = true,
         active = DEFAULT_INVESTIGATION_ACTIVE,
         cooldown = DEFAULT_INVESTIGATION_ACTIVE + 1,
@@ -175,17 +169,23 @@ enum class Ability(
         range = CLOSE_RANGE
     ),
     ADVANCED_SEARCH_FOR_SOUND(
-        id = 60004,
+        id = 60002,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 0.25).toLong(),
         targetTypes = listOf(SOUND_CLUE_JAMMER),
         range = CLOSE_RANGE
     ),
     ADVANCED_SEARCH_FOR_OMEN(
-        id = 60005,
+        id = 60003,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 0.25).toLong(),
         targetTypes = listOf(OMEN_CLUE),
+        range = CLOSE_RANGE
+    ),
+    ADVANCED_SEARCH_FOR_CORRUPTION(
+        id = 60004,
+        requiresItem = true,
+        cooldown = (MINUTE_IN_MILLIS * 1.0).toLong(),
         range = CLOSE_RANGE
     ),
 

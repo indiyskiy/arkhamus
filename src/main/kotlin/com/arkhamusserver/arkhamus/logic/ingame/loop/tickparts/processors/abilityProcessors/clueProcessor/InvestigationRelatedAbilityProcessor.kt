@@ -23,7 +23,6 @@ class InvestigationRelatedAbilityProcessor(
         val relatedSet = setOf(
             Ability.SEARCH_FOR_INSCRIPTION,
             Ability.SEARCH_FOR_AURA,
-            Ability.SEARCH_FOR_CORRUPTION,
             Ability.SEARCH_FOR_DISTORTION,
         )
     }
