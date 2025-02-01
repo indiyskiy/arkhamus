@@ -70,7 +70,7 @@ class ClueHandler(
 
         if (added != null && sourceUser != null && createActivity) {
             activityHandler.addUserNotTargetActivity(
-                gameId = data.game.gameId!!,
+                gameId = data.game.gameId,
                 activityType = ActivityType.CLUE_CREATED,
                 sourceUser = sourceUser,
                 gameTime = data.game.globalTimer,

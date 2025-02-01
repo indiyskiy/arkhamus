@@ -50,7 +50,7 @@ class ObjectWithTagsHandler(
         if (withGameTags is InGameContainer) {
             shortTimeEventHandler.createShortTimeEvent(
                 objectId = withGameTags.inGameId(),
-                gameId = data.game.gameId!!,
+                gameId = data.game.gameId,
                 globalTimer = data.game.globalTimer,
                 type = ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CONTAINER,
                 visibilityModifiers = setOf(VisibilityModifier.ALL),
@@ -61,7 +61,7 @@ class ObjectWithTagsHandler(
         if (withGameTags is InGameCrafter) {
             shortTimeEventHandler.createShortTimeEvent(
                 objectId = withGameTags.inGameId(),
-                gameId = data.game.gameId!!,
+                gameId = data.game.gameId,
                 globalTimer = data.game.globalTimer,
                 type = ShortTimeEventType.PEEKABOO_CURSE_ACTIVATED_CRAFTER,
                 visibilityModifiers = setOf(VisibilityModifier.ALL),

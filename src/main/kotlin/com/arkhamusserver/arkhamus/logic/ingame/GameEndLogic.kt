@@ -99,7 +99,7 @@ class GameEndLogic(
         gameEndReason: GameEndReason
     ): GameSession {
         logger.info("ending game session")
-        val gameSession = gameSessionRepository.findById(game.gameId!!).get()
+        val gameSession = gameSessionRepository.findById(game.gameId).get()
         gameSession.state = GameState.GAME_END_SCREEN
         gameSession.gameEndReason = gameEndReason
         gameSession.finishedTimestamp = Timestamp(System.currentTimeMillis())
@@ -190,7 +190,7 @@ class GameEndLogic(
         game.state = GameState.FINISHED.name
         inRamGameRepository.save(game)
 
-        val gameSession = gameSessionRepository.findById(game.gameId!!).get()
+        val gameSession = gameSessionRepository.findById(game.gameId).get()
         gameSession.state = GameState.FINISHED
         gameSessionRepository.save(gameSession)
     }

@@ -188,7 +188,7 @@ class RitualHandler(
         game: InRamGame
     ) {
         createGodVoteStartProcess(
-            gameId = game.gameId!!,
+            gameId = game.gameId,
             globalTimer = globalGameData.game.globalTimer,
             sourceUserId = currentGameUser.inGameId(),
             altar = altar
@@ -460,7 +460,7 @@ class RitualHandler(
             id = generateRandomId(),
             started = globalGameData.game.globalTimer,
             altarId = altar.inGameId(),
-            gameId = globalGameData.game.gameId!!,
+            gameId = globalGameData.game.gameId,
             startedUserId = userId,
             userVotes = mutableMapOf(userId to godId),
             state = MapAltarPollingState.ONGOING

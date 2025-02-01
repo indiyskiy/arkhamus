@@ -33,7 +33,7 @@ class TimeEventHandler(
         timeLeft: Long? = null
     ) {
         createEvent(
-            gameId = game.gameId!!,
+            gameId = game.gameId,
             eventType = eventType,
             startDateTime = game.globalTimer,
             sourceObject = sourceObject,

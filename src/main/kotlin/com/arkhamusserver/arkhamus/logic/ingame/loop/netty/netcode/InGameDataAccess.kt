@@ -36,7 +36,7 @@ interface InGameDataAccess {
 
 @Transactional(readOnly = true)
 fun InGameDataAccess.loadGlobalGameData(game: InRamGame): GlobalGameData {
-    val gameId = game.gameId!!
+    val gameId = game.gameId
     val allUsers = getGameUsers(gameId)
     val allContainers = getContainers(gameId)
     val allCrafters = getCrafters(gameId)
