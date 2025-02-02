@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.MIN
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.NIGHT_LENGTH_MINUTES
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SECOND_IN_MILLIS
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.TEST_MODE
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.CorruptionClueHandler
 
 enum class InGameTimeEventType(
     private val defaultTime: Long,
@@ -65,7 +66,7 @@ enum class InGameTimeEventType(
         targetType = GameObjectType.SOUND_CLUE_JAMMER
     ),
     CORRUPTION_CLUE_GROWTH(
-        MINUTE_IN_MILLIS * 5,
+        CorruptionClueHandler.DEFAULT_NULLIFY_TIME,
         Visibility.NONE,
         targetType = GameObjectType.CORRUPTION_CLUE
     ),
