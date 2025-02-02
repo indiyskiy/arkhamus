@@ -64,6 +64,11 @@ enum class InGameTimeEventType(
         Visibility.SOURCE,
         targetType = GameObjectType.SOUND_CLUE_JAMMER
     ),
+    CORRUPTION_CLUE_GROWTH(
+        MINUTE_IN_MILLIS * 5,
+        Visibility.NONE,
+        targetType = GameObjectType.CORRUPTION_CLUE
+    ),
 
     //tech
     TELEPORTATION_STUN(
