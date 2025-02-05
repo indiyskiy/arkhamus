@@ -186,7 +186,8 @@ enum class Ability(
         id = 60004,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 1.0).toLong(),
-        range = CLOSE_RANGE
+        range = CLOSE_RANGE,
+        targetTypes = listOf(CORRUPTION_CLUE),
     ),
 
     //ADVANCED_USEFUL_ITEM 9***

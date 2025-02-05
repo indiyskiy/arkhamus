@@ -4,4 +4,4 @@ data class CorruptionClueAdditionalDataResponse (
     var timeUntilFullyGrowth: Long,
     var totalTimeUntilNullify: Long,
     var timeFromStart: Long,
-)
+): AdditionalClueDataResponse

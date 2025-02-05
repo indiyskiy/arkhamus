@@ -24,6 +24,7 @@ import com.arkhamusserver.arkhamus.model.ingame.clues.InGameSoundClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameSoundClueJammer
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.SoundClueAdditionalDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.SoundClueJammerResponse
 import org.springframework.stereotype.Component
 import kotlin.random.Random
@@ -252,49 +253,42 @@ class SoundClueHandler(
         clue: InGameSoundClue,
         user: InGameUser,
         data: LevelGeometryData
-    ): List<SoundClueJammerResponse> {
-        return clue.soundClueJammers.filter {
-            visibilityByTagsHandler.userCanSeeTarget(user, it)
-        }.filter {
-            zonesHandler.inSameZone(
-                user,
-                it,
-                data,
-                types = setOf(ZoneType.SOUND)
-            )
-        }.map {
-            SoundClueJammerResponse(
-                id = it.inGameId(),
-                x = it.x,
-                y = it.y,
-                z = it.z,
-                turnedOn = it.turnedOn
-            )
-        }
+    ): SoundClueAdditionalDataResponse {
+        return defaultSoundClueJammersInfo(clue, user, data)
     }
 
     private fun fillActualAdditionalData(
         clue: InGameSoundClue,
         user: InGameUser,
         data: LevelGeometryData
-    ): List<SoundClueJammerResponse> {
-        return clue.soundClueJammers.filter {
-            visibilityByTagsHandler.userCanSeeTarget(user, it)
-        }.filter {
-            zonesHandler.inSameZone(
-                user,
-                it,
-                data,
-                types = setOf(ZoneType.SOUND)
-            )
-        }.map {
-            SoundClueJammerResponse(
-                id = it.inGameId(),
-                x = it.x,
-                y = it.y,
-                z = it.z,
-                turnedOn = it.turnedOn
-            )
+    ): SoundClueAdditionalDataResponse {
+        return defaultSoundClueJammersInfo(clue, user, data)
+    }
+
+    private fun defaultSoundClueJammersInfo(
+        clue: InGameSoundClue,
+        user: InGameUser,
+        data: LevelGeometryData
+    ): SoundClueAdditionalDataResponse {
+        return SoundClueAdditionalDataResponse().apply {
+            this.soundClueJammers = clue.soundClueJammers.filter {
+                visibilityByTagsHandler.userCanSeeTarget(user, it)
+            }.filter {
+                zonesHandler.inSameZone(
+                    user,
+                    it,
+                    data,
+                    types = setOf(ZoneType.SOUND)
+                )
+            }.map {
+                SoundClueJammerResponse(
+                    id = it.inGameId(),
+                    x = it.x,
+                    y = it.y,
+                    z = it.z,
+                    turnedOn = it.turnedOn
+                )
+            }
         }
     }
 
