@@ -8,8 +8,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -47,8 +47,10 @@ class RitualGoingEventProcessor(
         timePassedMillis: Long
     ) {
         val altarHolder = globalGameData.altarHolder
-        val gameTimeItemsNotches = ritualHandler.countItemsNotches(event, altarHolder)
-        val currentItem = ritualHandler.countCurrentItem(gameTimeItemsNotches, currentGameTime)
+        val altars = globalGameData.altars.values.toList()
+        val gameTimeItemsNotches = ritualHandler.countItemsNotches(event, altarHolder, altars)
+        val currentNotch = ritualHandler.countCurrentNotch(gameTimeItemsNotches, currentGameTime)
+        val currentItem = currentNotch?.item
 
         if (altarHolder != null && altarHolder.currentStepItem != currentItem) {
             altarHolder.currentStepItem = currentItem
@@ -59,7 +61,7 @@ class RitualGoingEventProcessor(
         }
 
         if (currentItem != null) {
-            ritualHandler.tryToShiftTime(globalGameData.altarHolder, currentItem, event)
+            ritualHandler.tryToShiftTime(globalGameData.altarHolder, currentItem, event, altars)
         }
         addUsersToRitual(globalGameData)
     }

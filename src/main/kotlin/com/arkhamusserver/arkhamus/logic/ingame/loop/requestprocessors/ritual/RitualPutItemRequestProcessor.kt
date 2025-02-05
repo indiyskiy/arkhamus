@@ -47,8 +47,6 @@ class RitualPutItemRequestProcessor(
 
             if (altarHolder != null && ritualHandler.isAllItemsPut(altarHolder) == true) {
                 ritualHandler.processAllItemsPut(globalGameData, altarHolder, ongoingEvents)
-            } else {
-                ritualHandler.tryToShiftTime(altarHolder, item, ongoingEvents)
             }
             ritualPutItemRequestProcessData.executedSuccessfully = true
         }

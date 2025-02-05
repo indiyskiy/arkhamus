@@ -48,7 +48,7 @@ class RitualLeaveNettyResponseMapper(
                     requestProcessData.ritualEvent,
                     requestProcessData.altarHolder!!,
                     requestProcessData.usersInRitual,
-                    requestProcessData.currentStepItem,
+                    requestProcessData.currentNotch,
                     requestProcessData.notches
                 ),
                 leaving = it.executedSuccessfully,

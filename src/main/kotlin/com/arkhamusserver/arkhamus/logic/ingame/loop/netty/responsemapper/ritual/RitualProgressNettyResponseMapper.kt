@@ -45,11 +45,11 @@ class RitualProgressNettyResponseMapper(
         (requestProcessData as RitualProgressRequestProcessData).let {
             return RitualProgressNettyResponse(
                 ritualGoingData = ritualMappingDataHandler.build(
-                    requestProcessData.ritualEvent,
-                    requestProcessData.altarHolder!!,
-                    requestProcessData.usersInRitual,
-                    requestProcessData.currentStepItem,
-                    requestProcessData.notches
+                    ritualEvent = requestProcessData.ritualEvent,
+                    altarHolder = requestProcessData.altarHolder!!,
+                    usersInRitual = requestProcessData.usersInRitual,
+                    currentNotch = requestProcessData.currentNotch,
+                    gameTimeItemsNotches = requestProcessData.notches
                 ),
                 userRitualData = ritualMappingDataHandler.buildUserData(
                     requestProcessData.altarHolder!!,

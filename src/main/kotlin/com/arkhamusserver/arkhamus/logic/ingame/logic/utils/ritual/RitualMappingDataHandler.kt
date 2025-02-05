@@ -1,10 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
@@ -14,21 +13,23 @@ class RitualMappingDataHandler {
         ritualEvent: InGameTimeEvent?,
         altarHolder: InGameAltarHolder,
         usersInRitual: List<InGameUser>,
-        currentItem: Item?,
+        currentNotch: ItemNotch?,
         gameTimeItemsNotches: List<ItemNotch>
     ): RitualGoingDataResponse {
         return RitualGoingDataResponse().apply {
+            val altarsContent = mapAltarsContent(altarHolder).map { AltarContentResponse(it) }
             val currentGameTime = ritualEvent?.let { it.timeStart + it.timePast } ?: 0
             this.godId = altarHolder.lockedGod?.getId()
-            this.altarsContent = mapAltarsContent(altarHolder).map { AltarContentResponse(it) }
-            this.currentItemId = currentItem?.id ?: 0
-            this.currentItemMax = altarHolder.itemsForRitual[currentItem] ?: 0
-            this.currentItemInside = altarHolder.itemsOnAltars[currentItem] ?: 0
+            this.altarsContent = altarsContent
+            this.currentItemId = currentNotch?.item?.id ?: 0
+            this.currentAltarId = currentNotch?.altarId ?: 0
+            this.currentItemMax = altarHolder.itemsForRitual[currentNotch?.item] ?: 0
+            this.currentItemInside = altarHolder.itemsOnAltars[currentNotch?.item] ?: 0
             this.gameTimeStart = ritualEvent?.timeStart ?: 0
             this.gameTimeEnd = (ritualEvent?.timeStart ?: 0) + InGameTimeEventType.RITUAL_GOING.getDefaultTime()
             this.gameTimeNow = currentGameTime
             this.gameTimeItemsNotches = gameTimeItemsNotches.map {
-                ItemNotchResponse(it)
+                ItemNotchResponse( it)
             }
             this.userIdsInRitual = usersInRitual.map { it.inGameId() }
         }

@@ -61,8 +61,9 @@ class RitualLeaveNettyRequestHandler(
                 it.event.type == InGameTimeEventType.RITUAL_GOING &&
                         it.event.state == InGameTimeEventState.ACTIVE
             }?.event
-            val notches = ritualHandler.countItemsNotches(event, altarHolder)
-            val currentItem = ritualHandler.countCurrentItem(notches, globalGameData.game.globalTimer)
+            val altars = globalGameData.altars.values.toList()
+            val notches = ritualHandler.countItemsNotches(event, altarHolder, altars)
+            val currentNotch = ritualHandler.countCurrentNotch(notches, globalGameData.game.globalTimer)
             val userInRitual = event != null &&
                     user.stateTags.contains(UserStateTag.IN_RITUAL) &&
                     altarHolder != null &&
@@ -70,7 +71,7 @@ class RitualLeaveNettyRequestHandler(
             return RitualLeaveRequestProcessData(
                 userInRitual = userInRitual,
                 notches = notches,
-                currentStepItem = currentItem,
+                currentNotch = currentNotch,
                 usersInRitual = altarHolder?.usersInRitual?.map { globalGameData.users[it]!! } ?: emptyList(),
                 currentGameTime = globalGameData.game.globalTimer,
                 ritualEvent = ongoingEvents.firstOrNull {

@@ -21,8 +21,8 @@ import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.ingame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL
 import com.arkhamusserver.arkhamus.model.ingame.*
 import org.apache.commons.lang3.math.NumberUtils.min
@@ -77,6 +77,7 @@ class RitualHandler(
     fun countItemsNotches(
         ritualEvent: InGameTimeEvent?,
         altarHolder: InGameAltarHolder?,
+        altars: List<InGameAltar>
     ): List<ItemNotch> {
         if (ritualEvent == null) return emptyList()
         if (altarHolder == null) return emptyList()
@@ -89,18 +90,20 @@ class RitualHandler(
             .sortedBy { it.first }
             .mapIndexed { index, (item, _) ->
                 ItemNotch().apply {
+                    this.index = index
                     this.item = item
                     this.gameTimeStart = start + (step * index)
                     this.gameTimeEnd = start + (step * (index + 1))
+                    this.altarId = altars[index].inGameId()
                 }
-            }
+            }.sortedBy { it.index }
     }
 
-    fun countCurrentItem(gameTimeItemsNotches: List<ItemNotch>, currentGameTime: Long): Item? {
+    fun countCurrentNotch(gameTimeItemsNotches: List<ItemNotch>, currentGameTime: Long): ItemNotch? {
         return gameTimeItemsNotches.firstOrNull {
             it.gameTimeStart <= currentGameTime &&
                     it.gameTimeEnd > currentGameTime
-        }?.item
+        }
     }
 
     fun takeItemForRitual(
@@ -158,20 +161,11 @@ class RitualHandler(
     fun tryToShiftTime(
         altarHolder: InGameAltarHolder?,
         item: Item,
-        ongoingEvents: List<OngoingEvent>
+        ongoingEvent: InGameTimeEvent,
+        altars: List<InGameAltar>
     ) {
         if (thisItemIsPutOnAltar(altarHolder, item)) {
-            shiftTimeOfEvent(ongoingEvents, item, altarHolder)
-        }
-    }
-
-    fun tryToShiftTime(
-        altarHolder: InGameAltarHolder?,
-        item: Item,
-        ongoingEvent: InGameTimeEvent
-    ) {
-        if (thisItemIsPutOnAltar(altarHolder, item)) {
-            shiftTimeOfEvent(ongoingEvent, item, altarHolder)
+            shiftTimeOfEvent(ongoingEvent, item, altarHolder, altars)
         }
     }
 
@@ -493,19 +487,10 @@ class RitualHandler(
     private fun shiftTimeOfEvent(
         event: InGameTimeEvent,
         item: Item,
-        altarHolder: InGameAltarHolder?
+        altarHolder: InGameAltarHolder?,
+        altars: List<InGameAltar>
     ) {
-        pushEvent(event, altarHolder, item)
-    }
-
-    private fun shiftTimeOfEvent(
-        ongoingEvents: List<OngoingEvent>,
-        item: Item,
-        altarHolder: InGameAltarHolder?
-    ) {
-        findRitualEvent(ongoingEvents).forEach { event ->
-            pushEvent(event.event, altarHolder, item)
-        }
+        pushEvent(event, altarHolder, item, altars)
     }
 
     private fun justFinishRitual(
@@ -523,10 +508,11 @@ class RitualHandler(
     private fun pushEvent(
         ritualEvent: InGameTimeEvent,
         altarHolder: InGameAltarHolder?,
-        item: Item
+        item: Item,
+        altars: List<InGameAltar>
     ) {
         logger.info("shift time")
-        val notches = countItemsNotches(ritualEvent, altarHolder)
+        val notches = countItemsNotches(ritualEvent, altarHolder, altars)
         val notchOfCurrentItem = notches.firstOrNull { it.item == item }
         if (notchOfCurrentItem != null) {
             val timeToAdd = notchOfCurrentItem.gameTimeEnd - (ritualEvent.timeStart + ritualEvent.timePast)

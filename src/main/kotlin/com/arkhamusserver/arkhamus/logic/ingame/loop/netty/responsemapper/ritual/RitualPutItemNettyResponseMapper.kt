@@ -50,7 +50,7 @@ class RitualPutItemNettyResponseMapper(
                     requestProcessData.ritualEvent,
                     requestProcessData.altarHolder!!,
                     requestProcessData.usersInRitual,
-                    requestProcessData.currentStepItem,
+                    requestProcessData.currentNotch,
                     requestProcessData.notches
                 ),
                 executedSuccessfully = it.executedSuccessfully,

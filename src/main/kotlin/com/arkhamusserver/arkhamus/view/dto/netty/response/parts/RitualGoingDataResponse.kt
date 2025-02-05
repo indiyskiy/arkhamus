@@ -5,6 +5,7 @@ data class RitualGoingDataResponse(
     var altarsContent: List<AltarContentResponse> = emptyList(),
 
     var currentItemId: Int = 0,
+    var currentAltarId: Long = 0L,
     var currentItemMax: Int = 0,
     var currentItemInside: Int = 0,
 

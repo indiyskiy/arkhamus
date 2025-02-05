@@ -22,7 +22,7 @@ class RitualPutItemRequestProcessData(
     var altarHolder: InGameAltarHolder?,
     var usersInRitual: List<InGameUser>,
     var executedSuccessfully: Boolean,
-    var currentStepItem: Item?,
+    var currentNotch: ItemNotch?,
     var notches: List<ItemNotch>,
     inZones: List<LevelZone>,
     ongoingCraftingProcess: List<CraftProcessResponse>,
