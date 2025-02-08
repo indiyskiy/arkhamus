@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
-import com.arkhamusserver.arkhamus.config.UserState
+import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
@@ -29,7 +29,7 @@ class OneTickUserRequests(
         ongoingEvents: List<OngoingEvent>,
     ): List<NettyTickRequestMessageDataHolder> {
         currentTasks.forEach { task ->
-            userStatusService.updateUserStatus(task.userAccount.id!!, UserState.IN_GAME)
+            userStatusService.updateUserStatus(task.userAccount.id!!, CultpritsUserState.IN_GAME)
         }
         val tasksByUser = currentTasks.groupBy { it.userAccount.id }
         return tasksByUser.map { entry ->

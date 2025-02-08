@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.config
 
-enum class UserState(
+enum class CultpritsUserState(
     val priority: Int,
     val forceUpdate: Boolean = false,
 ) {

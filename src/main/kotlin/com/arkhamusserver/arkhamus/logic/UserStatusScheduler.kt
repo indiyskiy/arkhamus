@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic
 
-import com.arkhamusserver.arkhamus.config.UserState
+import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -18,10 +18,10 @@ class UserStatusScheduler(
             val minutesInactive = currentTime - it.lastActive
 
             val newState = if (minutesInactive > UserStatusService.OFFLINE_TIME) {
-                UserState.OFFLINE
+                CultpritsUserState.OFFLINE
             } else {
                 if (minutesInactive > UserStatusService.AFK_TIME) {
-                    UserState.AFK
+                    CultpritsUserState.AFK
                 } else {
                     it.userState
                 }

@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame
 
-import com.arkhamusserver.arkhamus.config.UserState
+import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
@@ -51,7 +51,7 @@ class GameEndLogic(
         saveActivities(game.inGameId())
         users.values.forEach { user ->
             if (!user.leftTheGame) {
-                userStatusService.updateUserStatus(user.inGameId(), UserState.ONLINE, true)
+                userStatusService.updateUserStatus(user.inGameId(), CultpritsUserState.ONLINE, true)
             }
         }
     }

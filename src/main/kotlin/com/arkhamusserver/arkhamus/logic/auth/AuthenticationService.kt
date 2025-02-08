@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.auth
 
-import com.arkhamusserver.arkhamus.config.UserState
+import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.config.auth.JwtProperties
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.ArkhamusUserDetails
@@ -41,7 +41,7 @@ class AuthenticationService(
             )
         )
         val user = userDetailsService.loadUserByUsername(authenticationRequest.login)
-        userStatusService.updateUserStatus(user.userAccount.id!!, UserState.ONLINE, true)
+        userStatusService.updateUserStatus(user.userAccount.id!!, CultpritsUserState.ONLINE, true)
         return authUser(user)
     }
 

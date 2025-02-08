@@ -1,13 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.steam
 
 import com.arkhamusserver.arkhamus.logic.CurrentUserService
-import com.arkhamusserver.arkhamus.logic.steam.SteamHandler.Companion.STEAM_API_KEY
+import com.arkhamusserver.arkhamus.logic.steam.SteamHandler.Companion.VERY_SECRET_API_KEY
 import com.arkhamusserver.arkhamus.model.UserStateHolder
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.steam.SteamPersonaState
-import com.arkhamusserver.arkhamus.view.dto.steam.Friend
 import com.arkhamusserver.arkhamus.view.dto.steam.FriendListResponse
 import com.arkhamusserver.arkhamus.view.dto.steam.PlayerData
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamUserResponse
@@ -28,7 +27,8 @@ class SteamReaderLogic(
 
     companion object {
         private val logger = LoggerFactory.getLogger(SteamReaderLogic::class.java)
-        private val FRIENDS_URL = "https://api.steampowered.com/ISteamUser/GetFriendList/v1/"
+        //private val FRIENDS_URL = "https://api.steampowered.com/ISteamUserISteamUser/GetFriendList/v1"
+        private val FRIENDS_URL = "https://partner.steam-api.com/ISteamUser/GetFriendList/v1/"
     }
 
     fun readSteamUserData(steamId: String): SteamUserResponse {
@@ -54,16 +54,29 @@ class SteamReaderLogic(
     fun readFriendList(): List<SteamUserShortDto> {
         val steamId = currentUserService.getCurrentUserAccount().steamId
 
-        val response = queueFriends(steamId)
+        val response = try {
+            queueFriends(steamId)
+        } catch (e: Exception) {
+            logger.warn("Failed to fetch friend list from steam: {}", e.message)
+            FriendListResponse(friendslist = null)
+        }
         val friends = response.friendslist?.friends ?: emptyList()
-        if (friends.isEmpty()) return emptyList()
-        val realUsers = friends.mapNotNull {
-            userAccountRepository.findBySteamId(it.steamid).orElse(null)
+        return readSteamUsers(friends.map { it.steamid })
+    }
+
+    fun readFriendList(steamIds: String): List<SteamUserShortDto> {
+        val steamIdsList = steamIds.split(",").map { it.trim() }
+        return readSteamUsers(steamIdsList)
+    }
+
+    private fun readSteamUsers(steamIdsList: List<String>): List<SteamUserShortDto> {
+        val realUsers = steamIdsList.mapNotNull {
+            userAccountRepository.findBySteamId(it).orElse(null)
         }.associateBy {
             it.steamId
         }
-        val steamUserFriends = friends.mapNotNull {
-            readSteamUserData(it.steamid).response?.players?.firstOrNull()
+        val steamUserFriends = steamIdsList.mapNotNull {
+            readSteamUserData(it).response?.players?.firstOrNull()
         }.associateBy {
             it.steamid
         }
@@ -74,9 +87,9 @@ class SteamReaderLogic(
         }.associateBy {
             it.userId
         }
-        return friends.map {
-            val steamUser = steamUserFriends[it.steamid]
-            val user = realUsers[it.steamid]
+        return steamIdsList.map {
+            val steamUser = steamUserFriends[it]
+            val user = realUsers[it]
             val state = user?.let { states[user.id] }
             it.toDto(user, steamUser, state)
         }
@@ -86,8 +99,8 @@ class SteamReaderLogic(
         val friendListResponse = webClient.build()
             .get()
             .uri(FRIENDS_URL) {
-                it.queryParam("key", STEAM_API_KEY)
-                    .queryParam("steamids", steamId)
+                it.queryParam("key", VERY_SECRET_API_KEY)
+                    .queryParam("steamid", steamId)
                     .queryParam("relationship", "friend")
                     .build()
             }
@@ -98,22 +111,23 @@ class SteamReaderLogic(
         val response = gson.fromJson(friendListResponse, FriendListResponse::class.java)
         return response
     }
-}
 
-private fun Friend.toDto(
-    userAccount: UserAccount?,
-    steamPlayer: PlayerData?,
-    state: UserStateHolder?
-) = this.let { friend ->
-    SteamUserShortDto().apply {
-        this.steamId = friend.steamid
-        this.steamState = steamPlayer?.personastate?.let { SteamPersonaState.fromId(it) }
-        this.nickName = userAccount?.nickName ?: steamPlayer?.personaname
-        this.userId = userAccount?.id
-        this.state = state?.userState
-        this.lastActive = state?.lastActive
+    private fun String.toDto(
+        userAccount: UserAccount?,
+        steamPlayer: PlayerData?,
+        state: UserStateHolder?
+    ) = this.let { steamId ->
+        SteamUserShortDto().apply {
+            this.steamId = steamId
+            this.steamState = steamPlayer?.personastate?.let { SteamPersonaState.fromId(it) }
+            this.nickName = userAccount?.nickName ?: steamPlayer?.personaname
+            this.userId = userAccount?.id
+            this.cultpritsState = state?.userState
+            this.lastActive = state?.lastActive
+        }
     }
-
 }
+
+
 
 

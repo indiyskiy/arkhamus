@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.tech
 
-import com.arkhamusserver.arkhamus.config.UserState
+import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
@@ -33,7 +33,7 @@ class LeaveTheGameRequestProcessor(
             if (this.canLeaveTheGame) {
                 logger.info("user ${gameUser!!.inGameId()} left the game")
                 this.gameUser.leftTheGame = true
-                userStatusService.updateUserStatus(gameUser.inGameId(), UserState.ONLINE)
+                userStatusService.updateUserStatus(gameUser.inGameId(), CultpritsUserState.ONLINE)
             }
         }
     }

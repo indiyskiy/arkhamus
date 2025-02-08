@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.user
 
-import com.arkhamusserver.arkhamus.config.UserState
+import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.model.enums.steam.SteamPersonaState
 
 data class SteamUserShortDto(
@@ -8,6 +8,6 @@ data class SteamUserShortDto(
     var steamState: SteamPersonaState? = null,
     var nickName: String? = null,
     var userId: Long? = null,
-    var state: UserState? = null,
+    var cultpritsState: CultpritsUserState? = null,
     var lastActive: Long? = null,
 )

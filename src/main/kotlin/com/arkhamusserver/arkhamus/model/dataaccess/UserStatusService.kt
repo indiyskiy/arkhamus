@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.dataaccess
 
-import com.arkhamusserver.arkhamus.config.UserState
+import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.model.UserStateHolder
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -18,7 +18,7 @@ class UserStatusService {
 
     private val userStatusMap: ConcurrentHashMap<Long, UserStateHolder> = ConcurrentHashMap()
 
-    fun updateUserStatus(userId: Long, state: UserState, force: Boolean = false) {
+    fun updateUserStatus(userId: Long, state: CultpritsUserState, force: Boolean = false) {
         val currentTime = System.currentTimeMillis()
         userStatusMap[userId] = updatedState(
             userId,
@@ -32,7 +32,7 @@ class UserStatusService {
     private fun updatedState(
         userId: Long,
         oldHolder: UserStateHolder?,
-        state: UserState,
+        state: CultpritsUserState,
         currentTime: Long,
         force: Boolean = false
     ): UserStateHolder {
@@ -63,14 +63,14 @@ class UserStatusService {
     }
 
     private fun offline(userId: Long): UserStateHolder {
-        return buildNewState(userId, UserState.OFFLINE, 0L)
+        return buildNewState(userId, CultpritsUserState.OFFLINE, 0L)
     }
 
     fun getAllStatuses(): List<UserStateHolder> {
         return userStatusMap.values.toList()
     }
 
-    fun setUserStatusForce(userId: Long, state: UserState) {
+    fun setUserStatusForce(userId: Long, state: CultpritsUserState) {
         logger.info("timeout update new user state: $userId, $state")
         userStatusMap[userId] =
             buildNewState(userId, state, userStatusMap[userId]?.lastActive ?: System.currentTimeMillis())
@@ -78,7 +78,7 @@ class UserStatusService {
 
     private fun buildNewState(
         userId: Long,
-        state: UserState,
+        state: CultpritsUserState,
         currentTime: Long
     ): UserStateHolder = UserStateHolder(userId, state, currentTime)
 }
