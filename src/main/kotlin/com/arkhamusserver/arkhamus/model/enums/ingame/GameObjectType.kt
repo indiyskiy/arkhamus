@@ -10,6 +10,7 @@ enum class GameObjectType {
     SOUND_CLUE,
     OMEN_CLUE,
     CORRUPTION_CLUE,
+    DISTORTION_CLUE,
     SOUND_CLUE_JAMMER,
     ALTAR,
     LANTERN,

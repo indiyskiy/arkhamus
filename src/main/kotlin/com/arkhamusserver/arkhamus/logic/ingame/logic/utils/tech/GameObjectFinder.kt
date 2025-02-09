@@ -30,7 +30,9 @@ class GameObjectFinder {
             OMEN_CLUE -> data.clues.omen.firstOrNull {
                 it.stringId() == id
             }
-            CORRUPTION_CLUE -> data.clues.corruption.firstOrNull{it.inGameId() == id.toLong()}
+
+            CORRUPTION_CLUE -> data.clues.corruption.firstOrNull { it.inGameId() == id.toLong() }
+            DISTORTION_CLUE -> data.clues.distortion.firstOrNull { it.inGameId() == id.toLong() }
         }
     }
 
@@ -69,6 +71,7 @@ class GameObjectFinder {
         SOUND_CLUE_JAMMER -> data.clues.sound.map { it.soundClueJammers }.flatten()
         OMEN_CLUE -> data.clues.omen
         CORRUPTION_CLUE -> data.clues.corruption
+        DISTORTION_CLUE -> data.clues.distortion
     }
 
     data class TypedGameObject(

@@ -13,7 +13,6 @@ data class ExtendedClueResponse(
     val x: Double?,
     val y: Double?,
     val z: Double?,
-    val possibleRadius: Double?,
     var state: InnovateClueState,
     val additionalData: AdditionalClueDataResponse? = null,
 )

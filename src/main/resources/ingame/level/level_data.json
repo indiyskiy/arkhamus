@@ -968,6 +968,28 @@
         "z": 102
       }
     ],
+    "distortionClues": [
+      {
+        "canReceive": true,
+        "canTransmit": false,
+        "effectRadius": 5,
+        "id": 2500,
+        "interactionRadius": 2,
+        "x": 43,
+        "y": 0,
+        "z": 6
+      },
+      {
+        "canReceive": false,
+        "canTransmit": true,
+        "effectRadius": 5,
+        "id": 2501,
+        "interactionRadius": 2,
+        "x": 80.51,
+        "y": 0,
+        "z": 61.44
+      }
+    ],
     "doors": [
       {
         "id": 1700,

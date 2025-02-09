@@ -156,7 +156,6 @@ class ScentClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                possibleRadius = 0.0,
                 state = InnovateClueState.ACTIVE_CLUE,
             )
         }
@@ -180,7 +179,6 @@ class ScentClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                possibleRadius = 0.0,
                 state = countState(it, user),
             )
         }

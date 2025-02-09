@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
 import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignCorruptionClueInfoProcessor
+import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignDistortionClueInfoProcessor
 import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignScentClueInfoProcessor
 import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignSoundClueInfoProcessor
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CREATE_TEST_QUESTS
@@ -38,6 +39,7 @@ class LevelDesignInfoProcessor(
     private val levelDesignScentClueInfoProcessor: LevelDesignScentClueInfoProcessor,
     private val levelDesignSoundClueInfoProcessor: LevelDesignSoundClueInfoProcessor,
     private val levelDesignCorruptionClueInfoProcessor: LevelDesignCorruptionClueInfoProcessor,
+    private val levelDesignDistortionClueInfoProcessor: LevelDesignDistortionClueInfoProcessor,
     private val levelDesignVisibilityProcessor: LevelDesignVisibilityProcessor,
     private val randomQuestGenerator: RandomQuestGenerator,
 ) {
@@ -149,6 +151,10 @@ class LevelDesignInfoProcessor(
         )
         levelDesignCorruptionClueInfoProcessor.processCorruptionClueInfos(
             levelFromJson.corruptionClues,
+            savedLevel
+        )
+        levelDesignDistortionClueInfoProcessor.processDistortionClueInfos(
+            levelFromJson.distortionClues,
             savedLevel
         )
         levelDesignVisibilityProcessor.processVisibilityObjects(levelFromJson, savedLevel)

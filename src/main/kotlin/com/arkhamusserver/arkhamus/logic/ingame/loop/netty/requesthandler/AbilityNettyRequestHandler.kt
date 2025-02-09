@@ -39,7 +39,7 @@ class AbilityNettyRequestHandler(
     private val crafterProcessHandler: CrafterProcessHandler,
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
-    private val finder: GameObjectFinder
+    private val finder: GameObjectFinder,
 ) : NettyRequestHandler {
 
     companion object {

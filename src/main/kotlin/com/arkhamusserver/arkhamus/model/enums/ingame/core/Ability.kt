@@ -152,12 +152,6 @@ enum class Ability(
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
     ),
-    SEARCH_FOR_DISTORTION(
-        id = 6007,
-        requiresItem = true,
-        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
-        active = DEFAULT_INVESTIGATION_ACTIVE
-    ),
 
     //INVESTIGATION 2.0
     ADVANCED_SEARCH_FOR_SCENT(
@@ -178,6 +172,7 @@ enum class Ability(
     ADVANCED_SEARCH_FOR_OMEN(
         id = 60003,
         requiresItem = true,
+        active = DEFAULT_INVESTIGATION_ACTIVE,
         cooldown = (MINUTE_IN_MILLIS * 0.25).toLong(),
         targetTypes = listOf(OMEN_CLUE),
         range = CLOSE_RANGE
@@ -185,9 +180,17 @@ enum class Ability(
     ADVANCED_SEARCH_FOR_CORRUPTION(
         id = 60004,
         requiresItem = true,
-        cooldown = (MINUTE_IN_MILLIS * 1.0).toLong(),
+        cooldown = MINUTE_IN_MILLIS,
         range = CLOSE_RANGE,
         targetTypes = listOf(CORRUPTION_CLUE),
+    ),
+    ADVANCED_SEARCH_FOR_DISTORTION(
+        id = 6008,
+        requiresItem = true,
+        cooldown = MINUTE_IN_MILLIS * 3,
+        active = DEFAULT_INVESTIGATION_ACTIVE * 2,
+        range = MEDIUM_RANGE,
+        targetTypes = listOf(DISTORTION_CLUE),
     ),
 
     //ADVANCED_USEFUL_ITEM 9***

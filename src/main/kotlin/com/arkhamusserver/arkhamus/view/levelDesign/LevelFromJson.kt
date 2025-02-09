@@ -23,6 +23,7 @@ data class LevelFromJson(
     var scentClues: List<ScentClueFromJson> = emptyList(),
     var soundClues: List<JsonSoundClue>,
     var corruptionClues: List<JsonCorruptionClue>,
+    var distortionClues: List<JsonDistortionClue>,
     var soundClueJammers: List<JsonSoundClueJammer>,
     var visibilityDoors: List<VisibilityDoorFromJson>,
     var visibilityWalls: List<List<PointJson>>

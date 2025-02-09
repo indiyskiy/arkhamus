@@ -56,7 +56,7 @@ enum class InGameTimeEventType(
         sourceType = GameObjectType.CHARACTER
     ),
     ABILITY_STUN(
-        SECOND_IN_MILLIS * 45,
+        SECOND_IN_MILLIS * 30,
         Visibility.NONE,
         targetType = GameObjectType.CHARACTER
     ),

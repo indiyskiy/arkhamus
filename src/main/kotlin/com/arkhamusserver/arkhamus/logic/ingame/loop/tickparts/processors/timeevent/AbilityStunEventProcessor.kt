@@ -42,6 +42,6 @@ class AbilityStunEventProcessor() : TimeEventProcessor {
     ) {
         val user = globalGameData.users[event.targetObjectId]
         if (user == null) return
-        user.stateTags += UserStateTag.STUN
+        user.stateTags -= UserStateTag.STUN
     }
 }

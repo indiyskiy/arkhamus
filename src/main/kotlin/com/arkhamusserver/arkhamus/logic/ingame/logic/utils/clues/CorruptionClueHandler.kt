@@ -162,7 +162,6 @@ class CorruptionClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                possibleRadius = 0.0,
                 state = InnovateClueState.ACTIVE_CLUE,
                 additionalData = mapAdditionalData(it, user)
             )
@@ -188,7 +187,6 @@ class CorruptionClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                possibleRadius = 0.0,
                 state = countState(it, user),
                 additionalData = mapAdditionalData(it, user)
             )

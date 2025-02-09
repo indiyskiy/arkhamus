@@ -198,7 +198,6 @@ class SoundClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                possibleRadius = 0.0,
                 additionalData = fillActualAdditionalData(it, user, data.levelGeometryData),
                 state = InnovateClueState.ACTIVE_CLUE
             )
@@ -223,7 +222,6 @@ class SoundClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                possibleRadius = 0.0,
                 additionalData = fillPossibleAdditionalData(it, user, data.levelGeometryData),
                 state = countState(it, user, data.levelGeometryData),
             )
