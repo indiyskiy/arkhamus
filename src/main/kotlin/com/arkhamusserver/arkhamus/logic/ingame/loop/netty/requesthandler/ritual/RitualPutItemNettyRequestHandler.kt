@@ -65,8 +65,7 @@ class RitualPutItemNettyRequestHandler(
                 it.event.type == InGameTimeEventType.RITUAL_GOING &&
                         it.event.state == InGameTimeEventState.ACTIVE
             }?.event
-            val altars = globalGameData.altars.values.toList()
-            val notches = ritualHandler.countItemsNotches(event, altarHolder, altars)
+            val notches = ritualHandler.countItemsNotches(event, altarHolder)
             val currentNotch = ritualHandler.countCurrentNotch(notches, globalGameData.game.globalTimer)
             return RitualPutItemRequestProcessData(
                 notches = notches,

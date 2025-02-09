@@ -74,7 +74,7 @@ class RitualProgressNettyRequestHandler(
                 it.event.type == InGameTimeEventType.RITUAL_GOING &&
                         it.event.state == InGameTimeEventState.ACTIVE
             }?.event
-            val notches = ritualHandler.countItemsNotches(event, altarHolder,  globalGameData.altars.values.toList())
+            val notches = ritualHandler.countItemsNotches(event, altarHolder)
             val currentNotch = ritualHandler.countCurrentNotch(notches, event?.currentEventTime()?: globalGameData.game.globalTimer)
             val usersInRitual = usersInRitual(globalGameData, globalGameData.users.values)
             return RitualProgressRequestProcessData(

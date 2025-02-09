@@ -47,9 +47,8 @@ class RitualGoingEventProcessor(
         timePassedMillis: Long
     ) {
         val altarHolder = globalGameData.altarHolder
-        val altars = globalGameData.altars.values.toList()
-        val gameTimeItemsNotches = ritualHandler.countItemsNotches(event, altarHolder, altars)
-        val currentNotch = ritualHandler.countCurrentNotch(gameTimeItemsNotches, currentGameTime)
+        val gameTimeItemsNotches = ritualHandler.countItemsNotches(event, altarHolder)
+        val currentNotch = ritualHandler.countCurrentNotch(gameTimeItemsNotches, event.currentEventTime())
         val currentItem = currentNotch?.item
 
         if (altarHolder != null && altarHolder.currentStepItem != currentItem) {
@@ -61,7 +60,7 @@ class RitualGoingEventProcessor(
         }
 
         if (currentItem != null) {
-            ritualHandler.tryToShiftTime(globalGameData.altarHolder, currentItem, event, altars)
+            ritualHandler.tryToPushEvent(globalGameData.altarHolder, event, currentNotch)
         }
         addUsersToRitual(globalGameData)
     }

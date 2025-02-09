@@ -51,6 +51,46 @@ class RitualHandler(
         var logger: Logger = LoggerFactory.getLogger(RitualHandler::class.java)
     }
 
+    @Transactional
+    fun godVoteStart(
+        globalGameData: GlobalGameData,
+        altar: InGameAltar,
+        god: God,
+        currentGameUser: InGameUser,
+        allUsers: Collection<InGameUser>,
+        altars: Map<Long, InGameAltar>,
+        altarHolder: InGameAltarHolder?,
+        events: List<InGameTimeEvent>,
+        game: InRamGame
+    ) {
+        createGodVoteStartProcess(
+            gameId = game.gameId,
+            globalTimer = globalGameData.game.globalTimer,
+            sourceUserId = currentGameUser.inGameId(),
+            altar = altar
+        )
+        val altarPolling = createGodVote(
+            god = god,
+            altar = altar,
+            globalGameData = globalGameData,
+            currentGameUser = currentGameUser,
+        )
+        globalGameData.altarHolder?.state = MapAltarState.VOTING
+        globalGameData.altarHolder?.let { inGameAltarHolderRepository.save(it) }
+
+        activityHandler.addUserWithTargetActivity(
+            game.inGameId(),
+            ActivityType.ALTAR_VOTE_STARTED,
+            currentGameUser,
+            game.globalTimer,
+            GameObjectType.ALTAR,
+            altar,
+            god.getId().toLong(),
+        )
+
+        tryToForceStartRitual(allUsers, altarPolling, altars, altarHolder, events, game)
+    }
+
     fun failRitualByTime(
         altarHolder: InGameAltarHolder?,
         globalGameData: GlobalGameData
@@ -77,7 +117,6 @@ class RitualHandler(
     fun countItemsNotches(
         ritualEvent: InGameTimeEvent?,
         altarHolder: InGameAltarHolder?,
-        altars: List<InGameAltar>
     ): List<ItemNotch> {
         if (ritualEvent == null) return emptyList()
         if (altarHolder == null) return emptyList()
@@ -87,14 +126,14 @@ class RitualHandler(
         val step = (ritualEvent.timePast + ritualEvent.timeLeft) / size
         return altarHolder.itemsForRitual
             .toList()
-            .sortedBy { it.first }
+            .sortedBy { it.first.id }
             .mapIndexed { index, (item, _) ->
                 ItemNotch().apply {
                     this.index = index
                     this.item = item
                     this.gameTimeStart = start + (step * index)
                     this.gameTimeEnd = start + (step * (index + 1))
-                    this.altarId = altars[index].inGameId()
+                    this.altarId = altarHolder.itemsToAltarId[item]!!
                 }
             }.sortedBy { it.index }
     }
@@ -158,55 +197,15 @@ class RitualHandler(
             altarHolder.itemsOnAltars[itemId] == number
         }
 
-    fun tryToShiftTime(
+    fun tryToPushEvent(
         altarHolder: InGameAltarHolder?,
-        item: Item,
         ongoingEvent: InGameTimeEvent,
-        altars: List<InGameAltar>
+        currentNotch: ItemNotch
     ) {
+        val item = currentNotch.item!!
         if (thisItemIsPutOnAltar(altarHolder, item)) {
-            shiftTimeOfEvent(ongoingEvent, item, altarHolder, altars)
+            pushEvent(ongoingEvent, currentNotch)
         }
-    }
-
-    @Transactional
-    fun godVoteStart(
-        globalGameData: GlobalGameData,
-        altar: InGameAltar,
-        god: God,
-        currentGameUser: InGameUser,
-        allUsers: Collection<InGameUser>,
-        altars: Map<Long, InGameAltar>,
-        altarHolder: InGameAltarHolder?,
-        events: List<InGameTimeEvent>,
-        game: InRamGame
-    ) {
-        createGodVoteStartProcess(
-            gameId = game.gameId,
-            globalTimer = globalGameData.game.globalTimer,
-            sourceUserId = currentGameUser.inGameId(),
-            altar = altar
-        )
-        val altarPolling = createGodVote(
-            god = god,
-            altar = altar,
-            globalGameData = globalGameData,
-            currentGameUser = currentGameUser,
-        )
-        globalGameData.altarHolder?.state = MapAltarState.VOTING
-        globalGameData.altarHolder?.let { inGameAltarHolderRepository.save(it) }
-
-        activityHandler.addUserWithTargetActivity(
-            game.inGameId(),
-            ActivityType.ALTAR_VOTE_STARTED,
-            currentGameUser,
-            game.globalTimer,
-            GameObjectType.ALTAR,
-            altar,
-            god.getId().toLong(),
-        )
-
-        tryToForceStartRitual(allUsers, altarPolling, altars, altarHolder, events, game)
     }
 
     fun kickUsersFromRitual(
@@ -391,6 +390,7 @@ class RitualHandler(
         events: List<InGameTimeEvent>,
         game: InRamGame
     ) {
+        val sortedAltars = altars.sortedBy { it.inGameId() }
         eventHandler.tryToDeleteEvent(InGameTimeEventType.ALTAR_VOTING, events)
 
         logger.info("removing polling - god locked")
@@ -402,14 +402,15 @@ class RitualHandler(
         altarHolder?.lockedGod = quorum
         altarHolder?.thmAddedThisRound = false
         altarHolder?.round = 0
-        altarHolder?.itemsForRitual = recipe.ingredients.associate {
+        val itemsSorted = recipe.ingredients.sortedBy { it.item.id }
+        altarHolder?.itemsForRitual = itemsSorted.associate {
             it.item to it.number
         }
-        altarHolder?.itemsOnAltars = recipe.ingredients.associate {
+        altarHolder?.itemsOnAltars = itemsSorted.associate {
             it.item to 0
         }
-        altarHolder?.itemsToAltarId = recipe.ingredients.mapIndexed { index, ingredient ->
-            ingredient.item to altars[index].inGameId()
+        altarHolder?.itemsToAltarId = itemsSorted.mapIndexed { index, ingredient ->
+            ingredient.item to sortedAltars[index].inGameId()
         }.toMap()
 
         altarHolder?.state = MapAltarState.GOD_LOCKED
@@ -484,15 +485,6 @@ class RitualHandler(
                     it.event.state == InGameTimeEventState.ACTIVE
         }
 
-    private fun shiftTimeOfEvent(
-        event: InGameTimeEvent,
-        item: Item,
-        altarHolder: InGameAltarHolder?,
-        altars: List<InGameAltar>
-    ) {
-        pushEvent(event, altarHolder, item, altars)
-    }
-
     private fun justFinishRitual(
         ongoingEvents: List<OngoingEvent>
     ) {
@@ -507,18 +499,15 @@ class RitualHandler(
 
     private fun pushEvent(
         ritualEvent: InGameTimeEvent,
-        altarHolder: InGameAltarHolder?,
-        item: Item,
-        altars: List<InGameAltar>
+        currentNotch: ItemNotch
     ) {
-        logger.info("shift time")
-        val notches = countItemsNotches(ritualEvent, altarHolder, altars)
-        val notchOfCurrentItem = notches.firstOrNull { it.item == item }
-        if (notchOfCurrentItem != null) {
-            val timeToAdd = notchOfCurrentItem.gameTimeEnd - (ritualEvent.timeStart + ritualEvent.timePast)
-            if (timeToAdd > 0) {
-                eventHandler.pushEvent(ritualEvent, timeToAdd)
-            }
+        logger.info("trying to push event")
+        logger.info("trying to push event: current notch: $currentNotch")
+        val timeToAdd = currentNotch.gameTimeEnd - ritualEvent.currentEventTime()
+        logger.info("trying to push event: timeToAdd: $timeToAdd")
+        if (timeToAdd > 0) {
+            logger.info("trying to push event: push me baby")
+            eventHandler.pushEvent(ritualEvent, timeToAdd)
         }
     }
 
