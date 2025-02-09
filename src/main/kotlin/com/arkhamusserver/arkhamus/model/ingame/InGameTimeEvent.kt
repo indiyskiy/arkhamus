@@ -24,4 +24,8 @@ data class InGameTimeEvent(
     override fun visibilityModifiers(): Set<VisibilityModifier> {
         return visibilityModifiers
     }
+
+    fun currentEventTime(): Long {
+        return timeStart + timePast
+    }
 }

@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.model.enums.steam.SteamPersonaState
 data class SteamUserShortDto(
     var steamId: String? = null,
     var steamState: SteamPersonaState? = null,
+    var steamStateId: Int? = null,
     var nickName: String? = null,
     var userId: Long? = null,
     var cultpritsState: CultpritsUserState? = null,

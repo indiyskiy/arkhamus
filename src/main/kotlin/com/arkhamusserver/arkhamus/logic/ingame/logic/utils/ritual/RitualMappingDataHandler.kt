@@ -18,7 +18,7 @@ class RitualMappingDataHandler {
     ): RitualGoingDataResponse {
         return RitualGoingDataResponse().apply {
             val altarsContent = mapAltarsContent(altarHolder).map { AltarContentResponse(it) }
-            val currentGameTime = ritualEvent?.let { it.timeStart + it.timePast } ?: 0
+            val currentGameTime = ritualEvent?.currentEventTime() ?: 0
             this.godId = altarHolder.lockedGod?.getId()
             this.altarsContent = altarsContent
             this.currentItemId = currentNotch?.item?.id ?: 0

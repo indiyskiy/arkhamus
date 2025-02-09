@@ -27,6 +27,7 @@ class SteamReaderLogic(
 
     companion object {
         private val logger = LoggerFactory.getLogger(SteamReaderLogic::class.java)
+
         //private val FRIENDS_URL = "https://api.steampowered.com/ISteamUserISteamUser/GetFriendList/v1"
         private val FRIENDS_URL = "https://partner.steam-api.com/ISteamUser/GetFriendList/v1/"
     }
@@ -118,8 +119,10 @@ class SteamReaderLogic(
         state: UserStateHolder?
     ) = this.let { steamId ->
         SteamUserShortDto().apply {
+            val steamState = steamPlayer?.personastate?.let { SteamPersonaState.fromId(it) }?:SteamPersonaState.PERSONA_STATE_OFFLINE
             this.steamId = steamId
-            this.steamState = steamPlayer?.personastate?.let { SteamPersonaState.fromId(it) }
+            this.steamState = steamState
+            this.steamStateId = steamState.id
             this.nickName = userAccount?.nickName ?: steamPlayer?.personaname
             this.userId = userAccount?.id
             this.cultpritsState = state?.userState

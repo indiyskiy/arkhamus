@@ -9,6 +9,34 @@
             font-size: 50px;
             text-align: center;
         }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f3f3f3;
+        }
+
+        .footer a {
+            margin: 0 20px;
+            text-decoration: none;
+        }
+
+        .footer img {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .footer img:hover {
+            transform: scale(1.2);
+        }
+
     </style>
 </head>
 <body>
@@ -16,6 +44,16 @@
     <div id="text-container">
         <p id="text" th:text="'CulTprits'">CulTprits</p>
     </div>
+
+    <div class="footer">
+        <a href="https://store.steampowered.com/app/3348260/Cultprits/" target="_blank">
+            <img src="/images/steam_icon_logo.png" alt="Steam">
+        </a>
+        <a href="https://discord.gg/EWzwzX7U9S" target="_blank">
+            <img src="/images/discord-mark-blue.png" alt="Discord">
+        </a>
+    </div>
+
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {

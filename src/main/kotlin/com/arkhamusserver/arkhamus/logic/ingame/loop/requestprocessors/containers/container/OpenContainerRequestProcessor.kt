@@ -11,6 +11,8 @@ import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameContainerReposi
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
+import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -38,15 +40,23 @@ class OpenContainerRequestProcessor(
             container.state = MapObjectState.HOLD
             objectWithTagsHandler.processObject(container, gameUser, globalGameData)
             inGameContainerRepository.save(container)
-            activityHandler.addUserWithTargetActivity(
-                globalGameData.game.inGameId(),
-                ActivityType.CONTAINER_OPENED,
-                gameUser,
-                globalGameData.game.globalTimer,
-                GameObjectType.CONTAINER,
-                container,
-                null
-            )
+            createActivity(globalGameData, gameUser, container)
         }
+    }
+
+    private fun createActivity(
+        globalGameData: GlobalGameData,
+        gameUser: InGameUser,
+        container: InGameContainer
+    ) {
+        activityHandler.addUserWithTargetActivity(
+            globalGameData.game.inGameId(),
+            ActivityType.CONTAINER_OPENED,
+            gameUser,
+            globalGameData.game.globalTimer,
+            GameObjectType.CONTAINER,
+            container,
+            null
+        )
     }
 }

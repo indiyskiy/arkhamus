@@ -185,7 +185,7 @@ enum class Ability(
         targetTypes = listOf(CORRUPTION_CLUE),
     ),
     ADVANCED_SEARCH_FOR_DISTORTION(
-        id = 6008,
+        id = 60008,
         requiresItem = true,
         cooldown = MINUTE_IN_MILLIS * 3,
         active = DEFAULT_INVESTIGATION_ACTIVE * 2,
