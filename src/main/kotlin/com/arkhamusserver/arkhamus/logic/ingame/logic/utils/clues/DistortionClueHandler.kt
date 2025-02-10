@@ -238,7 +238,7 @@ class DistortionClueHandler(
                         whoLooks = user,
                         target = distortionClue.receiver,
                         levelGeometryData = data.levelGeometryData,
-                        range = distortionClue.effectRadius,
+                        range = distortionClue.receiver.effectRadius,
                         affectedByBlind = true
                     ) &&
                     transmitterOnline(distortionClue, data)
