@@ -232,16 +232,16 @@ class DistortionClueHandler(
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         val distortionOptions = container.distortion
-        val filtered = distortionOptions.filter {
-            it.receiver != null &&
+        val filtered = distortionOptions.filter { distortionClue ->
+            distortionClue.receiver != null &&
                     userLocationHandler.userCanSeeTargetInRange(
                         whoLooks = user,
-                        target = it.receiver,
+                        target = distortionClue.receiver,
                         levelGeometryData = data.levelGeometryData,
-                        range = it.effectRadius,
+                        range = distortionClue.effectRadius,
                         affectedByBlind = true
                     ) &&
-                    transmitterOnline(it, data)
+                    transmitterOnline(distortionClue, data)
         }
         return filtered.map {
             ExtendedClueResponse(
