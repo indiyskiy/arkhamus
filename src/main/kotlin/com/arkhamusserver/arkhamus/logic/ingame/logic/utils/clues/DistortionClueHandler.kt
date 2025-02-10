@@ -21,6 +21,7 @@ import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.DistortionClueAdditionalDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.SimpleUserAdditionalDataResponse
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -35,6 +36,7 @@ class DistortionClueHandler(
     companion object {
         const val MAX_ON_GAME = 7
         private val random: Random = Random(System.currentTimeMillis())
+        private val logger = LoggerFactory.getLogger(DistortionClueHandler::class.java)
     }
 
     override fun accept(clues: List<Clue>): Boolean {
@@ -122,30 +124,47 @@ class DistortionClueHandler(
         zones: List<InGameLevelZone>,
         activeCluesOnStart: Int
     ) {
+        logger.info("Starting to add DISTORTION clues for session: ${session.id}, god: ${god.name}, activeCluesOnStart: $activeCluesOnStart")
+
         val distortionClues = distortionClueRepository.findByLevelId(session.gameSessionSettings.level!!.id!!)
-        val distortionClueTransmittersForGameSession = distortionClues
+        logger.info("Found ${distortionClues.size} DISTORTION clues for level: ${session.gameSessionSettings.level!!.id}")
+
+        val distortionClueTransmitters = distortionClues
             .filter { it.canTransmit }
             .shuffled(random)
             .take(MAX_ON_GAME)
-        val transmitterIds = distortionClueTransmittersForGameSession.map { it.inGameId }.toSet()
+        logger.info("Selected ${distortionClueTransmitters.size} DISTORTION transmitters for game session.")
+
+        val transmitterIds = distortionClueTransmitters.map { it.inGameId }.toSet()
         val distortionClueReceiversForGameSession = distortionClues
-            .filter { !it.canReceive }
+            .filter { it.canReceive }
             .filter { it.inGameId !in transmitterIds }
             .shuffled(random)
-            .take(distortionClueTransmittersForGameSession.size)
+            .take(distortionClueTransmitters.size)
+        logger.info("Selected ${distortionClueReceiversForGameSession.size} DISTORTION receivers for game session.")
+
         val transmitterReceiverPairs =
-            distortionClueTransmittersForGameSession.zip(distortionClueReceiversForGameSession)
+            distortionClueTransmitters.zip(distortionClueReceiversForGameSession)
+        logger.info("Created ${transmitterReceiverPairs.size} transmitter-receiver pairs.")
+
         val inGameDistortionClues = transmitterReceiverPairs.map { (transmitter, receiver) ->
             mapNewClue(session, transmitter, receiver)
         }
+        logger.info("Mapped ${inGameDistortionClues.size} new in-game distortion clues.")
+
         if (god.getTypes().contains(Clue.DISTORTION)) {
             val turnedOn = inGameDistortionClues.shuffled(random).take(activeCluesOnStart)
             turnedOn.forEach {
                 it.turnedOn = true
                 it.receiver?.turnedOn = true
+                logger.info("Turned on clue with id: ${it.id} and its receiver.")
             }
+        } else {
+            logger.info("god have no distortion clues")
         }
+
         inGameDistortionClueRepository.saveAll(inGameDistortionClues)
+        logger.info("Saved ${inGameDistortionClues.size} distortion clues for session: ${session.id}")
     }
 
     override fun mapActualClues(
@@ -213,7 +232,7 @@ class DistortionClueHandler(
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         val distortionOptions = container.distortion
-        val filteredByVisibilityTags = distortionOptions.filter {
+        val filtered = distortionOptions.filter {
             it.receiver != null &&
                     userLocationHandler.userCanSeeTargetInRange(
                         whoLooks = user,
@@ -222,18 +241,9 @@ class DistortionClueHandler(
                         range = it.effectRadius,
                         affectedByBlind = true
                     ) &&
-                    it.castedAbilityUsers.any { nearOtherSideUserId ->
-                        val nearOtherSideUser = data.users[nearOtherSideUserId]!!
-                        userLocationHandler.userCanSeeTargetInRange(
-                            whoLooks = nearOtherSideUser,
-                            target = it.receiver,
-                            levelGeometryData = data.levelGeometryData,
-                            range = it.effectRadius,
-                            affectedByBlind = true
-                        )
-                    }
+                    transmitterOnline(it, data)
         }
-        return filteredByVisibilityTags.map {
+        return filtered.map {
             ExtendedClueResponse(
                 id = it.receiver!!.stringId(),
                 clue = Clue.DISTORTION,
@@ -246,6 +256,20 @@ class DistortionClueHandler(
                 additionalData = mapReceiverAdditionalData(it, data)
             )
         }
+    }
+
+    private fun transmitterOnline(
+        clue: InGameDistortionClue,
+        data: GlobalGameData,
+    ): Boolean = clue.castedAbilityUsers.any { nearOtherSideUserId ->
+        val nearOtherSideUser = data.users[nearOtherSideUserId]!!
+        userLocationHandler.userCanSeeTargetInRange(
+            whoLooks = nearOtherSideUser,
+            target = clue,
+            levelGeometryData = data.levelGeometryData,
+            range = clue.effectRadius,
+            affectedByBlind = true
+        )
     }
 
     private fun mapTransmitterAdditionalData(

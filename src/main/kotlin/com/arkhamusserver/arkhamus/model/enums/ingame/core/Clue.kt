@@ -8,7 +8,6 @@ enum class Clue(
 ) : WithVisibilityModifiers {
     INSCRIPTION(
         setOf(
-            VisibilityModifier.INSCRIPTION,
             VisibilityModifier.CULTIST
         )
     ),
@@ -24,13 +23,11 @@ enum class Clue(
     ),
     AURA(
         setOf(
-            VisibilityModifier.AURA,
             VisibilityModifier.CULTIST
         )
     ),
     CORRUPTION(
         setOf(
-            VisibilityModifier.CORRUPTION,
             VisibilityModifier.CULTIST
         )
     ),
@@ -41,7 +38,6 @@ enum class Clue(
     ),
     DISTORTION(
         setOf(
-            VisibilityModifier.DISTORTION,
             VisibilityModifier.CULTIST
         )
     );
