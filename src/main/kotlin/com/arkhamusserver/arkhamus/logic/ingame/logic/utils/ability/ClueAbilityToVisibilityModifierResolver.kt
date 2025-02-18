@@ -22,7 +22,6 @@ class ClueAbilityToVisibilityModifierResolver {
     fun toVisibilityModifier(ability: Ability) =
         when (ability) {
             Ability.SEARCH_FOR_INSCRIPTION -> VisibilityModifier.INSCRIPTION
-            Ability.SEARCH_FOR_AURA -> VisibilityModifier.AURA
             else -> null
         }
 

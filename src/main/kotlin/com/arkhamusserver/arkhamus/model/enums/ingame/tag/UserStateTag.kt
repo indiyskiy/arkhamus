@@ -13,6 +13,7 @@ enum class UserStateTag(
     INVESTIGATING_OMEN(Visibility.SOURCE),
     INVESTIGATING_CORRUPTION(Visibility.SOURCE),
     INVESTIGATING_DISTORTION(Visibility.SOURCE),
+    INVESTIGATING_AURA(Visibility.SOURCE),
     LUMINOUS(Visibility.PUBLIC),
     INVULNERABILITY(Visibility.PUBLIC),
     FARSIGHT(Visibility.SOURCE);

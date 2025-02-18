@@ -70,7 +70,7 @@ enum class Ability(
     ),
 
     //neutral ability 3***
-    //useful item ability
+    //useful item ability 4***
     TOWN_PORTAL_BY_SCROLL(
         id = 4002,
         cooldown = MINUTE_IN_MILLIS * 6,
@@ -139,15 +139,9 @@ enum class Ability(
         globalCooldown = true,
     ),
 
-    //clue items 5***
+    //clue items 6***
     SEARCH_FOR_INSCRIPTION(
         id = 6001,
-        requiresItem = true,
-        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
-        active = DEFAULT_INVESTIGATION_ACTIVE
-    ),
-    SEARCH_FOR_AURA(
-        id = 6004,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
         active = DEFAULT_INVESTIGATION_ACTIVE
@@ -184,6 +178,14 @@ enum class Ability(
         range = CLOSE_RANGE,
         targetTypes = listOf(CORRUPTION_CLUE),
     ),
+    ADVANCED_SEARCH_FOR_AURA(
+        id = 60005,
+        requiresItem = true,
+        cooldown = MINUTE_IN_MILLIS,
+        range = CLOSE_RANGE,
+        targetTypes = listOf(AURA_CLUE),
+        active = DEFAULT_INVESTIGATION_ACTIVE * 3
+    ),
     ADVANCED_SEARCH_FOR_DISTORTION(
         id = 60008,
         requiresItem = true,
@@ -192,6 +194,7 @@ enum class Ability(
         range = MEDIUM_RANGE,
         targetTypes = listOf(DISTORTION_CLUE),
     ),
+
 
     //ADVANCED_USEFUL_ITEM 9***
     KINDLE_CLOAK(

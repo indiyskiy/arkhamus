@@ -48,6 +48,7 @@ class OneTickUserInventory(
             INNOVATE_OMEN_INVESTIGATION_ITEM -> processInnovateOmenInvestigationItem(user)
             INNOVATE_CORRUPTION_INVESTIGATION_ITEM -> processInnovateCorruptionInvestigationItem(user)
             INNOVATE_DISTORTION_INVESTIGATION_ITEM -> processInnovateDistortionInvestigationItem(user)
+            INNOVATE_AURA_INVESTIGATION_ITEM -> processInnovateAuraInvestigationItem(user)
             else -> {}
         }
     }
@@ -62,6 +63,7 @@ class OneTickUserInventory(
             INNOVATE_OMEN_INVESTIGATION_ITEM -> noInnovateOmenInvestigationItem(user)
             INNOVATE_CORRUPTION_INVESTIGATION_ITEM -> noInnovateCorruptionInvestigationItem(user)
             INNOVATE_DISTORTION_INVESTIGATION_ITEM -> noInnovateDistortionInvestigationItem(user)
+            INNOVATE_AURA_INVESTIGATION_ITEM -> noInnovateAuraInvestigationItem(user)
             else -> {}
         }
     }
@@ -108,6 +110,13 @@ class OneTickUserInventory(
         user.stateTags += UserStateTag.INVESTIGATING_DISTORTION
     }
 
+    private fun processInnovateAuraInvestigationItem(
+        user: InGameUser,
+    ) {
+        user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_AURA
+        user.stateTags += UserStateTag.INVESTIGATING_AURA
+    }
+
     private fun noInnovateSoundInvestigationItem(
         user: InGameUser,
     ) {
@@ -134,6 +143,13 @@ class OneTickUserInventory(
     ) {
         user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_DISTORTION
         user.stateTags -= UserStateTag.INVESTIGATING_DISTORTION
+    }
+
+    private fun noInnovateAuraInvestigationItem(
+        user: InGameUser,
+    ) {
+        user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_AURA
+        user.stateTags -= UserStateTag.INVESTIGATING_AURA
     }
 
     private fun processCursedPotato(

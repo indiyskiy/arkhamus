@@ -4,4 +4,5 @@ enum class ZoneType {
     CLUE,
     BAN,
     SOUND,
+    AURA,
 }

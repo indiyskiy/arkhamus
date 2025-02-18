@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.*
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameAuraClueRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameCorruptionClueRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameDistortionClueRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameOmenClueRepository
@@ -38,6 +39,7 @@ class InGameDataAccessImpl(
     private val inGameUserQuestProgressRepository: InGameUserQuestProgressRepository,
     private val inGameQuestRewardRepository: InGameQuestRewardRepository,
     private val inGameScentClueRepository: InGameScentClueRepository,
+    private val inGameAuraClueRepository: InGameAuraClueRepository,
     private val inGameVisibilityMapRepository: InGameVisibilityMapRepository,
     private val inGameSoundClueRepository: InGameSoundClueRepository,
     private val inGameOmenClueRepository: InGameOmenClueRepository,
@@ -104,12 +106,13 @@ class InGameDataAccessImpl(
     }
 
     override fun getClues(gameId: Long): CluesContainer {
+        val aura = inGameAuraClueRepository.findByGameId(gameId)
         val scent = inGameScentClueRepository.findByGameId(gameId)
         val sound = inGameSoundClueRepository.findByGameId(gameId)
         val omen = inGameOmenClueRepository.findByGameId(gameId)
         val corruption = inGameCorruptionClueRepository.findByGameId(gameId)
         val distortion = inGameDistortionClueRepository.findByGameId(gameId)
-        return CluesContainer(scent, sound, omen, corruption, distortion)
+        return CluesContainer(aura, scent, sound, omen, corruption, distortion)
     }
 
     override fun getQuests(gameId: Long): List<InGameQuest> {

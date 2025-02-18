@@ -26,15 +26,6 @@ class InvestigationRecipePart() : RecipeSourcePart {
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = defaultCrafterTypes
             ),
-            listOf(
-                Ingredient(TEAR, 1),
-                Ingredient(ELDER_SIGN, 5)
-            ).toRecipe(
-                5004,
-                item = AURA_INVESTIGATION_ITEM,
-                timeToCraft = MINUTE_IN_MILLIS / 2,
-                crafterTypes = defaultCrafterTypes
-            ),
             //2.0
             listOf(
                 Ingredient(RING, 1),
@@ -78,6 +69,15 @@ class InvestigationRecipePart() : RecipeSourcePart {
             ).toRecipe(
                 50005,
                 item = INNOVATE_DISTORTION_INVESTIGATION_ITEM,
+                timeToCraft = MINUTE_IN_MILLIS / 2,
+                crafterTypes = defaultCrafterTypes
+            ),
+            listOf(
+                Ingredient(TEAR, 1),
+                Ingredient(ELDER_SIGN, 5)
+            ).toRecipe(
+                50006,
+                item = INNOVATE_AURA_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = defaultCrafterTypes
             ),

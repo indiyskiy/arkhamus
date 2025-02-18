@@ -1,0 +1,358 @@
+package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues
+
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.VisibilityByTagsHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameAuraClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.EllipseRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.TetragonRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.AuraClueRepository
+import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Ellipse
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Tetragon
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.AuraClue
+import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
+import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
+import com.arkhamusserver.arkhamus.model.ingame.clues.AuraCluePoint
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameAuraClue
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.AuraClueAdditionalDataResponse
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
+import kotlin.random.Random
+
+@Component
+class AuraClueHandler(
+    private val auraClueRepository: AuraClueRepository,
+    private val inGameAuraClueRepository: InGameAuraClueRepository,
+    private val userLocationHandler: UserLocationHandler,
+    private val visibilityByTagsHandler: VisibilityByTagsHandler,
+    private val ellipseRepository: EllipseRepository,
+    private val tetragonRepository: TetragonRepository,
+    private val geometryUtils: GeometryUtils
+) : AdvancedClueHandler {
+
+    companion object {
+        const val MAX_ON_GAME = 7
+        const val DEFAULT_INTERACTION_RADIUS = 1.0
+        private val random: Random = Random(System.currentTimeMillis())
+        private val logger = LoggerFactory.getLogger(AuraClueHandler::class.java)
+    }
+
+    override fun accept(clues: List<Clue>): Boolean {
+        return clues.contains(Clue.AURA)
+    }
+
+    override fun accept(clue: Clue): Boolean {
+        return clue == Clue.AURA
+    }
+
+    override fun accept(target: WithStringId): Boolean {
+        return target is InGameAuraClue
+    }
+
+    override fun canBeAdded(container: CluesContainer): Boolean {
+        return container.aura.any { !it.turnedOn }
+    }
+
+    override fun addClue(
+        data: GlobalGameData
+    ) {
+        data.clues.aura.filter { !it.turnedOn }.random(random).apply {
+            turnedOn = true
+            inGameAuraClueRepository.save(this)
+        }
+    }
+
+    override fun canBeRemovedRabdomly(container: CluesContainer): Boolean {
+        return container.aura.any { it.turnedOn }
+    }
+
+    override fun canBeRemoved(
+        user: InGameUser,
+        target: Any,
+        data: GlobalGameData
+    ): Boolean {
+        val aura = target as InGameAuraClue
+        return aura.turnedOn && userLocationHandler.userCanSeeTargetInRange(
+            whoLooks = user,
+            target = aura,
+            levelGeometryData = data.levelGeometryData,
+            range = aura.interactionRadius,
+            affectedByBlind = true,
+        )
+    }
+
+    override fun anyCanBeRemoved(
+        user: InGameUser,
+        data: GlobalGameData
+    ): Boolean {
+        return data.clues.aura.any {
+            canBeRemoved(user, it, data)
+        }
+    }
+
+    override fun removeRandom(container: CluesContainer) {
+        val auraClue = container.aura.filter { it.turnedOn }.randomOrNull()
+        auraClue?.let {
+            it.turnedOn = false
+            inGameAuraClueRepository.save(it)
+        }
+    }
+
+    override fun removeTarget(
+        target: WithStringId,
+        data: GlobalGameData
+    ) {
+        val auraClue = data.clues.aura.find { it.inGameId() == target.stringId().toLong() } ?: return
+        auraClue.turnedOn = false
+        inGameAuraClueRepository.save(auraClue)
+    }
+
+    override fun addClues(
+        session: GameSession,
+        god: God,
+        zones: List<InGameLevelZone>,
+        activeCluesOnStart: Int
+    ) {
+        val auraClues = auraClueRepository.findByLevelId(session.gameSessionSettings.level!!.id!!)
+        val auraCluesForGameSession = auraClues.shuffled(random).take(MAX_ON_GAME)
+        val inGameAuraClues = auraCluesForGameSession.map {
+            InGameAuraClue(
+                id = generateRandomId(),
+                gameId = session.id!!,
+                inGameAuraId = it.inGameId,
+                x = it.x,
+                y = it.y,
+                z = it.z,
+                interactionRadius = it.interactionRadius,
+                visibilityModifiers = setOf(
+                    VisibilityModifier.HAVE_ITEM_AURA,
+                ),
+                turnedOn = false,
+                targetPoint = generatePoint(it),
+                castedAbilityUsers = emptySet()
+            )
+        }
+        if (god.getTypes().contains(Clue.AURA)) {
+            val turnedOn = inGameAuraClues.shuffled(random).take(activeCluesOnStart)
+            turnedOn.forEach {
+                it.turnedOn = true
+            }
+        }
+        inGameAuraClueRepository.saveAll(inGameAuraClues)
+    }
+
+    override fun mapActualClues(
+        container: CluesContainer,
+        user: InGameUser,
+        data: GlobalGameData,
+    ): List<ExtendedClueResponse> {
+        return container.aura.filter {
+            it.turnedOn == true
+        }.filter {
+            userLocationHandler.userCanSeeTarget(user, it, data.levelGeometryData, true)
+        }.filter {
+            visibilityByTagsHandler.userCanSeeTarget(user, Clue.AURA)
+        }.map {
+            ExtendedClueResponse(
+                id = it.id,
+                clue = Clue.AURA,
+                relatedObjectId = it.inGameId(),
+                relatedObjectType = GameObjectType.AURA_CLUE,
+                x = null,
+                y = null,
+                z = null,
+                state = InnovateClueState.ACTIVE_CLUE,
+            )
+        }
+    }
+
+    override fun mapPossibleClues(
+        container: CluesContainer,
+        user: InGameUser,
+        data: GlobalGameData,
+    ): List<ExtendedClueResponse> {
+        val auraOptions = container.aura
+        val filteredByVisibilityTags = auraOptions.filter {
+            visibilityByTagsHandler.userCanSeeTarget(user, it)
+        }
+        return filteredByVisibilityTags.map {
+            val percentage = countPercentage(user, it.targetPoint)
+            ExtendedClueResponse(
+                id = it.id,
+                clue = Clue.AURA,
+                relatedObjectId = it.inGameId(),
+                relatedObjectType = GameObjectType.AURA_CLUE,
+                x = null,
+                y = null,
+                z = null,
+                state = countState(it, user, percentage),
+                additionalData = countAdditionalData(it, user, percentage),
+            )
+        }
+    }
+
+    private fun countAdditionalData(
+        clue: InGameAuraClue,
+        user: InGameUser,
+        percentage: Int
+    ): AuraClueAdditionalDataResponse? {
+        val visible = clue.castedAbilityUsers.contains(user.inGameId())
+        return if (visible) {
+            AuraClueAdditionalDataResponse(
+                distancePercentage = percentage,
+                pointReached = percentage == 100,
+                outOfRadius = percentage == -100,
+            )
+        } else null
+    }
+
+    fun countPercentage(user: InGameUser, auraCluePoint: AuraCluePoint): Int {
+        // Calculate the current distance between the user and the circle's center
+        val currentDistance = geometryUtils.distance(user, auraCluePoint)
+
+        val denominator = 2 * auraCluePoint.startDistance - auraCluePoint.interactionRadius
+        if (denominator == 0.0) {
+            logger.warn("Potential division by zero detected: 2 * startDistance equals circle.radius!")
+            return if (currentDistance >= auraCluePoint.interactionRadius) -100 else 100 // Safeguard result
+        }
+        return when {
+            // User is inside or on the circle's boundary
+            currentDistance <= auraCluePoint.interactionRadius -> {
+                100
+            }
+            // User is at start distance
+            currentDistance == auraCluePoint.startDistance -> {
+                0
+            }
+            // User is at twice the starting distance or farther
+            currentDistance >= 2 * auraCluePoint.startDistance -> {
+                -100
+            }
+            // For distances between startDistance and 2 * startDistance
+            else -> {
+                // Linearly interpolate the percentage value
+                percentage(currentDistance, auraCluePoint, denominator).toInt()
+            }
+        }
+    }
+
+    private fun percentage(
+        currentDistance: Double,
+        auraCluePoint: AuraCluePoint,
+        denominator: Double
+    ): Double =
+        100 - ((currentDistance - auraCluePoint.interactionRadius) / denominator * 200)
+
+
+    private fun countState(
+        clue: InGameAuraClue,
+        user: InGameUser,
+        percentage: Int
+    ): InnovateClueState {
+        return if (clue.castedAbilityUsers.contains(user.inGameId()) && percentage == 100) {
+            if (clue.turnedOn) {
+                InnovateClueState.ACTIVE_CLUE
+            } else {
+                InnovateClueState.ACTIVE_NO_CLUE
+            }
+        } else {
+            InnovateClueState.ACTIVE_UNKNOWN
+        }
+    }
+
+    private fun generateRandomPoint(clue: AuraClue): AuraCluePoint {
+        val minRadius = clue.minSpawnRadius
+        val maxRadius = clue.maxSpawnRadius
+        val randomRadius = sqrt(Random.nextDouble(minRadius * minRadius, maxRadius * maxRadius))
+
+        // Generate a random angle between 0 and 2π (360 degrees)
+        val randomAngle = Random.nextDouble(0.0, 2 * Math.PI)
+
+        // Convert polar coordinates to Cartesian coordinates
+        val x = clue.x + randomRadius * cos(randomAngle)
+        val z = clue.z + randomRadius * sin(randomAngle)
+
+        return AuraCluePoint(
+            x = x,
+            y = 0.0,
+            z = z,
+            interactionRadius = DEFAULT_INTERACTION_RADIUS,
+            id = generateRandomId(),
+            visibilityModifiers = setOf(VisibilityModifier.HAVE_ITEM_AURA),
+            startDistance = randomRadius - DEFAULT_INTERACTION_RADIUS,
+        )
+    }
+
+    private fun isPointInZone(
+        tetragons: List<GeometryUtils.Tetragon>,
+        ellipses: List<GeometryUtils.Ellipse>,
+        point: AuraCluePoint
+    ): Boolean {
+        return tetragons.any { it ->
+            geometryUtils.contains(it, point)
+        } || ellipses.any {
+            geometryUtils.contains(it, point)
+        }
+    }
+
+    private fun generatePoint(
+        clue: AuraClue
+    ): AuraCluePoint {
+        if (clue.zone?.id == null) {
+            logger.error("Invalid clue: zone or zone ID is null. Clue: {}", clue)
+            throw IllegalArgumentException("Clue or associated zone is invalid. Unable to generate point.")
+        }
+        val zoneId = clue.zone!!.id!!
+        val tetragons = fetchTetragons(zoneId).map {
+            GeometryUtils.Tetragon(
+                p0 = GeometryUtils.Point(it.point0X, it.point0Z),
+                p1 = GeometryUtils.Point(it.point1X, it.point1Z),
+                p2 = GeometryUtils.Point(it.point2X, it.point2Z),
+                p3 = GeometryUtils.Point(it.point3X, it.point3Z),
+            )
+        }
+        val ellipses = fetchEllipses(zoneId).map {
+            GeometryUtils.Ellipse(
+                center = GeometryUtils.Point(it.x, it.y),
+                rz = it.height / 2,
+                rx = it.width / 2
+            )
+        }
+        // Safety measure: Attempt to generate valid points
+        val maxAttempts = 1000
+        repeat(maxAttempts) {
+            val point = generateRandomPoint(clue)
+            if (isPointInZone(tetragons, ellipses, point)) {
+                logger.debug("Generated a valid AuraCluePoint: {}", point)
+                return point
+            }
+        }
+        logger.error(
+            "Failed to generate a valid AuraCluePoint after {} attempts for Clue: {} in Zone: {}",
+            maxAttempts, clue, zoneId
+        )
+        throw IllegalStateException("Unable to generate a valid AuraCluePoint after $maxAttempts attempts.")
+    }
+
+    private fun fetchTetragons(zoneId: Long): List<Tetragon> {
+        return tetragonRepository.findByLevelZoneId(zoneId)
+    }
+
+    private fun fetchEllipses(zoneId: Long): List<Ellipse> {
+        return ellipseRepository.findByLevelZoneId(zoneId)
+    }
+}

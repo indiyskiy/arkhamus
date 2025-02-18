@@ -1,9 +1,9 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign.clues
 
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelZoneRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.SoundClueJammerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.SoundClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelZone
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.SoundClue
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.SoundClueJammer
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
@@ -13,16 +13,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class LevelDesignSoundClueInfoProcessor(
-    private val levelZoneRepository: LevelZoneRepository,
     private val soundClueRepository: SoundClueRepository,
     private val soundClueJammerRepository: SoundClueJammerRepository,
 ) {
     fun processSoundInfos(
         soundCluesJson: List<JsonSoundClue>,
         soundClueJammersJson: List<JsonSoundClueJammer>,
-        savedLevel: Level
+        savedLevel: Level,
+        zones: List<LevelZone>
     ) {
-        val zones = levelZoneRepository.findByLevelId(levelId = savedLevel.levelId).filter {
+        val soundZones = zones.filter {
             it.zoneType == ZoneType.SOUND
         }.associateBy { it.inGameId }
 
@@ -33,7 +33,7 @@ class LevelDesignSoundClueInfoProcessor(
                 z = soundClueJson.z!!,
                 inGameId = soundClueJson.id!!,
                 level = savedLevel,
-                zone = zones[soundClueJson.zoneId]!!,
+                zone = soundZones[soundClueJson.zoneId]!!,
             ).let {
                 soundClueRepository.save(it)
             }

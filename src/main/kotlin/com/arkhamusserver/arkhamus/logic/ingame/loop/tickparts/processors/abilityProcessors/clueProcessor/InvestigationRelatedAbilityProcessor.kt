@@ -21,8 +21,7 @@ class InvestigationRelatedAbilityProcessor(
     companion object {
         val logger: Logger = LoggerFactory.getLogger(InvestigationRelatedAbilityProcessor::class.java)
         val relatedSet = setOf(
-            Ability.SEARCH_FOR_INSCRIPTION,
-            Ability.SEARCH_FOR_AURA,
+            Ability.SEARCH_FOR_INSCRIPTION
         )
     }
 

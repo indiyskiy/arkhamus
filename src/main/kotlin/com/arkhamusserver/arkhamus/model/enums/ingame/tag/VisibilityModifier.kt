@@ -28,5 +28,5 @@ enum class VisibilityModifier {
     HAVE_ITEM_AURA,
     HAVE_ITEM_CORRUPTION,
     HAVE_ITEM_OMEN,
-    HAVE_ITEM_DISTORTION
+    HAVE_ITEM_DISTORTION,
 }

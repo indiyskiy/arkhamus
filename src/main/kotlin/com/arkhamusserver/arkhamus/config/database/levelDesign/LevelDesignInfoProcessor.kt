@@ -1,12 +1,10 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
-import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignCorruptionClueInfoProcessor
-import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignDistortionClueInfoProcessor
-import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignScentClueInfoProcessor
-import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignSoundClueInfoProcessor
+import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.*
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CREATE_TEST_QUESTS
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
 import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
@@ -40,6 +38,7 @@ class LevelDesignInfoProcessor(
     private val levelDesignSoundClueInfoProcessor: LevelDesignSoundClueInfoProcessor,
     private val levelDesignCorruptionClueInfoProcessor: LevelDesignCorruptionClueInfoProcessor,
     private val levelDesignDistortionClueInfoProcessor: LevelDesignDistortionClueInfoProcessor,
+    private val levelDesignAuraClueInfoProcessor: LevelDesignAuraClueInfoProcessor,
     private val levelDesignVisibilityProcessor: LevelDesignVisibilityProcessor,
     private val randomQuestGenerator: RandomQuestGenerator,
 ) {
@@ -115,10 +114,11 @@ class LevelDesignInfoProcessor(
         levelDesignRitualAreaInfoProcessor.processRitualArea(levelFromJson.ritualZones, savedLevel)
         levelDesignCrafterInfoProcessor.processCrafters(levelFromJson.crafters, savedLevel)
         levelDesignProcessStartInfoProcessor.processStartMarkers(levelFromJson.startMarkers, savedLevel)
-        levelDesignZonesInfoProcessor.processZones(
+        val zones = levelDesignZonesInfoProcessor.processZones(
             clueZones = levelFromJson.clueZones,
             banZones = levelFromJson.banZones,
             soundZones = levelFromJson.soundClueZones,
+            auraZones = levelFromJson.auraClueZones,
             level = savedLevel
         )
 
@@ -143,11 +143,25 @@ class LevelDesignInfoProcessor(
             savedLevel
         )
         levelDesignDoorInfoProcessor.processDoors(levelFromJson.doors, savedLevel)
-        levelDesignScentClueInfoProcessor.processScentClueInfos(levelFromJson.scentClues, savedLevel)
+        levelDesignVisibilityProcessor.processVisibilityObjects(levelFromJson, savedLevel)
+
+        processClues(levelFromJson, savedLevel, zones)
+    }
+
+    private fun processClues(
+        levelFromJson: LevelFromJson,
+        savedLevel: Level,
+        zones: List<LevelZone>
+    ) {
+        levelDesignScentClueInfoProcessor.processScentClueInfos(
+            levelFromJson.scentClues,
+            savedLevel
+        )
         levelDesignSoundClueInfoProcessor.processSoundInfos(
             levelFromJson.soundClues,
             levelFromJson.soundClueJammers,
-            savedLevel
+            savedLevel,
+            zones
         )
         levelDesignCorruptionClueInfoProcessor.processCorruptionClueInfos(
             levelFromJson.corruptionClues,
@@ -157,7 +171,11 @@ class LevelDesignInfoProcessor(
             levelFromJson.distortionClues,
             savedLevel
         )
-        levelDesignVisibilityProcessor.processVisibilityObjects(levelFromJson, savedLevel)
+        levelDesignAuraClueInfoProcessor.processAuraClueInfos(
+            levelFromJson.auraClues,
+            savedLevel,
+            zones
+        )
     }
 
     private fun findSameLevel(levelFromJson: LevelFromJson, levelsFromDb: List<Level>): Level? =

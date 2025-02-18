@@ -31,6 +31,7 @@ class GameObjectFinder {
                 it.stringId() == id
             }
 
+            AURA_CLUE -> data.clues.aura.firstOrNull { it.inGameId() == id.toLong() }
             CORRUPTION_CLUE -> data.clues.corruption.firstOrNull { it.inGameId() == id.toLong() }
             DISTORTION_CLUE -> data.clues.distortion.firstOrNull { it.inGameId() == id.toLong() }
         }
@@ -69,6 +70,7 @@ class GameObjectFinder {
         SCENT_CLUE -> data.clues.scent
         SOUND_CLUE -> data.clues.sound
         SOUND_CLUE_JAMMER -> data.clues.sound.map { it.soundClueJammers }.flatten()
+        AURA_CLUE -> data.clues.aura
         OMEN_CLUE -> data.clues.omen
         CORRUPTION_CLUE -> data.clues.corruption
         DISTORTION_CLUE -> data.clues.distortion

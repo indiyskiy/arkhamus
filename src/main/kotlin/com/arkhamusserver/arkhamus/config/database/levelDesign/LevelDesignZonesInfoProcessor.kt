@@ -24,15 +24,18 @@ class LevelDesignZonesInfoProcessor(
         clueZones: List<ZoneFromJson>,
         banZones: List<ZoneFromJson>,
         soundZones: List<ZoneFromJson>,
+        auraZones: List<ZoneFromJson>,
         level: Level
-    ) {
-        processClueZones(clueZones, level)
-        processBanZones(banZones, level)
-        processSoundZones(soundZones, level)
+    ): List<LevelZone> {
+        val clueZone = processClueZones(clueZones, level)
+        val banZone = processBanZones(banZones, level)
+        val soundZone = processSoundZones(soundZones, level)
+        val auraZone = processAuraZones(auraZones, level)
+        return clueZone + banZone + soundZone + auraZone
     }
 
-    private fun processClueZones(clueZones: List<ZoneFromJson>, savedLevel: Level) {
-        clueZones.forEach { clueZone ->
+    private fun processClueZones(clueZones: List<ZoneFromJson>, savedLevel: Level): List<LevelZone> {
+        return clueZones.map { clueZone ->
             val levelZone = LevelZone(
                 inGameId = clueZone.zoneId!!,
                 zoneType = ZoneType.CLUE,
@@ -42,11 +45,12 @@ class LevelDesignZonesInfoProcessor(
             }
             processClueTetragons(clueZone.tetragons, levelZone)
             processClueEllipses(clueZone.ellipses, levelZone)
+            levelZone
         }
     }
 
-    private fun processBanZones(clueZones: List<ZoneFromJson>, savedLevel: Level) {
-        clueZones.forEach { clueZone ->
+    private fun processBanZones(clueZones: List<ZoneFromJson>, savedLevel: Level): List<LevelZone> {
+        return clueZones.map { clueZone ->
             val banZone = LevelZone(
                 inGameId = clueZone.zoneId!!,
                 zoneType = ZoneType.BAN,
@@ -56,11 +60,12 @@ class LevelDesignZonesInfoProcessor(
             }
             processClueTetragons(clueZone.tetragons, banZone)
             processClueEllipses(clueZone.ellipses, banZone)
+            banZone
         }
     }
 
-    private fun processSoundZones(soundZones: List<ZoneFromJson>, savedLevel: Level) {
-        soundZones.forEach { soundZone ->
+    private fun processSoundZones(soundZones: List<ZoneFromJson>, savedLevel: Level): List<LevelZone> {
+        return soundZones.map { soundZone ->
             val banZone = LevelZone(
                 inGameId = soundZone.zoneId!!,
                 zoneType = ZoneType.SOUND,
@@ -70,6 +75,22 @@ class LevelDesignZonesInfoProcessor(
             }
             processClueTetragons(soundZone.tetragons, banZone)
             processClueEllipses(soundZone.ellipses, banZone)
+            banZone
+        }
+    }
+
+    private fun processAuraZones(soundZones: List<ZoneFromJson>, savedLevel: Level): List<LevelZone> {
+        return soundZones.map { soundZone ->
+            val banZone = LevelZone(
+                inGameId = soundZone.zoneId!!,
+                zoneType = ZoneType.AURA,
+                level = savedLevel,
+            ).apply {
+                levelZoneRepository.save(this)
+            }
+            processClueTetragons(soundZone.tetragons, banZone)
+            processClueEllipses(soundZone.ellipses, banZone)
+            banZone
         }
     }
 
