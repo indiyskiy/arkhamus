@@ -63,12 +63,20 @@
     </th:block>
     <!-- Processing CLUE zone -->
     <!-- Processing tetragons -->
-    <th:block th:each="poly : ${levelGeometry.clueZones.polygons}">
+    <th:block th:each="poly : ${levelGeometry.auraClueZones.polygons}">
+        <polygon th:attr="points=${poly.polygonPoints}"
+                 th:style="'fill:' + ${poly.color.getCode()} + ';+fill-opacity:0.5' + ';stroke:black;stroke-width:1'"/>
+    </th:block>
+    <th:block th:each="poly : ${levelGeometry.soundClueZones.polygons}">
         <polygon th:attr="points=${poly.polygonPoints}"
                  th:style="'fill:' + ${poly.color.getCode()} + ';+fill-opacity:0.5' + ';stroke:black;stroke-width:1'"/>
     </th:block>
     <!-- Processing ellipses -->
-    <th:block th:each="ellipse : ${levelGeometry.clueZones.ellipses}">
+    <th:block th:each="ellipse : ${levelGeometry.auraClueZones.ellipses}">
+        <ellipse th:attr="cx=${ellipse.cx},cy=${ellipse.cy},rx=${ellipse.rx},ry=${ellipse.ry}"
+                 th:style="'fill:' + ${ellipse.color.getCode()} + ';stroke:black;stroke-width:1'"/>
+    </th:block>
+    <th:block th:each="ellipse : ${levelGeometry.soundClueZones.ellipses}">
         <ellipse th:attr="cx=${ellipse.cx},cy=${ellipse.cy},rx=${ellipse.rx},ry=${ellipse.ry}"
                  th:style="'fill:' + ${ellipse.color.getCode()} + ';stroke:black;stroke-width:1'"/>
     </th:block>

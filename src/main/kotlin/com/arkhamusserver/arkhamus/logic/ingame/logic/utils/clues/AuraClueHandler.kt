@@ -127,6 +127,10 @@ class AuraClueHandler(
         zones: List<InGameLevelZone>,
         activeCluesOnStart: Int
     ) {
+        val ellipses = ellipseRepository.findByLevelZoneLevelId(session.gameSessionSettings.level!!.id!!)
+        val tetragons = tetragonRepository.findByLevelZoneLevelId(session.gameSessionSettings.level!!.id!!)
+        logger.info("searching in ${ellipses.size} ellipses and ${tetragons.size} tetragons")
+
         val auraClues = auraClueRepository.findByLevelId(session.gameSessionSettings.level!!.id!!)
         val auraCluesForGameSession = auraClues.shuffled(random).take(MAX_ON_GAME)
         val inGameAuraClues = auraCluesForGameSession.map {
@@ -142,7 +146,7 @@ class AuraClueHandler(
                     VisibilityModifier.HAVE_ITEM_AURA,
                 ),
                 turnedOn = false,
-                targetPoint = generatePoint(it),
+                targetPoint = generatePoint(it, tetragons, ellipses),
                 castedAbilityUsers = emptySet()
             )
         }
@@ -278,14 +282,16 @@ class AuraClueHandler(
         val minRadius = clue.minSpawnRadius
         val maxRadius = clue.maxSpawnRadius
         val randomRadius = sqrt(Random.nextDouble(minRadius * minRadius, maxRadius * maxRadius))
+        logger.info("Radius  {} < {} < {}", minRadius, randomRadius, maxRadius)
 
         // Generate a random angle between 0 and 2π (360 degrees)
-        val randomAngle = Random.nextDouble(0.0, 2 * Math.PI)
+        val randomAngle = random.nextDouble(0.0, 2 * Math.PI)
+        logger.info("randomAngle: {}", randomAngle)
 
         // Convert polar coordinates to Cartesian coordinates
         val x = clue.x + randomRadius * cos(randomAngle)
         val z = clue.z + randomRadius * sin(randomAngle)
-
+        logger.info("random point generated x: {}, z: {}", x, z)
         return AuraCluePoint(
             x = x,
             y = 0.0,
@@ -310,14 +316,18 @@ class AuraClueHandler(
     }
 
     private fun generatePoint(
-        clue: AuraClue
+        clue: AuraClue,
+        tetragons: List<Tetragon>,
+        ellipses: List<Ellipse>
     ): AuraCluePoint {
         if (clue.zone?.id == null) {
             logger.error("Invalid clue: zone or zone ID is null. Clue: {}", clue)
             throw IllegalArgumentException("Clue or associated zone is invalid. Unable to generate point.")
         }
-        val zoneId = clue.zone!!.id!!
-        val tetragons = fetchTetragons(zoneId).map {
+        val zoneId = clue.zone!!.inGameId
+        val filteredTetragons = tetragons.filter {
+            it.levelZone.inGameId == zoneId
+        }.map {
             GeometryUtils.Tetragon(
                 p0 = GeometryUtils.Point(it.point0X, it.point0Z),
                 p1 = GeometryUtils.Point(it.point1X, it.point1Z),
@@ -325,19 +335,22 @@ class AuraClueHandler(
                 p3 = GeometryUtils.Point(it.point3X, it.point3Z),
             )
         }
-        val ellipses = fetchEllipses(zoneId).map {
+        val filteredEllipses = ellipses.filter { ellipse ->
+            ellipse.levelZone.inGameId == zoneId
+        }.map {
             GeometryUtils.Ellipse(
                 center = GeometryUtils.Point(it.x, it.y),
                 rz = it.height / 2,
                 rx = it.width / 2
             )
         }
+        logger.info("creating AURA CLUE point in ${filteredEllipses.size} ellipses and ${filteredTetragons.size} tetragons")
         // Safety measure: Attempt to generate valid points
         val maxAttempts = 1000
         repeat(maxAttempts) {
             val point = generateRandomPoint(clue)
-            if (isPointInZone(tetragons, ellipses, point)) {
-                logger.debug("Generated a valid AuraCluePoint: {}", point)
+            if (isPointInZone(filteredTetragons, filteredEllipses, point)) {
+                logger.info("Generated a valid AuraCluePoint: {}", point)
                 return point
             }
         }
@@ -345,14 +358,8 @@ class AuraClueHandler(
             "Failed to generate a valid AuraCluePoint after {} attempts for Clue: {} in Zone: {}",
             maxAttempts, clue, zoneId
         )
-        throw IllegalStateException("Unable to generate a valid AuraCluePoint after $maxAttempts attempts.")
-    }
-
-    private fun fetchTetragons(zoneId: Long): List<Tetragon> {
-        return tetragonRepository.findByLevelZoneId(zoneId)
-    }
-
-    private fun fetchEllipses(zoneId: Long): List<Ellipse> {
-        return ellipseRepository.findByLevelZoneId(zoneId)
+        logger.warn("generating random point no meter what")
+        return generateRandomPoint(clue)
+//        throw IllegalStateException("Unable to generate a valid AuraCluePoint after $maxAttempts attempts.")
     }
 }

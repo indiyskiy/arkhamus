@@ -81,10 +81,18 @@ class AdminLevelPreviewLogic(
         } else {
             ZoneDataDto(emptyList(), emptyList())
         }
-        val clueZones = if (filter.clueZones == true) {
+        val soundClueZones = if (filter.clueZones == true) {
             ZoneDataDto(
-                mapPolygons(tetragons.filter { tetragon -> tetragon.levelZone.zoneType == ZoneType.CLUE }),
-                mapEllipses(ellipses.filter { ellipse -> ellipse.levelZone.zoneType == ZoneType.CLUE }),
+                mapPolygons(tetragons.filter { tetragon -> tetragon.levelZone.zoneType == ZoneType.SOUND }),
+                mapEllipses(ellipses.filter { ellipse -> ellipse.levelZone.zoneType == ZoneType.SOUND }),
+            )
+        } else {
+            ZoneDataDto(emptyList(), emptyList())
+        }
+        val auraClueZones = if (filter.clueZones == true) {
+            ZoneDataDto(
+                mapPolygons(tetragons.filter { tetragon -> tetragon.levelZone.zoneType == ZoneType.AURA }),
+                mapEllipses(ellipses.filter { ellipse -> ellipse.levelZone.zoneType == ZoneType.AURA }),
             )
         } else {
             ZoneDataDto(emptyList(), emptyList())
@@ -95,7 +103,8 @@ class AdminLevelPreviewLogic(
             height = level.levelHeight.toInt() * SCREEN_ZOOM,
             width = level.levelWidth.toInt() * SCREEN_ZOOM,
             banZones = banZones,
-            clueZones = clueZones,
+            soundClueZones = soundClueZones,
+            auraClueZones = auraClueZones,
             keyPoints = mapKeyPoints(containers, altars, crafters, lanterns),
             questGivers = mapQuestGivers(questGivers),
             tasks = mapTasks(levelTasks),
