@@ -1,7 +1,9 @@
 package com.arkhamusserver.arkhamus.logic
 
+import com.arkhamusserver.arkhamus.logic.user.CurrentUserService
+import com.arkhamusserver.arkhamus.logic.user.UserSkinLogic
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.view.dto.GameSessionDto

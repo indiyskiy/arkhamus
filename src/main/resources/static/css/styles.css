@@ -215,3 +215,19 @@ select:focus {
 .status-offline {
     background-color: red;
 }
+
+.icon-yes {
+    background-image: url('/static/icon/yes_icon.png');
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+}
+
+.icon-no {
+    background-image: url('/static/icon/no_icon.png');
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+}

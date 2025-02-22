@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.model.database.entity
+package com.arkhamusserver.arkhamus.model.database.entity.user
 
 import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import jakarta.persistence.*

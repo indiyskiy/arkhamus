@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.view.controller.steam
 
-import com.arkhamusserver.arkhamus.logic.steam.SteamAuthLogic
-import com.arkhamusserver.arkhamus.logic.steam.SteamStartServerLogic
+import com.arkhamusserver.arkhamus.logic.user.steam.SteamAuthLogic
+import com.arkhamusserver.arkhamus.logic.user.steam.SteamStartServerLogic
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamAuthRequestDto
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamServerIdDto
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse

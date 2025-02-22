@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.maker
 
-import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserSkinSettings
 import com.arkhamusserver.arkhamus.view.dto.UserSkinDto
 import org.springframework.stereotype.Component
 

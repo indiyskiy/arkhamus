@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
-import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.view.dto.user.AdminUserDto
 import org.springframework.stereotype.Component
 import java.sql.Timestamp
@@ -41,6 +41,7 @@ class AdminUserLogic(
         nickName = userAccount.nickName,
         email = userAccount.email!!,
         creation = dateToString(userAccount.creationTimestamp),
+        steam = userAccount.steamId,
         status = userStatusService.getUserStatus(userAccount.id!!).userState,
     )
 

@@ -12,6 +12,7 @@ data class AdminGameLevelGeometryDto(
     var auraClueZones: ZoneDataDto,
     var keyPoints: List<PointDto>,
     var questGivers: List<NpcDto>,
+    var clues: List<ClueDto>,
     var tasks: List<TaskGeometryDto>,
     var voteSpots: List<VoteSpotDto>,
     var doors: List<DoorDto>,
@@ -36,6 +37,12 @@ data class EllipseDto(
 )
 
 data class NpcDto(
+    val points: List<PointDto>,
+    val polygonPoints: String = points.joinToString(" ") { "${it.pointX},${it.pointY}" },
+    var color: NiceColor
+)
+
+data class ClueDto(
     val points: List<PointDto>,
     val polygonPoints: String = points.joinToString(" ") { "${it.pointX},${it.pointY}" },
     var color: NiceColor

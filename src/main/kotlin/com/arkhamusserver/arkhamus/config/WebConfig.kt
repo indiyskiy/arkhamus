@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.config
 
-import com.arkhamusserver.arkhamus.logic.UserStateInterceptor
+import com.arkhamusserver.arkhamus.logic.user.UserStateInterceptor
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer

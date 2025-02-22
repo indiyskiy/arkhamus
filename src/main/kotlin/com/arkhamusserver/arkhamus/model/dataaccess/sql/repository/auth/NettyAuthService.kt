@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
-import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 

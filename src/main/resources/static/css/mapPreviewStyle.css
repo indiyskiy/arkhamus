@@ -30,11 +30,16 @@ a:active {
 }
 
 body {
+    padding-top: 35px;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
     background: #eee;
+}
+
+form {
+    margin-top: 35px; /* Matches the header’s height */
 }
 
 .header {
@@ -100,6 +105,24 @@ body {
     margin-left: -60px;
     opacity: 0;
     transition: opacity 0.3s;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: row; /* Align children in a horizontal row */
+    align-items: flex-start; /* Align items to the top */
+    gap: 20px; /* Add a gap between the form and the SVG */
+    padding: 20px; /* Optional: Add padding around the container */
+}
+
+.form-left {
+    min-width: 200px; /* Define a fixed or minimum width for the form */
+    margin: 0;
+    flex-shrink: 0; /* Prevent the form from shrinking */
+}
+
+.svg-container {
+    flex-grow: 1; /* Allow the SVG to take up the remaining space */
 }
 
 .dot:hover .tooltip {

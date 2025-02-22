@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic
+package com.arkhamusserver.arkhamus.logic.user
 
 import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService

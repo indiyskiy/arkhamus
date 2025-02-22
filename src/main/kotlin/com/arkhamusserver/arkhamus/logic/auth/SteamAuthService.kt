@@ -1,11 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.auth
 
-import com.arkhamusserver.arkhamus.logic.steam.SteamReaderLogic
+import com.arkhamusserver.arkhamus.logic.user.steam.SteamReaderLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.RoleRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.ArkhamusUserDetails
-import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
-import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserSkinSettings
 import com.arkhamusserver.arkhamus.model.enums.RoleName
 import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamUserResponse

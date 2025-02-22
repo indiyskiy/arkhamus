@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.view.controller
 
-import com.arkhamusserver.arkhamus.logic.UserSkinLogic
+import com.arkhamusserver.arkhamus.logic.user.UserSkinLogic
 import com.arkhamusserver.arkhamus.view.dto.UserSkinDto
 import org.springframework.web.bind.annotation.*
 

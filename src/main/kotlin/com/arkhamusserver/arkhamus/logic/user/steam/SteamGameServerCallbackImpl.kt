@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.steam
+package com.arkhamusserver.arkhamus.logic.user.steam
 
 import com.codedisaster.steamworks.*
 import org.slf4j.LoggerFactory

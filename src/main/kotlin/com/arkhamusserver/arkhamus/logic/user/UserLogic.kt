@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic
+package com.arkhamusserver.arkhamus.logic.user
 
 import com.arkhamusserver.arkhamus.view.dto.user.UserDto
 import org.springframework.stereotype.Component

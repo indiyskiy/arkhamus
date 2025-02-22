@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic
+package com.arkhamusserver.arkhamus.logic.user
 
 import com.arkhamusserver.arkhamus.config.UpdateUserState
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService

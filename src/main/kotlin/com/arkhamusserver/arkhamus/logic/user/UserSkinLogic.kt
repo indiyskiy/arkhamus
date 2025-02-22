@@ -1,9 +1,9 @@
-package com.arkhamusserver.arkhamus.logic
+package com.arkhamusserver.arkhamus.logic.user
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserSkinRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
-import com.arkhamusserver.arkhamus.model.database.entity.UserSkinSettings
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserSkinSettings
 import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.view.dto.UserSkinDto
 import com.arkhamusserver.arkhamus.view.maker.UserSkinDtoMaker

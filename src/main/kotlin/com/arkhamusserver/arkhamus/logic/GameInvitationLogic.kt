@@ -1,12 +1,13 @@
 package com.arkhamusserver.arkhamus.logic
 
 import com.arkhamusserver.arkhamus.logic.exception.ArkhamusServerRequestException
+import com.arkhamusserver.arkhamus.logic.user.CurrentUserService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameInvitationRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameInvitation
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.InvitationState.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType

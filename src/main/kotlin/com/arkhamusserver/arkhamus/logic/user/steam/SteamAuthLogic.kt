@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.steam
+package com.arkhamusserver.arkhamus.logic.user.steam
 
 import com.arkhamusserver.arkhamus.logic.auth.SteamAuthService
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse

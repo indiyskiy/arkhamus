@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.config.auth.ArkhamusWebAuthenticationDetails
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.CustomUserDetailsService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.TokenService
-import com.arkhamusserver.arkhamus.model.database.entity.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

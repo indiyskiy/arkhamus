@@ -1,8 +1,17 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.AuraClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.CorruptionClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.DistortionClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.SoundClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.*
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.AuraClue
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.CorruptionClue
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.DistortionClue
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.SoundClue
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.view.dto.admin.*
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -21,6 +30,11 @@ class AdminLevelPreviewLogic(
     private val voteSpotRepository: VoteSpotRepository,
     private val doorRepository: DoorRepository,
     private val thresholdRepository: ThresholdRepository,
+
+    private val soundClueRepository: SoundClueRepository,
+    private val auraClueRepository: AuraClueRepository,
+    private val distortionClueRepository: DistortionClueRepository,
+    private val corruptionClueRepository: CorruptionClueRepository,
 ) {
 
     companion object {
@@ -98,6 +112,19 @@ class AdminLevelPreviewLogic(
             ZoneDataDto(emptyList(), emptyList())
         }
 
+        val aura = if (filter.clueZones == true) {
+            auraClueRepository.findByLevelId(levelId)
+        } else emptyList()
+        val sound = if (filter.clueZones == true) {
+            soundClueRepository.findByLevelId(levelId)
+        } else emptyList()
+        val distortion = if (filter.clueZones == true) {
+            distortionClueRepository.findByLevelId(levelId)
+        } else emptyList()
+        val corruption = if (filter.clueZones == true) {
+            corruptionClueRepository.findByLevelId(levelId)
+        } else emptyList()
+
         return AdminGameLevelGeometryDto(
             levelId = level.levelId,
             height = level.levelHeight.toInt() * SCREEN_ZOOM,
@@ -110,9 +137,92 @@ class AdminLevelPreviewLogic(
             tasks = mapTasks(levelTasks),
             voteSpots = mapVoteSpots(voteSpots),
             doors = mapDoors(doors),
-            thresholds = mapThresholds(thresholds)
+            thresholds = mapThresholds(thresholds),
+            clues = mapClues(aura, sound, distortion, corruption)
         )
     }
+
+    private fun mapClues(
+        aura: List<AuraClue>,
+        sound: List<SoundClue>,
+        distortion: List<DistortionClue>,
+        corruption: List<CorruptionClue>
+    ): List<ClueDto> =
+        mapAura(aura) + mapSound(sound) + mapDistortion(distortion) + mapCorruption(corruption)
+
+    private fun mapAura(clues: List<AuraClue>): List<ClueDto> =
+        clues.map {
+            val x = it.x * SCREEN_ZOOM
+            val z = it.z * SCREEN_ZOOM
+            ClueDto(
+                points = cluePoints(x, z),
+                color = clueColor(Clue.AURA)
+            )
+        }
+
+    private fun mapDistortion(clues: List<DistortionClue>): List<ClueDto> =
+        clues.map {
+            val x = it.x * SCREEN_ZOOM
+            val z = it.z * SCREEN_ZOOM
+            ClueDto(
+                points = cluePoints(x, z),
+                color = clueColor(Clue.DISTORTION)
+            )
+        }
+
+    private fun mapSound(clues: List<SoundClue>): List<ClueDto> =
+        clues.map {
+            val x = it.x * SCREEN_ZOOM
+            val z = it.z * SCREEN_ZOOM
+            ClueDto(
+                points = cluePoints(x, z),
+                color = clueColor(Clue.SOUND)
+            )
+        }
+
+    private fun mapCorruption(clues: List<CorruptionClue>): List<ClueDto> =
+        clues.map {
+            val x = it.x * SCREEN_ZOOM
+            val z = it.z * SCREEN_ZOOM
+            ClueDto(
+                points = cluePoints(x, z),
+                color = clueColor(Clue.CORRUPTION)
+            )
+        }
+
+    private fun clueColor(clueType: Clue): NiceColor = NiceColor.values()[clueType.ordinal % NiceColor.values().size]
+
+    private fun cluePoints(
+        x: Double,
+        z: Double
+    ): List<PointDto> = listOf(
+        PointDto(
+            (x).toFloat(),
+            (z + 5).toFloat(),
+            NiceColor.VIOLET
+        ),
+        PointDto(
+            (x - 5).toFloat(),
+            (z - 5).toFloat(),
+            NiceColor.VIOLET
+        ),
+        PointDto(
+            (x + 5).toFloat(),
+            (z).toFloat(),
+            NiceColor.VIOLET
+        ),
+        PointDto(
+            (x - 5).toFloat(),
+            (z).toFloat(),
+            NiceColor.VIOLET
+        ),
+        PointDto(
+            (x + 5).toFloat(),
+            (z - 5).toFloat(),
+            NiceColor.VIOLET
+        ),
+    )
+
 
     private fun mapQuestGivers(questGivers: List<QuestGiver>): List<NpcDto> {
         return questGivers.map {

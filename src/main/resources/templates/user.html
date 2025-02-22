@@ -19,12 +19,14 @@
             <th>Id</th>
             <th>nick name</th>
             <th>email</th>
+            <th>steam</th>
             <th>created</th>
         </tr>
         <tr>
             <td th:text="${user.userId}"></td>
             <td th:text="${user.nickName}"></td>
             <td th:text="${user.email}"></td>
+            <td th:text="${user.steam?:'-'}"></td>
             <td th:text="${user.creation?:''}"></td>
         </tr>
     </table>

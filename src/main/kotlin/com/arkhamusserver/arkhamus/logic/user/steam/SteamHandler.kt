@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.steam
+package com.arkhamusserver.arkhamus.logic.user.steam
 
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamServerIdDto
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamUserResponse
@@ -21,9 +21,9 @@ class SteamHandler(
     companion object {
         private val logger = LoggerFactory.getLogger(SteamHandler::class.java)
         private val baseUrl = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/"
-        val PUBLIC_STEAM_API_KEY = "CCCF25C2E631257F00C93AAED8D7037D"
+        const val PUBLIC_STEAM_API_KEY = "CCCF25C2E631257F00C93AAED8D7037D"
         const val VERY_SECRET_API_KEY = "80E6C20B7E44260E6F9DB755DDF7B651"
-        val STEAM_GAME_ID = 3348260
+        const val STEAM_GAME_ID = 3348260
         private val GAME_PORT: Short = 27015 // Game port for player connections
         private val QUERY_PORT: Short = 27016 // Query port for Steam server list communication
     }
