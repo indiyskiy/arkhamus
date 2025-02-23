@@ -30,9 +30,8 @@ class BrowserAdminUserController(
     ): String {
         val user: AdminUserDto = adminUserLogic.user(userId)
         val data: AdminUserGameDataDto = adminGameLogic.allForUser(userId)
-        val relations = user.steamId?.let {
-            relationsLogic.readFriendListForAdmin(userId)
-        }
+        val relations = relationsLogic.readFriendListForAdmin(userId)
+
         model.addAttribute("user", user)
         model.addAttribute("data", data)
         model.addAttribute("relations", relations)

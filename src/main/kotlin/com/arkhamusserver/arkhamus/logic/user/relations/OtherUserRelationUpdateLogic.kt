@@ -12,8 +12,11 @@ class OtherUserRelationUpdateLogic(
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(OtherUserRelationUpdateLogic::class.java)
-        private val RELATION_TYPE_SET =
-            setOf(HAD_CUSTOM_GAME, HAD_LADDER_GAME, CULTPRITS_FRIEND)
+        private val RELATION_TYPE_SET = setOf(
+            HAD_CUSTOM_GAME,
+            HAD_LADDER_GAME,
+            CULTPRITS_FRIEND
+        )
     }
 
     fun updateRelations(userId: Long): List<UserRelation> {

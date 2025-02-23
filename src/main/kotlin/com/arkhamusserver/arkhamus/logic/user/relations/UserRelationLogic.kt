@@ -5,12 +5,15 @@ import com.arkhamusserver.arkhamus.logic.user.CurrentUserService
 import com.arkhamusserver.arkhamus.model.UserStateHolder
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserRelationRepository
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserRelation
 import com.arkhamusserver.arkhamus.model.enums.UserRelationType
 import com.arkhamusserver.arkhamus.model.enums.steam.SteamPersonaState
 import com.arkhamusserver.arkhamus.view.dto.user.SteamUserShortDto
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class UserRelationLogic(
@@ -19,11 +22,44 @@ class UserRelationLogic(
     private val currentUserService: CurrentUserService,
     private val userRepository: UserAccountRepository,
     private val userStatusService: UserStatusService,
-    private val steamUserDataCache: SteamUserDataCache
+    private val steamUserDataCache: SteamUserDataCache,
+    private val userRelationRepository: UserRelationRepository
 ) {
 
     companion object {
         private val logger = LoggerFactory.getLogger(UserRelationLogic::class.java)
+    }
+
+    @Transactional
+    fun makeFriend(newFriendId: Long): SteamUserShortDto {
+        val currentUser = currentUserService.getCurrentUserAccount()
+        val targetUser =
+            userRepository.findById(newFriendId).orElseThrow { IllegalStateException("user not found: $newFriendId") }
+        val relations =
+            userRelationRepository.findBySourceUserAndTargetUser(currentUser, targetUser)
+        val result = relations.firstOrNull {
+            it.userRelationType == UserRelationType.STEAM_FRIEND
+        } ?: createFriendRelation(
+            currentUser, targetUser
+        )
+        return toDto(
+            userAccount = result.targetUser,
+            steamPlayer = result.targetSteamId?.let { steamUserDataCache.getCachedSteamData(it) },
+            state = result.targetUser?.let { userStatusService.getUserStatus(it.id!!) },
+            userRelationTypes = relations.mapNotNull { it.userRelationType }
+        )
+    }
+
+    private fun createFriendRelation(
+        sourceUser: UserAccount, targetUser: UserAccount
+    ): UserRelation {
+        val relation = UserRelation().apply {
+            this.sourceUser = sourceUser
+            this.targetUser = targetUser
+            this.userRelationType = UserRelationType.STEAM_FRIEND
+            this.targetSteamId = targetUser.steamId
+        }
+        return userRelationRepository.save(relation)
     }
 
     fun readFriendList(steamIds: String): List<SteamUserShortDto> {
@@ -76,8 +112,7 @@ class UserRelationLogic(
 
     private fun List<CachedUserRelation>.collectRelations(userId: Long?, steamId: String?): List<UserRelationType> =
         this.filter {
-            (it.targetUserId != null && it.targetUserId == userId) ||
-                    (it.steamId != null && it.steamId == steamId)
+            (it.targetUserId != null && it.targetUserId == userId) || (it.steamId != null && it.steamId == steamId)
         }.let {
             logger.info("relation types: ${it.joinToString { "${it.userRelationType}" }}")
             it
@@ -93,11 +128,9 @@ class UserRelationLogic(
         }
 
     private fun mapSteamUsers(allRelations: List<CachedUserRelation>): Map<String, CachedSteamData> =
-        allRelations.mapNotNull { it.steamId }
-            .distinct()
-            .mapNotNull {
-                steamUserDataCache.getCachedSteamData(it)
-            }.associateBy { it.steamId }
+        allRelations.mapNotNull { it.steamId }.distinct().mapNotNull {
+            steamUserDataCache.getCachedSteamData(it)
+        }.associateBy { it.steamId }
 
 
     private fun toDto(
@@ -116,4 +149,5 @@ class UserRelationLogic(
         this.lastActive = state?.lastActive
         this.relations = userRelationTypes
     }
+
 }

@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.view.dto.user.SteamUserShortDto
 import com.arkhamusserver.arkhamus.view.dto.user.UserDto
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -29,5 +30,12 @@ class UserController(
         @PathVariable steamIds: String
     ): List<SteamUserShortDto> {
         return relationsLogic.readFriendList(steamIds)
+    }
+    @UpdateUserState(CultpritsUserState.ONLINE)
+    @PostMapping("/friends/{userId}")
+    fun makeFriend(
+        @PathVariable userId: Long
+    ): SteamUserShortDto {
+        return relationsLogic.makeFriend(userId)
     }
 }

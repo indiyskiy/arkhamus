@@ -34,4 +34,9 @@ class OtherUserRelationCache(
         }
     }
 
+    fun cleanCacheForUser(userId: Long) {
+        relationCache.remove(userId)
+        lastUpdateTimestamps.remove(userId)
+    }
+
 }

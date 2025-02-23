@@ -12,7 +12,7 @@ class UserRelationCacheMaker {
                 id = relation.id!!,
                 sourceUserId = relation.sourceUser!!.id!!,
                 targetUserId = relation.targetUser?.id,
-                steamId = relation.targetSteamId!!,
+                steamId = relation.targetSteamId,
                 userRelationType = relation.userRelationType!!
             )
         }
