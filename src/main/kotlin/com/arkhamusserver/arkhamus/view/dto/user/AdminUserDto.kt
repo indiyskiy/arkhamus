@@ -7,6 +7,6 @@ data class AdminUserDto(
     val nickName: String,
     val email: String,
     val creation: String?,
-    val steam: String?,
+    val steamId: String?,
     val status: CultpritsUserState
 )

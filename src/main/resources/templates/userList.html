@@ -31,18 +31,18 @@
             <td th:text="${user.nickName}"></td>
             <td th:text="${user.email}"></td>
             <td th:text="${user.creation?:''}"></td>
-            <td>
-                <span th:if="${user.steam != null and !user.steam.isEmpty()}"
+            <td class="icon-column">
+                <span th:if="${user.steamId != null and !user.steamId.isEmpty()}"
                       th:title="'Steam initialized'"
                       th:class="'icon-yes'">
                 </span>
-                <span th:if="${user.steam == null or user.steam.isEmpty()}"
+                <span th:if="${user.steamId == null or user.steamId.isEmpty()}"
                       th:title="'Steam not initialized'"
                       th:class="'icon-no'">
                 </span>
             </td>
 
-            <td>
+            <td class="icon-column">
                 <div th:class="|status-circle status-${user.status.name().toLowerCase()}|"
                      th:title="${user.status.name()}"></div>
             </td>

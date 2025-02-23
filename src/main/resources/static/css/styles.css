@@ -216,18 +216,30 @@ select:focus {
     background-color: red;
 }
 
-.icon-yes {
-    background-image: url('/static/icon/yes_icon.png');
+.icon-yes, .icon-no {
+    padding: 0;
+    margin: 0;
     display: inline-block;
     width: 20px;
     height: 20px;
+    background-size: 20px 20px; /* Explicitly match the span dimensions */
+    background-repeat: no-repeat; /* Prevent any undesired repetition */
+}
+
+.icon-yes {
+    background-image: url('../icon/yes_icon.png');
+    display: inline-block;
     background-size: contain;
 }
 
 .icon-no {
-    background-image: url('/static/icon/no_icon.png');
+    background-image: url('../icon/no_icon.png');
     display: inline-block;
-    width: 20px;
-    height: 20px;
     background-size: contain;
+}
+
+td.icon-column {
+    width: 30px; /* Set this to a little more than the icon width, e.g., 20px + small margin */
+    text-align: center; /* Center-align the icon to look better */
+    padding: 0; /* Optional: Remove internal padding */
 }

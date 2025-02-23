@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.view.controller.admin.browser.tech
 
 import com.arkhamusserver.arkhamus.logic.admin.AdminGameLogic
 import com.arkhamusserver.arkhamus.logic.admin.AdminUserLogic
+import com.arkhamusserver.arkhamus.logic.user.relations.UserRelationLogic
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminUserGameDataDto
 import com.arkhamusserver.arkhamus.view.dto.user.AdminUserDto
 import org.springframework.stereotype.Controller
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable
 @Controller
 class BrowserAdminUserController(
     private val adminUserLogic: AdminUserLogic,
-    private val adminGameLogic: AdminGameLogic
+    private val adminGameLogic: AdminGameLogic,
+    private val relationsLogic: UserRelationLogic
 ) {
     @GetMapping("/admin/browser/user")
     fun userDashboard(model: Model): String {
@@ -28,8 +30,12 @@ class BrowserAdminUserController(
     ): String {
         val user: AdminUserDto = adminUserLogic.user(userId)
         val data: AdminUserGameDataDto = adminGameLogic.allForUser(userId)
+        val relations = user.steamId?.let {
+            relationsLogic.readFriendListForAdmin(userId)
+        }
         model.addAttribute("user", user)
         model.addAttribute("data", data)
+        model.addAttribute("relations", relations)
         return "user"
     }
 }

@@ -26,7 +26,7 @@
             <td th:text="${user.userId}"></td>
             <td th:text="${user.nickName}"></td>
             <td th:text="${user.email}"></td>
-            <td th:text="${user.steam?:'-'}"></td>
+            <td th:text="${user.steamId?:'-'}"></td>
             <td th:text="${user.creation?:''}"></td>
         </tr>
     </table>
@@ -64,6 +64,32 @@
             <td th:text="${game?.gameSession?.god?.name ?: ''}"></td>
         </tr>
     </table>
+    <br/>
+    <table style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <th>User ID</th>
+            <th>Nickname</th>
+            <th>Steam ID</th>
+            <th>Persona State</th>
+            <th>Cultprits State</th>
+            <th>Last Active</th>
+            <th>Relations</th>
+        </tr>
+        <tr th:each="steamUser : ${relations}">
+            <td th:text="${steamUser.userId ?: ''}"></td>
+            <td th:text="${steamUser.nickName ?: ''}"></td>
+            <td th:text="${steamUser.steamId ?: ''}"></td>
+            <td th:text="${steamUser.steamState ?: ''}"></td>
+            <td th:text="${steamUser.cultpritsState ?: ''}"></td>
+            <td th:text="${#dates.format(steamUser?.lastActive, 'yyyy-MM-dd HH:mm:ss') ?: ''}"></td>
+            <td>
+    <span th:each="relation,iterStat : ${steamUser.relations}"
+          th:text="${relation.name()} + (!${iterStat.last} ? ', ' : '')"></span>
+            </td>
+
+        </tr>
+    </table>
+
 </div>
 
 <div class="footer">

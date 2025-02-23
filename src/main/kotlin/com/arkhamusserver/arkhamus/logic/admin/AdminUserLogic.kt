@@ -41,7 +41,7 @@ class AdminUserLogic(
         nickName = userAccount.nickName,
         email = userAccount.email!!,
         creation = dateToString(userAccount.creationTimestamp),
-        steam = userAccount.steamId,
+        steamId = userAccount.steamId,
         status = userStatusService.getUserStatus(userAccount.id!!).userState,
     )
 

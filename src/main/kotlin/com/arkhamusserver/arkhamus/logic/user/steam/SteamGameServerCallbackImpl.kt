@@ -31,10 +31,7 @@ class SteamGameServerCallbackImpl(
         response: SteamAuth.AuthSessionResponse,
         ownerSteamID: SteamID
     ) {
-        logger.info(
-            "Auth ticket validation received. Client SteamID: {}, Response: {}, Owner SteamID: {}",
-            steamID, response, ownerSteamID
-        )
+        logger.info("Auth ticket validation received")
     }
 
     override fun onClientApprove(clientSteamID: SteamID, ownerSteamID: SteamID) {

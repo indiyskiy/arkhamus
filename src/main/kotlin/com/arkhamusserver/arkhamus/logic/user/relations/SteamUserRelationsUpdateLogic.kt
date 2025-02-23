@@ -30,18 +30,28 @@ class SteamUserRelationsUpdateLogic(
         // 2. Handle new Steam IDs: Create new relations
         val newSteamIds = findNewSteamIds(steamIds, currentSteamIds)
         val newRelations = createNewRelations(currentUser, newSteamIds)
+        logger.info("Created ${newRelations.size} new UserRelations for userId: $userId with steamIds: $steamIds")
 
         // 3. Attempt to link UserAccounts to all relations (current + new)
         val allRelations = currentRelations + newRelations
         val linkedRelations = linkUserAccountToRelations(allRelations)
+        logger.info("Linked ${linkedRelations.size} UserRelations for userId: $userId with steamIds: $steamIds")
         val updatedRelationsSteamIds = linkedRelations.mapNotNull { it.targetSteamId }
         val createdNotLinkedRelations = newRelations.filter { it.targetSteamId !in updatedRelationsSteamIds }
-        val merged = linkedRelations + createdNotLinkedRelations
+        val allUpdated = (linkedRelations + createdNotLinkedRelations).distinctBy { it.targetSteamId }
         // 4. Save all modified relations in a single call
-        saveUpdatedRelations(merged)
+        val saved = saveUpdatedRelations(allUpdated)
+        //merge updated and not updated entities to the list
+        val updatedRelationIds = saved.mapNotNull { it.id }.toSet()
+        val notUpdated = currentRelations.filterNot { it.id in updatedRelationIds }
+        logger.info("Updated ${saved.size} UserRelations for userId: $userId with steamIds: $steamIds")
+        logger.info("Was ok ${notUpdated.size} UserRelations for userId: $userId with steamIds: $steamIds")
+        return saved + notUpdated
+    }
 
-        // 5. Return updated list of distinct relations
-        return merged
+    fun readSteamUser(userId: Long): List<UserRelation> {
+        val currentUser = fetchUser(userId)
+        return fetchUserRelations(currentUser)
     }
 
     /**
@@ -72,11 +82,11 @@ class SteamUserRelationsUpdateLogic(
     private fun createNewRelations(user: UserAccount, newSteamIds: List<String>): List<UserRelation> {
         return newSteamIds.map { steamId ->
             logger.info("Creating new UserRelation for steamId $steamId")
-            UserRelation(
-                sourceUser = user,
-                targetSteamId = steamId,
+            UserRelation().apply {
+                sourceUser = user
+                targetSteamId = steamId
                 userRelationType = UserRelationType.STEAM_FRIEND
-            )
+            }
         }
     }
 
@@ -105,7 +115,7 @@ class SteamUserRelationsUpdateLogic(
                     relation.targetUser = matchingUser
                     relation
                 } else {
-                    null // Skip relations that don’t require updates
+                    null
                 }
             }
         }
@@ -115,11 +125,13 @@ class SteamUserRelationsUpdateLogic(
     /**
      * Saves all modified relations in a single saveAll call to improve performance.
      */
-    private fun saveUpdatedRelations(updatedRelations: List<UserRelation>) {
+    private fun saveUpdatedRelations(updatedRelations: List<UserRelation>): List<UserRelation> {
         if (updatedRelations.isNotEmpty()) {
-            userRelationRepository.saveAll(updatedRelations)
+            val saved = userRelationRepository.saveAll(updatedRelations)
             logger.info("Saved ${updatedRelations.size} updated/new UserRelations to database")
+            return saved.toList()
         }
+        return emptyList()
     }
 
 }
