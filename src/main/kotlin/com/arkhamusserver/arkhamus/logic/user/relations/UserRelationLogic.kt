@@ -10,7 +10,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserRelation
 import com.arkhamusserver.arkhamus.model.enums.UserRelationType
 import com.arkhamusserver.arkhamus.model.enums.steam.SteamPersonaState
-import com.arkhamusserver.arkhamus.view.dto.user.SteamUserShortDto
+import com.arkhamusserver.arkhamus.view.dto.user.RelatedUserDto
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -31,7 +31,7 @@ class UserRelationLogic(
     }
 
     @Transactional
-    fun makeFriend(newFriendId: Long): SteamUserShortDto {
+    fun makeFriend(newFriendId: Long): RelatedUserDto {
         val currentUser = currentUserService.getCurrentUserAccount()
         val targetUser =
             userRepository.findById(newFriendId).orElseThrow { IllegalStateException("user not found: $newFriendId") }
@@ -62,7 +62,7 @@ class UserRelationLogic(
         return userRelationRepository.save(relation)
     }
 
-    fun readFriendList(steamIds: String): List<SteamUserShortDto> {
+    fun readFriendList(steamIds: String): List<RelatedUserDto> {
         val steamIdsList = steamIds.split(",").map { it.trim() }
         val currentUser = currentUserService.getCurrentUserAccount()
         val steamRelations = steamUserRelationCache.getCachedRelationsForUser(currentUser.id!!, steamIdsList)
@@ -71,14 +71,14 @@ class UserRelationLogic(
         return processRelations(allRelations)
     }
 
-    fun readFriendListForAdmin(userId: Long): List<SteamUserShortDto> {
+    fun readFriendListForAdmin(userId: Long): List<RelatedUserDto> {
         val steamRelations = steamUserRelationCache.getCachedRelationsForUser(userId)
         val otherRelations = otherUserRelationCache.getCachedRelationsForUser(userId)
         val allRelations = steamRelations + otherRelations
         return processRelations(allRelations)
     }
 
-    private fun processRelations(allRelations: List<CachedUserRelation>): List<SteamUserShortDto> {
+    private fun processRelations(allRelations: List<CachedUserRelation>): List<RelatedUserDto> {
         logger.info("process relations: ${allRelations.size}")
         val targetUsers = allRelations.mapNotNull { it.targetUserId }.let {
             userRepository.findByIdIn(it).associateBy { it.id }
@@ -138,7 +138,7 @@ class UserRelationLogic(
         steamPlayer: CachedSteamData?,
         state: UserStateHolder?,
         userRelationTypes: List<UserRelationType>
-    ) = SteamUserShortDto().apply {
+    ) = RelatedUserDto().apply {
         val steamState = steamPlayer?.steamPersonaState ?: SteamPersonaState.PERSONA_STATE_OFFLINE
         this.steamId = steamPlayer?.steamId
         this.steamState = steamState

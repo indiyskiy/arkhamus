@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.model.enums.UserRelationType
 import com.arkhamusserver.arkhamus.model.enums.steam.SteamPersonaState
 
-data class SteamUserShortDto(
+data class RelatedUserDto(
     var steamId: String? = null,
     var steamState: SteamPersonaState? = null,
     var steamStateId: Int? = null,

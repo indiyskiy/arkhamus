@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.config.UpdateUserState
 import com.arkhamusserver.arkhamus.logic.user.UserLogic
 import com.arkhamusserver.arkhamus.logic.user.relations.UserRelationLogic
-import com.arkhamusserver.arkhamus.view.dto.user.SteamUserShortDto
+import com.arkhamusserver.arkhamus.view.dto.user.RelatedUserDto
 import com.arkhamusserver.arkhamus.view.dto.user.UserDto
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -28,14 +28,14 @@ class UserController(
     @GetMapping("/friends/{steamIds}")
     fun getFriends(
         @PathVariable steamIds: String
-    ): List<SteamUserShortDto> {
+    ): List<RelatedUserDto> {
         return relationsLogic.readFriendList(steamIds)
     }
     @UpdateUserState(CultpritsUserState.ONLINE)
     @PostMapping("/friends/{userId}")
     fun makeFriend(
         @PathVariable userId: Long
-    ): SteamUserShortDto {
+    ): RelatedUserDto {
         return relationsLogic.makeFriend(userId)
     }
 }
