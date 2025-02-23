@@ -4,4 +4,5 @@ data class AuraClueAdditionalDataResponse (
     val distancePercentage: Int?,
     val pointReached: Boolean,
     val outOfRadius: Boolean,
+    val targetPoint: SimpleCoordinates?
 ): AdditionalClueDataResponse

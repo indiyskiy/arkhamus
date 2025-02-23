@@ -26,6 +26,7 @@ import com.arkhamusserver.arkhamus.model.ingame.clues.InGameAuraClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.AuraClueAdditionalDataResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.SimpleCoordinates
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.cos
@@ -195,6 +196,7 @@ class AuraClueHandler(
         }
         return filteredByVisibilityTags.map {
             val percentage = countPercentage(user, it.targetPoint)
+            val state = countState(it, user, percentage)
             ExtendedClueResponse(
                 id = it.id,
                 clue = Clue.AURA,
@@ -203,8 +205,8 @@ class AuraClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                state = countState(it, user, percentage),
-                additionalData = countAdditionalData(it, user, percentage),
+                state = state,
+                additionalData = countAdditionalData(it, user, percentage, state),
             )
         }
     }
@@ -212,14 +214,23 @@ class AuraClueHandler(
     private fun countAdditionalData(
         clue: InGameAuraClue,
         user: InGameUser,
-        percentage: Int
+        percentage: Int,
+        state: InnovateClueState
     ): AuraClueAdditionalDataResponse? {
         val visible = clue.castedAbilityUsers.contains(user.inGameId())
+        val seeActualState = state in setOf(InnovateClueState.ACTIVE_CLUE, InnovateClueState.ACTIVE_NO_CLUE)
         return if (visible) {
             AuraClueAdditionalDataResponse(
                 distancePercentage = percentage,
                 pointReached = percentage == 100,
                 outOfRadius = percentage == -100,
+                targetPoint = if (seeActualState) {
+                    SimpleCoordinates(
+                        x = clue.targetPoint.x,
+                        y = clue.targetPoint.y,
+                        z = clue.targetPoint.z
+                    )
+                } else null
             )
         } else null
     }
