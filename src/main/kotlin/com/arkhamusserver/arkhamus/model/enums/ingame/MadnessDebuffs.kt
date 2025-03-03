@@ -6,7 +6,6 @@ enum class MadnessDebuffs(private val stepNumber: Int) {
     //fake players
     //fake vote calls, fake ability casts (other)
     BLIND(0),  //implemented
-
     //    SLOW(0),
     PSYCHIC_UNSTABLE(0), //implemented
 
@@ -19,7 +18,6 @@ enum class MadnessDebuffs(private val stepNumber: Int) {
 
     //2
     UNSTABLE_POSITION(2),
-
     //    DARK_ENTITY(2),
     PROPHET(2);
 

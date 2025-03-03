@@ -1,5 +1,6 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.classbased.cultist
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
@@ -43,7 +44,7 @@ class FarsightAbilityCast() : AbilityCast {
 
     private fun farsight(currentUser: InGameUser?) {
         currentUser?.let {
-            it.stateTags += UserStateTag.FARSIGHT
+            it.stateTags + UserStateTag.FARSIGHT
         }
     }
 }

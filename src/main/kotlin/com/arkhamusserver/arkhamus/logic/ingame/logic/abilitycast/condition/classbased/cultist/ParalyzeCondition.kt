@@ -1,12 +1,12 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.classbased.cultist
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
-import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import org.springframework.stereotype.Component
 
 @Component
@@ -26,7 +26,9 @@ class ParalyzeCondition(
         globalGameData: GlobalGameData
     ): Boolean {
         if (target == null) return false
-        return geometryUtils.distanceLessOrEquals(user, target as WithPoint, ability.range)
+        val targetUser = (target as? InGameUser) ?: return false
+        return geometryUtils.distanceLessOrEquals(user, targetUser, ability.range) &&
+                !targetUser.stateTags.contains(UserStateTag.STUN)
     }
 
     override fun canBeCastedAtAll(
@@ -38,10 +40,10 @@ class ParalyzeCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is WithTrueIngameId &&
+            it is InGameUser &&
                     it.inGameId() != user.inGameId() &&
-                    it is WithPoint &&
-                    geometryUtils.distanceLessOrEquals(user, it, ability.range)
+                    geometryUtils.distanceLessOrEquals(user, it, ability.range) &&
+                    !it.stateTags.contains(UserStateTag.STUN)
         }
     }
 }

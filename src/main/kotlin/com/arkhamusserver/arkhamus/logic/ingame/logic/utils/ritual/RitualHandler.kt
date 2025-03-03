@@ -227,7 +227,12 @@ class RitualHandler(
             val user = data.users[userId]!!
             val nearestPoint = geometryUtils.nearestPoint(user, ritualThresholds)
             nearestPoint?.let {
-                madnessHandler.applyMadness(user, madnessApply, data.game.globalTimer)
+                madnessHandler.tryApplyMadness(
+                    user,
+                    madnessApply,
+                    data.game.globalTimer,
+                    data,
+                )
                 teleportHandler.forceTeleport(data.game, user, it)
                 user.stateTags -= IN_RITUAL
             }

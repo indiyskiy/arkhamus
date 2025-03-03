@@ -30,7 +30,7 @@ class OneTickUser(
         data: GlobalGameData,
         timePassedMillis: Long
     ) {
-        oneTickUserInventory.processInventory(user, timePassedMillis, data.game.globalTimer)
+        oneTickUserInventory.processInventory(user, data, timePassedMillis, data.game.globalTimer)
         processMadness(user, data, timePassedMillis)
     }
 

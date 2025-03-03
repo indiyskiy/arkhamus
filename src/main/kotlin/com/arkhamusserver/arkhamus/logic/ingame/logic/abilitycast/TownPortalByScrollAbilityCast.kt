@@ -7,8 +7,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Abili
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.slf4j.LoggerFactory
@@ -24,7 +24,7 @@ class TownPortalByScrollAbilityCast(
     }
 
     override fun accept(ability: Ability): Boolean {
-        return ability == Ability.TOWN_PORTAL_BY_SCROLL
+        return ability in setOf(Ability.TOWN_PORTAL_BY_SCROLL, Ability.TOWN_PORTAL_BY_AMULET)
     }
 
     override fun cast(
@@ -42,7 +42,7 @@ class TownPortalByScrollAbilityCast(
         target: WithStringId?,
         globalGameData: GlobalGameData
     ): Boolean {
-        castTownPortalByScrollAbility(globalGameData, sourceUser)
+        castTownPortalAbility(globalGameData, sourceUser)
         return true
     }
 
@@ -51,10 +51,10 @@ class TownPortalByScrollAbilityCast(
         abilityRequestProcessData: AbilityRequestProcessData,
     ) =
         abilityRequestProcessData.gameUser?.let { userNotNull ->
-            castTownPortalByScrollAbility(globalGameData, userNotNull)
+            castTownPortalAbility(globalGameData, userNotNull)
         }
 
-    private fun castTownPortalByScrollAbility(
+    private fun castTownPortalAbility(
         globalGameData: GlobalGameData,
         userNotNull: InGameUser
     ) {

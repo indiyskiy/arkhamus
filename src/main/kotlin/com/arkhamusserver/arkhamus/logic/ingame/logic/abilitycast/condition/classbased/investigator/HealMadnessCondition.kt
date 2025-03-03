@@ -1,28 +1,28 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.classbased.investigator
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
-import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class LastPersonTouchCondition(
+class HealMadnessCondition(
     private val geometryUtils: GeometryUtils,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(LastPersonTouchCondition::class.java)
+        private val logger = LoggerFactory.getLogger(HealMadnessCondition::class.java)
     }
 
     override fun accepts(ability: Ability): Boolean {
-        return ability == Ability.TAKE_FINGERPRINTS
+        return ability == Ability.HEAL_MADNESS
     }
 
     override fun canBeCastedRightNow(
@@ -35,15 +35,14 @@ class LastPersonTouchCondition(
             logger.info("target is null")
             return false
         }
-        if (target !is WithPoint) {
-            logger.info("target is not WithPoint")
+        if (target !is InGameUser) {
+            logger.info("target is not user")
             return false
         }
-        if (target !is InGameContainer && target !is InGameCrafter) {
-            logger.info("target is not right")
+        if (target.inGameId() == user.inGameId()) {
+            logger.info("can't cast heal madness on myself")
             return false
         }
-
         return geometryUtils.distanceLessOrEquals(user, target, ability.range)
     }
 
@@ -56,7 +55,8 @@ class LastPersonTouchCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is WithPoint && geometryUtils.distanceLessOrEquals(user, it, ability.range)
+            (it is WithTrueIngameId && it.inGameId() != user.inGameId()) &&
+                    (it is WithPoint && geometryUtils.distanceLessOrEquals(user, it, ability.range))
         }
     }
 }

@@ -1,5 +1,6 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.classbased.investigator
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.abilityresult.ShortTimeEventPersonWithTimeData
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.abilityresult.UserActivityView
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ShortTimeEventHandler

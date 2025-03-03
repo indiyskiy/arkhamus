@@ -41,7 +41,12 @@ class AbilityToItemResolver {
                 CLEAN_UP_CLUE -> DUST_OF_DISAPPEARANCE
                 DARK_TEMPTATION -> CIRCLET_OF_NOBILITY
                 //class based abilities
-                HEAL_MADNESS, SPAWN_LOOT, TAKE_FINGERPRINTS, FARSIGHT, PARALYSE -> null
+                HEAL_MADNESS,
+                SPAWN_LOOT,
+                TAKE_FINGERPRINTS,
+                FARSIGHT,
+                PARALYSE,
+                MADNESS_LINK -> null
             }
         }
 }

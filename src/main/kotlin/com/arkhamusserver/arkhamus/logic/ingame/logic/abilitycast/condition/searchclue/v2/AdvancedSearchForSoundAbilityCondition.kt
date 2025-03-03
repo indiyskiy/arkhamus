@@ -6,7 +6,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameSoundClueJammer
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -49,6 +48,10 @@ class AdvancedSearchForSoundAbilityCondition(
             logger.warn("User cannot see target or target is out of range")
             return false
         }
+        if (!target.turnedOn){
+            logger.warn("jammer is not turned on")
+            return false
+        }
         return true
     }
 
@@ -61,13 +64,13 @@ class AdvancedSearchForSoundAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is WithPoint && userLocationHandler.userCanSeeTargetInRange(
+            it is InGameSoundClueJammer && userLocationHandler.userCanSeeTargetInRange(
                 user,
                 it,
                 globalGameData.levelGeometryData,
                 ability.range ?: 0.0,
                 true
-            )
+            ) && it.turnedOn
         }
     }
 

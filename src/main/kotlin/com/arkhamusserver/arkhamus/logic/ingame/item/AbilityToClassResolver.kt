@@ -20,6 +20,7 @@ class AbilityToClassResolver {
                 //cultists
                 FARSIGHT -> setOf(ARISTOCRAT)
                 PARALYSE -> setOf(DESCENDANT)
+                MADNESS_LINK -> setOf(MADNESS_SHIFTER)
                 else -> null
             }
         }

@@ -45,7 +45,7 @@ class ObjectWithTagsHandler(
         tag: InGameObjectTag,
         data: GlobalGameData
     ) {
-        madnessHandler.applyMadness(user, PEEKABOO_CURSE_ITEM_VALUE, data.game.globalTimer)
+        madnessHandler.tryApplyMadness(user, PEEKABOO_CURSE_ITEM_VALUE, data.game.globalTimer, data)
         inGameTagsHandler.removeTag(withGameTags, tag)
         createShortTimeEvent(withGameTags, data, user)
     }

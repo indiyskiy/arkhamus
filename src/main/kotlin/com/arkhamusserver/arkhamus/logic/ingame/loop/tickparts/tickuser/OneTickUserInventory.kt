@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.tickuser
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.OneTickUser.Companion.POTATO_MADNESS_TICK_MILLIS
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.*
@@ -15,13 +16,14 @@ class OneTickUserInventory(
 ) {
     fun processInventory(
         user: InGameUser,
+        data: GlobalGameData,
         timePassedMillis: Long,
         gameTime: Long
     ) {
         Item.values().forEach { item ->
             val itemsInInventory = user.items.filter { it.item == item }.sumOf { it.number }
             if (itemsInInventory > 0) {
-                processItem(user, item, itemsInInventory, timePassedMillis, gameTime)
+                processItem(user, item, itemsInInventory, timePassedMillis, gameTime, data)
             } else {
                 processNoItem(user, item)
             }
@@ -33,14 +35,16 @@ class OneTickUserInventory(
         item: Item,
         numberOfItems: Int,
         timePassedMillis: Long,
-        gameTime: Long
+        gameTime: Long,
+        globalGameData: GlobalGameData
     ) {
         when (item) {
             CURSED_POTATO -> processCursedPotato(
                 user,
                 numberOfItems,
                 timePassedMillis,
-                gameTime
+                gameTime,
+                globalGameData
             )
 
             INNOVATE_SCENT_INVESTIGATION_ITEM -> processInnovateScentInvestigationItem(user)
@@ -156,12 +160,14 @@ class OneTickUserInventory(
         user: InGameUser,
         numberOfItems: Int,
         timePassedMillis: Long,
-        gameTime: Long
+        gameTime: Long,
+        globalGameData: GlobalGameData
     ) {
-        madnessHandler.applyMadness(
+        madnessHandler.tryApplyMadness(
             user,
             POTATO_MADNESS_TICK_MILLIS * numberOfItems * timePassedMillis,
             gameTime,
+            globalGameData
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 
@@ -24,7 +25,10 @@ data class MyGameUserResponse(
         x = gameUser.x,
         y = gameUser.y,
         z = gameUser.z,
-        stateTags = gameUser.stateTags,
+        stateTags = gameUser.stateTags.filter {
+            it.getVisibility() == Visibility.PUBLIC ||
+                    it.getVisibility() == Visibility.SOURCE
+        }.toSet(),
         quests = quests
     )
 }

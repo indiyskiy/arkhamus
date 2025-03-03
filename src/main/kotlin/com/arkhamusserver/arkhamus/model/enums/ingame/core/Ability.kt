@@ -68,6 +68,14 @@ enum class Ability(
         targetTypes = listOf(CHARACTER),
         range = MEDIUM_RANGE
     ),
+    MADNESS_LINK(
+        id = 2003,
+        classBased = true,
+        cooldown = 5 * MINUTE_IN_MILLIS,
+        active = MINUTE_IN_MILLIS,
+        targetTypes = listOf(CHARACTER),
+        range = LARGE_RANGE
+    ),
 
     //neutral ability 3***
     //useful item ability 4***

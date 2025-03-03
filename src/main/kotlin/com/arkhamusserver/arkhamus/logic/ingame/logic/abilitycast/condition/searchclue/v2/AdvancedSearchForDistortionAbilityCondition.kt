@@ -7,7 +7,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameDistortionClue
-import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -17,7 +16,7 @@ class AdvancedSearchForDistortionAbilityCondition(
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
-    companion object{
+    companion object {
         private val logger = LoggerFactory.getLogger(AdvancedSearchForDistortionAbilityCondition::class.java)
     }
 
@@ -49,6 +48,10 @@ class AdvancedSearchForDistortionAbilityCondition(
             logger.warn("User cannot see target or target is out of range")
             return false
         }
+        if (target.castedAbilityUsers.contains(user.inGameId())) {
+            logger.warn("ability already casted")
+            return false
+        }
         return true
     }
 
@@ -61,13 +64,13 @@ class AdvancedSearchForDistortionAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is WithPoint && userLocationHandler.userCanSeeTargetInRange(
+            it is InGameDistortionClue && userLocationHandler.userCanSeeTargetInRange(
                 user,
                 it,
                 globalGameData.levelGeometryData,
                 ability.range ?: 0.0,
                 true
-            )
+            ) && !it.castedAbilityUsers.contains(user.inGameId())
         }
     }
 

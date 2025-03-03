@@ -53,6 +53,10 @@ class AdvancedSearchForOmenAbilityCondition(
             logger.warn("User cannot see target or target is out of range")
             return false
         }
+        if (target.castedAbilityUsers.contains(user.inGameId())) {
+            logger.warn("ability already casted")
+            return false
+        }
         return true
     }
 
@@ -75,7 +79,7 @@ class AdvancedSearchForOmenAbilityCondition(
                     globalGameData.levelGeometryData,
                     ability.range ?: 0.0,
                     true
-                )
+                ) && !it.castedAbilityUsers.contains(user.inGameId())
             }
         }
     }

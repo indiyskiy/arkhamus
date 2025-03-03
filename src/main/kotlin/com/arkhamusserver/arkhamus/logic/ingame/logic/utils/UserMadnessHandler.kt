@@ -1,8 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,11 +22,36 @@ class UserMadnessHandler(
         private val random = Random(System.currentTimeMillis())
     }
 
-    fun applyNightMadness(gameUser: InGameUser, timePassedMillis: Long, gameTime: Long) {
-        applyMadness(gameUser, NIGHT_MADNESS_TICK_IN_MILLIS * timePassedMillis, gameTime)
+    fun applyNightMadness(
+        gameUser: InGameUser,
+        timePassedMillis: Long,
+        gameTime: Long,
+        globalGameData: GlobalGameData
+    ) {
+        tryApplyMadness(gameUser, NIGHT_MADNESS_TICK_IN_MILLIS * timePassedMillis, gameTime, globalGameData)
     }
 
-    fun applyMadness(gameUser: InGameUser, madness: Double, gameTime: Long) {
+    fun tryApplyMadness(
+        gameUser: InGameUser,
+        madness: Double,
+        gameTime: Long,
+        globalGameData: GlobalGameData
+    ) {
+        if(gameUser.stateTags.contains(UserStateTag.MADNESS_LINK_SOURCE)){
+            val realTarget = globalGameData.users.values.firstOrNull{
+                it.stateTags.contains(UserStateTag.MADNESS_LINK_TARGET)
+            }?:gameUser
+            realApplyMadness(realTarget, madness, gameTime)
+            return
+        }
+        realApplyMadness(gameUser, madness, gameTime)
+    }
+
+    private fun realApplyMadness(
+        gameUser: InGameUser,
+        madness: Double,
+        gameTime: Long
+    ) {
         val before = gameUser.madness
         val modifier = if (gameUser.madnessDebuffs.contains(MadnessDebuffs.PSYCHIC_UNSTABLE.name)) 1.5 else 1.0
         gameUser.madness += (madness * modifier)

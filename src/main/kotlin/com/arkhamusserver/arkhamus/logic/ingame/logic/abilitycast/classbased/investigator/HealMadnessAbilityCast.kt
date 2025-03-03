@@ -1,5 +1,6 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.classbased.investigator
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
