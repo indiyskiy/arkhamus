@@ -1,12 +1,10 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
-import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.*
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CREATE_TEST_QUESTS
+import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignAllCluesInfoProcessor
+import com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors.LevelDesignZonesInfoProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelZone
 import com.arkhamusserver.arkhamus.model.enums.LevelState
-import com.arkhamusserver.arkhamus.model.enums.ingame.ThresholdType
 import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -22,25 +20,12 @@ import java.io.FileReader
 @Component
 class LevelDesignInfoProcessor(
     private val levelRepository: LevelRepository,
-    private val levelDesignContainerInfoProcessor: LevelDesignContainerInfoProcessor,
-    private val levelDesignLanternInfoProcessor: LevelDesignLanternInfoProcessor,
-    private val levelDesignAltarInfoProcessor: LevelDesignAltarInfoProcessor,
-    private val levelDesignRitualAreaInfoProcessor: LevelDesignRitualAreaInfoProcessor,
-    private val levelDesignCrafterInfoProcessor: LevelDesignCrafterInfoProcessor,
-    private val levelDesignProcessStartInfoProcessor: LevelDesignProcessStartInfoProcessor,
     private val levelDesignZonesInfoProcessor: LevelDesignZonesInfoProcessor,
-    private val levelDesignQuestGiverInfoProcessor: LevelDesignQuestGiverInfoProcessor,
-    private val levelDesignLevelTaskInfoProcessor: LevelDesignLevelTaskInfoProcessor,
-    private val levelDesignVoteSpotInfoProcessor: LevelDesignVoteSpotInfoProcessor,
-    private val levelDesignThresholdInfoProcessor: LevelDesignThresholdInfoProcessor,
-    private val levelDesignDoorInfoProcessor: LevelDesignDoorInfoProcessor,
-    private val levelDesignScentClueInfoProcessor: LevelDesignScentClueInfoProcessor,
-    private val levelDesignSoundClueInfoProcessor: LevelDesignSoundClueInfoProcessor,
-    private val levelDesignCorruptionClueInfoProcessor: LevelDesignCorruptionClueInfoProcessor,
-    private val levelDesignDistortionClueInfoProcessor: LevelDesignDistortionClueInfoProcessor,
-    private val levelDesignAuraClueInfoProcessor: LevelDesignAuraClueInfoProcessor,
-    private val levelDesignVisibilityProcessor: LevelDesignVisibilityProcessor,
-    private val randomQuestGenerator: RandomQuestGenerator,
+    private val levelDesignGeometryProcessor: LevelDesignGeometryProcessor,
+    private val levelDesignQuestsRelatedStuffProcessor: LevelDesignQuestsRelatedStuffProcessor,
+    private val levelDesignAllCluesInfoProcessor: LevelDesignAllCluesInfoProcessor,
+    private val levelDesignRitualRelatedStuffProcessor: LevelDesignRitualRelatedStuffProcessor,
+    private val levelDesignOtherGameObjectsProcessor: LevelDesignOtherGameObjectsProcessor
 ) {
     companion object {
         private const val JSON_PATH = "ingame/level/level_data.json"
@@ -100,20 +85,7 @@ class LevelDesignInfoProcessor(
 
     private fun createAndSaveLevel(levelFromJson: LevelFromJson) {
         logger.info("create level ${levelFromJson.levelId} v.${levelFromJson.levelVersion}")
-        val newLevel = Level(
-            levelId = levelFromJson.levelId!!,
-            version = levelFromJson.levelVersion!!,
-            levelWidth = levelFromJson.levelWidth!!,
-            levelHeight = levelFromJson.levelHeight!!,
-            state = LevelState.ACTIVE
-        )
-        val savedLevel = levelRepository.save(newLevel)
-        levelDesignContainerInfoProcessor.processContainers(levelFromJson.containers, savedLevel)
-        levelDesignLanternInfoProcessor.processLanterns(levelFromJson.lanterns, savedLevel)
-        levelDesignAltarInfoProcessor.processAltars(levelFromJson.altars, savedLevel)
-        levelDesignRitualAreaInfoProcessor.processRitualArea(levelFromJson.ritualZones, savedLevel)
-        levelDesignCrafterInfoProcessor.processCrafters(levelFromJson.crafters, savedLevel)
-        levelDesignProcessStartInfoProcessor.processStartMarkers(levelFromJson.startMarkers, savedLevel)
+        val savedLevel = createLevel(levelFromJson)
         val zones = levelDesignZonesInfoProcessor.processZones(
             clueZones = levelFromJson.clueZones,
             banZones = levelFromJson.banZones,
@@ -121,62 +93,20 @@ class LevelDesignInfoProcessor(
             auraZones = levelFromJson.auraClueZones,
             level = savedLevel
         )
-
-        val questGivers =
-            levelDesignQuestGiverInfoProcessor.processQuestGiverFromJson(levelFromJson.questGivers, savedLevel)
-        val levelTasks =
-            levelDesignLevelTaskInfoProcessor.processLevelTasksFromJson(levelFromJson.levelTasks, savedLevel)
-
-        if (CREATE_TEST_QUESTS) {
-            logger.info("creating random quests")
-            randomQuestGenerator.generateRandomQuests(savedLevel, questGivers, levelTasks)
-        }
-        levelDesignVoteSpotInfoProcessor.processVoteSpots(levelFromJson.votespots, savedLevel)
-        levelDesignThresholdInfoProcessor.processThresholds(
-            levelFromJson.ritualThresholds,
-            ThresholdType.RITUAL,
-            savedLevel
-        )
-        levelDesignThresholdInfoProcessor.processThresholds(
-            levelFromJson.banThresholds,
-            ThresholdType.BAN,
-            savedLevel
-        )
-        levelDesignDoorInfoProcessor.processDoors(levelFromJson.doors, savedLevel)
-        levelDesignVisibilityProcessor.processVisibilityObjects(levelFromJson, savedLevel)
-
-        processClues(levelFromJson, savedLevel, zones)
+        levelDesignGeometryProcessor.processGeometry(levelFromJson, savedLevel)
+        levelDesignRitualRelatedStuffProcessor.processRitualRelatedStuff(levelFromJson, savedLevel)
+        levelDesignQuestsRelatedStuffProcessor.generateQuestRelatedStuff(levelFromJson, savedLevel)
+        levelDesignAllCluesInfoProcessor.processClues(levelFromJson, savedLevel, zones)
+        levelDesignOtherGameObjectsProcessor.processAllSortOfMapObjects(levelFromJson, savedLevel)
     }
 
-    private fun processClues(
-        levelFromJson: LevelFromJson,
-        savedLevel: Level,
-        zones: List<LevelZone>
-    ) {
-        levelDesignScentClueInfoProcessor.processScentClueInfos(
-            levelFromJson.scentClues,
-            savedLevel
-        )
-        levelDesignSoundClueInfoProcessor.processSoundInfos(
-            levelFromJson.soundClues,
-            levelFromJson.soundClueJammers,
-            savedLevel,
-            zones
-        )
-        levelDesignCorruptionClueInfoProcessor.processCorruptionClueInfos(
-            levelFromJson.corruptionClues,
-            savedLevel
-        )
-        levelDesignDistortionClueInfoProcessor.processDistortionClueInfos(
-            levelFromJson.distortionClues,
-            savedLevel
-        )
-        levelDesignAuraClueInfoProcessor.processAuraClueInfos(
-            levelFromJson.auraClues,
-            savedLevel,
-            zones
-        )
-    }
+    private fun createLevel(levelFromJson: LevelFromJson): Level = Level(
+        levelId = levelFromJson.levelId!!,
+        version = levelFromJson.levelVersion!!,
+        levelWidth = levelFromJson.levelWidth!!,
+        levelHeight = levelFromJson.levelHeight!!,
+        state = LevelState.ACTIVE
+    ).let {  levelRepository.save(it) }
 
     private fun findSameLevel(levelFromJson: LevelFromJson, levelsFromDb: List<Level>): Level? =
         levelsFromDb.firstOrNull {

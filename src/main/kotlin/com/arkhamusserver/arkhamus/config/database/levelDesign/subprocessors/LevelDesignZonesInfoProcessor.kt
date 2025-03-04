@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.config.database.levelDesign
+package com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.EllipseRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelZoneRepository

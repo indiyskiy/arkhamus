@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.config.database.levelDesign
+package com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors
 
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
 import com.arkhamusserver.arkhamus.logic.ingame.quest.QuestDifficultyLogic

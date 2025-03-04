@@ -21,6 +21,8 @@ data class LevelFromJson(
     var ritualThresholds: List<ThresholdFromJson> = emptyList(),
     var banThresholds: List<ThresholdFromJson> = emptyList(),
     var votespots: List<VoteSpotFromJson> = emptyList(),
+    var inscriptionClues: List<InscriptionClueFromJson> = emptyList(),
+    var inscriptionGlyphs: List<InscriptionGlyphFromJson> = emptyList(),
     var scentClues: List<ScentClueFromJson> = emptyList(),
     var soundClues: List<JsonSoundClue>,
     var auraClues: List<JsonAuraClue>,
