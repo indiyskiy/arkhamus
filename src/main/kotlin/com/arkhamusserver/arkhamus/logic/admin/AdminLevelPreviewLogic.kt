@@ -1,15 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.AuraClueRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.CorruptionClueRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.DistortionClueRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.SoundClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.*
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.*
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.AuraClue
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.CorruptionClue
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.DistortionClue
-import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.SoundClue
+import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.view.dto.admin.*
@@ -35,6 +29,7 @@ class AdminLevelPreviewLogic(
     private val auraClueRepository: AuraClueRepository,
     private val distortionClueRepository: DistortionClueRepository,
     private val corruptionClueRepository: CorruptionClueRepository,
+    private val inscriptionClueRepository: InscriptionClueRepository,
 ) {
 
     companion object {
@@ -124,6 +119,9 @@ class AdminLevelPreviewLogic(
         val corruption = if (filter.clueZones == true) {
             corruptionClueRepository.findByLevelId(levelId)
         } else emptyList()
+        val inscription = if (filter.clueZones == true) {
+            inscriptionClueRepository.findByLevelId(levelId)
+        } else emptyList()
 
         return AdminGameLevelGeometryDto(
             levelId = level.levelId,
@@ -138,7 +136,7 @@ class AdminLevelPreviewLogic(
             voteSpots = mapVoteSpots(voteSpots),
             doors = mapDoors(doors),
             thresholds = mapThresholds(thresholds),
-            clues = mapClues(aura, sound, distortion, corruption)
+            clues = mapClues(aura, sound, distortion, corruption, inscription)
         )
     }
 
@@ -146,9 +144,14 @@ class AdminLevelPreviewLogic(
         aura: List<AuraClue>,
         sound: List<SoundClue>,
         distortion: List<DistortionClue>,
-        corruption: List<CorruptionClue>
+        corruption: List<CorruptionClue>,
+        inscription: List<InscriptionClue>
     ): List<ClueDto> =
-        mapAura(aura) + mapSound(sound) + mapDistortion(distortion) + mapCorruption(corruption)
+        mapAura(aura) +
+                mapSound(sound) +
+                mapDistortion(distortion) +
+                mapCorruption(corruption) +
+                mapInscription(inscription)
 
     private fun mapAura(clues: List<AuraClue>): List<ClueDto> =
         clues.map {
@@ -181,6 +184,16 @@ class AdminLevelPreviewLogic(
         }
 
     private fun mapCorruption(clues: List<CorruptionClue>): List<ClueDto> =
+        clues.map {
+            val x = it.x * SCREEN_ZOOM
+            val z = it.z * SCREEN_ZOOM
+            ClueDto(
+                points = cluePoints(x, z),
+                color = clueColor(Clue.CORRUPTION)
+            )
+        }
+
+    private fun mapInscription(clues: List<InscriptionClue>): List<ClueDto> =
         clues.map {
             val x = it.x * SCREEN_ZOOM
             val z = it.z * SCREEN_ZOOM
