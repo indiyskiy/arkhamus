@@ -16,13 +16,13 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForCorruptionAbilityCast(
+class SearchForCorruptionAbilityCast(
     private val inGameCorruptionClueRepository: InGameCorruptionClueRepository,
     private val eventHandler: TimeEventHandler
 ) : AbilityCast {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(AdvancedSearchForCorruptionAbilityCast::class.java)
+        var logger: Logger = LoggerFactory.getLogger(SearchForCorruptionAbilityCast::class.java)
     }
 
     override fun accept(ability: Ability): Boolean {

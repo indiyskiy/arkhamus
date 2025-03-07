@@ -6,22 +6,22 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.clues.InGameScentClue
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameCorruptionClue
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForScentAbilityCondition(
+class SearchForCorruptionAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(AdvancedSearchForScentAbilityCondition::class.java)
+        private val logger = LoggerFactory.getLogger(SearchForCorruptionAbilityCondition::class.java)
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.SEARCH_FOR_SCENT
+        ability == Ability.SEARCH_FOR_CORRUPTION
 
     override fun canBeCastedRightNow(
         ability: Ability,
@@ -33,8 +33,8 @@ class AdvancedSearchForScentAbilityCondition(
             logger.warn("Target is null")
             return false
         }
-        if (target !is InGameScentClue) {
-            logger.warn("Target is not a scent clue")
+        if (target !is InGameCorruptionClue) {
+            logger.warn("Target is not a corruption clue")
             return false
         }
         val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
@@ -49,7 +49,7 @@ class AdvancedSearchForScentAbilityCondition(
             return false
         }
         if (target.castedAbilityUsers.contains(user.inGameId())) {
-            logger.info("User already activated searching for scent")
+            logger.warn("ability already casted")
             return false
         }
         return true
@@ -64,7 +64,7 @@ class AdvancedSearchForScentAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is InGameScentClue && userLocationHandler.userCanSeeTargetInRange(
+            it is InGameCorruptionClue && userLocationHandler.userCanSeeTargetInRange(
                 user,
                 it,
                 globalGameData.levelGeometryData,

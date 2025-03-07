@@ -16,13 +16,13 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForInscriptionAbilityCast(
+class SearchForInscriptionAbilityCast(
     private val inGameInscriptionClueRepository: InGameInscriptionClueRepository,
     private val inscriptionClueHandler: InscriptionClueHandler
 ) : AbilityCast {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(AdvancedSearchForInscriptionAbilityCast::class.java)
+        var logger: Logger = LoggerFactory.getLogger(SearchForInscriptionAbilityCast::class.java)
     }
 
     override fun accept(ability: Ability): Boolean {

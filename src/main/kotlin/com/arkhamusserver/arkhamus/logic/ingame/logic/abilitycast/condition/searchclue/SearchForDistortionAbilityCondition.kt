@@ -6,22 +6,22 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.clues.InGameCorruptionClue
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameDistortionClue
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForCorruptionAbilityCondition(
+class SearchForDistortionAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(AdvancedSearchForCorruptionAbilityCondition::class.java)
+        private val logger = LoggerFactory.getLogger(SearchForDistortionAbilityCondition::class.java)
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.SEARCH_FOR_CORRUPTION
+        ability == Ability.SEARCH_FOR_DISTORTION
 
     override fun canBeCastedRightNow(
         ability: Ability,
@@ -33,8 +33,8 @@ class AdvancedSearchForCorruptionAbilityCondition(
             logger.warn("Target is null")
             return false
         }
-        if (target !is InGameCorruptionClue) {
-            logger.warn("Target is not a corruption clue")
+        if (target !is InGameDistortionClue) {
+            logger.warn("Target is not a distortion clue")
             return false
         }
         val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
@@ -64,7 +64,7 @@ class AdvancedSearchForCorruptionAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is InGameCorruptionClue && userLocationHandler.userCanSeeTargetInRange(
+            it is InGameDistortionClue && userLocationHandler.userCanSeeTargetInRange(
                 user,
                 it,
                 globalGameData.levelGeometryData,

@@ -17,13 +17,13 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForSoundAbilityCast(
+class SearchForSoundAbilityCast(
     private val timeEventHandler: TimeEventHandler,
     private val inGameSoundClueRepository: InGameSoundClueRepository
 ) : AbilityCast {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(AdvancedSearchForSoundAbilityCast::class.java)
+        var logger: Logger = LoggerFactory.getLogger(SearchForSoundAbilityCast::class.java)
     }
 
     override fun accept(ability: Ability): Boolean {

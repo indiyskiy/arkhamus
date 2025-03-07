@@ -3,26 +3,26 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.searchclue
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
-import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameAuraClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameOmenClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.clues.InGameAuraClue
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameOmenClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForAuraAbilityCast(
-    private val inGameAuraClueRepository: InGameAuraClueRepository
+class SearchForOmenAbilityCast(
+    private val inGameOmenClueRepository: InGameOmenClueRepository
 ) : AbilityCast {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(AdvancedSearchForAuraAbilityCast::class.java)
+        var logger: Logger = LoggerFactory.getLogger(SearchForOmenAbilityCast::class.java)
     }
 
     override fun accept(ability: Ability): Boolean {
-        return ability == Ability.SEARCH_FOR_AURA
+        return ability == Ability.SEARCH_FOR_OMEN
     }
 
     override fun cast(
@@ -33,7 +33,7 @@ class AdvancedSearchForAuraAbilityCast(
         logger.info("cast $ability")
         val user = abilityRequestProcessData.gameUser
         if (user == null) return false
-        val targetWithGameTags = abilityRequestProcessData.target as? InGameAuraClue
+        val targetWithGameTags = abilityRequestProcessData.target as? InGameOmenClue
         if (targetWithGameTags == null) return false
         castAbility(user, targetWithGameTags)
         return true
@@ -46,17 +46,17 @@ class AdvancedSearchForAuraAbilityCast(
         globalGameData: GlobalGameData
     ): Boolean {
         val user = sourceUser
-        val aura = target as? InGameAuraClue
-        if (aura == null) return false
-        castAbility(user, aura)
+        val omen = target as? InGameOmenClue
+        if (omen == null) return false
+        castAbility(user, omen)
         return true
     }
 
     private fun castAbility(
         user: InGameUser,
-        target: InGameAuraClue,
+        target: InGameOmenClue,
     ) {
         target.castedAbilityUsers += user.inGameId()
-        inGameAuraClueRepository.save(target)
+        inGameOmenClueRepository.save(target)
     }
 }

@@ -6,22 +6,22 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.clues.InGameOmenClue
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameScentClue
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForOmenAbilityCondition(
+class SearchForScentAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(AdvancedSearchForOmenAbilityCondition::class.java)
+        private val logger = LoggerFactory.getLogger(SearchForScentAbilityCondition::class.java)
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.SEARCH_FOR_OMEN
+        ability == Ability.SEARCH_FOR_SCENT
 
     override fun canBeCastedRightNow(
         ability: Ability,
@@ -33,18 +33,13 @@ class AdvancedSearchForOmenAbilityCondition(
             logger.warn("Target is null")
             return false
         }
-        if (target !is InGameOmenClue) {
-            logger.warn("Target is not a omen clue")
-            return false
-        }
-        val targetUser = globalGameData.users[target.userId]
-        if (targetUser == null) {
-            logger.warn("Related for omen user not found")
+        if (target !is InGameScentClue) {
+            logger.warn("Target is not a scent clue")
             return false
         }
         val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
             user,
-            targetUser,
+            target,
             globalGameData.levelGeometryData,
             ability.range ?: 0.0,
             true
@@ -54,7 +49,7 @@ class AdvancedSearchForOmenAbilityCondition(
             return false
         }
         if (target.castedAbilityUsers.contains(user.inGameId())) {
-            logger.warn("ability already casted")
+            logger.info("User already activated searching for scent")
             return false
         }
         return true
@@ -69,18 +64,13 @@ class AdvancedSearchForOmenAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            if (it !is InGameOmenClue) {
-                false
-            } else {
-                val targetUser = globalGameData.users[it.userId]
-                targetUser != null && userLocationHandler.userCanSeeTargetInRange(
-                    user,
-                    targetUser,
-                    globalGameData.levelGeometryData,
-                    ability.range ?: 0.0,
-                    true
-                ) && !it.castedAbilityUsers.contains(user.inGameId())
-            }
+            it is InGameScentClue && userLocationHandler.userCanSeeTargetInRange(
+                user,
+                it,
+                globalGameData.levelGeometryData,
+                ability.range ?: 0.0,
+                true
+            ) && !it.castedAbilityUsers.contains(user.inGameId())
         }
     }
 

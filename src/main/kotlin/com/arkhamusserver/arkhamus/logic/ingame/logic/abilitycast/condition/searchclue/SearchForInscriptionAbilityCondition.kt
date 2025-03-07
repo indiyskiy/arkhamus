@@ -6,22 +6,22 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.parts.InGameSoundClueJammer
+import com.arkhamusserver.arkhamus.model.ingame.parts.InGameInscriptionClueGlyph
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForSoundAbilityCondition(
+class SearchForInscriptionAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
     companion object{
-        private val logger = LoggerFactory.getLogger(AdvancedSearchForSoundAbilityCondition::class.java)
+        private val logger = LoggerFactory.getLogger(SearchForInscriptionAbilityCondition::class.java)
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.SEARCH_FOR_SOUND
+        ability == Ability.SEARCH_FOR_INSCRIPTION
 
     override fun canBeCastedRightNow(
         ability: Ability,
@@ -33,8 +33,8 @@ class AdvancedSearchForSoundAbilityCondition(
             logger.warn("Target is null")
             return false
         }
-        if (target !is InGameSoundClueJammer) {
-            logger.warn("Target is not a sound clue jammer")
+        if (target !is InGameInscriptionClueGlyph) {
+            logger.warn("Target is not a inscription clue glyph")
             return false
         }
         val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
@@ -46,10 +46,6 @@ class AdvancedSearchForSoundAbilityCondition(
         )
         if (!canSeeAndInRange) {
             logger.warn("User cannot see target or target is out of range")
-            return false
-        }
-        if (!target.turnedOn){
-            logger.warn("jammer is not turned on")
             return false
         }
         return true
@@ -64,13 +60,13 @@ class AdvancedSearchForSoundAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is InGameSoundClueJammer && userLocationHandler.userCanSeeTargetInRange(
+            it is InGameInscriptionClueGlyph && userLocationHandler.userCanSeeTargetInRange(
                 user,
                 it,
                 globalGameData.levelGeometryData,
                 ability.range ?: 0.0,
                 true
-            ) && it.turnedOn
+            )
         }
     }
 

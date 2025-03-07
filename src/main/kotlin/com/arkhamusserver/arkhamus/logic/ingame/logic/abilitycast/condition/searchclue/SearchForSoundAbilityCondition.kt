@@ -6,22 +6,22 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.clues.InGameAuraClue
+import com.arkhamusserver.arkhamus.model.ingame.parts.InGameSoundClueJammer
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForAuraAbilityCondition(
+class SearchForSoundAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
     companion object{
-        private val logger = LoggerFactory.getLogger(AdvancedSearchForAuraAbilityCondition::class.java)
+        private val logger = LoggerFactory.getLogger(SearchForSoundAbilityCondition::class.java)
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.SEARCH_FOR_AURA
+        ability == Ability.SEARCH_FOR_SOUND
 
     override fun canBeCastedRightNow(
         ability: Ability,
@@ -33,23 +33,23 @@ class AdvancedSearchForAuraAbilityCondition(
             logger.warn("Target is null")
             return false
         }
-        if (target !is InGameAuraClue) {
-            logger.warn("Target is not a aura clue")
+        if (target !is InGameSoundClueJammer) {
+            logger.warn("Target is not a sound clue jammer")
             return false
         }
         val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
             user,
             target,
             globalGameData.levelGeometryData,
-            ability.range ?: 0.0,
+            target.interactionRadius,
             true
         )
         if (!canSeeAndInRange) {
             logger.warn("User cannot see target or target is out of range")
             return false
         }
-        if(target.castedAbilityUsers.contains(user.inGameId())){
-            logger.info("User already activated searching for aura")
+        if (!target.turnedOn){
+            logger.warn("jammer is not turned on")
             return false
         }
         return true
@@ -64,13 +64,13 @@ class AdvancedSearchForAuraAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is InGameAuraClue && userLocationHandler.userCanSeeTargetInRange(
+            it is InGameSoundClueJammer && userLocationHandler.userCanSeeTargetInRange(
                 user,
                 it,
                 globalGameData.levelGeometryData,
                 ability.range ?: 0.0,
                 true
-            ) && !it.castedAbilityUsers.contains(user.inGameId())
+            ) && it.turnedOn
         }
     }
 
