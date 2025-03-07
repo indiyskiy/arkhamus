@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.searchclue.v2
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.searchclue
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
@@ -6,22 +6,22 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.clues.InGameAuraClue
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameCorruptionClue
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForAuraAbilityCondition(
+class AdvancedSearchForCorruptionAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
-    companion object{
-        private val logger = LoggerFactory.getLogger(AdvancedSearchForAuraAbilityCondition::class.java)
+    companion object {
+        private val logger = LoggerFactory.getLogger(AdvancedSearchForCorruptionAbilityCondition::class.java)
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.SEARCH_FOR_AURA
+        ability == Ability.SEARCH_FOR_CORRUPTION
 
     override fun canBeCastedRightNow(
         ability: Ability,
@@ -33,8 +33,8 @@ class AdvancedSearchForAuraAbilityCondition(
             logger.warn("Target is null")
             return false
         }
-        if (target !is InGameAuraClue) {
-            logger.warn("Target is not a aura clue")
+        if (target !is InGameCorruptionClue) {
+            logger.warn("Target is not a corruption clue")
             return false
         }
         val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
@@ -48,8 +48,8 @@ class AdvancedSearchForAuraAbilityCondition(
             logger.warn("User cannot see target or target is out of range")
             return false
         }
-        if(target.castedAbilityUsers.contains(user.inGameId())){
-            logger.info("User already activated searching for aura")
+        if (target.castedAbilityUsers.contains(user.inGameId())) {
+            logger.warn("ability already casted")
             return false
         }
         return true
@@ -64,7 +64,7 @@ class AdvancedSearchForAuraAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is InGameAuraClue && userLocationHandler.userCanSeeTargetInRange(
+            it is InGameCorruptionClue && userLocationHandler.userCanSeeTargetInRange(
                 user,
                 it,
                 globalGameData.levelGeometryData,

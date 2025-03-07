@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.MIN
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.NIGHT_LENGTH_MINUTES
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SECOND_IN_MILLIS
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.TEST_MODE
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.searchclue.AdvancedSearchForInscriptionAbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.CorruptionClueHandler
 
 enum class InGameTimeEventType(
@@ -69,6 +70,11 @@ enum class InGameTimeEventType(
         CorruptionClueHandler.DEFAULT_NULLIFY_TIME,
         Visibility.NONE,
         targetType = GameObjectType.CORRUPTION_CLUE
+    ),
+    INSCRIPTION_CLUE_VISIBLE(
+        AdvancedSearchForInscriptionAbilityCast.DEFAULT_NULLIFY_TIME,
+        Visibility.NONE,
+        targetType = GameObjectType.INSCRIPTION_CLUE
     ),
 
     //tech

@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.searchclue.v2
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.searchclue
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
@@ -6,22 +6,22 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.clues.InGameScentClue
+import com.arkhamusserver.arkhamus.model.ingame.parts.InGameInscriptionClueGlyph
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForScentAbilityCondition(
+class AdvancedSearchForInscriptionAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
-    companion object {
-        private val logger = LoggerFactory.getLogger(AdvancedSearchForScentAbilityCondition::class.java)
+    companion object{
+        private val logger = LoggerFactory.getLogger(AdvancedSearchForInscriptionAbilityCondition::class.java)
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.SEARCH_FOR_SCENT
+        ability == Ability.SEARCH_FOR_INSCRIPTION
 
     override fun canBeCastedRightNow(
         ability: Ability,
@@ -33,23 +33,19 @@ class AdvancedSearchForScentAbilityCondition(
             logger.warn("Target is null")
             return false
         }
-        if (target !is InGameScentClue) {
-            logger.warn("Target is not a scent clue")
+        if (target !is InGameInscriptionClueGlyph) {
+            logger.warn("Target is not a inscription clue glyph")
             return false
         }
         val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
             user,
             target,
             globalGameData.levelGeometryData,
-            ability.range ?: 0.0,
+            target.interactionRadius,
             true
         )
         if (!canSeeAndInRange) {
             logger.warn("User cannot see target or target is out of range")
-            return false
-        }
-        if (target.castedAbilityUsers.contains(user.inGameId())) {
-            logger.info("User already activated searching for scent")
             return false
         }
         return true
@@ -64,13 +60,13 @@ class AdvancedSearchForScentAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is InGameScentClue && userLocationHandler.userCanSeeTargetInRange(
+            it is InGameInscriptionClueGlyph && userLocationHandler.userCanSeeTargetInRange(
                 user,
                 it,
                 globalGameData.levelGeometryData,
                 ability.range ?: 0.0,
                 true
-            ) && !it.castedAbilityUsers.contains(user.inGameId())
+            )
         }
     }
 

@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.searchclue.v2
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.searchclue
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
@@ -6,22 +6,22 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.parts.InGameSoundClueJammer
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameDistortionClue
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForSoundAbilityCondition(
+class AdvancedSearchForDistortionAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
-    companion object{
-        private val logger = LoggerFactory.getLogger(AdvancedSearchForSoundAbilityCondition::class.java)
+    companion object {
+        private val logger = LoggerFactory.getLogger(AdvancedSearchForDistortionAbilityCondition::class.java)
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.SEARCH_FOR_SOUND
+        ability == Ability.SEARCH_FOR_DISTORTION
 
     override fun canBeCastedRightNow(
         ability: Ability,
@@ -33,23 +33,23 @@ class AdvancedSearchForSoundAbilityCondition(
             logger.warn("Target is null")
             return false
         }
-        if (target !is InGameSoundClueJammer) {
-            logger.warn("Target is not a sound clue jammer")
+        if (target !is InGameDistortionClue) {
+            logger.warn("Target is not a distortion clue")
             return false
         }
         val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
             user,
             target,
             globalGameData.levelGeometryData,
-            target.interactionRadius,
+            ability.range ?: 0.0,
             true
         )
         if (!canSeeAndInRange) {
             logger.warn("User cannot see target or target is out of range")
             return false
         }
-        if (!target.turnedOn){
-            logger.warn("jammer is not turned on")
+        if (target.castedAbilityUsers.contains(user.inGameId())) {
+            logger.warn("ability already casted")
             return false
         }
         return true
@@ -64,13 +64,13 @@ class AdvancedSearchForSoundAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is InGameSoundClueJammer && userLocationHandler.userCanSeeTargetInRange(
+            it is InGameDistortionClue && userLocationHandler.userCanSeeTargetInRange(
                 user,
                 it,
                 globalGameData.levelGeometryData,
                 ability.range ?: 0.0,
                 true
-            ) && it.turnedOn
+            ) && !it.castedAbilityUsers.contains(user.inGameId())
         }
     }
 

@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.searchclue.v2
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.searchclue
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
@@ -6,22 +6,22 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinde
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.clues.InGameOmenClue
+import com.arkhamusserver.arkhamus.model.ingame.clues.InGameAuraClue
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AdvancedSearchForOmenAbilityCondition(
+class AdvancedSearchForAuraAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
-    companion object {
-        private val logger = LoggerFactory.getLogger(AdvancedSearchForOmenAbilityCondition::class.java)
+    companion object{
+        private val logger = LoggerFactory.getLogger(AdvancedSearchForAuraAbilityCondition::class.java)
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.SEARCH_FOR_OMEN
+        ability == Ability.SEARCH_FOR_AURA
 
     override fun canBeCastedRightNow(
         ability: Ability,
@@ -33,18 +33,13 @@ class AdvancedSearchForOmenAbilityCondition(
             logger.warn("Target is null")
             return false
         }
-        if (target !is InGameOmenClue) {
-            logger.warn("Target is not a omen clue")
-            return false
-        }
-        val targetUser = globalGameData.users[target.userId]
-        if (targetUser == null) {
-            logger.warn("Related for omen user not found")
+        if (target !is InGameAuraClue) {
+            logger.warn("Target is not a aura clue")
             return false
         }
         val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
             user,
-            targetUser,
+            target,
             globalGameData.levelGeometryData,
             ability.range ?: 0.0,
             true
@@ -53,8 +48,8 @@ class AdvancedSearchForOmenAbilityCondition(
             logger.warn("User cannot see target or target is out of range")
             return false
         }
-        if (target.castedAbilityUsers.contains(user.inGameId())) {
-            logger.warn("ability already casted")
+        if(target.castedAbilityUsers.contains(user.inGameId())){
+            logger.info("User already activated searching for aura")
             return false
         }
         return true
@@ -69,18 +64,13 @@ class AdvancedSearchForOmenAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            if (it !is InGameOmenClue) {
-                false
-            } else {
-                val targetUser = globalGameData.users[it.userId]
-                targetUser != null && userLocationHandler.userCanSeeTargetInRange(
-                    user,
-                    targetUser,
-                    globalGameData.levelGeometryData,
-                    ability.range ?: 0.0,
-                    true
-                ) && !it.castedAbilityUsers.contains(user.inGameId())
-            }
+            it is InGameAuraClue && userLocationHandler.userCanSeeTargetInRange(
+                user,
+                it,
+                globalGameData.levelGeometryData,
+                ability.range ?: 0.0,
+                true
+            ) && !it.castedAbilityUsers.contains(user.inGameId())
         }
     }
 

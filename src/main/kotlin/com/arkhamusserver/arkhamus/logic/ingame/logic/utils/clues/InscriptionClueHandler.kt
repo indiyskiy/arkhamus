@@ -172,7 +172,7 @@ class InscriptionClueHandler(
         inGameInscriptionClueRepository.saveAll(inGameInscriptionClues)
     }
 
-    private fun shuffleGlyphValues(clue: InGameInscriptionClue) {
+    fun shuffleGlyphValues(clue: InGameInscriptionClue) {
         val values = (1..GLYPH_VARIANTS).shuffled(random)
         clue.inscriptionClueGlyphs.forEachIndexed { index, glyph ->
             glyph.value = values[index]
