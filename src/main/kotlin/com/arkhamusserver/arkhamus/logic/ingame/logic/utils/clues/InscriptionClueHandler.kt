@@ -160,7 +160,6 @@ class InscriptionClueHandler(
                 },
             )
             shuffleGlyphValues(clue)
-            clue.value = clue.inscriptionClueGlyphs.random(random).value
             clue
         }
         if (god.getTypes().contains(Clue.INSCRIPTION)) {
@@ -177,6 +176,7 @@ class InscriptionClueHandler(
         clue.inscriptionClueGlyphs.forEachIndexed { index, glyph ->
             glyph.value = values[index]
         }
+        clue.value = clue.inscriptionClueGlyphs.random(random).value
     }
 
     override fun mapActualClues(

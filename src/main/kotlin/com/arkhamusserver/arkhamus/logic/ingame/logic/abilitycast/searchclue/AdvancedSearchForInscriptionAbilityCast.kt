@@ -1,14 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.searchclue
 
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.MINUTE_IN_MILLIS
-import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.InscriptionClueHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameInscriptionClueRepository
-import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameInscriptionClue
@@ -21,14 +17,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class AdvancedSearchForInscriptionAbilityCast(
-    private val timeEventHandler: TimeEventHandler,
     private val inGameInscriptionClueRepository: InGameInscriptionClueRepository,
     private val inscriptionClueHandler: InscriptionClueHandler
 ) : AbilityCast {
 
     companion object {
         var logger: Logger = LoggerFactory.getLogger(AdvancedSearchForInscriptionAbilityCast::class.java)
-        val DEFAULT_NULLIFY_TIME = MINUTE_IN_MILLIS
     }
 
     override fun accept(ability: Ability): Boolean {
@@ -81,8 +75,7 @@ class AdvancedSearchForInscriptionAbilityCast(
                 if (rightGlyph) {
                     makeClueVisible(
                         inscriptionClue,
-                        user,
-                        data
+                        user
                     )
                 } else {
                     resetGlyphs(
@@ -97,22 +90,12 @@ class AdvancedSearchForInscriptionAbilityCast(
     private fun makeClueVisible(
         targetedClue: InGameInscriptionClue,
         user: InGameUser,
-        data: GlobalGameData
     ) {
         targetedClue.castedAbilityUsers += user.inGameId()
         targetedClue.inscriptionClueGlyphs.forEach {
             it.value = targetedClue.value
         }
         inGameInscriptionClueRepository.save(targetedClue)
-
-        timeEventHandler.createEvent(
-            game = data.game,
-            eventType = InGameTimeEventType.INSCRIPTION_CLUE_VISIBLE,
-            sourceObject = user,
-            targetObject = targetedClue,
-            location = Location(targetedClue.x, targetedClue.y, targetedClue.z),
-            timeLeft = InGameTimeEventType.INSCRIPTION_CLUE_VISIBLE.getDefaultTime()
-        )
     }
 
     private fun resetGlyphs(
