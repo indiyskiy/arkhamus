@@ -21,7 +21,7 @@ class AdvancedSearchForScentAbilityCondition(
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.ADVANCED_SEARCH_FOR_SCENT
+        ability == Ability.SEARCH_FOR_SCENT
 
     override fun canBeCastedRightNow(
         ability: Ability,

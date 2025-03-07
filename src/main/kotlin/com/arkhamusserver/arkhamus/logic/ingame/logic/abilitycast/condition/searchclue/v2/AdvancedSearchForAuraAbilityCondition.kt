@@ -21,7 +21,7 @@ class AdvancedSearchForAuraAbilityCondition(
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.ADVANCED_SEARCH_FOR_AURA
+        ability == Ability.SEARCH_FOR_AURA
 
     override fun canBeCastedRightNow(
         ability: Ability,

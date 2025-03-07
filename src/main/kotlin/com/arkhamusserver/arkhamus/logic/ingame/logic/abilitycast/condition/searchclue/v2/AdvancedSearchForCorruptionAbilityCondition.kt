@@ -21,7 +21,7 @@ class AdvancedSearchForCorruptionAbilityCondition(
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.ADVANCED_SEARCH_FOR_CORRUPTION
+        ability == Ability.SEARCH_FOR_CORRUPTION
 
     override fun canBeCastedRightNow(
         ability: Ability,

@@ -21,7 +21,7 @@ class AdvancedSearchForDistortionAbilityCondition(
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.ADVANCED_SEARCH_FOR_DISTORTION
+        ability == Ability.SEARCH_FOR_DISTORTION
 
     override fun canBeCastedRightNow(
         ability: Ability,

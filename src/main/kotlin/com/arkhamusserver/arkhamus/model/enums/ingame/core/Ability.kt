@@ -149,7 +149,7 @@ enum class Ability(
 
     //clue items 6***
     //INVESTIGATION 2.0
-    ADVANCED_SEARCH_FOR_SCENT(
+    SEARCH_FOR_SCENT(
         id = 6001,
         requiresItem = true,
         active = DEFAULT_INVESTIGATION_ACTIVE,
@@ -157,14 +157,14 @@ enum class Ability(
         targetTypes = listOf(SCENT_CLUE),
         range = CLOSE_RANGE
     ),
-    ADVANCED_SEARCH_FOR_SOUND(
+    SEARCH_FOR_SOUND(
         id = 6002,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 0.25).toLong(),
         targetTypes = listOf(SOUND_CLUE_JAMMER),
         range = CLOSE_RANGE
     ),
-    ADVANCED_SEARCH_FOR_OMEN(
+    SEARCH_FOR_OMEN(
         id = 6003,
         requiresItem = true,
         active = DEFAULT_INVESTIGATION_ACTIVE,
@@ -172,14 +172,14 @@ enum class Ability(
         targetTypes = listOf(OMEN_CLUE),
         range = CLOSE_RANGE
     ),
-    ADVANCED_SEARCH_FOR_CORRUPTION(
+    SEARCH_FOR_CORRUPTION(
         id = 6004,
         requiresItem = true,
         cooldown = MINUTE_IN_MILLIS,
         range = CLOSE_RANGE,
         targetTypes = listOf(CORRUPTION_CLUE),
     ),
-    ADVANCED_SEARCH_FOR_AURA(
+    SEARCH_FOR_AURA(
         id = 6005,
         requiresItem = true,
         cooldown = MINUTE_IN_MILLIS,
@@ -187,7 +187,7 @@ enum class Ability(
         targetTypes = listOf(AURA_CLUE),
         active = DEFAULT_INVESTIGATION_ACTIVE * 3
     ),
-    ADVANCED_SEARCH_FOR_DISTORTION(
+    SEARCH_FOR_DISTORTION(
         id = 6006,
         requiresItem = true,
         cooldown = MINUTE_IN_MILLIS * 3,
@@ -195,7 +195,7 @@ enum class Ability(
         range = MEDIUM_RANGE,
         targetTypes = listOf(DISTORTION_CLUE),
     ),
-    ADVANCED_SEARCH_FOR_INSCRIPTION(
+    SEARCH_FOR_INSCRIPTION(
         id = 6007,
         requiresItem = true,
         cooldown = MINUTE_IN_MILLIS * 3,

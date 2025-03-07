@@ -22,7 +22,7 @@ class AdvancedSearchForScentAbilityCast(
     }
 
     override fun accept(ability: Ability): Boolean {
-        return ability == Ability.ADVANCED_SEARCH_FOR_SCENT
+        return ability == Ability.SEARCH_FOR_SCENT
     }
 
     override fun cast(

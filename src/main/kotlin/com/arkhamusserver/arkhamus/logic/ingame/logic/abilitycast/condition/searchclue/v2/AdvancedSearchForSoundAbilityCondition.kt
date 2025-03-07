@@ -21,7 +21,7 @@ class AdvancedSearchForSoundAbilityCondition(
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.ADVANCED_SEARCH_FOR_SOUND
+        ability == Ability.SEARCH_FOR_SOUND
 
     override fun canBeCastedRightNow(
         ability: Ability,

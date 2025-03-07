@@ -26,7 +26,7 @@ class AdvancedSearchForCorruptionAbilityCast(
     }
 
     override fun accept(ability: Ability): Boolean {
-        return ability == Ability.ADVANCED_SEARCH_FOR_CORRUPTION
+        return ability == Ability.SEARCH_FOR_CORRUPTION
     }
 
     override fun cast(

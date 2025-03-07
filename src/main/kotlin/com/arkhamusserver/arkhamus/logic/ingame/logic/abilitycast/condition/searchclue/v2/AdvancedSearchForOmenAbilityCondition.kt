@@ -21,7 +21,7 @@ class AdvancedSearchForOmenAbilityCondition(
     }
 
     override fun accepts(ability: Ability): Boolean =
-        ability == Ability.ADVANCED_SEARCH_FOR_OMEN
+        ability == Ability.SEARCH_FOR_OMEN
 
     override fun canBeCastedRightNow(
         ability: Ability,

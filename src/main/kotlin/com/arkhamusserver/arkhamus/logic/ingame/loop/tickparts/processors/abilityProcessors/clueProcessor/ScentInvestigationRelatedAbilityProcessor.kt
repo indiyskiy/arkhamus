@@ -21,7 +21,7 @@ class ScentInvestigationRelatedAbilityProcessor(
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {
         return castAbility.abilityId.toAbility()?.let { ability ->
-            ability == Ability.ADVANCED_SEARCH_FOR_SCENT
+            ability == Ability.SEARCH_FOR_SCENT
         } == true
     }
 

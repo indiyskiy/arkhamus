@@ -22,7 +22,7 @@ class AdvancedSearchForAuraAbilityCast(
     }
 
     override fun accept(ability: Ability): Boolean {
-        return ability == Ability.ADVANCED_SEARCH_FOR_AURA
+        return ability == Ability.SEARCH_FOR_AURA
     }
 
     override fun cast(
