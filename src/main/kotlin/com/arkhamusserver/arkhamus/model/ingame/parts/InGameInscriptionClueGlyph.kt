@@ -1,28 +1,23 @@
-package com.arkhamusserver.arkhamus.model.ingame.clues
+package com.arkhamusserver.arkhamus.model.ingame.parts
 
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.InGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.ingame.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithVisibilityModifiers
-import com.arkhamusserver.arkhamus.model.ingame.parts.AuraCluePoint
 
-data class InGameAuraClue(
+data class InGameInscriptionClueGlyph(
     override val id: String,
     override val gameId: Long,
-    val inGameAuraId: Long,
-    val x: Double,
-    val y: Double,
-    val z: Double,
-    val interactionRadius: Double,
-    val visibilityModifiers: Set<VisibilityModifier>,
-    var turnedOn: Boolean,
-    val targetPoint: AuraCluePoint,
-    var castedAbilityUsers: Set<Long> = setOf(),
-
-    ) : InGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers, Interactable {
-
+    var x: Double,
+    var y: Double,
+    var z: Double,
+    var inGameId: Long,
+    var visibilityModifiers: Set<VisibilityModifier>,
+    var interactionRadius: Double,
+    var inscriptionClueId: Long,
+    var value : Int
+) : InGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers {
     override fun x(): Double {
         return x
     }
@@ -36,14 +31,10 @@ data class InGameAuraClue(
     }
 
     override fun inGameId(): Long {
-        return inGameAuraId
+        return inGameId
     }
 
     override fun visibilityModifiers(): Set<VisibilityModifier> {
         return visibilityModifiers
-    }
-
-    override fun interactionRadius(): Double {
-        return interactionRadius
     }
 }

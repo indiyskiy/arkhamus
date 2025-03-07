@@ -24,7 +24,6 @@ class AdminLevelPreviewLogic(
     private val voteSpotRepository: VoteSpotRepository,
     private val doorRepository: DoorRepository,
     private val thresholdRepository: ThresholdRepository,
-
     private val soundClueRepository: SoundClueRepository,
     private val auraClueRepository: AuraClueRepository,
     private val distortionClueRepository: DistortionClueRepository,
@@ -199,7 +198,7 @@ class AdminLevelPreviewLogic(
             val z = it.z * SCREEN_ZOOM
             ClueDto(
                 points = cluePoints(x, z),
-                color = clueColor(Clue.CORRUPTION)
+                color = clueColor(Clue.INSCRIPTION)
             )
         }
 

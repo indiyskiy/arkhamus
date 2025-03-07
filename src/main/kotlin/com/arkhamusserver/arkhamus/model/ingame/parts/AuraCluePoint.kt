@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.model.ingame.clues
+package com.arkhamusserver.arkhamus.model.ingame.parts
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.Interactable

@@ -12,7 +12,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.ClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
@@ -187,7 +187,7 @@ class DistortionClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                state = InnovateClueState.ACTIVE_CLUE,
+                state = ClueState.ACTIVE_CLUE,
                 additionalData = mapTransmitterAdditionalData(it, user, data)
             )
         }
@@ -220,7 +220,7 @@ class DistortionClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                state = InnovateClueState.ACTIVE_UNKNOWN,
+                state = ClueState.ACTIVE_UNKNOWN,
                 additionalData = mapTransmitterAdditionalData(it, user, data)
             )
         }
@@ -252,7 +252,7 @@ class DistortionClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                state = if (it.turnedOn) InnovateClueState.ACTIVE_CLUE else InnovateClueState.ACTIVE_NO_CLUE,
+                state = if (it.turnedOn) ClueState.ACTIVE_CLUE else ClueState.ACTIVE_NO_CLUE,
                 additionalData = mapReceiverAdditionalData(it, data)
             )
         }

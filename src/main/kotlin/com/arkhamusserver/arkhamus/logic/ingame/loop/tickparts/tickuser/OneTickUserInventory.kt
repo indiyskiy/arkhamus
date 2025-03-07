@@ -47,12 +47,13 @@ class OneTickUserInventory(
                 globalGameData
             )
 
-            INNOVATE_SCENT_INVESTIGATION_ITEM -> processInnovateScentInvestigationItem(user)
-            INNOVATE_SOUND_INVESTIGATION_ITEM -> processInnovateSoundInvestigationItem(user)
-            INNOVATE_OMEN_INVESTIGATION_ITEM -> processInnovateOmenInvestigationItem(user)
-            INNOVATE_CORRUPTION_INVESTIGATION_ITEM -> processInnovateCorruptionInvestigationItem(user)
-            INNOVATE_DISTORTION_INVESTIGATION_ITEM -> processInnovateDistortionInvestigationItem(user)
-            INNOVATE_AURA_INVESTIGATION_ITEM -> processInnovateAuraInvestigationItem(user)
+            SCENT_INVESTIGATION_ITEM -> processScentInvestigationItem(user)
+            SOUND_INVESTIGATION_ITEM -> processSoundInvestigationItem(user)
+            OMEN_INVESTIGATION_ITEM -> processOmenInvestigationItem(user)
+            CORRUPTION_INVESTIGATION_ITEM -> processCorruptionInvestigationItem(user)
+            DISTORTION_INVESTIGATION_ITEM -> processDistortionInvestigationItem(user)
+            AURA_INVESTIGATION_ITEM -> processAuraInvestigationItem(user)
+            INSCRIPTION_INVESTIGATION_ITEM -> processInscriptionInvestigationItem(user)
             else -> {}
         }
     }
@@ -62,98 +63,113 @@ class OneTickUserInventory(
         item: Item,
     ) {
         when (item) {
-            INNOVATE_SCENT_INVESTIGATION_ITEM -> noInnovateScentInvestigationItem(user)
-            INNOVATE_SOUND_INVESTIGATION_ITEM -> noInnovateSoundInvestigationItem(user)
-            INNOVATE_OMEN_INVESTIGATION_ITEM -> noInnovateOmenInvestigationItem(user)
-            INNOVATE_CORRUPTION_INVESTIGATION_ITEM -> noInnovateCorruptionInvestigationItem(user)
-            INNOVATE_DISTORTION_INVESTIGATION_ITEM -> noInnovateDistortionInvestigationItem(user)
-            INNOVATE_AURA_INVESTIGATION_ITEM -> noInnovateAuraInvestigationItem(user)
+            SCENT_INVESTIGATION_ITEM -> noScentInvestigationItem(user)
+            SOUND_INVESTIGATION_ITEM -> noSoundInvestigationItem(user)
+            OMEN_INVESTIGATION_ITEM -> noOmenInvestigationItem(user)
+            CORRUPTION_INVESTIGATION_ITEM -> noCorruptionInvestigationItem(user)
+            DISTORTION_INVESTIGATION_ITEM -> noDistortionInvestigationItem(user)
+            AURA_INVESTIGATION_ITEM -> noAuraInvestigationItem(user)
+            INSCRIPTION_INVESTIGATION_ITEM -> noInscriptionInvestigationItem(user)
             else -> {}
         }
     }
 
-    private fun processInnovateScentInvestigationItem(
+    private fun processScentInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_SCENT
         user.stateTags += UserStateTag.INVESTIGATING_SCENT
     }
 
-    private fun noInnovateScentInvestigationItem(
+    private fun noScentInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_SCENT
         user.stateTags -= UserStateTag.INVESTIGATING_SCENT
     }
 
-    private fun processInnovateSoundInvestigationItem(
+    private fun processSoundInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_SOUND
         user.stateTags += UserStateTag.INVESTIGATING_SOUND
     }
 
-    private fun processInnovateOmenInvestigationItem(
+    private fun processOmenInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_OMEN
         user.stateTags += UserStateTag.INVESTIGATING_OMEN
     }
 
-    private fun processInnovateCorruptionInvestigationItem(
+    private fun processCorruptionInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_CORRUPTION
         user.stateTags += UserStateTag.INVESTIGATING_CORRUPTION
     }
 
-    private fun processInnovateDistortionInvestigationItem(
+    private fun processDistortionInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_DISTORTION
         user.stateTags += UserStateTag.INVESTIGATING_DISTORTION
     }
 
-    private fun processInnovateAuraInvestigationItem(
+    private fun processAuraInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_AURA
         user.stateTags += UserStateTag.INVESTIGATING_AURA
     }
 
-    private fun noInnovateSoundInvestigationItem(
+    private fun processInscriptionInvestigationItem(
+        user: InGameUser,
+    ) {
+        user.visibilityModifiers += VisibilityModifier.HAVE_ITEM_INSCRIPTION
+        user.stateTags += UserStateTag.INVESTIGATING_INSCRIPTION
+    }
+
+    private fun noSoundInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_SOUND
         user.stateTags -= UserStateTag.INVESTIGATING_SOUND
     }
 
-    private fun noInnovateOmenInvestigationItem(
+    private fun noOmenInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_OMEN
         user.stateTags -= UserStateTag.INVESTIGATING_OMEN
     }
 
-    private fun noInnovateCorruptionInvestigationItem(
+    private fun noCorruptionInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_CORRUPTION
         user.stateTags -= UserStateTag.INVESTIGATING_CORRUPTION
     }
 
-    private fun noInnovateDistortionInvestigationItem(
+    private fun noDistortionInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_DISTORTION
         user.stateTags -= UserStateTag.INVESTIGATING_DISTORTION
     }
 
-    private fun noInnovateAuraInvestigationItem(
+    private fun noAuraInvestigationItem(
         user: InGameUser,
     ) {
         user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_AURA
         user.stateTags -= UserStateTag.INVESTIGATING_AURA
+    }
+
+    private fun noInscriptionInvestigationItem(
+        user: InGameUser,
+    ) {
+        user.visibilityModifiers = user.visibilityModifiers - VisibilityModifier.HAVE_ITEM_INSCRIPTION
+        user.stateTags -= UserStateTag.INVESTIGATING_INSCRIPTION
     }
 
     private fun processCursedPotato(

@@ -12,7 +12,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.ClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
@@ -162,7 +162,7 @@ class CorruptionClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                state = InnovateClueState.ACTIVE_CLUE,
+                state = ClueState.ACTIVE_CLUE,
                 additionalData = mapAdditionalData(it, user)
             )
         }
@@ -196,18 +196,18 @@ class CorruptionClueHandler(
     private fun countState(
         clue: InGameCorruptionClue,
         user: InGameUser,
-    ): InnovateClueState {
+    ): ClueState {
         return if (
             clue.castedAbilityUsers.contains(user.inGameId()) &&
             clue.timeFromStart >= clue.timeUntilFullyGrowth
             ) {
             if (clue.turnedOn) {
-                InnovateClueState.ACTIVE_CLUE
+                ClueState.ACTIVE_CLUE
             } else {
-                InnovateClueState.ACTIVE_NO_CLUE
+                ClueState.ACTIVE_NO_CLUE
             }
         } else {
-            InnovateClueState.ACTIVE_UNKNOWN
+            ClueState.ACTIVE_UNKNOWN
         }
     }
 

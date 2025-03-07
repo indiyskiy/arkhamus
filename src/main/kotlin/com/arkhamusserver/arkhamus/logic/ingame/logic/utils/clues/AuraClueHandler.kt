@@ -17,11 +17,11 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.ClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.clues.AuraCluePoint
+import com.arkhamusserver.arkhamus.model.ingame.parts.AuraCluePoint
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameAuraClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
@@ -180,7 +180,7 @@ class AuraClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                state = InnovateClueState.ACTIVE_CLUE,
+                state = ClueState.ACTIVE_CLUE,
             )
         }
     }
@@ -215,10 +215,10 @@ class AuraClueHandler(
         clue: InGameAuraClue,
         user: InGameUser,
         percentage: Int,
-        state: InnovateClueState
+        state: ClueState
     ): AuraClueAdditionalDataResponse? {
         val visible = clue.castedAbilityUsers.contains(user.inGameId())
-        val seeActualState = state in setOf(InnovateClueState.ACTIVE_CLUE, InnovateClueState.ACTIVE_NO_CLUE)
+        val seeActualState = state in setOf(ClueState.ACTIVE_CLUE, ClueState.ACTIVE_NO_CLUE)
         return if (visible) {
             AuraClueAdditionalDataResponse(
                 distancePercentage = percentage,
@@ -277,15 +277,15 @@ class AuraClueHandler(
         clue: InGameAuraClue,
         user: InGameUser,
         percentage: Int
-    ): InnovateClueState {
+    ): ClueState {
         return if (clue.castedAbilityUsers.contains(user.inGameId()) && percentage == 100) {
             if (clue.turnedOn) {
-                InnovateClueState.ACTIVE_CLUE
+                ClueState.ACTIVE_CLUE
             } else {
-                InnovateClueState.ACTIVE_NO_CLUE
+                ClueState.ACTIVE_NO_CLUE
             }
         } else {
-            InnovateClueState.ACTIVE_UNKNOWN
+            ClueState.ACTIVE_UNKNOWN
         }
     }
 

@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.searchclue.v2
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.searchclue
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast

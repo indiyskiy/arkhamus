@@ -26,13 +26,12 @@ class InvestigationRecipePart() : RecipeSourcePart {
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = defaultCrafterTypes
             ),
-            //2.0
             listOf(
                 Ingredient(RING, 1),
                 Ingredient(CORRUPTED_TOPAZ, 5)
             ).toRecipe(
-                50001,
-                item = INNOVATE_SCENT_INVESTIGATION_ITEM,
+                5002,
+                item = SCENT_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = defaultCrafterTypes
             ),
@@ -40,8 +39,8 @@ class InvestigationRecipePart() : RecipeSourcePart {
                 Ingredient(BLACK_STONE, 1),
                 Ingredient(HIGGS_BOSON, 5)
             ).toRecipe(
-                50002,
-                item = INNOVATE_SOUND_INVESTIGATION_ITEM,
+                5003,
+                item = SOUND_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = defaultCrafterTypes
             ),
@@ -49,8 +48,8 @@ class InvestigationRecipePart() : RecipeSourcePart {
                 Ingredient(EYE, 1),
                 Ingredient(SAINT_QUARTZ, 5)
             ).toRecipe(
-                50003,
-                item = INNOVATE_OMEN_INVESTIGATION_ITEM,
+                5004,
+                item = OMEN_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = defaultCrafterTypes
             ),
@@ -58,8 +57,8 @@ class InvestigationRecipePart() : RecipeSourcePart {
                 Ingredient(PLATE, 1),
                 Ingredient(CRYSTALLIZED_BLOOD, 5)
             ).toRecipe(
-                50004,
-                item = INNOVATE_CORRUPTION_INVESTIGATION_ITEM,
+                5005,
+                item = CORRUPTION_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = defaultCrafterTypes
             ),
@@ -67,8 +66,8 @@ class InvestigationRecipePart() : RecipeSourcePart {
                 Ingredient(MASK, 1),
                 Ingredient(BLIGHTING_JEWEL, 5)
             ).toRecipe(
-                50005,
-                item = INNOVATE_DISTORTION_INVESTIGATION_ITEM,
+                5006,
+                item = DISTORTION_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = defaultCrafterTypes
             ),
@@ -76,8 +75,8 @@ class InvestigationRecipePart() : RecipeSourcePart {
                 Ingredient(TEAR, 1),
                 Ingredient(ELDER_SIGN, 5)
             ).toRecipe(
-                50006,
-                item = INNOVATE_AURA_INVESTIGATION_ITEM,
+                5007,
+                item = AURA_INVESTIGATION_ITEM,
                 timeToCraft = MINUTE_IN_MILLIS / 2,
                 crafterTypes = defaultCrafterTypes
             ),

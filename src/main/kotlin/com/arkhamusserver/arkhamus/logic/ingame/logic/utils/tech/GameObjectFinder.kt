@@ -34,6 +34,10 @@ class GameObjectFinder {
             AURA_CLUE -> data.clues.aura.firstOrNull { it.inGameId() == id.toLong() }
             CORRUPTION_CLUE -> data.clues.corruption.firstOrNull { it.inGameId() == id.toLong() }
             DISTORTION_CLUE -> data.clues.distortion.firstOrNull { it.inGameId() == id.toLong() }
+            INSCRIPTION_CLUE -> data.clues.inscription.firstOrNull { it.inGameId() == id.toLong() }
+            INSCRIPTION_CLUE_GLYPH -> data.clues.inscription.flatMap { it.inscriptionClueGlyphs }.firstOrNull {
+                it.inGameId() == id.toLong()
+            }
         }
     }
 
@@ -74,6 +78,8 @@ class GameObjectFinder {
         OMEN_CLUE -> data.clues.omen
         CORRUPTION_CLUE -> data.clues.corruption
         DISTORTION_CLUE -> data.clues.distortion
+        INSCRIPTION_CLUE -> data.clues.inscription
+        INSCRIPTION_CLUE_GLYPH -> data.clues.inscription.flatMap { it.inscriptionClueGlyphs }
     }
 
     data class TypedGameObject(

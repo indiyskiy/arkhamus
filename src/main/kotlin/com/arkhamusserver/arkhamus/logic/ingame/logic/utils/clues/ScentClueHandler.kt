@@ -11,7 +11,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.ClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
@@ -156,7 +156,7 @@ class ScentClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                state = InnovateClueState.ACTIVE_CLUE,
+                state = ClueState.ACTIVE_CLUE,
             )
         }
     }
@@ -187,15 +187,15 @@ class ScentClueHandler(
     private fun countState(
         clue: InGameScentClue,
         user: InGameUser,
-    ): InnovateClueState {
+    ): ClueState {
         return if (clue.castedAbilityUsers.contains(user.inGameId())) {
             if (clue.turnedOn) {
-                InnovateClueState.ACTIVE_CLUE
+                ClueState.ACTIVE_CLUE
             } else {
-                InnovateClueState.ACTIVE_NO_CLUE
+                ClueState.ACTIVE_NO_CLUE
             }
         } else {
-            InnovateClueState.ACTIVE_UNKNOWN
+            ClueState.ACTIVE_UNKNOWN
         }
     }
 

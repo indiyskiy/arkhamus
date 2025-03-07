@@ -148,16 +148,9 @@ enum class Ability(
     ),
 
     //clue items 6***
-    SEARCH_FOR_INSCRIPTION(
-        id = 6001,
-        requiresItem = true,
-        cooldown = (MINUTE_IN_MILLIS * 1.5).toLong(),
-        active = DEFAULT_INVESTIGATION_ACTIVE
-    ),
-
     //INVESTIGATION 2.0
     ADVANCED_SEARCH_FOR_SCENT(
-        id = 60001,
+        id = 6001,
         requiresItem = true,
         active = DEFAULT_INVESTIGATION_ACTIVE,
         cooldown = DEFAULT_INVESTIGATION_ACTIVE + 1,
@@ -165,14 +158,14 @@ enum class Ability(
         range = CLOSE_RANGE
     ),
     ADVANCED_SEARCH_FOR_SOUND(
-        id = 60002,
+        id = 6002,
         requiresItem = true,
         cooldown = (MINUTE_IN_MILLIS * 0.25).toLong(),
         targetTypes = listOf(SOUND_CLUE_JAMMER),
         range = CLOSE_RANGE
     ),
     ADVANCED_SEARCH_FOR_OMEN(
-        id = 60003,
+        id = 6003,
         requiresItem = true,
         active = DEFAULT_INVESTIGATION_ACTIVE,
         cooldown = (MINUTE_IN_MILLIS * 0.25).toLong(),
@@ -180,14 +173,14 @@ enum class Ability(
         range = CLOSE_RANGE
     ),
     ADVANCED_SEARCH_FOR_CORRUPTION(
-        id = 60004,
+        id = 6004,
         requiresItem = true,
         cooldown = MINUTE_IN_MILLIS,
         range = CLOSE_RANGE,
         targetTypes = listOf(CORRUPTION_CLUE),
     ),
     ADVANCED_SEARCH_FOR_AURA(
-        id = 60005,
+        id = 6005,
         requiresItem = true,
         cooldown = MINUTE_IN_MILLIS,
         range = CLOSE_RANGE,
@@ -195,12 +188,20 @@ enum class Ability(
         active = DEFAULT_INVESTIGATION_ACTIVE * 3
     ),
     ADVANCED_SEARCH_FOR_DISTORTION(
-        id = 60008,
+        id = 6006,
         requiresItem = true,
         cooldown = MINUTE_IN_MILLIS * 3,
         active = DEFAULT_INVESTIGATION_ACTIVE * 2,
         range = MEDIUM_RANGE,
         targetTypes = listOf(DISTORTION_CLUE),
+    ),
+    ADVANCED_SEARCH_FOR_INSCRIPTION(
+        id = 6007,
+        requiresItem = true,
+        cooldown = MINUTE_IN_MILLIS * 3,
+        active = DEFAULT_INVESTIGATION_ACTIVE * 2,
+        range = MEDIUM_RANGE,
+        targetTypes = listOf(INSCRIPTION_CLUE_GLYPH),
     ),
 
 

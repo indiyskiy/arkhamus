@@ -9,14 +9,13 @@ enum class UserStateTag(
     IN_RITUAL(Visibility.PUBLIC),
 
     //abilities
-    //invetigation
-    INVESTIGATING(Visibility.SOURCE),
     INVESTIGATING_SCENT(Visibility.SOURCE),
     INVESTIGATING_SOUND(Visibility.SOURCE),
     INVESTIGATING_OMEN(Visibility.SOURCE),
     INVESTIGATING_CORRUPTION(Visibility.SOURCE),
     INVESTIGATING_DISTORTION(Visibility.SOURCE),
     INVESTIGATING_AURA(Visibility.SOURCE),
+    INVESTIGATING_INSCRIPTION(Visibility.SOURCE),
 
     //just abilities
     LUMINOUS(Visibility.PUBLIC),

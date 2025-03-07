@@ -12,7 +12,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.ClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
@@ -162,7 +162,7 @@ class OmenClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                state = InnovateClueState.ACTIVE_CLUE,
+                state = ClueState.ACTIVE_CLUE,
             )
         }
     }
@@ -193,15 +193,15 @@ class OmenClueHandler(
     private fun countState(
         clue: InGameOmenClue,
         user: InGameUser,
-    ): InnovateClueState {
+    ): ClueState {
         return if (clue.castedAbilityUsers.contains(user.inGameId())) {
             if (clue.turnedOn) {
-                InnovateClueState.ACTIVE_CLUE
+                ClueState.ACTIVE_CLUE
             } else {
-                InnovateClueState.ACTIVE_NO_CLUE
+                ClueState.ACTIVE_NO_CLUE
             }
         } else {
-            InnovateClueState.ACTIVE_UNKNOWN
+            ClueState.ACTIVE_UNKNOWN
         }
     }
 

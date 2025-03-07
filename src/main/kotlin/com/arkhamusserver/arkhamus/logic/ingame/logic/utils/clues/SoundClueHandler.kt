@@ -16,7 +16,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InnovateClueState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.ClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
@@ -199,7 +199,7 @@ class SoundClueHandler(
                 y = null,
                 z = null,
                 additionalData = fillActualAdditionalData(it, user, data.levelGeometryData),
-                state = InnovateClueState.ACTIVE_CLUE
+                state = ClueState.ACTIVE_CLUE
             )
         }
     }
@@ -232,7 +232,7 @@ class SoundClueHandler(
         clue: InGameSoundClue,
         user: InGameUser,
         levelGeometryData: LevelGeometryData
-    ): InnovateClueState {
+    ): ClueState {
         val turnedOn = clue.turnedOn
         val jammersTurnedOff = clue.soundClueJammers.all { !it.turnedOn }
         val inSameZone = zonesHandler.inSameZone(
@@ -242,9 +242,9 @@ class SoundClueHandler(
             types = setOf(ZoneType.SOUND)
         )
         if (!jammersTurnedOff || !inSameZone) {
-            return InnovateClueState.ACTIVE_UNKNOWN
+            return ClueState.ACTIVE_UNKNOWN
         }
-        return if (turnedOn) InnovateClueState.ACTIVE_CLUE else InnovateClueState.ACTIVE_NO_CLUE
+        return if (turnedOn) ClueState.ACTIVE_CLUE else ClueState.ACTIVE_NO_CLUE
     }
 
     private fun fillPossibleAdditionalData(
