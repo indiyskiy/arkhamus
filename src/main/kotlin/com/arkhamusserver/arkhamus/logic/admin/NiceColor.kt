@@ -32,7 +32,9 @@ enum class NiceColor(val colorCode: String) {
     LIGHT_SLATE_GREY("#778899"),
     MEDIUM_AQUAMARINE("#66CDAA"),
     MEDIUM_ORCHID("#BA55D3"),
-    MEDIUM_PURPLE("#9370DB");
+    MEDIUM_PURPLE("#9370DB"),
+    BLACK("#000000"),
+    ;
 
     fun getCode(): String {
         return colorCode

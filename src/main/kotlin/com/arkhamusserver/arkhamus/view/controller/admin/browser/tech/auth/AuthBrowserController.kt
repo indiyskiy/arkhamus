@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.view.controller.admin.browser.tech
+package com.arkhamusserver.arkhamus.view.controller.admin.browser.tech.auth
 
 import com.arkhamusserver.arkhamus.logic.auth.AuthenticationService
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
-
 
 @Controller
 class AuthBrowserController(

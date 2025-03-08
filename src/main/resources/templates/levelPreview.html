@@ -47,6 +47,10 @@
                 <input checked="checked" id="voteSpotData" name="voteSpotData" type="checkbox" value="true">
                 <label for="voteSpotData"> Vote Spot Data </label>
             </div>
+            <div class="checkbox-input">
+                <input checked="checked" id="extendedGeometry" name="extendedGeometry" type="checkbox" value="true">
+                <label for="extendedGeometry"> Extended geometry </label>
+            </div>
         </div>
         <input id="levelId" name="levelId" th:value="${levelGeometry.levelId}" type="hidden">
         <input type="submit" value="Filter">
@@ -115,6 +119,17 @@
                 <polygon th:attr="points=${poly.polygonPoints}"
                          th:style="'fill:' + ${poly.color.getCode()} + ';stroke:black;stroke-width:1'"/>
             </th:block>
+            <!-- Processing walls and doors -->
+            <th:block th:each="line : ${levelGeometry.getExtendedGeometry()}">
+                <line th:x1="${line.pointStart.pointX}"
+                      th:y1="${line.pointStart.pointY}"
+                      th:x2="${line.pointEnd.pointX}"
+                      th:y2="${line.pointEnd.pointY}"
+                      th:stroke="${line.color.getCode()}"
+                      th:stroke-width="'3'" />
+
+            </th:block>
+
         </svg>
     </div>
 </div>

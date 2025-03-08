@@ -5,8 +5,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.visibility.ObstaclesMap
 import com.arkhamusserver.arkhamus.logic.ingame.logic.visibility.VisibilityMap
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameVisibilityMapRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.VisibilityDoorRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.VisibilityWallRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.VisibilityDoorRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.VisibilityWallRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.ingame.InGameVisibilityMap
 import org.springframework.stereotype.Component

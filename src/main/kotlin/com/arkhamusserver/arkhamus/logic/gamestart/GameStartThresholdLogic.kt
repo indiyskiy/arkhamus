@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameThresholdRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.ThresholdRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.ThresholdRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Threshold
 import com.arkhamusserver.arkhamus.model.ingame.InGameThreshold

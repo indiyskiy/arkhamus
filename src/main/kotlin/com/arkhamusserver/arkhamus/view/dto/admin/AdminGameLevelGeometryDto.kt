@@ -17,6 +17,7 @@ data class AdminGameLevelGeometryDto(
     var voteSpots: List<VoteSpotDto>,
     var doors: List<DoorDto>,
     var thresholds: List<ThresholdDto>,
+    var extendedGeometry: List<GeometryLineDto>
 )
 
 data class ZoneDataDto(
@@ -69,5 +70,12 @@ data class DoorDto(
 data class ThresholdDto(
     val points: List<PointDto>,
     val polygonPoints: String = points.joinToString(" ") { "${it.pointX},${it.pointY}" },
+    var color: NiceColor
+)
+
+data class GeometryLineDto(
+    val pointStart: PointDto,
+    val pointEnd: PointDto,
+    val polygonPoints: String = listOf(pointStart, pointEnd).joinToString(" ") { "${it.pointX},${it.pointY}" },
     var color: NiceColor
 )

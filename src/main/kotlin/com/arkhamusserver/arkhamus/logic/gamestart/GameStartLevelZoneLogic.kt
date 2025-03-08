@@ -4,9 +4,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomI
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameLevelEllipseRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameLevelTetragonRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameLevelZoneRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.EllipseRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelZoneRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.TetragonRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.EllipseRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.LevelZoneRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.TetragonRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelZone
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone

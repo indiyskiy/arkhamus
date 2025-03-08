@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors
 
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.VisibilityDoorRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.VisibilityWallRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.VisibilityDoorRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.VisibilityWallRepository
 import com.arkhamusserver.arkhamus.model.database.entity.game.VisibilityDoor
 import com.arkhamusserver.arkhamus.model.database.entity.game.VisibilityWall
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level

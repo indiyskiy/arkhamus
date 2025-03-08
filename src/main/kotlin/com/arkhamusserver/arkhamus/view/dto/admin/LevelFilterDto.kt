@@ -8,12 +8,13 @@ data class LevelFilterDto(
     var questGivers: Boolean? = false,
     var levelTasks: Boolean? = false,
     var voteSpotData: Boolean? = false,
+    var extendedGeometry: Boolean? = false,
     var levelId: Long? = null
 ) {
     companion object {
         fun allTrue(levelId: Long): LevelFilterDto {
             return LevelFilterDto(
-                true, true, true, true, true, true, true, levelId
+                true, true, true, true, true, true, true, true, levelId
             )
         }
     }

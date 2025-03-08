@@ -7,8 +7,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomI
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameAuraClueRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.EllipseRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.TetragonRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.EllipseRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.TetragonRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.AuraClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Ellipse

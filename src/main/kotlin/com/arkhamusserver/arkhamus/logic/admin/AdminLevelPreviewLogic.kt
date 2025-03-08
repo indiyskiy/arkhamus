@@ -2,6 +2,13 @@ package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.*
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.EllipseRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.TetragonRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.ThresholdRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.VisibilityDoorRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.VisibilityWallRepository
+import com.arkhamusserver.arkhamus.model.database.entity.game.VisibilityDoor
+import com.arkhamusserver.arkhamus.model.database.entity.game.VisibilityWall
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.*
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.ZoneType
@@ -29,6 +36,8 @@ class AdminLevelPreviewLogic(
     private val distortionClueRepository: DistortionClueRepository,
     private val corruptionClueRepository: CorruptionClueRepository,
     private val inscriptionClueRepository: InscriptionClueRepository,
+    private val visibilityWallRepository: VisibilityWallRepository,
+    private val visibilityDoorRepository: VisibilityDoorRepository
 ) {
 
     companion object {
@@ -73,7 +82,7 @@ class AdminLevelPreviewLogic(
             voteSpotRepository.findByLevelId(levelId)
         } else emptyList()
 
-        val doors = if (filter.voteSpotData == true) {
+        val doors = if (filter.voteSpotData == true || filter.extendedGeometry == true) {
             doorRepository.findByLevelId(levelId)
         } else emptyList()
 
@@ -122,6 +131,18 @@ class AdminLevelPreviewLogic(
             inscriptionClueRepository.findByLevelId(levelId)
         } else emptyList()
 
+        val walls = if(filter.extendedGeometry == true) {
+            visibilityWallRepository.findByLevelId(levelId)
+        } else {
+            emptyList()
+        }
+
+        val visibilityDoors = if(filter.extendedGeometry == true) {
+            visibilityDoorRepository.findByLevelId(levelId)
+        } else {
+            emptyList()
+        }
+
         return AdminGameLevelGeometryDto(
             levelId = level.levelId,
             height = level.levelHeight.toInt() * SCREEN_ZOOM,
@@ -135,8 +156,52 @@ class AdminLevelPreviewLogic(
             voteSpots = mapVoteSpots(voteSpots),
             doors = mapDoors(doors),
             thresholds = mapThresholds(thresholds),
-            clues = mapClues(aura, sound, distortion, corruption, inscription)
+            clues = mapClues(aura, sound, distortion, corruption, inscription),
+            extendedGeometry = mapExtendedGeometry(walls, visibilityDoors)
         )
+    }
+
+    private fun mapExtendedGeometry(
+        walls: List<VisibilityWall>,
+        visibilityDoors: List<VisibilityDoor>
+    ): List<GeometryLineDto> {
+        return mapWalls(walls) + mapVisibilityDoors(visibilityDoors)
+    }
+
+    private fun mapWalls(walls: List<VisibilityWall>): List<GeometryLineDto> {
+        return walls.map { wall ->
+            GeometryLineDto(
+                pointStart = PointDto(
+                    wall.x1.toFloat() * SCREEN_ZOOM,
+                    wall.z1.toFloat() * SCREEN_ZOOM,
+                    NiceColor.BLACK
+                ),
+                pointEnd = PointDto(
+                    wall.x2.toFloat() * SCREEN_ZOOM,
+                    wall.z2.toFloat() * SCREEN_ZOOM,
+                    NiceColor.BLACK
+                ),
+                color = NiceColor.BLACK
+            )
+        }
+    }
+
+    private fun mapVisibilityDoors(walls: List<VisibilityDoor>): List<GeometryLineDto> {
+        return walls.map { wall ->
+            GeometryLineDto(
+                pointStart = PointDto(
+                    wall.x1.toFloat() * SCREEN_ZOOM,
+                    wall.z1.toFloat() * SCREEN_ZOOM,
+                    NiceColor.CHOCOLATE
+                ),
+                pointEnd = PointDto(
+                    wall.x2.toFloat() * SCREEN_ZOOM,
+                    wall.z2.toFloat() * SCREEN_ZOOM,
+                    NiceColor.CHOCOLATE
+                ),
+                color = NiceColor.CHOCOLATE
+            )
+        }
     }
 
     private fun mapClues(

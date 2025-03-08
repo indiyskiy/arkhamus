@@ -1,4 +1,4 @@
-package com.arkhamusserver.arkhamus.view.controller.admin.browser.game
+package com.arkhamusserver.arkhamus.view.controller.admin.browser.tech.stat
 
 import com.arkhamusserver.arkhamus.logic.admin.AdminNettyResourcesLogic
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminNettyResourcesInfoDto
