@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameDoorRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.DoorRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Door
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameDoor
 import org.springframework.stereotype.Component
@@ -35,7 +36,8 @@ class GameStartDoorLogic(
                 y = door.y,
                 z = door.z,
                 zoneId = door.zoneId,
-                visibilityModifiers = setOf(VisibilityModifier.ALL)
+                visibilityModifiers = setOf(VisibilityModifier.ALL),
+                additionalTags = setOf(DoorTag.OPEN_SOMETIMES)
             )
         )
 

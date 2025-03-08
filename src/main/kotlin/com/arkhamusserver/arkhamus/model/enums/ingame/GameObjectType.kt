@@ -17,4 +17,5 @@ enum class GameObjectType {
     SOUND_CLUE_JAMMER,
     ALTAR,
     LANTERN,
+    DOOR,
 }

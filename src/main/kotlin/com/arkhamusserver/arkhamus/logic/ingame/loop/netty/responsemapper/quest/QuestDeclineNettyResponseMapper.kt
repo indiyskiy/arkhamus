@@ -95,7 +95,7 @@ class QuestDeclineNettyResponseMapper(
                 clues = requestProcessData.clues,
                 doors = doorDataHandler.map(
                     it.gameUser,
-                    globalGameData.doorsByZoneId.values.flatten(),
+                    globalGameData.doors,
                     globalGameData.levelGeometryData
                 ),
                 lanterns = lanternDataHandler.map(

@@ -196,8 +196,8 @@ class UserVoteHandler(
                 )
             }
         }
-        val doors = globalGameData.doorsByZoneId[voteSpot.zoneId]
-        doors?.let {
+        val doors = globalGameData.doors.filter { it.zoneId == voteSpot.zoneId }
+        doors.let {
             it.forEach { door ->
                 door.closedForUsers += userId
             }

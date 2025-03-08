@@ -46,7 +46,8 @@ class AbilityToItemResolver {
                 TAKE_FINGERPRINTS,
                 FARSIGHT,
                 PARALYSE,
-                MADNESS_LINK -> null
+                MADNESS_LINK,
+                LOCK_DOOR -> null
             }
         }
 }

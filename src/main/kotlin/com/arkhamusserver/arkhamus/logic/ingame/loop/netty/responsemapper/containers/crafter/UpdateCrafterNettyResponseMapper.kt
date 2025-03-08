@@ -135,7 +135,7 @@ class UpdateCrafterNettyResponseMapper(
         ),
         doors = doorDataHandler.map(
             gameUser,
-            globalGameData.doorsByZoneId.values.flatten(),
+            globalGameData.doors,
             globalGameData.levelGeometryData
         ),
         lanterns = lanternDataHandler.map(

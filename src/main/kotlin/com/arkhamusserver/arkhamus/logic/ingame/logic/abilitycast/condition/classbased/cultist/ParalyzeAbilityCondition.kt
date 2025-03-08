@@ -10,13 +10,13 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 
 @Component
-class MadnessLinkAbilityCondition(
+class ParalyzeAbilityCondition(
     private val geometryUtils: GeometryUtils,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
-        return ability == Ability.MADNESS_LINK
+        return ability == Ability.PARALYSE
     }
 
     override fun canBeCastedRightNow(
@@ -29,8 +29,7 @@ class MadnessLinkAbilityCondition(
         val targetUser = (target as? InGameUser) ?: return false
         return targetUser.inGameId() != user.inGameId() &&
                 geometryUtils.distanceLessOrEquals(user, targetUser, ability.range) &&
-                !targetUser.stateTags.contains(UserStateTag.MADNESS_LINK_TARGET) &&
-                !targetUser.stateTags.contains(UserStateTag.MADNESS_LINK_SOURCE)
+                !targetUser.stateTags.contains(UserStateTag.STUN)
     }
 
     override fun canBeCastedAtAll(
@@ -45,7 +44,7 @@ class MadnessLinkAbilityCondition(
             it is InGameUser &&
                     it.inGameId() != user.inGameId() &&
                     geometryUtils.distanceLessOrEquals(user, it, ability.range) &&
-                    !it.stateTags.contains(UserStateTag.MADNESS_LINK_TARGET)
+                    !it.stateTags.contains(UserStateTag.STUN)
         }
     }
 }

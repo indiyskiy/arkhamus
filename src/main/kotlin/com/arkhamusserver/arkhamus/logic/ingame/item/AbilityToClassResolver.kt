@@ -21,6 +21,7 @@ class AbilityToClassResolver {
                 FARSIGHT -> setOf(ARISTOCRAT)
                 PARALYSE -> setOf(DESCENDANT)
                 MADNESS_LINK -> setOf(MADNESS_SHIFTER)
+                LOCK_DOOR -> setOf(DOOR_LOCKER)
                 else -> null
             }
         }

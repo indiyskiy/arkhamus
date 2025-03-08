@@ -76,6 +76,14 @@ enum class Ability(
         targetTypes = listOf(CHARACTER),
         range = LARGE_RANGE
     ),
+    LOCK_DOOR(
+        id = 2004,
+        classBased = true,
+        cooldown = 5 * MINUTE_IN_MILLIS,
+        active = SECOND_IN_MILLIS * 45,
+        targetTypes = listOf(DOOR),
+        range = CLOSE_RANGE
+    ),
 
     //neutral ability 3***
     //useful item ability 4***

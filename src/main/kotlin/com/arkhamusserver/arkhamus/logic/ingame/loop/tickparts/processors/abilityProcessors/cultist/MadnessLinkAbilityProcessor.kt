@@ -1,6 +1,7 @@
-package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors
+package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.cultist
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag

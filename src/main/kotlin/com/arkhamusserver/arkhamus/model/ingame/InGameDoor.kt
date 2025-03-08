@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.model.ingame
 
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.InGameEntity
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
@@ -16,7 +17,8 @@ data class InGameDoor(
     var z: Double,
     var zoneId: Long,
     var globalState: DoorState = DoorState.OPEN,
-    var closedForUsers: MutableSet<Long> = mutableSetOf(),
+    var additionalTags: Set<DoorTag> = setOf(),
+    var closedForUsers: Set<Long> = setOf(),
     var visibilityModifiers: Set<VisibilityModifier>,
 ) : InGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers {
 

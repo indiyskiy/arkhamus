@@ -41,7 +41,7 @@ data class GlobalGameData(
     var voteSpots: List<InGameVoteSpot> = emptyList(),
     var userVoteSpotsBySpotId: Map<Long, List<InGameUserVoteSpot>> = emptyMap(),
     var thresholds: List<InGameThreshold> = emptyList(),
-    var doorsByZoneId: Map<Long, List<InGameDoor>> = emptyMap(),
+    var doors: List<InGameDoor> = emptyList(),
 ) {
     fun buildGeometryData(
         zones: List<InGameLevelZone>,

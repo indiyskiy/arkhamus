@@ -93,7 +93,7 @@ fun InGameDataAccess.loadGlobalGameData(game: InRamGame): GlobalGameData {
         this.voteSpots = allVoteSpots
         this.userVoteSpotsBySpotId = allUserVoteSpots.groupBy { it.voteSpotId }
         this.thresholds = thresholds
-        this.doorsByZoneId = doors.groupBy { it.zoneId }
+        this.doors = doors
     }
 }
 
