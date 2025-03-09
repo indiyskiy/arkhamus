@@ -46,7 +46,7 @@ class LanternDataHandler(
             )
         ) {
             responseToMask.lanternState = LanternState.EMPTY
-            responseToMask.objectState = MapObjectState.NOT_ACHIEVABLE
+            responseToMask.objectState = MapObjectState.NOT_IN_SIGHT
         }
     }
 

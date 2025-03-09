@@ -101,7 +101,7 @@ class VoteSpotInfoMapper(
         ) {
             return spot.voteSpotState
         }
-        return VoteSpotState.OUT_OF_REACH
+        return VoteSpotState.NOT_IN_SIGHT
     }
 
 }
