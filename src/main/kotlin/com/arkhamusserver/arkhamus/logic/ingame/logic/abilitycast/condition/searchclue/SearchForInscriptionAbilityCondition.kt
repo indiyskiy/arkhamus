@@ -68,7 +68,7 @@ class SearchForInscriptionAbilityCondition(
                 it,
                 globalGameData.levelGeometryData,
                 ability.range ?: 0.0,
-                true
+                true,
             )
         }
     }
