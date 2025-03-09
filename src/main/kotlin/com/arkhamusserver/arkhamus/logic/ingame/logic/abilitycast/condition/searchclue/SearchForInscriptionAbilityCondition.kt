@@ -37,18 +37,15 @@ class SearchForInscriptionAbilityCondition(
             logger.warn("Target is not a inscription clue glyph")
             return false
         }
-        val inscription = globalGameData.clues.inscription.firstOrNull {
-            it.inGameId() == target.inscriptionClueId
-        } ?: return false
         val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
             user,
             target,
             globalGameData.levelGeometryData,
-            inscription.interactionRadius,
+            ability.range ?: 0.0,
             true
         )
         if (!canSeeAndInRange) {
-            logger.warn("User cannot see target or target is out of range")
+            logger.warn("User cannot see target {} or target is out of range {}", target.inGameId(), ability.range)
             return false
         }
         return true

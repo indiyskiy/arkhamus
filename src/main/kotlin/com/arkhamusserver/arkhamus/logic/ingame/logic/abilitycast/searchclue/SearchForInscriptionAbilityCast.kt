@@ -34,13 +34,12 @@ class SearchForInscriptionAbilityCast(
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData
     ): Boolean {
-        logger.info("cast $ability")
         val user = abilityRequestProcessData.gameUser
         if (user == null) return false
-        val targetWithGameTags = abilityRequestProcessData.target as? WithTrueIngameId
-        if (targetWithGameTags == null) return false
-        castAbility(user, targetWithGameTags, globalGameData)
-        return true
+        val targetWithInGameId = abilityRequestProcessData.target as? WithTrueIngameId
+        if (targetWithInGameId == null) return false
+        logger.info("cast $ability on ${targetWithInGameId.inGameId()}")
+        return castAbility(user, targetWithInGameId, globalGameData)
     }
 
     override fun cast(
@@ -52,38 +51,35 @@ class SearchForInscriptionAbilityCast(
         val user = sourceUser
         val targetWithGameTags = target as? WithTrueIngameId
         if (targetWithGameTags == null) return false
-        castAbility(user, targetWithGameTags, globalGameData)
-        return true
+        return castAbility(user, targetWithGameTags, globalGameData)
     }
 
     private fun castAbility(
         user: InGameUser,
         target: WithTrueIngameId,
         data: GlobalGameData
-    ) {
+    ): Boolean {
         with(target as InGameInscriptionClueGlyph) {
             val inscriptionClue = data.clues.inscription.firstOrNull {
                 it.inscriptionClueGlyphs.any {
                     it.inGameId() == this.inGameId()
                 }
             }
-            inscriptionClue?.let { inscriptionClueNotNull ->
-                val targetedGlyph = inscriptionClueNotNull.inscriptionClueGlyphs.first {
-                    it.inGameId() == this.inGameId()
-                }
-                val rightGlyph = targetedGlyph.value == this.value
-                if (rightGlyph) {
-                    makeClueVisible(
-                        inscriptionClue,
-                        user
-                    )
-                } else {
-                    resetGlyphs(
-                        inscriptionClueNotNull,
-                        user,
-                    )
-                }
+            if (inscriptionClue == null) return false
+            logger.info("found related clue: ${inscriptionClue.inGameId()}")
+            val rightGlyph = inscriptionClue.value == this.value
+            if (rightGlyph) {
+                makeClueVisible(
+                    inscriptionClue,
+                    user
+                )
+            } else {
+                resetGlyphs(
+                    inscriptionClue,
+                    user,
+                )
             }
+            return true
         }
     }
 
