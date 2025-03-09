@@ -11,6 +11,8 @@ data class InGameInscriptionClue(
     override val id: String,
     override val gameId: Long,
     val inGameInscriptionId: Long,
+    val interactionRadius: Double,
+    val effectRadius: Double,
     val x: Double,
     val y: Double,
     val z: Double,

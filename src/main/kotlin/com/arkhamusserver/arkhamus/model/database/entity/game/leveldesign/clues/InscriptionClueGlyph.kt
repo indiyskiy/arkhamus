@@ -14,8 +14,6 @@ data class InscriptionClueGlyph (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
-    var interactionRadius: Double,
-    var name: String,
     @ManyToOne
     @JoinColumn(name = "relatedClueId", nullable = false)
     var relatedClue: InscriptionClue?,
@@ -28,7 +26,7 @@ data class InscriptionClueGlyph (
     var level: Level? = null
 ) : WithPoint {
 
-    constructor() : this(null, 0.0, "", null, 0.0, 0.0, 0.0, 0, null)
+    constructor() : this(null, null, 0.0, 0.0, 0.0, 0, null)
 
     override fun x(): Double {
         return x

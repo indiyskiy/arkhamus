@@ -14,7 +14,6 @@ data class InGameInscriptionClueGlyph(
     var z: Double,
     var inGameId: Long,
     var visibilityModifiers: Set<VisibilityModifier>,
-    var interactionRadius: Double,
     var inscriptionClueId: Long,
     var value : Int
 ) : InGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers {

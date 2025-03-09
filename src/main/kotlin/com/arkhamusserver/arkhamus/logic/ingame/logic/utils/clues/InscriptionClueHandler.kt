@@ -142,6 +142,8 @@ class InscriptionClueHandler(
                     VisibilityModifier.HAVE_ITEM_INSCRIPTION,
                 ),
                 turnedOn = false,
+                interactionRadius = it.interactionRadius,
+                effectRadius = it.effectRadius,
                 inscriptionClueGlyphs = inscriptionClueGlyphs.filter { glyph ->
                     it.inGameId == glyph.relatedClue!!.inGameId
                 }.map { glyph ->
@@ -154,7 +156,6 @@ class InscriptionClueHandler(
                         inGameId = glyph.inGameId,
                         visibilityModifiers = setOf(VisibilityModifier.HAVE_ITEM_INSCRIPTION),
                         inscriptionClueId = it.inGameId,
-                        interactionRadius = glyph.interactionRadius,
                         value = 0
                     )
                 },

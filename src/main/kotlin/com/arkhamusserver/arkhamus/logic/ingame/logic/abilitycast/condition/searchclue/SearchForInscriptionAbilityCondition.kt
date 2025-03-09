@@ -16,7 +16,7 @@ class SearchForInscriptionAbilityCondition(
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
-    companion object{
+    companion object {
         private val logger = LoggerFactory.getLogger(SearchForInscriptionAbilityCondition::class.java)
     }
 
@@ -37,11 +37,14 @@ class SearchForInscriptionAbilityCondition(
             logger.warn("Target is not a inscription clue glyph")
             return false
         }
+        val inscription = globalGameData.clues.inscription.firstOrNull {
+            it.inGameId() == target.inscriptionClueId
+        } ?: return false
         val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
             user,
             target,
             globalGameData.levelGeometryData,
-            target.interactionRadius,
+            inscription.interactionRadius,
             true
         )
         if (!canSeeAndInRange) {

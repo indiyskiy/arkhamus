@@ -6,4 +6,5 @@ data class InscriptionClueFromJson(
     var x: Double? = null,
     var y: Double? = null,
     var z: Double? = null,
+    var effectRadius: Double? = null,
 )

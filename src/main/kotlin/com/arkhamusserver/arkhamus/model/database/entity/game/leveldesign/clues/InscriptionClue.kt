@@ -12,13 +12,15 @@ data class InscriptionClue(
     var x: Double,
     var y: Double,
     var z: Double,
+    var effectRadius: Double,
+    var interactionRadius: Double,
     var inGameId: Long,
     @ManyToOne
     @JoinColumn(name = "levelId", nullable = false)
     var level: Level? = null,
 ) : WithPoint {
 
-    constructor() : this(null, 0.0, 0.0, 0.0, 0, null)
+    constructor() : this(null, 0.0, 0.0, 0.0, 0.0, 0.0, 0, null)
 
     override fun x(): Double {
         return x

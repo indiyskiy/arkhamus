@@ -87,7 +87,6 @@ class LevelDesignInfoProcessor(
         logger.info("create level ${levelFromJson.levelId} v.${levelFromJson.levelVersion}")
         val savedLevel = createLevel(levelFromJson)
         val zones = levelDesignZonesInfoProcessor.processZones(
-            clueZones = levelFromJson.clueZones,
             banZones = levelFromJson.banZones,
             soundZones = levelFromJson.soundClueZones,
             auraZones = levelFromJson.auraClueZones,

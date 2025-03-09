@@ -13,7 +13,6 @@ data class LevelFromJson(
     var ritualZones: List<RitualAreaFromJson> = emptyList(),
     var startMarkers: List<StartMarkerFromJson> = emptyList(),
     var crafters: List<CrafterFromJson> = emptyList(),
-    var clueZones: List<ZoneFromJson> = emptyList(),
     var soundClueZones: List<ZoneFromJson> = emptyList(),
     var auraClueZones: List<ZoneFromJson> = emptyList(),
     var banZones: List<ZoneFromJson> = emptyList(),

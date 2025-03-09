@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign.clues
 
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.InscriptionClueRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.InscriptionClueGlyphRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.InscriptionClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.InscriptionClue
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.InscriptionClueGlyph
@@ -25,6 +25,8 @@ class LevelDesignInscriptionClueInfoProcessor(
                 x = inscriptionClueJson.x!!,
                 y = inscriptionClueJson.y!!,
                 z = inscriptionClueJson.z!!,
+                effectRadius = inscriptionClueJson.effectRadius!!,
+                interactionRadius = inscriptionClueJson.interactionRadius!!,
                 inGameId = inscriptionClueJson.id!!,
                 level = savedLevel,
             ).let {
@@ -37,8 +39,6 @@ class LevelDesignInscriptionClueInfoProcessor(
             }
             inscriptionClueJsonGlyphs.forEach { inscriptionClueJsonGlyph ->
                 InscriptionClueGlyph(
-                    interactionRadius = inscriptionClueJsonGlyph.interactionRadius!!,
-                    name = inscriptionClueJsonGlyph.name!!,
                     relatedClue = inscriptionClue,
                     x = inscriptionClueJsonGlyph.x!!,
                     y = inscriptionClueJsonGlyph.y!!,
