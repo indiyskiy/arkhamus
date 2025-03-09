@@ -26,6 +26,7 @@ class FillLanternNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -42,5 +43,6 @@ class FillLanternNettyResponse(
     doors = doors,
     lanterns = lanterns,
     clues = clues,
+    easyVoteSpots = easyVoteSpots,
     type = FillLanternNettyResponse::class.java.simpleName,
 )

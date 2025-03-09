@@ -29,7 +29,8 @@ class QuestDeclineNettyResponseMapper(
     private val rewardUtils: QuestRewardUtils,
     private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler,
     private val doorDataHandler: DoorDataHandler,
-    private val lanternDataHandler: LanternDataHandler
+    private val lanternDataHandler: LanternDataHandler,
+    private val voteSpotInfoMapper: VoteSpotInfoMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == QuestDeclineRequestProcessData::class.java
@@ -101,6 +102,11 @@ class QuestDeclineNettyResponseMapper(
                 lanterns = lanternDataHandler.map(
                     it.gameUser,
                     globalGameData.lanterns,
+                    globalGameData.levelGeometryData
+                ),
+                easyVoteSpots = voteSpotInfoMapper.mapEasy(
+                    it.gameUser,
+                    globalGameData.voteSpots,
                     globalGameData.levelGeometryData
                 ),
             )

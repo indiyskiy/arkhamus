@@ -27,6 +27,7 @@ class GodVoteSkipNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -43,6 +44,7 @@ class GodVoteSkipNettyResponse(
     doors = doors,
     lanterns = lanterns,
     clues = clues,
+    easyVoteSpots = easyVoteSpots,
     type = GodVoteSkipNettyResponse::class.java.simpleName,
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

@@ -23,6 +23,7 @@ class LeaveTheGameNettyResponse(
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     lanterns: List<LanternData>,
+    easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -39,5 +40,6 @@ class LeaveTheGameNettyResponse(
     doors = doors,
     lanterns = lanterns,
     clues = clues,
+    easyVoteSpots = easyVoteSpots,
     type = LeaveTheGameNettyResponse::class.java.simpleName
 )

@@ -33,7 +33,8 @@ class UpdateCrafterNettyResponseMapper(
     private val craftersDataHandler: CrafterDataHandler,
     private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler,
     private val doorDataHandler: DoorDataHandler,
-    private val lanternDataHandler: LanternDataHandler
+    private val lanternDataHandler: LanternDataHandler,
+    private val voteSpotInfoMapper: VoteSpotInfoMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == UpdateCrafterRequestGameData::class.java
@@ -141,6 +142,11 @@ class UpdateCrafterNettyResponseMapper(
         lanterns = lanternDataHandler.map(
             gameUser,
             globalGameData.lanterns,
+            globalGameData.levelGeometryData
+        ),
+        easyVoteSpots = voteSpotInfoMapper.mapEasy(
+            gameUser,
+            globalGameData.voteSpots,
             globalGameData.levelGeometryData
         ),
     )

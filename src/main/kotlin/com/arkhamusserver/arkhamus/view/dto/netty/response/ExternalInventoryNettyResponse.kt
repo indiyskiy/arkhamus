@@ -26,6 +26,7 @@ abstract class ExternalInventoryNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    easyVoteSpots: List<EasyVoteSpotResponse>,
     type: String
 ) : NettyResponse(
     tick = tick,
@@ -43,5 +44,6 @@ abstract class ExternalInventoryNettyResponse(
     doors = doors,
     clues = clues,
     lanterns = lanterns,
+    easyVoteSpots = easyVoteSpots,
     type = type
 )

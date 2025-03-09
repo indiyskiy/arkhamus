@@ -5,7 +5,11 @@ enum class GameObjectType {
     VOTE_SPOT,
     CONTAINER,
     CRAFTER,
+    ALTAR,
+    LANTERN,
+    DOOR,
     QUEST_GIVER,
+    //clues
     SCENT_CLUE,
     SOUND_CLUE,
     OMEN_CLUE,
@@ -15,7 +19,4 @@ enum class GameObjectType {
     INSCRIPTION_CLUE,
     INSCRIPTION_CLUE_GLYPH,
     SOUND_CLUE_JAMMER,
-    ALTAR,
-    LANTERN,
-    DOOR,
 }

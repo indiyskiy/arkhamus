@@ -25,6 +25,7 @@ class LevelTaskCompleteNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -41,5 +42,6 @@ class LevelTaskCompleteNettyResponse(
     doors = doors,
     lanterns = lanterns,
     clues = clues,
+    easyVoteSpots = easyVoteSpots,
     type = LevelTaskCompleteNettyResponse::class.java.simpleName,
 )

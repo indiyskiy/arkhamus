@@ -41,9 +41,10 @@ class OtherGameUsersDataHandler(
             responseToMask.y = null
             responseToMask.z = null
             responseToMask.stateTags = emptySet()
+        } else {
+            responseToMask.stateTags = responseToMask.stateTags.filter {
+                it.getVisibility() == Visibility.PUBLIC
+            }.toSet()
         }
-        responseToMask.stateTags = responseToMask.stateTags.filter {
-            it.getVisibility() == Visibility.PUBLIC
-        }.toSet()
     }
 }

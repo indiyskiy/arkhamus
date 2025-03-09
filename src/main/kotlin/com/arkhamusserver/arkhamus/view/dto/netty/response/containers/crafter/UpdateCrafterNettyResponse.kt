@@ -30,6 +30,7 @@ class UpdateCrafterNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    easyVoteSpots: List<EasyVoteSpotResponse>
 ) : ExternalInventoryNettyResponse(
     sortedUserInventory = sortedUserInventory,
     itemsInside = itemsInside,
@@ -50,6 +51,7 @@ class UpdateCrafterNettyResponse(
     doors = doors,
     clues = clues,
     lanterns = lanterns,
+    easyVoteSpots = easyVoteSpots,
     type = UpdateCrafterNettyResponse::class.java.simpleName
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

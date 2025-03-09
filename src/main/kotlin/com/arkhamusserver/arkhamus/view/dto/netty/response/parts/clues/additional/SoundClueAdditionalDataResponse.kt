@@ -2,4 +2,4 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.addition
 
 data class SoundClueAdditionalDataResponse(
     var soundClueJammers: List<SoundClueJammerResponse> = listOf(),
-): AdditionalClueDataResponse
+) : AdditionalClueDataResponse

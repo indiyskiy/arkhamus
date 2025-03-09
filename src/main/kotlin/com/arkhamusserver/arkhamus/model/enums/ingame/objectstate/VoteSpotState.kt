@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame.objectstate
 
 enum class VoteSpotState {
-    WAITING_FOR_PAYMENT, OPEN
+    WAITING_FOR_PAYMENT,
+    OPEN,
+    OUT_OF_REACH
 }

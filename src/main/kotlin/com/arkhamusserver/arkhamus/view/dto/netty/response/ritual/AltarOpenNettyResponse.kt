@@ -31,6 +31,7 @@ class AltarOpenNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -47,5 +48,6 @@ class AltarOpenNettyResponse(
     doors = doors,
     clues = clues,
     lanterns = lanterns,
+    easyVoteSpots = easyVoteSpots,
     type = AltarOpenNettyResponse::class.java.simpleName,
 )

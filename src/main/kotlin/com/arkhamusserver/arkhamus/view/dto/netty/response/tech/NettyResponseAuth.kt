@@ -29,5 +29,6 @@ class NettyResponseAuth(
     doors = emptyList(),
     clues = ExtendedCluesResponse(emptyList(), emptyList()),
     lanterns = emptyList(),
+    easyVoteSpots = emptyList(),
     type = NettyResponseAuth::class.java.simpleName
 )

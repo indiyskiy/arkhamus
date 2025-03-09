@@ -30,6 +30,7 @@ class RitualPutItemNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -46,6 +47,7 @@ class RitualPutItemNettyResponse(
     doors = doors,
     lanterns = lanterns,
     clues = clues,
+    easyVoteSpots = easyVoteSpots,
     type = RitualPutItemNettyResponse::class.java.simpleName,
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

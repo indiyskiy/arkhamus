@@ -1,14 +1,23 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.VisibilityByTagsHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.BanState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameUserVoteSpot
 import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.EasyVoteSpotResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserWithBanState
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.VoteSpotInfo
 import org.springframework.stereotype.Component
 
 @Component
-class VoteSpotInfoMapper() {
+class VoteSpotInfoMapper(
+    private val userLocationHandler: UserLocationHandler,
+    private val visibilityByTagsHandler: VisibilityByTagsHandler
+) {
     fun map(
         voteSpot: InGameVoteSpot?,
         currentUserVoteSpot: InGameUserVoteSpot?,
@@ -68,5 +77,31 @@ class VoteSpotInfoMapper() {
                 BanState.NOT_AVAILABLE_FOR_VOTING
             }
         }
+
+    fun mapEasy(
+        user: InGameUser,
+        spots: List<InGameVoteSpot>,
+        data: LevelGeometryData
+    ): List<EasyVoteSpotResponse> {
+        return spots.map {
+            EasyVoteSpotResponse(
+                voteSpotId = it.inGameId(),
+                state = mapState(it, user, data)
+            )
+        }
+    }
+
+    private fun mapState(
+        spot: InGameVoteSpot,
+        user: InGameUser,
+        data: LevelGeometryData
+    ): VoteSpotState {
+        if (userLocationHandler.userCanSeeTarget(user, spot, data, true) &&
+            visibilityByTagsHandler.userCanSeeTarget(user, spot)
+        ) {
+            return spot.voteSpotState
+        }
+        return VoteSpotState.OUT_OF_REACH
+    }
 
 }

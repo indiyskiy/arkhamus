@@ -26,6 +26,7 @@ class VoteSpotCastNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -42,5 +43,6 @@ class VoteSpotCastNettyResponse(
     doors = doors,
     clues = clues,
     lanterns = lanterns,
+    easyVoteSpots = easyVoteSpots,
     type = VoteSpotCastNettyResponse::class.java.simpleName,
 )

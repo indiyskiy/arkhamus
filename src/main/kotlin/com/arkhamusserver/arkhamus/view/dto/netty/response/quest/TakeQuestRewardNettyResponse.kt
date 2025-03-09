@@ -25,6 +25,7 @@ class TakeQuestRewardNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -41,5 +42,6 @@ class TakeQuestRewardNettyResponse(
     doors = doors,
     lanterns = lanterns,
     clues = clues,
+    easyVoteSpots = easyVoteSpots,
     type = TakeQuestRewardNettyResponse::class.java.simpleName,
 )

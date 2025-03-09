@@ -24,7 +24,7 @@ class HeartbeatRequestGameData(
     crafters: List<InGameCrafter>,
     clues: ExtendedCluesResponse,
     userQuestProgresses: List<UserQuestResponse>,
-    tick: Long
+    tick: Long,
 ) : GameUserData(
     gameUser = gameUser,
     otherGameUsers = otherGameUsers,
@@ -37,5 +37,5 @@ class HeartbeatRequestGameData(
     crafters = crafters,
     clues = clues,
     userQuest = userQuestProgresses,
-    tick = tick
+    tick = tick,
 )

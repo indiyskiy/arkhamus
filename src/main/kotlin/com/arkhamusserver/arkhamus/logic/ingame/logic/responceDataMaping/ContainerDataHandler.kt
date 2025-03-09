@@ -42,7 +42,7 @@ class ContainerDataHandler(
             ) ||
             !visibilityByTagsHandler.userCanSeeTarget(currentUser, container)
         ) {
-            responseToMask.state = MapObjectState.DISABLED
+            responseToMask.state = MapObjectState.NOT_ACHIEVABLE
             responseToMask.holdingUserId = null
             responseToMask.gameTags = setOf()
         } else {

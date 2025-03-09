@@ -24,7 +24,8 @@ class VoteSpotCastNettyResponseMapper(
     private val craftersDataHandler: CrafterDataHandler,
     private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler,
     private val doorDataHandler: DoorDataHandler,
-    private val lanternDataHandler: LanternDataHandler
+    private val lanternDataHandler: LanternDataHandler,
+    private val voteSpotInfoMapper: VoteSpotInfoMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == VoteSpotCastRequestProcessData::class.java
@@ -79,6 +80,11 @@ class VoteSpotCastNettyResponseMapper(
                 doors = doorDataHandler.map(
                     it.gameUser,
                     globalGameData.doors,
+                    globalGameData.levelGeometryData
+                ),
+                easyVoteSpots = voteSpotInfoMapper.mapEasy(
+                    it.gameUser,
+                    globalGameData.voteSpots,
                     globalGameData.levelGeometryData
                 ),
                 lanterns = lanternDataHandler.map(
