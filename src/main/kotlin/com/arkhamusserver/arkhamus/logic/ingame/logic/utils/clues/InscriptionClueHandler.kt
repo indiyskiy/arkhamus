@@ -212,8 +212,11 @@ class InscriptionClueHandler(
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
         val inscriptionOptions = container.inscription
-        return mapActualInscriptionInvestigators(inscriptionOptions, user, data) +
-                mapWitnessesOfInvestigators(inscriptionOptions, user, data)
+        val actualInvestigationInscriptionClues = mapActualInscriptionInvestigators(inscriptionOptions, user, data)
+        val investigatorIds = actualInvestigationInscriptionClues.map { it.id }
+        val notInvestigatingClues = inscriptionOptions.filter { it.id !in investigatorIds }
+        val witnessesInscriptionClues = mapWitnessesOfInvestigators(notInvestigatingClues, user, data)
+        return actualInvestigationInscriptionClues + witnessesInscriptionClues
     }
 
     private fun mapWitnessesOfInvestigators(
