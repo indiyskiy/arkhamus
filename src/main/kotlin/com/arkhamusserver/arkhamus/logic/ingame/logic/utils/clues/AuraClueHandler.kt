@@ -7,9 +7,9 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomI
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameAuraClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.AuraClueRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.EllipseRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.TetragonRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.AuraClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Ellipse
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Tetragon
@@ -21,10 +21,11 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.ClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.parts.AuraCluePoint
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameAuraClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.model.ingame.parts.AuraCluePoint
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.AdditionalClueDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.AuraClueAdditionalDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.SimpleCoordinates
 import org.slf4j.LoggerFactory
@@ -77,7 +78,7 @@ class AuraClueHandler(
         }
     }
 
-    override fun canBeRemovedRabdomly(container: CluesContainer): Boolean {
+    override fun canBeRemovedRandomly(container: CluesContainer): Boolean {
         return container.aura.any { it.turnedOn }
     }
 
@@ -172,6 +173,7 @@ class AuraClueHandler(
         }.filter {
             visibilityByTagsHandler.userCanSeeTarget(user, Clue.AURA)
         }.map {
+            val percentage = countPercentage(user, it.targetPoint)
             ExtendedClueResponse(
                 id = it.id,
                 clue = Clue.AURA,
@@ -181,6 +183,7 @@ class AuraClueHandler(
                 y = null,
                 z = null,
                 state = ClueState.ACTIVE_CLUE,
+                additionalData = countActualAdditionalData(it, percentage),
             )
         }
     }
@@ -233,6 +236,35 @@ class AuraClueHandler(
                 } else null
             )
         } else null
+    }
+
+    private fun countActualAdditionalData(
+        clue: InGameAuraClue,
+        percentage: Int,
+    ): AdditionalClueDataResponse? {
+        return if (percentage == -100) {
+            AuraClueAdditionalDataResponse(
+                distancePercentage = -100,
+                pointReached = false,
+                outOfRadius = true,
+                targetPoint = SimpleCoordinates(
+                    x = clue.targetPoint.x,
+                    y = clue.targetPoint.y,
+                    z = clue.targetPoint.z
+                )
+            )
+        } else {
+            AuraClueAdditionalDataResponse(
+                distancePercentage = 100,
+                pointReached = true,
+                outOfRadius = false,
+                targetPoint = SimpleCoordinates(
+                    x = clue.targetPoint.x,
+                    y = clue.targetPoint.y,
+                    z = clue.targetPoint.z
+                )
+            )
+        }
     }
 
     fun countPercentage(user: InGameUser, auraCluePoint: AuraCluePoint): Int {

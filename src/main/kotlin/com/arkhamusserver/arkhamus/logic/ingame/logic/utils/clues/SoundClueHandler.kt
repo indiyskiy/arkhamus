@@ -70,7 +70,7 @@ class SoundClueHandler(
         }
     }
 
-    override fun canBeRemovedRabdomly(container: CluesContainer): Boolean {
+    override fun canBeRemovedRandomly(container: CluesContainer): Boolean {
         return container.sound.any { it.turnedOn }
     }
 

@@ -60,7 +60,7 @@ class OmenClueHandler(
         }
     }
 
-    override fun canBeRemovedRabdomly(container: CluesContainer): Boolean {
+    override fun canBeRemovedRandomly(container: CluesContainer): Boolean {
         return container.omen.any { it.turnedOn }
     }
 

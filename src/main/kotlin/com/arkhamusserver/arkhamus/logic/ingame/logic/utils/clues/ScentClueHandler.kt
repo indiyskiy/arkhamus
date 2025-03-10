@@ -59,7 +59,7 @@ class ScentClueHandler(
         }
     }
 
-    override fun canBeRemovedRabdomly(container: CluesContainer): Boolean {
+    override fun canBeRemovedRandomly(container: CluesContainer): Boolean {
         return container.scent.any { it.turnedOn }
     }
 

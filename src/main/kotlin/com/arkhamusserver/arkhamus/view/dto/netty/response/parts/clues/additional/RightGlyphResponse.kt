@@ -2,5 +2,4 @@ package com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.addition
 
 data class RightGlyphResponse(
     val value: Int,
-    val playerIds: List<Long>
 )

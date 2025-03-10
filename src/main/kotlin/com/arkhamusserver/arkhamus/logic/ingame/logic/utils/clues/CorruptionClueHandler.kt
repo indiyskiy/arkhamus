@@ -63,7 +63,7 @@ class CorruptionClueHandler(
         }
     }
 
-    override fun canBeRemovedRabdomly(container: CluesContainer): Boolean {
+    override fun canBeRemovedRandomly(container: CluesContainer): Boolean {
         return container.corruption.any { it.turnedOn }
     }
 

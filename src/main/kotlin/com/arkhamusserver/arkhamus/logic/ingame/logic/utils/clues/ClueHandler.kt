@@ -82,7 +82,7 @@ class ClueHandler(
     fun removeRandomClue(data: GlobalGameData) {
         val existingClues = data.clues
         advancedClueHandlers.shuffled(random).firstOrNull {
-            it.canBeRemovedRabdomly(existingClues)
+            it.canBeRemovedRandomly(existingClues)
         }?.removeRandom(existingClues)
     }
 

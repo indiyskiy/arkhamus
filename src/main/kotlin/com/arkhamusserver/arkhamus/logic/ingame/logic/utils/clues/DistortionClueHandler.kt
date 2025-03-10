@@ -67,7 +67,7 @@ class DistortionClueHandler(
         }
     }
 
-    override fun canBeRemovedRabdomly(container: CluesContainer): Boolean {
+    override fun canBeRemovedRandomly(container: CluesContainer): Boolean {
         return container.distortion.any { it.turnedOn && it.receiver != null }
     }
 

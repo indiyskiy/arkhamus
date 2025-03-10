@@ -23,7 +23,7 @@ import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameInscriptionClueGlyph
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.InscriptionClueAdditionalDataResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.PossiblerGlyphResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.PossibleGlyphResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.RightGlyphResponse
 import org.springframework.stereotype.Component
 import kotlin.random.Random
@@ -68,7 +68,7 @@ class InscriptionClueHandler(
         }
     }
 
-    override fun canBeRemovedRabdomly(container: CluesContainer): Boolean {
+    override fun canBeRemovedRandomly(container: CluesContainer): Boolean {
         return container.inscription.any { it.turnedOn }
     }
 
@@ -200,7 +200,7 @@ class InscriptionClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                additionalData = fillActualAdditionalData(it, user),
+                additionalData = fillActualAdditionalData(it, user, data.levelGeometryData),
                 state = ClueState.ACTIVE_CLUE
             )
         }
@@ -245,11 +245,7 @@ class InscriptionClueHandler(
                 x = null,
                 y = null,
                 z = null,
-                additionalData = fillWitnessesAdditionalData(
-                    it,
-                    data.levelGeometryData,
-                    usersCanSeeInscriptions
-                ),
+                additionalData = fillWitnessesAdditionalData(it),
                 state = ClueState.ACTIVE_UNKNOWN,
             )
         }
@@ -293,16 +289,11 @@ class InscriptionClueHandler(
 
     private fun fillWitnessesAdditionalData(
         clue: InGameInscriptionClue,
-        data: LevelGeometryData,
-        usersCanSeeInscriptions: List<InGameUser>
     ): InscriptionClueAdditionalDataResponse {
         return InscriptionClueAdditionalDataResponse().apply {
             this.possiblyGlyphs = emptyList()
             this.rightGlyph = RightGlyphResponse(
                 value = clue.value,
-                playerIds = usersCanSeeInscriptions.filter { investigator ->
-                    userCanSeeClue(investigator, clue, data)
-                }.map { it.inGameId() }
             )
         }
     }
@@ -324,34 +315,40 @@ class InscriptionClueHandler(
         user: InGameUser,
         data: LevelGeometryData
     ): InscriptionClueAdditionalDataResponse? {
-        if (userCanSeeClue(user, clue, data)) {
-            return InscriptionClueAdditionalDataResponse().apply {
-                this.possiblyGlyphs = clue.inscriptionClueGlyphs.filter {
-                    visibilityByTagsHandler.userCanSeeTarget(user, it)
-                }.map {
-                    PossiblerGlyphResponse(
-                        glyphId = it.inGameId(),
-                        value = it.value
-                    )
-                }
-                this.rightGlyph = null
-            }
+        return if (userCanSeeClue(user, clue, data)) {
+            createAdditionalDataForInvestigator(clue, user)
         } else {
-            return null
+            null
         }
+    }
+
+    private fun createAdditionalDataForInvestigator(
+        clue: InGameInscriptionClue,
+        user: InGameUser
+    ): InscriptionClueAdditionalDataResponse = InscriptionClueAdditionalDataResponse().apply {
+        this.possiblyGlyphs = clue.inscriptionClueGlyphs.filter {
+            visibilityByTagsHandler.userCanSeeTarget(user, it)
+        }.map {
+            PossibleGlyphResponse(
+                glyphId = it.inGameId(),
+                value = it.value
+            )
+        }
+        this.rightGlyph = null
     }
 
     private fun fillActualAdditionalData(
         clue: InGameInscriptionClue,
         user: InGameUser,
+        data: LevelGeometryData
     ): InscriptionClueAdditionalDataResponse {
-        return InscriptionClueAdditionalDataResponse().apply {
-            this.possiblyGlyphs = clue.inscriptionClueGlyphs.filter {
-                visibilityByTagsHandler.userCanSeeTarget(user, it)
-            }.map {
-                PossiblerGlyphResponse(
-                    glyphId = it.inGameId(),
-                    value = it.value
+        return if (userCanSeeClue(user, clue, data)) {
+            createAdditionalDataForInvestigator(clue, user)
+        } else {
+            InscriptionClueAdditionalDataResponse().apply {
+                this.possiblyGlyphs = emptyList()
+                this.rightGlyph = RightGlyphResponse(
+                    value = clue.value,
                 )
             }
         }
