@@ -219,6 +219,29 @@ class InscriptionClueHandler(
         return actualInvestigationInscriptionClues + witnessesInscriptionClues
     }
 
+    private fun mapActualInscriptionInvestigators(
+        inscriptionOptions: List<InGameInscriptionClue>,
+        user: InGameUser,
+        data: GlobalGameData
+    ): List<ExtendedClueResponse> {
+        val filteredByVisibilityTags = inscriptionOptions.filter {
+            visibilityByTagsHandler.userCanSeeTarget(user, it)
+        }
+        return filteredByVisibilityTags.map {
+            ExtendedClueResponse(
+                id = it.id,
+                clue = Clue.INSCRIPTION,
+                relatedObjectId = it.inGameId(),
+                relatedObjectType = GameObjectType.INSCRIPTION_CLUE,
+                x = null,
+                y = null,
+                z = null,
+                additionalData = fillInvestigatorsAdditionalData(it, user, data.levelGeometryData),
+                state = countState(it, user),
+            )
+        }
+    }
+
     private fun mapWitnessesOfInvestigators(
         inscriptionOptions: List<InGameInscriptionClue>,
         user: InGameUser,
@@ -246,6 +269,77 @@ class InscriptionClueHandler(
         }
     }
 
+    private fun countState(
+        clue: InGameInscriptionClue,
+        user: InGameUser,
+    ): ClueState {
+        return if (user.inGameId() in clue.castedAbilityUsers) {
+            if (clue.turnedOn) {
+                ClueState.ACTIVE_CLUE
+            } else {
+                ClueState.ACTIVE_NO_CLUE
+            }
+        } else ClueState.ACTIVE_UNKNOWN
+    }
+
+    private fun fillInvestigatorsAdditionalData(
+        clue: InGameInscriptionClue,
+        user: InGameUser,
+        data: LevelGeometryData
+    ): InscriptionClueAdditionalDataResponse? {
+        return if (userCanSeeClue(user, clue, data)) {
+            createAdditionalDataForGuyWhoSee(clue)
+        } else {
+            null
+        }
+    }
+
+    private fun fillActualAdditionalData(
+        clue: InGameInscriptionClue,
+        user: InGameUser,
+        geometry: LevelGeometryData,
+        users: Collection<InGameUser>
+    ): InscriptionClueAdditionalDataResponse {
+        return if (userCanSeeClue(user, clue, geometry)) {
+            createAdditionalDataForGuyWhoSee(clue)
+        } else {
+            //cultist with item case
+            val realInvestigatorUsers = realInvestigatorUsers(
+                users,
+                geometry,
+                user,
+                clue
+            )
+            if (realInvestigatorUsers.isNotEmpty()) {
+                //other user with item nearby, must fake helping
+                createAdditionalDataForWitness(clue)
+            } else {
+                //just a cultist
+                createAdditionalDataForGuyWhoSee(clue)
+            }
+        }
+    }
+
+    private fun createAdditionalDataForGuyWhoSee(
+        clue: InGameInscriptionClue
+    ): InscriptionClueAdditionalDataResponse = InscriptionClueAdditionalDataResponse().apply {
+        this.possiblyGlyphs = clue.inscriptionClueGlyphs.map {
+            PossibleGlyphResponse(
+                glyphId = it.inGameId(),
+                value = it.value
+            )
+        }
+        this.rightGlyph = null
+    }
+
+    private fun createAdditionalDataForWitness(clue: InGameInscriptionClue): InscriptionClueAdditionalDataResponse =
+        InscriptionClueAdditionalDataResponse().apply {
+            this.possiblyGlyphs = emptyList()
+            this.rightGlyph = RightGlyphResponse(
+                value = clue.value,
+            )
+        }
+
     private fun realInvestigatorUsers(
         users: Collection<InGameUser>,
         levelGeometryData: LevelGeometryData,
@@ -255,7 +349,6 @@ class InscriptionClueHandler(
         val allUserNotMe = users.filter { it.inGameId() != user.inGameId() }
         val usersCurrentUserSee = allUserNotMe.filter { investigator ->
             userLocationHandler.userCanSeeTarget(user, investigator, levelGeometryData, true)
-
         }
         val usersCanSeeInscriptions = usersCurrentUserSee.filter { investigator ->
             inscriptionOptions.any { clue ->
@@ -281,69 +374,6 @@ class InscriptionClueHandler(
         return usersCanSeeInscriptions
     }
 
-    private fun mapActualInscriptionInvestigators(
-        inscriptionOptions: List<InGameInscriptionClue>,
-        user: InGameUser,
-        data: GlobalGameData
-    ): List<ExtendedClueResponse> {
-        val filteredByVisibilityTags = inscriptionOptions.filter {
-            visibilityByTagsHandler.userCanSeeTarget(user, it)
-        }
-        return filteredByVisibilityTags.map {
-            ExtendedClueResponse(
-                id = it.id,
-                clue = Clue.INSCRIPTION,
-                relatedObjectId = it.inGameId(),
-                relatedObjectType = GameObjectType.INSCRIPTION_CLUE,
-                x = null,
-                y = null,
-                z = null,
-                additionalData = fillInvestigatorsAdditionalData(it, user, data.levelGeometryData),
-                state = countState(it, user),
-            )
-        }
-    }
-
-    private fun countState(
-        clue: InGameInscriptionClue,
-        user: InGameUser,
-    ): ClueState {
-        return if (user.inGameId() in clue.castedAbilityUsers) {
-            if (clue.turnedOn) {
-                ClueState.ACTIVE_CLUE
-            } else {
-                ClueState.ACTIVE_NO_CLUE
-            }
-        } else ClueState.ACTIVE_UNKNOWN
-    }
-
-    private fun fillInvestigatorsAdditionalData(
-        clue: InGameInscriptionClue,
-        user: InGameUser,
-        data: LevelGeometryData
-    ): InscriptionClueAdditionalDataResponse? {
-        return if (userCanSeeClue(user, clue, data)) {
-            createAdditionalDataForGuyWhoSee(clue, user)
-        } else {
-            null
-        }
-    }
-
-    private fun createAdditionalDataForGuyWhoSee(
-        clue: InGameInscriptionClue,
-        user: InGameUser
-    ): InscriptionClueAdditionalDataResponse = InscriptionClueAdditionalDataResponse().apply {
-        this.possiblyGlyphs = clue.inscriptionClueGlyphs.filter {
-            visibilityByTagsHandler.userCanSeeTarget(user, it)
-        }.map {
-            PossibleGlyphResponse(
-                glyphId = it.inGameId(),
-                value = it.value
-            )
-        }
-        this.rightGlyph = null
-    }
-
     private fun userCanSeeClue(
         investigator: InGameUser,
         clue: InGameInscriptionClue,
@@ -355,39 +385,5 @@ class InscriptionClueHandler(
                 data,
                 true
             )
-
-    private fun fillActualAdditionalData(
-        clue: InGameInscriptionClue,
-        user: InGameUser,
-        geometry: LevelGeometryData,
-        users: Collection<InGameUser>
-    ): InscriptionClueAdditionalDataResponse {
-        return if (userCanSeeClue(user, clue, geometry)) {
-            createAdditionalDataForGuyWhoSee(clue, user)
-        } else {
-            //cultist with item case
-            val realInvestigatorUsers = realInvestigatorUsers(
-                users,
-                geometry,
-                user,
-                clue
-            )
-            if (realInvestigatorUsers.isNotEmpty()) {
-                //other user with item nearby, must fake helping
-                createAdditionalDataForWitness(clue)
-            } else {
-                //just a cultist
-                createAdditionalDataForGuyWhoSee(clue, user)
-            }
-        }
-    }
-
-    private fun createAdditionalDataForWitness(clue: InGameInscriptionClue): InscriptionClueAdditionalDataResponse =
-        InscriptionClueAdditionalDataResponse().apply {
-            this.possiblyGlyphs = emptyList()
-            this.rightGlyph = RightGlyphResponse(
-                value = clue.value,
-            )
-        }
 
 }
