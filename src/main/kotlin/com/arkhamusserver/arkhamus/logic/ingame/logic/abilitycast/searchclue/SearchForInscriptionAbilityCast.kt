@@ -88,9 +88,6 @@ class SearchForInscriptionAbilityCast(
         user: InGameUser,
     ) {
         targetedClue.castedAbilityUsers += user.inGameId()
-        targetedClue.inscriptionClueGlyphs.forEach {
-            it.value = targetedClue.value
-        }
         inGameInscriptionClueRepository.save(targetedClue)
     }
 
