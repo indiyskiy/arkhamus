@@ -35,14 +35,24 @@ class InscriptionInvestigationRelatedAbilityProcessor(
     }
 
     override fun finishActive(castAbility: InGameAbilityCast, globalGameData: GlobalGameData) {
-        val inscription = globalGameData.clues.inscription.first { it.stringId() == castAbility.targetId }
-        val user = globalGameData.users[castAbility.sourceUserId]
-        user?.let {
-            inscription.castedAbilityUsers -= user.inGameId()
-            if (inscription.castedAbilityUsers.isEmpty()) {
-                inscriptionClueHandler.shuffleGlyphValues(inscription)
+        val inscription = globalGameData.clues.inscription.firstOrNull {
+            it.inscriptionClueGlyphs.any {
+                it.stringId() == castAbility.targetId
             }
-            inGameInscriptionClueRepository.save(inscription)
         }
+        val user = globalGameData.users[castAbility.sourceUserId]
+        user?.let { userNotNull ->
+            inscription?.let { inscriptionNotNull ->
+                inscriptionNotNull.castedAbilityUsers -= userNotNull.inGameId()
+                if (inscriptionNotNull.castedAbilityUsers.isEmpty()) {
+                    inscriptionClueHandler.shuffleGlyphValues(inscriptionNotNull)
+                }
+                inGameInscriptionClueRepository.save(inscriptionNotNull)
+            }
+        } ?: logger.error(
+            "user {} or inscription {} is null",
+            user?.inGameId() ?: "null",
+            inscription?.stringId() ?: "null"
+        )
     }
 }
