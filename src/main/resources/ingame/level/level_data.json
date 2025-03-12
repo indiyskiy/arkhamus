@@ -1133,7 +1133,7 @@
         "id": 814,
         "interactionRadius": 3.5,
         "name": "Willow's Stash",
-        "x": 93.0,
+        "x": 15.0,
         "y": 0.0,
         "z": 98.0
       },
@@ -1156,9 +1156,9 @@
         "id": 816,
         "interactionRadius": 3.5,
         "name": "Xander's Stash",
-        "x": 37.0,
+        "x": 75.0,
         "y": 0.0,
-        "z": 85.0
+        "z": 98.0
       },
       {
         "containerTags": [
@@ -1204,9 +1204,9 @@
         "id": 900,
         "interactionRadius": 3.5,
         "name": "CRAFTER_NAME_01",
-        "x": 24.0,
+        "x": 14.0,
         "y": 0.0,
-        "z": 75.5
+        "z": 77.0
       },
       {
         "crafterType": "REGULAR",
@@ -1459,25 +1459,25 @@
         "id": 1201,
         "interactionRadius": 3.5,
         "name": "Investigate the Fraternity",
-        "x": 46.0,
+        "x": 93.0,
         "y": 0.0,
-        "z": 85.0
+        "z": 102.0
       },
       {
         "id": 1202,
         "interactionRadius": 3.5,
         "name": "Investigate the Sorority",
-        "x": 82.0,
+        "x": 11.0,
         "y": 0.0,
-        "z": 81.0
+        "z": 85.0
       },
       {
         "id": 1203,
         "interactionRadius": 3.5,
         "name": "Attend a Lecture",
-        "x": 5.0,
+        "x": 37.0,
         "y": 0.0,
-        "z": 96.0
+        "z": 94.0
       },
       {
         "id": 1204,
@@ -1531,9 +1531,9 @@
         "id": 1210,
         "interactionRadius": 3.5,
         "name": "Shady Deal",
-        "x": 57.0,
+        "x": 66.0,
         "y": 0.0,
-        "z": 101.0
+        "z": 109.0
       },
       {
         "id": 1211,
@@ -3830,9 +3830,9 @@
         "id": 1802,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 45.0,
+        "x": 47.5,
         "y": 0.0,
-        "z": 95.0,
+        "z": 94.5,
         "zoneId": 1402
       },
       {
