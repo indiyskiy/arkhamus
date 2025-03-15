@@ -7,7 +7,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameScentClue
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,10 +14,6 @@ class SearchForScentAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
-
-    companion object {
-        private val logger = LoggerFactory.getLogger(SearchForScentAbilityCondition::class.java)
-    }
 
     override fun accepts(ability: Ability): Boolean =
         ability == Ability.SEARCH_FOR_SCENT
@@ -29,30 +24,16 @@ class SearchForScentAbilityCondition(
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
-        if (target == null) {
-            logger.warn("Target is null")
-            return false
-        }
-        if (target !is InGameScentClue) {
-            logger.warn("Target is not a scent clue")
-            return false
-        }
-        val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
-            user,
-            target,
-            globalGameData.levelGeometryData,
-            ability.range ?: 0.0,
-            true
-        )
-        if (!canSeeAndInRange) {
-            logger.warn("User cannot see target or target is out of range")
-            return false
-        }
-        if (target.castedAbilityUsers.contains(user.inGameId())) {
-            logger.info("User already activated searching for scent")
-            return false
-        }
-        return true
+        return target != null &&
+                target is InGameScentClue &&
+                userLocationHandler.userCanSeeTargetInRange(
+                    user,
+                    target,
+                    globalGameData.levelGeometryData,
+                    ability.range ?: 0.0,
+                    true
+                ) &&
+                !target.castedAbilityUsers.contains(user.inGameId())
     }
 
     override fun canBeCastedAtAll(

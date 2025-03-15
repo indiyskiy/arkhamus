@@ -7,7 +7,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameOmenClue
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,10 +14,6 @@ class SearchForOmenAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
-
-    companion object {
-        private val logger = LoggerFactory.getLogger(SearchForOmenAbilityCondition::class.java)
-    }
 
     override fun accepts(ability: Ability): Boolean =
         ability == Ability.SEARCH_FOR_OMEN
@@ -29,35 +24,19 @@ class SearchForOmenAbilityCondition(
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
-        if (target == null) {
-            logger.warn("Target is null")
-            return false
-        }
-        if (target !is InGameOmenClue) {
-            logger.warn("Target is not a omen clue")
-            return false
-        }
-        val targetUser = globalGameData.users[target.userId]
-        if (targetUser == null) {
-            logger.warn("Related for omen user not found")
-            return false
-        }
-        val canSeeAndInRange = userLocationHandler.userCanSeeTargetInRange(
-            user,
-            targetUser,
-            globalGameData.levelGeometryData,
-            ability.range ?: 0.0,
-            true
-        )
-        if (!canSeeAndInRange) {
-            logger.warn("User cannot see target or target is out of range")
-            return false
-        }
-        if (target.castedAbilityUsers.contains(user.inGameId())) {
-            logger.warn("ability already casted")
-            return false
-        }
-        return true
+        return target != null &&
+                target is InGameOmenClue &&
+                with(globalGameData.users[target.userId]) {
+                    this != null &&
+                            userLocationHandler.userCanSeeTargetInRange(
+                                user,
+                                this,
+                                globalGameData.levelGeometryData,
+                                ability.range ?: 0.0,
+                                true
+                            ) &&
+                            !target.castedAbilityUsers.contains(user.inGameId())
+                }
     }
 
     override fun canBeCastedAtAll(
@@ -69,18 +48,12 @@ class SearchForOmenAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            if (it !is InGameOmenClue) {
-                false
-            } else {
-                val targetUser = globalGameData.users[it.userId]
-                targetUser != null && userLocationHandler.userCanSeeTargetInRange(
-                    user,
-                    targetUser,
-                    globalGameData.levelGeometryData,
-                    ability.range ?: 0.0,
-                    true
-                ) && !it.castedAbilityUsers.contains(user.inGameId())
-            }
+            canBeCastedRightNow(
+                ability,
+                user,
+                it,
+                globalGameData
+            )
         }
     }
 
