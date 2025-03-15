@@ -116,7 +116,6 @@ class QuestProgressHandler(
             data.canDecline = false
             data.canFinish = false
         }
-
         addMoreQuestsMaybe(globalGameData, data, globalGameData.game.globalTimer)
     }
 
@@ -313,42 +312,65 @@ class QuestProgressHandler(
         userQuestProgress?.questState = COMPLETED
     }
 
-    private fun mapTasks(
-        tasks: List<InGameTask>,
+    fun mapSteps(
+        userQuestResponses: List<UserQuestResponse>,
         user: InGameUser,
         data: GlobalGameData
     ): List<QuestStepResponse> {
-        return tasks.map {
-            QuestStepResponse(
-                id = it.inGameId(),
-                state = if (userLocationHandler.userCanSeeTargetInRange(
-                        user,
-                        it,
-                        data.levelGeometryData,
-                        it.interactionRadius,
-                        true
-                    )
-                ) {
-                    MapObjectState.ACTIVE
-                } else {
-                    MapObjectState.NOT_IN_SIGHT
-                }
-
-            )
+        val allStepIds = userQuestResponses.flatMap { it.questStepIds }.distinct()
+        val allSteps = data.quests.flatMap { it.levelTasks }.filter { it.inGameId() in allStepIds }
+        return allSteps.map {
+            mapStep(it, user, data)
         }
     }
 
-    private fun mapNpc(
-        questGiverId: Long,
+    fun mapQuestGivers(
+        userQuestResponses: List<UserQuestResponse>,
         user: InGameUser,
         data: GlobalGameData
-    ): QuestGiverResponse? {
-        val npc = data.questGivers.firstOrNull { it.inGameId() == questGiverId } ?: return null
+    ): List<QuestGiverResponse> {
+        val allQuestGiverIds = userQuestResponses.flatMap {
+            listOf(it.startQuestGiverId, it.endQuestGiverId)
+        }.filterNotNull().distinct()
+        val allQuestGivers = data.questGivers.filter { it.inGameId() in allQuestGiverIds }
+        val questStepResponses = allQuestGivers.map {
+            mapQuestGiver(it, user, data)
+        }
+        return questStepResponses
+    }
+
+    private fun mapStep(
+        task: InGameTask,
+        user: InGameUser,
+        data: GlobalGameData
+    ): QuestStepResponse {
+        return QuestStepResponse(
+            id = task.inGameId(),
+            state = if (userLocationHandler.userCanSeeTargetInRange(
+                    user,
+                    task,
+                    data.levelGeometryData,
+                    task.interactionRadius,
+                    true
+                )
+            ) {
+                MapObjectState.ACTIVE
+            } else {
+                MapObjectState.NOT_IN_SIGHT
+            }
+        )
+    }
+
+    private fun mapQuestGiver(
+        questGiver: InGameQuestGiver,
+        user: InGameUser,
+        data: GlobalGameData
+    ): QuestGiverResponse {
         val state = if (userLocationHandler.userCanSeeTargetInRange(
                 user,
-                npc,
+                questGiver,
                 data.levelGeometryData,
-                npc.interactionRadius,
+                questGiver.interactionRadius,
                 true
             )
         ) {
@@ -357,11 +379,12 @@ class QuestProgressHandler(
             MapObjectState.NOT_IN_SIGHT
         }
         return QuestGiverResponse(
-            id = npc.inGameId(),
+            id = questGiver.inGameId(),
             state = state
         )
     }
 }
+
 
 
 

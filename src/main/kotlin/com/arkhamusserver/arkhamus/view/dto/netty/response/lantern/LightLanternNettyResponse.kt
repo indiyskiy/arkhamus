@@ -26,6 +26,8 @@ class LightLanternNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    questGivers: List<QuestGiverResponse>,
+    questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
@@ -44,5 +46,7 @@ class LightLanternNettyResponse(
     lanterns = lanterns,
     clues = clues,
     easyVoteSpots = easyVoteSpots,
+    questGivers = questGivers,
+    questSteps = questSteps,
     type = LightLanternNettyResponse::class.java.simpleName,
 )

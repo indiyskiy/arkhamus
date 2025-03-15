@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.votes
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.*
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
@@ -25,7 +26,8 @@ class PayForVoteNettyResponseMapper(
     private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler,
     private val doorDataHandler: DoorDataHandler,
     private val lanternDataHandler: LanternDataHandler,
-    private val voteSpotInfoMapper: VoteSpotInfoMapper
+    private val voteSpotInfoMapper: VoteSpotInfoMapper,
+    private val questProgressHandler: QuestProgressHandler,
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == PayForVoteRequestProcessData::class.java
@@ -85,6 +87,16 @@ class PayForVoteNettyResponseMapper(
                     it.gameUser,
                     globalGameData.voteSpots,
                     globalGameData.levelGeometryData
+                ),
+                questGivers = questProgressHandler.mapQuestGivers(
+                    it.userQuest,
+                    it.gameUser,
+                    globalGameData
+                ),
+                questSteps = questProgressHandler.mapSteps(
+                    it.userQuest,
+                    it.gameUser,
+                    globalGameData,
                 ),
                 lanterns = lanternDataHandler.map(
                     it.gameUser,

@@ -23,6 +23,8 @@ class AbilityNettyResponse(
     doors: List<DoorResponse>,
     lanterns: List<LanternData>,
     clues: ExtendedCluesResponse,
+    questGivers: List<QuestGiverResponse>,
+    questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
@@ -41,6 +43,8 @@ class AbilityNettyResponse(
     clues = clues,
     lanterns = lanterns,
     easyVoteSpots = easyVoteSpots,
+    questGivers = questGivers,
+    questSteps = questSteps,
     type = AbilityNettyResponse::class.java.simpleName
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

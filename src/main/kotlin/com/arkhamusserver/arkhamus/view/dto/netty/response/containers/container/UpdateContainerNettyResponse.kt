@@ -30,7 +30,9 @@ class UpdateContainerNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
-    easyVoteSpots: List<EasyVoteSpotResponse>
+    easyVoteSpots: List<EasyVoteSpotResponse>,
+    questGivers: List<QuestGiverResponse>,
+    questSteps: List<QuestStepResponse>
 ) : ExternalInventoryNettyResponse(
     sortedUserInventory = sortedUserInventory,
     itemsInside = itemsInside,
@@ -52,6 +54,8 @@ class UpdateContainerNettyResponse(
     clues = clues,
     lanterns = lanterns,
     easyVoteSpots = easyVoteSpots,
+    questGivers = questGivers,
+    questSteps = questSteps,
     type = UpdateContainerNettyResponse::class.java.simpleName
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

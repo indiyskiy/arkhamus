@@ -25,6 +25,8 @@ class PayForVoteNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    questGivers: List<QuestGiverResponse>,
+    questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
@@ -43,5 +45,7 @@ class PayForVoteNettyResponse(
     clues = clues,
     lanterns = lanterns,
     easyVoteSpots = easyVoteSpots,
+    questGivers = questGivers,
+    questSteps = questSteps,
     type = PayForVoteNettyResponse::class.java.simpleName,
 )

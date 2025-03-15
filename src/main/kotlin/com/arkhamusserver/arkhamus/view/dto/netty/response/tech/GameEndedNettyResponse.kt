@@ -27,6 +27,8 @@ class GameEndedNettyResponse(
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     lanterns: List<LanternData>,
+    questGivers: List<QuestGiverResponse>,
+    questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
@@ -45,5 +47,7 @@ class GameEndedNettyResponse(
     lanterns = lanterns,
     clues = clues,
     easyVoteSpots = easyVoteSpots,
+    questGivers = questGivers,
+    questSteps = questSteps,
     type = GameEndedNettyResponse::class.java.simpleName
 )

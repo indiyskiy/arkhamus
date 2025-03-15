@@ -21,6 +21,8 @@ class HeartbeatNettyResponse(
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     lanterns: List<LanternData>,
+    questGivers: List<QuestGiverResponse>,
+    questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
@@ -39,5 +41,7 @@ class HeartbeatNettyResponse(
     clues = clues,
     lanterns = lanterns,
     easyVoteSpots = easyVoteSpots,
+    questGivers = questGivers,
+    questSteps = questSteps,
     type = HeartbeatNettyResponse::class.java.simpleName
 )

@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.conta
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.*
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
@@ -30,7 +31,8 @@ class CraftProcessNettyResponseMapper(
     private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler,
     private val doorDataHandler: DoorDataHandler,
     private val lanternDataHandler: LanternDataHandler,
-    private val voteSpotInfoMapper: VoteSpotInfoMapper
+    private val voteSpotInfoMapper: VoteSpotInfoMapper,
+    private val questProgressHandler: QuestProgressHandler,
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == CraftProcessRequestProcessData::class.java
@@ -62,6 +64,8 @@ class CraftProcessNettyResponseMapper(
                         item = it.item
                     }
                 }?.mapCellsToResponse() ?: emptyList(),
+                state = it.crafter?.state ?: MapObjectState.DISABLED,
+                holdingUser = it.crafter!!.holdingUser,
                 tick = it.tick,
                 userId = user.id!!,
                 myGameUser = MyGameUserResponse(it.gameUser!!, it.userQuest),
@@ -81,8 +85,6 @@ class CraftProcessNettyResponseMapper(
                 ),
                 availableAbilities = requestProcessData.availableAbilities,
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
-                holdingUser = it.crafter!!.holdingUser,
-                state = it.crafter?.state ?: MapObjectState.DISABLED,
                 userInventory = requestProcessData.visibleItems.mapCellsToResponse(),
                 containers = containersDataHandler.map(
                     it.gameUser,
@@ -95,12 +97,12 @@ class CraftProcessNettyResponseMapper(
                     globalGameData.levelGeometryData
                 ),
                 inZones = requestProcessData.inZones,
-                clues = requestProcessData.clues,
                 doors = doorDataHandler.map(
                     it.gameUser,
                     globalGameData.doors,
                     globalGameData.levelGeometryData
                 ),
+                clues = requestProcessData.clues,
                 lanterns = lanternDataHandler.map(
                     it.gameUser,
                     globalGameData.lanterns,
@@ -110,6 +112,16 @@ class CraftProcessNettyResponseMapper(
                     it.gameUser,
                     globalGameData.voteSpots,
                     globalGameData.levelGeometryData
+                ),
+                questGivers = questProgressHandler.mapQuestGivers(
+                    it.userQuest,
+                    it.gameUser,
+                    globalGameData
+                ),
+                questSteps = questProgressHandler.mapSteps(
+                    it.userQuest,
+                    it.gameUser,
+                    globalGameData,
                 ),
             )
         }

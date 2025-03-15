@@ -30,5 +30,7 @@ class NettyResponseAuth(
     clues = ExtendedCluesResponse(emptyList(), emptyList()),
     lanterns = emptyList(),
     easyVoteSpots = emptyList(),
+    questGivers = emptyList(),
+    questSteps = emptyList(),
     type = NettyResponseAuth::class.java.simpleName
 )

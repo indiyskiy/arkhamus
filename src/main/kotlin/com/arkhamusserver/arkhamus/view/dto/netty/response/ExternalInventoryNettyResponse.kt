@@ -26,6 +26,8 @@ abstract class ExternalInventoryNettyResponse(
     doors: List<DoorResponse>,
     clues: ExtendedCluesResponse,
     lanterns: List<LanternData>,
+    questGivers: List<QuestGiverResponse>,
+    questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>,
     type: String
 ) : NettyResponse(
@@ -45,5 +47,7 @@ abstract class ExternalInventoryNettyResponse(
     clues = clues,
     lanterns = lanterns,
     easyVoteSpots = easyVoteSpots,
+    questGivers = questGivers,
+    questSteps = questSteps,
     type = type
 )

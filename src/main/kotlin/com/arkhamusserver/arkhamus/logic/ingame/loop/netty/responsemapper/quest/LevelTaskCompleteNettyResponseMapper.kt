@@ -104,6 +104,16 @@ class LevelTaskCompleteNettyResponseMapper(
                     globalGameData.lanterns,
                     globalGameData.levelGeometryData
                 ),
+                questGivers = questProgressHandler.mapQuestGivers(
+                    it.userQuest,
+                    it.gameUser,
+                    globalGameData
+                ),
+                questSteps = questProgressHandler.mapSteps(
+                    it.userQuest,
+                    it.gameUser,
+                    globalGameData,
+                ),
                 easyVoteSpots = voteSpotInfoMapper.mapEasy(
                     it.gameUser,
                     globalGameData.voteSpots,

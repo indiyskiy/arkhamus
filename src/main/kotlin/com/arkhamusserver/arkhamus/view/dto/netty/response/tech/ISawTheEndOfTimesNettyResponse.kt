@@ -23,6 +23,8 @@ class ISawTheEndOfTimesNettyResponse(
     inZones: List<LevelZone>,
     doors: List<DoorResponse>,
     lanterns: List<LanternData>,
+    questGivers: List<QuestGiverResponse>,
+    questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>
 ) : NettyResponse(
     tick = tick,
@@ -41,5 +43,7 @@ class ISawTheEndOfTimesNettyResponse(
     lanterns = lanterns,
     clues = clues,
     easyVoteSpots = easyVoteSpots,
+    questGivers = questGivers,
+    questSteps = questSteps,
     type = ISawTheEndOfTimesNettyResponse::class.java.simpleName
 )

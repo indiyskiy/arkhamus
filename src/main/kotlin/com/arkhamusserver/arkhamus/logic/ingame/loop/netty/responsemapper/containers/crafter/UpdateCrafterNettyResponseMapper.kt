@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.conta
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.*
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenItemHolderChanges
@@ -34,7 +35,8 @@ class UpdateCrafterNettyResponseMapper(
     private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler,
     private val doorDataHandler: DoorDataHandler,
     private val lanternDataHandler: LanternDataHandler,
-    private val voteSpotInfoMapper: VoteSpotInfoMapper
+    private val voteSpotInfoMapper: VoteSpotInfoMapper,
+    private val questProgressHandler: QuestProgressHandler,
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == UpdateCrafterRequestGameData::class.java
@@ -100,7 +102,8 @@ class UpdateCrafterNettyResponseMapper(
         itemsInside = itemsInside.mapCellsToResponse(),
         state = gameData.crafter.state,
         holdingUser = gameData.crafter.holdingUser,
-        userInventory = sortedUserInventory.mapCellsToResponse(),
+        executedSuccessfully = true,
+        firstTime = true,
         tick = gameData.tick,
         userId = user.id!!,
         myGameUser = MyGameUserResponse(gameUser, userQuestProgresses),
@@ -112,6 +115,15 @@ class UpdateCrafterNettyResponseMapper(
         ongoingEvents = gameData.visibleOngoingEvents.map {
             OngoingEventResponse(it)
         },
+        shortTimeEvents = shortTimeEventToResponseHandler.filterAndMap(
+            shortTimeEvents,
+            gameUser,
+            inZones,
+            globalGameData
+        ),
+        availableAbilities = availableAbilities,
+        ongoingCraftingProcess = ongoingCraftingProcess,
+        userInventory = sortedUserInventory.mapCellsToResponse(),
         containers = containersDataHandler.map(
             gameUser,
             containers,
@@ -122,23 +134,13 @@ class UpdateCrafterNettyResponseMapper(
             crafters,
             levelGeometryData
         ),
-        ongoingCraftingProcess = ongoingCraftingProcess,
-        availableAbilities = availableAbilities,
-        executedSuccessfully = true,
-        firstTime = true,
         inZones = inZones,
-        clues = clues,
-        shortTimeEvents = shortTimeEventToResponseHandler.filterAndMap(
-            shortTimeEvents,
-            gameUser,
-            inZones,
-            globalGameData
-        ),
         doors = doorDataHandler.map(
             gameUser,
             globalGameData.doors,
             globalGameData.levelGeometryData
         ),
+        clues = clues,
         lanterns = lanternDataHandler.map(
             gameUser,
             globalGameData.lanterns,
@@ -148,6 +150,16 @@ class UpdateCrafterNettyResponseMapper(
             gameUser,
             globalGameData.voteSpots,
             globalGameData.levelGeometryData
+        ),
+        questGivers = questProgressHandler.mapQuestGivers(
+            userQuestProgresses,
+            gameUser,
+            globalGameData
+        ),
+        questSteps = questProgressHandler.mapSteps(
+            userQuestProgresses,
+            gameUser,
+            globalGameData,
         ),
     )
 

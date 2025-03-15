@@ -27,5 +27,7 @@ class NettyGameStartedResponse(
     clues = ExtendedCluesResponse(emptyList(), emptyList()),
     lanterns = emptyList(),
     easyVoteSpots = emptyList(),
+    questGivers = emptyList(),
+    questSteps = emptyList(),
     type = NettyGameStartedResponse::class.java.simpleName
 )

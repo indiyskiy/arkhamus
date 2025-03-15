@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.conta
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.*
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
@@ -34,7 +35,8 @@ class OpenContainerNettyResponseMapper(
     private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler,
     private val doorDataHandler: DoorDataHandler,
     private val lanternDataHandler: LanternDataHandler,
-    private val voteSpotInfoMapper: VoteSpotInfoMapper
+    private val voteSpotInfoMapper: VoteSpotInfoMapper,
+    private val questProgressHandler: QuestProgressHandler
 ) : NettyResponseMapper {
 
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
@@ -69,12 +71,12 @@ class OpenContainerNettyResponseMapper(
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
                     crafters = requestProcessData.crafters,
-                    inZones = requestProcessData.inZones,
                     clues = requestProcessData.clues,
                     userQuestProgresses = requestProcessData.userQuest,
                     shortTimeEvents = globalGameData.shortTimeEvents,
+                    inZones = requestProcessData.inZones,
                     levelGeometryData = globalGameData.levelGeometryData,
-                    globalGameData = globalGameData
+                    globalGameData = globalGameData,
                 )
             } else {
                 return buildContainer(
@@ -89,12 +91,12 @@ class OpenContainerNettyResponseMapper(
                     containerHoldingUserId = containerHoldingUserId,
                     containers = requestProcessData.containers,
                     crafters = requestProcessData.crafters,
-                    inZones = requestProcessData.inZones,
                     clues = requestProcessData.clues,
                     userQuestProgresses = requestProcessData.userQuest,
                     shortTimeEvents = globalGameData.shortTimeEvents,
+                    inZones = requestProcessData.inZones,
                     levelGeometryData = globalGameData.levelGeometryData,
-                    globalGameData = globalGameData
+                    globalGameData = globalGameData,
                 )
             }
         }
@@ -117,7 +119,7 @@ class OpenContainerNettyResponseMapper(
         shortTimeEvents: List<InGameShortTimeEvent>,
         inZones: List<LevelZone>,
         levelGeometryData: LevelGeometryData,
-        globalGameData: GlobalGameData
+        globalGameData: GlobalGameData,
     ) = OpenContainerNettyResponse(
         itemsInside = itemsInside.mapCellsToResponse(),
         state = state,
@@ -163,6 +165,16 @@ class OpenContainerNettyResponseMapper(
             gameUser,
             globalGameData.lanterns,
             globalGameData.levelGeometryData
+        ),
+        questGivers = questProgressHandler.mapQuestGivers(
+            userQuestProgresses,
+            gameUser,
+            globalGameData
+        ),
+        questSteps = questProgressHandler.mapSteps(
+            userQuestProgresses,
+            gameUser,
+            globalGameData,
         ),
         easyVoteSpots = voteSpotInfoMapper.mapEasy(
             gameUser,

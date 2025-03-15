@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.ritua
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.*
 import com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortTime.ShortTimeEventToResponseHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.InBetweenEventHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
@@ -25,7 +26,8 @@ class GodVoteCastNettyResponseMapper(
     private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler,
     private val doorDataHandler: DoorDataHandler,
     private val lanternDataHandler: LanternDataHandler,
-    private val voteSpotInfoMapper: VoteSpotInfoMapper
+    private val voteSpotInfoMapper: VoteSpotInfoMapper,
+    private val questProgressHandler: QuestProgressHandler,
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == GodVoteCastRequestProcessData::class.java
@@ -87,6 +89,16 @@ class GodVoteCastNettyResponseMapper(
                     it.gameUser,
                     globalGameData.lanterns,
                     globalGameData.levelGeometryData
+                ),
+                questGivers = questProgressHandler.mapQuestGivers(
+                    it.userQuest,
+                    it.gameUser,
+                    globalGameData
+                ),
+                questSteps = questProgressHandler.mapSteps(
+                    it.userQuest,
+                    it.gameUser,
+                    globalGameData,
                 ),
                 easyVoteSpots = voteSpotInfoMapper.mapEasy(
                     it.gameUser,

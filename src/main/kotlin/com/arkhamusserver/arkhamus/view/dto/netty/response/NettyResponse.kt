@@ -21,6 +21,8 @@ abstract class NettyResponse(
     var lanterns: List<LanternData>,
     var easyVoteSpots: List<EasyVoteSpotResponse>,
     var clues: ExtendedCluesResponse,
+    var questGivers: List<QuestGiverResponse>,
+    var questSteps: List<QuestStepResponse>,
     val type: String
 )
 
