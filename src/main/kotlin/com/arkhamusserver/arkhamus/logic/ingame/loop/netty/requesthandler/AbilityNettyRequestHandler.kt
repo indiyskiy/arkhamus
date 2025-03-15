@@ -154,7 +154,6 @@ class AbilityNettyRequestHandler(
         clues = clues,
         tick = globalGameData.game.currentTick,
         userQuestProgresses = questProgressHandler.mapQuestProgresses(
-            globalGameData,
             globalGameData.questProgressByUserId,
             user,
             globalGameData.quests
@@ -195,7 +194,6 @@ class AbilityNettyRequestHandler(
         clues = clues,
         tick = globalGameData.game.currentTick,
         userQuestProgresses = questProgressHandler.mapQuestProgresses(
-            globalGameData,
             globalGameData.questProgressByUserId,
             user,
             globalGameData.quests

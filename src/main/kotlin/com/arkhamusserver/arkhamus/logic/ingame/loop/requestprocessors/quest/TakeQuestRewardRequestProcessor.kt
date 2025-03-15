@@ -33,7 +33,6 @@ class TakeQuestRewardRequestProcessor(
             if (reward != null && quest != null && user != null && questGiverGivesReward != null) {
                 questRewardUtils.takeReward(user, reward, globalGameData, questGiverGivesReward)
                 questProgressHandler.finishQuest(
-                    user,
                     globalGameData,
                     takeQuestRewardRequestProcessData
                 )

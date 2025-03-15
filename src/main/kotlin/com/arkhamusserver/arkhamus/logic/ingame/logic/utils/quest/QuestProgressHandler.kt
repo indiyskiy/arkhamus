@@ -66,7 +66,6 @@ class QuestProgressHandler(
 
     @Transactional
     fun finishQuest(
-        user: InGameUser,
         globalGameData: GlobalGameData,
         data: TakeQuestRewardRequestProcessData
     ) {
@@ -91,12 +90,11 @@ class QuestProgressHandler(
         }
 
 
-        addMoreQuestsMaybe(user, globalGameData, data, globalGameData.game.globalTimer)
+        addMoreQuestsMaybe(globalGameData, data, globalGameData.game.globalTimer)
     }
 
     @Transactional
     fun declineTheQuest(
-        user: InGameUser,
         globalGameData: GlobalGameData,
         data: QuestDeclineRequestProcessData
     ) {
@@ -119,11 +117,10 @@ class QuestProgressHandler(
             data.canFinish = false
         }
 
-        addMoreQuestsMaybe(user, globalGameData, data, globalGameData.game.globalTimer)
+        addMoreQuestsMaybe(globalGameData, data, globalGameData.game.globalTimer)
     }
 
     private fun addMoreQuestsMaybe(
-        user: InGameUser,
         globalGameData: GlobalGameData,
         data: GameUserData,
         currentGameTime: Long
@@ -140,40 +137,33 @@ class QuestProgressHandler(
             )
             logger.info("new quest progress ${newQuestProgress.size}")
             data.userQuest += newQuestProgress.map {
-                mapQuestProgress(user, globalGameData, globalGameData.quests, it)
+                mapQuestProgress(globalGameData.quests, it)
             }
         }
     }
 
     fun mapQuestProgresses(
-        data: GlobalGameData,
         questProgressByUserId: Map<Long, List<InGameUserQuestProgress>>,
         user: InGameUser,
         quests: List<InGameQuest>
     ): List<UserQuestResponse> {
         return (questProgressByUserId[user.inGameId()] ?: emptyList()).map { userQuest ->
-            mapQuestProgress(user, data, quests, userQuest)
+            mapQuestProgress(quests, userQuest)
         }
     }
 
     fun mapQuestProgress(
-        user: InGameUser,
-        data: GlobalGameData,
         quests: List<InGameQuest>,
         userQuest: InGameUserQuestProgress
     ): UserQuestResponse {
         val quest = quests.firstOrNull { it.inGameId() == userQuest.questId }
         return mapQuestProgress(
-            user,
-            data,
             quest,
             userQuest
         )
     }
 
     fun mapQuestProgress(
-        user: InGameUser,
-        data: GlobalGameData,
         quest: InGameQuest?,
         userQuest: InGameUserQuestProgress,
     ): UserQuestResponse {
@@ -183,9 +173,9 @@ class QuestProgressHandler(
                 questId = userQuest.questId,
                 questState = userQuest.questState,
                 questCurrentStep = userQuest.questCurrentStep,
-                questSteps = quest.levelTasks.mapQuests(user, data),
-                endQuestGiver = quest.endQuestGiverId.mapNpc(user, data),
-                startQuestGiver = quest.startQuestGiverId.mapNpc(user, data),
+                questStepIds = quest.levelTasks.map { it.inGameId() },
+                endQuestGiverId = quest.endQuestGiverId,
+                startQuestGiverId = quest.startQuestGiverId,
                 textKey = quest.textKey,
                 creationGameTime = userQuest.creationGameTime,
                 readGameTime = userQuest.readGameTime,
@@ -198,9 +188,9 @@ class QuestProgressHandler(
                 questId = null,
                 questState = userQuest.questState,
                 questCurrentStep = userQuest.questCurrentStep,
-                questSteps = emptyList(),
-                endQuestGiver = null,
-                startQuestGiver = quest?.startQuestGiverId?.mapNpc(user, data),
+                questStepIds = emptyList(),
+                endQuestGiverId = null,
+                startQuestGiverId = quest?.startQuestGiverId,
                 textKey = null,
                 creationGameTime = userQuest.creationGameTime,
                 readGameTime = userQuest.readGameTime,
@@ -323,11 +313,12 @@ class QuestProgressHandler(
         userQuestProgress?.questState = COMPLETED
     }
 
-    private fun List<InGameTask>.mapQuests(
+    private fun mapTasks(
+        tasks: List<InGameTask>,
         user: InGameUser,
         data: GlobalGameData
     ): List<QuestStepResponse> {
-        return this.map {
+        return tasks.map {
             QuestStepResponse(
                 id = it.inGameId(),
                 state = if (userLocationHandler.userCanSeeTargetInRange(
@@ -347,12 +338,12 @@ class QuestProgressHandler(
         }
     }
 
-    private fun Long.mapNpc(
+    private fun mapNpc(
+        questGiverId: Long,
         user: InGameUser,
         data: GlobalGameData
     ): QuestGiverResponse? {
-        val npcId: Long = this
-        val npc = data.questGivers.firstOrNull { it.inGameId() == npcId } ?: return null
+        val npc = data.questGivers.firstOrNull { it.inGameId() == questGiverId } ?: return null
         val state = if (userLocationHandler.userCanSeeTargetInRange(
                 user,
                 npc,

@@ -24,7 +24,6 @@ class QuestDeclineRequestProcessor(
         val questDeclineRequestProcessData = requestDataHolder.requestProcessData as QuestDeclineRequestProcessData
         if (questDeclineRequestProcessData.canDecline) {
             questProgressHandler.declineTheQuest(
-                globalGameData.users[requestDataHolder.userAccount.id]!!,
                 globalGameData,
                 questDeclineRequestProcessData
             )

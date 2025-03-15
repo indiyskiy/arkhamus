@@ -66,7 +66,6 @@ class RitualProgressNettyRequestHandler(
                 globalGameData.craftProcess
             )
             val userQuestProgresses = questProgressHandler.mapQuestProgresses(
-                globalGameData,
                 globalGameData.questProgressByUserId,
                 user,
                 globalGameData.quests

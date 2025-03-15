@@ -51,8 +51,6 @@ class LevelTaskCompleteNettyResponseMapper(
                 questInfo = QuestInfoResponse(
                     userQuest = requestProcessData.userQuestProgress?.let { process ->
                         questProgressHandler.mapQuestProgress(
-                            globalGameData.users[user.id]!!,
-                            globalGameData,
                             requestProcessData.quest,
                             process
                         )
