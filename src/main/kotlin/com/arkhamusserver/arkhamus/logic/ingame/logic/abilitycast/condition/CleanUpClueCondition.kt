@@ -23,8 +23,7 @@ class CleanUpClueCondition(
         globalGameData: GlobalGameData
     ): Boolean {
         if (target == null) return false
-        val canBeRemoved = clueHandler.canBeRemoved(user, target, globalGameData)
-        return canBeRemoved
+        return clueHandler.canBeRemoved(user, target, globalGameData)
     }
 
     override fun canBeCastedAtAll(

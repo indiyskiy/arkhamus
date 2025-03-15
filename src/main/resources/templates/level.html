@@ -106,7 +106,7 @@
                 <tbody>
                 <tr th:each="activities : ${levelStatistic.getActivitiesStatistic()}">
                     <td th:text="${activities.type != null ? activities.type : 'Unknown'}"></td>
-                    <td th:text="${#numbers.formatDecimal(activities.value, 2, 'POINT')}"></td>
+                    <td th:text="${activities.value}"></td>
                 </tr>
                 </tbody>
             </table>

@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 
@@ -31,6 +32,6 @@ class TownPortalByScrollCondition(
         user: InGameUser,
         globalGameData: GlobalGameData
     ): Boolean {
-        return true
+        return !user.stateTags.contains(UserStateTag.STUN)
     }
 }

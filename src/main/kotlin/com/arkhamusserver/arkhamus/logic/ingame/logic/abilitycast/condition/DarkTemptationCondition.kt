@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.DARK_TEMPTATION
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class DarkTemptationCondition(
-    private val geometryUtils: GeometryUtils,
-    private val gameObjectFinder: GameObjectFinder
+    private val gameObjectFinder: GameObjectFinder,
+    private val userLocationHandler: UserLocationHandler,
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
@@ -25,7 +25,15 @@ class DarkTemptationCondition(
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
-        return target != null
+        return target != null &&
+                target is WithPoint &&
+                userLocationHandler.userCanSeeTargetInRange(
+                    user,
+                    target,
+                    globalGameData.levelGeometryData,
+                    ability.range ?: 0.0,
+                    true
+                )
     }
 
     override fun canBeCastedAtAll(
@@ -37,7 +45,12 @@ class DarkTemptationCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is WithPoint && geometryUtils.distanceLessOrEquals(user, it, ability.range)
+            canBeCastedRightNow(
+                ability,
+                user,
+                it,
+                globalGameData
+            )
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.classbased.cultist
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ParalyzeAbilityCondition(
-    private val geometryUtils: GeometryUtils,
+    private val userLocationHandler: UserLocationHandler,
     private val gameObjectFinder: GameObjectFinder
 ) : AdditionalAbilityCondition {
 
@@ -28,8 +28,14 @@ class ParalyzeAbilityCondition(
         if (target == null) return false
         val targetUser = (target as? InGameUser) ?: return false
         return targetUser.inGameId() != user.inGameId() &&
-                geometryUtils.distanceLessOrEquals(user, targetUser, ability.range) &&
-                !targetUser.stateTags.contains(UserStateTag.STUN)
+                userLocationHandler.userCanSeeTargetInRange(
+                    user,
+                    targetUser,
+                    globalGameData.levelGeometryData,
+                    ability.range ?: 0.0,
+                    true
+                )
+        !targetUser.stateTags.contains(UserStateTag.STUN)
     }
 
     override fun canBeCastedAtAll(
@@ -41,10 +47,12 @@ class ParalyzeAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            it is InGameUser &&
-                    it.inGameId() != user.inGameId() &&
-                    geometryUtils.distanceLessOrEquals(user, it, ability.range) &&
-                    !it.stateTags.contains(UserStateTag.STUN)
+            canBeCastedRightNow(
+                ability,
+                user,
+                it,
+                globalGameData
+            )
         }
     }
 }

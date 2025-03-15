@@ -88,9 +88,11 @@ class AdminLevelInfoLogic(
             relatedTypes
         ).groupBy { it.activityType }
         return activities.map { (type, activities) ->
-            ActivityStatisticDto(type, 1.0 * activities.size / gameIds.size)
+            ActivityStatisticDto(type, formatDouble(1.0 * activities.size / gameIds.size))
         }
     }
+
+    private fun formatDouble(value: Double): String = String.format("%.2f", value)
 
     private fun averageGameLengthByGameEndReason(sessions: List<GameSession>): List<Pair<GameEndReason?, String>> {
         return sessions.groupBy {

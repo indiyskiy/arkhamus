@@ -1,8 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.classbased.cultist
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorState
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class LockDoorAbilityCondition(
-    private val geometryUtils: GeometryUtils,
-    private val gameObjectFinder: GameObjectFinder
+    private val gameObjectFinder: GameObjectFinder,
+    private val userLocationHandler: UserLocationHandler,
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
@@ -29,7 +29,13 @@ class LockDoorAbilityCondition(
     ): Boolean {
         if (target == null) return false
         val targetDoor = (target as? InGameDoor) ?: return false
-        return geometryUtils.distanceLessOrEquals(user, targetDoor, ability.range) &&
+        return userLocationHandler.userCanSeeTargetInRange(
+            user,
+            targetDoor,
+            globalGameData.levelGeometryData,
+            ability.range ?: 0.0,
+            true
+        ) &&
                 !targetDoor.additionalTags.contains(DoorTag.CLOSED_BY_ABILITY) &&
                 !targetDoor.additionalTags.contains(DoorTag.CLOSED_BY_DESIGN) &&
                 !targetDoor.additionalTags.contains(DoorTag.CLOSED_IN_GAME_FOREVER) &&
@@ -46,13 +52,12 @@ class LockDoorAbilityCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any { targetDoor ->
-            targetDoor is InGameDoor &&
-                    geometryUtils.distanceLessOrEquals(user, targetDoor, ability.range) &&
-                    !targetDoor.additionalTags.contains(DoorTag.CLOSED_BY_ABILITY) &&
-                    !targetDoor.additionalTags.contains(DoorTag.CLOSED_BY_DESIGN) &&
-                    !targetDoor.additionalTags.contains(DoorTag.CLOSED_IN_GAME_FOREVER) &&
-                    targetDoor.additionalTags.contains(DoorTag.OPEN_SOMETIMES) &&
-                    targetDoor.globalState == DoorState.OPEN
+            canBeCastedRightNow(
+                ability,
+                user,
+                targetDoor,
+                globalGameData
+            )
         }
     }
 }

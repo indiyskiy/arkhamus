@@ -1,19 +1,17 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.THROW_POTATO
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
-import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import org.springframework.stereotype.Component
 
 @Component
 class ThrowPotatoCondition(
-    private val geometryUtils: GeometryUtils,
-    private val gameObjectFinder: GameObjectFinder
+    private val gameObjectFinder: GameObjectFinder,
+    private val userLocationHandler: UserLocationHandler,
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
@@ -26,8 +24,16 @@ class ThrowPotatoCondition(
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
-        if (target == null) return false
-        return geometryUtils.distanceLessOrEquals(user, target as WithPoint, ability.range)
+        return target != null &&
+                target is InGameUser &&
+                target.inGameId() != user.inGameId() &&
+                userLocationHandler.userCanSeeTargetInRange(
+                    user,
+                    target,
+                    globalGameData.levelGeometryData,
+                    ability.range ?: 0.0,
+                    true
+                )
     }
 
     override fun canBeCastedAtAll(
@@ -39,8 +45,12 @@ class ThrowPotatoCondition(
             ability.targetTypes ?: emptyList(),
             globalGameData
         ).any {
-            (it is WithTrueIngameId && it.inGameId() != user.inGameId()) &&
-                    (it is WithPoint && geometryUtils.distanceLessOrEquals(user, it, ability.range))
+            canBeCastedRightNow(
+                ability,
+                user,
+                it,
+                globalGameData
+            )
         }
     }
 }

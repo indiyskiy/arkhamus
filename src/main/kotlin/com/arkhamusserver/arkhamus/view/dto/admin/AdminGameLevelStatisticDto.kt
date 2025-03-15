@@ -29,5 +29,5 @@ data class GameTimeByReasonElementDto(
 
 data class ActivityStatisticDto(
     val type: ActivityType,
-    val value: Double
+    val value: String
 )
