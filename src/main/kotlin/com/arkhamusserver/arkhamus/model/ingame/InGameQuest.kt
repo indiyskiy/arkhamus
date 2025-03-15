@@ -11,7 +11,7 @@ data class InGameQuest(
     var startQuestGiverId: Long,
     var endQuestGiverId: Long,
     var difficulty: QuestDifficulty,
-    var levelTaskIds: MutableList<Long> = mutableListOf(),
+    var levelTasks: List<InGameTask> = emptyList(),
     var textKey: String,
 ) : InGameEntity, WithTrueIngameId {
     override fun inGameId(): Long {

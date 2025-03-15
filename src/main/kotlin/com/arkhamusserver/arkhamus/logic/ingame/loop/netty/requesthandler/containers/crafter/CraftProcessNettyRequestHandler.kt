@@ -90,6 +90,7 @@ class CraftProcessNettyRequestHandler(
                     crafters = globalGameData.crafters.values.toList(),
                     clues = clues,
                     userQuestProgresses = questProgressHandler.mapQuestProgresses(
+                        globalGameData,
                         globalGameData.questProgressByUserId,
                         user,
                         globalGameData.quests
@@ -119,6 +120,7 @@ class CraftProcessNettyRequestHandler(
                     crafters = globalGameData.crafters.values.toList(),
                     clues = clues,
                     userQuestProgresses = questProgressHandler.mapQuestProgresses(
+                        globalGameData,
                         globalGameData.questProgressByUserId,
                         user,
                         globalGameData.quests

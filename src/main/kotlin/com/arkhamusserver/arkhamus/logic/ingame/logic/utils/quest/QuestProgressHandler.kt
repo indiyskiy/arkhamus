@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
@@ -9,11 +10,11 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameUserQuestProgressRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.*
-import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
-import com.arkhamusserver.arkhamus.model.ingame.InGameUserQuestProgress
+import com.arkhamusserver.arkhamus.model.ingame.*
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestGiverResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestStepResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -25,7 +26,8 @@ import kotlin.math.min
 class QuestProgressHandler(
     private val questProgressRepository: InGameUserQuestProgressRepository,
     private val userQuestCreationHandler: UserQuestCreationHandler,
-    private val activityHandler: ActivityHandler
+    private val activityHandler: ActivityHandler,
+    private val userLocationHandler: UserLocationHandler
 ) {
 
     companion object {
@@ -64,6 +66,7 @@ class QuestProgressHandler(
 
     @Transactional
     fun finishQuest(
+        user: InGameUser,
         globalGameData: GlobalGameData,
         data: TakeQuestRewardRequestProcessData
     ) {
@@ -88,11 +91,12 @@ class QuestProgressHandler(
         }
 
 
-        addMoreQuestsMaybe(globalGameData, data, globalGameData.game.globalTimer)
+        addMoreQuestsMaybe(user, globalGameData, data, globalGameData.game.globalTimer)
     }
 
     @Transactional
     fun declineTheQuest(
+        user: InGameUser,
         globalGameData: GlobalGameData,
         data: QuestDeclineRequestProcessData
     ) {
@@ -115,10 +119,11 @@ class QuestProgressHandler(
             data.canFinish = false
         }
 
-        addMoreQuestsMaybe(globalGameData, data, globalGameData.game.globalTimer)
+        addMoreQuestsMaybe(user, globalGameData, data, globalGameData.game.globalTimer)
     }
 
     private fun addMoreQuestsMaybe(
+        user: InGameUser,
         globalGameData: GlobalGameData,
         data: GameUserData,
         currentGameTime: Long
@@ -134,29 +139,41 @@ class QuestProgressHandler(
                 currentGameTime
             )
             logger.info("new quest progress ${newQuestProgress.size}")
-            data.userQuest += newQuestProgress.map { mapQuestProgress(globalGameData.quests, it) }
+            data.userQuest += newQuestProgress.map {
+                mapQuestProgress(user, globalGameData, globalGameData.quests, it)
+            }
         }
     }
 
     fun mapQuestProgresses(
+        data: GlobalGameData,
         questProgressByUserId: Map<Long, List<InGameUserQuestProgress>>,
         user: InGameUser,
         quests: List<InGameQuest>
     ): List<UserQuestResponse> {
         return (questProgressByUserId[user.inGameId()] ?: emptyList()).map { userQuest ->
-            mapQuestProgress(quests, userQuest)
+            mapQuestProgress(user, data, quests, userQuest)
         }
     }
 
     fun mapQuestProgress(
+        user: InGameUser,
+        data: GlobalGameData,
         quests: List<InGameQuest>,
         userQuest: InGameUserQuestProgress
     ): UserQuestResponse {
         val quest = quests.firstOrNull { it.inGameId() == userQuest.questId }
-        return mapQuestProgress(quest, userQuest)
+        return mapQuestProgress(
+            user,
+            data,
+            quest,
+            userQuest
+        )
     }
 
     fun mapQuestProgress(
+        user: InGameUser,
+        data: GlobalGameData,
         quest: InGameQuest?,
         userQuest: InGameUserQuestProgress,
     ): UserQuestResponse {
@@ -166,9 +183,9 @@ class QuestProgressHandler(
                 questId = userQuest.questId,
                 questState = userQuest.questState,
                 questCurrentStep = userQuest.questCurrentStep,
-                questStepIds = quest.levelTaskIds,
-                endQuestGiverId = quest.endQuestGiverId,
-                startQuestGiverId = quest.startQuestGiverId,
+                questSteps = quest.levelTasks.mapQuests(user, data),
+                endQuestGiver = quest.endQuestGiverId.mapNpc(user, data),
+                startQuestGiver = quest.startQuestGiverId.mapNpc(user, data),
                 textKey = quest.textKey,
                 creationGameTime = userQuest.creationGameTime,
                 readGameTime = userQuest.readGameTime,
@@ -181,9 +198,9 @@ class QuestProgressHandler(
                 questId = null,
                 questState = userQuest.questState,
                 questCurrentStep = userQuest.questCurrentStep,
-                questStepIds = emptyList(),
-                endQuestGiverId = null,
-                startQuestGiverId = quest?.startQuestGiverId,
+                questSteps = emptyList(),
+                endQuestGiver = null,
+                startQuestGiver = quest?.startQuestGiverId?.mapNpc(user, data),
                 textKey = null,
                 creationGameTime = userQuest.creationGameTime,
                 readGameTime = userQuest.readGameTime,
@@ -214,13 +231,13 @@ class QuestProgressHandler(
         quest != null &&
                 userQuestProgress != null &&
                 userQuestProgress.questState in setOf(IN_PROGRESS, COMPLETED) &&
-                userQuestProgress.questCurrentStep == quest.levelTaskIds.size
+                userQuestProgress.questCurrentStep == quest.levelTasks.size
 
     fun canFinish(quest: InGameQuest?, userQuestProgress: InGameUserQuestProgress?): Boolean =
         quest != null &&
                 userQuestProgress != null &&
                 userQuestProgress.questState in setOf(COMPLETED) &&
-                userQuestProgress.questCurrentStep == quest.levelTaskIds.size
+                userQuestProgress.questCurrentStep == quest.levelTasks.size
 
     @Transactional
     fun readTheQuest(
@@ -246,8 +263,8 @@ class QuestProgressHandler(
         val questIdToStep = questSteps?.map { it.questId to it.questCurrentStep }
         val questToStep = questIdToStep
             ?.map { quests.first { quest -> quest.inGameId() == it.first } to it.second }
-            ?.map { it.first to task(it.second, it.first.levelTaskIds) }
-        val quest = questToStep?.firstOrNull { it.second == levelTaskId }?.first
+            ?.map { it.first to task(it.second, it.first.levelTasks) }
+        val quest = questToStep?.firstOrNull { it.second?.inGameId() == levelTaskId }?.first
         val userQuestProgress = quest?.let {
             questSteps.firstOrNull { questStep -> it.inGameId() == questStep.questId }
         }
@@ -265,7 +282,7 @@ class QuestProgressHandler(
         userQuestProgress?.let { progress ->
             quest?.let { questNotNull ->
                 currentUser?.let { currentUserNotNull ->
-                    progress.questCurrentStep = min(progress.questCurrentStep + 1, questNotNull.levelTaskIds.size)
+                    progress.questCurrentStep = min(progress.questCurrentStep + 1, questNotNull.levelTasks.size)
                     if (isCompleted(quest, userQuestProgress)) {
                         complete(userQuestProgress)
                     }
@@ -286,14 +303,14 @@ class QuestProgressHandler(
         }
     }
 
-    private fun task(stepNumber: Int, levelTaskIds: MutableList<Long>): Long? {
+    private fun task(stepNumber: Int, levelTasks: List<InGameTask>): InGameTask? {
         if (stepNumber < 0) {
             return null
         }
-        if (stepNumber >= levelTaskIds.size) {
+        if (stepNumber >= levelTasks.size) {
             return null
         }
-        return levelTaskIds[stepNumber]
+        return levelTasks[stepNumber]
     }
 
     private fun questTaken(userQuest: InGameUserQuestProgress): Boolean {
@@ -306,4 +323,55 @@ class QuestProgressHandler(
         userQuestProgress?.questState = COMPLETED
     }
 
+    private fun List<InGameTask>.mapQuests(
+        user: InGameUser,
+        data: GlobalGameData
+    ): List<QuestStepResponse> {
+        return this.map {
+            QuestStepResponse(
+                id = it.inGameId(),
+                state = if (userLocationHandler.userCanSeeTargetInRange(
+                        user,
+                        it,
+                        data.levelGeometryData,
+                        it.interactionRadius,
+                        true
+                    )
+                ) {
+                    MapObjectState.ACTIVE
+                } else {
+                    MapObjectState.NOT_IN_SIGHT
+                }
+
+            )
+        }
+    }
+
+    private fun Long.mapNpc(
+        user: InGameUser,
+        data: GlobalGameData
+    ): QuestGiverResponse? {
+        val npcId: Long = this
+        val npc = data.questGivers.firstOrNull { it.inGameId() == npcId } ?: return null
+        val state = if (userLocationHandler.userCanSeeTargetInRange(
+                user,
+                npc,
+                data.levelGeometryData,
+                npc.interactionRadius,
+                true
+            )
+        ) {
+            MapObjectState.ACTIVE
+        } else {
+            MapObjectState.NOT_IN_SIGHT
+        }
+        return QuestGiverResponse(
+            id = npc.inGameId(),
+            state = state
+        )
+    }
 }
+
+
+
+

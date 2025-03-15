@@ -6,9 +6,12 @@ import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameQuestRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
+import com.arkhamusserver.arkhamus.model.database.entity.game.QuestStep
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
+import com.arkhamusserver.arkhamus.model.ingame.InGameTask
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -51,9 +54,26 @@ class GameStartQuestLogic(
         gameId = game.id!!,
         startQuestGiverId = dbQuest.startQuestGiver.inGameId,
         endQuestGiverId = dbQuest.endQuestGiver.inGameId,
-        levelTaskIds = dbQuest.questSteps.sortedBy { it.stepNumber }.map { it.levelTask.inGameId }.toMutableList(),
+        levelTasks = dbQuest.questSteps.sortedBy { it.stepNumber }.map {
+            createTask(game.id, it)
+        },
         difficulty = dbQuest.dificulty,
         textKey = dbQuest.textKey.value ?: ""
+    )
+
+    private fun createTask(
+        id: Long?,
+        step: QuestStep
+    ): InGameTask = InGameTask(
+        id = generateRandomId(),
+        gameId = id!!,
+        taskId = step.levelTask.inGameId,
+        x = step.levelTask.x,
+        y = step.levelTask.y,
+        z = step.levelTask.z,
+        interactionRadius = step.levelTask.interactionRadius,
+        gameTags = emptySet(),
+        visibilityModifiers = setOf(VisibilityModifier.ALL)
     )
 
 }

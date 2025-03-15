@@ -96,6 +96,7 @@ class CallForBanVoteNettyRequestHandler(
                 tick = globalGameData.game.currentTick,
                 clues = clues,
                 userQuestProgresses = questProgressHandler.mapQuestProgresses(
+                    globalGameData,
                     globalGameData.questProgressByUserId,
                     user,
                     globalGameData.quests
