@@ -34,7 +34,7 @@ class ParalyzeAbilityCondition(
                     globalGameData.levelGeometryData,
                     ability.range ?: 0.0,
                     true
-                )
+                ) &&
         !targetUser.stateTags.contains(UserStateTag.STUN)
     }
 
