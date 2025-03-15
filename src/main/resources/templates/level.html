@@ -25,6 +25,95 @@
     <a th:href="@{/admin/browser/level/{levelId}/preview(levelId=${levelInfo.levelId})}" title="Preview">Preview</a>
     <br/>
     <a th:href="@{/admin/browser/level/{levelId}/quests(levelId=${levelInfo.levelId})}" title="Quests">Quests</a>
+    <br/>
+    <h1>Level statistic</h1>
+    <br/>
+    <div>
+        <h1>Game Level Statistics</h1>
+
+        <!-- Average Game Length -->
+        <section>
+            <h2>Average Game Length</h2>
+            <p th:text="${levelStatistic.averageGameLength}"></p>
+        </section>
+
+        <!-- Average Game Length By Game End Reason -->
+        <section>
+            <h2>Average Game Length by Game End Reason</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Game End Reason</th>
+                    <th>Average Length</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="gameTimeByReason : ${levelStatistic.averageGameLengthByGameEndReason}">
+                    <td th:text="${gameTimeByReason.reason != null ? gameTimeByReason.reason : 'Unknown'}"></td>
+                    <td th:text="${gameTimeByReason.value}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Win Rate By Class -->
+        <section>
+            <h2>Win Rate by Class</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Win Rate (%)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="winRateByClass : ${levelStatistic.winRateByClassElementDto}">
+                    <td th:text="${winRateByClass.role != null ? winRateByClass.role : 'Unknown'}"></td>
+                    <td th:text="${winRateByClass.value}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Win Rate By Reason -->
+        <section>
+            <h2>Win Rate by Game End Reason</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Game End Reason</th>
+                    <th>Win Rate (%)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="winRateByReason : ${levelStatistic.winRateByReasonElementDto}">
+                    <td th:text="${winRateByReason.reason != null ? winRateByReason.reason : 'Unknown'}"></td>
+                    <td th:text="${winRateByReason.value}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+        <!-- activityStatistic -->
+        <section>
+            <h2>Average activity statistic</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Activity type</th>
+                    <th>Average number</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="activities : ${levelStatistic.getActivitiesStatistic()}">
+                    <td th:text="${activities.type != null ? activities.type : 'Unknown'}"></td>
+                    <td th:text="${activities.value}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
 </div>
 
 <div class="footer">

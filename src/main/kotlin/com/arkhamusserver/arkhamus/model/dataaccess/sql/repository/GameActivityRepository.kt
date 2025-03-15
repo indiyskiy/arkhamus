@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.model.dataaccess.sql.repository
 
 import com.arkhamusserver.arkhamus.model.database.entity.game.GameActivity
+import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import org.springframework.data.repository.CrudRepository
 import java.util.*
 
@@ -17,4 +18,11 @@ interface GameActivityRepository : CrudRepository<GameActivity, Long> {
         gameSessionId: Long,
         userOfGameSession: Long
     ): List<GameActivity>
+
+    fun findByGameSessionIdInAndActivityTypeIn(
+        gameSessionIds: Set<Long>,
+        activityTypes: Set<ActivityType>
+    ): List<GameActivity>
+
+
 }

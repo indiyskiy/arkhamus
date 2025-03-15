@@ -31,8 +31,10 @@ class BrowserAdminLevelController(
         @PathVariable levelId: Long,
         model: Model,
     ): String {
-        val levelGeometry: AdminGameLevelInfoDto = adminLevelInfoLogic.info(levelId)
-        model.addAttribute("levelInfo", levelGeometry)
+        val levelInfo: AdminGameLevelInfoDto = adminLevelInfoLogic.info(levelId)
+        val levelStatistic = adminLevelInfoLogic.statistic(levelId)
+        model.addAttribute("levelInfo", levelInfo)
+        model.addAttribute("levelStatistic", levelStatistic)
         return "level"
     }
 

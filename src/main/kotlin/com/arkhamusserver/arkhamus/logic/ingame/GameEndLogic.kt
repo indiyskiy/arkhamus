@@ -59,6 +59,17 @@ class GameEndLogic(
         }
     }
 
+    @Transactional
+    fun endTheGameCompletely(game: InRamGame) {
+        logger.info("ending the game completely ${game.gameId}")
+        game.state = GameState.FINISHED.name
+        inRamGameRepository.save(game)
+
+        val gameSession = gameSessionRepository.findById(game.gameId).get()
+        gameSession.state = GameState.FINISHED
+        gameSessionRepository.save(gameSession)
+    }
+
     private fun addRelations(session: GameSession) {
         gameEndRelationLogic.saveGameEndedRelations(session)
     }
@@ -189,16 +200,5 @@ class GameEndLogic(
 
     private fun logUserWinStatus(user: UserOfGameSession) {
         logger.info("user ${user.userAccount.id} won? ${user.won ?: "null"}")
-    }
-
-    @Transactional
-    fun endTheGameCompletely(game: InRamGame) {
-        logger.info("ending the game completely ${game.gameId}")
-        game.state = GameState.FINISHED.name
-        inRamGameRepository.save(game)
-
-        val gameSession = gameSessionRepository.findById(game.gameId).get()
-        gameSession.state = GameState.FINISHED
-        gameSessionRepository.save(gameSession)
     }
 }
