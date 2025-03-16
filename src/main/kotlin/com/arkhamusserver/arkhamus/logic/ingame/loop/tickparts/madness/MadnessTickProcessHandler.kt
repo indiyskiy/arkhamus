@@ -3,8 +3,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ShortTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
+import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
@@ -37,7 +37,8 @@ class MadnessTickProcessHandler(
         data: GlobalGameData,
         timePassedMillis: Long
     ) {
-        val madnessDebuffs = user.madnessDebuffs.map { MadnessDebuffs.valueOf(it) }
+        val madnessDebuffs =
+            user.additionalData.madness.madnessDebuffs.map { MadnessDebuffs.valueOf(it) }
         var madnessEffectFinal = false
         madnessDebuffs.forEach { debuff ->
             val madnessEffect: Boolean = when (debuff) {

@@ -73,7 +73,7 @@ class OneTickTryEndGameMaybeHandler(
         users: Collection<InGameUser>
     ): Boolean {
         if (singlePlayerGame(users)) return false
-        val notLeavers = users.filter { !it.leftTheGame }
+        val notLeavers = users.filter { !it.techData.leftTheGame }
         val notLeversNotCultists = notLeavers.filter { it.role != RoleTypeInGame.CULTIST }
         val notMadNotCultists = notLeversNotCultists.filter { !madnessHandler.isCompletelyMad(it) }
         if (notMadNotCultists.isEmpty()) {
@@ -84,7 +84,7 @@ class OneTickTryEndGameMaybeHandler(
     }
 
     private fun abandonIfAllLeave(game: InRamGame, users: Collection<InGameUser>) {
-        if (users.all { it.leftTheGame }) {
+        if (users.all { it.techData.leftTheGame }) {
             logger.info("end the game - ABANDONED")
             gameEndLogic.endTheGame(
                 game,
@@ -98,7 +98,7 @@ class OneTickTryEndGameMaybeHandler(
     private fun markLeaversIfNoResponses(game: InRamGame, users: Collection<InGameUser>) {
         if (game.globalTimer - game.lastTimeSentResponse > MAX_TIME_NO_RESPONSES) {
             users.forEach {
-                it.leftTheGame = true
+                it.techData.leftTheGame = true
             }
             logger.info(
                 "no requests for ${game.gameId} - all users left - marked them - ${

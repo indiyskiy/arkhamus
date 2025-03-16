@@ -40,7 +40,7 @@ class LeaveTheGameNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents)
 
-            val canLeaveTheGame = (user.leftTheGame == false) && (
+            val canLeaveTheGame = (user.techData.leftTheGame == false) && (
                     globalGameData.game.state in setOf(
                         GameState.IN_PROGRESS.name,
                         GameState.PENDING.name
@@ -53,7 +53,7 @@ class LeaveTheGameNettyRequestHandler(
                 otherGameUsers = users,
                 visibleOngoingEvents = visibleOngoingEvents,
                 availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
-                visibleItems = inventoryHandler.mapUsersItems(user.items),
+                visibleItems = inventoryHandler.mapUsersItems(user.additionalData.inventory.items),
                 tick = globalGameData.game.currentTick,
                 ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
                     user = user, crafters = globalGameData.crafters, globalGameData.craftProcess

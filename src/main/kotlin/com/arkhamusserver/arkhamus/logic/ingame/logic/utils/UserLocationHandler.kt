@@ -8,8 +8,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLantern
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.Interactable
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.springframework.stereotype.Component
@@ -84,11 +84,15 @@ class UserLocationHandler(
         target: WithPoint,
         affectedByBlind: Boolean,
     ): Boolean {
-        val distance = if (affectedByBlind && whoLooks.madnessDebuffs.contains(MadnessDebuffs.BLIND.name)) {
-            GlobalGameSettings.GLOBAL_VISION_DISTANCE * 0.75
-        } else {
-            GlobalGameSettings.GLOBAL_VISION_DISTANCE
-        }
+        val distance =
+            if (affectedByBlind && whoLooks.additionalData.madness.madnessDebuffs.contains(
+                    MadnessDebuffs.BLIND.name
+                )
+            ) {
+                GlobalGameSettings.GLOBAL_VISION_DISTANCE * 0.75
+            } else {
+                GlobalGameSettings.GLOBAL_VISION_DISTANCE
+            }
         return distanceLessOrEquals(whoLooks, target, distance)
     }
 
@@ -135,7 +139,7 @@ class UserLocationHandler(
         if (visibilityMapSegment == null) {
             throw RuntimeException("Visibility checker failure, should never happen!!")
         }
-        val res = visibilityMapSegment.obstacles.fold(true){ acc, obstacle ->
+        val res = visibilityMapSegment.obstacles.fold(true) { acc, obstacle ->
             acc && !obstacle.blocksVision(from, to)
         }
         return res

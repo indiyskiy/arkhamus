@@ -53,7 +53,7 @@ class GameEndLogic(
         saveActivities(game.inGameId())
         addRelations(gameSession)
         users.values.forEach { user ->
-            if (!user.leftTheGame) {
+            if (!user.techData.leftTheGame) {
                 userStatusService.updateUserStatus(user.inGameId(), CultpritsUserState.ONLINE, true)
             }
         }
@@ -140,8 +140,8 @@ class GameEndLogic(
         }
         databaseUsers.forEach { databaseUser ->
             val inGameUser = inGameUsers[databaseUser.userAccount.id]
-            inGameUser?.let { userNullSafe -> userNullSafe.won = databaseUser.won }
-            logger.info("in-game user ${inGameUser?.inGameId() ?: "null"} won? ${inGameUser?.won ?: "null"}")
+            inGameUser?.let { userNullSafe -> userNullSafe.techData.won = databaseUser.won }
+            logger.info("in-game user ${inGameUser?.inGameId() ?: "null"} won? ${inGameUser?.techData?.won ?: "null"}")
         }
     }
 

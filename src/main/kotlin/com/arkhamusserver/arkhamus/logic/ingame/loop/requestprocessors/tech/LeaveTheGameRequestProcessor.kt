@@ -32,7 +32,7 @@ class LeaveTheGameRequestProcessor(
         with(requestDataHolder.requestProcessData as LeaveTheGameRequestGameData) {
             if (this.canLeaveTheGame) {
                 logger.info("user ${gameUser!!.inGameId()} left the game")
-                this.gameUser.leftTheGame = true
+                this.gameUser.techData.leftTheGame = true
                 userStatusService.updateUserStatus(gameUser.inGameId(), CultpritsUserState.ONLINE)
             }
         }

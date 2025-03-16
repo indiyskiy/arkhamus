@@ -18,10 +18,10 @@ data class MyGameUserResponse(
 ) {
     constructor(gameUser: InGameUser, quests: List<UserQuestResponse>) : this(
         id = gameUser.inGameId(),
-        nickName = gameUser.nickName,
-        madness = gameUser.madness,
-        madnessNotches = gameUser.madnessNotches,
-        madnessDebuffs = gameUser.madnessDebuffs,
+        nickName = gameUser.additionalData.originalSkin.nickName,
+        madness = gameUser.additionalData.madness.madness,
+        madnessNotches = gameUser.additionalData.madness.madnessNotches,
+        madnessDebuffs = gameUser.additionalData.madness.madnessDebuffs,
         x = gameUser.x,
         y = gameUser.y,
         z = gameUser.z,

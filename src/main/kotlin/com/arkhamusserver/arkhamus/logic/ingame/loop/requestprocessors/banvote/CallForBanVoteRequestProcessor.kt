@@ -33,7 +33,7 @@ class CallForBanVoteRequestProcessor(
         val gameData = requestDataHolder.requestProcessData as CallForBanVoteRequestProcessData
         if (gameData.canCallForVote) {
             createEvent(gameData, globalGameData)
-            gameData.gameUser?.let { it.callToArms -= 1 }
+            gameData.gameUser?.let { it.additionalData.callToArms -= 1 }
             gameData.successfullyCalled = true
             activityHandler.addUserWithTargetActivity(
                 globalGameData.game.inGameId(),

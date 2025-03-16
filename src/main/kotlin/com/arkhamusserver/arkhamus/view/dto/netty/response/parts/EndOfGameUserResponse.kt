@@ -10,7 +10,7 @@ data class EndOfGameUserResponse(
 ) {
     constructor(gameUser: InGameUser) : this(
         id = gameUser.inGameId(),
-        nickName = gameUser.nickName,
+        nickName = gameUser.additionalData.originalSkin.nickName,
         role = gameUser.role.name,
         classInGame = gameUser.classInGame.name,
     )

@@ -52,10 +52,10 @@ class UserMadnessHandler(
         madness: Double,
         gameTime: Long
     ) {
-        val before = gameUser.madness
-        val modifier = if (gameUser.madnessDebuffs.contains(MadnessDebuffs.PSYCHIC_UNSTABLE.name)) 1.5 else 1.0
-        gameUser.madness += (madness * modifier)
-        val after = gameUser.madness
+        val before = gameUser.additionalData.madness.madness
+        val modifier = if (gameUser.additionalData.madness.madnessDebuffs.contains(MadnessDebuffs.PSYCHIC_UNSTABLE.name)) 1.5 else 1.0
+        gameUser.additionalData.madness.madness += (madness * modifier)
+        val after = gameUser.additionalData.madness.madness
         applyMadnessDebuffMaybe(gameUser, before, after, gameTime)
     }
 
@@ -65,8 +65,8 @@ class UserMadnessHandler(
         after: Double,
         gameTime: Long
     ) {
-        val notch = gameUser.madnessNotches.firstOrNull { it >= before && it <= after }
-        val notchIndex = notch?.let { gameUser.madnessNotches.indexOf(notch) }
+        val notch = gameUser.additionalData.madness.madnessNotches.firstOrNull { it >= before && it <= after }
+        val notchIndex = notch?.let { gameUser.additionalData.madness.madnessNotches.indexOf(notch) }
         if (notchIndex != null) {
             applyMadnessDebuff(notchIndex, gameUser, gameTime)
         }
@@ -79,8 +79,7 @@ class UserMadnessHandler(
     ) {
         val debuff = MadnessDebuffs.values().filter { it.getStepNumber() == notchIndex }
             .random(random).name
-        gameUser.madnessDebuffs += debuff
-        logger.info("apply debuff $debuff to ${gameUser.inGameId()}-${gameUser.nickName}")
+        gameUser.additionalData.madness.madnessDebuffs += debuff
         activityHandler.addUserNotTargetActivity(
             gameId = gameUser.gameId,
             activityType = ActivityType.USER_GOT_MAD,
@@ -94,19 +93,19 @@ class UserMadnessHandler(
         gameUsers.filterNot { isCompletelyMad(it) }
 
     fun isCompletelyMad(gameUser: InGameUser): Boolean =
-        gameUser.madness >= gameUser.madnessNotches.max()
+        gameUser.additionalData.madness.madness >= gameUser.additionalData.madness.madnessNotches.max()
 
     fun reduceMadness(user: InGameUser, reduceValue: Double) {
         val notch = currentMinNotch(user)
         notch?.let {
-            val afterReduced = max(user.madness - reduceValue, notch)
-            user.madness = afterReduced
+            val afterReduced = max(user.additionalData.madness.madness - reduceValue, notch)
+            user.additionalData.madness.madness = afterReduced
         }
     }
 
     private fun currentMinNotch(user: InGameUser): Double? {
-        val madness = user.madness
-        val notch = user.madnessNotches.filter { it <= madness }.maxOrNull()
+        val madness = user.additionalData.madness.madness
+        val notch = user.additionalData.madness.madnessNotches.filter { it <= madness }.maxOrNull()
         return notch
     }
 

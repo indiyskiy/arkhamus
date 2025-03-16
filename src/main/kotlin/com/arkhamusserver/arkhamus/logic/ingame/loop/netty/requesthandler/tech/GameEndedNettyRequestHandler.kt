@@ -43,8 +43,8 @@ class GameEndedNettyRequestHandler(
 
             val gameEnded = globalGameData.game.state in setOf(GameState.GAME_END_SCREEN.name, GameState.FINISHED.name)
             val gameEndReason = globalGameData.game.gameEndReason?.let { GameEndReason.valueOf(it) }
-            val winners = globalGameData.users.values.filter { it.won == true }
-            val losers = globalGameData.users.values.filter { it.won == false }
+            val winners = globalGameData.users.values.filter { it.techData.won == true }
+            val losers = globalGameData.users.values.filter { it.techData.won == false }
 
             return GameEndedRequestGameData(
                 gameEnded = gameEnded,
@@ -56,7 +56,7 @@ class GameEndedNettyRequestHandler(
                 god = globalGameData.game.god,
                 visibleOngoingEvents = visibleOngoingEvents,
                 availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
-                visibleItems = inventoryHandler.mapUsersItems(user.items),
+                visibleItems = inventoryHandler.mapUsersItems(user.additionalData.inventory.items),
                 tick = globalGameData.game.currentTick,
                 ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
                     user = user,

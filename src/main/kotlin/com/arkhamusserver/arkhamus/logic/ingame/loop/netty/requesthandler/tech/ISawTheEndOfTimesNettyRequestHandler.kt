@@ -47,7 +47,7 @@ class ISawTheEndOfTimesNettyRequestHandler(
                 otherGameUsers = users,
                 visibleOngoingEvents = visibleOngoingEvents,
                 availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
-                visibleItems = inventoryHandler.mapUsersItems(user.items),
+                visibleItems = inventoryHandler.mapUsersItems(user.additionalData.inventory.items),
                 tick = globalGameData.game.currentTick,
                 ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
                     user = user,

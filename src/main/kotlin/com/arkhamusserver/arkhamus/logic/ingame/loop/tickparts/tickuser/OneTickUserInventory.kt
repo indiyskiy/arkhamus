@@ -21,7 +21,7 @@ class OneTickUserInventory(
         gameTime: Long
     ) {
         Item.values().forEach { item ->
-            val itemsInInventory = user.items.filter { it.item == item }.sumOf { it.number }
+            val itemsInInventory = user.additionalData.inventory.items.filter { it.item == item }.sumOf { it.number }
             if (itemsInInventory > 0) {
                 processItem(user, item, itemsInInventory, timePassedMillis, gameTime, data)
             } else {

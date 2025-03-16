@@ -37,7 +37,7 @@ class GameEndEventProcessor(
         currentGameTime: Long,
         timePassedMillis: Long
     ) {
-        if (globalGameData.users.values.all { it.sawTheEndOfTimes }) {
+        if (globalGameData.users.values.all { it.techData.sawTheEndOfTimes }) {
             logger.info("all users saw the end")
             gameEndLogic.endTheGameCompletely(globalGameData.game)
         }

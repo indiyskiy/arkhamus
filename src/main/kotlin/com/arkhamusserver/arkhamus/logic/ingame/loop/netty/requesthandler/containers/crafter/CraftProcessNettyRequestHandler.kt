@@ -79,7 +79,7 @@ class CraftProcessNettyRequestHandler(
                     inZones = inZones,
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                     availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
-                    visibleItems = inventoryHandler.mapUsersItems(user.items),
+                    visibleItems = inventoryHandler.mapUsersItems(user.additionalData.inventory.items),
                     tick = globalGameData.game.currentTick,
                     ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
                         user,
@@ -108,7 +108,7 @@ class CraftProcessNettyRequestHandler(
                     sortedUserInventory = sortedUserInventory.map { InventoryCell(it) },
                     visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                     availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
-                    visibleItems = inventoryHandler.mapUsersItems(user.items),
+                    visibleItems = inventoryHandler.mapUsersItems(user.additionalData.inventory.items),
                     tick = globalGameData.game.currentTick,
                     ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
                         user,

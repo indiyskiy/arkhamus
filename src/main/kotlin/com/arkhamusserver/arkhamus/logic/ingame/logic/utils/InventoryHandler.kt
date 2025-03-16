@@ -23,11 +23,11 @@ class InventoryHandler {
     }
 
     fun addItems(user: InGameUser, addedItem: Item, itemsToAdd: Int = 1) {
-        val existingCell = user.items.firstOrNull { it.item == addedItem }
+        val existingCell = user.additionalData.inventory.items.firstOrNull { it.item == addedItem }
         if (existingCell != null) {
             existingCell.number += itemsToAdd
         } else {
-            user.items += InventoryCell(
+            user.additionalData.inventory.items += InventoryCell(
                 item = addedItem,
                 number = itemsToAdd
             )
@@ -43,7 +43,7 @@ class InventoryHandler {
     }
 
     fun howManyItems(user: InGameUser, requiredItem: Item): Int {
-        return howManyItems(user.items, requiredItem)
+        return howManyItems(user.additionalData.inventory.items, requiredItem)
     }
 
     fun howManyItems(inventory: List<InventoryCell>, requiredItem: Item): Int {
@@ -53,7 +53,7 @@ class InventoryHandler {
     fun consumeItems(user: InGameUser, item: Item, number: Int): ConsumedItem {
         if (userHaveItem(user, item)) {
             var numberLeft = number
-            user.items
+            user.additionalData.inventory.items
                 .filter { it.item == item }
                 .forEach { cell ->
                     val numberToConsume = min(cell.number, numberLeft)
@@ -103,7 +103,9 @@ class InventoryHandler {
     }
 
     private fun trimInventory(user: InGameUser) {
-        user.items = user.items.filter { it.number > 0 && it.item != Item.PURE_NOTHING }
+        user.additionalData.inventory.items = user.additionalData.inventory.items.filter {
+            it.number > 0 && it.item != Item.PURE_NOTHING
+        }
     }
 
     fun haveRequiredItems(ingredient: Ingredient, crafter: InGameCrafter, user: InGameUser): Boolean {

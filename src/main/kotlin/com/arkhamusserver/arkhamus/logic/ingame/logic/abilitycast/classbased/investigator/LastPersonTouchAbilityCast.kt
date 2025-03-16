@@ -122,8 +122,11 @@ class LastPersonTouchAbilityCast(
                 user = user?.let { userNotNull ->
                     UserActivityView(
                         id = userNotNull.inGameId(),
-                        nickName = userNotNull.nickName,
-                        skin = InGameUserSkinSetting(userNotNull.originalSkin)
+                        nickName = userNotNull.additionalData.originalSkin.nickName,
+                        skin = InGameUserSkinSetting(
+                            userNotNull.additionalData.originalSkin.nickName,
+                            userNotNull.additionalData.originalSkin.skinColor,
+                        )
                     )
                 },
                 currentTime = data.game.globalTimer,

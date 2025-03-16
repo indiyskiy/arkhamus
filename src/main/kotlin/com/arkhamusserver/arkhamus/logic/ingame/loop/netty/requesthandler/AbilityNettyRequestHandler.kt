@@ -143,7 +143,7 @@ class AbilityNettyRequestHandler(
         inZones = inZones,
         visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
         availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
-        visibleItems = inventoryHandler.mapUsersItems(user.items),
+        visibleItems = inventoryHandler.mapUsersItems(user.additionalData.inventory.items),
         ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
             user,
             globalGameData.crafters,
@@ -188,7 +188,7 @@ class AbilityNettyRequestHandler(
             globalGameData.crafters,
             globalGameData.craftProcess
         ),
-        visibleItems = inventoryHandler.mapUsersItems(user.items),
+        visibleItems = inventoryHandler.mapUsersItems(user.additionalData.inventory.items),
         containers = globalGameData.containers.values.toList(),
         crafters = globalGameData.crafters.values.toList(),
         clues = clues,

@@ -156,7 +156,7 @@ class UserVoteHandler(
         user: InGameUser
     ): Boolean = voteSpot != null &&
             callForVoteEventInProgress(ongoingEvents) &&
-            user.callToArms > 0
+            user.additionalData.callToArms > 0
 
     private fun callForVoteEventInProgress(ongoingEvents: List<OngoingEvent>): Boolean = !ongoingEvents.any {
         it.event.type == InGameTimeEventType.CALL_FOR_BAN_VOTE &&

@@ -328,8 +328,8 @@ class DistortionClueHandler(
         }.map {
             SimpleUserAdditionalDataResponse().apply {
                 id = it.inGameId()
-                nickName = it.nickName
-                skin = it.originalSkin
+                nickName = it.additionalData.originalSkin.nickName
+                skin = it.additionalData.originalSkin
                 x = it.x
                 y = it.y
                 z = it.z

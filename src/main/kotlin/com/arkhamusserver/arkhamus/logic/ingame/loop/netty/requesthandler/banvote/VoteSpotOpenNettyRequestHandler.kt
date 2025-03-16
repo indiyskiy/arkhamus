@@ -90,7 +90,7 @@ class VoteSpotOpenNettyRequestHandler(
                 inZones = inZones,
                 visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents),
                 availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData),
-                visibleItems = inventoryHandler.mapUsersItems(user.items),
+                visibleItems = inventoryHandler.mapUsersItems(user.additionalData.inventory.items),
                 ongoingCraftingProcess = crafterProcessHandler.filterAndMap(
                     user,
                     globalGameData.crafters,

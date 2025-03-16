@@ -13,7 +13,7 @@ data class GameUserResponse(
 ) {
     constructor(gameUser: InGameUser) : this(
         id = gameUser.inGameId(),
-        nickName = gameUser.nickName,
+        nickName = gameUser.additionalData.originalSkin.nickName,
         x = gameUser.x,
         y = gameUser.y,
         z = gameUser.z,

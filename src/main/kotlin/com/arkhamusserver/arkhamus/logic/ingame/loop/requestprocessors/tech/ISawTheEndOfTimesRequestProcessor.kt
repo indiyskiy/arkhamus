@@ -26,9 +26,9 @@ class ISawTheEndOfTimesRequestProcessor : NettyRequestProcessor {
         ongoingEvents: List<OngoingEvent>
     ) {
         with(requestDataHolder.requestProcessData as ISawTheEndOfTimesRequestGameData) {
-            if (this.gameEnded && this.gameUser?.sawTheEndOfTimes != true) {
+            if (this.gameEnded && this.gameUser?.techData?.sawTheEndOfTimes != true) {
                 logger.info("set sawTheEndOfTimes true")
-                this.gameUser?.let { it.sawTheEndOfTimes = true }
+                this.gameUser?.let { it.techData.sawTheEndOfTimes = true }
             }
         }
     }

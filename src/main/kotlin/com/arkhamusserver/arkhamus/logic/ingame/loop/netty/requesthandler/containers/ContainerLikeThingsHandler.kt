@@ -26,7 +26,7 @@ class ContainerLikeThingsHandler(
         newInventoryContent: List<InventoryCell>
     ): List<InventoryCell> {
         val oldCrafterItemsList = oldCrafter.items
-        val oldGameUserItemsList = oldGameUser.items
+        val oldGameUserItemsList = oldGameUser.additionalData.inventory.items
 
         val (summarizedItems: MutableMap<Item, Int>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
             oldCrafterItemsList,
@@ -37,7 +37,7 @@ class ContainerLikeThingsHandler(
         oldCrafter.items = summarizedItems
             .filterNot { it.key == Item.PURE_NOTHING || it.value <= 0 }
             .map { InventoryCell(it.key, it.value) }
-        oldGameUser.items = mapSimpleInventory(trueNewInventoryContent)
+        oldGameUser.additionalData.inventory.items = mapSimpleInventory(trueNewInventoryContent)
         return trueNewInventoryContent
     }
 
@@ -48,7 +48,7 @@ class ContainerLikeThingsHandler(
     ): List<InventoryCell> {
         logger.info("items from request = ${newInventoryContent.joinToString { it.item.name + " " + it.number }}")
         val oldContainerItemsList = oldContainer.items
-        val oldGameUserItemsList = oldGameUser.items
+        val oldGameUserItemsList = oldGameUser.additionalData.inventory.items
 
         val (summarizedItems: MutableMap<Item, Int>, trueNewInventoryContent: List<InventoryCell>) = calculateInventory(
             oldContainerItemsList,
@@ -61,8 +61,8 @@ class ContainerLikeThingsHandler(
             .map { InventoryCell(it.key, it.value) }
         logger.info("new container items = ${oldContainer.items.joinToString { it.item.name + " " + it.number }}")
 
-        oldGameUser.items = mapSimpleInventory(trueNewInventoryContent)
-        logger.info("new user items = ${oldGameUser.items.joinToString { it.item.name + " " + it.number }}")
+        oldGameUser.additionalData.inventory.items = mapSimpleInventory(trueNewInventoryContent)
+        logger.info("new user items = ${oldGameUser.additionalData.inventory.items.joinToString { it.item.name + " " + it.number }}")
         return trueNewInventoryContent
     }
 

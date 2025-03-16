@@ -32,7 +32,7 @@ class GameNettyLogic(
     fun markPlayerDisconnected(user: UserOfGameSession) {
         userRepository.findByUserIdAndGameId(user.userAccount.id!!, user.gameSession.id!!).firstOrNull()
             ?.let { inGameUser ->
-                inGameUser.connected = false
+                inGameUser.techData.connected = false
                 userRepository.save(inGameUser)
             }
     }
@@ -41,7 +41,7 @@ class GameNettyLogic(
     fun markPlayerConnected(user: UserOfGameSession) {
         userRepository.findByUserIdAndGameId(user.userAccount.id!!, user.gameSession.id!!).firstOrNull()
             ?.let { inGameUser ->
-                inGameUser.connected = true
+                inGameUser.techData.connected = true
                 userRepository.save(inGameUser)
             }
     }

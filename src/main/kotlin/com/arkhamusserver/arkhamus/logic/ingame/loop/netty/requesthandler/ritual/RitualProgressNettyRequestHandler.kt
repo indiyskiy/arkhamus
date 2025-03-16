@@ -59,7 +59,7 @@ class RitualProgressNettyRequestHandler(
             )
             val visibleOngoingEvents = eventVisibilityFilter.filter(user, ongoingEvents)
             val availableAbilities = canAbilityBeCastHandler.abilityOfUserResponses(user, globalGameData)
-            val visibleItems = inventoryHandler.mapUsersItems(user.items)
+            val visibleItems = inventoryHandler.mapUsersItems(user.additionalData.inventory.items)
             val ongoingCrafterProcess = crafterProcessHandler.filterAndMap(
                 user,
                 globalGameData.crafters,
