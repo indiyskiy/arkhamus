@@ -47,6 +47,7 @@ class QuestGiverOpenNettyResponseMapper(
         globalGameData: GlobalGameData
     ): QuestGiverOpenNettyResponse {
         (requestProcessData as QuestGiverOpenRequestProcessData).let {
+            val inGameUser = it.gameUser!!
             return QuestGiverOpenNettyResponse(
                 questInfo = QuestInfoResponse(
                     userQuest = requestProcessData.userQuestProgress?.let { process ->
@@ -56,7 +57,7 @@ class QuestGiverOpenNettyResponseMapper(
                         )
                     },
                     questDifficulty = requestProcessData.quest?.difficulty,
-                    rewards = rewardUtils.mapRewards(requestProcessData.questRewards),
+                    rewards = rewardUtils.mapRewards(inGameUser, requestProcessData.questRewards),
                     canAccept = requestProcessData.canAccept,
                     canDecline = requestProcessData.canDecline,
                     canFinish = requestProcessData.canFinish,
@@ -64,9 +65,9 @@ class QuestGiverOpenNettyResponseMapper(
                 ),
                 tick = it.tick,
                 userId = user.id!!,
-                myGameUser = MyGameUserResponse(it.gameUser!!, it.userQuest),
+                myGameUser = MyGameUserResponse(inGameUser, it.userQuest),
                 otherGameUsers = otherGameUsersDataHandler.map(
-                    myUser = it.gameUser,
+                    myUser = inGameUser,
                     it.otherGameUsers,
                     globalGameData.levelGeometryData
                 ),
@@ -75,7 +76,7 @@ class QuestGiverOpenNettyResponseMapper(
                 },
                 shortTimeEvents = shortTimeEventToResponseHandler.filterAndMap(
                     globalGameData.shortTimeEvents,
-                    it.gameUser,
+                    inGameUser,
                     it.inZones,
                     globalGameData
                 ),
@@ -83,39 +84,39 @@ class QuestGiverOpenNettyResponseMapper(
                 ongoingCraftingProcess = requestProcessData.ongoingCraftingProcess,
                 userInventory = requestProcessData.visibleItems.mapCellsToResponse(),
                 containers = containersDataHandler.map(
-                    it.gameUser,
+                    inGameUser,
                     it.containers,
                     globalGameData.levelGeometryData
                 ),
                 crafters = craftersDataHandler.map(
-                    it.gameUser,
+                    inGameUser,
                     it.crafters,
                     globalGameData.levelGeometryData
                 ),
                 inZones = requestProcessData.inZones,
                 clues = requestProcessData.clues,
                 doors = doorDataHandler.map(
-                    it.gameUser,
+                    inGameUser,
                     globalGameData.doors,
                     globalGameData.levelGeometryData
                 ),
                 lanterns = lanternDataHandler.map(
-                    it.gameUser,
+                    inGameUser,
                     globalGameData.lanterns,
                     globalGameData.levelGeometryData
                 ),
                 questGivers = questProgressHandler.mapQuestGivers(
                     it.userQuest,
-                    it.gameUser,
+                    inGameUser,
                     globalGameData
                 ),
                 questSteps = questProgressHandler.mapSteps(
                     it.userQuest,
-                    it.gameUser,
+                    inGameUser,
                     globalGameData,
                 ),
                 easyVoteSpots = voteSpotInfoMapper.mapEasy(
-                    it.gameUser,
+                    inGameUser,
                     globalGameData.voteSpots,
                     globalGameData.levelGeometryData
                 ),

@@ -52,6 +52,7 @@ class ThrowPotatoAbilityCast(
         globalGameData: GlobalGameData
     ) {
         if (targetUser.stateTags.contains(UserStateTag.INVULNERABILITY)) return
+        if(!inventoryHandler.itemCanBeAdded(targetUser, Item.CURSED_POTATO)) return
         inventoryHandler.addItem(targetUser, Item.CURSED_POTATO)
         rememberItemChangesForResponses(globalGameData, targetUser)
     }

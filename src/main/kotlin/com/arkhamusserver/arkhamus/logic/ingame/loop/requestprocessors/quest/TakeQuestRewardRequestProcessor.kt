@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.quest
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestProgressHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest.QuestRewardUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Component
 @Component
 class TakeQuestRewardRequestProcessor(
     private val questProgressHandler: QuestProgressHandler,
-    private val questRewardUtils: QuestRewardUtils
+    private val questRewardUtils: QuestRewardUtils,
+    private val inventoryHandler: InventoryHandler,
 ) : NettyRequestProcessor {
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is TakeQuestRewardRequestProcessData
@@ -31,6 +33,10 @@ class TakeQuestRewardRequestProcessor(
             val user = takeQuestRewardRequestProcessData.gameUser
             val questGiverGivesReward = takeQuestRewardRequestProcessData.questGiverGivesReward
             if (reward != null && quest != null && user != null && questGiverGivesReward != null) {
+                if (!inventoryHandler.itemCanBeAdded(
+                        user, reward.rewardItem
+                    )
+                ) return
                 questRewardUtils.takeReward(user, reward, globalGameData, questGiverGivesReward)
                 questProgressHandler.finishQuest(
                     globalGameData,

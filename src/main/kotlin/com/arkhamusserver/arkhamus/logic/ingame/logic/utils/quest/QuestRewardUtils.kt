@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameQuestRewardRepository
+import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.ADD_CLUE
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType.ITEM
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
@@ -33,14 +34,29 @@ class QuestRewardUtils(
         private val random = Random(System.currentTimeMillis())
     }
 
-    fun mapRewards(questRewards: List<InGameQuestReward>): List<QuestRewardResponse> {
+    fun mapRewards(
+        user: InGameUser,
+        questRewards: List<InGameQuestReward>
+    ): List<QuestRewardResponse> {
         return questRewards.map {
             QuestRewardResponse(
                 rewardId = it.id,
                 rewardType = it.rewardType,
                 rewardItem = it.rewardItem?.id,
                 rewardAmount = it.rewardAmount,
+                canTake = canTakeReward(it.rewardItem, it.rewardType, user)
             )
+        }
+    }
+
+    private fun canTakeReward(
+        item: Item?,
+        type: RewardType,
+        user: InGameUser
+    ): Boolean {
+        return when (type) {
+            ITEM -> inventoryHandler.itemCanBeAdded(user, item)
+            ADD_CLUE -> true
         }
     }
 
@@ -195,7 +211,6 @@ class QuestRewardUtils(
                     takeItems(reward, user)
                 }
             }
-
             ADD_CLUE -> {
                 if (!tags.contains(InGameObjectTag.DARK_THOUGHTS)) {
                     clueHandler.addRandomClue(globalGameData, user, true)
@@ -211,7 +226,8 @@ class QuestRewardUtils(
         reward: InGameQuestReward,
         user: InGameUser
     ) {
-        if (reward.rewardItem != null) {
+        val item = reward.rewardItem
+        if (item != null && inventoryHandler.itemCanBeAdded(user, item)) {
             inventoryHandler.addItems(user, reward.rewardItem!!, reward.rewardAmount)
         }
     }
@@ -220,10 +236,14 @@ class QuestRewardUtils(
         reward: InGameQuestReward,
         user: InGameUser
     ) {
+        val item = Item.values().filter {
+            it.itemType == ItemType.CULTIST_LOOT
+        }.random(random)
+
+        if (!inventoryHandler.itemCanBeAdded(user, item)) return
         inventoryHandler.addItems(
-            user, Item.values().filter {
-                it.itemType == ItemType.CULTIST_LOOT
-            }.random(random),
+            user,
+            item,
             reward.rewardAmount
         )
     }

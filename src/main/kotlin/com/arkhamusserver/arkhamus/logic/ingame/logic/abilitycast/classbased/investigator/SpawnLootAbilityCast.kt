@@ -63,6 +63,7 @@ class SpawnLootAbilityCast(
         val randomItem = Item.values()
             .filter { item -> item.itemType == ItemType.LOOT }
             .random(random)
+        if(!inventoryHandler.itemCanBeAdded(currentUserNotNull, randomItem)) return
         inventoryHandler.addItem(currentUserNotNull, randomItem)
         rememberItemChangesForResponses(globalGameData, currentUserNotNull, randomItem)
     }

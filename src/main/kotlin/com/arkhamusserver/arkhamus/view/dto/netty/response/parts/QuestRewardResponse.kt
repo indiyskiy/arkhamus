@@ -6,5 +6,6 @@ data class QuestRewardResponse(
     var rewardId: String,
     var rewardType: RewardType,
     var rewardAmount: Int = 0,
-    var rewardItem: Int?
+    var rewardItem: Int?,
+    var canTake: Boolean,
 )

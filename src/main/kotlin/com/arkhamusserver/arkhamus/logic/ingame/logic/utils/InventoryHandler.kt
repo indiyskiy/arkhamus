@@ -18,6 +18,17 @@ class InventoryHandler {
         var logger: Logger = LoggerFactory.getLogger(InventoryHandler::class.java)
     }
 
+    fun itemCanBeAdded(user: InGameUser, addedItem: Item?): Boolean {
+        if(addedItem == null) return false
+        trimInventory(user)
+        val existingCell = user.additionalData.inventory.items.firstOrNull { it.item == addedItem }
+        return if (existingCell != null) {
+            true
+        } else {
+            (user.additionalData.inventory.items.size < user.additionalData.inventory.maxItems)
+        }
+    }
+
     fun addItem(user: InGameUser, addedItem: Item) {
         addItems(user, addedItem)
     }
@@ -86,6 +97,10 @@ class InventoryHandler {
         }
     }
 
+    fun haveRequiredItems(ingredient: Ingredient, crafter: InGameCrafter, user: InGameUser): Boolean {
+        return howManyItems(user, ingredient.item) + howManyItems(crafter, ingredient.item) >= ingredient.number
+    }
+
     private fun consumeItem(ingredient: Ingredient, user: InGameUser, crafter: InGameCrafter): ConsumedItem {
         logger.info("consuming ${ingredient.number} of ${ingredient.item.name}")
         val itemToConsume = ingredient.item
@@ -106,10 +121,10 @@ class InventoryHandler {
         user.additionalData.inventory.items = user.additionalData.inventory.items.filter {
             it.number > 0 && it.item != Item.PURE_NOTHING
         }
-    }
-
-    fun haveRequiredItems(ingredient: Ingredient, crafter: InGameCrafter, user: InGameUser): Boolean {
-        return howManyItems(user, ingredient.item) + howManyItems(crafter, ingredient.item) >= ingredient.number
+        val grouped = user.additionalData.inventory.items.groupBy { it.item }.map { (item, cells) ->
+            InventoryCell(item, cells.sumOf { it.number })
+        }
+        user.additionalData.inventory.items = grouped.sortedByDescending { it.item.id }
     }
 
     private fun howManyItems(
