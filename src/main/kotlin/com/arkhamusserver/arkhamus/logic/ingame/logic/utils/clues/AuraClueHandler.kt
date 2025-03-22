@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.VisibilityByTagsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -14,10 +13,8 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Ellipse
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Tetragon
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.AuraClue
-import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
-import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.ClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
@@ -25,9 +22,6 @@ import com.arkhamusserver.arkhamus.model.ingame.clues.InGameAuraClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.parts.AuraCluePoint
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.AdditionalClueDataResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.AuraClueAdditionalDataResponse
-import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.SimpleCoordinates
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.cos
@@ -40,10 +34,10 @@ class AuraClueHandler(
     private val auraClueRepository: AuraClueRepository,
     private val inGameAuraClueRepository: InGameAuraClueRepository,
     private val userLocationHandler: UserLocationHandler,
-    private val visibilityByTagsHandler: VisibilityByTagsHandler,
     private val ellipseRepository: EllipseRepository,
     private val tetragonRepository: TetragonRepository,
-    private val geometryUtils: GeometryUtils
+    private val geometryUtils: GeometryUtils,
+    private val auraClueResponseHandler: AuraClueResponseHandler
 ) : AdvancedClueHandler {
 
     companion object {
@@ -166,26 +160,7 @@ class AuraClueHandler(
         user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
-        return container.aura.filter {
-            it.turnedOn == true
-        }.filter {
-            userLocationHandler.userCanSeeTarget(user, it, data.levelGeometryData, true)
-        }.filter {
-            visibilityByTagsHandler.userCanSeeTarget(user, Clue.AURA)
-        }.map {
-            val percentage = countPercentage(user, it.targetPoint)
-            ExtendedClueResponse(
-                id = it.id,
-                clue = Clue.AURA,
-                relatedObjectId = it.inGameId(),
-                relatedObjectType = GameObjectType.AURA_CLUE,
-                x = null,
-                y = null,
-                z = null,
-                state = ClueState.ACTIVE_CLUE,
-                additionalData = countActualAdditionalData(it, percentage),
-            )
-        }
+        return auraClueResponseHandler.mapActualClues(container, user, data)
     }
 
     override fun mapPossibleClues(
@@ -193,132 +168,7 @@ class AuraClueHandler(
         user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
-        val auraOptions = container.aura
-        val filteredByVisibilityTags = auraOptions.filter {
-            visibilityByTagsHandler.userCanSeeTarget(user, it)
-        }
-        return filteredByVisibilityTags.map {
-            val percentage = countPercentage(user, it.targetPoint)
-            val state = countState(it, user, percentage)
-            ExtendedClueResponse(
-                id = it.id,
-                clue = Clue.AURA,
-                relatedObjectId = it.inGameId(),
-                relatedObjectType = GameObjectType.AURA_CLUE,
-                x = null,
-                y = null,
-                z = null,
-                state = state,
-                additionalData = countAdditionalData(it, user, percentage, state),
-            )
-        }
-    }
-
-    private fun countAdditionalData(
-        clue: InGameAuraClue,
-        user: InGameUser,
-        percentage: Int,
-        state: ClueState
-    ): AuraClueAdditionalDataResponse? {
-        val visible = clue.castedAbilityUsers.contains(user.inGameId())
-        val seeActualState = state in setOf(ClueState.ACTIVE_CLUE, ClueState.ACTIVE_NO_CLUE)
-        return if (visible) {
-            AuraClueAdditionalDataResponse(
-                distancePercentage = percentage,
-                pointReached = percentage == 100,
-                outOfRadius = percentage == -100,
-                targetPoint = if (seeActualState) {
-                    SimpleCoordinates(
-                        x = clue.targetPoint.x,
-                        y = clue.targetPoint.y,
-                        z = clue.targetPoint.z
-                    )
-                } else null
-            )
-        } else null
-    }
-
-    private fun countActualAdditionalData(
-        clue: InGameAuraClue,
-        percentage: Int,
-    ): AdditionalClueDataResponse? {
-        return if (percentage == -100) {
-            AuraClueAdditionalDataResponse(
-                distancePercentage = -100,
-                pointReached = false,
-                outOfRadius = true,
-                targetPoint = SimpleCoordinates(
-                    x = clue.targetPoint.x,
-                    y = clue.targetPoint.y,
-                    z = clue.targetPoint.z
-                )
-            )
-        } else {
-            AuraClueAdditionalDataResponse(
-                distancePercentage = 100,
-                pointReached = true,
-                outOfRadius = false,
-                targetPoint = SimpleCoordinates(
-                    x = clue.targetPoint.x,
-                    y = clue.targetPoint.y,
-                    z = clue.targetPoint.z
-                )
-            )
-        }
-    }
-
-    fun countPercentage(user: InGameUser, auraCluePoint: AuraCluePoint): Int {
-        // Calculate the current distance between the user and the circle's center
-        val currentDistance = geometryUtils.distance(user, auraCluePoint)
-
-        val denominator = 2 * auraCluePoint.startDistance - auraCluePoint.interactionRadius
-        if (denominator == 0.0) {
-            logger.warn("Potential division by zero detected: 2 * startDistance equals circle.radius!")
-            return if (currentDistance >= auraCluePoint.interactionRadius) -100 else 100 // Safeguard result
-        }
-        return when {
-            // User is inside or on the circle's boundary
-            currentDistance <= auraCluePoint.interactionRadius -> {
-                100
-            }
-            // User is at start distance
-            currentDistance == auraCluePoint.startDistance -> {
-                0
-            }
-            // User is at twice the starting distance or farther
-            currentDistance >= 2 * auraCluePoint.startDistance -> {
-                -100
-            }
-            // For distances between startDistance and 2 * startDistance
-            else -> {
-                // Linearly interpolate the percentage value
-                percentage(currentDistance, auraCluePoint, denominator).toInt()
-            }
-        }
-    }
-
-    private fun percentage(
-        currentDistance: Double,
-        auraCluePoint: AuraCluePoint,
-        denominator: Double
-    ): Double =
-        100 - ((currentDistance - auraCluePoint.interactionRadius) / denominator * 200)
-
-
-    private fun countState(
-        clue: InGameAuraClue,
-        user: InGameUser,
-        percentage: Int
-    ): ClueState {
-        return if (clue.castedAbilityUsers.contains(user.inGameId()) && percentage == 100) {
-            if (clue.turnedOn) {
-                ClueState.ACTIVE_CLUE
-            } else {
-                ClueState.ACTIVE_NO_CLUE
-            }
-        } else {
-            ClueState.ACTIVE_UNKNOWN
-        }
+       return auraClueResponseHandler.mapPossibleClues(container, user)
     }
 
     private fun generateRandomPoint(clue: AuraClue): AuraCluePoint {
@@ -403,6 +253,5 @@ class AuraClueHandler(
         )
         logger.warn("generating random point no meter what")
         return generateRandomPoint(clue)
-//        throw IllegalStateException("Unable to generate a valid AuraCluePoint after $maxAttempts attempts.")
     }
 }
