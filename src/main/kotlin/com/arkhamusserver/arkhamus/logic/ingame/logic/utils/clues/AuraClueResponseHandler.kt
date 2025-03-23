@@ -24,6 +24,7 @@ class AuraClueResponseHandler(
     private val geometryUtils: GeometryUtils,
 ) {
     companion object {
+        private const val SHADOW_RANGE_RADIUS = 1.5 //m
         private val logger = LoggerFactory.getLogger(AuraClueResponseHandler::class.java)
     }
 
@@ -140,11 +141,11 @@ class AuraClueResponseHandler(
     private fun countPercentage(user: InGameUser, auraCluePoint: AuraCluePoint): Pair<AuraDistanceType, Int> {
         // Calculate the current distance between the user and the circle's center
         val currentDistance = geometryUtils.distance(user, auraCluePoint)
-
-        val denominator = 2 * auraCluePoint.startDistance - auraCluePoint.interactionRadius
+        logger.info("distance {}, radius {}", currentDistance, SHADOW_RANGE_RADIUS)
+        val denominator = 2 * auraCluePoint.startDistance - SHADOW_RANGE_RADIUS
         if (denominator == 0.0) {
             logger.warn("Potential division by zero detected: 2 * startDistance equals circle.radius!")
-            return if (currentDistance >= auraCluePoint.interactionRadius) {
+            return if (currentDistance >= SHADOW_RANGE_RADIUS) {
                 AuraDistanceType.OUT_OF_RANGE to -100
             } else {
                 AuraDistanceType.ON_POINT to 100
@@ -152,27 +153,30 @@ class AuraClueResponseHandler(
         }
         return when {
             // User is inside or on the circle's boundary
-            currentDistance <= auraCluePoint.interactionRadius -> {
+            currentDistance <= SHADOW_RANGE_RADIUS -> {
+                logger.info("User is inside or on the circle's boundary, 100")
                 AuraDistanceType.ON_POINT to 100
             }
             // User is at twice the starting distance or farther
             currentDistance >= 2 * auraCluePoint.startDistance -> {
+                logger.info("User is at twice the starting distance or farther, -100")
                 AuraDistanceType.OUT_OF_RANGE to -100
             }
             // For distances between startDistance and 2 * startDistance
             else -> {
                 // Linearly interpolate the percentage value
-                AuraDistanceType.IN_RANGE to percentage(currentDistance, auraCluePoint, denominator).toInt()
+                val percentage = percentage(currentDistance, denominator).toInt()
+                logger.info("Linearly interpolate the percentage value, {}", percentage)
+                AuraDistanceType.IN_RANGE to percentage
             }
         }
     }
 
     private fun percentage(
         currentDistance: Double,
-        auraCluePoint: AuraCluePoint,
         denominator: Double
     ): Double =
-        100 - ((currentDistance - auraCluePoint.interactionRadius) / denominator * 200)
+        100 - ((currentDistance - SHADOW_RANGE_RADIUS) / denominator * 200)
 
     private fun mapSimpleCoordinate(point: AuraCluePoint): SimpleCoordinates? {
         return SimpleCoordinates(
