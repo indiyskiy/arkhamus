@@ -70,7 +70,7 @@ class ShortTimeEventHandler(
             Visibility.NONE -> false
             Visibility.TARGET -> user.inGameId() == event.objectId && event.type.getSource() == GameObjectType.CHARACTER
             Visibility.PUBLIC -> true
-            Visibility.SOURCE, Visibility.SOURCE_AND_TARGET -> {
+            Visibility.SOURCE, Visibility.SOURCE_OR_TARGET -> {
                 event.sourceId == user.inGameId()
             }
         }

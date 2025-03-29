@@ -5,5 +5,5 @@ enum class Visibility {
     PUBLIC,
     SOURCE,
     TARGET,
-    SOURCE_AND_TARGET
+    SOURCE_OR_TARGET
 }

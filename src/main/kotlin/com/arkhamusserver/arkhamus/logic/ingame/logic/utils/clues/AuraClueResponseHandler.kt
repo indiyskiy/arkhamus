@@ -24,7 +24,7 @@ class AuraClueResponseHandler(
     private val geometryUtils: GeometryUtils,
 ) {
     companion object {
-        private const val SHADOW_RANGE_RADIUS = 1.5 //m
+        private const val SHADOW_RANGE_RADIUS = 2.5 //m
         private val logger = LoggerFactory.getLogger(AuraClueResponseHandler::class.java)
     }
 

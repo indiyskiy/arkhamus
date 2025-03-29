@@ -1222,18 +1222,18 @@
         "id": 902,
         "interactionRadius": 3.5,
         "name": "CRAFTER_NAME_03",
-        "x": 23.5,
+        "x": 29.0,
         "y": 0.0,
-        "z": 22.0
+        "z": 93.0
       },
       {
         "crafterType": "CULTIST",
         "id": 903,
         "interactionRadius": 3.5,
         "name": "CRAFTER_NAME_04",
-        "x": 12.0,
+        "x": 46.0,
         "y": 0.0,
-        "z": 35.0
+        "z": 8.0
       },
       {
         "crafterType": "CULTIST",
@@ -1293,14 +1293,14 @@
         "id": 1703,
         "x": 80.0,
         "y": 2.0,
-        "z": 33.0,
+        "z": 33.5,
         "zoneId": 1401
       },
       {
         "id": 1704,
         "x": 90.0,
         "y": 0.0,
-        "z": 54.5,
+        "z": 55.0,
         "zoneId": 1401
       },
       {
@@ -1413,9 +1413,9 @@
         "interactionRadius": 3.5,
         "lightRange": 6.0,
         "name": "Lantern",
-        "x": 88.0,
+        "x": 69.0,
         "y": 0.0,
-        "z": 90.0
+        "z": 84.0
       },
       {
         "id": 1102,

@@ -14,7 +14,7 @@ class EventVisibilityFilter {
                 NONE -> false
                 SOURCE -> isSource(it, user)
                 TARGET -> isTarget(it, user)
-                SOURCE_AND_TARGET -> isSource(it, user) || isTarget(it, user)
+                SOURCE_OR_TARGET -> isSource(it, user) || isTarget(it, user)
             }
         }
 
