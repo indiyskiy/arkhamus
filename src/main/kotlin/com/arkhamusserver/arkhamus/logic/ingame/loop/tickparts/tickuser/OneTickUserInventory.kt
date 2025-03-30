@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.tickuser
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.OneTickUser.Companion.POTATO_MADNESS_TICK_MILLIS
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameUserStatus
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
@@ -183,6 +184,7 @@ class OneTickUserInventory(
             user,
             POTATO_MADNESS_TICK_MILLIS * numberOfItems * timePassedMillis,
             gameTime,
+            InGameUserStatus.CURSED_POTATO,
             globalGameData
         )
     }

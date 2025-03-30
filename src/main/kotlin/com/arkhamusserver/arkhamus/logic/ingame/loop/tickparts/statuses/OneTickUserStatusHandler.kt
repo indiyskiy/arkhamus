@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.statuses
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserStatusHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameUserStatusHolderRepository
 import com.arkhamusserver.arkhamus.model.ingame.InGameUserStatusHolder
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component
 class OneTickUserStatusHandler(
     private val inGameUserStatusHolderRepository: InGameUserStatusHolderRepository,
     private val oneTickUserStatusHandlerParts: List<OneTickUserStatusHandlerPart>,
+    private val userStatusHandler: UserStatusHandler
 ) {
     fun nullifyOldStatuses(data: GlobalGameData) {
         data.userStatuses.forEach {
@@ -18,11 +19,11 @@ class OneTickUserStatusHandler(
     }
 
     fun updateStatuses(data: GlobalGameData) {
-        val updatedStatuses: List<InGameUserStatusHolder> = oneTickUserStatusHandlerParts.flatMap { handler ->
+        val newStatuses: List<InGameUserStatusHolder> = oneTickUserStatusHandlerParts.flatMap { handler ->
             updateStatusesOneHandler(handler, data)
         }
         cleanStatuses(data)
-        data.userStatuses = updatedStatuses
+        data.userStatuses += newStatuses
     }
 
     private fun updateStatusesOneHandler(
@@ -30,7 +31,7 @@ class OneTickUserStatusHandler(
         data: GlobalGameData
     ): List<InGameUserStatusHolder> {
         val simpleStatuses = part.updateStatuses(data)
-        val newStatuses = simpleStatuses.map { simpleStatus ->
+        val newStatuses = simpleStatuses.mapNotNull { simpleStatus ->
             updateOrCreateUserStatus(data, simpleStatus)
         }
         return newStatuses
@@ -39,15 +40,16 @@ class OneTickUserStatusHandler(
     private fun updateOrCreateUserStatus(
         data: GlobalGameData,
         simpleStatus: SimpleStatus
-    ): InGameUserStatusHolder {
+    ): InGameUserStatusHolder? {
         val oldSameStatus = data.userStatuses.firstOrNull {
             it.userId == simpleStatus.userId &&
                     it.status == simpleStatus.inGameStatus
         }
         return if (oldSameStatus != null) {
             updateOldStatus(oldSameStatus)
+            null
         } else {
-            createNewStatus(data, simpleStatus)
+            userStatusHandler.createNewStatus(data, simpleStatus)
         }
     }
 
@@ -55,22 +57,6 @@ class OneTickUserStatusHandler(
         oldSameStatus.prolongation = true
         inGameUserStatusHolderRepository.save(oldSameStatus)
         return oldSameStatus
-    }
-
-    private fun createNewStatus(
-        data: GlobalGameData,
-        status: SimpleStatus
-    ): InGameUserStatusHolder {
-        val inGameUserStatusHolder = InGameUserStatusHolder(
-            id = generateRandomId(),
-            gameId = data.game.inGameId(),
-            userId = status.userId,
-            status = status.inGameStatus,
-            prolongation = true,
-            started = data.game.globalTimer,
-        )
-        inGameUserStatusHolderRepository.save(inGameUserStatusHolder)
-        return inGameUserStatusHolder
     }
 
     private fun cleanStatuses(data: GlobalGameData) {

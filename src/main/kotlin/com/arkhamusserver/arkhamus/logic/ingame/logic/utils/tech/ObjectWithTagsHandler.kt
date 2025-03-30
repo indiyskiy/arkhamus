@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameUserStatus
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
@@ -45,7 +46,13 @@ class ObjectWithTagsHandler(
         tag: InGameObjectTag,
         data: GlobalGameData
     ) {
-        madnessHandler.tryApplyMadness(user, PEEKABOO_CURSE_ITEM_VALUE, data.game.globalTimer, data)
+        madnessHandler.tryApplyMadness(
+            user,
+            PEEKABOO_CURSE_ITEM_VALUE,
+            data.game.globalTimer,
+            InGameUserStatus.PEEKABOO_CURSE,
+            data,
+        )
         inGameTagsHandler.removeTag(withGameTags, tag)
         createShortTimeEvent(withGameTags, data, user)
     }

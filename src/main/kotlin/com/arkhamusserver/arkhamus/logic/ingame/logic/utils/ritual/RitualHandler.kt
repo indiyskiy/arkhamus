@@ -231,7 +231,8 @@ class RitualHandler(
                     user,
                     madnessApply,
                     data.game.globalTimer,
-                    data,
+                    InGameUserStatus.RITUAL_KICK,
+                    data
                 )
                 teleportHandler.forceTeleport(data.game, user, it)
                 user.stateTags -= IN_RITUAL

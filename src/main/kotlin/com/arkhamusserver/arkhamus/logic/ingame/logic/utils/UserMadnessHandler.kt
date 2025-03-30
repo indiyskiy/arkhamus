@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
+import com.arkhamusserver.arkhamus.model.enums.ingame.InGameUserStatus
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuff
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
@@ -14,7 +15,8 @@ import kotlin.random.Random
 
 @Component
 class UserMadnessHandler(
-    private val activityHandler: ActivityHandler
+    private val activityHandler: ActivityHandler,
+    private val userStatusHandler: UserStatusHandler
 ) {
     companion object {
         val logger: Logger = LoggerFactory.getLogger(UserMadnessHandler::class.java)
@@ -28,35 +30,46 @@ class UserMadnessHandler(
         gameTime: Long,
         globalGameData: GlobalGameData
     ) {
-        tryApplyMadness(gameUser, NIGHT_MADNESS_TICK_IN_MILLIS * timePassedMillis, gameTime, globalGameData)
+        tryApplyMadness(
+            gameUser,
+            NIGHT_MADNESS_TICK_IN_MILLIS * timePassedMillis,
+            gameTime,
+            InGameUserStatus.NIGHT_MADNESS,
+            globalGameData
+        )
     }
 
     fun tryApplyMadness(
         gameUser: InGameUser,
         madness: Double,
         gameTime: Long,
+        source: InGameUserStatus,
         globalGameData: GlobalGameData
     ) {
-        if(gameUser.stateTags.contains(UserStateTag.MADNESS_LINK_SOURCE)){
-            val realTarget = globalGameData.users.values.firstOrNull{
+        if (gameUser.stateTags.contains(UserStateTag.MADNESS_LINK_SOURCE)) {
+            val realTarget = globalGameData.users.values.firstOrNull {
                 it.stateTags.contains(UserStateTag.MADNESS_LINK_TARGET)
-            }?:gameUser
-            realApplyMadness(realTarget, madness, gameTime)
+            } ?: gameUser
+            realApplyMadness(realTarget, madness, gameTime, InGameUserStatus.MADNESS_LINK, globalGameData)
             return
         }
-        realApplyMadness(gameUser, madness, gameTime)
+        realApplyMadness(gameUser, madness, gameTime, source, globalGameData)
     }
 
     private fun realApplyMadness(
         gameUser: InGameUser,
         madness: Double,
-        gameTime: Long
+        gameTime: Long,
+        source: InGameUserStatus,
+        globalGameData: GlobalGameData
     ) {
         val before = gameUser.additionalData.madness.madness
-        val modifier = if (gameUser.additionalData.madness.madnessDebuffs.contains(MadnessDebuff.PSYCHIC_UNSTABLE)) 1.5 else 1.0
+        val modifier =
+            if (gameUser.additionalData.madness.madnessDebuffs.contains(MadnessDebuff.PSYCHIC_UNSTABLE)) 1.5 else 1.0
         gameUser.additionalData.madness.madness += (madness * modifier)
         val after = gameUser.additionalData.madness.madness
         applyMadnessDebuffMaybe(gameUser, before, after, gameTime)
+        userStatusHandler.forceAddStatus(gameUser, source, globalGameData)
     }
 
     private fun applyMadnessDebuffMaybe(
