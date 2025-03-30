@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.InGameTagsHandl
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuestGiver
@@ -24,9 +23,7 @@ class DarkTemptationAbilityProcessor(
     }
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {
-        return castAbility.abilityId.toAbility()?.let { ability ->
-            ability == Ability.DARK_TEMPTATION
-        } == true
+        return castAbility.ability == Ability.DARK_TEMPTATION
     }
 
     override fun processActive(

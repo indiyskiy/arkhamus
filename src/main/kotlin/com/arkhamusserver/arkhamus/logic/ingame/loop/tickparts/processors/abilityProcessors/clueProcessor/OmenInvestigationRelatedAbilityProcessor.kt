@@ -4,7 +4,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameOmenClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,9 +19,7 @@ class OmenInvestigationRelatedAbilityProcessor(
     }
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {
-        return castAbility.abilityId.toAbility()?.let { ability ->
-            ability == Ability.SEARCH_FOR_OMEN
-        } == true
+        return castAbility.ability == Ability.SEARCH_FOR_OMEN
     }
 
     override fun processActive(

@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameInscriptionClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -22,9 +21,7 @@ class InscriptionInvestigationRelatedAbilityProcessor(
     }
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {
-        return castAbility.abilityId.toAbility()?.let { ability ->
-            ability == Ability.SEARCH_FOR_INSCRIPTION
-        } == true
+        return castAbility.ability == Ability.SEARCH_FOR_INSCRIPTION
     }
 
     override fun processActive(

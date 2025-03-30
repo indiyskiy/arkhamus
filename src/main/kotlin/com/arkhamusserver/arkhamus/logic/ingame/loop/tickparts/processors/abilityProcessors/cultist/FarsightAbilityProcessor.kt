@@ -3,13 +3,11 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abili
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-import kotlin.collections.get
 
 @Component
 class FarsightAbilityProcessor : ActiveAbilityProcessor {
@@ -19,9 +17,7 @@ class FarsightAbilityProcessor : ActiveAbilityProcessor {
     }
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {
-        return castAbility.abilityId.toAbility()?.let { ability ->
-            ability == Ability.FARSIGHT
-        } == true
+        return castAbility.ability == Ability.FARSIGHT
     }
 
     override fun processActive(

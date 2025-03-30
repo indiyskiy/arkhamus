@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abili
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
 import org.slf4j.Logger
@@ -17,9 +16,7 @@ class PretendCultistAbilityProcessor() : ActiveAbilityProcessor {
     }
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {
-        return castAbility.abilityId.toAbility()?.let { ability ->
-            ability == Ability.PRETEND_CULTIST
-        } == true
+        return castAbility.ability == Ability.PRETEND_CULTIST
     }
 
     override fun processActive(

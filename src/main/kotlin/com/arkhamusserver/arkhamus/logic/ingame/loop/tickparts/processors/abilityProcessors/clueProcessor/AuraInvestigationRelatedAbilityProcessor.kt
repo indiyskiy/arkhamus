@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abili
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
-import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameDistortionClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameAuraClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
 import org.slf4j.Logger
@@ -10,36 +10,36 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class DistortionInvestigationRelatedAbilityProcessor(
-    private val inGameDistortionClueRepository: InGameDistortionClueRepository
+class AuraInvestigationRelatedAbilityProcessor(
+    private val inGameAuraClueRepository: InGameAuraClueRepository
 ) : ActiveAbilityProcessor {
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(DistortionInvestigationRelatedAbilityProcessor::class.java)
+        val logger: Logger = LoggerFactory.getLogger(AuraInvestigationRelatedAbilityProcessor::class.java)
     }
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {
-        return castAbility.ability == Ability.SEARCH_FOR_DISTORTION
+        return castAbility.ability == Ability.SEARCH_FOR_AURA
     }
 
     override fun processActive(
         castAbility: InGameAbilityCast,
         globalGameData: GlobalGameData
     ) {
-        val distortion = globalGameData.clues.distortion.first { it.stringId() == castAbility.targetId }
+        val aura = globalGameData.clues.aura.first { it.stringId() == castAbility.targetId }
         val user = globalGameData.users[castAbility.sourceUserId]
         user?.let {
-            distortion.castedAbilityUsers += user.inGameId()
-            inGameDistortionClueRepository.save(distortion)
+            aura.castedAbilityUsers += user.inGameId()
+            inGameAuraClueRepository.save(aura)
         }
     }
 
     override fun finishActive(castAbility: InGameAbilityCast, globalGameData: GlobalGameData) {
-        val distortion = globalGameData.clues.distortion.first { it.stringId() == castAbility.targetId }
+        val aura = globalGameData.clues.aura.first { it.stringId() == castAbility.targetId }
         val user = globalGameData.users[castAbility.sourceUserId]
         user?.let {
-            distortion.castedAbilityUsers -= user.inGameId()
-            inGameDistortionClueRepository.save(distortion)
+            aura.castedAbilityUsers -= user.inGameId()
+            inGameAuraClueRepository.save(aura)
         }
     }
 }

@@ -26,7 +26,7 @@ class CreateCastAbilityEventHandler(
         val abilityCast = InGameAbilityCast(
             id = generateRandomId(),
             gameId = gameId,
-            abilityId = ability.id,
+            ability = ability,
             sourceUserId = sourceUserId,
             targetId = targetId,
             targetType = targetType,

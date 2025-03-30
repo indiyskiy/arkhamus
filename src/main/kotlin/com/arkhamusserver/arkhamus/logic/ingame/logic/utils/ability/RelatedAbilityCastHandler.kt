@@ -13,10 +13,10 @@ class RelatedAbilityCastHandler {
         castAbilities: List<InGameAbilityCast>,
     ) =
         if (ability.globalCooldown) {
-            castAbilities.firstOrNull { it.abilityId == ability.id && it.timeLeftCooldown > 0 }
+            castAbilities.firstOrNull { it.ability == ability && it.timeLeftCooldown > 0 }
         } else {
             castAbilities.firstOrNull {
-                it.abilityId == ability.id &&
+                it.ability == ability &&
                         it.sourceUserId == user.inGameId() &&
                         it.timeLeftCooldown > 0
             }

@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameDoorRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.toAbility
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
@@ -25,9 +24,7 @@ class LockDoorAbilityProcessor(
     }
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {
-        return castAbility.abilityId.toAbility()?.let { ability ->
-            ability == Ability.LOCK_DOOR
-        } == true
+        return castAbility.ability == Ability.LOCK_DOOR
     }
 
     override fun processActive(
