@@ -180,9 +180,9 @@ class AuraClueResponseHandler(
 
     private fun mapSimpleCoordinate(point: AuraCluePoint): SimpleCoordinates? {
         return SimpleCoordinates(
-            point.x,
-            point.y,
-            point.z
+            x = point.x,
+            y = point.y,
+            z = point.z
         )
     }
 

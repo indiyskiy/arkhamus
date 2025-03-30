@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils.WithHeight
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -168,7 +169,7 @@ class AuraClueHandler(
         user: InGameUser,
         data: GlobalGameData,
     ): List<ExtendedClueResponse> {
-       return auraClueResponseHandler.mapPossibleClues(container, user)
+        return auraClueResponseHandler.mapPossibleClues(container, user)
     }
 
     private fun generateRandomPoint(clue: AuraClue): AuraCluePoint {
@@ -200,12 +201,20 @@ class AuraClueHandler(
         tetragons: List<GeometryUtils.Tetragon>,
         ellipses: List<GeometryUtils.Ellipse>,
         point: AuraCluePoint
-    ): Boolean {
-        return tetragons.any { it ->
-            geometryUtils.contains(it, point)
-        } || ellipses.any {
+    ): WithHeight? {
+        val relatedTetragon = tetragons.firstOrNull {
             geometryUtils.contains(it, point)
         }
+        if (relatedTetragon != null) {
+            return relatedTetragon
+        }
+        val relatedEllipse = ellipses.firstOrNull {
+            geometryUtils.contains(it, point)
+        }
+        if (relatedEllipse != null) {
+            return relatedTetragon
+        }
+        return null
     }
 
     private fun generatePoint(
@@ -226,6 +235,7 @@ class AuraClueHandler(
                 p1 = GeometryUtils.Point(it.point1X, it.point1Z),
                 p2 = GeometryUtils.Point(it.point2X, it.point2Z),
                 p3 = GeometryUtils.Point(it.point3X, it.point3Z),
+                height = it.point0Y
             )
         }
         val filteredEllipses = ellipses.filter { ellipse ->
@@ -234,7 +244,8 @@ class AuraClueHandler(
             GeometryUtils.Ellipse(
                 center = GeometryUtils.Point(it.x, it.y),
                 rz = it.height / 2,
-                rx = it.width / 2
+                rx = it.width / 2,
+                height = it.y
             )
         }
         logger.info("creating AURA CLUE point in ${filteredEllipses.size} ellipses and ${filteredTetragons.size} tetragons")
@@ -242,7 +253,9 @@ class AuraClueHandler(
         val maxAttempts = 1000
         repeat(maxAttempts) {
             val point = generateRandomPoint(clue)
-            if (isPointInZone(filteredTetragons, filteredEllipses, point)) {
+            val relatedGeometry = isPointInZone(filteredTetragons, filteredEllipses, point)
+            if (relatedGeometry != null) {
+                point.y = relatedGeometry.height
                 logger.info("Generated a valid AuraCluePoint: {}", point)
                 return point
             }

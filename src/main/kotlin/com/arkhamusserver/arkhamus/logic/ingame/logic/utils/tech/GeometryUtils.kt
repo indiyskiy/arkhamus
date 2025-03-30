@@ -83,7 +83,20 @@ class GeometryUtils {
 
     data class Point(var x: Double, var y: Double)
 
-    class Tetragon(val p0: Point, val p1: Point, val p2: Point, val p3: Point)
+    class Tetragon(
+        val p0: Point,
+        val p1: Point,
+        val p2: Point,
+        val p3: Point,
+        override val height: Double = 0.0
+    ): WithHeight
 
-    class Ellipse(val center: Point, val rz: Double, val rx: Double)
+    class Ellipse(
+        val center: Point,
+        val rz: Double,
+        val rx: Double,
+        override val height: Double = 0.0
+    ): WithHeight
+
+    interface WithHeight { val height: Double }
 }

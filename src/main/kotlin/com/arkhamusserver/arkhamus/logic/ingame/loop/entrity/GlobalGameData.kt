@@ -75,6 +75,7 @@ data class GlobalGameData(
                 p1 = GeometryUtils.Point(tetragon.point1X, tetragon.point1Z),
                 p2 = GeometryUtils.Point(tetragon.point2X, tetragon.point2Z),
                 p3 = GeometryUtils.Point(tetragon.point3X, tetragon.point3Z),
+                height = tetragon.point0Y
             )
         }
     }
@@ -86,7 +87,8 @@ data class GlobalGameData(
             GeometryUtils.Ellipse(
                 center = GeometryUtils.Point(ellipse.pointX, ellipse.pointZ),
                 rz = ellipse.height / 2,
-                rx = ellipse.width / 2
+                rx = ellipse.width / 2,
+                height = ellipse.pointY
             )
         }
     }

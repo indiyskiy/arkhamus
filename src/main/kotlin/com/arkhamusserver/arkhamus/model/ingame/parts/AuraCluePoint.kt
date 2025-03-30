@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithVisibilityModifie
 data class AuraCluePoint(
     val id: String,
     val x: Double,
-    val y: Double,
+    var y: Double,
     val z: Double,
     val interactionRadius: Double,
     val visibilityModifiers: Set<VisibilityModifier>,
