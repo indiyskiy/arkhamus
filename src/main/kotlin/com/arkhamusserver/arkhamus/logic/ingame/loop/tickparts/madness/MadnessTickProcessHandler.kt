@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ShortTimeEventH
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
-import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
+import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuff
 import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
@@ -37,40 +37,39 @@ class MadnessTickProcessHandler(
         data: GlobalGameData,
         timePassedMillis: Long
     ) {
-        val madnessDebuffs =
-            user.additionalData.madness.madnessDebuffs.map { MadnessDebuffs.valueOf(it) }
+        val madnessDebuffs = user.additionalData.madness.madnessDebuffs
         var madnessEffectFinal = false
         madnessDebuffs.forEach { debuff ->
             val madnessEffect: Boolean = when (debuff) {
-                MadnessDebuffs.BLIND -> {
+                MadnessDebuff.BLIND -> {
                     false
                 }
 
-                MadnessDebuffs.PSYCHIC_UNSTABLE -> {
+                MadnessDebuff.PSYCHIC_UNSTABLE -> {
                     false
                 }
 
-                MadnessDebuffs.CURSED_AURA -> {
+                MadnessDebuff.CURSED_AURA -> {
                     curseSomethingMaybe(user, data, timePassedMillis)
                 }
 
-                MadnessDebuffs.MAGIC_ADDICTED -> {
+                MadnessDebuff.MAGIC_ADDICTED -> {
                     castRandomSpellMaybe(user, data, timePassedMillis)
                 }
 
-                MadnessDebuffs.CRAFT_ADDICTED -> {
+                MadnessDebuff.CRAFT_ADDICTED -> {
                     craftSomethingMaybe(user, data, timePassedMillis)
                 }
 
-                MadnessDebuffs.BAN_ADDICTED -> {
+                MadnessDebuff.BAN_ADDICTED -> {
                     voteForSomeone(user, data)
                 }
 
-                MadnessDebuffs.LIGHT_ADDICTED -> {
+                MadnessDebuff.LIGHT_ADDICTED -> {
                     lightSomething(user, data, timePassedMillis)
                 }
 
-                MadnessDebuffs.UNSTABLE_POSITION -> {
+                MadnessDebuff.UNSTABLE_POSITION -> {
                     teleportMaybe(user, data, timePassedMillis)
                     false
                 }
@@ -80,7 +79,7 @@ class MadnessTickProcessHandler(
 //                    false
 //                }
 
-                MadnessDebuffs.PROPHET -> {
+                MadnessDebuff.PROPHET -> {
                     pushGodAwaken(data, timePassedMillis)
                     false
                 }

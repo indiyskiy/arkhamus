@@ -35,6 +35,7 @@ class OpenCrafterNettyResponseMapper(
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
     private val questProgressHandler: QuestProgressHandler,
+    private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
 
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
@@ -185,5 +186,6 @@ class OpenCrafterNettyResponseMapper(
             globalGameData.voteSpots,
             globalGameData.levelGeometryData
         ),
+        statuses = userStatusMapper.mapStatuses(gameUser, globalGameData),
     )
 }

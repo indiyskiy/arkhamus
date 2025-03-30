@@ -29,5 +29,6 @@ class NettyGameStartedResponse(
     easyVoteSpots = emptyList(),
     questGivers = emptyList(),
     questSteps = emptyList(),
+    statuses = emptyList(),
     type = NettyGameStartedResponse::class.java.simpleName
 )

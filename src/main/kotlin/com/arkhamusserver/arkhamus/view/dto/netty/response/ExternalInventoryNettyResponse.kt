@@ -29,6 +29,7 @@ abstract class ExternalInventoryNettyResponse(
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>,
+    statuses: List<UserStatusResponse>,
     type: String
 ) : NettyResponse(
     tick = tick,
@@ -49,5 +50,6 @@ abstract class ExternalInventoryNettyResponse(
     easyVoteSpots = easyVoteSpots,
     questGivers = questGivers,
     questSteps = questSteps,
+    statuses = statuses,
     type = type
 )

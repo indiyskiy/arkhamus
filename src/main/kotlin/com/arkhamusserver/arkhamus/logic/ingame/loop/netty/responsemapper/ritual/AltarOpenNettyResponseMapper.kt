@@ -31,6 +31,7 @@ class AltarOpenNettyResponseMapper(
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
     private val questProgressHandler: QuestProgressHandler,
+    private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == AltarOpenRequestProcessData::class.java
@@ -111,6 +112,7 @@ class AltarOpenNettyResponseMapper(
                     globalGameData.voteSpots,
                     globalGameData.levelGeometryData
                 ),
+                statuses = userStatusMapper.mapStatuses(it.gameUser, globalGameData),
             )
         }
     }

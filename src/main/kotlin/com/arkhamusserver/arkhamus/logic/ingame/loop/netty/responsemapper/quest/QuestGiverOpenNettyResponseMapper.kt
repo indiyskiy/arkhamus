@@ -30,7 +30,8 @@ class QuestGiverOpenNettyResponseMapper(
     private val shortTimeEventToResponseHandler: ShortTimeEventToResponseHandler,
     private val doorDataHandler: DoorDataHandler,
     private val lanternDataHandler: LanternDataHandler,
-    private val voteSpotInfoMapper: VoteSpotInfoMapper
+    private val voteSpotInfoMapper: VoteSpotInfoMapper,
+    private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == QuestGiverOpenRequestProcessData::class.java
@@ -120,6 +121,7 @@ class QuestGiverOpenNettyResponseMapper(
                     globalGameData.voteSpots,
                     globalGameData.levelGeometryData
                 ),
+                statuses = userStatusMapper.mapStatuses(it.gameUser, globalGameData),
             )
         }
     }

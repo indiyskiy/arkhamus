@@ -2,13 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.*
-import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameAuraClueRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameCorruptionClueRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameDistortionClueRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameInscriptionClueRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameOmenClueRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameScentClueRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameSoundClueRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.*
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.InRamGameRepository
 import com.arkhamusserver.arkhamus.model.ingame.*
 import org.springframework.stereotype.Service
@@ -38,6 +32,7 @@ class InGameDataAccessImpl(
     private val inGameQuestRepository: InGameQuestRepository,
     private val inGameQuestGiverRepository: InGameQuestGiverRepository,
     private val inGameUserQuestProgressRepository: InGameUserQuestProgressRepository,
+    private val inGameUserStatusHolderRepository: InGameUserStatusHolderRepository,
     private val inGameQuestRewardRepository: InGameQuestRewardRepository,
     private val inGameScentClueRepository: InGameScentClueRepository,
     private val inGameAuraClueRepository: InGameAuraClueRepository,
@@ -115,7 +110,7 @@ class InGameDataAccessImpl(
         val corruption = inGameCorruptionClueRepository.findByGameId(gameId)
         val distortion = inGameDistortionClueRepository.findByGameId(gameId)
         val inscription = inGameInscriptionClueRepository.findByGameId(gameId)
-        return CluesContainer(aura, scent, sound, omen, corruption, distortion, inscription )
+        return CluesContainer(aura, scent, sound, omen, corruption, distortion, inscription)
     }
 
     override fun getQuests(gameId: Long): List<InGameQuest> {
@@ -130,8 +125,12 @@ class InGameDataAccessImpl(
         return inGameQuestRewardRepository.findByGameId(gameId)
     }
 
-    override fun getUserQuestProrgesses(gameId: Long): List<InGameUserQuestProgress> {
+    override fun getUserQuestProgresses(gameId: Long): List<InGameUserQuestProgress> {
         return inGameUserQuestProgressRepository.findByGameId(gameId)
+    }
+
+    override fun getUserStatusHolders(gameId: Long): List<InGameUserStatusHolder> {
+        return inGameUserStatusHolderRepository.findByGameId(gameId)
     }
 
     override fun getEllipses(gameId: Long): List<InGameLevelZoneEllipse> {

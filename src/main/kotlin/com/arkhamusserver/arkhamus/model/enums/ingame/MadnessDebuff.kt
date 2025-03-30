@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame
 
-enum class MadnessDebuffs(private val stepNumber: Int) {
+enum class MadnessDebuff(private val stepNumber: Int) {
     //0
     //fake clues
     //fake players

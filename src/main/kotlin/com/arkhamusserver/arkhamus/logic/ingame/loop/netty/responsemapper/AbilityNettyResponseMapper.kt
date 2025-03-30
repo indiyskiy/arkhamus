@@ -26,7 +26,8 @@ class AbilityNettyResponseMapper(
     private val doorDataHandler: DoorDataHandler,
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
-    private val questProgressHandler: QuestProgressHandler
+    private val questProgressHandler: QuestProgressHandler,
+    private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == AbilityRequestProcessData::class.java
@@ -104,6 +105,7 @@ class AbilityNettyResponseMapper(
                     it.gameUser,
                     globalGameData,
                 ),
+                statuses = userStatusMapper.mapStatuses(it.gameUser, globalGameData),
             )
         }
     }

@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
-import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuffs
+import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuff
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.slf4j.Logger
@@ -53,7 +53,7 @@ class UserMadnessHandler(
         gameTime: Long
     ) {
         val before = gameUser.additionalData.madness.madness
-        val modifier = if (gameUser.additionalData.madness.madnessDebuffs.contains(MadnessDebuffs.PSYCHIC_UNSTABLE.name)) 1.5 else 1.0
+        val modifier = if (gameUser.additionalData.madness.madnessDebuffs.contains(MadnessDebuff.PSYCHIC_UNSTABLE)) 1.5 else 1.0
         gameUser.additionalData.madness.madness += (madness * modifier)
         val after = gameUser.additionalData.madness.madness
         applyMadnessDebuffMaybe(gameUser, before, after, gameTime)
@@ -77,8 +77,8 @@ class UserMadnessHandler(
         gameUser: InGameUser,
         gameTime: Long
     ) {
-        val debuff = MadnessDebuffs.values().filter { it.getStepNumber() == notchIndex }
-            .random(random).name
+        val debuff = MadnessDebuff.values().filter { it.getStepNumber() == notchIndex }
+            .random(random)
         gameUser.additionalData.madness.madnessDebuffs += debuff
         activityHandler.addUserNotTargetActivity(
             gameId = gameUser.gameId,

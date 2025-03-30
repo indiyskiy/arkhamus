@@ -28,6 +28,7 @@ class CallForBanVoteNettyResponseMapper(
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
     private val questProgressHandler: QuestProgressHandler,
+    private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == CallForBanVoteRequestProcessData::class.java
@@ -102,6 +103,7 @@ class CallForBanVoteNettyResponseMapper(
                     it.gameUser,
                     globalGameData,
                 ),
+                statuses = userStatusMapper.mapStatuses(it.gameUser, globalGameData),
                 successfullyCalled = requestProcessData.successfullyCalled
             )
         }

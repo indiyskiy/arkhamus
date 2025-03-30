@@ -32,5 +32,6 @@ class NettyResponseAuth(
     easyVoteSpots = emptyList(),
     questGivers = emptyList(),
     questSteps = emptyList(),
+    statuses = emptyList(),
     type = NettyResponseAuth::class.java.simpleName
 )

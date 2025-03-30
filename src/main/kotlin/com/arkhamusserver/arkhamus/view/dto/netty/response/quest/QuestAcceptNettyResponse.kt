@@ -27,7 +27,8 @@ class QuestAcceptNettyResponse(
     lanterns: List<LanternData>,
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
-    easyVoteSpots: List<EasyVoteSpotResponse>
+    easyVoteSpots: List<EasyVoteSpotResponse>,
+    statuses: List<UserStatusResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -47,5 +48,6 @@ class QuestAcceptNettyResponse(
     easyVoteSpots = easyVoteSpots,
     questGivers = questGivers,
     questSteps = questSteps,
+    statuses = statuses,
     type = QuestAcceptNettyResponse::class.java.simpleName,
 )

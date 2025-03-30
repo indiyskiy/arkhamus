@@ -9,8 +9,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Reque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.VoteSpotOpenRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.banvote.VoteSpotOpenNettyResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
@@ -29,6 +29,7 @@ class VoteSpotOpenNettyResponseMapper(
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
     private val questProgressHandler: QuestProgressHandler,
+    private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == VoteSpotOpenRequestProcessData::class.java
@@ -114,7 +115,8 @@ class VoteSpotOpenNettyResponseMapper(
                     it.gameUser,
                     globalGameData.lanterns,
                     globalGameData.levelGeometryData
-                )
+                ),
+                statuses = userStatusMapper.mapStatuses(it.gameUser, globalGameData),
             )
         }
     }

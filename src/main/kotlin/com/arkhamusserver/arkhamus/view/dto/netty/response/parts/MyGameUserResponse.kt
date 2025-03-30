@@ -21,7 +21,7 @@ data class MyGameUserResponse(
         nickName = gameUser.additionalData.originalSkin.nickName,
         madness = gameUser.additionalData.madness.madness,
         madnessNotches = gameUser.additionalData.madness.madnessNotches,
-        madnessDebuffs = gameUser.additionalData.madness.madnessDebuffs,
+        madnessDebuffs = gameUser.additionalData.madness.madnessDebuffs.map { it.name }.toSet(),
         x = gameUser.x,
         y = gameUser.y,
         z = gameUser.z,

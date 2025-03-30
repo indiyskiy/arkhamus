@@ -30,7 +30,8 @@ interface InGameDataAccess {
     fun getQuests(gameId: Long): List<InGameQuest>
     fun getQuestGivers(gameId: Long): List<InGameQuestGiver>
     fun getQuestRewards(gameId: Long): List<InGameQuestReward>
-    fun getUserQuestProrgesses(gameId: Long): List<InGameUserQuestProgress>
+    fun getUserQuestProgresses(gameId: Long): List<InGameUserQuestProgress>
+    fun getUserStatusHolders(gameId: Long): List<InGameUserStatusHolder>
     fun getVisibilityMap(gameId: Long): InGameVisibilityMap?
 }
 
@@ -65,7 +66,8 @@ fun InGameDataAccess.loadGlobalGameData(game: InRamGame): GlobalGameData {
     val allQuests = getQuests(gameId)
     val allQuestGivers = getQuestGivers(gameId)
     val allQuestRewards = getQuestRewards(gameId)
-    val allUsersQuestProgresses = getUserQuestProrgesses(gameId)
+    val allUsersQuestProgresses = getUserQuestProgresses(gameId)
+    val userStatuses = getUserStatusHolders(gameId)
 
     val visibilityMap = getVisibilityMap(gameId)
 
@@ -88,6 +90,7 @@ fun InGameDataAccess.loadGlobalGameData(game: InRamGame): GlobalGameData {
         this.levelGeometryData = buildGeometryData(zones, tetragons, ellipses, visibilityMap!!)
         this.quests = allQuests
         this.questGivers = allQuestGivers
+        this.userStatuses = userStatuses
         this.questRewardsByQuestProgressId = allQuestRewards.groupBy { it.questProgressId }
         this.questProgressByUserId = allUsersQuestProgresses.groupBy { it.userId }
         this.voteSpots = allVoteSpots

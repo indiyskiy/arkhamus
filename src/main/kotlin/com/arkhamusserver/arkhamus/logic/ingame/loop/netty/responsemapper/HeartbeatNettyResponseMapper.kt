@@ -26,7 +26,8 @@ class HeartbeatNettyResponseMapper(
     private val doorDataHandler: DoorDataHandler,
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
-    private val questProgressHandler: QuestProgressHandler
+    private val questProgressHandler: QuestProgressHandler,
+    private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == HeartbeatRequestGameData::class.java
@@ -100,7 +101,8 @@ class HeartbeatNettyResponseMapper(
                     it.gameUser,
                     globalGameData,
                 ),
-                clues = it.clues
+                clues = it.clues,
+                statuses = userStatusMapper.mapStatuses(it.gameUser, globalGameData),
             )
         }
     }

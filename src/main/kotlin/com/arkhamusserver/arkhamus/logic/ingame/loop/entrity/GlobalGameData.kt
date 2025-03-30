@@ -37,6 +37,7 @@ data class GlobalGameData(
     var questRewardsByQuestProgressId: Map<String, List<InGameQuestReward>> = emptyMap(),
     var questProgressByUserId: Map<Long, List<InGameUserQuestProgress>> = emptyMap(),
     var questGivers: List<InGameQuestGiver> = emptyList(),
+    var userStatuses: List<InGameUserStatusHolder> = emptyList(),
 
     var voteSpots: List<InGameVoteSpot> = emptyList(),
     var userVoteSpotsBySpotId: Map<Long, List<InGameUserVoteSpot>> = emptyMap(),

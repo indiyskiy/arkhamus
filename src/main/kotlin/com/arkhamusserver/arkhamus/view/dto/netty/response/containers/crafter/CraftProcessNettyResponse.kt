@@ -34,7 +34,8 @@ class CraftProcessNettyResponse(
     lanterns: List<LanternData>,
     easyVoteSpots: List<EasyVoteSpotResponse>,
     questGivers: List<QuestGiverResponse>,
-    questSteps: List<QuestStepResponse>
+    questSteps: List<QuestStepResponse>,
+    statuses: List<UserStatusResponse>
 ) : ExternalInventoryNettyResponse(
     sortedUserInventory = sortedUserInventory,
     itemsInside = itemsInside,
@@ -58,6 +59,7 @@ class CraftProcessNettyResponse(
     easyVoteSpots = easyVoteSpots,
     questGivers = questGivers,
     questSteps = questSteps,
+    statuses = statuses,
     type = CraftProcessNettyResponse::class.java.simpleName
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

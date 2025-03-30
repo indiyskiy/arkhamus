@@ -28,7 +28,8 @@ class RitualLeaveNettyResponse(
     lanterns: List<LanternData>,
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
-    easyVoteSpots: List<EasyVoteSpotResponse>
+    easyVoteSpots: List<EasyVoteSpotResponse>,
+    statuses: List<UserStatusResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -48,5 +49,6 @@ class RitualLeaveNettyResponse(
     easyVoteSpots = easyVoteSpots,
     questGivers = questGivers,
     questSteps = questSteps,
+    statuses = statuses,
     type = RitualLeaveNettyResponse::class.java.simpleName,
 )

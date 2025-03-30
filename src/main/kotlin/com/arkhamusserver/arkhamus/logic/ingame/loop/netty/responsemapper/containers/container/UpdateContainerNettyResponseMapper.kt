@@ -36,7 +36,8 @@ class UpdateContainerNettyResponseMapper(
     private val doorDataHandler: DoorDataHandler,
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
-    private val questProgressHandler: QuestProgressHandler
+    private val questProgressHandler: QuestProgressHandler,
+    private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == UpdateContainerRequestGameData::class.java
@@ -162,6 +163,7 @@ class UpdateContainerNettyResponseMapper(
             gameUser,
             globalGameData,
         ),
+        statuses = userStatusMapper.mapStatuses(gameUser, globalGameData),
     )
 
     private fun List<InventoryCell>.applyInBetween(

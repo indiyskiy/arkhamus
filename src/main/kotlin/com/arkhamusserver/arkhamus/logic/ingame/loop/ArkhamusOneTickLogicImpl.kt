@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.InGameDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.loadGlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.*
+import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.statuses.OneTickUserStatusHandler
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import org.slf4j.LoggerFactory
@@ -25,6 +26,7 @@ class ArkhamusOneTickLogicImpl(
     private val onTickCraftProcess: OnTickCraftProcess,
     private val afterLoopSaving: AfterLoopSavingComponent,
     private val oneTickTryEndGameMaybeHandler: OneTickTryEndGameMaybeHandler,
+    private val oneTickUserStatusHandler: OneTickUserStatusHandler,
     private val activityHandler: ActivityHandler
 ) : ArkhamusOneTickLogic {
 
@@ -38,60 +40,50 @@ class ArkhamusOneTickLogicImpl(
         game: InRamGame,
     ): List<NettyResponse> {
         try {
-//            logger.info("loadGlobalGameData")
             val globalGameData = inGameDataAccess.loadGlobalGameData(game)
-//            logger.info("updateNextTick")
+            oneTickUserStatusHandler.nullifyOldStatuses(globalGameData)
             val timePassedMillis = oneTickTick.updateNextTick(game)
-//            logger.info("processTimeEvents")
             val ongoingEvents = oneTickTimeEvent.processTimeEvents(
                 globalGameData,
                 globalGameData.timeEvents,
                 game.globalTimer,
                 timePassedMillis
             )
-//            logger.info("processShortTimeEvents")
             oneTickShortTimeEvent.processShortTimeEvents(globalGameData.shortTimeEvents, timePassedMillis)
-//            logger.info("applyAbilityCasts")
             onTickAbilityCast.applyAbilityCasts(
                 globalGameData,
                 globalGameData.castAbilities,
                 timePassedMillis
             )
-//            logger.info("applyCraftProcess")
             onTickCraftProcess.applyCraftProcess(
                 globalGameData,
                 globalGameData.craftProcess,
                 timePassedMillis
             )
-//            logger.info("tickLanterns")
             oneTickLantern.tickLanterns(
                 globalGameData,
                 timePassedMillis
             )
-//            logger.info("processRequests")
             val processedRequests = oneTickUserRequests.processRequests(
                 currentTasks,
                 globalGameData,
                 ongoingEvents,
             )
-//            logger.info("processUsers")
             oneTickUser.processUsers(globalGameData, timePassedMillis)
             if (game.currentTick - game.lastTickSaveHeartbeatActivity > SAVE_ACTIVITY_TICK_DELTA) {
-//                logger.info("saveHeartbeatForUsers")
                 activityHandler.saveHeartbeatForUsers(globalGameData)
                 game.lastTickSaveHeartbeatActivity = game.currentTick
             }
-//            logger.info("buildResponses")
-            val responses =
-                oneTickUserResponses.buildResponses(
-                    globalGameData,
-                    processedRequests,
-                )
+            oneTickUserStatusHandler.updateStatuses(globalGameData)
+            val responses = oneTickUserResponses.buildResponses(
+                globalGameData,
+                processedRequests,
+            )
             if (responses.isNotEmpty()) {
                 game.lastTimeSentResponse = game.globalTimer
             }
-//            logger.info("checkIfEnd")
             oneTickTryEndGameMaybeHandler.checkIfEnd(game, globalGameData.users.values, globalGameData.voteSpots)
+
             game.serverTimeLastTick = game.serverTimeCurrentTick
             afterLoopSaving.saveAll(globalGameData, game)
 

@@ -25,7 +25,8 @@ class AbilityNettyResponse(
     clues: ExtendedCluesResponse,
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
-    easyVoteSpots: List<EasyVoteSpotResponse>
+    easyVoteSpots: List<EasyVoteSpotResponse>,
+    statuses: List<UserStatusResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -45,7 +46,8 @@ class AbilityNettyResponse(
     easyVoteSpots = easyVoteSpots,
     questGivers = questGivers,
     questSteps = questSteps,
-    type = AbilityNettyResponse::class.java.simpleName
+    type = AbilityNettyResponse::class.java.simpleName,
+    statuses = statuses,
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =
         executedSuccessfully

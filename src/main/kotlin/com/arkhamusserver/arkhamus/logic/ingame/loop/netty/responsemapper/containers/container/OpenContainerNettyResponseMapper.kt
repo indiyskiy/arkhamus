@@ -36,7 +36,8 @@ class OpenContainerNettyResponseMapper(
     private val doorDataHandler: DoorDataHandler,
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
-    private val questProgressHandler: QuestProgressHandler
+    private val questProgressHandler: QuestProgressHandler,
+    private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
 
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
@@ -181,6 +182,7 @@ class OpenContainerNettyResponseMapper(
             globalGameData.voteSpots,
             globalGameData.levelGeometryData
         ),
+        statuses = userStatusMapper.mapStatuses(gameUser, globalGameData),
     )
 
 }

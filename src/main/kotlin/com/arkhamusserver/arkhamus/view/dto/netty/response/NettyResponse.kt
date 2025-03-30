@@ -23,6 +23,7 @@ abstract class NettyResponse(
     var clues: ExtendedCluesResponse,
     var questGivers: List<QuestGiverResponse>,
     var questSteps: List<QuestStepResponse>,
+    val statuses: List<UserStatusResponse>,
     val type: String
 )
 

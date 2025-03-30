@@ -33,6 +33,7 @@ class CraftProcessNettyResponseMapper(
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
     private val questProgressHandler: QuestProgressHandler,
+    private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == CraftProcessRequestProcessData::class.java
@@ -123,6 +124,7 @@ class CraftProcessNettyResponseMapper(
                     it.gameUser,
                     globalGameData,
                 ),
+                statuses = userStatusMapper.mapStatuses(it.gameUser, globalGameData),
             )
         }
     }

@@ -110,7 +110,7 @@ class MockInGameDataAccess : InGameDataAccess {
         TODO("Not yet implemented")
     }
 
-    override fun getUserQuestProrgesses(gameId: Long): List<InGameUserQuestProgress> {
+    override fun getUserQuestProgresses(gameId: Long): List<InGameUserQuestProgress> {
         TODO("Not yet implemented")
     }
 
