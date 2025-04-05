@@ -49,8 +49,8 @@ class MadnessLinkAbilityCast() : AbilityCast {
         currentUser: InGameUser?
     ) {
         currentUser?.let {
-            it.stateTags + UserStateTag.MADNESS_LINK_SOURCE
+            it.stateTags += UserStateTag.MADNESS_LINK_SOURCE
         }
-        targetUser.stateTags + UserStateTag.MADNESS_LINK_TARGET
+        targetUser.stateTags += UserStateTag.MADNESS_LINK_TARGET
     }
 }

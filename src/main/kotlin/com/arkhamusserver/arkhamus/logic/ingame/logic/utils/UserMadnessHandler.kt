@@ -24,21 +24,6 @@ class UserMadnessHandler(
         private val random = Random(System.currentTimeMillis())
     }
 
-    fun applyNightMadness(
-        gameUser: InGameUser,
-        timePassedMillis: Long,
-        gameTime: Long,
-        globalGameData: GlobalGameData
-    ) {
-        tryApplyMadness(
-            gameUser,
-            NIGHT_MADNESS_TICK_IN_MILLIS * timePassedMillis,
-            gameTime,
-            InGameUserStatus.NIGHT_MADNESS,
-            globalGameData
-        )
-    }
-
     fun tryApplyMadness(
         gameUser: InGameUser,
         madness: Double,
@@ -54,6 +39,35 @@ class UserMadnessHandler(
             return
         }
         realApplyMadness(gameUser, madness, gameTime, source, globalGameData)
+    }
+
+    fun applyNightMadness(
+        gameUser: InGameUser,
+        timePassedMillis: Long,
+        gameTime: Long,
+        globalGameData: GlobalGameData
+    ) {
+        tryApplyMadness(
+            gameUser,
+            NIGHT_MADNESS_TICK_IN_MILLIS * timePassedMillis,
+            gameTime,
+            InGameUserStatus.NIGHT_MADNESS,
+            globalGameData
+        )
+    }
+
+    fun filterNotMad(gameUsers: Collection<InGameUser>): List<InGameUser> =
+        gameUsers.filterNot { isCompletelyMad(it) }
+
+    fun isCompletelyMad(gameUser: InGameUser): Boolean =
+        gameUser.additionalData.madness.madness >= gameUser.additionalData.madness.madnessNotches.max()
+
+    fun reduceMadness(user: InGameUser, reduceValue: Double) {
+        val notch = currentMinNotch(user)
+        notch?.let {
+            val afterReduced = max(user.additionalData.madness.madness - reduceValue, notch)
+            user.additionalData.madness.madness = afterReduced
+        }
     }
 
     private fun realApplyMadness(
@@ -100,20 +114,6 @@ class UserMadnessHandler(
             gameTime = gameTime,
             relatedEventId = notchIndex.toLong()
         )
-    }
-
-    fun filterNotMad(gameUsers: Collection<InGameUser>): List<InGameUser> =
-        gameUsers.filterNot { isCompletelyMad(it) }
-
-    fun isCompletelyMad(gameUser: InGameUser): Boolean =
-        gameUser.additionalData.madness.madness >= gameUser.additionalData.madness.madnessNotches.max()
-
-    fun reduceMadness(user: InGameUser, reduceValue: Double) {
-        val notch = currentMinNotch(user)
-        notch?.let {
-            val afterReduced = max(user.additionalData.madness.madness - reduceValue, notch)
-            user.additionalData.madness.madness = afterReduced
-        }
     }
 
     private fun currentMinNotch(user: InGameUser): Double? {
