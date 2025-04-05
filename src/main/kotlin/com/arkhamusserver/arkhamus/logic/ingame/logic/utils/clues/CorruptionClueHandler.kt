@@ -46,7 +46,7 @@ class CorruptionClueHandler(
         return clue == Clue.CORRUPTION
     }
 
-    override fun accept(target: WithStringId): Boolean {
+    override fun acceptForRemoveAbility(target: WithStringId): Boolean {
         return target is InGameCorruptionClue
     }
 

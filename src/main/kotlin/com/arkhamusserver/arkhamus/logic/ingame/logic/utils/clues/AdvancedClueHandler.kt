@@ -32,7 +32,7 @@ interface AdvancedClueHandler {
 
     fun accept(clues: List<Clue>): Boolean
     fun accept(clue: Clue): Boolean
-    fun accept(target: WithStringId): Boolean
+    fun acceptForRemoveAbility(target: WithStringId): Boolean
     fun canBeAdded(container: CluesContainer): Boolean
     fun addClue(data: GlobalGameData)
     fun canBeRemovedRandomly(container: CluesContainer): Boolean

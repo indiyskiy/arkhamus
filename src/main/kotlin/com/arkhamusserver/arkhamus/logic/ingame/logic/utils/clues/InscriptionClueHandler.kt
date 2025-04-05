@@ -51,8 +51,8 @@ class InscriptionClueHandler(
         return clue == Clue.INSCRIPTION
     }
 
-    override fun accept(target: WithStringId): Boolean {
-        return target is InGameInscriptionClue
+    override fun acceptForRemoveAbility(target: WithStringId): Boolean {
+        return target is InGameInscriptionClueGlyph
     }
 
     override fun canBeAdded(container: CluesContainer): Boolean {

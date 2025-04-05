@@ -42,7 +42,7 @@ class ScentClueHandler(
         return clue == Clue.SCENT
     }
 
-    override fun accept(target: WithStringId): Boolean {
+    override fun acceptForRemoveAbility(target: WithStringId): Boolean {
         return target is InGameScentClue
     }
 

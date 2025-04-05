@@ -86,12 +86,12 @@ class ClueHandler(
         }?.removeRandom(existingClues)
     }
 
-    fun removeClue(
+    fun removeClueByAbility(
         data: GlobalGameData,
         target: WithStringId
     ) {
         advancedClueHandlers.firstOrNull {
-            it.accept(target)
+            it.acceptForRemoveAbility(target)
         }?.removeTarget(target, data)
     }
 
@@ -102,7 +102,7 @@ class ClueHandler(
     ): Boolean {
         return advancedClueHandlers.any {
             it is WithStringId &&
-                    it.accept(target as WithStringId) &&
+                    it.acceptForRemoveAbility(target as WithStringId) &&
                     it.canBeRemovedByAbility(user, target, data)
         }
     }

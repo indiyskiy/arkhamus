@@ -43,7 +43,7 @@ class OmenClueHandler(
         return clue == Clue.OMEN
     }
 
-    override fun accept(target: WithStringId): Boolean {
+    override fun acceptForRemoveAbility(target: WithStringId): Boolean {
         return target is InGameOmenClue
     }
 

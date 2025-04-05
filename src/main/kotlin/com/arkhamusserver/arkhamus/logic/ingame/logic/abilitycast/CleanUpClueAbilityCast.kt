@@ -45,7 +45,7 @@ class CleanUpClueAbilityCast(
         data: GlobalGameData,
         target: WithStringId
     ) {
-        clueHandler.removeClue(
+        clueHandler.removeClueByAbility(
             data,
             target
         )

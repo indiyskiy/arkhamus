@@ -56,7 +56,7 @@ class AuraClueHandler(
         return clue == Clue.AURA
     }
 
-    override fun accept(target: WithStringId): Boolean {
+    override fun acceptForRemoveAbility(target: WithStringId): Boolean {
         return target is InGameAuraClue
     }
 
