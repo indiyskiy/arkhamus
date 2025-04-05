@@ -12,4 +12,6 @@ data class GameSessionDto(
     var usersInGame: List<InGameUserDto>? = emptyList(),
     var gameSessionSettings: GameSessionSettingsDto? = null,
     var token: String? = null
-)
+) {
+    constructor() : this(null, null, null, null, emptyList(), null, null)
+}

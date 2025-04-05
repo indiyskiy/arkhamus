@@ -7,7 +7,6 @@ import com.arkhamusserver.arkhamus.utils.EnvironmentSetupUtil
 import com.arkhamusserver.arkhamus.utils.FakeUserSetupUtil
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.GRAF_D
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.INDIYSKIY
-import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.Q_CHAN
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.SITHOID
 import com.arkhamusserver.arkhamus.view.controller.GameController
 import com.arkhamusserver.arkhamus.view.controller.UserController
@@ -114,13 +113,13 @@ class GameControllerIT {
         fakeUserSetupUtil.fakeUser(SITHOID)
         gameController.connect(gameSession.id!!)
 
-        fakeUserSetupUtil.fakeUser(Q_CHAN)
+        fakeUserSetupUtil.fakeUser(GRAF_D)
         gameController.connect(gameSession.id!!)
 
         fakeUserSetupUtil.fakeUser(INDIYSKIY)
         gameController.start(gameSession.id!!)
 
-        listOf(SITHOID, Q_CHAN, INDIYSKIY).forEach { nickName ->
+        listOf(SITHOID, GRAF_D, INDIYSKIY).forEach { nickName ->
             fakeUserSetupUtil.fakeUser(nickName)
             val user = userController.whoAmI()
             val updatedGameSession = gameController.getGame(gameSession.id!!).body!!
