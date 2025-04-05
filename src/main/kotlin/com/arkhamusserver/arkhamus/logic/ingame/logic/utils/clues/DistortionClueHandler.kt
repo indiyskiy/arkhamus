@@ -71,7 +71,7 @@ class DistortionClueHandler(
         return container.distortion.any { it.turnedOn && it.receiver != null }
     }
 
-    override fun canBeRemoved(
+    override fun canBeRemovedByAbility(
         user: InGameUser,
         target: Any,
         data: GlobalGameData
@@ -88,12 +88,12 @@ class DistortionClueHandler(
                 )
     }
 
-    override fun anyCanBeRemoved(
+    override fun anyCanBeRemovedByAbility(
         user: InGameUser,
         data: GlobalGameData
     ): Boolean {
         return data.clues.distortion.any {
-            canBeRemoved(user, it, data)
+            canBeRemovedByAbility(user, it, data)
         }
     }
 

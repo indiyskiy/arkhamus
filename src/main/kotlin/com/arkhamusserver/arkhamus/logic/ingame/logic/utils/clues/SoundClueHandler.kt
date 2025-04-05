@@ -74,7 +74,7 @@ class SoundClueHandler(
         return container.sound.any { it.turnedOn }
     }
 
-    override fun canBeRemoved(
+    override fun canBeRemovedByAbility(
         user: InGameUser,
         target: Any,
         data: GlobalGameData
@@ -91,12 +91,12 @@ class SoundClueHandler(
         )
     }
 
-    override fun anyCanBeRemoved(
+    override fun anyCanBeRemovedByAbility(
         user: InGameUser,
         data: GlobalGameData
     ): Boolean {
         return data.clues.sound.any {
-            canBeRemoved(user, it, data)
+            canBeRemovedByAbility(user, it, data)
         }
     }
 

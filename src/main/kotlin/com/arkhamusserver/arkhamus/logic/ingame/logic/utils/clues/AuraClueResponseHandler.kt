@@ -14,7 +14,6 @@ import com.arkhamusserver.arkhamus.model.ingame.parts.AuraCluePoint
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.AuraClueAdditionalDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.SimpleCoordinates
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -25,7 +24,6 @@ class AuraClueResponseHandler(
 ) {
     companion object {
         private const val SHADOW_RANGE_RADIUS = 2.5 //m
-        private val logger = LoggerFactory.getLogger(AuraClueResponseHandler::class.java)
     }
 
     fun mapActualClues(container: CluesContainer, user: InGameUser, data: GlobalGameData): List<ExtendedClueResponse> {
@@ -141,10 +139,8 @@ class AuraClueResponseHandler(
     private fun countPercentage(user: InGameUser, auraCluePoint: AuraCluePoint): Pair<AuraDistanceType, Int> {
         // Calculate the current distance between the user and the circle's center
         val currentDistance = geometryUtils.distance(user, auraCluePoint)
-        logger.info("distance {}, radius {}", currentDistance, SHADOW_RANGE_RADIUS)
         val denominator = 2 * auraCluePoint.startDistance - SHADOW_RANGE_RADIUS
         if (denominator == 0.0) {
-            logger.warn("Potential division by zero detected: 2 * startDistance equals circle.radius!")
             return if (currentDistance >= SHADOW_RANGE_RADIUS) {
                 AuraDistanceType.OUT_OF_RANGE to -100
             } else {
@@ -154,19 +150,16 @@ class AuraClueResponseHandler(
         return when {
             // User is inside or on the circle's boundary
             currentDistance <= SHADOW_RANGE_RADIUS -> {
-                logger.info("User is inside or on the circle's boundary, 100")
                 AuraDistanceType.ON_POINT to 100
             }
             // User is at twice the starting distance or farther
             currentDistance >= 2 * auraCluePoint.startDistance -> {
-                logger.info("User is at twice the starting distance or farther, -100")
                 AuraDistanceType.OUT_OF_RANGE to -100
             }
             // For distances between startDistance and 2 * startDistance
             else -> {
                 // Linearly interpolate the percentage value
                 val percentage = percentage(currentDistance, denominator).toInt()
-                logger.info("Linearly interpolate the percentage value, {}", percentage)
                 AuraDistanceType.IN_RANGE to percentage
             }
         }

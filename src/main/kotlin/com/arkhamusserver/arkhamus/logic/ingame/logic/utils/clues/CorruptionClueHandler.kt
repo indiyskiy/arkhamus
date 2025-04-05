@@ -67,7 +67,7 @@ class CorruptionClueHandler(
         return container.corruption.any { it.turnedOn }
     }
 
-    override fun canBeRemoved(
+    override fun canBeRemovedByAbility(
         user: InGameUser,
         target: Any,
         data: GlobalGameData
@@ -82,12 +82,12 @@ class CorruptionClueHandler(
         )
     }
 
-    override fun anyCanBeRemoved(
+    override fun anyCanBeRemovedByAbility(
         user: InGameUser,
         data: GlobalGameData
     ): Boolean {
         return data.clues.corruption.any {
-            canBeRemoved(user, it, data)
+            canBeRemovedByAbility(user, it, data)
         }
     }
 

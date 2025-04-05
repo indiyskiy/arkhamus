@@ -63,7 +63,7 @@ class ScentClueHandler(
         return container.scent.any { it.turnedOn }
     }
 
-    override fun canBeRemoved(
+    override fun canBeRemovedByAbility(
         user: InGameUser,
         target: Any,
         data: GlobalGameData
@@ -78,12 +78,12 @@ class ScentClueHandler(
         )
     }
 
-    override fun anyCanBeRemoved(
+    override fun anyCanBeRemovedByAbility(
         user: InGameUser,
         data: GlobalGameData
     ): Boolean {
         return data.clues.scent.any {
-            canBeRemoved(user, it, data)
+            canBeRemovedByAbility(user, it, data)
         }
     }
 

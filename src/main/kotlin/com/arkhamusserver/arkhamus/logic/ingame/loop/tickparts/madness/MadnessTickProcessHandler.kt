@@ -37,6 +37,7 @@ class MadnessTickProcessHandler(
         data: GlobalGameData,
         timePassedMillis: Long
     ) {
+        val timePassedMillisZeroSafe = timePassedMillis.coerceAtLeast(1)
         val madnessDebuffs = user.additionalData.madness.madnessDebuffs
         var madnessEffectFinal = false
         madnessDebuffs.forEach { debuff ->
@@ -50,15 +51,15 @@ class MadnessTickProcessHandler(
                 }
 
                 MadnessDebuff.CURSED_AURA -> {
-                    curseSomethingMaybe(user, data, timePassedMillis)
+                    curseSomethingMaybe(user, data, timePassedMillisZeroSafe)
                 }
 
                 MadnessDebuff.MAGIC_ADDICTED -> {
-                    castRandomSpellMaybe(user, data, timePassedMillis)
+                    castRandomSpellMaybe(user, data, timePassedMillisZeroSafe)
                 }
 
                 MadnessDebuff.CRAFT_ADDICTED -> {
-                    craftSomethingMaybe(user, data, timePassedMillis)
+                    craftSomethingMaybe(user, data, timePassedMillisZeroSafe)
                 }
 
                 MadnessDebuff.BAN_ADDICTED -> {
@@ -66,21 +67,21 @@ class MadnessTickProcessHandler(
                 }
 
                 MadnessDebuff.LIGHT_ADDICTED -> {
-                    lightSomething(user, data, timePassedMillis)
+                    lightSomething(user, data, timePassedMillisZeroSafe)
                 }
 
                 MadnessDebuff.UNSTABLE_POSITION -> {
-                    teleportMaybe(user, data, timePassedMillis)
+                    teleportMaybe(user, data, timePassedMillisZeroSafe)
                     false
                 }
 
 //                MadnessDebuffs.DARK_ENTITY -> {
-//                    applyMadnessTickNearby(user, data, timePassedMillis)
+//                    applyMadnessTickNearby(user, data, timePassedMillisZeroSafe)
 //                    false
 //                }
 
                 MadnessDebuff.PROPHET -> {
-                    pushGodAwaken(data, timePassedMillis)
+                    pushGodAwaken(data, timePassedMillisZeroSafe)
                     false
                 }
             }

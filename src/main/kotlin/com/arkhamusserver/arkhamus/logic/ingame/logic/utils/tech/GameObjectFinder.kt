@@ -4,16 +4,22 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType.*
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class GameObjectFinder {
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(GameObjectFinder::class.java)
+    }
 
     fun findById(
         id: String,
         type: GameObjectType,
         data: GlobalGameData
     ): WithStringId? {
+        logger.info("finding game object by id: $id of type: $type")
         return when (type) {
             CHARACTER -> data.users[id.toLong()]
             VOTE_SPOT -> data.voteSpots.firstOrNull { it.inGameId() == id.toLong() }

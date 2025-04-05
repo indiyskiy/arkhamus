@@ -95,7 +95,7 @@ class ClueHandler(
         }?.removeTarget(target, data)
     }
 
-    fun canBeRemoved(
+    fun canBeRemovedByAbility(
         user: InGameUser,
         target: Any,
         data: GlobalGameData
@@ -103,13 +103,13 @@ class ClueHandler(
         return advancedClueHandlers.any {
             it is WithStringId &&
                     it.accept(target as WithStringId) &&
-                    it.canBeRemoved(user, target, data)
+                    it.canBeRemovedByAbility(user, target, data)
         }
     }
 
-    fun anyCanBeRemoved(user: InGameUser, data: GlobalGameData): Boolean {
+    fun anyCanBeRemovedByAbility(user: InGameUser, data: GlobalGameData): Boolean {
         return advancedClueHandlers.any {
-            it.anyCanBeRemoved(user, data)
+            it.anyCanBeRemovedByAbility(user, data)
         }
     }
 

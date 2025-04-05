@@ -72,15 +72,18 @@ class InscriptionClueHandler(
         return container.inscription.any { it.turnedOn }
     }
 
-    override fun canBeRemoved(
+    override fun canBeRemovedByAbility(
         user: InGameUser,
         target: Any,
         data: GlobalGameData
     ): Boolean {
-        val inscription = target as InGameInscriptionClue
+        val glyph = target as InGameInscriptionClueGlyph
+        val inscription = data.clues.inscription.firstOrNull {
+            it.inscriptionClueGlyphs.any { it.inGameId == glyph.inGameId }
+        } ?: return false
         return inscription.turnedOn && userLocationHandler.userCanSeeTargetInRange(
             whoLooks = user,
-            target = inscription,
+            target = glyph,
             levelGeometryData = data.levelGeometryData,
             range = Ability.CLEAN_UP_CLUE.range!!.toDouble(),
             affectedByBlind = false,
@@ -89,12 +92,12 @@ class InscriptionClueHandler(
         )
     }
 
-    override fun anyCanBeRemoved(
+    override fun anyCanBeRemovedByAbility(
         user: InGameUser,
         data: GlobalGameData
     ): Boolean {
         return data.clues.inscription.any {
-            canBeRemoved(user, it, data)
+            canBeRemovedByAbility(user, it, data)
         }
     }
 

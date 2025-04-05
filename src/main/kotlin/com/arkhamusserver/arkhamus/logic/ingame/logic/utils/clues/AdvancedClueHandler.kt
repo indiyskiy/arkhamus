@@ -36,8 +36,8 @@ interface AdvancedClueHandler {
     fun canBeAdded(container: CluesContainer): Boolean
     fun addClue(data: GlobalGameData)
     fun canBeRemovedRandomly(container: CluesContainer): Boolean
-    fun canBeRemoved(user: InGameUser, target: Any, data: GlobalGameData): Boolean
-    fun anyCanBeRemoved(user: InGameUser, data: GlobalGameData): Boolean
+    fun canBeRemovedByAbility(user: InGameUser, target: Any, data: GlobalGameData): Boolean
+    fun anyCanBeRemovedByAbility(user: InGameUser, data: GlobalGameData): Boolean
     fun removeRandom(container: CluesContainer)
     fun removeTarget(
         target: WithStringId,

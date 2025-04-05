@@ -261,7 +261,11 @@ enum class Ability(
         targetTypes = listOf(
             SCENT_CLUE,
             SOUND_CLUE,
-            OMEN_CLUE
+            OMEN_CLUE,
+            AURA_CLUE,
+            CORRUPTION_CLUE,
+            DISTORTION_CLUE,
+            INSCRIPTION_CLUE_GLYPH,
         ),
         range = CLOSE_RANGE
     ),
