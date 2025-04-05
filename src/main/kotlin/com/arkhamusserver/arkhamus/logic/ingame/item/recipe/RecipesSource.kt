@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class RecipesSource(
-    private val recipeSourceParts: List<RecipeSourcePart>
+    val recipeSourceParts: List<RecipeSourcePart>
 ) {
     private val allRecipes = buildAll()
     private val allRecipesMap = allRecipes.associateBy { it.recipeId }

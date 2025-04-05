@@ -1,22 +1,21 @@
-package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
+package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.usefullitems
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.MINOR_DISPELL
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.springframework.stereotype.Component
 
 @Component
-class MinorDispellCondition(
+class HealMadnessByPillCondition(
     private val gameObjectFinder: GameObjectFinder,
     private val userLocationHandler: UserLocationHandler,
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
-        return ability == MINOR_DISPELL
+        return ability == Ability.HEAL_MADNESS_BY_PILL
     }
 
     override fun canBeCastedRightNow(
@@ -26,7 +25,8 @@ class MinorDispellCondition(
         globalGameData: GlobalGameData
     ): Boolean {
         return target != null &&
-                target is WithPoint &&
+                target is InGameUser &&
+                target.inGameId() != user.inGameId() &&
                 userLocationHandler.userCanSeeTargetInRange(
                     user,
                     target,

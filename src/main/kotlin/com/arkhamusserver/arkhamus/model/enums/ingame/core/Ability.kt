@@ -13,7 +13,7 @@ import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithVisibilityModifie
 private const val MINIMUM_COOLDOWN: Long = SECOND_IN_MILLIS
 private const val DEFAULT_INVESTIGATION_ACTIVE: Long = MINUTE_IN_MILLIS
 
-private const val CLOSE_RANGE = 4.0
+private const val CLOSE_RANGE = 5.0
 private const val MEDIUM_RANGE = 8.0
 private const val LARGE_RANGE = 16.0
 
@@ -115,6 +115,14 @@ enum class Ability(
         active = MINUTE_IN_MILLIS,
         requiresItem = true,
         consumesItem = false,
+    ),
+    CLEAR_MIND(
+        id = 4006,
+        cooldown = MINUTE_IN_MILLIS * 2,
+        requiresItem = true,
+        consumesItem = true,
+        targetTypes = listOf(CHARACTER, QUEST_GIVER),
+        range = CLOSE_RANGE
     ),
 
     //cultist items spell 5***
@@ -239,7 +247,7 @@ enum class Ability(
         requiresItem = true,
         consumesItem = false,
         cooldown = MINUTE_IN_MILLIS,
-        targetTypes = listOf(CHARACTER, CONTAINER, CRAFTER, QUEST_GIVER),
+        targetTypes = listOf(CONTAINER, CRAFTER),
         range = MEDIUM_RANGE
     ),
 

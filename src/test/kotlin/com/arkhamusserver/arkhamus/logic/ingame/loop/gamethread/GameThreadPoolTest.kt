@@ -1,25 +1,22 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ExecutedAction
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.HeartbeatRequestGameData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
-import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState
-import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
+import com.arkhamusserver.arkhamus.utils.InGameUserBuilder
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.HeartbeatRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
@@ -37,6 +34,8 @@ class GameThreadPoolTest {
         private var gameSessionCounter = 0L
         private var userAccountCounter = 0L
     }
+
+    private val inGameUserBuilder = InGameUserBuilder()
 
     @Autowired
     private lateinit var threadPool: GameThreadPool
@@ -424,29 +423,7 @@ class GameThreadPoolTest {
         gameSession.usersOfGameSession = usersOfGameSession
 
         val inGameUsers = usersOfGameSession.map { userOfGameSession ->
-            InGameUser(
-                id = generateRandomId(),
-                userId = userOfGameSession.id!!,
-                nickName = "user-nickname",
-                role = RoleTypeInGame.INVESTIGATOR,
-                classInGame = ClassInGame.MIND_HEALER,
-                gameId = gameSession.id!!,
-                madness = 0.0,
-                madnessNotches = listOf(100.0, 300.0, 600.0),
-                connected = true,
-                x = 0.0,
-                y = 0.0,
-                z = 0.0,
-                items = listOf(),
-                stateTags = mutableSetOf(),
-                madnessDebuffs = mutableSetOf(),
-                callToArms = 0,
-                won = null,
-                sawTheEndOfTimes = false,
-                leftTheGame = false,
-                visibilityModifiers = mutableSetOf(),
-                originalSkin = InGameUserSkinSetting(SkinColor.LAVENDER)
-            )
+            inGameUserBuilder.buildPerfectUser(userOfGameSession, gameSession)
         }
 
         val inRamGame = InRamGame(

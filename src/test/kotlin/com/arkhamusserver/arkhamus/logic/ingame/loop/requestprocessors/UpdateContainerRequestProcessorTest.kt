@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.MockInGameDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ExecutedAction
@@ -9,26 +8,24 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.conta
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.containers.container.UpdateContainerRequestProcessor
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.GameSessionSettings
-import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.Role
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Container
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.LevelState
 import com.arkhamusserver.arkhamus.model.enums.RoleName
-import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameType
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
-import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.utils.InGameUserBuilder
 import com.arkhamusserver.arkhamus.view.dto.netty.request.BaseRequestData
 import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
@@ -43,6 +40,9 @@ import java.sql.Timestamp
 
 @SpringBootTest
 class UpdateContainerRequestProcessorTest {
+
+    private val inGameUserBuilder = InGameUserBuilder()
+
     @Autowired
     private lateinit var redisDataAccess: MockInGameDataAccess
 
@@ -60,7 +60,7 @@ class UpdateContainerRequestProcessorTest {
 
         val (data, _) = executeRequest(newInventoryContent)
 
-        val resultUser = data.globalGameData.users[1L]!!.items
+        val resultUser = data.globalGameData.users[1L]!!.additionalData.inventory.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
 
         assertNull(resultUser.firstOrNull { it.item == Item.SAINT_QUARTZ })
@@ -95,7 +95,7 @@ class UpdateContainerRequestProcessorTest {
 
         val (data, _) = executeRequest(newInventoryContent)
 
-        val resultUser = data.globalGameData.users[1L]!!.items
+        val resultUser = data.globalGameData.users[1L]!!.additionalData.inventory.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
 
         assertEquals(10, resultUser.firstOrNull { it.item == Item.SAINT_QUARTZ }?.number)
@@ -130,7 +130,7 @@ class UpdateContainerRequestProcessorTest {
 
         val (data, _) = executeRequest(newInventoryContent)
 
-        val resultUser = data.globalGameData.users[1L]!!.items
+        val resultUser = data.globalGameData.users[1L]!!.additionalData.inventory.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
 
         assertEquals(10, resultUser.firstOrNull { it.item == Item.SAINT_QUARTZ }?.number)
@@ -158,7 +158,7 @@ class UpdateContainerRequestProcessorTest {
             InventoryCell(Item.MASK, 3),
         )
         val (data, requestContainer) = executeRequest(newInventoryContent)
-        val resultUser = data.globalGameData.users[1L]!!.items
+        val resultUser = data.globalGameData.users[1L]!!.additionalData.inventory.items
         val updateContainerRequestGameData = requestContainer.requestProcessData as UpdateContainerRequestGameData
 
         assertEquals(null, resultUser.firstOrNull { it.item == Item.MASK })
@@ -175,7 +175,7 @@ class UpdateContainerRequestProcessorTest {
             InventoryCell(Item.SAINT_QUARTZ, 100),
         )
         val (data, requestContainer) = executeRequest(newInventoryContent)
-        val resultUser = data.globalGameData.users[1L]!!.items
+        val resultUser = data.globalGameData.users[1L]!!.additionalData.inventory.items
         val updateContainerRequestGameData = requestContainer.requestProcessData as UpdateContainerRequestGameData
 
         assertEquals(10, resultUser.firstOrNull { it.item == Item.SAINT_QUARTZ }?.number)
@@ -200,7 +200,7 @@ class UpdateContainerRequestProcessorTest {
 
         val (data, requestContainer) = executeRequest(newInventoryContent)
 
-        val resultUser = data.globalGameData.users[1L]!!.items
+        val resultUser = data.globalGameData.users[1L]!!.additionalData.inventory.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
 
         assertEquals(10, resultUser.firstOrNull { it.item == Item.SAINT_QUARTZ }?.number)
@@ -252,7 +252,7 @@ class UpdateContainerRequestProcessorTest {
 
         val (data, requestContainer) = executeRequest(newInventoryContent)
 
-        val resultUser = data.globalGameData.users[1L]!!.items
+        val resultUser = data.globalGameData.users[1L]!!.additionalData.inventory.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
 
         assertEquals(10, resultUser.firstOrNull { it.item == Item.SAINT_QUARTZ }?.number)
@@ -309,7 +309,7 @@ class UpdateContainerRequestProcessorTest {
 
         val (data, requestContainer) = executeRequest(newInventoryContent)
 
-        val resultUser = data.globalGameData.users[1L]!!.items
+        val resultUser = data.globalGameData.users[1L]!!.additionalData.inventory.items
         val resultContainer = data.globalGameData.containers[1L]!!.items
 
         assertEquals(10, resultUser.firstOrNull { it.item == Item.SAINT_QUARTZ }?.number)
@@ -463,29 +463,8 @@ class UpdateContainerRequestProcessorTest {
 
         val oldUserItems = createOldUserItems()
 
-        val gameUser = InGameUser(
-            id = generateRandomId(),
-            userId = user.id!!,
-            nickName = "test user",
-            role = RoleTypeInGame.INVESTIGATOR,
-            classInGame = ClassInGame.MIND_HEALER,
-            gameId = gameSession.id!!,
-            x = container.x,
-            y = container.y,
-            z = container.z,
-            madness = 20.0,
-            madnessNotches = listOf(100.0, 300.0, 600.0),
-            items = oldUserItems,
-            connected = true,
-            stateTags = mutableSetOf(),
-            callToArms = 1,
-            won = null,
-            sawTheEndOfTimes = false,
-            leftTheGame = false,
-            madnessDebuffs = mutableSetOf(),
-            visibilityModifiers = mutableSetOf(),
-            originalSkin = InGameUserSkinSetting(SkinColor.LAVENDER)
-        )
+        val gameUser = inGameUserBuilder.buildPerfectUser(user, gameSession)
+        gameUser.additionalData.inventory.items = oldUserItems
 
         val oldContainer = UpdateContainerRequestGameData(
             container = inGameContainer,

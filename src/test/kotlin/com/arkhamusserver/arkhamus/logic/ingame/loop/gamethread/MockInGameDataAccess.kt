@@ -114,6 +114,10 @@ class MockInGameDataAccess : InGameDataAccess {
         TODO("Not yet implemented")
     }
 
+    override fun getUserStatusHolders(gameId: Long): List<InGameUserStatusHolder> {
+        TODO("Not yet implemented")
+    }
+
     override fun getVisibilityMap(gameId: Long): InGameVisibilityMap? {
         TODO("Not yet implemented")
     }

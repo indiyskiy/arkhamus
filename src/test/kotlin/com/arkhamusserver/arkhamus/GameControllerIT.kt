@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus
 
 import com.arkhamusserver.arkhamus.model.enums.GameState
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.ClassInGame
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.utils.EnvironmentSetupUtil
 import com.arkhamusserver.arkhamus.utils.FakeUserSetupUtil
@@ -10,8 +11,10 @@ import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.Q_CHAN
 import com.arkhamusserver.arkhamus.utils.UserContainer.Companion.SITHOID
 import com.arkhamusserver.arkhamus.view.controller.GameController
 import com.arkhamusserver.arkhamus.view.controller.UserController
+import com.arkhamusserver.arkhamus.view.dto.ClassInSettingsDto
 import com.arkhamusserver.arkhamus.view.dto.GameSessionSettingsDto
 import com.arkhamusserver.arkhamus.view.dto.LevelDto
+import com.arkhamusserver.arkhamus.view.dto.ingame.ClassInGameDto
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -103,7 +106,8 @@ class GameControllerIT {
                 level = LevelDto(
                     levelId = 1,
                     version = 1
-                )
+                ),
+                availableClasses = availableClasses()
             )
         ).body!!
 
@@ -153,6 +157,19 @@ class GameControllerIT {
 
     }
 
+    private fun availableClasses(): List<ClassInSettingsDto> = ClassInGame.values().map {
+        ClassInSettingsDto(
+            classInGame = ClassInGameDto(
+                id = it.id,
+                name = it.name,
+                roleType = it.roleType,
+                defaultAbility = null,
+                globalTurnedOn = true
+            ),
+            turnedOnForGame = true
+        )
+    }
+
     @Test
     fun `start SINGLE game`() {
         fakeUserSetupUtil.fakeUser(INDIYSKIY)
@@ -166,7 +183,8 @@ class GameControllerIT {
                 level = LevelDto(
                     levelId = 1,
                     version = 1
-                )
+                ),
+                availableClasses = availableClasses()
             )
         ).body!!
 

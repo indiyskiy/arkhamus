@@ -43,7 +43,7 @@ class AdvancedCultistRecipePart() : RecipeSourcePart {
             ),
             listOf(
                 Ingredient(EYE, 1),
-                Ingredient(SOUL_STONE, 1)
+                Ingredient(INNSMOUTH_WATTER, 1)
             ).toRecipe(
                 10004,
                 item = DUST_OF_DISAPPEARANCE,

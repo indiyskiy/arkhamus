@@ -63,11 +63,19 @@ class UsefulItemsRecipePart() : RecipeSourcePart {
                 crafterTypes = defaultCrafterTypes
             ),
             listOf(
-                Ingredient(ELDER_SIGN, 3),
-                Ingredient(EYE, 1)
+                Ingredient(RAGS, 3),
+                Ingredient(TEAR, 1)
             ).toRecipe(
                 6006,
                 item = FAKE_CULTIST_SCARF,
+                timeToCraft = SECOND_IN_MILLIS * 3,
+                crafterTypes = defaultCrafterTypes
+            ),listOf(
+                Ingredient(BLIGHTING_JEWEL, 3),
+                Ingredient(HIGGS_BOSON, 2)
+            ).toRecipe(
+                6007,
+                item = CLEANSING_VAPORS,
                 timeToCraft = SECOND_IN_MILLIS * 3,
                 crafterTypes = defaultCrafterTypes
             ),

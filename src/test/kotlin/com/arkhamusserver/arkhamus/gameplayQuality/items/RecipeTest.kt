@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.RecipesSource
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
+import com.arkhamusserver.arkhamus.view.validator.utils.assertEquals
 import com.arkhamusserver.arkhamus.view.validator.utils.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -59,5 +60,28 @@ class RecipeTest() {
             "The following items have duplicated Ids: $moreThanOne",
             relatedObject = "Item"
         )
+    }
+
+    @Test
+    fun allRecipesHaveUniqueAndOnlyOneType() {
+        recipesSource.recipeSourceParts.forEach {
+            assertEquals(
+                1, it.recipes().map { it.item.itemType }.distinct().size,
+                "more than one item type for recipe source ${it.javaClass.simpleName}",
+                "RecipeSourcePart"
+            )
+        }
+        recipesSource.recipeSourceParts
+            .map { it.recipes().map { it.item.itemType }.distinct() }
+            .flatten()
+            .groupBy { it }
+            .map { it.key to it.value.size }
+            .forEach {
+                assertEquals(
+                    1, it.second,
+                    "more than one source for type ${it.first}",
+                    "RecipeSourcePart"
+                )
+            }
     }
 }

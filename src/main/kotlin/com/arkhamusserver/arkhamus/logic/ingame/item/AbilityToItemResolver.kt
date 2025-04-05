@@ -18,6 +18,7 @@ class AbilityToItemResolver {
                 HEAL_MADNESS_BY_PILL -> PILL
                 MINOR_DISPELL -> DISPELL_FLASK
                 PRETEND_CULTIST -> FAKE_CULTIST_SCARF
+                CLEAR_MIND -> CLEANSING_VAPORS
                 //cultist items
                 THROW_POTATO -> CURSED_POTATO
                 SUMMON_NIGHT -> MOON_STONE
