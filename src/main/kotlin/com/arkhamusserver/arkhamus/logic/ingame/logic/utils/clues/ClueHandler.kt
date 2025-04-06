@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -19,6 +20,7 @@ class ClueHandler(
 
     companion object {
         private val random: Random = Random(System.currentTimeMillis())
+        private val logger = LoggerFactory.getLogger(ClueHandler::class.java)
     }
 
     fun filterClues(
@@ -100,11 +102,17 @@ class ClueHandler(
         target: Any,
         data: GlobalGameData
     ): Boolean {
-        return advancedClueHandlers.any {
-            it is WithStringId &&
-                    it.acceptForRemoveAbility(target as WithStringId) &&
-                    it.canBeRemovedByAbility(user, target, data)
+        logger.info("canBeRemovedByAbility: $target")
+        val handler = advancedClueHandlers.firstOrNull {
+            it.acceptForRemoveAbility(target as WithStringId)
         }
+        if (handler == null) {
+            logger.info("canBeRemovedByAbility: handler is null")
+            return false
+        }
+        return target is WithStringId &&
+                handler.acceptForRemoveAbility(target) &&
+                handler.canBeRemovedByAbility(user, target, data)
     }
 
     fun anyCanBeRemovedByAbility(user: InGameUser, data: GlobalGameData): Boolean {

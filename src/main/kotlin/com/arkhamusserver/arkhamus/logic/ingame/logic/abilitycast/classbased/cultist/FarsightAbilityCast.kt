@@ -44,7 +44,7 @@ class FarsightAbilityCast() : AbilityCast {
 
     private fun farsight(currentUser: InGameUser?) {
         currentUser?.let {
-            it.stateTags + UserStateTag.FARSIGHT
+            it.stateTags += UserStateTag.FARSIGHT
         }
     }
 }

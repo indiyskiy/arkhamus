@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues.DistortionClue
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.ClueState
@@ -83,7 +84,7 @@ class DistortionClueHandler(
                     whoLooks = user,
                     target = distortion,
                     levelGeometryData = data.levelGeometryData,
-                    range = distortion.interactionRadius,
+                    range = Ability.CLEAN_UP_CLUE.range!!.toDouble(),
                     affectedByBlind = true,
                 )
     }

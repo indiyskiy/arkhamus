@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.CLEAN_UP_CLUE
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.ClueState
@@ -25,6 +26,7 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedC
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.InscriptionClueAdditionalDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.PossibleGlyphResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.RightGlyphResponse
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -41,6 +43,7 @@ class InscriptionClueHandler(
         const val GLYPH_VARIANTS = 20
         const val MAX_ON_GAME = 7
         private val random: Random = Random(System.currentTimeMillis())
+        private val logger = LoggerFactory.getLogger(InscriptionClueHandler::class.java)
     }
 
     override fun accept(clues: List<Clue>): Boolean {
@@ -81,22 +84,25 @@ class InscriptionClueHandler(
         val inscription = data.clues.inscription.firstOrNull {
             it.inscriptionClueGlyphs.any { it.inGameId == glyph.inGameId }
         } ?: return false
-        return inscription.turnedOn && userLocationHandler.userCanSeeTargetInRange(
-            whoLooks = user,
-            target = glyph,
-            levelGeometryData = data.levelGeometryData,
-            range = Ability.CLEAN_UP_CLUE.range!!.toDouble(),
-            affectedByBlind = false,
-            heightAffectVision = false,
-            geometryAffectsVision = true,
-        )
+        return inscription.turnedOn &&
+                userLocationHandler.userCanSeeTarget(
+                    whoLooks = user,
+                    target = inscription,
+                    levelGeometryData = data.levelGeometryData,
+                    affectedByBlind = false,
+                    heightAffectVision = false,
+                    geometryAffectsVision = true,
+                ) &&
+                userLocationHandler.distanceLessOrEquals(user, glyph, CLEAN_UP_CLUE.range!!.toDouble())
     }
 
     override fun anyCanBeRemovedByAbility(
         user: InGameUser,
         data: GlobalGameData
     ): Boolean {
-        return data.clues.inscription.any {
+        return data.clues.inscription.flatMap {
+            it.inscriptionClueGlyphs
+        }.any {
             canBeRemovedByAbility(user, it, data)
         }
     }
@@ -114,7 +120,19 @@ class InscriptionClueHandler(
         target: WithStringId,
         data: GlobalGameData
     ) {
-        val inscriptionClue = data.clues.inscription.find { it.inGameId() == target.stringId().toLong() } ?: return
+        if(target !is InGameInscriptionClueGlyph) {
+            logger.info("target has wrong type ${target.javaClass.simpleName} instead of InGameInscriptionClueGlyph")
+            return
+        }
+        val inscriptionClue = data.clues.inscription.find {
+           it.inscriptionClueGlyphs.any{
+               it.inGameId == target.stringId().toLong()
+           }
+        }
+        if(inscriptionClue == null) {
+            logger.info("inscriptionClue for glyph ${target.stringId()} not found")
+            return
+        }
         inscriptionClue.turnedOn = false
         inscriptionClue.castedAbilityUsers = emptySet()
         inGameInscriptionClueRepository.save(inscriptionClue)

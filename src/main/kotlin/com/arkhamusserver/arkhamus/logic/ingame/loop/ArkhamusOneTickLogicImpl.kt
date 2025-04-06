@@ -31,7 +31,8 @@ class ArkhamusOneTickLogicImpl(
 ) : ArkhamusOneTickLogic {
 
     companion object {
-        const val SAVE_ACTIVITY_TICK_DELTA = 60 * 1000 / TICK_DELTA / 8 //8 times per minute
+//        const val SAVE_ACTIVITY_TICK_DELTA = 60 * 1000 / TICK_DELTA / 8 //8 times per minute aka 20 tps
+        const val SAVE_ACTIVITY_TICK_DELTA = 60 * 1000 / TICK_DELTA / 10 //10 times per minute aka 25 tps
         private var logger = LoggerFactory.getLogger(ArkhamusOneTickLogicImpl::class.java)
     }
 

@@ -95,9 +95,10 @@ enum class Ability(
     ),
     HEAL_MADNESS_BY_PILL(
         id = 4003,
-        cooldown = MINUTE_IN_MILLIS,
+        classBased = false,
         requiresItem = true,
         consumesItem = true,
+        cooldown = MINUTE_IN_MILLIS / 2,
         targetTypes = listOf(CHARACTER),
         range = MEDIUM_RANGE
     ),

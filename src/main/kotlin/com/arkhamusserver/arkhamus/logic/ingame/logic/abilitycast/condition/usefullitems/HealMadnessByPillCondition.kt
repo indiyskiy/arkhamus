@@ -24,16 +24,22 @@ class HealMadnessByPillCondition(
         target: Any?,
         globalGameData: GlobalGameData
     ): Boolean {
-        return target != null &&
-                target is InGameUser &&
-                target.inGameId() != user.inGameId() &&
-                userLocationHandler.userCanSeeTargetInRange(
-                    user,
-                    target,
-                    globalGameData.levelGeometryData,
-                    ability.range ?: 0.0,
-                    true
-                )
+        if (target == null) {
+            return false
+        }
+        if (target !is InGameUser) {
+            return false
+        }
+        if (target.inGameId() == user.inGameId()) {
+            return false
+        }
+        return userLocationHandler.userCanSeeTargetInRange(
+            user,
+            target,
+            globalGameData.levelGeometryData,
+            ability.range ?: 0.0,
+            true
+        )
     }
 
     override fun canBeCastedAtAll(

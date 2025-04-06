@@ -18,7 +18,7 @@ class LockDoorAbilityCast(
 ) : AbilityCast {
 
     override fun accept(ability: Ability): Boolean {
-        return ability == Ability.PARALYSE
+        return ability == Ability.LOCK_DOOR
     }
 
     override fun cast(

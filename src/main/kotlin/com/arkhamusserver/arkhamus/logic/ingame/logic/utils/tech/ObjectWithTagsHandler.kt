@@ -32,10 +32,7 @@ class ObjectWithTagsHandler(
                 InGameObjectTag.PEEKABOO_CURSE -> {
                     processPeekabooCurse(user, withGameTags, tag, data)
                 }
-
                 InGameObjectTag.DARK_THOUGHTS -> {}
-                InGameObjectTag.SCENT -> {}
-                InGameObjectTag.SOUND -> {}
             }
         }
     }

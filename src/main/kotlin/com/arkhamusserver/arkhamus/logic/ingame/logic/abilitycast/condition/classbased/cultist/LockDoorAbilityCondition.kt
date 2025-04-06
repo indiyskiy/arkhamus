@@ -18,7 +18,7 @@ class LockDoorAbilityCondition(
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
-        return ability == Ability.PARALYSE
+        return ability == Ability.LOCK_DOOR
     }
 
     override fun canBeCastedRightNow(
