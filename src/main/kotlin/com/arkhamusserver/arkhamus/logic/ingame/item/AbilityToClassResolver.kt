@@ -17,6 +17,7 @@ class AbilityToClassResolver {
                 HEAL_MADNESS -> setOf(MIND_HEALER)
                 SPAWN_LOOT -> setOf(BREADWINNER)
                 TAKE_FINGERPRINTS -> setOf(FORENSIC_SCIENTIST)
+                GIVE_INCLUSION -> setOf(KEEPER)
                 //cultists
                 FARSIGHT -> setOf(ARISTOCRAT)
                 PARALYSE -> setOf(DESCENDANT)

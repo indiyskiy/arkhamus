@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.aftershock.CastAftershockHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ShortTimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -24,17 +25,18 @@ class AbilityCastHandler(
     private val createCastAbilityEventHandler: CreateCastAbilityEventHandler,
     private val shortTimeEventHandler: ShortTimeEventHandler,
     private val abilityToItemResolver: AbilityToItemResolver,
-    private val activityHandler: ActivityHandler
+    private val activityHandler: ActivityHandler,
+    private val castAftershockHandlers: List<CastAftershockHandler>
 ) {
     fun cast(
         ability: Ability,
         abilityRequestProcessData: AbilityRequestProcessData,
         globalGameData: GlobalGameData,
     ): Boolean {
+        val item: Item? = abilityToItemResolver.resolve(ability)
         val casted = abilityCasts
             .first { it.accept(ability) }
             .cast(ability, abilityRequestProcessData, globalGameData)
-        val item: Item? = abilityToItemResolver.resolve(ability)
         processCastedSuccess(
             casted,
             item,
@@ -57,6 +59,12 @@ class AbilityCastHandler(
                     null
                 },
                 ability = ability
+            )
+            processCastAftershocks(
+                ability,
+                abilityRequestProcessData.gameUser,
+                abilityRequestProcessData.target,
+                globalGameData
             )
         }
         return casted
@@ -185,5 +193,18 @@ class AbilityCastHandler(
             relatedGameObject,
             ability.id.toLong(),
         )
+    }
+
+    private fun processCastAftershocks(
+        ability: Ability,
+        user: InGameUser,
+        target: WithStringId?,
+        data: GlobalGameData
+    ) {
+        castAftershockHandlers.filter {
+            it.accept(ability)
+        }.forEach {
+            it.processCastAftershocks(ability, user, target, data)
+        }
     }
 }

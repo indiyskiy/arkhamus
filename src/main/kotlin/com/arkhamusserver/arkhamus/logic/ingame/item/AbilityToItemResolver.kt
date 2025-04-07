@@ -45,6 +45,7 @@ class AbilityToItemResolver {
                 HEAL_MADNESS,
                 SPAWN_LOOT,
                 TAKE_FINGERPRINTS,
+                GIVE_INCLUSION,
                 FARSIGHT,
                 PARALYSE,
                 MADNESS_LINK,

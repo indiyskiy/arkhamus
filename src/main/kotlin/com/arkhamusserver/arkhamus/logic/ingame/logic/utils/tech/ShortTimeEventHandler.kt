@@ -44,6 +44,36 @@ class ShortTimeEventHandler(
         return filteredByAdditionalFilters
     }
 
+    @Transactional
+    fun createShortTimeEvent(
+        objectId: Long,
+        gameId: Long,
+        globalTimer: Long,
+        type: ShortTimeEventType,
+        visibilityModifiers: Set<VisibilityModifier>,
+        data: GlobalGameData,
+        sourceUserId: Long? = null,
+        additionalData: Any? = null
+    ) {
+        val event = InGameShortTimeEvent(
+            id = generateRandomId(),
+            gameId = gameId,
+            sourceId = sourceUserId,
+            objectId = objectId,
+            xLocation = null,
+            yLocation = null,
+            timeStart = globalTimer,
+            timePast = 0,
+            timeLeft = type.getTime(),
+            type = type,
+            state = InGameTimeEventState.ACTIVE,
+            visibilityModifiers = visibilityModifiers.map { it }.toMutableSet(),
+            additionalData = additionalData
+        )
+        inGameShortTimeEventRepository.save(event)
+        data.shortTimeEvents += event
+    }
+
     private fun filterByState(event: InGameShortTimeEvent): Boolean =
         event.timeLeft > 0 && event.state == InGameTimeEventState.ACTIVE
 
@@ -74,36 +104,6 @@ class ShortTimeEventHandler(
                 event.sourceId == user.inGameId()
             }
         }
-    }
-
-    @Transactional
-    fun createShortTimeEvent(
-        objectId: Long,
-        gameId: Long,
-        globalTimer: Long,
-        type: ShortTimeEventType,
-        visibilityModifiers: Set<VisibilityModifier>,
-        data: GlobalGameData,
-        sourceUserId: Long? = null,
-        additionalData: Any? = null
-    ) {
-        val event = InGameShortTimeEvent(
-            id = generateRandomId(),
-            gameId = gameId,
-            sourceId = sourceUserId,
-            objectId = objectId,
-            xLocation = null,
-            yLocation = null,
-            timeStart = globalTimer,
-            timePast = 0,
-            timeLeft = type.getTime(),
-            type = type,
-            state = InGameTimeEventState.ACTIVE,
-            visibilityModifiers = visibilityModifiers.map { it }.toMutableSet(),
-            additionalData = additionalData
-        )
-        inGameShortTimeEventRepository.save(event)
-        data.shortTimeEvents += event
     }
 
     private fun canSeeTarget(

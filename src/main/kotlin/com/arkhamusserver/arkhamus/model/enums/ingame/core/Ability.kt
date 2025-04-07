@@ -53,6 +53,15 @@ enum class Ability(
         ),
         cooldown = MINUTE_IN_MILLIS * 2 / 3
     ),
+    GIVE_INCLUSION(
+        id = 1004,
+        classBased = true,
+        range = MEDIUM_RANGE,
+        targetTypes = listOf(
+            CHARACTER
+        ),
+        cooldown = MINUTE_IN_MILLIS * 5
+    ),
 
     //cultist ability 2***
     FARSIGHT(

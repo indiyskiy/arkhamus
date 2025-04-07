@@ -22,6 +22,9 @@ enum class UserStateTag(
     INVULNERABILITY(Visibility.PUBLIC),
     FARSIGHT(Visibility.SOURCE),
 
+    //investigator abilities
+    HAVE_INCLUSION(Visibility.NONE),
+
     //cultist ability
     MADNESS_LINK_TARGET(Visibility.NONE),
     MADNESS_LINK_SOURCE(Visibility.NONE),
