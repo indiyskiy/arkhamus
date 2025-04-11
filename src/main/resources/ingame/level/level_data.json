@@ -1166,54 +1166,54 @@
         "id": 801,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 112.0,
+        "x": 100.0,
         "y": 0.0,
-        "z": 109.0
+        "z": 108.5
       },
       {
         "containerTags": [],
         "id": 802,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 110.0,
+        "x": 103.0,
         "y": 0.0,
-        "z": 111.0
+        "z": 108.5
       },
       {
         "containerTags": [],
         "id": 803,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 114.0,
+        "x": 106.0,
         "y": 0.0,
-        "z": 111.0
+        "z": 108.5
       },
       {
         "containerTags": [],
         "id": 800,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 112.0,
+        "x": 109.0,
         "y": 0.0,
-        "z": 112.5
+        "z": 108.5
       },
       {
         "containerTags": [],
         "id": 804,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 110.0,
+        "x": 112.0,
         "y": 0.0,
-        "z": 114.0
+        "z": 108.5
       },
       {
         "containerTags": [],
         "id": 805,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 114.0,
+        "x": 100.0,
         "y": 0.0,
-        "z": 114.0
+        "z": 110.5
       },
       {
         "containerTags": [
@@ -1223,27 +1223,27 @@
         "id": 819,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 112.0,
+        "x": 103.0,
         "y": 0.0,
-        "z": 115.5
+        "z": 110.5
       },
       {
         "containerTags": [],
         "id": 806,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 110.0,
+        "x": 106.0,
         "y": 0.0,
-        "z": 117.0
+        "z": 110.5
       },
       {
         "containerTags": [],
         "id": 807,
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
-        "x": 114.0,
+        "x": 109.0,
         "y": 0.0,
-        "z": 117.0
+        "z": 110.5
       },
       {
         "containerTags": [],
@@ -1251,8 +1251,8 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 112.0,
-        "y": 2.0,
-        "z": 118.5
+        "y": 0.0,
+        "z": 110.5
       },
       {
         "containerTags": [
@@ -1634,6 +1634,15 @@
         "x": 106.0,
         "y": 0.0,
         "z": 50.0
+      },
+      {
+        "id": 1104,
+        "interactionRadius": 3.5,
+        "lightRange": 6.0,
+        "name": "Test Lantern",
+        "x": 62.31,
+        "y": 0.0,
+        "z": 77.22
       }
     ],
     "levelHeight": 120.0,

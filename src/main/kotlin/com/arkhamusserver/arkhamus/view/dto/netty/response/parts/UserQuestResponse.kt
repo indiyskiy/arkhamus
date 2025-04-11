@@ -22,6 +22,7 @@ data class QuestGiverResponse(
     var id: Long,
     var state: MapObjectState,
 )
+
 data class QuestStepResponse(
     var id: Long,
     var state: MapObjectState,

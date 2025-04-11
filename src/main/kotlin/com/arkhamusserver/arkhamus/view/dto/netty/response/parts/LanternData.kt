@@ -6,6 +6,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 data class LanternData(
     var lanternId: Long,
     var lanternState: LanternState,
-    var objectState: MapObjectState,
+    var state: MapObjectState,
     var lightRange: Double,
 )

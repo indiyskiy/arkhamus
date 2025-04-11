@@ -1,9 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.VisibilityByTagsHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.BanState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.VoteSpotState
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameUserVoteSpot
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component
 @Component
 class VoteSpotInfoMapper(
     private val userLocationHandler: UserLocationHandler,
-    private val visibilityByTagsHandler: VisibilityByTagsHandler
 ) {
     fun map(
         voteSpot: InGameVoteSpot?,
@@ -84,24 +83,36 @@ class VoteSpotInfoMapper(
         data: LevelGeometryData
     ): List<EasyVoteSpotResponse> {
         return spots.map {
+            val canSee = userLocationHandler.userCanSeeTarget(user, it, data, true)
+            val state = mapState(canSee)
+            val voteSpotState = mapVoteSpotState(it, state)
             EasyVoteSpotResponse(
                 voteSpotId = it.inGameId(),
-                state = mapState(it, user, data)
+                state = state,
+                voteSpotState = voteSpotState
             )
         }
     }
 
     private fun mapState(
-        spot: InGameVoteSpot,
-        user: InGameUser,
-        data: LevelGeometryData
-    ): VoteSpotState {
-        if (userLocationHandler.userCanSeeTarget(user, spot, data, true) &&
-            visibilityByTagsHandler.userCanSeeTarget(user, spot)
-        ) {
-            return spot.voteSpotState
+        canSee: Boolean
+    ): MapObjectState {
+        return if (!canSee) {
+            MapObjectState.NOT_IN_SIGHT
+        } else {
+            MapObjectState.ACTIVE
         }
-        return VoteSpotState.NOT_IN_SIGHT
+    }
+
+    private fun mapVoteSpotState(
+        spot: InGameVoteSpot,
+        state: MapObjectState,
+    ): VoteSpotState {
+        return if (state == MapObjectState.NOT_IN_SIGHT) {
+            VoteSpotState.WAITING_FOR_PAYMENT
+        } else {
+            spot.voteSpotState
+        }
     }
 
 }
