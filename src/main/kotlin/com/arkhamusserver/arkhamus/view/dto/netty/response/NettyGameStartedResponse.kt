@@ -30,5 +30,6 @@ class NettyGameStartedResponse(
     questGivers = emptyList(),
     questSteps = emptyList(),
     statuses = emptyList(),
+    altars = emptyList(),
     type = NettyGameStartedResponse::class.java.simpleName
 )

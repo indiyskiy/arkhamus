@@ -50,7 +50,7 @@ class GodVoteSkipNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val altarHolder = globalGameData.altarHolder
             val altarPolling = globalGameData.altarPolling
-            val altar = globalGameData.altars[this.altarId]
+            val altar = globalGameData.altars.firstOrNull { it.inGameId() == this.altarId }
             val canSkip = godVoteHandler.canVote(altarPolling, altarHolder, user)
             val clues = clueHandler.filterClues(
                 globalGameData.clues,

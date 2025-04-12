@@ -28,7 +28,8 @@ class PayForVoteNettyResponseMapper(
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
     private val questProgressHandler: QuestProgressHandler,
-    private val userStatusMapper: UserInGameStatusMapper
+    private val userStatusMapper: UserInGameStatusMapper,
+    private val altarsDataHandler: AltarsDataHandler,
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == PayForVoteRequestProcessData::class.java
@@ -104,6 +105,7 @@ class PayForVoteNettyResponseMapper(
                     globalGameData.lanterns,
                     globalGameData.levelGeometryData
                 ),
+                altars = altarsDataHandler.mapAltars(globalGameData.altars, it.gameUser, globalGameData),
                 statuses = userStatusMapper.mapStatuses(it.gameUser, globalGameData),
             )
         }

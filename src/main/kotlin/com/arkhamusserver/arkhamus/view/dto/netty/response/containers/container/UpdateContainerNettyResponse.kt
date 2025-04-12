@@ -33,6 +33,7 @@ class UpdateContainerNettyResponse(
     easyVoteSpots: List<EasyVoteSpotResponse>,
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
+    altars: List<EasyAltarResponse>,
     statuses: List<UserStatusResponse>
 ) : ExternalInventoryNettyResponse(
     sortedUserInventory = sortedUserInventory,
@@ -58,6 +59,7 @@ class UpdateContainerNettyResponse(
     questGivers = questGivers,
     questSteps = questSteps,
     statuses = statuses,
+    altars = altars,
     type = UpdateContainerNettyResponse::class.java.simpleName
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

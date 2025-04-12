@@ -2,7 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder

@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.model.ingame
 
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.InGameEntity
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarPollingState
 
 data class InGameAltarPolling(
     override var id: String,

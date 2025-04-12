@@ -27,6 +27,7 @@ class HeartbeatNettyResponseMapper(
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
     private val questProgressHandler: QuestProgressHandler,
+    private val altarsDataHandler: AltarsDataHandler,
     private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
@@ -102,6 +103,11 @@ class HeartbeatNettyResponseMapper(
                     globalGameData,
                 ),
                 clues = it.clues,
+                altars = altarsDataHandler.mapAltars(
+                    globalGameData.altars,
+                    it.gameUser,
+                    globalGameData
+                ),
                 statuses = userStatusMapper.mapStatuses(it.gameUser, globalGameData),
             )
         }

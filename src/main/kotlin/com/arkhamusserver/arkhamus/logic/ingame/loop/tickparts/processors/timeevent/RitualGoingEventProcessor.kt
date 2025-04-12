@@ -67,7 +67,7 @@ class RitualGoingEventProcessor(
 
     private fun addUsersToRitual(globalGameData: GlobalGameData) {
         globalGameData.altarHolder?.let {
-            val altar = globalGameData.altars.values.first()
+            val altar = globalGameData.altars.first()
             val radius = distance(altar, it) + altar.interactionRadius
             addUsersToRitual(globalGameData.users.values, it, radius)
             setUsersPosition(globalGameData.users.values, it, radius)

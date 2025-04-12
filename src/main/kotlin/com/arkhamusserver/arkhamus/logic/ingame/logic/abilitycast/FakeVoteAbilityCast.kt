@@ -55,7 +55,7 @@ class FakeVoteAbilityCast(
         sourceUser: InGameUser,
         globalGameData: GlobalGameData
     ) {
-        val target = (globalGameData.voteSpots + globalGameData.altars.values.random(random)).random(random)
+        val target = (globalGameData.voteSpots + globalGameData.altars.random(random)).random(random)
         if (target is InGameAltar) {
             timeEventHandler.createEvent(
                 game,

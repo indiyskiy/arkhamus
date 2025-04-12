@@ -13,8 +13,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.EventVisibilityFilter
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.AltarOpenRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.toGod
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarPolling
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
@@ -54,7 +54,7 @@ class AltarOpenNettyRequestHandler(
             val users = globalGameData.users.values.filter { it.inGameId() != userId }
             val altarHolder = globalGameData.altarHolder
             val altarPolling = globalGameData.altarPolling
-            val altar = globalGameData.altars[this.altarId]
+            val altar = globalGameData.altars.firstOrNull { it.inGameId() == this.altarId }
             val clues = clueHandler.filterClues(
                 globalGameData.clues,
                 user,

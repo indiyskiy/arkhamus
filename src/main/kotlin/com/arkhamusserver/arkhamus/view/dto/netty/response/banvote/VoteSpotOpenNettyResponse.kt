@@ -34,6 +34,7 @@ class VoteSpotOpenNettyResponse(
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>,
+    altars: List<EasyAltarResponse>,
     statuses: List<UserStatusResponse>
 ) : NettyResponse(
     tick = tick,
@@ -55,5 +56,6 @@ class VoteSpotOpenNettyResponse(
     questGivers = questGivers,
     questSteps = questSteps,
     statuses = statuses,
+    altars = altars,
     type = VoteSpotOpenNettyResponse::class.java.simpleName,
 )

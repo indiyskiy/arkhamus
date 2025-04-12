@@ -28,6 +28,7 @@ class PayForVoteNettyResponse(
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>,
+    altars: List<EasyAltarResponse>,
     statuses: List<UserStatusResponse>
 ) : NettyResponse(
     tick = tick,
@@ -49,5 +50,6 @@ class PayForVoteNettyResponse(
     questGivers = questGivers,
     questSteps = questSteps,
     statuses = statuses,
+    altars = altars,
     type = PayForVoteNettyResponse::class.java.simpleName,
 )

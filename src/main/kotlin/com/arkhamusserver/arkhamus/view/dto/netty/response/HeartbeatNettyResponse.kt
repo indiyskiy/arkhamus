@@ -24,7 +24,8 @@ class HeartbeatNettyResponse(
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>,
-    statuses: List<UserStatusResponse>
+    statuses: List<UserStatusResponse>,
+    altars: List<EasyAltarResponse>
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -45,5 +46,6 @@ class HeartbeatNettyResponse(
     questGivers = questGivers,
     questSteps = questSteps,
     statuses = statuses,
+    altars = altars,
     type = HeartbeatNettyResponse::class.java.simpleName
 )

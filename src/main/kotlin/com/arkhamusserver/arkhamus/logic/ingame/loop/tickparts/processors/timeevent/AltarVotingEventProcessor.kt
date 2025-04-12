@@ -44,7 +44,7 @@ class AltarVotingEventProcessor(
             if (quorum != null) {
                 ritualHandler.lockTheGod(
                     quorum,
-                    globalGameData.altars.values.toList(),
+                    globalGameData.altars,
                     altarPolling,
                     globalGameData.altarHolder,
                     globalGameData.timeEvents,

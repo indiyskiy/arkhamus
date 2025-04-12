@@ -46,7 +46,7 @@ class MockInGameDataAccess : InGameDataAccess {
         TODO("Not yet implemented")
     }
 
-    override fun getAltars(gameId: Long): Map<Long, InGameAltar> {
+    override fun getAltars(gameId: Long): List<InGameAltar> {
         TODO("Not yet implemented")
     }
 

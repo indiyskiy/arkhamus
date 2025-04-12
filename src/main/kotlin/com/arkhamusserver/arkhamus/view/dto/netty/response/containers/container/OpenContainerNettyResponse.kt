@@ -31,6 +31,7 @@ class OpenContainerNettyResponse(
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>,
+    altars: List<EasyAltarResponse>,
     statuses: List<UserStatusResponse>
 ) : NettyResponse(
     tick = tick,
@@ -52,5 +53,6 @@ class OpenContainerNettyResponse(
     questGivers = questGivers,
     questSteps = questSteps,
     statuses = statuses,
+    altars = altars,
     type = OpenContainerNettyResponse::class.java.simpleName
 )

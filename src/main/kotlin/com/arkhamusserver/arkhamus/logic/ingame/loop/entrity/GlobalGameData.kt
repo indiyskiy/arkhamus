@@ -14,7 +14,7 @@ data class GlobalGameData(
 
     var altarHolder: InGameAltarHolder?,
     var altarPolling: InGameAltarPolling? = null,
-    var altars: Map<Long, InGameAltar> = emptyMap(),
+    var altars: List<InGameAltar> = emptyList(),
 
     var clues: CluesContainer = CluesContainer(
         emptyList(),

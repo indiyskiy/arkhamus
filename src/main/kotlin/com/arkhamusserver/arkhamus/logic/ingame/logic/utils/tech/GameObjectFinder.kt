@@ -25,7 +25,7 @@ class GameObjectFinder {
             VOTE_SPOT -> data.voteSpots.firstOrNull { it.inGameId() == id.toLong() }
             CONTAINER -> data.containers[id.toLong()]
             CRAFTER -> data.crafters[id.toLong()]
-            ALTAR -> data.altars[id.toLong()]
+            ALTAR -> data.altars.firstOrNull { it.inGameId() == id.toLong() }
             QUEST_GIVER -> data.questGivers.firstOrNull { it.inGameId() == id.toLong() }
             LANTERN -> data.lanterns.firstOrNull { it.inGameId() == id.toLong() }
             DOOR -> data.doors.firstOrNull { it.inGameId() == id.toLong() }
@@ -76,7 +76,7 @@ class GameObjectFinder {
         VOTE_SPOT -> data.voteSpots
         CONTAINER -> data.containers.values
         CRAFTER -> data.crafters.values
-        ALTAR -> data.altars.values
+        ALTAR -> data.altars
         QUEST_GIVER -> data.questGivers
         LANTERN -> data.lanterns
         DOOR -> data.doors

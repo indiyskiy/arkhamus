@@ -37,7 +37,8 @@ class UpdateCrafterNettyResponseMapper(
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
     private val questProgressHandler: QuestProgressHandler,
-    private val userStatusMapper: UserInGameStatusMapper
+    private val userStatusMapper: UserInGameStatusMapper,
+    private val altarsDataHandler: AltarsDataHandler,
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
         gameResponseMessage::class.java == UpdateCrafterRequestGameData::class.java
@@ -162,6 +163,7 @@ class UpdateCrafterNettyResponseMapper(
             gameUser,
             globalGameData,
         ),
+        altars = altarsDataHandler.mapAltars(globalGameData.altars, gameUser, globalGameData),
         statuses = userStatusMapper.mapStatuses(gameUser, globalGameData),
     )
 

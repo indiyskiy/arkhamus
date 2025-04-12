@@ -33,5 +33,6 @@ class NettyResponseAuth(
     questGivers = emptyList(),
     questSteps = emptyList(),
     statuses = emptyList(),
+    altars = emptyList(),
     type = NettyResponseAuth::class.java.simpleName
 )

@@ -9,8 +9,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.Reque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.AltarOpenRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.responsemapper.NettyResponseMapper
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarPolling
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.mapCellsToResponse
@@ -31,6 +31,7 @@ class AltarOpenNettyResponseMapper(
     private val lanternDataHandler: LanternDataHandler,
     private val voteSpotInfoMapper: VoteSpotInfoMapper,
     private val questProgressHandler: QuestProgressHandler,
+    private val altarsDataHandler: AltarsDataHandler,
     private val userStatusMapper: UserInGameStatusMapper
 ) : NettyResponseMapper {
     override fun acceptClass(gameResponseMessage: RequestProcessData): Boolean =
@@ -112,6 +113,7 @@ class AltarOpenNettyResponseMapper(
                     globalGameData.voteSpots,
                     globalGameData.levelGeometryData
                 ),
+                altars = altarsDataHandler.mapAltars(globalGameData.altars, it.gameUser, globalGameData),
                 statuses = userStatusMapper.mapStatuses(it.gameUser, globalGameData),
             )
         }

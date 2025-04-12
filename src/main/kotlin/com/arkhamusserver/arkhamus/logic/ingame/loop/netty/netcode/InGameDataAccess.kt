@@ -18,7 +18,7 @@ interface InGameDataAccess {
     fun getDoors(gameId: Long): List<InGameDoor>
     fun getAltarHolder(gameId: Long): InGameAltarHolder?
     fun getAltarPolling(gameId: Long): InGameAltarPolling?
-    fun getAltars(gameId: Long): Map<Long, InGameAltar>
+    fun getAltars(gameId: Long): List<InGameAltar>
     fun getTimeEvents(gameId: Long): List<InGameTimeEvent>
     fun getShortTimeEvents(gameId: Long): List<InGameShortTimeEvent>
     fun getCastAbilities(gameId: Long): List<InGameAbilityCast>

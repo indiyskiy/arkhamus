@@ -25,6 +25,7 @@ class AbilityNettyResponse(
     clues: ExtendedCluesResponse,
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
+    altars: List<EasyAltarResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>,
     statuses: List<UserStatusResponse>
 ) : NettyResponse(
@@ -46,6 +47,7 @@ class AbilityNettyResponse(
     easyVoteSpots = easyVoteSpots,
     questGivers = questGivers,
     questSteps = questSteps,
+    altars = altars,
     type = AbilityNettyResponse::class.java.simpleName,
     statuses = statuses,
 ), ActionResponse {

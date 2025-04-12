@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.ritual
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.enums.ingame.MapAltarPollingState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarPollingState
 
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 
@@ -34,6 +34,7 @@ class AltarOpenNettyResponse(
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>,
+    altars: List<EasyAltarResponse>,
     statuses: List<UserStatusResponse>
 ) : NettyResponse(
     tick = tick,
@@ -55,5 +56,6 @@ class AltarOpenNettyResponse(
     questGivers = questGivers,
     questSteps = questSteps,
     statuses = statuses,
+    altars = altars,
     type = AltarOpenNettyResponse::class.java.simpleName,
 )

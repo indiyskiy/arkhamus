@@ -59,7 +59,7 @@ class InGameDataAccessImpl(
         altarPollingRepository.findByGameId(gameId).maxByOrNull { it.started }
 
     override fun getAltars(gameId: Long) =
-        altarRepository.findByGameId(gameId).associateBy { it.inGameId() }
+        altarRepository.findByGameId(gameId)
 
     override fun getContainers(gameId: Long) =
         containerRepository.findByGameId(gameId)

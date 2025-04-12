@@ -31,7 +31,8 @@ class GodVoteCastNettyResponse(
     questGivers: List<QuestGiverResponse>,
     questSteps: List<QuestStepResponse>,
     easyVoteSpots: List<EasyVoteSpotResponse>,
-    statuses: List<UserStatusResponse>
+    statuses: List<UserStatusResponse>,
+    altars: List<EasyAltarResponse>,
 ) : NettyResponse(
     tick = tick,
     userId = userId,
@@ -52,6 +53,7 @@ class GodVoteCastNettyResponse(
     questGivers = questGivers,
     questSteps = questSteps,
     statuses = statuses,
+    altars = altars,
     type = GodVoteCastNettyResponse::class.java.simpleName,
 ), ActionResponse {
     override fun isExecutedSuccessfully(): Boolean =

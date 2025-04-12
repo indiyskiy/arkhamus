@@ -22,6 +22,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL
 import com.arkhamusserver.arkhamus.model.ingame.*
@@ -58,7 +59,7 @@ class RitualHandler(
         god: God,
         currentGameUser: InGameUser,
         allUsers: Collection<InGameUser>,
-        altars: Map<Long, InGameAltar>,
+        altars: List<InGameAltar>,
         altarHolder: InGameAltarHolder?,
         events: List<InGameTimeEvent>,
         game: InRamGame
@@ -259,7 +260,7 @@ class RitualHandler(
         altarPolling: InGameAltarPolling,
         gameData: GodVoteCastRequestProcessData,
         altarHolder: InGameAltarHolder?,
-        altars: Map<Long, InGameAltar>,
+        altars: List<InGameAltar>,
         game: InRamGame,
         allUsers: Collection<InGameUser>,
         events: List<InGameTimeEvent>
@@ -360,7 +361,7 @@ class RitualHandler(
     fun tryToForceStartRitual(
         allUsers: Collection<InGameUser>,
         altarPolling: InGameAltarPolling,
-        altars: Map<Long, InGameAltar>,
+        altars: List<InGameAltar>,
         altarHolder: InGameAltarHolder?,
         events: List<InGameTimeEvent>,
         game: InRamGame
@@ -371,7 +372,7 @@ class RitualHandler(
             if (quorum != null) {
                 lockTheGod(
                     quorum = quorum,
-                    altars = altars.values.toList(),
+                    altars = altars,
                     altarPolling = altarPolling,
                     altarHolder = altarHolder,
                     events = events,
