@@ -20,6 +20,7 @@ enum class UserStateTag(
     //just abilities
     LUMINOUS(Visibility.PUBLIC),
     INVULNERABILITY(Visibility.PUBLIC),
+    STEALTH(Visibility.SOURCE),
     FARSIGHT(Visibility.SOURCE),
 
     //investigator abilities

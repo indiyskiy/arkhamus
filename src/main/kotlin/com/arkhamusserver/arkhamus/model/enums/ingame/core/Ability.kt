@@ -140,7 +140,7 @@ enum class Ability(
         id = 5001,
         requiresItem = true,
         consumesItem = true,
-        //available for everybody couse can ber re-thrown
+        //available for everybody because can ber re-thrown
         cooldown = SECOND_IN_MILLIS * 30,
         globalCooldown = true,
         targetTypes = listOf(CHARACTER),
@@ -171,6 +171,14 @@ enum class Ability(
         availableForRole = setOf(CULTIST),
         cooldown = MINUTE_IN_MILLIS * 8,
         globalCooldown = true,
+    ),
+    HIDE_IN_SHADOWS(
+        id = 5005,
+        requiresItem = true,
+        consumesItem = true,
+        availableForRole = setOf(CULTIST),
+        cooldown = MINUTE_IN_MILLIS * 10,
+        active = MINUTE_IN_MILLIS,
     ),
 
     //clue items 6***
@@ -229,7 +237,6 @@ enum class Ability(
         range = MEDIUM_RANGE,
         targetTypes = listOf(INSCRIPTION_CLUE_GLYPH),
     ),
-
 
     //ADVANCED_USEFUL_ITEM 9***
     KINDLE_CLOAK(

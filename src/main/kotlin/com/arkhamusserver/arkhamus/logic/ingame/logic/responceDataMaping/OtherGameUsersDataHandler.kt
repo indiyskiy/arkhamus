@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
 import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility
+import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import org.springframework.stereotype.Component
@@ -35,7 +36,7 @@ class OtherGameUsersDataHandler(
                 target = thatUser,
                 levelGeometryData = levelGeometryData,
                 affectedByBlind = true
-            )
+            ) || thatUser.stateTags.contains(UserStateTag.STEALTH)
         ) {
             responseToMask.x = null
             responseToMask.y = null

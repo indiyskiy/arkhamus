@@ -24,6 +24,7 @@ class AbilityToItemResolver {
                 SUMMON_NIGHT -> MOON_STONE
                 FAKE_VOTE -> ANNOYING_BELL
                 PEEKABOO_CURSE_ITEM -> RITUAL_DAGGER
+                HIDE_IN_SHADOWS -> UMBRAL_SHROUD
                 //clue search items
                 //clue 2.0
                 SEARCH_FOR_INSCRIPTION -> INSCRIPTION_INVESTIGATION_ITEM

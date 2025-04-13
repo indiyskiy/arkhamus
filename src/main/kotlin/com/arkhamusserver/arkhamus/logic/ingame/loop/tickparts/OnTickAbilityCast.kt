@@ -82,7 +82,6 @@ class OnTickAbilityCast(
         }
     }
 
-
     private fun handleActiveEvent(
         castAbility: InGameAbilityCast,
         globalGameData: GlobalGameData

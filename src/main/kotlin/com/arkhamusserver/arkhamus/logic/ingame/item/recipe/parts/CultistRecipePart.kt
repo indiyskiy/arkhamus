@@ -18,7 +18,11 @@ class CultistRecipePart() : RecipeSourcePart {
 
     override fun recipes(): List<Recipe> {
         return listOf(
-            listOf(Ingredient(SAINT_QUARTZ, 3), Ingredient(DARK_ESSENCE, 3)).toRecipe(
+            listOf(
+                Ingredient(SAINT_QUARTZ, 3),
+                Ingredient(DARK_ESSENCE, 1),
+                Ingredient(SOUL_STONE, 1),
+            ).toRecipe(
                 7001,
                 item = MOON_STONE,
                 timeToCraft = MINUTE_IN_MILLIS,
@@ -50,6 +54,17 @@ class CultistRecipePart() : RecipeSourcePart {
                 7004,
                 item = ANNOYING_BELL,
                 timeToCraft = MINUTE_IN_MILLIS,
+                numberOfItems = 1,
+                crafterTypes = defaultCrafterTypes
+            ),
+            listOf(
+                Ingredient(ELDER_SIGN, 1),
+                Ingredient(RAGS, 1),
+                Ingredient(SOUL_STONE, 1)
+            ).toRecipe(
+                7005,
+                item = UMBRAL_SHROUD,
+                timeToCraft = MINUTE_IN_MILLIS / 2,
                 numberOfItems = 1,
                 crafterTypes = defaultCrafterTypes
             ),
