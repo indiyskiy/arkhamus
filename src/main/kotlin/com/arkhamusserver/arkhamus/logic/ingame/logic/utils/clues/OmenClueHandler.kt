@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.TargetableUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.VisibilityByTagsHandler
@@ -27,7 +28,8 @@ class OmenClueHandler(
     private val inGameOmenClueRepository: InGameOmenClueRepository,
     private val userLocationHandler: UserLocationHandler,
     private val visibilityByTagsHandler: VisibilityByTagsHandler,
-    private val gameObjectFinder: GameObjectFinder
+    private val gameObjectFinder: GameObjectFinder,
+    private val targetableUtils: TargetableUtils
 ) : AdvancedClueHandler {
 
     companion object {
@@ -71,7 +73,9 @@ class OmenClueHandler(
     ): Boolean {
         val targetOmen = (target as? InGameOmenClue) ?: return false
         val targetUser = data.users[targetOmen.userId] ?: return false
-        return targetOmen.turnedOn && userLocationHandler.userCanSeeTargetInRange(
+        return targetOmen.turnedOn &&
+                targetableUtils.isTargetable(targetUser)
+        userLocationHandler.userCanSeeTargetInRange(
             whoLooks = user,
             target = targetUser,
             levelGeometryData = data.levelGeometryData,

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.searchclue
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.TargetableUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Component
 @Component
 class SearchForOmenAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
-    private val gameObjectFinder: GameObjectFinder
+    private val gameObjectFinder: GameObjectFinder,
+    private val targetableUtils: TargetableUtils
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean =
@@ -28,6 +30,7 @@ class SearchForOmenAbilityCondition(
                 target is InGameOmenClue &&
                 with(globalGameData.users[target.userId]) {
                     this != null &&
+                            targetableUtils.isTargetable(user) &&
                             userLocationHandler.userCanSeeTargetInRange(
                                 user,
                                 this,

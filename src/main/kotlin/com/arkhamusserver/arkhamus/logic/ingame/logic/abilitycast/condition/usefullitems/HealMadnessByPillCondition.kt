@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.usefullitems
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.TargetableUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component
 class HealMadnessByPillCondition(
     private val gameObjectFinder: GameObjectFinder,
     private val userLocationHandler: UserLocationHandler,
+    private val targetableUtils: TargetableUtils
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
@@ -33,6 +35,7 @@ class HealMadnessByPillCondition(
         if (target.inGameId() == user.inGameId()) {
             return false
         }
+        if(!targetableUtils.isTargetable(user)) return false
         return userLocationHandler.userCanSeeTargetInRange(
             user,
             target,

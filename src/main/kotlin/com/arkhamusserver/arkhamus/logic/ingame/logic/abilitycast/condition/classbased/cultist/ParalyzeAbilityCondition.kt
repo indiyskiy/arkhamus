@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.classbased.cultist
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.TargetableUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Component
 @Component
 class ParalyzeAbilityCondition(
     private val userLocationHandler: UserLocationHandler,
-    private val gameObjectFinder: GameObjectFinder
+    private val gameObjectFinder: GameObjectFinder,
+    private val targetableUtils: TargetableUtils
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
@@ -28,6 +30,7 @@ class ParalyzeAbilityCondition(
         if (target == null) return false
         val targetUser = (target as? InGameUser) ?: return false
         return targetUser.inGameId() != user.inGameId() &&
+                targetableUtils.isTargetable(user) &&
                 userLocationHandler.userCanSeeTargetInRange(
                     user,
                     targetUser,

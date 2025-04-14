@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.TargetableUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
@@ -15,6 +16,7 @@ class ThrowPotatoCondition(
     private val gameObjectFinder: GameObjectFinder,
     private val userLocationHandler: UserLocationHandler,
     private val inventoryHandler: InventoryHandler,
+    private val targetableUtils: TargetableUtils
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
@@ -30,6 +32,7 @@ class ThrowPotatoCondition(
         return target != null &&
                 target is InGameUser &&
                 target.inGameId() != user.inGameId() &&
+                targetableUtils.isTargetable(target) &&
                 userLocationHandler.userCanSeeTargetInRange(
                     user,
                     target,

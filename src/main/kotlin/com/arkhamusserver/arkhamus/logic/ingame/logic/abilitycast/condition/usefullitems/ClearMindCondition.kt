@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.usefullitems
 
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.TargetableUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GameObjectFinder
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component
 class ClearMindCondition(
     private val gameObjectFinder: GameObjectFinder,
     private val userLocationHandler: UserLocationHandler,
+    private val targetableUtils: TargetableUtils
 ) : AdditionalAbilityCondition {
 
     override fun accepts(ability: Ability): Boolean {
@@ -35,7 +37,14 @@ class ClearMindCondition(
                     ability.range ?: 0.0,
                     true
                 ) &&
-                (target !is InGameUser || target.inGameId() != user.inGameId())
+                (target !is InGameUser || validUser(target, user))
+    }
+
+    private fun validUser(
+        target: InGameUser,
+        user: InGameUser
+    ): Boolean {
+        return target.inGameId() != user.inGameId() && targetableUtils.isTargetable(target)
     }
 
     override fun canBeCastedAtAll(
