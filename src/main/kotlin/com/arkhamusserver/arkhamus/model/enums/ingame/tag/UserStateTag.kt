@@ -22,6 +22,7 @@ enum class UserStateTag(
     INVULNERABILITY(Visibility.PUBLIC),
     STEALTH(Visibility.SOURCE),
     FARSIGHT(Visibility.SOURCE),
+    COFFEINE_RUSH(Visibility.SOURCE),
 
     //investigator abilities
     HAVE_INCLUSION(Visibility.NONE),

@@ -134,6 +134,13 @@ enum class Ability(
         targetTypes = listOf(CHARACTER, QUEST_GIVER),
         range = CLOSE_RANGE
     ),
+    GET_COFFEE(
+        id = 4007,
+        cooldown = MINUTE_IN_MILLIS / 2,
+        active = MINUTE_IN_MILLIS / 3,
+        requiresItem = true,
+        consumesItem = true,
+    ),
 
     //cultist items spell 5***
     THROW_POTATO(

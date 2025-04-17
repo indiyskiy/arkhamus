@@ -74,14 +74,14 @@ class OmenClueHandler(
         val targetOmen = (target as? InGameOmenClue) ?: return false
         val targetUser = data.users[targetOmen.userId] ?: return false
         return targetOmen.turnedOn &&
-                targetableUtils.isTargetable(targetUser)
-        userLocationHandler.userCanSeeTargetInRange(
-            whoLooks = user,
-            target = targetUser,
-            levelGeometryData = data.levelGeometryData,
-            range = targetOmen.interactionRadius,
-            affectedByBlind = true,
-        )
+                targetableUtils.isTargetable(targetUser) &&
+                userLocationHandler.userCanSeeTargetInRange(
+                    whoLooks = user,
+                    target = targetUser,
+                    levelGeometryData = data.levelGeometryData,
+                    range = targetOmen.interactionRadius,
+                    affectedByBlind = true,
+                )
     }
 
     override fun anyCanBeRemovedByAbility(
