@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.view.dto.netty.response.parts
 
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InteractionQuestType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
 
@@ -21,9 +22,19 @@ data class UserQuestResponse(
 data class QuestGiverResponse(
     var id: Long,
     var state: MapObjectState,
+    var questProgressDataResponses: List<QuestProgressDataResponse>
 )
 
 data class QuestStepResponse(
     var id: Long,
     var state: MapObjectState,
+    var questProgressDataResponses: List<QuestProgressDataResponse>
+)
+
+data class QuestProgressDataResponse(
+    var questStepId: Long,
+    var interactionQuestType: InteractionQuestType,
+    var questId: Long,
+    var currentStep: Boolean,
+    val questProgressId: String,
 )

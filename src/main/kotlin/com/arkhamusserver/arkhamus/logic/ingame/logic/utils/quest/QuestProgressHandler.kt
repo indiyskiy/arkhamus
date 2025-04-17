@@ -10,10 +10,12 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameUserQuestProgressRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
+import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InteractionQuestType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.*
 import com.arkhamusserver.arkhamus.model.ingame.*
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestGiverResponse
+import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestProgressDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestStepResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 import org.slf4j.Logger
@@ -346,19 +348,57 @@ class QuestProgressHandler(
     ): QuestStepResponse {
         return QuestStepResponse(
             id = task.inGameId(),
-            state = if (userLocationHandler.userCanSeeTargetInRange(
-                    user,
-                    task,
-                    data.levelGeometryData,
-                    task.interactionRadius,
-                    true
-                )
-            ) {
-                MapObjectState.ACTIVE
-            } else {
-                MapObjectState.NOT_IN_SIGHT
-            }
+            state = state(user, task, data),
+            questProgressDataResponses = mapQuestProgressesDataResponses(task, user, data)
         )
+    }
+
+    private fun mapQuestProgressesDataResponses(
+        task: InGameTask,
+        user: InGameUser,
+        data: GlobalGameData
+    ): List<QuestProgressDataResponse> {
+        return data.questProgressByUserId[user.inGameId()]?.let { questProgresses ->
+            questProgresses.mapNotNull { questProgress ->
+                mapSingleQuestProgress(task, questProgress, data)
+            }
+        }?.sortedBy { it.interactionQuestType.priority } ?: emptyList()
+    }
+
+    private fun mapSingleQuestProgress(
+        task: InGameTask,
+        progress: InGameUserQuestProgress,
+        data: GlobalGameData
+    ): QuestProgressDataResponse? {
+        val relatedQuest = data.quests.firstOrNull { it.inGameId() == progress.questId }
+        if (relatedQuest == null) return null
+        val index = relatedQuest.levelTasks.indexOfFirst { it.inGameId() == task.inGameId() }
+        if (index == -1) return null
+        val currentStep = index == progress.questCurrentStep
+        return QuestProgressDataResponse(
+            questStepId = task.inGameId(),
+            interactionQuestType = InteractionQuestType.QUEST_PROGRESS,
+            questId = relatedQuest.inGameId(),
+            questProgressId = progress.id,
+            currentStep = currentStep
+        )
+    }
+
+    private fun state(
+        user: InGameUser,
+        task: InGameTask,
+        data: GlobalGameData
+    ): MapObjectState = if (userLocationHandler.userCanSeeTargetInRange(
+            user,
+            task,
+            data.levelGeometryData,
+            task.interactionRadius,
+            true
+        )
+    ) {
+        MapObjectState.ACTIVE
+    } else {
+        MapObjectState.NOT_IN_SIGHT
     }
 
     private fun mapQuestGiver(
@@ -380,8 +420,75 @@ class QuestProgressHandler(
         }
         return QuestGiverResponse(
             id = questGiver.inGameId(),
-            state = state
+            state = state,
+            questProgressDataResponses = mapQuestProgressDataResponses(
+                questGiver,
+                user,
+                data
+            )
         )
+    }
+
+    private fun mapQuestProgressDataResponses(
+        questGiver: InGameQuestGiver,
+        user: InGameUser,
+        data: GlobalGameData
+    ): List<QuestProgressDataResponse> {
+        return data.questProgressByUserId[user.inGameId()]?.let { questProgresses ->
+            questProgresses.mapNotNull { questProgress ->
+                mapSingleQuestProgress(questGiver, questProgress, data)
+            }
+        }?.sortedBy { it.interactionQuestType.priority } ?: emptyList()
+    }
+
+    private fun mapSingleQuestProgress(
+        questGiver: InGameQuestGiver,
+        progress: InGameUserQuestProgress,
+        data: GlobalGameData
+    ): QuestProgressDataResponse? {
+        val relatedQuest = data.quests.firstOrNull { it.inGameId() == progress.questId }
+        if (relatedQuest == null) return null
+        val startQuestGiverId = relatedQuest.startQuestGiverId
+        val endQuestGiverId = relatedQuest.endQuestGiverId
+        if (questGiver.inGameId() != startQuestGiverId && questGiver.inGameId() != endQuestGiverId) return null
+
+        if (endQuestGiverId == questGiver.inGameId() && progress.questState == COMPLETED) {
+            return QuestProgressDataResponse(
+                questStepId = endQuestGiverId,
+                interactionQuestType = InteractionQuestType.QUEST_END,
+                questId = relatedQuest.inGameId(),
+                questProgressId = progress.id,
+                currentStep = true
+            )
+        }
+        if (startQuestGiverId == questGiver.inGameId() && progress.questState == AWAITING) {
+            return QuestProgressDataResponse(
+                questStepId = startQuestGiverId,
+                interactionQuestType = InteractionQuestType.QUEST_START,
+                questId = relatedQuest.inGameId(),
+                questProgressId = progress.id,
+                currentStep = true
+            )
+        }
+        if (startQuestGiverId == questGiver.inGameId() && progress.questState in setOf(READ, IN_PROGRESS)) {
+            return QuestProgressDataResponse(
+                questStepId = startQuestGiverId,
+                interactionQuestType = InteractionQuestType.QUEST_START,
+                questId = relatedQuest.inGameId(),
+                questProgressId = progress.id,
+                currentStep = false
+            )
+        }
+        if (endQuestGiverId == questGiver.inGameId() && progress.questState in setOf(READ, IN_PROGRESS)) {
+            return QuestProgressDataResponse(
+                questStepId = startQuestGiverId,
+                interactionQuestType = InteractionQuestType.QUEST_END,
+                questId = relatedQuest.inGameId(),
+                questProgressId = progress.id,
+                currentStep = false
+            )
+        }
+        return null
     }
 }
 
