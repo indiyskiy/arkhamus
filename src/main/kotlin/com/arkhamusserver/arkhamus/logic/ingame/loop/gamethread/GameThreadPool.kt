@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import jakarta.annotation.PreDestroy
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -62,17 +63,37 @@ class GameThreadPool(
             loopHandlerFutures[gameId] = scheduledFuture
             logTaskExecutorInfo(gameId, "Added tick processing loop")
         } catch (th: Throwable) {
-            logger.error("Error occurred while initializing tick processing loop", th)
+            LoggingUtils.error(
+                logger,
+                LoggingUtils.EVENT_ERROR,
+                "Error occurred while initializing tick processing loop for game ${gameSession.id}",
+                th
+            )
             throw th
         }
     }
 
     private fun logTaskExecutorInfo(gameId: Long, reason: String) {
-        logger.info("logging taskExecutor: $reason for game $gameId")
-        logger.info("taskExecutor pool size ${taskExecutor.poolSize}")
-        logger.info("taskExecutor active threads count ${taskExecutor.activeCount}")
-        logger.info("taskExecutor queue size ${taskExecutor.queue.size}")
-        logger.info("loop handler futures size: ${loopHandlerFutures.size}")
+        LoggingUtils.withContext(
+            gameId = gameId.toString(),
+            eventType = LoggingUtils.EVENT_SYSTEM
+        ) {
+            val metrics = mapOf(
+                "poolSize" to taskExecutor.poolSize,
+                "activeThreads" to taskExecutor.activeCount,
+                "queueSize" to taskExecutor.queue.size,
+                "futuresSize" to loopHandlerFutures.size
+            )
+
+            LoggingUtils.info(
+                logger,
+                LoggingUtils.EVENT_SYSTEM,
+                "TaskExecutor status: {} for game {}, metrics: {}",
+                reason,
+                gameId,
+                metrics
+            )
+        }
     }
 
 
@@ -94,18 +115,41 @@ class GameThreadPool(
             false
         }
         if (added) {
-            logger.debug("task added")
+            LoggingUtils.withContext(
+                gameId = gameId.toString(),
+                userId = task.userAccount.id.toString(),
+                eventType = LoggingUtils.EVENT_SYSTEM
+            ) {
+                LoggingUtils.debug(
+                    logger,
+                    LoggingUtils.EVENT_SYSTEM,
+                    "Task added to game processing queue, channelId: {}, messageType: {}",
+                    task.channelId,
+                    task.nettyRequestMessage.javaClass.simpleName
+                )
+            }
         } else {
-            logger.debug("task skipped")
+            LoggingUtils.debug(
+                logger,
+                LoggingUtils.EVENT_SYSTEM,
+                "Task skipped (no task collection found), gameId: {}",
+                gameId
+            )
         }
     }
 
     @PreDestroy
     fun onDestroy() {
+        val handlerCount = loopHandlerFutures.size
         for (handler in loopHandlerFutures.values) {
             handler.cancel(true)
-            logger.info("Loop handler cancelled")
         }
+        LoggingUtils.info(
+            logger,
+            LoggingUtils.EVENT_SYSTEM,
+            "Application shutting down: {} game loop handlers cancelled",
+            handlerCount
+        )
         loopHandlerFutures.clear()
     }
 

@@ -45,6 +45,12 @@ class InGameUserBuilder {
             sawTheEndOfTimes = false,
             connected = true,
             leftTheGame = false
-        )
+        ),
+        initialVisibilityLength = 25.0,
+        currentVisibilityLength = 25.0,
+        initialCooldownSpeed = 1.0,
+        currentCooldownSpeed = 1.0,
+        initialMovementSpeed = 1.0,
+        currentMovementSpeed = 1.0
     )
 }

@@ -56,6 +56,7 @@ dependencies {
     implementation("com.code-disaster.steamworks4j:steamworks4j:1.9.0")
     implementation("com.code-disaster.steamworks4j:steamworks4j-server:1.9.0")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -94,5 +95,3 @@ tasks.bootBuildImage {
 tasks.withType<JavaExec> {
     jvmArgs = listOf("-Djava.library.path=/home/steam/steamworks_sdk/sdk/redistributable_bin")
 }
-
-

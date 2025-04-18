@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.loadGlobalGam
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.*
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.statuses.OneTickUserStatusHandler
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -33,7 +34,7 @@ class ArkhamusOneTickLogicImpl(
     companion object {
 //        const val SAVE_ACTIVITY_TICK_DELTA = 60 * 1000 / TICK_DELTA / 8 //8 times per minute aka 20 tps
         const val SAVE_ACTIVITY_TICK_DELTA = 60 * 1000 / TICK_DELTA / 10 //10 times per minute aka 25 tps
-        private var logger = LoggerFactory.getLogger(ArkhamusOneTickLogicImpl::class.java)
+        private val logger = LoggerFactory.getLogger(ArkhamusOneTickLogicImpl::class.java)
     }
 
     override fun processCurrentTasks(
@@ -90,7 +91,18 @@ class ArkhamusOneTickLogicImpl(
 
             return responses
         } catch (e: Throwable) {
-            logger.error("Error processing current tasks: ${e.message}", e)
+            LoggingUtils.error(
+                logger,
+                LoggingUtils.EVENT_ERROR,
+                "Error processing current tasks: ${e.message}",
+                e
+            )
+            LoggingUtils.withContext(
+                gameId = game.gameId.toString(),
+                eventType = LoggingUtils.EVENT_ERROR
+            ) {
+                logger.error("Game state at error: tick=${game.currentTick}, gameId=${game.gameId}, state=${game.state}")
+            }
         }
         return emptyList()
     }

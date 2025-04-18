@@ -14,6 +14,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InteractionQue
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState.*
 import com.arkhamusserver.arkhamus.model.ingame.*
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestGiverResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestProgressDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestStepResponse
@@ -126,17 +127,17 @@ class QuestProgressHandler(
         data: GameUserData,
         currentGameTime: Long
     ) {
-        logger.info("add more quests maybe?")
+        LoggingUtils.info(logger, LoggingUtils.EVENT_SYSTEM, "add more quests maybe?")
         val userQuestProgress = globalGameData.questProgressByUserId[data.gameUser!!.inGameId()] ?: emptyList()
         if (userQuestCreationHandler.needToAddQuests(userQuestProgress)) {
-            logger.info("add more quests definitely")
+            LoggingUtils.info(logger, LoggingUtils.EVENT_SYSTEM, "add more quests definitely")
             val newQuestProgress = userQuestCreationHandler.addQuests(
                 data,
                 globalGameData.quests,
                 userQuestProgress,
                 currentGameTime
             )
-            logger.info("new quest progress ${newQuestProgress.size}")
+            LoggingUtils.info(logger, LoggingUtils.EVENT_SYSTEM, "new quest progress {}", newQuestProgress.size)
             data.userQuest += newQuestProgress.map {
                 mapQuestProgress(globalGameData.quests, it)
             }
@@ -489,8 +490,3 @@ class QuestProgressHandler(
         return null
     }
 }
-
-
-
-
-

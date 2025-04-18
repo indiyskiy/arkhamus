@@ -16,6 +16,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -46,22 +47,28 @@ class GameEndLogic(
         if (game.state == GameState.FINISHED.name || game.state == GameState.GAME_END_SCREEN.name) {
             return
         }
-        saveGameState(game, gameEndReason)
-        val gameSession = endGameSession(game, gameEndReason)
-        setWinnersLosers(gameSession, gameEndReason, users)
-        createEndOfGameTimeEvent(game, timeLeft = timeLeft)
-        saveActivities(game.inGameId())
-        addRelations(gameSession)
-        users.values.forEach { user ->
-            if (!user.techData.leftTheGame) {
-                userStatusService.updateUserStatus(user.inGameId(), CultpritsUserState.ONLINE, true)
+
+        LoggingUtils.withContext(
+            gameId = game.gameId.toString(),
+            eventType = LoggingUtils.EVENT_GAME_END
+        ) {
+            saveGameState(game, gameEndReason)
+            val gameSession = endGameSession(game, gameEndReason)
+            setWinnersLosers(gameSession, gameEndReason, users)
+            createEndOfGameTimeEvent(game, timeLeft = timeLeft)
+            saveActivities(game.inGameId())
+            addRelations(gameSession)
+            users.values.forEach { user ->
+                if (!user.techData.leftTheGame) {
+                    userStatusService.updateUserStatus(user.inGameId(), CultpritsUserState.ONLINE, true)
+                }
             }
         }
     }
 
     @Transactional
     fun endTheGameCompletely(game: InRamGame) {
-        logger.info("ending the game completely ${game.gameId}")
+        LoggingUtils.info(logger, LoggingUtils.EVENT_GAME_END, "ending the game completely {}", game.gameId)
         game.state = GameState.FINISHED.name
         inRamGameRepository.save(game)
 
@@ -82,7 +89,7 @@ class GameEndLogic(
         game: InRamGame,
         timeLeft: Long? = null
     ) {
-        logger.info("creating end of the game event")
+        LoggingUtils.info(logger, LoggingUtils.EVENT_GAME_END, "creating end of the game event")
         timeEventHandler.createEvent(
             game,
             InGameTimeEventType.GAME_END,
@@ -95,9 +102,9 @@ class GameEndLogic(
         gameEndReason: GameEndReason,
         users: Map<Long, InGameUser>
     ) {
-        logger.info("set winners and losers")
+        LoggingUtils.info(logger, LoggingUtils.EVENT_GAME_END, "set winners and losers")
         val databaseUsers = userOfGameSessionRepository.findByGameSessionIdAndLeftTheLobby(gameSession.id!!)
-        logger.info("found ${databaseUsers.size} users of the game")
+        LoggingUtils.info(logger, LoggingUtils.EVENT_GAME_END, "found {} users of the game", databaseUsers.size)
         setWonOrLoose(gameEndReason, users, databaseUsers)
         userOfGameSessionRepository.saveAll(databaseUsers)
     }
@@ -106,7 +113,7 @@ class GameEndLogic(
         game: InRamGame,
         gameEndReason: GameEndReason
     ) {
-        logger.info("saving end game state")
+        LoggingUtils.info(logger, LoggingUtils.EVENT_GAME_END, "saving end game state")
         game.state = GameState.GAME_END_SCREEN.name
         game.gameEndReason = gameEndReason.name
         inRamGameRepository.save(game)
@@ -116,7 +123,7 @@ class GameEndLogic(
         game: InRamGame,
         gameEndReason: GameEndReason
     ): GameSession {
-        logger.info("ending game session")
+        LoggingUtils.info(logger, LoggingUtils.EVENT_GAME_END, "ending game session")
         val gameSession = gameSessionRepository.findById(game.gameId).get()
         gameSession.state = GameState.GAME_END_SCREEN
         gameSession.gameEndReason = gameEndReason
@@ -141,7 +148,13 @@ class GameEndLogic(
         databaseUsers.forEach { databaseUser ->
             val inGameUser = inGameUsers[databaseUser.userAccount.id]
             inGameUser?.let { userNullSafe -> userNullSafe.techData.won = databaseUser.won }
-            logger.info("in-game user ${inGameUser?.inGameId() ?: "null"} won? ${inGameUser?.techData?.won ?: "null"}")
+            val userId = inGameUser?.inGameId()?.toString() ?: "null"
+            val userWon = when (inGameUser?.techData?.won) {
+                true -> "true"
+                false -> "false"
+                null -> "null"
+            }
+            LoggingUtils.info(logger, LoggingUtils.EVENT_GAME_END, "in-game user {} won? {}", userId, userWon)
         }
     }
 
@@ -199,6 +212,11 @@ class GameEndLogic(
     }
 
     private fun logUserWinStatus(user: UserOfGameSession) {
-        logger.info("user ${user.userAccount.id} won? ${user.won ?: "null"}")
+        val wonStatus = when (user.won) {
+            true -> "true"
+            false -> "false"
+            null -> "null"
+        }
+        LoggingUtils.info(logger, LoggingUtils.EVENT_GAME_END, "user {} won? {}", user.userAccount.id.toString(), wonStatus)
     }
 }

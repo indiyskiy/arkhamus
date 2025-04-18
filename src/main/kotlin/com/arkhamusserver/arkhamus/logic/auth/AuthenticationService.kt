@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.Arkhamus
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.CustomUserDetailsService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.RefreshTokenRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.TokenService
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
 import com.arkhamusserver.arkhamus.view.dto.user.UserDto
@@ -46,10 +47,10 @@ class AuthenticationService(
     }
 
     fun authUser(user: ArkhamusUserDetails): AuthenticationResponse {
-        logger.info("Authenticating user: {}", user.username)
+        LoggingUtils.info(logger, LoggingUtils.EVENT_SECURITY, "Authenticating user: {}", user.username)
         val accessToken = createAccessToken(user)
         val refreshToken = createRefreshToken(user)
-        logger.info("Authenticating user: {}", user.username)
+        LoggingUtils.info(logger, LoggingUtils.EVENT_SECURITY, "Generated tokens for user: {}", user.username)
         refreshTokenRepository.save(refreshToken, user)
         return AuthenticationResponse(
             accessToken = accessToken,
