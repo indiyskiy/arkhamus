@@ -362,8 +362,11 @@ class QuestProgressHandler(
             questProgresses.mapNotNull { questProgress ->
                 mapSingleQuestProgress(task, questProgress, data)
             }
-        }?.sortedBy { it.interactionQuestType.priority } ?: emptyList()
+        }?.sortedByDescending { it.interactionQuestType.priority * multiplier(it) } ?: emptyList()
     }
+
+    private fun multiplier(response: QuestProgressDataResponse) =
+        if (response.currentStep) 10 else 1
 
     private fun mapSingleQuestProgress(
         task: InGameTask,
@@ -376,7 +379,6 @@ class QuestProgressHandler(
         if (index == -1) return null
         val currentStep = index == progress.questCurrentStep
         return QuestProgressDataResponse(
-            questStepId = task.inGameId(),
             interactionQuestType = InteractionQuestType.QUEST_PROGRESS,
             questId = relatedQuest.inGameId(),
             questProgressId = progress.id,
@@ -438,7 +440,7 @@ class QuestProgressHandler(
             questProgresses.mapNotNull { questProgress ->
                 mapSingleQuestProgress(questGiver, questProgress, data)
             }
-        }?.sortedBy { it.interactionQuestType.priority } ?: emptyList()
+        }?.sortedByDescending { it.interactionQuestType.priority } ?: emptyList()
     }
 
     private fun mapSingleQuestProgress(
@@ -454,7 +456,6 @@ class QuestProgressHandler(
 
         if (endQuestGiverId == questGiver.inGameId() && progress.questState == COMPLETED) {
             return QuestProgressDataResponse(
-                questStepId = endQuestGiverId,
                 interactionQuestType = InteractionQuestType.QUEST_END,
                 questId = relatedQuest.inGameId(),
                 questProgressId = progress.id,
@@ -463,7 +464,6 @@ class QuestProgressHandler(
         }
         if (startQuestGiverId == questGiver.inGameId() && progress.questState == AWAITING) {
             return QuestProgressDataResponse(
-                questStepId = startQuestGiverId,
                 interactionQuestType = InteractionQuestType.QUEST_START,
                 questId = relatedQuest.inGameId(),
                 questProgressId = progress.id,
@@ -472,7 +472,6 @@ class QuestProgressHandler(
         }
         if (startQuestGiverId == questGiver.inGameId() && progress.questState in setOf(READ, IN_PROGRESS)) {
             return QuestProgressDataResponse(
-                questStepId = startQuestGiverId,
                 interactionQuestType = InteractionQuestType.QUEST_START,
                 questId = relatedQuest.inGameId(),
                 questProgressId = progress.id,
@@ -481,7 +480,6 @@ class QuestProgressHandler(
         }
         if (endQuestGiverId == questGiver.inGameId() && progress.questState in setOf(READ, IN_PROGRESS)) {
             return QuestProgressDataResponse(
-                questStepId = startQuestGiverId,
                 interactionQuestType = InteractionQuestType.QUEST_END,
                 questId = relatedQuest.inGameId(),
                 questProgressId = progress.id,

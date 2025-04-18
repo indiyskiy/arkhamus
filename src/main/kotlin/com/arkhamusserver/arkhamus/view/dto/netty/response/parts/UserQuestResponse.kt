@@ -32,7 +32,6 @@ data class QuestStepResponse(
 )
 
 data class QuestProgressDataResponse(
-    var questStepId: Long,
     var interactionQuestType: InteractionQuestType,
     var questId: Long,
     var currentStep: Boolean,
