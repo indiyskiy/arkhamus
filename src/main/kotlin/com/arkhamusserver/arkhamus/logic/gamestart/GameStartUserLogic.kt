@@ -124,6 +124,12 @@ class GameStartUserLogic(
         y = marker.y,
         z = marker.z,
         visibilityModifiers = visibleModifiersByRole(user.roleInGame!!),
+        initialVisibilityLength = GlobalGameSettings.GLOBAL_VISION_DISTANCE,
+        currentVisibilityLength = GlobalGameSettings.GLOBAL_VISION_DISTANCE,
+        initialCooldownSpeed = GlobalGameSettings.DEFAULT_ABILITY_COOLDOWN_MULTIPLIER,
+        currentCooldownSpeed = GlobalGameSettings.DEFAULT_ABILITY_COOLDOWN_MULTIPLIER,
+        initialMovementSpeed = GlobalGameSettings.DEFAULT_MOVEMENT_SPEED_MULTIPLIER,
+        currentMovementSpeed = GlobalGameSettings.DEFAULT_MOVEMENT_SPEED_MULTIPLIER,
     )
 
     private fun buildTechData(): TechInGameUserData = TechInGameUserData(

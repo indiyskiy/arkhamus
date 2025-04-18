@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.DEFAULT_ABILITY_COOLDOWN_MULTIPLIER
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAbilityCastRepository
@@ -9,6 +10,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import kotlin.math.roundToLong
 
 @Component
 class OnTickAbilityCast(
@@ -26,15 +28,17 @@ class OnTickAbilityCast(
         timePassedMillis: Long
     ) {
         castAbilities.forEach { castAbility ->
+            val user = globalGameData.users[castAbility.sourceUserId]
+            val currentCooldownSpeed = user?.currentCooldownSpeed ?: DEFAULT_ABILITY_COOLDOWN_MULTIPLIER
             when (castAbility.state) {
                 ACTIVE -> {
                     handleActiveEvent(castAbility, globalGameData)
-                    pushActive(castAbility, globalGameData, timePassedMillis)
+                    pushActive(castAbility, globalGameData, timePassedMillis, currentCooldownSpeed)
                     inGameAbilityCastRepository.save(castAbility)
                 }
 
                 ON_COOLDOWN -> {
-                    pushCooldown(castAbility, timePassedMillis)
+                    pushCooldown(castAbility, timePassedMillis, currentCooldownSpeed)
                     inGameAbilityCastRepository.save(castAbility)
                 }
 
@@ -46,16 +50,17 @@ class OnTickAbilityCast(
     private fun pushActive(
         castAbility: InGameAbilityCast,
         globalGameData: GlobalGameData,
-        timePassedMillis: Long
+        timePassedMillis: Long,
+        currentCooldownSpeed: Double
     ) {
         if (castAbility.timeLeftActive > 0) {
-            pushNotPastEvent(castAbility, timePassedMillis)
+            pushNotPastEvent(castAbility, timePassedMillis, currentCooldownSpeed)
             if (castAbility.timeLeftActive <= 0) {
                 transitActiveToCooldown(castAbility, globalGameData)
             }
         } else {
             transitActiveToCooldown(castAbility, globalGameData)
-            pushCooldown(castAbility, timePassedMillis)
+            pushCooldown(castAbility, timePassedMillis, currentCooldownSpeed)
         }
     }
 
@@ -71,9 +76,13 @@ class OnTickAbilityCast(
     }
 
 
-    private fun pushCooldown(castAbility: InGameAbilityCast, timePassedMillis: Long) {
+    private fun pushCooldown(
+        castAbility: InGameAbilityCast,
+        timePassedMillis: Long,
+        currentCooldownSpeed: Double
+    ) {
         if (castAbility.timeLeftCooldown > 0) {
-            pushNotPastEvent(castAbility, timePassedMillis)
+            pushNotPastEvent(castAbility, timePassedMillis, currentCooldownSpeed)
             if (castAbility.timeLeftCooldown <= 0) {
                 castAbility.state = PAST
             }
@@ -106,10 +115,11 @@ class OnTickAbilityCast(
 
     private fun pushNotPastEvent(
         abilityCast: InGameAbilityCast,
-        timePassedMillis: Long
+        timePassedMillis: Long,
+        currentCooldownSpeed: Double
     ) {
-        abilityCast.timePast += timePassedMillis
-        abilityCast.timeLeftCooldown -= timePassedMillis
+        abilityCast.timePast += (timePassedMillis * currentCooldownSpeed).roundToLong()
+        abilityCast.timeLeftCooldown -= (timePassedMillis * currentCooldownSpeed).roundToLong()
         abilityCast.timeLeftActive -= timePassedMillis
     }
 }

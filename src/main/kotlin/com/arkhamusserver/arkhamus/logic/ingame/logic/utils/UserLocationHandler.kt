@@ -1,11 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.logic.visibility.VisibilityMap
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.LevelGeometryData
-import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuff
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameLantern
@@ -82,16 +80,13 @@ class UserLocationHandler(
     fun inVisionDistance(
         whoLooks: InGameUser,
         target: WithPoint,
-        affectedByBlind: Boolean,
+        affectedByLengthModifiers: Boolean,
     ): Boolean {
         val distance =
-            if (affectedByBlind && whoLooks.additionalData.madness.madnessDebuffs.contains(
-                    MadnessDebuff.BLIND
-                )
-            ) {
-                GlobalGameSettings.GLOBAL_VISION_DISTANCE * 0.75
+            if (affectedByLengthModifiers) {
+                whoLooks.currentVisibilityLength
             } else {
-                GlobalGameSettings.GLOBAL_VISION_DISTANCE
+                whoLooks.initialVisibilityLength
             }
         return distanceLessOrEquals(whoLooks, target, distance)
     }

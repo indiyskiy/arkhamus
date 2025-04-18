@@ -23,7 +23,13 @@ data class InGameUser(
     var stateTags: Set<UserStateTag> = emptySet(),
     var visibilityModifiers: Set<VisibilityModifier>,
     val additionalData: AdditionalInGameUserData,
-    val techData: TechInGameUserData
+    val techData: TechInGameUserData,
+    val initialVisibilityLength: Double,
+    var currentVisibilityLength: Double,
+    val initialCooldownSpeed: Double,
+    var currentCooldownSpeed: Double,
+    var initialMovementSpeed: Double,
+    var currentMovementSpeed: Double,
 ) : InGameEntity, WithPoint, WithTrueIngameId, WithVisibilityModifiers {
 
     override fun x(): Double {

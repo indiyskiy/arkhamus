@@ -43,7 +43,7 @@ class MadnessTickProcessHandler(
         madnessDebuffs.forEach { debuff ->
             val madnessEffect: Boolean = when (debuff) {
                 MadnessDebuff.BLIND -> {
-                    false
+                    processBlindMadness(user)
                 }
 
                 MadnessDebuff.PSYCHIC_UNSTABLE -> {
@@ -106,6 +106,11 @@ class MadnessTickProcessHandler(
     ) {
         val godEvent = data.timeEvents.first { it.type == InGameTimeEventType.GOD_AWAKEN }
         eventHandler.pushEvent(godEvent, timePassedMillis / 2)
+    }
+
+    private fun processBlindMadness(user: InGameUser): Boolean {
+        user.currentVisibilityLength /= 0.75
+        return false
     }
 
     private fun teleportMaybe(

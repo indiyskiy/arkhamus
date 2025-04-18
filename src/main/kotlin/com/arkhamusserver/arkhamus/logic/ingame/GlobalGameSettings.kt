@@ -19,6 +19,12 @@ class GlobalGameSettings {
         const val GLOBAL_VISION_DISTANCE: Double = 15.0
         const val HIGH_GROUND_HEIGHT: Double = 1.0
 
+        //ABILITIES
+        const val DEFAULT_ABILITY_COOLDOWN_MULTIPLIER: Double = 1.0
+
+        //MOVEMENT
+        const val DEFAULT_MOVEMENT_SPEED_MULTIPLIER: Double = 1.0
+
         //QUESTS
         const val QUESTS_ON_START = 5
         const val QUESTS_TO_REFRESH = 2

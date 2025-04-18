@@ -9,6 +9,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
+import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
+import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
 import org.springframework.stereotype.Component
@@ -50,8 +52,7 @@ class CanAbilityBeCastHandler(
         }
         val availableAbilities = visibleAbilitiesList.map {
             val cooldown = summoningSickness?.timeLeft ?: (relatedAbilityCastMap[it.id]?.timeLeftCooldown ?: 0)
-            val maxCooldown = summoningSickness?.type?.getDefaultTime()
-                ?: (relatedAbilityCastMap[it.id]?.let { it.timeLeftCooldown + it.timePast } ?: 0)
+            val maxCooldown = getMaxCooldown(summoningSickness, relatedAbilityCastMap, it)
             val canBeCast = (fitAdditionalConditionsMap[it] != false) && (cooldown <= 0)
             val charges = charges(it, user)
             AbilityOfUserResponse(
@@ -64,6 +65,20 @@ class CanAbilityBeCastHandler(
         }
         return availableAbilities
     }
+
+    private fun getMaxCooldown(
+        summoningSickness: InGameTimeEvent?,
+        relatedAbilityCastMap: Map<Int, InGameAbilityCast?>,
+        ability: Ability
+    ): Long = summoningSicknessTime(summoningSickness) ?: countRealMaxCooldown(relatedAbilityCastMap, ability)
+
+    private fun countRealMaxCooldown(
+        relatedAbilityCastMap: Map<Int, InGameAbilityCast?>,
+        ability: Ability
+    ): Long = (relatedAbilityCastMap[ability.id]?.let { it.timeLeftCooldown + it.timePast } ?: 0)
+
+    private fun summoningSicknessTime(summoningSickness: InGameTimeEvent?): Long? =
+        summoningSickness?.type?.getDefaultTime()
 
     fun canBeCastedAtAll(
         ability: Ability,

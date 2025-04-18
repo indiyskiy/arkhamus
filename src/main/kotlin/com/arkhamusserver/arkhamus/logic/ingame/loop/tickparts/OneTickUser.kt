@@ -21,6 +21,9 @@ class OneTickUser(
 
     fun processUsers(data: GlobalGameData, timePassedMillis: Long) {
         data.users.forEach { user ->
+            user.value.currentVisibilityLength = user.value.initialVisibilityLength
+            user.value.currentCooldownSpeed = user.value.initialCooldownSpeed
+            user.value.currentMovementSpeed = user.value.initialMovementSpeed
             processUser(user.value, data, timePassedMillis)
         }
     }
