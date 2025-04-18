@@ -462,7 +462,7 @@ class QuestProgressHandler(
                 currentStep = true
             )
         }
-        if (startQuestGiverId == questGiver.inGameId() && progress.questState == AWAITING) {
+        if (startQuestGiverId == questGiver.inGameId() && progress.questState in setOf(AWAITING, READ)) {
             return QuestProgressDataResponse(
                 interactionQuestType = InteractionQuestType.QUEST_START,
                 questId = relatedQuest.inGameId(),
@@ -470,7 +470,7 @@ class QuestProgressHandler(
                 currentStep = true
             )
         }
-        if (startQuestGiverId == questGiver.inGameId() && progress.questState in setOf(READ, IN_PROGRESS)) {
+        if (startQuestGiverId == questGiver.inGameId() && progress.questState in setOf(IN_PROGRESS)) {
             return QuestProgressDataResponse(
                 interactionQuestType = InteractionQuestType.QUEST_START,
                 questId = relatedQuest.inGameId(),
