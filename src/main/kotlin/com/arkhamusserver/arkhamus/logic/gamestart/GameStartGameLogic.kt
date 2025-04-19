@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -19,7 +20,7 @@ class GameStartGameLogic(
     private val gameSessionRepository: GameSessionRepository
 ) {
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(GameStartGameLogic::class.java)
+        private val logger = LoggingUtils.getLogger<GameStartGameLogic>()
         private val random: Random = Random(System.currentTimeMillis())
     }
 

@@ -2,8 +2,10 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
+import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.DistortionClueHandler
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -13,7 +15,7 @@ class CanRecipeBeCraftedHandler(
 ) {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(CanRecipeBeCraftedHandler::class.java)
+        private val logger = LoggingUtils.getLogger<CanRecipeBeCraftedHandler>()
     }
 
     fun canUserCraft(

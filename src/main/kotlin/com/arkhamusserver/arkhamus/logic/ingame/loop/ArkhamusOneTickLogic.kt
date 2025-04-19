@@ -2,14 +2,13 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 interface ArkhamusOneTickLogic {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(ArkhamusOneTickLogic::class.java)
+        private val logger = LoggingUtils.getLogger<ArkhamusOneTickLogic>()
     }
 
     fun processCurrentTasks(

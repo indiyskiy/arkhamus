@@ -4,6 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameGameUserRepository
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -15,7 +16,7 @@ class GameNettyLogic(
     val userRepository: InGameGameUserRepository
 ) {
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(GameNettyLogic::class.java)
+        private val logger = LoggingUtils.getLogger<GameNettyLogic>()
     }
 
     fun process(

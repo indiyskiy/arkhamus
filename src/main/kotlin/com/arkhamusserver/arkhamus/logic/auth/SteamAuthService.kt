@@ -27,7 +27,7 @@ class SteamAuthService(
 ) {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(SteamAuthService::class.java)
+        private val logger = LoggingUtils.getLogger<SteamAuthService>()
         private val random = Random(System.currentTimeMillis())
     }
 

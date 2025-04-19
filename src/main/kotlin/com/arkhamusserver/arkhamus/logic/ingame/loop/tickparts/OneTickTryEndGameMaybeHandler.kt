@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -21,7 +22,7 @@ class OneTickTryEndGameMaybeHandler(
 ) {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(OneTickTryEndGameMaybeHandler::class.java)
+        private val logger = LoggingUtils.getLogger<OneTickTryEndGameMaybeHandler>()
     }
 
     @Transactional

@@ -13,6 +13,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.InGameObjectTag
 import com.arkhamusserver.arkhamus.model.ingame.*
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestRewardResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -30,7 +31,7 @@ class QuestRewardUtils(
     private val clueHandler: ClueHandler
 ) {
     companion object {
-        private var logger: Logger = LoggerFactory.getLogger(QuestRewardUtils::class.java)
+        private val logger = LoggingUtils.getLogger<QuestRewardUtils>()
         private val random = Random(System.currentTimeMillis())
     }
 

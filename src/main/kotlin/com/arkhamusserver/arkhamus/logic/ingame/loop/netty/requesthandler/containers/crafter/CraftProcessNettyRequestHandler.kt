@@ -15,6 +15,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.RequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.containers.crafter.CraftProcessRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.NettyRequestHandler
+import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.containers.ContainerLikeThingsHandler
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.crafter.CraftProcessRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
@@ -35,7 +37,7 @@ class CraftProcessNettyRequestHandler(
 ) : NettyRequestHandler {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(CraftProcessNettyRequestHandler::class.java)
+        private val logger = LoggingUtils.getLogger<CraftProcessNettyRequestHandler>()
     }
 
     override fun acceptClass(nettyRequestMessage: NettyBaseRequestMessage): Boolean =

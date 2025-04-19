@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.config.netty
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChannel
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import io.netty.channel.Channel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,7 +17,7 @@ class ChannelRepository {
     private val arkhamusUserCache: ConcurrentMap<Long, ArkhamusChannel> = ConcurrentHashMap()
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(ChannelRepository::class.java)
+        private val logger = LoggingUtils.getLogger<ChannelRepository>()
     }
 
     fun put(arkhamusChannel: ArkhamusChannel) {

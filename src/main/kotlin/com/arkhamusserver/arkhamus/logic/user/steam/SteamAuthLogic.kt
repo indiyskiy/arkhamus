@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.user.steam
 
 import com.arkhamusserver.arkhamus.logic.auth.SteamAuthService
+import com.arkhamusserver.arkhamus.logic.user.relations.UserRelationLogic
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -12,7 +14,7 @@ class SteamAuthLogic(
     private val steamAuthService: SteamAuthService
 ) {
     companion object {
-        private val logger = LoggerFactory.getLogger(SteamAuthLogic::class.java)
+        private val logger = LoggingUtils.getLogger<SteamAuthLogic>()
     }
 
    @Transactional

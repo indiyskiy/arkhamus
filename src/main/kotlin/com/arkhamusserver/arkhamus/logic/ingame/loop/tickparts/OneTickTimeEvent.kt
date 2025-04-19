@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameTimeEventReposi
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.math.min
@@ -19,7 +19,7 @@ class OneTickTimeEvent(
 ) {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(OneTickTimeEvent::class.java)
+        var logger: Logger = LoggingUtils.getLogger<OneTickTimeEvent>()
     }
 
     @Transactional

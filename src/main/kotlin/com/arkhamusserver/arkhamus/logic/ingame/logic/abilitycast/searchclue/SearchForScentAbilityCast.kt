@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameScentClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -18,7 +19,7 @@ class SearchForScentAbilityCast(
 ) : AbilityCast {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(SearchForScentAbilityCast::class.java)
+        private val logger = LoggingUtils.getLogger<SearchForScentAbilityCast>()
     }
 
     override fun accept(ability: Ability): Boolean {

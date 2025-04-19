@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors
 
+import com.arkhamusserver.arkhamus.config.database.levelDesign.LevelDesignQuestsRelatedStuffProcessor
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
 import com.arkhamusserver.arkhamus.logic.ingame.quest.QuestDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.TextKeyRepository
@@ -13,6 +14,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.LevelT
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.QuestGiver
 import com.arkhamusserver.arkhamus.model.enums.TextKeyType
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -28,7 +30,7 @@ class RandomQuestGenerator(
 
     companion object {
         private val random = Random(System.currentTimeMillis())
-        private val logger: Logger = LoggerFactory.getLogger(RandomQuestGenerator::class.java)
+        private val logger = LoggingUtils.getLogger<RandomQuestGenerator>()
     }
 
     fun generateRandomQuests(level: Level, questGivers: List<QuestGiver>, levelTasks: List<LevelTask>) {

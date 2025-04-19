@@ -1,8 +1,10 @@
 package com.arkhamusserver.arkhamus.config.netty
 
+import com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors.RandomQuestGenerator
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.jsonparser.NettyRequestJsonParser
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.JsonToObjectRequestDecoder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ProcessingHandler
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import io.netty.channel.ChannelInitializer
 import io.netty.channel.socket.SocketChannel
 import io.netty.handler.codec.DelimiterBasedFrameDecoder
@@ -20,7 +22,7 @@ class ArkhamusChannelInitializer(
 
     companion object {
         const val MAX_LENGTH = 2 * 1024 * 1024
-        private var logger: Logger = LoggerFactory.getLogger(ArkhamusChannelInitializer::class.java)
+        private val logger = LoggingUtils.getLogger<ArkhamusChannelInitializer>()
     }
 
     override fun initChannel(socketChannel: SocketChannel) {

@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserMadnessHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarPollingState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
@@ -8,8 +7,7 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarPolling
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,7 +16,7 @@ class GodVoteHandler(
 ) {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(InventoryHandler::class.java)
+        private val logger = LoggingUtils.getLogger<GodVoteHandler>()
     }
 
     fun canBeStarted(

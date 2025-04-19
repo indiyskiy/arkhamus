@@ -2,8 +2,10 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timee
 
 import com.arkhamusserver.arkhamus.logic.ingame.GameEndLogic
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
+import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.cultist.MadnessLinkAbilityProcessor
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -15,7 +17,7 @@ class GameEndEventProcessor(
 ) : TimeEventProcessor {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(GameEndLogic::class.java)
+        private val logger = LoggingUtils.getLogger<GameEndEventProcessor>()
     }
 
     override fun accept(type: InGameTimeEventType): Boolean =

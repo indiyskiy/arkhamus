@@ -1,8 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.user.relations
 
+import com.arkhamusserver.arkhamus.logic.user.UserSkinLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserRelationRepository
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserRelation
 import com.arkhamusserver.arkhamus.model.enums.UserRelationType.*
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -11,7 +13,7 @@ class OtherUserRelationUpdateLogic(
     private val userRelationRepository: UserRelationRepository
 ) {
     companion object {
-        private val logger = LoggerFactory.getLogger(OtherUserRelationUpdateLogic::class.java)
+        private val logger = LoggingUtils.getLogger<OtherUserRelationUpdateLogic>()
         private val RELATION_TYPE_SET = setOf(
             HAD_CUSTOM_GAME,
             HAD_LADDER_GAME,

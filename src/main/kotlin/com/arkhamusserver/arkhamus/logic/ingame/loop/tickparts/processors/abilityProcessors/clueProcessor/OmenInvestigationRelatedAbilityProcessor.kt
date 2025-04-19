@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilit
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameOmenClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -15,7 +16,7 @@ class OmenInvestigationRelatedAbilityProcessor(
 ) : ActiveAbilityProcessor {
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(OmenInvestigationRelatedAbilityProcessor::class.java)
+        private val logger = LoggingUtils.getLogger<OmenInvestigationRelatedAbilityProcessor>()
     }
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {

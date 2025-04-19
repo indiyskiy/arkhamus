@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.exception.entity.Chan
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.GameState.PENDING
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyBaseRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.NettyRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.request.tech.AuthRequestMessage
@@ -29,7 +30,7 @@ class ProcessingHandler(
 ) : SimpleChannelInboundHandler<NettyRequestMessage>() {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(ProcessingHandler::class.java)
+        private val logger = LoggingUtils.getLogger<ProcessingHandler>()
     }
 
     override fun channelActive(ctx: ChannelHandlerContext) {

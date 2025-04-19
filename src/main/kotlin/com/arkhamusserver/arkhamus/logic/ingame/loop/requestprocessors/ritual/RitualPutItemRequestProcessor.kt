@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.RitualPutItemRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -17,7 +18,7 @@ class RitualPutItemRequestProcessor(
 ) : NettyRequestProcessor {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(RitualPutItemRequestProcessor::class.java)
+        private val logger = LoggingUtils.getLogger<RitualPutItemRequestProcessor>()
     }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {

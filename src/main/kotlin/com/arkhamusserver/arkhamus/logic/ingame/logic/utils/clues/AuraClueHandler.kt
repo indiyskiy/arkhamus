@@ -22,8 +22,8 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameAuraClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.parts.AuraCluePoint
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.cos
 import kotlin.math.sin
@@ -44,8 +44,8 @@ class AuraClueHandler(
     companion object {
         const val MAX_ON_GAME = 7
         const val DEFAULT_INTERACTION_RADIUS = 1.0
+        private val logger = LoggingUtils.getLogger<AuraClueHandler>()
         private val random: Random = Random(System.currentTimeMillis())
-        private val logger = LoggerFactory.getLogger(AuraClueHandler::class.java)
     }
 
     override fun accept(clues: List<Clue>): Boolean {

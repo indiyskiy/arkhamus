@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.classbased.investigator
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
+import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.KindleCloakAbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.abilityresult.ShortTimeEventPersonWithTimeData
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.abilityresult.UserActivityView
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ShortTimeEventHandler
@@ -17,6 +18,7 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameUserSkinSetting
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -34,7 +36,7 @@ class LastPersonTouchAbilityCast(
             ActivityType.CRAFTER_OPENED,
             ActivityType.CRAFTER_CLOSED,
         )
-        private val logger = LoggerFactory.getLogger(LastPersonTouchAbilityCast::class.java)
+        private val logger = LoggingUtils.getLogger<LastPersonTouchAbilityCast>()
     }
 
     override fun accept(ability: Ability): Boolean {

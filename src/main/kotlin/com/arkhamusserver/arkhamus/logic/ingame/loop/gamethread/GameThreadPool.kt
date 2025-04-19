@@ -23,7 +23,7 @@ class GameThreadPool(
     private val threadId = AtomicInteger(1)
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(GameThreadPool::class.java)
+        private val logger = LoggingUtils.getLogger<GameThreadPool>()
 
         //TODO read from config?
         const val CORE_POOL_SIZE = 5

@@ -9,6 +9,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.UserQuestState
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
 import com.arkhamusserver.arkhamus.model.ingame.InGameUserQuestProgress
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -20,7 +21,7 @@ class UserQuestCreationHandler(
     private val inGameUserQuestProgressRepository: InGameUserQuestProgressRepository,
 ) {
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(UserQuestCreationHandler::class.java)
+        private val logger = LoggingUtils.getLogger<UserQuestCreationHandler>()
         val random: Random = Random(System.currentTimeMillis())
 
         val QUESTS_IN_PROGRESS = setOf(

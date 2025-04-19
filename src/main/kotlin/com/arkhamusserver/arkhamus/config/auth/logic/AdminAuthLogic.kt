@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.config.auth.logic
 
+import com.arkhamusserver.arkhamus.config.auth.CustomAccessDeniedHandler
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.Cookie
@@ -13,7 +15,7 @@ class AdminAuthLogic(
     private val mainAuthLogic: MainAuthLogic,
 ) {
     companion object {
-        private val logger = LoggerFactory.getLogger(AdminAuthLogic::class.java)
+        private val logger = LoggingUtils.getLogger<AdminAuthLogic>()
     }
 
     fun getAdminAuthData(request: HttpServletRequest): Cookie? {

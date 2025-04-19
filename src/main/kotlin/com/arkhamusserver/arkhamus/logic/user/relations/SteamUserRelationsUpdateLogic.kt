@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserRelationR
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserRelation
 import com.arkhamusserver.arkhamus.model.enums.UserRelationType
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -15,7 +16,7 @@ class SteamUserRelationsUpdateLogic(
     private val userRelationRepository: UserRelationRepository
 ) {
     companion object {
-        private val logger = LoggerFactory.getLogger(SteamUserRelationsUpdateLogic::class.java)
+        private val logger = LoggingUtils.getLogger<SteamUserRelationsUpdateLogic>()
     }
 
     @Transactional

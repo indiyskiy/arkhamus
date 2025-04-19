@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.config.netty
 
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.Channel
 import jakarta.annotation.PreDestroy
@@ -22,7 +23,7 @@ class TcpNettyServer {
     private var channel: Channel? = null
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(TcpNettyServer::class.java)
+        private val logger = LoggingUtils.getLogger<TcpNettyServer>()
     }
 
     fun start() {

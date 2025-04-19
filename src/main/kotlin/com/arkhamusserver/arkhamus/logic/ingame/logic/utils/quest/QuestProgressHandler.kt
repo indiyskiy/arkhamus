@@ -20,7 +20,6 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestProgressDa
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.QuestStepResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.UserQuestResponse
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.math.min
@@ -35,7 +34,7 @@ class QuestProgressHandler(
 
     companion object {
         val notTakenStates = setOf(AWAITING)
-        var logger: Logger = LoggerFactory.getLogger(QuestProgressHandler::class.java)
+        var logger: Logger = LoggingUtils.getLogger<QuestProgressHandler>()
     }
 
     @Transactional
@@ -320,8 +319,11 @@ class QuestProgressHandler(
         user: InGameUser,
         data: GlobalGameData
     ): List<QuestStepResponse> {
-        val allStepIds = userQuestResponses.flatMap { it.questStepIds }.distinct()
-        val allSteps = data.quests.flatMap { it.levelTasks }.filter { it.inGameId() in allStepIds }
+        val allStepIds = userQuestResponses.flatMap { it.questStepIds }.distinct().toSet()
+        val allSteps = data.quests
+            .flatMap { it.levelTasks }
+            .filter { it.inGameId() in allStepIds }
+            .distinctBy { it.inGameId() }
         return allSteps.map {
             mapStep(it, user, data)
         }

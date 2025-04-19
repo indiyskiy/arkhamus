@@ -6,6 +6,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 import org.slf4j.LoggerFactory
@@ -20,7 +21,7 @@ class ClueHandler(
 
     companion object {
         private val random: Random = Random(System.currentTimeMillis())
-        private val logger = LoggerFactory.getLogger(ClueHandler::class.java)
+        private val logger = LoggingUtils.getLogger<ClueHandler>()
     }
 
     fun filterClues(

@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.view.controller.admin.browser
 
+import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping
 class MainPageController {
 
     companion object {
-        val logger = LoggerFactory.getLogger(MainPageController::class.java)!!
+        private val logger = LoggingUtils.getLogger<MainPageController>()
     }
 
     @GetMapping("/")

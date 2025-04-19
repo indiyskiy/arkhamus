@@ -11,6 +11,7 @@ import com.arkhamusserver.arkhamus.model.ingame.clues.InGameInscriptionClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameInscriptionClueGlyph
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -22,7 +23,7 @@ class SearchForInscriptionAbilityCast(
 ) : AbilityCast {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(SearchForInscriptionAbilityCast::class.java)
+        private val logger = LoggingUtils.getLogger<SearchForInscriptionAbilityCast>()
     }
 
     override fun accept(ability: Ability): Boolean {

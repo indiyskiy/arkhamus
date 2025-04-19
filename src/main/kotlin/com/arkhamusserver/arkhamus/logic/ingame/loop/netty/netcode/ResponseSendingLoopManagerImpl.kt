@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.globalutils.toJson
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -15,7 +16,7 @@ class ResponseSendingLoopManagerImpl(
     private val taskExecutor: ThreadPoolTaskExecutor = ThreadPoolTaskExecutor()
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(ResponseSendingLoopManagerImpl::class.java)
+        private val logger = LoggingUtils.getLogger<ResponseSendingLoopManagerImpl>()
     }
 
     init {

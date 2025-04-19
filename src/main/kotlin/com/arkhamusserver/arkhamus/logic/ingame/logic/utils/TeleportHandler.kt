@@ -4,10 +4,10 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
-import org.slf4j.LoggerFactory
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 
 @Component
@@ -16,7 +16,7 @@ class TeleportHandler(
 ) {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(TeleportHandler::class.java)
+        private val logger = LoggingUtils.getLogger<TeleportHandler>()
     }
 
     fun forceTeleport(

@@ -5,6 +5,7 @@ import com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors.Lev
 import com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors.RandomQuestGenerator
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CREATE_TEST_QUESTS
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -17,7 +18,7 @@ class LevelDesignQuestsRelatedStuffProcessor(
 ) {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(LevelDesignQuestsRelatedStuffProcessor::class.java)
+        private val logger = LoggingUtils.getLogger<LevelDesignQuestsRelatedStuffProcessor>()
     }
 
     fun generateQuestRelatedStuff(

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.gamestart
 
+import com.arkhamusserver.arkhamus.logic.cache.SteamUserRelationCache
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameContainerRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.ContainerRepository
@@ -11,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.ContainerTag
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -26,7 +28,7 @@ class GameStartContainerLogic(
 ) {
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(GameStartContainerLogic::class.java)
+        private val logger = LoggingUtils.getLogger<GameStartContainerLogic>()
         val random: Random = Random(System.currentTimeMillis())
     }
 

@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.config.netty
 
 
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.ChannelOption
 import io.netty.channel.nio.NioEventLoopGroup
@@ -20,7 +21,7 @@ import java.net.InetSocketAddress
 class NettyConfiguration(val nettyProperties: ArkhamusNettyProperties) {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(NettyConfiguration::class.java)
+        private val logger = LoggingUtils.getLogger<NettyConfiguration>()
     }
 
     @Bean(name = ["serverBootstrap"])

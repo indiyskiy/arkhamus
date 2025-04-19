@@ -1,6 +1,8 @@
 package com.arkhamusserver.arkhamus.view.controller.admin.browser.tech.auth
 
 import com.arkhamusserver.arkhamus.logic.auth.AuthenticationService
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
+import com.arkhamusserver.arkhamus.view.controller.admin.browser.level.BrowserQuestController
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
@@ -17,7 +19,7 @@ class AuthBrowserController(
 ) {
 
     companion object {
-        val logger = LoggerFactory.getLogger(AuthBrowserController::class.java)!!
+        private val logger = LoggingUtils.getLogger<AuthBrowserController>()
     }
 
     @PostMapping(

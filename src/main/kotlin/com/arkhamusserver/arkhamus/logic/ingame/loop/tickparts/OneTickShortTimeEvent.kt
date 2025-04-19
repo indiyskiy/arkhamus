@@ -1,8 +1,10 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
+import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.tech.LeaveTheGameRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameShortTimeEventRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.ingame.InGameShortTimeEvent
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -15,7 +17,7 @@ class OneTickShortTimeEvent(
 ) {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(OneTickShortTimeEvent::class.java)
+        private val logger = LoggingUtils.getLogger<OneTickShortTimeEvent>()
     }
 
     @Transactional

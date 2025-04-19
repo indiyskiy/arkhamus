@@ -1,10 +1,9 @@
 package com.arkhamusserver.arkhamus.config.repository
 
-import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.NonGenericMyCrudRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.InRamGameRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.NonGenericMyCrudRepository
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import jakarta.annotation.PostConstruct
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -14,6 +13,11 @@ class InGameRepositoryCleaner(
     private val inRamGameRepository: InRamGameRepository,
     private val toDelete: List<NonGenericMyCrudRepository>,
 ) {
+
+    companion object {
+        private val logger = LoggingUtils.getLogger<InGameRepositoryCleaner>()
+    }
+
     @PostConstruct
     @Transactional
     fun cleanAll() {
@@ -36,11 +40,6 @@ class InGameRepositoryCleaner(
         inRamGameRepository.findByGameId(gameId).firstOrNull()?.let { inRamGameRepository.delete(it) } ?: {
             logger.warn("Game repository contains no game for id $gameId")
         }
-
-    }
-
-    companion object {
-        var logger: Logger = LoggerFactory.getLogger(InGameRepositoryCleaner::class.java)
     }
 
 }

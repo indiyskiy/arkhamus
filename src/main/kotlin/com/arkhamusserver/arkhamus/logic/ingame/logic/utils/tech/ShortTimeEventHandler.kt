@@ -13,6 +13,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameShortTimeEvent
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -27,7 +28,7 @@ class ShortTimeEventHandler(
 ) {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(ShortTimeEventHandler::class.java)
+        private val logger = LoggingUtils.getLogger<ShortTimeEventHandler>()
     }
 
     fun filter(

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
+import com.arkhamusserver.arkhamus.config.repository.InGameRepositoryCleaner
 import com.arkhamusserver.arkhamus.logic.user.UserSkinLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameActivityRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
@@ -9,6 +10,7 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.GameActivity
 import com.arkhamusserver.arkhamus.model.enums.GameEndReason
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.admin.*
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
 import org.slf4j.LoggerFactory
@@ -32,7 +34,7 @@ class AdminGameLogic(
         const val TARGET = "Target"
         const val RELATED_ID = "Related ID"
 
-        private val logger = LoggerFactory.getLogger(AdminGameLogic::class.java)
+        private val logger = LoggingUtils.getLogger<AdminGameLogic>()
     }
 
 

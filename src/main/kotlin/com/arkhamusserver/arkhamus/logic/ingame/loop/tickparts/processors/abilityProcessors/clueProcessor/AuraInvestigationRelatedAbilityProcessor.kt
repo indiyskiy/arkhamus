@@ -2,9 +2,11 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abili
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
+import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.PretendCultistAbilityProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameAuraClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -15,7 +17,7 @@ class AuraInvestigationRelatedAbilityProcessor(
 ) : ActiveAbilityProcessor {
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(AuraInvestigationRelatedAbilityProcessor::class.java)
+        private val logger = LoggingUtils.getLogger<AuraInvestigationRelatedAbilityProcessor>()
     }
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {

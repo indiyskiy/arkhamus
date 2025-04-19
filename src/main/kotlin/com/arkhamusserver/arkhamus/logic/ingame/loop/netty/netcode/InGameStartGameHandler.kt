@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.ingame.interfaces.InRamGameR
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameStartedResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
@@ -23,7 +24,7 @@ class InGameStartGameHandler(
     private val gameSessionRepository: GameSessionRepository
 ) {
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(InGameStartGameHandler::class.java)
+        private val logger = LoggingUtils.getLogger<InGameStartGameHandler>()
     }
 
     @Transactional

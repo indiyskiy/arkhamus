@@ -1,7 +1,9 @@
 package com.arkhamusserver.arkhamus.model.dataaccess
 
 import com.arkhamusserver.arkhamus.config.CultpritsUserState
+import com.arkhamusserver.arkhamus.logic.user.steam.SteamStartServerLogic
 import com.arkhamusserver.arkhamus.model.UserStateHolder
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.concurrent.ConcurrentHashMap
@@ -13,7 +15,7 @@ class UserStatusService {
         const val AFK_TIME = 1000 * 60 * 5 //5 min
         const val OFFLINE_TIME = 1000 * 60 * 30 //30 min
 
-        private val logger = LoggerFactory.getLogger(UserStatusService::class.java)
+        private val logger = LoggingUtils.getLogger<UserStatusService>()
     }
 
     private val userStatusMap: ConcurrentHashMap<Long, UserStateHolder> = ConcurrentHashMap()

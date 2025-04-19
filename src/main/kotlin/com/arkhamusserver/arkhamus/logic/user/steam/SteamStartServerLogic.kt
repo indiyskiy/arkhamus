@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.user.steam
 
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamServerIdDto
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
@@ -10,7 +11,7 @@ class SteamStartServerLogic(
     private val steamHandler: SteamHandler,
 ) {
     companion object {
-        private val logger = LoggerFactory.getLogger(SteamStartServerLogic::class.java)
+        private val logger = LoggingUtils.getLogger<SteamStartServerLogic>()
     }
 
     // Automatically initialize the game server on application startup

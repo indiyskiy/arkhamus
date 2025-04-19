@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -24,7 +25,7 @@ class RitualGoingEventProcessor(
 ) : TimeEventProcessor {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(RitualGoingEventProcessor::class.java)
+        private val logger = LoggingUtils.getLogger<RitualGoingEventProcessor>()
     }
 
     override fun accept(type: InGameTimeEventType): Boolean =

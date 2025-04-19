@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame
 
 import com.arkhamusserver.arkhamus.config.CultpritsUserState
+import com.arkhamusserver.arkhamus.logic.gamestart.LootTableHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.user.relations.GameEndRelationLogic
@@ -34,7 +35,7 @@ class GameEndLogic(
     private val gameEndRelationLogic: GameEndRelationLogic
 ) {
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(GameEndLogic::class.java)
+        private val logger = LoggingUtils.getLogger<GameEndLogic>()
     }
 
     @Transactional

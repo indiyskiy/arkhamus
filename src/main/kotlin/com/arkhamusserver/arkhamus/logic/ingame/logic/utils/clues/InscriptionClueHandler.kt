@@ -22,6 +22,7 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameInscriptionClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameInscriptionClueGlyph
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.InscriptionClueAdditionalDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.PossibleGlyphResponse
@@ -43,7 +44,7 @@ class InscriptionClueHandler(
         const val GLYPH_VARIANTS = 20
         const val MAX_ON_GAME = 7
         private val random: Random = Random(System.currentTimeMillis())
-        private val logger = LoggerFactory.getLogger(InscriptionClueHandler::class.java)
+        private val logger = LoggingUtils.getLogger<DistortionClueHandler>()
     }
 
     override fun accept(clues: List<Clue>): Boolean {

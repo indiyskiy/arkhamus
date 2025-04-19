@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.usefullThings
 
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
+import com.arkhamusserver.arkhamus.view.controller.steam.SteamAuthController
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.random.Random
@@ -8,7 +10,7 @@ import kotlin.random.Random
 class MadnessProbabilityCalculator {
 
     companion object {
-        private val logger = org.slf4j.LoggerFactory.getLogger(MadnessProbabilityCalculator::class.java)
+        private val logger = LoggingUtils.getLogger<MadnessProbabilityCalculator>()
     }
 
     private val random: Random = Random(System.currentTimeMillis())

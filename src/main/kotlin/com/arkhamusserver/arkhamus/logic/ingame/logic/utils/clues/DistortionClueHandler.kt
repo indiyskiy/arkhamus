@@ -19,6 +19,7 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameDistortionClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.DistortionClueAdditionalDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.SimpleUserAdditionalDataResponse
@@ -37,7 +38,7 @@ class DistortionClueHandler(
     companion object {
         const val MAX_ON_GAME = 7
         private val random: Random = Random(System.currentTimeMillis())
-        private val logger = LoggerFactory.getLogger(DistortionClueHandler::class.java)
+        private val logger = LoggingUtils.getLogger<DistortionClueHandler>()
     }
 
     override fun accept(clues: List<Clue>): Boolean {

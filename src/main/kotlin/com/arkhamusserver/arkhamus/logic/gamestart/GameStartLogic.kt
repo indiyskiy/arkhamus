@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserSkinSettings
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -30,7 +31,7 @@ class GameStartLogic(
 ) {
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(GameStartLogic::class.java)
+        private val logger = LoggingUtils.getLogger<GameStartLogic>()
         val random: Random = Random(System.currentTimeMillis())
     }
 

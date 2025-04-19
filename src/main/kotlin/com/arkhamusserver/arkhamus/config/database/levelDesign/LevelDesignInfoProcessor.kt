@@ -1,10 +1,12 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
+import com.arkhamusserver.arkhamus.config.database.UsersConfig
 import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignAllCluesInfoProcessor
 import com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors.LevelDesignZonesInfoProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.model.enums.LevelState
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -29,7 +31,7 @@ class LevelDesignInfoProcessor(
 ) {
     companion object {
         private const val JSON_PATH = "ingame/level/level_data.json"
-        private val logger: Logger = LoggerFactory.getLogger(LevelDesignInfoProcessor::class.java)
+        private val logger = LoggingUtils.getLogger<LevelDesignInfoProcessor>()
         private val gson: Gson = Gson()
     }
 

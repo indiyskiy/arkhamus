@@ -7,6 +7,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.LeaveTheGameRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -17,7 +18,7 @@ class LeaveTheGameRequestProcessor(
 ) : NettyRequestProcessor {
 
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(LeaveTheGameRequestProcessor::class.java)
+        private val logger = LoggingUtils.getLogger<LeaveTheGameRequestProcessor>()
     }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {

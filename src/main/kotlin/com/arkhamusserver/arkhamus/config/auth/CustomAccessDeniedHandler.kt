@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.config.auth
 
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
@@ -11,7 +12,7 @@ import java.io.IOException
 class CustomAccessDeniedHandler : AccessDeniedHandler {
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(CustomAccessDeniedHandler::class.java)
+        val logger: Logger = LoggingUtils.getLogger<CustomAccessDeniedHandler>()
     }
 
 

@@ -9,7 +9,7 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
-import org.slf4j.LoggerFactory
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,7 +19,7 @@ class LastPersonTouchCondition(
 ) : AdditionalAbilityCondition {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(LastPersonTouchCondition::class.java)
+        private val logger = LoggingUtils.getLogger<LastPersonTouchCondition>()
     }
 
     override fun accepts(ability: Ability): Boolean {

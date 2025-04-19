@@ -10,6 +10,7 @@ import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -20,7 +21,7 @@ class TimeEventHandler(
     private val inGameTimeEventRepository: InGameTimeEventRepository
 ) {
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(TimeEventHandler::class.java)
+        private val logger = LoggingUtils.getLogger<TimeEventHandler>()
     }
 
     @Transactional

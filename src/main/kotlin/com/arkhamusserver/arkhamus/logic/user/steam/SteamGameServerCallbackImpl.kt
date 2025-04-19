@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.user.steam
 
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.codedisaster.steamworks.*
 import org.slf4j.LoggerFactory
 
@@ -8,7 +9,7 @@ class SteamGameServerCallbackImpl(
 ) : SteamGameServerCallback {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(SteamGameServerCallbackImpl::class.java)
+        private val logger = LoggingUtils.getLogger<SteamGameServerCallbackImpl>()
     }
 
     override fun onSteamServersConnected() {

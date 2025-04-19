@@ -1,10 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.user
 
+import com.arkhamusserver.arkhamus.logic.ingame.quest.QuestDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserSkinRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserSkinSettings
 import com.arkhamusserver.arkhamus.model.enums.SkinColor
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.UserSkinDto
 import com.arkhamusserver.arkhamus.view.maker.UserSkinDtoMaker
 import org.slf4j.LoggerFactory
@@ -20,7 +22,7 @@ class UserSkinLogic(
 ) {
     companion object {
         private val random = Random(System.currentTimeMillis())
-        private val logger = LoggerFactory.getLogger(UserSkinLogic::class.java)
+        private val logger = LoggingUtils.getLogger<UserSkinLogic>()
     }
 
     fun userSkin(): UserSkinDto {

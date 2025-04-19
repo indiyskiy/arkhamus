@@ -4,14 +4,14 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType.*
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
-import org.slf4j.LoggerFactory
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 
 @Component
 class GameObjectFinder {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(GameObjectFinder::class.java)
+        private val logger = LoggingUtils.getLogger<GameObjectFinder>()
     }
 
     fun findById(

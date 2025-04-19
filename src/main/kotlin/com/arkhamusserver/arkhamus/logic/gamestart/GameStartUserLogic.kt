@@ -17,6 +17,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.parts.*
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -34,7 +35,7 @@ class GameStartUserLogic(
     companion object {
         private val random: Random = Random(System.currentTimeMillis())
         const val DEFAULT_INVENTORY_SIZE = 16
-        private val logger: Logger = LoggerFactory.getLogger(GameStartLogic::class.java)
+        private val logger = LoggingUtils.getLogger<GameStartUserLogic>()
     }
 
     @Transactional

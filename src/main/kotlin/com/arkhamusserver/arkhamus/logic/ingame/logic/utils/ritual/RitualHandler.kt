@@ -26,6 +26,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarPollin
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapAltarState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL
 import com.arkhamusserver.arkhamus.model.ingame.*
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.apache.commons.lang3.math.NumberUtils.min
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -49,7 +50,7 @@ class RitualHandler(
 ) {
     companion object {
         const val MADNESS_PER_USER = GlobalGameSettings.MAX_USER_MADNESS / 12.0
-        var logger: Logger = LoggerFactory.getLogger(RitualHandler::class.java)
+        private val logger = LoggingUtils.getLogger<RitualHandler>()
     }
 
     @Transactional

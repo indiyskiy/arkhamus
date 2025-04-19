@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.auth
 
 import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.config.auth.JwtProperties
+import com.arkhamusserver.arkhamus.logic.admin.AdminGameLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.ArkhamusUserDetails
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.CustomUserDetailsService
@@ -30,7 +31,7 @@ class AuthenticationService(
 ) {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(AuthenticationService::class.java)
+        private val logger = LoggingUtils.getLogger<AuthenticationService>()
     }
 
     @Transactional

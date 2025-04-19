@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.ingame.InGameCraftProcess
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -22,7 +23,7 @@ class OnTickCraftProcess(
     private val recipesSource: RecipesSource,
 ) {
     companion object {
-        var logger: Logger = LoggerFactory.getLogger(OnTickCraftProcess::class.java)
+        private val logger = LoggingUtils.getLogger<OnTickCraftProcess>()
     }
 
     @Transactional

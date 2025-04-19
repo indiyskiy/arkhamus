@@ -12,6 +12,7 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -21,7 +22,7 @@ class TownPortalByScrollAbilityCast(
 ) : AbilityCast {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(TownPortalByScrollAbilityCast::class.java)
+        private val logger = LoggingUtils.getLogger<TownPortalByScrollAbilityCast>()
     }
 
     override fun accept(ability: Ability): Boolean {

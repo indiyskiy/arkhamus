@@ -3,6 +3,7 @@ package com.arkhamusserver.arkhamus.view.controller.admin.browser.level
 import com.arkhamusserver.arkhamus.logic.admin.AdminQuestLogic
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminLevelTaskDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestGiverDto
@@ -21,7 +22,7 @@ class BrowserQuestController(
 ) {
 
     companion object {
-        val logger = LoggerFactory.getLogger(BrowserQuestController::class.java)!!
+        private val logger = LoggingUtils.getLogger<BrowserQuestController>()
     }
 
     @PostMapping("/admin/browser/level/{levelId}/quest")

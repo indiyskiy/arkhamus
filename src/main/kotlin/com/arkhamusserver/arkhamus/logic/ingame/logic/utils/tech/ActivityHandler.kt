@@ -10,7 +10,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.ingame.InGameActivity
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
-import org.slf4j.LoggerFactory
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -21,7 +21,7 @@ class ActivityHandler(
     private val gameSessionRepository: GameSessionRepository
 ) {
     companion object {
-        private var logger = LoggerFactory.getLogger(ActivityHandler::class.java)
+        private var logger = LoggingUtils.getLogger<ActivityHandler>()
     }
 
     fun addActivity(
@@ -50,7 +50,7 @@ class ActivityHandler(
             relatedEventId = relatedEventId
         )
         inGameActivityRepository.save(activity)
-        logger.info("added activity: ${activity.activityType.name}")
+        LoggingUtils.info(logger, LoggingUtils.EVENT_SYSTEM, "added activity: ${activity.activityType.name}")
         return activity
     }
 
@@ -118,7 +118,7 @@ class ActivityHandler(
                 userOfGameSession = gameSession.usersOfGameSession.first { it.userAccount.id == inGameActivity.sourceUserId },
             )
         }
-        logger.info("saving ${activities.size} activities")
+        LoggingUtils.info(logger, LoggingUtils.EVENT_SYSTEM, "saving ${activities.size} activities")
         gameActivityRepository.saveAll(activities)
         inGameActivityRepository.deleteAll(inGameActivities)
     }

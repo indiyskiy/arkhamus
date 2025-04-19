@@ -2,6 +2,8 @@ package com.arkhamusserver.arkhamus.view.controller.steam
 
 import com.arkhamusserver.arkhamus.logic.user.steam.SteamAuthLogic
 import com.arkhamusserver.arkhamus.logic.user.steam.SteamStartServerLogic
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
+import com.arkhamusserver.arkhamus.view.controller.exception.UnpredictedExceptionHandler
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamAuthRequestDto
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamServerIdDto
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
@@ -16,7 +18,7 @@ class SteamAuthController(
     private val steamStartServerLogic: SteamStartServerLogic,
 ) {
     companion object {
-        private val logger = LoggerFactory.getLogger(SteamAuthController::class.java)
+        private val logger = LoggingUtils.getLogger<SteamAuthController>()
     }
 
     // Retrieve the Steam game server's SteamID
