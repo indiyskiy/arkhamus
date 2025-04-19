@@ -92,13 +92,13 @@ class ArkhamusOneTickLogicImpl(
         } catch (e: Throwable) {
             LoggingUtils.error(
                 logger,
-                LoggingUtils.EVENT_ERROR,
+                LoggingUtils.EVENT_IN_GAME_SYSTEM,
                 "Error processing current tasks: ${e.message}",
                 e
             )
             LoggingUtils.withContext(
-                gameId = game.gameId.toString(),
-                eventType = LoggingUtils.EVENT_ERROR
+                gameId = game.gameId,
+                eventType = LoggingUtils.EVENT_IN_GAME_SYSTEM
             ) {
                 logger.error("Game state at error: tick=${game.currentTick}, gameId=${game.gameId}, state=${game.state}")
             }

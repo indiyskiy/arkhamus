@@ -50,7 +50,11 @@ class ActivityHandler(
             relatedEventId = relatedEventId
         )
         inGameActivityRepository.save(activity)
-        LoggingUtils.info(logger, LoggingUtils.EVENT_SYSTEM, "added activity: ${activity.activityType.name}")
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_IN_GAME_SYSTEM,
+        ) {
+            logger.info("added activity: ${activity.activityType.name}")
+        }
         return activity
     }
 
@@ -118,7 +122,12 @@ class ActivityHandler(
                 userOfGameSession = gameSession.usersOfGameSession.first { it.userAccount.id == inGameActivity.sourceUserId },
             )
         }
-        LoggingUtils.info(logger, LoggingUtils.EVENT_SYSTEM, "saving ${activities.size} activities")
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_GAME_END,
+            gameId = gameId
+        ) {
+            logger.info("saving ${activities.size} activities")
+        }
         gameActivityRepository.saveAll(activities)
         inGameActivityRepository.deleteAll(inGameActivities)
     }

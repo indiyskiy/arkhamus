@@ -35,7 +35,11 @@ class RandomQuestGenerator(
         if (hasOldQuests) {
             return
         }
-        logger.info("processing quest for level ${level.id}")
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_OUTER_GAME_SYSTEM
+        ) {
+            logger.info("processing quest for level ${level.id}")
+        }
         val quests = (0..QUESTS_ON_START * 10 - 1).map { number ->
             val randomQuestGiverStart = questGivers.random()
             val randomQuestGiverEnd = questGivers.random()
@@ -66,6 +70,10 @@ class RandomQuestGenerator(
         questStepRepository.saveAll(quests.flatMap { it.questSteps })
 
         val statistic = quests.groupBy { it.dificulty }.map { it.key to it.value.size }.sortedBy { it.first.ordinal }
-        logger.info(statistic.joinToString { "${it.first} - ${it.second}" })
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_OUTER_GAME_SYSTEM
+        ) {
+            logger.info(statistic.joinToString { "${it.first} - ${it.second}" })
+        }
     }
 }

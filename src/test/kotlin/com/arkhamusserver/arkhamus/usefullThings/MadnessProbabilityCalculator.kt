@@ -1,16 +1,11 @@
 package com.arkhamusserver.arkhamus.usefullThings
 
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.random.Random
 
 @SpringBootTest
 class MadnessProbabilityCalculator {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<MadnessProbabilityCalculator>()
-    }
 
     private val random: Random = Random(System.currentTimeMillis())
 
@@ -34,7 +29,7 @@ class MadnessProbabilityCalculator {
             val active = 0 == random.nextInt(activeValue)
             if (active) activations++
         }
-        logger.info("activations = $activations")
-        logger.info("activations per minute = ${1.0 * activations / numberOfMinutes}")
+        println("activations = $activations")
+        println("activations per minute = ${1.0 * activations / numberOfMinutes}")
     }
 }

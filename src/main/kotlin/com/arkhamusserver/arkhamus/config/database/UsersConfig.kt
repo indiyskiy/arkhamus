@@ -58,7 +58,11 @@ class UsersConfig {
 
 
     fun addDefaultUsers(roles: Map<RoleName, Role>) {
-        logger.info("add default users")
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_SECURITY
+        ) {
+            logger.info("add default users")
+        }
         addUser(
             "indiyskiy@gmail.com",
             "indiyskiy",

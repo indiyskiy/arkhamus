@@ -14,14 +14,17 @@ class CustomAccessDeniedHandler : AccessDeniedHandler {
         val logger: Logger = LoggingUtils.getLogger<CustomAccessDeniedHandler>()
     }
 
-
     @Throws(IOException::class)
     override fun handle(
         request: HttpServletRequest?,
         response: HttpServletResponse,
         accessDeniedException: AccessDeniedException
     ) {
-        logger.error("Access denied: " + accessDeniedException.message, accessDeniedException)
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_SECURITY
+        ) {
+            logger.error("Access denied: " + accessDeniedException.message, accessDeniedException)
+        }
         response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied: " + accessDeniedException.message)
     }
 }

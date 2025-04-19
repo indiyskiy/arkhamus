@@ -24,15 +24,27 @@ class ArkhamusChannelInitializer(
 
     override fun initChannel(socketChannel: SocketChannel) {
         try {
-            logger.info("initializing netty channels with ${parsers.size} decoders")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_NETTY_SYSTEM
+            ) {
+                logger.info("initializing netty channels with ${parsers.size} decoders")
+            }
             val pipeline = socketChannel.pipeline()
             pipeline.addLast(DelimiterBasedFrameDecoder(MAX_LENGTH, *Delimiters.lineDelimiter()))
             pipeline.addLast(JsonToObjectRequestDecoder(parsers))
             pipeline.addLast(StringEncoder())
             pipeline.addLast(processingHandler)
-            logger.info("initialized netty channels")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_NETTY_SYSTEM
+            ) {
+                logger.info("initialized netty channels")
+            }
         } catch (e: Exception) {
-            logger.error("Error initializing channel", e)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_NETTY_SYSTEM
+            ) {
+                logger.error("Error initializing channel", e)
+            }
             socketChannel.close()
         }
     }

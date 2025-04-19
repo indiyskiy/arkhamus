@@ -30,7 +30,11 @@ class LevelDesignQuestsRelatedStuffProcessor(
             levelDesignLevelTaskInfoProcessor.processLevelTasksFromJson(levelFromJson.levelTasks, savedLevel)
 
         if (CREATE_TEST_QUESTS) {
-            logger.info("creating random quests")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_OUTER_GAME_SYSTEM
+            ) {
+                logger.info("creating random quests")
+            }
             randomQuestGenerator.generateRandomQuests(savedLevel, questGivers, levelTasks)
         }
     }

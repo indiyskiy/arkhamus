@@ -27,7 +27,11 @@ class ChannelRepository {
                 arkhamusUserCache[it] = arkhamusChannel
             }
         } catch (e: Exception) {
-            logger.error("Error occurred while putting ArkhamusChannel into cache", e)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_NETTY_SYSTEM
+            ) {
+                logger.error("Error occurred while putting ArkhamusChannel into cache", e)
+            }
         }
     }
 
@@ -47,7 +51,11 @@ class ChannelRepository {
                 }
             }
         } catch (e: Exception) {
-            logger.error("Error occurred while updating ArkhamusChannel", e)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_NETTY_SYSTEM
+            ) {
+                logger.error("Error occurred while updating ArkhamusChannel", e)
+            }
         }
     }
 
@@ -66,13 +74,30 @@ class ChannelRepository {
 
     fun closeAndRemove(channelId: String) {
         try {
-            logger.warn("close and remove socket $channelId")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_NETTY_SYSTEM
+            ) {
+                logger.info("close and remove socket $channelId")
+            }
             val channel = channelCache.remove(channelId)
             channel?.close()?.sync()
             val arkhamusChannel = arkhamusChannelCache.remove(channelId)
-            arkhamusChannel?.userAccount?.id?.let { arkhamusUserCache.remove(it) }
+            arkhamusChannel?.userAccount?.id?.let {
+                arkhamusUserCache.remove(it)
+                LoggingUtils.withContext(
+                    eventType = LoggingUtils.EVENT_NETTY_SYSTEM,
+                    userId = it.toString()
+                ) {
+                    logger.info("closed and removed socket $channelId")
+                }
+            }
+
         } catch (e: Exception) {
-            logger.error("Error occurred while removing ArkhamusChannel", e)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_NETTY_SYSTEM
+            ) {
+                logger.error("Error occurred while removing ArkhamusChannel", e)
+            }
         }
     }
 

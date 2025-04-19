@@ -16,14 +16,16 @@ object LoggingUtils {
     const val USER_ID = "USER_ID"
     const val GAME_ID = "GAME_ID"
     const val REQUEST_ID = "REQUEST_ID"
+    const val EVENT_TYPE = "EVENT_TYPE"
 
     // Log event types for structured logging
-    const val EVENT_TYPE = "eventType"
     const val EVENT_GAME_START = "GAME_START"
     const val EVENT_GAME_END = "GAME_END"
     const val EVENT_USER_ACTION = "USER_ACTION"
     const val EVENT_SYSTEM = "SYSTEM"
-    const val EVENT_ERROR = "ERROR"
+    const val EVENT_OUTER_GAME_SYSTEM = "OUTER_GAME_SYSTEM"
+    const val EVENT_IN_GAME_SYSTEM = "IN_GAME_SYSTEM"
+    const val EVENT_NETTY_SYSTEM = "EVENT_NETTY_SYSTEM"
     const val EVENT_SECURITY = "SECURITY"
     const val EVENT_PERFORMANCE = "PERFORMANCE"
 
@@ -149,7 +151,7 @@ object LoggingUtils {
     fun <T> withContext(
         sessionId: String? = null,
         userId: String? = null,
-        gameId: String? = null,
+        gameId: Long? = null,
         requestId: String? = null,
         eventType: String? = null,
         block: () -> T
@@ -163,7 +165,7 @@ object LoggingUtils {
         try {
             sessionId?.let { MDC.put(SESSION_ID, it) }
             userId?.let { MDC.put(USER_ID, it) }
-            gameId?.let { MDC.put(GAME_ID, it) }
+            gameId?.let { MDC.put(GAME_ID, it.toString()) }
             requestId?.let { MDC.put(REQUEST_ID, it) }
             eventType?.let { MDC.put(EVENT_TYPE, it) }
 

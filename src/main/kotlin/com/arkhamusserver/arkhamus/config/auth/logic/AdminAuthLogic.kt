@@ -31,7 +31,11 @@ class AdminAuthLogic(
         try {
             mainAuthLogic.processToken(jwtToken, request, filterChain, response)
         } catch (e: ExpiredJwtException) {
-            logger.warn("processAdminAuth failed", e)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_SECURITY
+            ) {
+                logger.warn("processAdminAuth failed", e)
+            }
             response.addCookie(
                 Cookie("token", null).apply {
                     maxAge = 0

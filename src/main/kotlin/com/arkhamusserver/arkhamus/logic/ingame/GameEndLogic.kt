@@ -45,21 +45,15 @@ class GameEndLogic(
         if (game.state == GameState.FINISHED.name || game.state == GameState.GAME_END_SCREEN.name) {
             return
         }
-
-        LoggingUtils.withContext(
-            gameId = game.gameId.toString(),
-            eventType = LoggingUtils.EVENT_GAME_END
-        ) {
-            saveGameState(game, gameEndReason)
-            val gameSession = endGameSession(game, gameEndReason)
-            setWinnersLosers(gameSession, gameEndReason, users)
-            createEndOfGameTimeEvent(game, timeLeft = timeLeft)
-            saveActivities(game.inGameId())
-            addRelations(gameSession)
-            users.values.forEach { user ->
-                if (!user.techData.leftTheGame) {
-                    userStatusService.updateUserStatus(user.inGameId(), CultpritsUserState.ONLINE, true)
-                }
+        saveGameState(game, gameEndReason)
+        val gameSession = endGameSession(game, gameEndReason)
+        setWinnersLosers(gameSession, gameEndReason, users)
+        createEndOfGameTimeEvent(game, timeLeft = timeLeft)
+        saveActivities(game.inGameId())
+        addRelations(gameSession)
+        users.values.forEach { user ->
+            if (!user.techData.leftTheGame) {
+                userStatusService.updateUserStatus(user.inGameId(), CultpritsUserState.ONLINE, true)
             }
         }
     }
@@ -215,6 +209,12 @@ class GameEndLogic(
             false -> "false"
             null -> "null"
         }
-        LoggingUtils.info(logger, LoggingUtils.EVENT_GAME_END, "user {} won? {}", user.userAccount.id.toString(), wonStatus)
+        LoggingUtils.info(
+            logger,
+            LoggingUtils.EVENT_GAME_END,
+            "user {} won? {}",
+            user.userAccount.id.toString(),
+            wonStatus
+        )
     }
 }

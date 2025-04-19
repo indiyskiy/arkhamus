@@ -38,10 +38,21 @@ class SteamAuthService(
                 val userBySteamId = userAccountRepository.findBySteamId(steamId)
                 val user = if (userBySteamId.isPresent) {
                     val existingUser = userBySteamId.get()
-                    LoggingUtils.info(logger, LoggingUtils.EVENT_SECURITY, "User found for SteamID {}: {}", steamId, existingUser)
+                    LoggingUtils.info(
+                        logger,
+                        LoggingUtils.EVENT_SECURITY,
+                        "User found for SteamID {}: {}",
+                        steamId,
+                        existingUser
+                    )
                     existingUser
                 } else {
-                    LoggingUtils.info(logger, LoggingUtils.EVENT_SECURITY, "No user found for SteamID: {}, creating a new user.", steamId)
+                    LoggingUtils.info(
+                        logger,
+                        LoggingUtils.EVENT_SECURITY,
+                        "No user found for SteamID: {}, creating a new user.",
+                        steamId
+                    )
                     createNewUser(steamId)
                 }
 
@@ -56,7 +67,12 @@ class SteamAuthService(
                 return auth
             }
         } catch (e: Exception) {
-            LoggingUtils.error(logger, LoggingUtils.EVENT_ERROR, "Error during Steam authentication for SteamID: {}", steamId, e)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_SECURITY
+            ) {
+                logger.error("Error during Steam authentication for SteamID: $steamId", e)
+
+            }
             throw RuntimeException("Steam authentication failed for SteamID: $steamId", e)
         }
     }
@@ -78,7 +94,12 @@ class SteamAuthService(
 
 
     private fun buildUser(response: SteamUserResponse): UserAccount {
-        LoggingUtils.info(logger, LoggingUtils.EVENT_SECURITY, "Building UserAccount from Steam user data: {}", response)
+        LoggingUtils.info(
+            logger,
+            LoggingUtils.EVENT_SECURITY,
+            "Building UserAccount from Steam user data: {}",
+            response
+        )
 
         val player = response.response?.players?.firstOrNull()
             ?: throw IllegalArgumentException("Invalid user data received from Steam.")

@@ -126,17 +126,29 @@ class QuestProgressHandler(
         data: GameUserData,
         currentGameTime: Long
     ) {
-        LoggingUtils.info(logger, LoggingUtils.EVENT_SYSTEM, "add more quests maybe?")
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_OUTER_GAME_SYSTEM,
+        ) {
+            logger.info("add more quests maybe?")
+        }
         val userQuestProgress = globalGameData.questProgressByUserId[data.gameUser!!.inGameId()] ?: emptyList()
         if (userQuestCreationHandler.needToAddQuests(userQuestProgress)) {
-            LoggingUtils.info(logger, LoggingUtils.EVENT_SYSTEM, "add more quests definitely")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_OUTER_GAME_SYSTEM,
+            ) {
+                logger.info("add more quests definitely")
+            }
             val newQuestProgress = userQuestCreationHandler.addQuests(
                 data,
                 globalGameData.quests,
                 userQuestProgress,
                 currentGameTime
             )
-            LoggingUtils.info(logger, LoggingUtils.EVENT_SYSTEM, "new quest progress {}", newQuestProgress.size)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_OUTER_GAME_SYSTEM,
+            ) {
+                logger.info("new quest progress {}", newQuestProgress.size)
+            }
             data.userQuest += newQuestProgress.map {
                 mapQuestProgress(globalGameData.quests, it)
             }

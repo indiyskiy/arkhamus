@@ -61,20 +61,20 @@ class GameThreadPool(
             loopHandlerFutures[gameId] = scheduledFuture
             logTaskExecutorInfo(gameId, "Added tick processing loop")
         } catch (th: Throwable) {
-            LoggingUtils.error(
-                logger,
-                LoggingUtils.EVENT_ERROR,
-                "Error occurred while initializing tick processing loop for game ${gameSession.id}",
-                th
-            )
+            LoggingUtils.withContext(
+                gameId = gameSession.id,
+                eventType = LoggingUtils.EVENT_PERFORMANCE
+            ) {
+                logger.error("Error occurred while initializing tick processing loop for game ${gameSession.id}", th)
+            }
             throw th
         }
     }
 
     private fun logTaskExecutorInfo(gameId: Long, reason: String) {
         LoggingUtils.withContext(
-            gameId = gameId.toString(),
-            eventType = LoggingUtils.EVENT_SYSTEM
+            gameId = gameId,
+            eventType = LoggingUtils.EVENT_PERFORMANCE
         ) {
             val metrics = mapOf(
                 "poolSize" to taskExecutor.poolSize,
@@ -85,7 +85,7 @@ class GameThreadPool(
 
             LoggingUtils.info(
                 logger,
-                LoggingUtils.EVENT_SYSTEM,
+                LoggingUtils.EVENT_PERFORMANCE,
                 "TaskExecutor status: {} for game {}, metrics: {}",
                 reason,
                 gameId,
@@ -114,7 +114,7 @@ class GameThreadPool(
         }
         if (added) {
             LoggingUtils.withContext(
-                gameId = gameId.toString(),
+                gameId = gameId,
                 userId = task.userAccount.id.toString(),
                 eventType = LoggingUtils.EVENT_SYSTEM
             ) {
