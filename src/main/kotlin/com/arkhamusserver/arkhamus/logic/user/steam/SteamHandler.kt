@@ -8,7 +8,6 @@ import com.codedisaster.steamworks.SteamGameServer
 import com.codedisaster.steamworks.SteamGameServerAPI
 import com.codedisaster.steamworks.SteamID
 import com.google.gson.Gson
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import java.io.File

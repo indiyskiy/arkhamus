@@ -3,11 +3,9 @@ package com.arkhamusserver.arkhamus.view.controller.steam
 import com.arkhamusserver.arkhamus.logic.user.steam.SteamAuthLogic
 import com.arkhamusserver.arkhamus.logic.user.steam.SteamStartServerLogic
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import com.arkhamusserver.arkhamus.view.controller.exception.UnpredictedExceptionHandler
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamAuthRequestDto
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamServerIdDto
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
-import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 

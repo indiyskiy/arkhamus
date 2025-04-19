@@ -4,8 +4,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.ArkhamusChanne
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import io.netty.channel.Channel
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap

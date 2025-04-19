@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame.core
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue.*
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.God.values
 
 enum class God(
     private val id: Int,

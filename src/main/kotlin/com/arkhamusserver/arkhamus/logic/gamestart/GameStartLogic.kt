@@ -3,9 +3,6 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserSkinSettings
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.random.Random
@@ -31,7 +28,6 @@ class GameStartLogic(
 ) {
 
     companion object {
-        private val logger = LoggingUtils.getLogger<GameStartLogic>()
         val random: Random = Random(System.currentTimeMillis())
     }
 

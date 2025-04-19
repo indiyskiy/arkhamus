@@ -28,8 +28,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag.IN_RITUAL
 import com.arkhamusserver.arkhamus.model.ingame.*
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.apache.commons.lang3.math.NumberUtils.min
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

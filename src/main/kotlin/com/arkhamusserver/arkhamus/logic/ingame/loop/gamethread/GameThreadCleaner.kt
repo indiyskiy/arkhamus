@@ -2,10 +2,10 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.config.netty.ChannelRepository
 import com.arkhamusserver.arkhamus.config.repository.InGameRepositoryCleaner
-import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool.Companion.logger
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.InGameDataAccess
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.concurrent.ConcurrentMap
@@ -17,6 +17,10 @@ class GameThreadCleaner(
     private val channelRepository: ChannelRepository,
     private val inGameRepositoryCleaner: InGameRepositoryCleaner,
 ) {
+
+    companion object {
+        private val logger = LoggingUtils.getLogger<GameThreadCleaner>()
+    }
 
     @Transactional
     fun cleanUpGameSession(

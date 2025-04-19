@@ -6,13 +6,11 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
+import com.arkhamusserver.arkhamus.model.ingame.InRamGame
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

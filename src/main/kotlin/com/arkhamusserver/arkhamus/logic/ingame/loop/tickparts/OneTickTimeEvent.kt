@@ -6,8 +6,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeev
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameTimeEventRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
-import org.slf4j.Logger
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
+import org.slf4j.Logger
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.math.min

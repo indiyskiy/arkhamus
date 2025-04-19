@@ -11,8 +11,6 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.cos
 import kotlin.math.sin

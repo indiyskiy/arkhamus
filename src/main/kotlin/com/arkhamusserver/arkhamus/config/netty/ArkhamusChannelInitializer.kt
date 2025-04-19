@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.config.netty
 
-import com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors.RandomQuestGenerator
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.jsonparser.NettyRequestJsonParser
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.JsonToObjectRequestDecoder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ProcessingHandler
@@ -10,8 +9,6 @@ import io.netty.channel.socket.SocketChannel
 import io.netty.handler.codec.DelimiterBasedFrameDecoder
 import io.netty.handler.codec.Delimiters
 import io.netty.handler.codec.string.StringEncoder
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

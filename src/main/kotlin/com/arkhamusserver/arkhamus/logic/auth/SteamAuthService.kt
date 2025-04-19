@@ -11,7 +11,6 @@ import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamUserResponse
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
-import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

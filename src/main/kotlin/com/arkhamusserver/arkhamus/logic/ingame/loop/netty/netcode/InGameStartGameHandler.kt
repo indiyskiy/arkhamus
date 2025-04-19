@@ -12,8 +12,6 @@ import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.NettyGameStartedResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.GameUserResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.MyGameUserResponse
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -31,7 +29,7 @@ class InGameStartGameHandler(
     fun tryToStartGame(
         authData: AuthRequestProcessData
     ) {
-        ProcessingHandler.logger.info("try to start the gamer after auth {}", authData.userAccount?.id)
+        logger.info("try to start the gamer after auth {}", authData.userAccount?.id)
         authData.game?.id?.let { gameId ->
             val channels = channelRepository.getByGameId(gameId)
             if (allUsersAuthorised(channels, authData)) {

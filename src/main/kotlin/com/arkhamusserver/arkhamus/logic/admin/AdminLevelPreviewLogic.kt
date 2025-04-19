@@ -2,11 +2,7 @@ package com.arkhamusserver.arkhamus.logic.admin
 
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.*
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.*
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.EllipseRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.TetragonRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.ThresholdRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.VisibilityDoorRepository
-import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.VisibilityWallRepository
+import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.geometry.*
 import com.arkhamusserver.arkhamus.model.database.entity.game.VisibilityDoor
 import com.arkhamusserver.arkhamus.model.database.entity.game.VisibilityWall
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.*

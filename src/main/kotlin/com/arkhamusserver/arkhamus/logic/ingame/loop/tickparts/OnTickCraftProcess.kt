@@ -10,8 +10,6 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameCraftProcess
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.math.min

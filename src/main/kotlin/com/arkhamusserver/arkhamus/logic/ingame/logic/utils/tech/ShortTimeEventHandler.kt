@@ -10,12 +10,9 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ShortTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.Visibility
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameShortTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -26,10 +23,6 @@ class ShortTimeEventHandler(
     private val userLocationHandler: UserLocationHandler,
     private val finder: GameObjectFinder
 ) {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<ShortTimeEventHandler>()
-    }
 
     fun filter(
         events: List<InGameShortTimeEvent>,

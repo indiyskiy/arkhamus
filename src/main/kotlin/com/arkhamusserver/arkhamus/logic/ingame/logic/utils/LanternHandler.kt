@@ -4,8 +4,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.lante
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameLanternRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.LanternState
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLantern
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 
 @Component

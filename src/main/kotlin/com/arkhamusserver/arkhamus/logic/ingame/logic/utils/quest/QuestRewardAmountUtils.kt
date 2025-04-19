@@ -1,16 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.craft.CanRecipeBeCraftedHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 import kotlin.math.max
 import kotlin.random.Random
@@ -20,7 +16,6 @@ class QuestRewardAmountUtils {
     companion object {
         const val DEFAULT_AMOUNT = 5
         private val random = Random(System.currentTimeMillis())
-        private val logger = LoggingUtils.getLogger<QuestRewardAmountUtils>()
     }
 
     fun chooseAmount(

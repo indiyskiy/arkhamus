@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.auth
 
 import com.arkhamusserver.arkhamus.config.CultpritsUserState
 import com.arkhamusserver.arkhamus.config.auth.JwtProperties
-import com.arkhamusserver.arkhamus.logic.admin.AdminGameLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.ArkhamusUserDetails
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.CustomUserDetailsService
@@ -12,7 +11,6 @@ import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationResponse
 import com.arkhamusserver.arkhamus.view.dto.user.UserDto
-import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails

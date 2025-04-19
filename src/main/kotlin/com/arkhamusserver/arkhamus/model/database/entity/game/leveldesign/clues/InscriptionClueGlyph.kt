@@ -2,12 +2,7 @@ package com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.clues
 
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
 
 @Entity
 data class InscriptionClueGlyph (

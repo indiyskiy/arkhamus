@@ -1,15 +1,12 @@
 package com.arkhamusserver.arkhamus.config.netty
 
 
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.ChannelOption
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioServerSocketChannel
 import io.netty.handler.logging.LogLevel
 import io.netty.handler.logging.LoggingHandler
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.netty.NettyProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -19,10 +16,6 @@ import java.net.InetSocketAddress
 @Component
 @EnableConfigurationProperties(NettyProperties::class)
 class NettyConfiguration(val nettyProperties: ArkhamusNettyProperties) {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<NettyConfiguration>()
-    }
 
     @Bean(name = ["serverBootstrap"])
     fun bootstrap(

@@ -1,24 +1,17 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.usefullitems
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
-import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.searchclue.SearchForSoundAbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.AbilityRequestProcessData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class GetCoffeeAbilityCast() : AbilityCast {
 
-    companion object {
-        private val logger = LoggingUtils.getLogger<GetCoffeeAbilityCast>()
-    }
 
     override fun accept(ability: Ability): Boolean {
         return ability == Ability.GET_COFFEE

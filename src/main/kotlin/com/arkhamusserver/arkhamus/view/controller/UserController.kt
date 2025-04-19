@@ -6,11 +6,7 @@ import com.arkhamusserver.arkhamus.logic.user.UserLogic
 import com.arkhamusserver.arkhamus.logic.user.relations.UserRelationLogic
 import com.arkhamusserver.arkhamus.view.dto.user.RelatedUserDto
 import com.arkhamusserver.arkhamus.view.dto.user.UserDto
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/user")

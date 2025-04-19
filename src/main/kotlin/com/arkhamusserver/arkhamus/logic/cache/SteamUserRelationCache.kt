@@ -1,10 +1,8 @@
 package com.arkhamusserver.arkhamus.logic.cache
 
-import com.arkhamusserver.arkhamus.logic.auth.SteamAuthService
 import com.arkhamusserver.arkhamus.logic.user.relations.SteamUserRelationsUpdateLogic
 import com.arkhamusserver.arkhamus.logic.user.relations.UserRelationCacheMaker
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 

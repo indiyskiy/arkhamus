@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
-import com.arkhamusserver.arkhamus.config.repository.InGameRepositoryCleaner
 import com.arkhamusserver.arkhamus.logic.user.UserSkinLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameActivityRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.GameSessionRepository
@@ -13,7 +12,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.admin.*
 import com.arkhamusserver.arkhamus.view.maker.GameSessionDtoMaker
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

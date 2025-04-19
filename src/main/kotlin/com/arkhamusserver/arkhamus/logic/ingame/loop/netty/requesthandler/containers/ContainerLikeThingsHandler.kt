@@ -1,15 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.containers
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
-import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler.AbilityNettyRequestHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.min
 

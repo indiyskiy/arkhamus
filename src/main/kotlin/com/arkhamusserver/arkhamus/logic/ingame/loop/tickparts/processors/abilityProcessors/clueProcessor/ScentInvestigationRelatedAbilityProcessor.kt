@@ -5,19 +5,12 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilit
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameScentClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class ScentInvestigationRelatedAbilityProcessor(
     private val inGameScentClueRepository: InGameScentClueRepository
 ) : ActiveAbilityProcessor {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<ScentInvestigationRelatedAbilityProcessor>()
-    }
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {
         return castAbility.ability == Ability.SEARCH_FOR_SCENT

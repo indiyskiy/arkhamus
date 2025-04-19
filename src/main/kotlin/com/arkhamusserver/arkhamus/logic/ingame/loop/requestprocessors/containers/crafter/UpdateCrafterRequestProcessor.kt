@@ -9,7 +9,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequ
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameCrafterRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.crafter.UpdateCrafterRequestMessage
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -19,10 +18,6 @@ class UpdateCrafterRequestProcessor(
     private val inGameCrafterRepository: InGameCrafterRepository,
     private val crafterTypeThingsHandler: ContainerLikeThingsHandler
 ) : NettyRequestProcessor {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<UpdateCrafterRequestProcessor>()
-    }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is UpdateCrafterRequestGameData

@@ -23,7 +23,6 @@ import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.DistortionClueAdditionalDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.SimpleUserAdditionalDataResponse
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -85,7 +84,7 @@ class DistortionClueHandler(
                     whoLooks = user,
                     target = distortion,
                     levelGeometryData = data.levelGeometryData,
-                    range = Ability.CLEAN_UP_CLUE.range!!.toDouble(),
+                    range = Ability.CLEAN_UP_CLUE.range!!,
                     affectedByBlind = true,
                 )
     }

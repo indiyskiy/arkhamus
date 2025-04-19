@@ -2,11 +2,9 @@ package com.arkhamusserver.arkhamus.view.controller.admin.browser.tech.auth
 
 import com.arkhamusserver.arkhamus.logic.auth.AuthenticationService
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import com.arkhamusserver.arkhamus.view.controller.admin.browser.level.BrowserQuestController
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
-import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

@@ -3,10 +3,7 @@ package com.arkhamusserver.arkhamus.logic.gamestart
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.ContainerTag
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -15,7 +12,6 @@ import kotlin.random.Random
 class LootTableHandler {
 
     companion object {
-        private val logger = LoggingUtils.getLogger<LootTableHandler>()
         val random: Random = Random(System.currentTimeMillis())
     }
 

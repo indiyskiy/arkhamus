@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.user.steam
 
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.codedisaster.steamworks.*
-import org.slf4j.LoggerFactory
 
 class SteamGameServerCallbackImpl(
     private val handler: SteamHandler // Reference to update server state in handler

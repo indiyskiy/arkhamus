@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors
 
-import com.arkhamusserver.arkhamus.config.database.levelDesign.LevelDesignQuestsRelatedStuffProcessor
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
 import com.arkhamusserver.arkhamus.logic.ingame.quest.QuestDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.TextKeyRepository
@@ -15,8 +14,6 @@ import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.QuestG
 import com.arkhamusserver.arkhamus.model.enums.TextKeyType
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 

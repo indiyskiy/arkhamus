@@ -6,7 +6,6 @@ import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserRelation
 import com.arkhamusserver.arkhamus.model.enums.UserRelationType
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

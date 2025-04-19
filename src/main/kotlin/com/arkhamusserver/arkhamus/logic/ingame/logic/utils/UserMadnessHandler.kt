@@ -7,9 +7,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.InGameUserStatus
 import com.arkhamusserver.arkhamus.model.enums.ingame.MadnessDebuff
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.max
 import kotlin.random.Random
@@ -20,7 +17,6 @@ class UserMadnessHandler(
     private val userStatusHandler: UserStatusHandler
 ) {
     companion object {
-        private val logger = LoggingUtils.getLogger<UserMadnessHandler>()
         const val NIGHT_MADNESS_TICK_IN_MILLIS = 1.0 / 1000.0
         private val random = Random(System.currentTimeMillis())
     }

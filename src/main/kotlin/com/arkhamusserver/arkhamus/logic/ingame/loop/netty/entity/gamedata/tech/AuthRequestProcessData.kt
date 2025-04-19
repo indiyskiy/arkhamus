@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
-import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 

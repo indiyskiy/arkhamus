@@ -3,8 +3,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.madness
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.LanternHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLantern
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 
 @Component

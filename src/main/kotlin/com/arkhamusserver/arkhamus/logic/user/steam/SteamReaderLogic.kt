@@ -2,7 +2,6 @@ package com.arkhamusserver.arkhamus.logic.user.steam
 
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamUserResponse
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

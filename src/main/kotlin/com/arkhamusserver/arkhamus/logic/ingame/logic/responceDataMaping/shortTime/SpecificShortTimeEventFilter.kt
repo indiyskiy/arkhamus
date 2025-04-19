@@ -2,8 +2,8 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.responceDataMaping.shortT
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts.LevelZone
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameShortTimeEvent
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 
 interface SpecificShortTimeEventFilter {
     fun accept(

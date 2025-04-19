@@ -1,9 +1,7 @@
 package com.arkhamusserver.arkhamus.view.controller.admin.browser
 
-import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import jakarta.servlet.http.HttpServletResponse
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping

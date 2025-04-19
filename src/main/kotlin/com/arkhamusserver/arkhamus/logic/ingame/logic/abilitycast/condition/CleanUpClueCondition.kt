@@ -1,13 +1,11 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition
 
-import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.classbased.investigator.LastPersonTouchAbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.clues.ClueHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.CLEAN_UP_CLUE
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

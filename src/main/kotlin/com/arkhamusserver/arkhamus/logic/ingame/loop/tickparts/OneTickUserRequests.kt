@@ -7,9 +7,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameDataBuilder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,10 +16,6 @@ class OneTickUserRequests(
     private val actionCacheHandler: ActionCacheHandler,
     private val userStatusService: UserStatusService
 ) {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<OneTickUserRequests>()
-    }
 
     fun processRequests(
         currentTasks: List<NettyTickRequestMessageDataHolder>,

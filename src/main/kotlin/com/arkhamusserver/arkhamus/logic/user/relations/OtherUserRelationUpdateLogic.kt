@@ -1,11 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.user.relations
 
-import com.arkhamusserver.arkhamus.logic.user.UserSkinLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserRelationRepository
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserRelation
 import com.arkhamusserver.arkhamus.model.enums.UserRelationType.*
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

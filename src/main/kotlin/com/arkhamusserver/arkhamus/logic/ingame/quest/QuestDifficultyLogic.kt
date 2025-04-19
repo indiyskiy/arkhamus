@@ -1,11 +1,9 @@
 package com.arkhamusserver.arkhamus.logic.ingame.quest
 
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
-import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent.RitualGoingEventProcessor
 import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

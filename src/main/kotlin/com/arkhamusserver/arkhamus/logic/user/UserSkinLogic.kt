@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.logic.user
 
-import com.arkhamusserver.arkhamus.logic.ingame.quest.QuestDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserSkinRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
@@ -9,7 +8,6 @@ import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.UserSkinDto
 import com.arkhamusserver.arkhamus.view.maker.UserSkinDtoMaker
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.random.Random

@@ -1,9 +1,6 @@
 package com.arkhamusserver.arkhamus.view.controller.exception
 
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import com.arkhamusserver.arkhamus.view.controller.admin.browser.tech.auth.AuthBrowserController
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus

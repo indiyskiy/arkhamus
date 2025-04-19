@@ -6,9 +6,6 @@ import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
@@ -20,7 +17,6 @@ class GameStartGameLogic(
     private val gameSessionRepository: GameSessionRepository
 ) {
     companion object {
-        private val logger = LoggingUtils.getLogger<GameStartGameLogic>()
         private val random: Random = Random(System.currentTimeMillis())
     }
 

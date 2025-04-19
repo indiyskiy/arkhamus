@@ -18,8 +18,8 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.ClueState
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameLevelZone
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.clues.InGameSoundClue
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameSoundClueJammer
@@ -84,7 +84,7 @@ class SoundClueHandler(
             whoLooks = user,
             target = sound,
             levelGeometryData = data.levelGeometryData,
-            range = Ability.CLEAN_UP_CLUE.range!!.toDouble(),
+            range = Ability.CLEAN_UP_CLUE.range!!,
             affectedByBlind = false,
             heightAffectVision = false,
             geometryAffectsVision = true,

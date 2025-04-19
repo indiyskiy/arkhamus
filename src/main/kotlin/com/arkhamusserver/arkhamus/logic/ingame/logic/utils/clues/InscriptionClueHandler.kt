@@ -11,7 +11,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.clues.InscriptionClueRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
-import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability.CLEAN_UP_CLUE
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.God
@@ -27,7 +26,6 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedC
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.InscriptionClueAdditionalDataResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.PossibleGlyphResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.additional.RightGlyphResponse
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -94,7 +92,7 @@ class InscriptionClueHandler(
                     heightAffectVision = false,
                     geometryAffectsVision = true,
                 ) &&
-                userLocationHandler.distanceLessOrEquals(user, glyph, CLEAN_UP_CLUE.range!!.toDouble())
+                userLocationHandler.distanceLessOrEquals(user, glyph, CLEAN_UP_CLUE.range!!)
     }
 
     override fun anyCanBeRemovedByAbility(

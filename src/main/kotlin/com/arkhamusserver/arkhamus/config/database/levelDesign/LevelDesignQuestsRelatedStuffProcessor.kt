@@ -7,7 +7,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CRE
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

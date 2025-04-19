@@ -1,13 +1,11 @@
 package com.arkhamusserver.arkhamus.config.auth.logic
 
-import com.arkhamusserver.arkhamus.config.auth.CustomAccessDeniedHandler
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

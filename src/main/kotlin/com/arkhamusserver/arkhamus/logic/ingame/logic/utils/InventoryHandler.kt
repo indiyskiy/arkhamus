@@ -2,14 +2,11 @@ package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Ingredient
 import com.arkhamusserver.arkhamus.logic.ingame.item.recipe.Recipe
-import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.usefullitems.TownPortalByScrollAbilityCast
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.math.min
 

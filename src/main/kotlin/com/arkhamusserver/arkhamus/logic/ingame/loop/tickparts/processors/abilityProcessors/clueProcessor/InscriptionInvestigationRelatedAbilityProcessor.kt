@@ -7,8 +7,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameInscripti
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.usefullThings
 
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import com.arkhamusserver.arkhamus.view.controller.steam.SteamAuthController
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.random.Random

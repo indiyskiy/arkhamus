@@ -18,8 +18,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.parts.*
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.random.Random
@@ -101,7 +99,7 @@ class GameStartUserLogic(
         val inGameUsers = game.usersOfGameSession.map {
             val marker = startMarkers.random(GameStartLogic.random)
             val inGameUser = buildInGameUser(it, game, skins, marker)
-            GameStartLogic.logger.info("user placed to $inGameUser")
+            logger.info("user placed to $inGameUser")
             inGameUser
         }
         inGameGameUserRepository.saveAll(inGameUsers)

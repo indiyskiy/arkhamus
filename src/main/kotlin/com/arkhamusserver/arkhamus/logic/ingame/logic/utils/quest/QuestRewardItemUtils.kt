@@ -6,12 +6,9 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.ItemType.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
-import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuest
 import com.arkhamusserver.arkhamus.model.ingame.InGameQuestReward
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
@@ -20,7 +17,6 @@ class QuestRewardItemUtils {
 
     companion object {
         private val random = Random(System.currentTimeMillis())
-        private val logger = LoggingUtils.getLogger<QuestRewardItemUtils>()
     }
 
     fun chooseItem(

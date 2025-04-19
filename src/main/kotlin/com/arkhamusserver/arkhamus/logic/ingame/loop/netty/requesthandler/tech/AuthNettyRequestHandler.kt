@@ -7,8 +7,8 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.DatabaseDataA
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.InGameDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.getOtherGameUsers
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.auth.NettyAuthService
-import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.UserOfGameSession
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.enums.GameState.*
 import com.arkhamusserver.arkhamus.view.dto.netty.request.tech.AuthRequestMessage
 import org.springframework.stereotype.Component

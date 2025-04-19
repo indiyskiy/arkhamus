@@ -1,6 +1,5 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign
 
-import com.arkhamusserver.arkhamus.config.database.UsersConfig
 import com.arkhamusserver.arkhamus.config.database.levelDesign.clues.LevelDesignAllCluesInfoProcessor
 import com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors.LevelDesignZonesInfoProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.LevelRepository
@@ -12,8 +11,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import jakarta.annotation.PostConstruct
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.io.File

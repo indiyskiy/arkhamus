@@ -1,12 +1,12 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.ArkhamusOneTickLogic
-import com.arkhamusserver.arkhamus.logic.ingame.loop.gamethread.GameThreadPool.Companion.logger
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.InGameDataAccess
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode.ResponseSendingLoopManager
 import com.arkhamusserver.arkhamus.model.enums.GameState
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -16,6 +16,10 @@ class GameTasksProcessor(
     private val responseSendingLoopManager: ResponseSendingLoopManager,
     private val tickLogic: ArkhamusOneTickLogic,
 ) {
+
+    companion object {
+        private val logger = LoggingUtils.getLogger<GameTasksProcessor>()
+    }
 
     @Transactional
     fun processGameTasks(gameId: Long, taskCollection: TaskCollection?) {

@@ -12,8 +12,6 @@ import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithTrueIngameId
 import com.arkhamusserver.arkhamus.model.ingame.parts.InGameInscriptionClueGlyph
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

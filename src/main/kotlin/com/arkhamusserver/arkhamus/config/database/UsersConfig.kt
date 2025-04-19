@@ -1,18 +1,15 @@
 package com.arkhamusserver.arkhamus.config.database
 
-import com.arkhamusserver.arkhamus.config.auth.logic.AdminAuthLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.RoleRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserSkinRepository
-import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.game.Role
+import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserSkinSettings
 import com.arkhamusserver.arkhamus.model.enums.RoleName
 import com.arkhamusserver.arkhamus.model.enums.SkinColor
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import jakarta.annotation.PostConstruct
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component

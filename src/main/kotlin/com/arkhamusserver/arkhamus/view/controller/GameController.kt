@@ -1,7 +1,7 @@
 package com.arkhamusserver.arkhamus.view.controller
 
-import com.arkhamusserver.arkhamus.config.UpdateUserState
 import com.arkhamusserver.arkhamus.config.CultpritsUserState
+import com.arkhamusserver.arkhamus.config.UpdateUserState
 import com.arkhamusserver.arkhamus.logic.CustomGameLogic
 import com.arkhamusserver.arkhamus.logic.DefaultGameLogic
 import com.arkhamusserver.arkhamus.logic.SingleGameLogic

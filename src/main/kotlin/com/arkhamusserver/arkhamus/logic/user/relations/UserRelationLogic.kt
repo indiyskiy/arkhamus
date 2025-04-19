@@ -12,7 +12,6 @@ import com.arkhamusserver.arkhamus.model.enums.UserRelationType
 import com.arkhamusserver.arkhamus.model.enums.steam.SteamPersonaState
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.user.RelatedUserDto
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
