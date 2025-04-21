@@ -23,11 +23,14 @@ class SteamAuthController(
     @GetMapping("/server-steamid")
     fun getServerSteamID(): SteamServerIdDto {
         try {
-            logger.info("Received request to get server SteamID.")
             val serverSteamID = steamStartServerLogic.getServerSteamID()
             return serverSteamID ?: throw Exception("Failed to retrieve Server SteamID.")
         } catch (e: Exception) {
-            logger.error("Failed to retrieve Server SteamID: {}", e.message)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Failed to retrieve Server SteamID: {}", e.message)
+            }
             throw e
         }
     }
@@ -37,7 +40,6 @@ class SteamAuthController(
     fun authenticateClient(
         @RequestBody steamAuthRequestDto: SteamAuthRequestDto
     ): AuthenticationResponse {
-        logger.info("Received request to authenticate client with SteamID: {}", steamAuthRequestDto.clientSteamID)
         return steamAuthLogic.authenticateClient(
             steamAuthRequestDto.clientSteamID,
             steamAuthRequestDto.authTicket
@@ -48,11 +50,14 @@ class SteamAuthController(
     @PostMapping("/disconnect-client")
     fun handleClientDisconnect(@RequestParam clientSteamID: String): ResponseEntity<String> {
         return try {
-            logger.info("Received request to disconnect client with SteamID: {}", clientSteamID)
             steamAuthLogic.handleClientDisconnect(clientSteamID)
             ResponseEntity.ok("Client disconnected and session ended. SteamID: $clientSteamID")
         } catch (e: Exception) {
-            logger.error("Error while disconnecting client. SteamID: {}, Error: {}", clientSteamID, e.message)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Error while disconnecting client. SteamID: {}, Error: {}", clientSteamID, e.message)
+            }
             ResponseEntity.internalServerError().body("Error disconnecting client: ${e.message}")
         }
     }

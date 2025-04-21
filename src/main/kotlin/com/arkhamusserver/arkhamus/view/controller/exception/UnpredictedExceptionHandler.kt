@@ -23,8 +23,9 @@ class UnpredictedExceptionHandler {
         e: Throwable,
         request: WebRequest
     ): ResponseEntity<Map<String, String>> {
-        logger.error("server fall with unpredicted exception ${e.message}", e)
-
+        LoggingUtils.withContext {
+            logger.error("server fall with unpredicted exception ${e.message}", e)
+        }
         val body: MutableMap<String, String> = LinkedHashMap()
         body["timestamp"] = LocalDateTime.now().toString()
         body["message"] = e.message ?: "no message"

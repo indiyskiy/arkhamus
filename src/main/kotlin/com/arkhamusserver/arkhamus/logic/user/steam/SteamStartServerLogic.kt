@@ -16,7 +16,11 @@ class SteamStartServerLogic(
     // Automatically initialize the game server on application startup
     @PostConstruct
     fun initializeSteamServer() {
-        logger.info("Initializing Steam server automatically on application startup.")
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_STEAM
+        ) {
+            logger.info("Initializing Steam server automatically on application startup.")
+        }
         startServer()
     }
 
@@ -25,7 +29,11 @@ class SteamStartServerLogic(
         try {
             steamHandler.initSteamServer()
         } catch (e: Exception) {
-            logger.error("Failed to start Steam server: {}", e.message)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Failed to start Steam server: {}", e.message)
+            }
             throw e
         }
     }

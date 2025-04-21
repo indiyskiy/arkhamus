@@ -3,7 +3,6 @@ package com.arkhamusserver.arkhamus.view.controller.admin.browser.level
 import com.arkhamusserver.arkhamus.logic.admin.AdminQuestLogic
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestState
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminLevelTaskDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestGiverDto
@@ -19,10 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes
 class BrowserQuestController(
     private val adminQuestLogic: AdminQuestLogic
 ) {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<BrowserQuestController>()
-    }
 
     @PostMapping("/admin/browser/level/{levelId}/quest")
     fun createQuest(
@@ -44,7 +39,6 @@ class BrowserQuestController(
         @PathVariable questId: Long,
         @ModelAttribute quest: AdminQuestDto,
     ): String {
-        logger.info("save by Thymeleaf")
         val editedQuest: AdminQuestDto = adminQuestLogic.update(questId, quest)
         model.addAttribute("quest", editedQuest)
         addDefaultPageValues(levelId, model)
@@ -68,7 +62,6 @@ class BrowserQuestController(
         @PathVariable levelId: Long,
         @PathVariable questId: Long,
     ): String {
-        logger.info("loading quest $questId")
         val quest: AdminQuestDto = adminQuestLogic.get(questId)
         model.addAttribute("quest", quest)
         addDefaultPageValues(levelId, model)

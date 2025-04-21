@@ -6,7 +6,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.GodVoteCastRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,10 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 class GodVoteCastRequestProcessor(
     private val ritualHandler: RitualHandler
 ) : NettyRequestProcessor {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<GodVoteCastRequestProcessor>()
-    }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is GodVoteCastRequestProcessData
@@ -29,7 +24,6 @@ class GodVoteCastRequestProcessor(
         globalGameData: GlobalGameData,
         ongoingEvents: List<OngoingEvent>
     ) {
-        logger.info("GodVoteCast process")
         val godVoteCastRequestProcessData = requestDataHolder.requestProcessData as GodVoteCastRequestProcessData
         val god = godVoteCastRequestProcessData.votedGod
         val altarPolling = globalGameData.altarPolling

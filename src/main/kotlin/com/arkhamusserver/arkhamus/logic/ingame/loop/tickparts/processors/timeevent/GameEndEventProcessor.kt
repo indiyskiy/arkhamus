@@ -26,7 +26,11 @@ class GameEndEventProcessor(
         currentGameTime: Long,
         timePassedMillis: Long
     ) {
-        logger.info("starting the end of game event")
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_GAME_END
+        ) {
+            logger.info("starting the end of game event")
+        }
     }
 
     @Transactional
@@ -37,7 +41,11 @@ class GameEndEventProcessor(
         timePassedMillis: Long
     ) {
         if (globalGameData.users.values.all { it.techData.sawTheEndOfTimes }) {
-            logger.info("all users saw the end")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_GAME_END
+            ) {
+                logger.info("all users saw the end")
+            }
             gameEndLogic.endTheGameCompletely(globalGameData.game)
         }
     }
@@ -48,7 +56,11 @@ class GameEndEventProcessor(
         currentGameTime: Long,
         timePassedMillis: Long
     ) {
-        logger.info("end of game event ends")
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_GAME_END
+        ) {
+            logger.info("end of game event ends")
+        }
         gameEndLogic.endTheGameCompletely(globalGameData.game)
     }
 

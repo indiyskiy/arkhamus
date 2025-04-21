@@ -6,7 +6,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilit
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameInscriptionClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 
 @Component
@@ -14,10 +13,6 @@ class InscriptionInvestigationRelatedAbilityProcessor(
     private val inGameInscriptionClueRepository: InGameInscriptionClueRepository,
     private val inscriptionClueHandler: InscriptionClueHandler
 ) : ActiveAbilityProcessor {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<InscriptionInvestigationRelatedAbilityProcessor>()
-    }
 
     override fun accepts(castAbility: InGameAbilityCast): Boolean {
         return castAbility.ability == Ability.SEARCH_FOR_INSCRIPTION
@@ -45,10 +40,6 @@ class InscriptionInvestigationRelatedAbilityProcessor(
                 }
                 inGameInscriptionClueRepository.save(inscriptionNotNull)
             }
-        } ?: logger.error(
-            "user {} or inscription {} is null",
-            user?.inGameId() ?: "null",
-            inscription?.stringId() ?: "null"
-        )
+        }
     }
 }

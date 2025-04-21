@@ -10,7 +10,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.InGameVoteSpot
 import com.arkhamusserver.arkhamus.model.ingame.InRamGame
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -19,10 +18,6 @@ class OneTickTryEndGameMaybeHandler(
     private val gameEndLogic: GameEndLogic,
     private val madnessHandler: UserMadnessHandler,
 ) {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<OneTickTryEndGameMaybeHandler>()
-    }
 
     @Transactional
     fun checkIfEnd(game: InRamGame, users: Collection<InGameUser>, voteSpots: List<InGameVoteSpot>) {
@@ -85,7 +80,6 @@ class OneTickTryEndGameMaybeHandler(
 
     private fun abandonIfAllLeave(game: InRamGame, users: Collection<InGameUser>) {
         if (users.all { it.techData.leftTheGame }) {
-            logger.info("end the game - ABANDONED")
             gameEndLogic.endTheGame(
                 game,
                 users.associateBy { it.inGameId() },
@@ -100,13 +94,6 @@ class OneTickTryEndGameMaybeHandler(
             users.forEach {
                 it.techData.leftTheGame = true
             }
-            logger.info(
-                "no requests for ${game.gameId} - all users left - marked them - ${
-                    users.joinToString {
-                        it.inGameId().toString()
-                    }
-                }"
-            )
         }
     }
 }

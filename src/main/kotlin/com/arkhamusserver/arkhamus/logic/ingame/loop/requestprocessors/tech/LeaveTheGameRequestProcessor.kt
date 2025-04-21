@@ -7,17 +7,12 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.tech.LeaveTheGameRequestGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.UserStatusService
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 
 @Component
 class LeaveTheGameRequestProcessor(
     private val userStatusService: UserStatusService
 ) : NettyRequestProcessor {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<LeaveTheGameRequestProcessor>()
-    }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is LeaveTheGameRequestGameData
@@ -30,8 +25,7 @@ class LeaveTheGameRequestProcessor(
     ) {
         with(requestDataHolder.requestProcessData as LeaveTheGameRequestGameData) {
             if (this.canLeaveTheGame) {
-                logger.info("user ${gameUser!!.inGameId()} left the game")
-                this.gameUser.techData.leftTheGame = true
+                gameUser!!.techData.leftTheGame = true
                 userStatusService.updateUserStatus(gameUser.inGameId(), CultpritsUserState.ONLINE)
             }
         }

@@ -15,7 +15,7 @@ class SteamAuthLogic(
         private val logger = LoggingUtils.getLogger<SteamAuthLogic>()
     }
 
-   @Transactional
+    @Transactional
     // Authenticate a connecting client
     fun authenticateClient(
         clientSteamID: String,
@@ -28,14 +28,21 @@ class SteamAuthLogic(
                 authTicket.parseToByteArray()
             )
             if (isAuthenticated) {
-                logger.info("Client authenticated successfully. SteamID: {}", clientSteamID)
                 return steamAuthService.authenticateSteam(clientSteamID)
             } else {
-                logger.warn("Client authentication failed. SteamID: {}", clientSteamID)
+                LoggingUtils.withContext(
+                    eventType = LoggingUtils.EVENT_STEAM
+                ) {
+                    logger.warn("Client authentication failed. SteamID: {}", clientSteamID)
+                }
                 throw RuntimeException("Client authentication failed for SteamID: $clientSteamID")
             }
         } catch (e: Exception) {
-            logger.error("Error during client authentication. SteamID: {}, Error: {}", clientSteamID, e.message)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Error during client authentication. SteamID: {}, Error: {}", clientSteamID, e.message)
+            }
             throw e
         }
     }
@@ -45,9 +52,12 @@ class SteamAuthLogic(
         try {
             // Terminate the client's authentication session
             steamHandler.endClientAuthSession(clientSteamID)
-            logger.info("Client disconnected. Authentication session ended for SteamID: {}", clientSteamID)
         } catch (e: Exception) {
-            logger.error("Error while handling client disconnect. SteamID: {}, Error: {}", clientSteamID, e.message)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Error while handling client disconnect. SteamID: {}, Error: {}", clientSteamID, e.message)
+            }
         }
     }
 
@@ -56,9 +66,12 @@ class SteamAuthLogic(
         try {
             // Shutdown the SteamHandler / server
             steamHandler.shutdownServer()
-            logger.info("Steam game server shut down successfully.")
         } catch (e: Exception) {
-            logger.error("Error during Steam server shutdown: {}", e.message)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Error during Steam server shutdown: {}", e.message)
+            }
         }
     }
 

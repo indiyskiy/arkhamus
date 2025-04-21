@@ -3,7 +3,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameShortTimeEventRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.ingame.InGameShortTimeEvent
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.math.min
@@ -12,10 +11,6 @@ import kotlin.math.min
 class OneTickShortTimeEvent(
     private val shortTimeEventRepository: InGameShortTimeEventRepository,
 ) {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<OneTickShortTimeEvent>()
-    }
 
     @Transactional
     fun processShortTimeEvents(
@@ -42,7 +37,6 @@ class OneTickShortTimeEvent(
         if (event.timeLeft > 0) {
             shortTimeEventRepository.save(event)
         } else {
-            logger.info("end of life of event ${event.type}")
             event.state = InGameTimeEventState.PAST
             shortTimeEventRepository.delete(event)
         }

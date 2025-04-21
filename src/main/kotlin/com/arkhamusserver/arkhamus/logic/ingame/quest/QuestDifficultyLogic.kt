@@ -3,7 +3,6 @@ package com.arkhamusserver.arkhamus.logic.ingame.quest
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.model.database.entity.game.Quest
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 
 @Component
@@ -16,7 +15,6 @@ class QuestDifficultyLogic(
         const val HARD = 150
         const val VERY_HARD = 197
 
-        private val logger = LoggingUtils.getLogger<QuestDifficultyLogic>()
     }
 
     fun recount(quests: List<Quest>) {
@@ -30,10 +28,6 @@ class QuestDifficultyLogic(
             val number = i / numberPerType
             pair.second.dificulty = difficulty[number]!!
         }
-        logger.info(
-            "Quests recounted: ${
-                questsSorted.joinToString { "${it.first} - ${it.second.dificulty}" }
-            }")
     }
 
     fun recount(quest: Quest) {

@@ -9,7 +9,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequ
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameContainerRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.MapObjectState
 import com.arkhamusserver.arkhamus.model.ingame.InGameContainer
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -19,10 +18,6 @@ class UpdateContainerRequestProcessor(
     private val inGameContainerRepository: InGameContainerRepository,
     private val containerLikeThingsHandler: ContainerLikeThingsHandler
 ) : NettyRequestProcessor {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<UpdateContainerRequestProcessor>()
-    }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is UpdateContainerRequestGameData
@@ -40,7 +35,6 @@ class UpdateContainerRequestProcessor(
         val oldGameUser = globalGameData.users[requestDataHolder.userAccount.id]!!
         val container = globalGameData.containers[updateContainerRequestMessage.externalInventoryId]!!
 
-        logger.info("start update container")
         if ((container.state == MapObjectState.HOLD) && (container.holdingUser == oldGameUser.inGameId())) {
             val sortedUserInventory =
                 containerLikeThingsHandler.getTrueNewInventoryContent(
@@ -49,12 +43,9 @@ class UpdateContainerRequestProcessor(
                     requestProcessData.sortedUserInventory
                 )
             if (updateContainerRequestMessage.close) {
-                logger.info("close container")
                 closeContainer(container)
             }
-            logger.info("save container")
             inGameContainerRepository.save(container)
-            logger.info("start update container")
             requestProcessData.sortedUserInventory = sortedUserInventory
             requestProcessData.visibleItems = sortedUserInventory
         }

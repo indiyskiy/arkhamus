@@ -21,12 +21,15 @@ object LoggingUtils {
     // Log event types for structured logging
     const val EVENT_GAME_START = "GAME_START"
     const val EVENT_GAME_END = "GAME_END"
-    const val EVENT_USER_ACTION = "USER_ACTION"
+
     const val EVENT_SYSTEM = "SYSTEM"
     const val EVENT_OUTER_GAME_SYSTEM = "OUTER_GAME_SYSTEM"
     const val EVENT_IN_GAME_SYSTEM = "IN_GAME_SYSTEM"
+
     const val EVENT_NETTY_SYSTEM = "EVENT_NETTY_SYSTEM"
     const val EVENT_SECURITY = "SECURITY"
+    const val EVENT_STEAM = "STEAM"
+
     const val EVENT_PERFORMANCE = "PERFORMANCE"
 
     /**

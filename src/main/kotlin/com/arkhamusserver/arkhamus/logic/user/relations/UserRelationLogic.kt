@@ -10,7 +10,6 @@ import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserRelation
 import com.arkhamusserver.arkhamus.model.enums.UserRelationType
 import com.arkhamusserver.arkhamus.model.enums.steam.SteamPersonaState
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.user.RelatedUserDto
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -25,10 +24,6 @@ class UserRelationLogic(
     private val steamUserDataCache: SteamUserDataCache,
     private val userRelationRepository: UserRelationRepository
 ) {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<UserRelationLogic>()
-    }
 
     @Transactional
     fun makeFriend(newFriendId: Long): RelatedUserDto {
@@ -79,16 +74,12 @@ class UserRelationLogic(
     }
 
     private fun processRelations(allRelations: List<CachedUserRelation>): List<RelatedUserDto> {
-        logger.info("process relations: ${allRelations.size}")
         val targetUsers = allRelations.mapNotNull { it.targetUserId }.let {
             userRepository.findByIdIn(it).associateBy { it.id }
         }
-        logger.info("read target users: ${targetUsers.size}")
         val steamUsers = mapSteamUsers(allRelations)
-        logger.info("read steam users: ${steamUsers.size}")
         val states = mapUserStates(targetUsers)
         val trimRelations = allRelations.filterByUserId().filterBySteamId()
-        logger.info("trim relations: ${trimRelations.size}")
         return trimRelations.map {
             val steamUser = steamUsers[it.steamId]
             val user = targetUsers[it.targetUserId]
@@ -113,9 +104,6 @@ class UserRelationLogic(
     private fun List<CachedUserRelation>.collectRelations(userId: Long?, steamId: String?): List<UserRelationType> =
         this.filter {
             (it.targetUserId != null && it.targetUserId == userId) || (it.steamId != null && it.steamId == steamId)
-        }.let {
-            logger.info("relation types: ${it.joinToString { "${it.userRelationType}" }}")
-            it
         }.map { it.userRelationType }
 
     private fun mapUserStates(targetUsers: Map<Long?, UserAccount>): Map<Long, UserStateHolder> =

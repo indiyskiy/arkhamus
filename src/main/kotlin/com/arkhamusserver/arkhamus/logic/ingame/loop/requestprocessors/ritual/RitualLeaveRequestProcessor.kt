@@ -6,7 +6,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickReque
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.ritual.RitualLeaveRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAltarHolderRepository
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,10 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 class RitualLeaveRequestProcessor(
     private val inGameAltarHolderRepository: InGameAltarHolderRepository
 ) : NettyRequestProcessor {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<RitualLeaveRequestProcessor>()
-    }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is RitualLeaveRequestProcessData
@@ -34,7 +29,6 @@ class RitualLeaveRequestProcessor(
         val user = ritualLeaveRequestProcessData.gameUser!!
 
         if (ritualLeaveRequestProcessData.userInRitual) {
-            logger.info("leave ritual")
             if (altarHolder != null) {
                 altarHolder.usersToKick += user.inGameId()
                 inGameAltarHolderRepository.save(altarHolder)

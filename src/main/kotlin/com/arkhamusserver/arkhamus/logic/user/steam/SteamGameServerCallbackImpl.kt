@@ -28,10 +28,32 @@ class SteamGameServerCallbackImpl(
 
     override fun onValidateAuthTicketResponse(
         steamID: SteamID,
-        response: SteamAuth.AuthSessionResponse,
+        response: SteamAuth.AuthSessionResponse?,
         ownerSteamID: SteamID
     ) {
-        logger.info("Auth ticket validation received")
+        try {
+            logger.info("Auth ticket validation received for SteamID: {}, Response: {}", steamID, response)
+            // Only process the response if it's not null
+            if (response != null) {
+                // Handle the response based on its value
+                when (response) {
+                    SteamAuth.AuthSessionResponse.OK -> logger.info("Auth ticket is valid")
+                    SteamAuth.AuthSessionResponse.UserNotConnectedToSteam -> logger.warn("User not connected to Steam")
+                    SteamAuth.AuthSessionResponse.NoLicenseOrExpired -> logger.warn("No license or expired")
+                    SteamAuth.AuthSessionResponse.VACBanned -> logger.warn("VAC banned")
+                    SteamAuth.AuthSessionResponse.LoggedInElseWhere -> logger.warn("Logged in elsewhere")
+                    SteamAuth.AuthSessionResponse.VACCheckTimedOut -> logger.warn("VAC check timed out")
+                    SteamAuth.AuthSessionResponse.AuthTicketCanceled -> logger.warn("Auth ticket canceled")
+                    SteamAuth.AuthSessionResponse.AuthTicketInvalidAlreadyUsed -> logger.warn("Auth ticket invalid - already used")
+                    SteamAuth.AuthSessionResponse.AuthTicketInvalid -> logger.warn("Auth ticket invalid")
+                    SteamAuth.AuthSessionResponse.PublisherIssuedBan -> logger.warn("Publisher issued ban")
+                }
+            } else {
+                logger.warn("Received null auth session response for SteamID: {}", steamID)
+            }
+        } catch (e: Exception) {
+            logger.error("Error processing auth ticket validation: {}", e.message)
+        }
     }
 
     override fun onClientApprove(clientSteamID: SteamID, ownerSteamID: SteamID) {

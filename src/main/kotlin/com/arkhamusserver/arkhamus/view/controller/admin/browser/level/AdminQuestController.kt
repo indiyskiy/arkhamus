@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.view.controller.admin.browser.level
 
 import com.arkhamusserver.arkhamus.logic.admin.AdminQuestLogic
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.admin.AdminQuestDto
 import org.springframework.web.bind.annotation.*
 
@@ -10,10 +9,6 @@ import org.springframework.web.bind.annotation.*
 class AdminQuestController(
     private val adminQuestLogic: AdminQuestLogic
 ) {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<AdminQuestController>()
-    }
 
     @PostMapping
     fun createQuest(
@@ -29,7 +24,6 @@ class AdminQuestController(
         @PathVariable questId: Long,
         @RequestBody quest: AdminQuestDto,
     ): AdminQuestDto {
-        logger.info("save by rest controller")
         val savedQuest: AdminQuestDto = adminQuestLogic.update(questId, quest)
         return savedQuest
     }
@@ -49,9 +43,7 @@ class AdminQuestController(
         @PathVariable questId: Long,
         @PathVariable stepId: Long,
     ): AdminQuestDto {
-        logger.info("removing step $stepId")
         val createdQuest: AdminQuestDto = adminQuestLogic.removeStep(questId, stepId)
-        logger.info("removed")
         return createdQuest
     }
 }

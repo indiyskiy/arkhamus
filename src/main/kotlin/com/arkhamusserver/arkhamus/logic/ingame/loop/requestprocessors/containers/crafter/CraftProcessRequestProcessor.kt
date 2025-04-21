@@ -15,7 +15,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -29,10 +28,6 @@ class CraftProcessRequestProcessor(
     private val activityHandler: ActivityHandler
 ) : NettyRequestProcessor {
 
-    companion object {
-        private val logger = LoggingUtils.getLogger<CraftProcessRequestProcessor>()
-    }
-
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is CraftProcessRequestProcessData
     }
@@ -45,12 +40,9 @@ class CraftProcessRequestProcessor(
     ) {
         val craftProcessRequestProcessData = requestDataHolder.requestProcessData as CraftProcessRequestProcessData
         craftProcessRequestProcessData.recipe?.let { recipe ->
-            logger.info("started craft process for ${recipe.recipeId} for ${requestDataHolder.userAccount.nickName}")
             val canBeStarted = craftProcessRequestProcessData.canBeStarted
-            logger.info("can be started = $canBeStarted")
             if (canBeStarted) {
                 craft(craftProcessRequestProcessData, recipe, requestDataHolder, globalGameData)
-                logger.info("craft process for ${recipe.recipeId} started")
                 activityHandler.addUserWithTargetActivity(
                     globalGameData.game.inGameId(),
                     ActivityType.CRAFT_STARTED,
@@ -61,8 +53,6 @@ class CraftProcessRequestProcessor(
                     recipe.recipeId.toLong()
                 )
             }
-        } ?: {
-            logger.warn("recipe is null for ${requestDataHolder.userAccount.nickName} of game ${requestDataHolder.gameSession!!.id}")
         }
     }
 

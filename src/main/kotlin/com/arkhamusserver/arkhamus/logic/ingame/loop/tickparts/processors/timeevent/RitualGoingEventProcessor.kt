@@ -10,7 +10,6 @@ import com.arkhamusserver.arkhamus.model.ingame.InGameAltar
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 import kotlin.math.cos
 import kotlin.math.sin
@@ -22,10 +21,6 @@ class RitualGoingEventProcessor(
     private val inGameAltarHolderRepository: InGameAltarHolderRepository
 ) : TimeEventProcessor {
 
-    companion object {
-        private val logger = LoggingUtils.getLogger<RitualGoingEventProcessor>()
-    }
-
     override fun accept(type: InGameTimeEventType): Boolean =
         type == InGameTimeEventType.RITUAL_GOING
 
@@ -35,7 +30,6 @@ class RitualGoingEventProcessor(
         currentGameTime: Long,
         timePassedMillis: Long
     ) {
-        logger.info("RITUAL_GOING process started")
         addUsersToRitual(globalGameData)
     }
 
@@ -81,11 +75,8 @@ class RitualGoingEventProcessor(
     ) {
         val altarHolder = globalGameData.altarHolder
         if (altarHolder == null || !altarHolder.thmAddedThisRound) {
-            logger.info("RITUAL_GOING process ending")
             ritualHandler.failRitualByTime(altarHolder, globalGameData)
-            logger.info("RITUAL_GOING process ended")
         } else {
-            logger.info("RITUAL_GOING process ending, but starts another round")
             ritualHandler.startAnotherRound(globalGameData, altarHolder)
         }
     }

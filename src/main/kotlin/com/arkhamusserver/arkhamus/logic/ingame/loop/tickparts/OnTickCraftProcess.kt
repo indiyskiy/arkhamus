@@ -8,7 +8,6 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 import com.arkhamusserver.arkhamus.model.ingame.InGameCraftProcess
 import com.arkhamusserver.arkhamus.model.ingame.InGameCrafter
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -20,9 +19,6 @@ class OnTickCraftProcess(
     private val inGameCrafterRepository: InGameCrafterRepository,
     private val recipesSource: RecipesSource,
 ) {
-    companion object {
-        private val logger = LoggingUtils.getLogger<OnTickCraftProcess>()
-    }
 
     @Transactional
     fun applyCraftProcess(
@@ -39,7 +35,6 @@ class OnTickCraftProcess(
                 val produced = recipe.item
                 val numberOfItems = recipe.numberOfItems
                 val crafter = globalGameData.crafters[craftProcess.targetCrafterId]!!
-                logger.info("created $numberOfItems of ${produced.name}")
                 addItemToCrafter(produced, numberOfItems, crafter)
                 inGameCraftProcessRepository.delete(craftProcess)
             }

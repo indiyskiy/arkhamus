@@ -6,8 +6,6 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilit
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAbilityCastRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState.*
 import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
-import org.slf4j.Logger
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import kotlin.math.roundToLong
@@ -17,9 +15,6 @@ class OnTickAbilityCast(
     private val inGameAbilityCastRepository: InGameAbilityCastRepository,
     private val activeAbilityProcessors: List<ActiveAbilityProcessor>
 ) {
-    companion object {
-        var logger: Logger = LoggingUtils.getLogger<OnTickAbilityCast>()
-    }
 
     @Transactional
     fun applyAbilityCasts(

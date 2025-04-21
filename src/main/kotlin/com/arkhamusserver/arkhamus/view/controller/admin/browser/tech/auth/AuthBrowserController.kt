@@ -29,7 +29,11 @@ class AuthBrowserController(
         response: HttpServletResponse,
         model: Model
     ): String {
-        logger.info("gogo authenticate!")
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_STEAM
+        ) {
+            logger.info("gogo authenticate!")
+        }
         val authResponse = authenticationService.authentication(loginInfo)
         val cookie = Cookie("token", authResponse.accessToken)
         cookie.maxAge = 1 * 24 * 60 * 60

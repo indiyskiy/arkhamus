@@ -36,6 +36,7 @@ class SteamHandler(
 
     // Initialize the Steam Game Server
     fun initSteamServer() {
+
         logger.info("Initializing Steam Game Server...")
         SteamGameServerAPI.loadLibraries()
 
@@ -51,27 +52,26 @@ class SteamHandler(
             SteamGameServerAPI.ServerMode.Authentication,
             "1.0.0"
         )
-        logger.info("Steam Game Server initialized: {}", isInitialized)
-
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_STEAM
+        ) {
+            logger.info("Steam Game Server initialized: {}", isInitialized)
+        }
         // Set up the callback implementation and pass it to the SteamGameServer
-        logger.info("creating steam callback")
         steamCallback = SteamGameServerCallbackImpl(this)
-        logger.info("initialising steam server")
         steamServer = SteamGameServer(steamCallback)
-        logger.info("setting server data fo $steamServer")
         // Configure the server
-        logger.info("name")
         steamServer.setProduct("Cultprits")
-        logger.info("description")
         steamServer.setGameDescription("the one and only Cultprits server")
-        logger.info("dedicated")
         steamServer.setDedicatedServer(true)
-
-        logger.info("logging in anonymously...")
         // Log in anonymously
         steamServer.logOnAnonymous()
 
-        logger.info("Steam Game Server initialized and attempting to log in anonymously.")
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_STEAM
+        ) {
+            logger.info("Steam Game Server initialized and attempting to log in anonymously.")
+        }
         val serverThread = Thread {
             runSteamCallbacksLoop()
         }
@@ -83,34 +83,53 @@ class SteamHandler(
 
         // Check if the file exists
         if (!steamAppIdFile.exists()) {
-            logger.error(
-                "The file 'steam_appid.txt' is missing in the working directory: {}",
-                steamAppIdFile.absolutePath
-            )
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error(
+                    "The file 'steam_appid.txt' is missing in the working directory: {}",
+                    steamAppIdFile.absolutePath
+                )
+            }
             return false
         }
 
         // Check if the file is readable
         if (!steamAppIdFile.canRead()) {
-            logger.error("The file 'steam_appid.txt' exists but is not readable.")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("The file 'steam_appid.txt' exists but is not readable.")
+            }
             return false
         }
 
         // Verify the content of the file
         val content = steamAppIdFile.readText().trim()
         if (content.isEmpty()) {
-            logger.error("The file 'steam_appid.txt' is empty.")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("The file 'steam_appid.txt' is empty.")
+            }
             return false
         }
 
         // Check if the content is a valid number
         val gameId = content.toLongOrNull()
         if (gameId == null || gameId <= 0) {
-            logger.error("The file 'steam_appid.txt' contains invalid content: {}", content)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("The file 'steam_appid.txt' contains invalid content: {}", content)
+            }
             return false
         }
-
-        logger.info("The file 'steam_appid.txt' exists and contains a valid game ID: {}", gameId)
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_STEAM
+        ) {
+            logger.info("The file 'steam_appid.txt' exists and contains a valid game ID: {}", gameId)
+        }
         return true
     }
 
@@ -118,26 +137,41 @@ class SteamHandler(
         return try {
             // Attempt to bind to the port
             ServerSocket(port.toInt()).use { _ ->
-                logger.info("Port {} is available.", port)
+                LoggingUtils.withContext(
+                    eventType = LoggingUtils.EVENT_STEAM
+                ) {
+                    logger.info("Port {} is available.", port)
+                }
                 true
             }
         } catch (e: Exception) {
             // Port is already in use or unavailable
-            logger.error("Port {} is not available. Reason: {}", port, e.message)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Port {} is not available. Reason: {}", port, e.message)
+            }
             false
         }
     }
 
-
     private fun runSteamCallbacksLoop() {
         try {
-            logger.info("run endless loop of steam callbacks")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.info("run endless loop of steam callbacks")
+            }
             while (isServerRunning) {
                 SteamGameServerAPI.runCallbacks() // Process Steamworks callbacks
                 Thread.sleep(10000)
             }
         } catch (e: Exception) {
-            logger.error("Error running Steam Game Server callbacks: ${e.message}")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Error running Steam Game Server callbacks: ${e.message}")
+            }
         } finally {
             // Clean up when the thread is stopped
             SteamGameServerAPI.shutdown()
@@ -150,12 +184,19 @@ class SteamHandler(
 
     // Update the server SteamID when connected
     fun updateServerSteamID() {
-        logger.info("Server SteamID: {}", steamServer.steamID?.toString() ?: "null")
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_STEAM
+        ) {
+            logger.info("Server SteamID: {}", steamServer.steamID?.toString() ?: "null")
+        }
         if (isLoggedOn) {
-            logger.warn("update server steam id")
             serverSteamID = steamServer.steamID
         } else {
-            logger.warn("Game server is not logged into Steam.")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Game server is not logged into Steam.")
+            }
         }
     }
 
@@ -166,7 +207,11 @@ class SteamHandler(
                 it, it.toDecimalValue()
             )
         } ?: run {
-            logger.warn("ServerSteamID is not available. Game server is not logged on.")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("ServerSteamID is not available. Game server is not logged on.")
+            }
             null
         }
     }
@@ -174,7 +219,6 @@ class SteamHandler(
     // Set the server's logged-on state
     fun setLoggedOn(loggedOn: Boolean) {
         isLoggedOn = loggedOn
-        logger.info("Game server logged-on state updated: {}", loggedOn)
     }
 
     // Authenticate a client using the provided authentication ticket
@@ -183,7 +227,11 @@ class SteamHandler(
         authTicket: ByteArray
     ): Boolean {
         if (!isLoggedOn) {
-            logger.error("Cannot authenticate client. Game server is not logged on!")
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Cannot authenticate client. Game server is not logged on!")
+            }
             return false
         }
 
@@ -198,17 +246,24 @@ class SteamHandler(
 
             return when (result) {
                 SteamAuth.BeginAuthSessionResult.OK -> {
-                    logger.info("Client authentication successful. SteamID: {}", clientSteamID)
                     true
                 }
 
                 else -> {
-                    logger.warn("Client authentication failed. SteamID: {}, Result: {}", clientSteamID, result)
+                    LoggingUtils.withContext(
+                        eventType = LoggingUtils.EVENT_STEAM
+                    ) {
+                        logger.error("Client authentication failed. SteamID: {}, Result: {}", clientSteamID, result)
+                    }
                     false
                 }
             }
         } catch (e: Exception) {
-            logger.error("Error during client authentication. SteamID: {}, Error: {}", clientSteamID, e.message)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Error during client authentication. SteamID: {}", clientSteamID, e)
+            }
             return false
         }
     }
@@ -231,21 +286,31 @@ class SteamHandler(
             steamServer.endAuthSession(steamID)
             logger.info("Ended authentication session for SteamID: {}", clientSteamID)
         } catch (e: Exception) {
-            logger.error("Error while ending authentication session. SteamID: {}, Error: {}", clientSteamID, e.message)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error(
+                    "Error while ending authentication session. SteamID: {}",
+                    clientSteamID,
+                    e
+                )
+            }
         }
     }
 
     // Shut down the server by logging off
     fun shutdownServer() {
-        logger.info("Shutting down the Steam game server...")
         steamServer.logOff()
         isLoggedOn = false
         serverSteamID = null
-        logger.info("Steam game server logged off successfully.")
     }
 
     fun fetchUserData(steamId: String): SteamUserResponse? {
-        logger.info("Fetching user data from Steam Web API for SteamID: {}", steamId)
+        LoggingUtils.withContext(
+            eventType = LoggingUtils.EVENT_STEAM
+        ) {
+            logger.debug("Fetching user data from Steam Web API for SteamID: {}", steamId)
+        }
         try {
             // Call the Steam Web API endpoint (e.g., GetPlayerSummaries)
             // Make the HTTP call
@@ -253,10 +318,13 @@ class SteamHandler(
 
             // Parse API response and return as SteamUserResponse
             val steamUserResponse = parseSteamResponse(response)
-            logger.info("Received valid response from Steam API for SteamID: {}", steamId)
             return steamUserResponse
         } catch (e: Exception) {
-            logger.error("Error during Steam API call: {}", e.message)
+            LoggingUtils.withContext(
+                eventType = LoggingUtils.EVENT_STEAM
+            ) {
+                logger.error("Error during Steam API call:", e)
+            }
             return null
         }
     }
@@ -275,7 +343,6 @@ class SteamHandler(
     }
 
     private fun parseSteamResponse(response: String): SteamUserResponse? {
-        logger.info("parse Steam response: $response")
         val gson = Gson()
         return gson.fromJson(response, SteamUserResponse::class.java)
     }

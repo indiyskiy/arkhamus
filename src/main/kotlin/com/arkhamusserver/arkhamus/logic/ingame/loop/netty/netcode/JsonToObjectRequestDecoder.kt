@@ -2,6 +2,7 @@ package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.netcode
 
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.jsonparser.NettyRequestJsonParser
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils.EVENT_NETTY_SYSTEM
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
@@ -37,19 +38,45 @@ class JsonToObjectRequestDecoder(
                 if (parsed != null) {
                     out.add(parsed)
                 } else {
-                    logger.error("did not parse request $jsonString")
+                    LoggingUtils.withContext(
+                        eventType = EVENT_NETTY_SYSTEM
+                    ) {
+                        logger.debug("did not parse request $jsonString")
+                    }
                     ctx?.close()?.sync()
-                    logger.error("${ctx?.channelId()} is closed for sent unknown json")
+                    LoggingUtils.withContext(
+                        eventType = EVENT_NETTY_SYSTEM
+                    ) {
+                        logger.debug("${ctx?.channelId()} is closed for sent unknown json")
+                    }
                 }
-            } ?: logger.error("can't parse type from $jsonString")
+            } ?: {
+                LoggingUtils.withContext(
+                    eventType = EVENT_NETTY_SYSTEM
+                ) {
+                    logger.error("can't parse type from $jsonString")
+                }
+            }
         } catch (e: Exception) {
             try {
-                logger.error("Error decoding JSON message ${msg.toString(charset)}")
+                LoggingUtils.withContext(
+                    eventType = EVENT_NETTY_SYSTEM
+                ) {
+                    logger.debug("Error decoding JSON message ${msg.toString(charset)}")
+                }
             } catch (e: Exception) {
-                logger.error("Error decoding JSON message", e)
+                LoggingUtils.withContext(
+                    eventType = EVENT_NETTY_SYSTEM
+                ) {
+                    logger.debug("Error decoding JSON message", e)
+                }
             } finally {
                 ctx?.close()?.sync()
-                logger.error("${ctx?.channelId()} is closed for sent non-json data", e)
+                LoggingUtils.withContext(
+                    eventType = EVENT_NETTY_SYSTEM
+                ) {
+                    logger.debug("${ctx?.channelId()} is closed for sent non-json data", e)
+                }
             }
         }
     }

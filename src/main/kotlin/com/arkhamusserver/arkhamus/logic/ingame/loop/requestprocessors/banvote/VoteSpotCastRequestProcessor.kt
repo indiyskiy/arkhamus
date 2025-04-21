@@ -6,17 +6,12 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.banvote.VoteSpotCastRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 
 @Component
 class VoteSpotCastRequestProcessor(
     private val voteHandler: UserVoteHandler,
 ) : NettyRequestProcessor {
-
-    companion object {
-        private val logger = LoggingUtils.getLogger<VoteSpotCastRequestProcessor>()
-    }
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is VoteSpotCastRequestProcessData
@@ -33,7 +28,6 @@ class VoteSpotCastRequestProcessor(
         val allUserVoteSpots = gameData.thisSpotUserInfos
         val targetUser = gameData.targetUser
         if (gameData.canVoteForTargetUser && currentUserVoteSpot != null && targetUser != null && voteSpot != null) {
-            logger.info("casting vote from ${currentUserVoteSpot.userId} to ${targetUser.inGameId()}")
             val bannedUser = voteHandler.castVote(
                 currentUser = gameData.gameUser!!,
                 currentUserVoteSpot = currentUserVoteSpot,

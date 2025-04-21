@@ -5,7 +5,6 @@ import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserRelationR
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserAccount
 import com.arkhamusserver.arkhamus.model.database.entity.user.UserRelation
 import com.arkhamusserver.arkhamus.model.enums.UserRelationType
-import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,14 +13,9 @@ class SteamUserRelationsUpdateLogic(
     private val userAccountRepository: UserAccountRepository,
     private val userRelationRepository: UserRelationRepository
 ) {
-    companion object {
-        private val logger = LoggingUtils.getLogger<SteamUserRelationsUpdateLogic>()
-    }
 
     @Transactional
     fun updateSteamUser(userId: Long, steamIds: List<String>): List<UserRelation> {
-        logger.info("Updating Steam user relations for userId: $userId with steamIds: $steamIds")
-
         // 1. Fetch current user and relations
         val currentUser = fetchUser(userId)
         val currentRelations = fetchUserRelations(currentUser)
@@ -30,12 +24,10 @@ class SteamUserRelationsUpdateLogic(
         // 2. Handle new Steam IDs: Create new relations
         val newSteamIds = findNewSteamIds(steamIds, currentSteamIds)
         val newRelations = createNewRelations(currentUser, newSteamIds)
-        logger.info("Created ${newRelations.size} new UserRelations for userId: $userId with steamIds: $steamIds")
 
         // 3. Attempt to link UserAccounts to all relations (current + new)
         val allRelations = currentRelations + newRelations
         val linkedRelations = linkUserAccountToRelations(allRelations)
-        logger.info("Linked ${linkedRelations.size} UserRelations for userId: $userId with steamIds: $steamIds")
         val updatedRelationsSteamIds = linkedRelations.mapNotNull { it.targetSteamId }
         val createdNotLinkedRelations = newRelations.filter { it.targetSteamId !in updatedRelationsSteamIds }
         val allUpdated = (linkedRelations + createdNotLinkedRelations).distinctBy { it.targetSteamId }
@@ -44,8 +36,6 @@ class SteamUserRelationsUpdateLogic(
         //merge updated and not updated entities to the list
         val updatedRelationIds = saved.mapNotNull { it.id }.toSet()
         val notUpdated = currentRelations.filterNot { it.id in updatedRelationIds }
-        logger.info("Updated ${saved.size} UserRelations for userId: $userId with steamIds: $steamIds")
-        logger.info("Was ok ${notUpdated.size} UserRelations for userId: $userId with steamIds: $steamIds")
         return saved + notUpdated
     }
 
@@ -81,7 +71,6 @@ class SteamUserRelationsUpdateLogic(
      */
     private fun createNewRelations(user: UserAccount, newSteamIds: List<String>): List<UserRelation> {
         return newSteamIds.map { steamId ->
-            logger.info("Creating new UserRelation for steamId $steamId")
             UserRelation().apply {
                 sourceUser = user
                 targetSteamId = steamId
@@ -111,7 +100,6 @@ class SteamUserRelationsUpdateLogic(
             relation.targetSteamId?.let { steamId ->
                 val matchingUser = matchedUsersBySteamId[steamId]
                 if (matchingUser != null && relation.targetUser == null) {
-                    logger.info("Linking UserRelation with steamId $steamId to UserAccount with id ${matchingUser.id}")
                     relation.targetUser = matchingUser
                     relation
                 } else {
@@ -128,7 +116,6 @@ class SteamUserRelationsUpdateLogic(
     private fun saveUpdatedRelations(updatedRelations: List<UserRelation>): List<UserRelation> {
         if (updatedRelations.isNotEmpty()) {
             val saved = userRelationRepository.saveAll(updatedRelations)
-            logger.info("Saved ${updatedRelations.size} updated/new UserRelations to database")
             return saved.toList()
         }
         return emptyList()
