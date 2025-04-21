@@ -29,6 +29,7 @@ object LoggingUtils {
     const val EVENT_NETTY_SYSTEM = "EVENT_NETTY_SYSTEM"
     const val EVENT_SECURITY = "SECURITY"
     const val EVENT_STEAM = "STEAM"
+    const val EVENT_API = "API"
 
     const val EVENT_PERFORMANCE = "PERFORMANCE"
 
