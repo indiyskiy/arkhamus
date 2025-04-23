@@ -1,13 +1,15 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.HIGH_GROUND_HEIGHT
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithPoint
 import org.springframework.stereotype.Component
 import java.awt.geom.Point2D
 
 @Component
-class GeometryUtils {
+class GeometryUtils(
+    private val globalGameSettings: GlobalGameSettings
+) {
 
     fun distanceLessOrEquals(
         withPoint1: WithPoint,
@@ -68,7 +70,7 @@ class GeometryUtils {
         whoLooks: InGameUser,
         target: WithPoint
     ): Boolean {
-        return (target.y() - whoLooks.y) >= HIGH_GROUND_HEIGHT
+        return (target.y() - whoLooks.y) >= globalGameSettings.highGroundHeight
     }
 
     private fun det(a: Point, b: Point, c: Point) =

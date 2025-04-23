@@ -1,17 +1,13 @@
 package com.arkhamusserver.arkhamus.model.enums.ingame.core
 
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.DAY_LENGTH_MINUTES
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.MINUTE_IN_MILLIS
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.NIGHT_LENGTH_MINUTES
 import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.SECOND_IN_MILLIS
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType.*
+import com.arkhamusserver.arkhamus.model.enums.ingame.TimeBase
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.RoleTypeInGame.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.VisibilityModifier
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithVisibilityModifiers
-
-private const val MINIMUM_COOLDOWN: Long = SECOND_IN_MILLIS
-private const val DEFAULT_INVESTIGATION_ACTIVE: Long = MINUTE_IN_MILLIS
 
 private const val CLOSE_RANGE = 5.0
 private const val MEDIUM_RANGE = 8.0
@@ -23,12 +19,13 @@ enum class Ability(
     val consumesItem: Boolean = false,
     val classBased: Boolean = false,
     val availableForRole: Set<RoleTypeInGame> = setOf(CULTIST, INVESTIGATOR, NEUTRAL),
-    val cooldown: Long = MINIMUM_COOLDOWN,
-    val active: Long? = null,
+    private val cooldown: Long,
+    private val active: Long? = null,
     val globalCooldown: Boolean = false,
     val targetTypes: List<GameObjectType>? = null,
     val range: Double? = null,
     val visibilityModifiers: Set<VisibilityModifier> = setOf(VisibilityModifier.ALL),
+    private val timeBase: TimeBase = TimeBase.PLAIN_BASE,
 ) : WithVisibilityModifiers {
     // investigator ability 1***
     HEAL_MADNESS(
@@ -193,8 +190,8 @@ enum class Ability(
     SEARCH_FOR_SCENT(
         id = 6001,
         requiresItem = true,
-        active = DEFAULT_INVESTIGATION_ACTIVE,
-        cooldown = DEFAULT_INVESTIGATION_ACTIVE + 1,
+        active = MINUTE_IN_MILLIS,
+        cooldown = MINUTE_IN_MILLIS + 1,
         targetTypes = listOf(SCENT_CLUE),
         range = CLOSE_RANGE
     ),
@@ -208,7 +205,7 @@ enum class Ability(
     SEARCH_FOR_OMEN(
         id = 6003,
         requiresItem = true,
-        active = DEFAULT_INVESTIGATION_ACTIVE,
+        active = MINUTE_IN_MILLIS,
         cooldown = (MINUTE_IN_MILLIS * 0.25).toLong(),
         targetTypes = listOf(OMEN_CLUE),
         range = CLOSE_RANGE
@@ -226,13 +223,13 @@ enum class Ability(
         cooldown = MINUTE_IN_MILLIS,
         range = CLOSE_RANGE,
         targetTypes = listOf(AURA_CLUE),
-        active = DEFAULT_INVESTIGATION_ACTIVE * 3
+        active = MINUTE_IN_MILLIS * 3
     ),
     SEARCH_FOR_DISTORTION(
         id = 6006,
         requiresItem = true,
         cooldown = MINUTE_IN_MILLIS * 3,
-        active = DEFAULT_INVESTIGATION_ACTIVE * 2,
+        active = MINUTE_IN_MILLIS * 2,
         range = MEDIUM_RANGE,
         targetTypes = listOf(DISTORTION_CLUE),
     ),
@@ -240,7 +237,7 @@ enum class Ability(
         id = 6007,
         requiresItem = true,
         cooldown = MINUTE_IN_MILLIS * 3,
-        active = DEFAULT_INVESTIGATION_ACTIVE * 2,
+        active = MINUTE_IN_MILLIS * 2,
         range = MEDIUM_RANGE,
         targetTypes = listOf(INSCRIPTION_CLUE_GLYPH),
     ),
@@ -250,8 +247,9 @@ enum class Ability(
         id = 10001,
         requiresItem = true,
         consumesItem = false,
-        cooldown = MINUTE_IN_MILLIS * DAY_LENGTH_MINUTES,
-        active = MINUTE_IN_MILLIS * NIGHT_LENGTH_MINUTES / 2
+        cooldown = MINUTE_IN_MILLIS / 2,
+        active = MINUTE_IN_MILLIS / 2,
+        timeBase = TimeBase.NIGHT_LENGTH_BASE
     ),
     TOWN_PORTAL_BY_AMULET(
         id = 10002,
@@ -309,6 +307,9 @@ enum class Ability(
         return visibilityModifiers
     }
 
+    fun timeBase() = timeBase
+    fun cooldown() = cooldown
+    fun active() = active
 
     companion object {
         private val abilityMap = values().associateBy { it.id }

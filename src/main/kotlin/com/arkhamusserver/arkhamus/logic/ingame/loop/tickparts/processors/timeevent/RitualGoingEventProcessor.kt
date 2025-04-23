@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.timeevent
 
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual.RitualHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.GeometryUtils
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -18,7 +19,8 @@ import kotlin.math.sin
 class RitualGoingEventProcessor(
     private val ritualHandler: RitualHandler,
     private val geometryUtils: GeometryUtils,
-    private val inGameAltarHolderRepository: InGameAltarHolderRepository
+    private val inGameAltarHolderRepository: InGameAltarHolderRepository,
+    private val globalGameSettings: GlobalGameSettings
 ) : TimeEventProcessor {
 
     override fun accept(type: InGameTimeEventType): Boolean =
@@ -87,7 +89,7 @@ class RitualGoingEventProcessor(
         radius: Double
     ) {
         val usersInRitual = values.filter { it.inGameId() in altarHolder.usersInRitual }.sortedBy { it.inGameId() }
-        val usersRadius = radius * 2 / 3
+        val usersRadius = radius * globalGameSettings.ritualUserRadiusFactor
         if (usersInRitual.isNotEmpty()) {
             val step = 2 * Math.PI / usersInRitual.size
             usersInRitual.mapIndexed { index, inGameUser ->

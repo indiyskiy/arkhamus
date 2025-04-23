@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.classbased.cultist
 
+import com.arkhamusserver.arkhamus.logic.globalUtils.TimeBaseCalculator
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component
 @Component
 class ParalyzeAbilityCast(
     private val timeEventHandler: TimeEventHandler,
+    private val calculator: TimeBaseCalculator
 ) : AbilityCast {
 
     override fun accept(ability: Ability): Boolean {
@@ -63,7 +65,7 @@ class ParalyzeAbilityCast(
             sourceObject = currentUser,
             targetObject = targetUser,
             location = Location(targetUser.x, targetUser.y, targetUser.z),
-            timeLeft = InGameTimeEventType.ABILITY_STUN.getDefaultTime()
+            timeLeft = calculator.resolve(InGameTimeEventType.ABILITY_STUN)
         )
     }
 }

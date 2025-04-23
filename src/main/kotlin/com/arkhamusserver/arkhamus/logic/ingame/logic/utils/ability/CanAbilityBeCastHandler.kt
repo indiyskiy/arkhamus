@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability
 
+import com.arkhamusserver.arkhamus.logic.globalUtils.TimeBaseCalculator
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToClassResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.condition.AdditionalAbilityCondition
@@ -21,7 +22,8 @@ class CanAbilityBeCastHandler(
     private val userInventoryHandler: InventoryHandler,
     private val abilityToItemResolver: AbilityToItemResolver,
     private val relatedAbilityCastHandler: RelatedAbilityCastHandler,
-    private val additionalAbilityConditions: List<AdditionalAbilityCondition>
+    private val additionalAbilityConditions: List<AdditionalAbilityCondition>,
+    private val timeBaseCalculator: TimeBaseCalculator
 ) {
 
     fun canUserSeeAbility(user: InGameUser, ability: Ability, requiredItem: Item?): Boolean {
@@ -78,7 +80,7 @@ class CanAbilityBeCastHandler(
     ): Long = (relatedAbilityCastMap[ability.id]?.let { it.timeLeftCooldown + it.timePast } ?: 0)
 
     private fun summoningSicknessTime(summoningSickness: InGameTimeEvent?): Long? =
-        summoningSickness?.type?.getDefaultTime()
+        summoningSickness?.let { timeBaseCalculator.resolve(it.type) }
 
     fun canBeCastedAtAll(
         ability: Ability,

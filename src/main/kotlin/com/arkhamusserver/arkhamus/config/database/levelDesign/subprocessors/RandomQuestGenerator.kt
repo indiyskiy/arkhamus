@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors
 
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.quest.QuestDifficultyLogic
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.TextKeyRepository
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.ingame.QuestRepository
@@ -23,6 +23,7 @@ class RandomQuestGenerator(
     private val textKeyRepository: TextKeyRepository,
     private val questStepRepository: QuestStepRepository,
     private val questDifficultyLogic: QuestDifficultyLogic,
+    private val globalGameSettings: GlobalGameSettings,
 ) {
 
     companion object {
@@ -40,7 +41,7 @@ class RandomQuestGenerator(
         ) {
             logger.info("processing quest for level ${level.id}")
         }
-        val quests = (0..QUESTS_ON_START * 10 - 1).map { number ->
+        val quests = (0..globalGameSettings.questsOnStart * 10 - 1).map { number ->
             val randomQuestGiverStart = questGivers.random()
             val randomQuestGiverEnd = questGivers.random()
 

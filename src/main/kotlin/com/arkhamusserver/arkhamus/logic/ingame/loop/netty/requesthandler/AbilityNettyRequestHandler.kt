@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.netty.requesthandler
 
+import com.arkhamusserver.arkhamus.logic.globalUtils.TimeBaseCalculator
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.InventoryHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability.CanAbilityBeCastHandler
@@ -40,6 +41,7 @@ class AbilityNettyRequestHandler(
     private val clueHandler: ClueHandler,
     private val questProgressHandler: QuestProgressHandler,
     private val finder: GameObjectFinder,
+    private val calculator: TimeBaseCalculator
 ) : NettyRequestHandler {
 
     companion object {
@@ -135,7 +137,7 @@ class AbilityNettyRequestHandler(
         canBeSeen = canBeSeen,
         fitAdditionalConditions = canBeCast,
         cooldown = relatedAbility?.timeLeftCooldown,
-        cooldownOf = ability.cooldown,
+        cooldownOf = calculator.resolveAbilityCooldown(ability),
         item = requiredItem,
         executedSuccessfully = false,
         gameUser = user,

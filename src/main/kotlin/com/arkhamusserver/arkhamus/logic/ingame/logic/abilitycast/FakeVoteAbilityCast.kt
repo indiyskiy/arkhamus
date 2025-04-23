@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast
 
+import com.arkhamusserver.arkhamus.logic.globalUtils.TimeBaseCalculator
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
@@ -17,7 +18,8 @@ import kotlin.random.Random
 
 @Component
 class FakeVoteAbilityCast(
-    private val timeEventHandler: TimeEventHandler
+    private val timeEventHandler: TimeEventHandler,
+    private val calculator: TimeBaseCalculator
 ) : AbilityCast {
     companion object {
         private val random = Random(System.currentTimeMillis())
@@ -79,7 +81,9 @@ class FakeVoteAbilityCast(
                 sourceObject = sourceUser,
                 targetObject = target,
                 location = threshold,
-                timeLeft = InGameTimeEventType.CALL_FOR_BAN_VOTE.getDefaultTime()
+                timeLeft = calculator.resolve(
+                    InGameTimeEventType.CALL_FOR_BAN_VOTE
+                )
             )
         }
     }

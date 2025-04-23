@@ -44,10 +44,11 @@ class RitualHandler(
     private val inGameAltarHolderRepository: InGameAltarHolderRepository,
     private val madnessHandler: UserMadnessHandler,
     private val teleportHandler: TeleportHandler,
-    private val geometryUtils: GeometryUtils
+    private val geometryUtils: GeometryUtils,
+    private val globalGameSettings: GlobalGameSettings
 ) {
     companion object {
-        const val MADNESS_PER_USER = GlobalGameSettings.MAX_USER_MADNESS / 12.0
+        //        const val MADNESS_PER_USER = GlobalGameSettings.MAX_USER_MADNESS / 12.0
         private val logger = LoggingUtils.getLogger<RitualHandler>()
     }
 
@@ -220,7 +221,7 @@ class RitualHandler(
         val madnessApply = if (isKickForAll) {
             0.0
         } else {
-            MADNESS_PER_USER * usersInRitual.size / usersToKick.size
+            madnessPerUser() * usersPercent(usersInRitual, usersToKick)
         }
         val ritualThresholds = data.thresholds.filter { it.type == ThresholdType.RITUAL }
         usersToKick.forEach { userId ->
@@ -250,6 +251,13 @@ class RitualHandler(
         }
         inGameAltarHolderRepository.save(holder)
     }
+
+    private fun usersPercent(
+        usersInRitual: Set<Long>,
+        usersToKick: Set<Long>
+    ): Double = (1.0 / usersInRitual.size / usersToKick.size)
+
+    private fun madnessPerUser(): Double = (1.0 * globalGameSettings.maxUserMadness / 12.0)
 
     @Transactional
     fun castGodVote(

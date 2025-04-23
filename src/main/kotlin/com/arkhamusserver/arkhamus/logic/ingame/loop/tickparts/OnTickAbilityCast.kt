@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts
 
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.DEFAULT_ABILITY_COOLDOWN_MULTIPLIER
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameAbilityCastRepository
@@ -13,7 +13,8 @@ import kotlin.math.roundToLong
 @Component
 class OnTickAbilityCast(
     private val inGameAbilityCastRepository: InGameAbilityCastRepository,
-    private val activeAbilityProcessors: List<ActiveAbilityProcessor>
+    private val activeAbilityProcessors: List<ActiveAbilityProcessor>,
+    private val globalGameSettings: GlobalGameSettings
 ) {
 
     @Transactional
@@ -24,7 +25,7 @@ class OnTickAbilityCast(
     ) {
         castAbilities.forEach { castAbility ->
             val user = globalGameData.users[castAbility.sourceUserId]
-            val currentCooldownSpeed = user?.currentCooldownSpeed ?: DEFAULT_ABILITY_COOLDOWN_MULTIPLIER
+            val currentCooldownSpeed = user?.currentCooldownSpeed ?: globalGameSettings.defaultAbilityCooldownMultiplier
             when (castAbility.state) {
                 ACTIVE -> {
                     handleActiveEvent(castAbility, globalGameData)

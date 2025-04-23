@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.user.steam
 
+import com.arkhamusserver.arkhamus.config.steam.SteamProperties
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamServerIdDto
 import com.arkhamusserver.arkhamus.view.dto.steam.SteamUserResponse
@@ -16,16 +17,11 @@ import java.nio.ByteBuffer
 
 @Service
 class SteamHandler(
-    private val webClient: WebClient.Builder
+    private val webClient: WebClient.Builder,
+    private val steamProperties: SteamProperties
 ) {
     companion object {
         private val logger = LoggingUtils.getLogger<SteamHandler>()
-        private val baseUrl = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/"
-        const val PUBLIC_STEAM_API_KEY = "CCCF25C2E631257F00C93AAED8D7037D"
-        const val VERY_SECRET_API_KEY = "80E6C20B7E44260E6F9DB755DDF7B651"
-        const val STEAM_GAME_ID = 3348260
-        private val GAME_PORT: Short = 27015 // Game port for player connections
-        private val QUERY_PORT: Short = 27016 // Query port for Steam server list communication
     }
 
     private lateinit var steamServer: SteamGameServer
@@ -41,16 +37,16 @@ class SteamHandler(
         SteamGameServerAPI.loadLibraries()
 
         checkSteamAppIdFile()
-        isPortAvailable(GAME_PORT)
-        isPortAvailable(QUERY_PORT)
+        isPortAvailable(steamProperties.gamePort)
+        isPortAvailable(steamProperties.queryPort)
 
         // Initialize the Steam Game Server
         val isInitialized = SteamGameServerAPI.init(
             0,
-            GAME_PORT,
-            QUERY_PORT,
+            steamProperties.gamePort,
+            steamProperties.queryPort,
             SteamGameServerAPI.ServerMode.Authentication,
-            "1.0.0"
+            steamProperties.serverVersion
         )
         LoggingUtils.withContext(
             eventType = LoggingUtils.EVENT_STEAM
@@ -61,8 +57,8 @@ class SteamHandler(
         steamCallback = SteamGameServerCallbackImpl(this)
         steamServer = SteamGameServer(steamCallback)
         // Configure the server
-        steamServer.setProduct("Cultprits")
-        steamServer.setGameDescription("the one and only Cultprits server")
+        steamServer.setProduct(steamProperties.productName)
+        steamServer.setGameDescription(steamProperties.gameDescription)
         steamServer.setDedicatedServer(true)
         // Log in anonymously
         steamServer.logOnAnonymous()
@@ -164,7 +160,7 @@ class SteamHandler(
             }
             while (isServerRunning) {
                 SteamGameServerAPI.runCallbacks() // Process Steamworks callbacks
-                Thread.sleep(10000)
+                Thread.sleep(steamProperties.callbackIntervalMs)
             }
         } catch (e: Exception) {
             LoggingUtils.withContext(
@@ -332,8 +328,8 @@ class SteamHandler(
     private fun getSteamUser(steamId: String): String? {
         return webClient.build()
             .get()
-            .uri(baseUrl) {
-                it.queryParam("key", PUBLIC_STEAM_API_KEY)
+            .uri(steamProperties.apiBaseUrl) {
+                it.queryParam("key", steamProperties.publicApiKey)
                     .queryParam("steamids", steamId)
                     .build()
             }
@@ -350,5 +346,3 @@ class SteamHandler(
     private fun String.toDecimalValue(): Long = this.toULong(16).toLong()
 
 }
-
-

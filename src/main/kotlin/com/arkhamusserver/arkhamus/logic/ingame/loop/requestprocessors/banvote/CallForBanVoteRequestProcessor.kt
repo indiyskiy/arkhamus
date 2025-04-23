@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.banvote
 
+import com.arkhamusserver.arkhamus.logic.globalUtils.TimeBaseCalculator
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
@@ -17,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class CallForBanVoteRequestProcessor(
     private val eventHandler: TimeEventHandler,
-    private val activityHandler: ActivityHandler
+    private val activityHandler: ActivityHandler,
+    private val calculator: TimeBaseCalculator
 ) : NettyRequestProcessor {
 
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
@@ -59,7 +61,7 @@ class CallForBanVoteRequestProcessor(
             sourceObject = gameData.gameUser,
             targetObject = voteSpot,
             location = threshold?.let { Location(it.x, it.y, it.z) },
-            timeLeft = InGameTimeEventType.CALL_FOR_BAN_VOTE.getDefaultTime()
+            timeLeft = calculator.resolve(InGameTimeEventType.CALL_FOR_BAN_VOTE)
         )
     }
 }

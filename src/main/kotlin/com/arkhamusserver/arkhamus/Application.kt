@@ -1,6 +1,7 @@
 package com.arkhamusserver.arkhamus
 
 import com.arkhamusserver.arkhamus.config.auth.JwtProperties
+import com.arkhamusserver.arkhamus.config.steam.SteamProperties
 import com.arkhamusserver.arkhamus.model.dataaccess.sql.repository.UserAccountRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -12,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 
 
 @SpringBootApplication
-@EnableConfigurationProperties(JwtProperties::class)
+@EnableConfigurationProperties(JwtProperties::class, SteamProperties::class)
 @EnableScheduling
 class Application : SpringBootServletInitializer() {
 

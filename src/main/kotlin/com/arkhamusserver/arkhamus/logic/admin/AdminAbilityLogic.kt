@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.admin
 
+import com.arkhamusserver.arkhamus.logic.globalUtils.TimeBaseCalculator
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToClassResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.*
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Component
 @Component
 class AdminAbilityLogic(
     private val abilityToItemResolver: AbilityToItemResolver,
-    private val abilityToClassResolver: AbilityToClassResolver
+    private val abilityToClassResolver: AbilityToClassResolver,
+    private val timeBaseCalculator: TimeBaseCalculator
 ) {
     fun listAllAbilities(): List<AbilityBrowserSimpleDto> {
         return Ability.values().toList().mapToSimpleDto()
@@ -48,8 +50,8 @@ class AdminAbilityLogic(
             consumesItem = ability.consumesItem,
             classBased = ability.classBased,
             availableForRole = ability.availableForRole,
-            cooldown = ability.cooldown,
-            active = ability.active,
+            cooldown = timeBaseCalculator.resolveAbilityCooldown(ability),
+            active = timeBaseCalculator.resolveAbilityActive(ability),
             globalCooldown = ability.globalCooldown,
             range = ability.range,
             visibilityModifiers = ability.visibilityModifiers,

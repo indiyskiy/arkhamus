@@ -1,5 +1,7 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ritual
 
+import com.arkhamusserver.arkhamus.logic.globalUtils.TimeBaseCalculator
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.ingame.InGameAltarHolder
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
@@ -8,7 +10,10 @@ import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.*
 import org.springframework.stereotype.Component
 
 @Component
-class RitualMappingDataHandler {
+class RitualMappingDataHandler(
+    private val calculator: TimeBaseCalculator,
+    private val globalGameSettings: GlobalGameSettings
+) {
     fun build(
         ritualEvent: InGameTimeEvent?,
         altarHolder: InGameAltarHolder,
@@ -26,10 +31,10 @@ class RitualMappingDataHandler {
             this.currentItemMax = altarHolder.itemsForRitual[currentNotch?.item] ?: 0
             this.currentItemInside = altarHolder.itemsOnAltars[currentNotch?.item] ?: 0
             this.gameTimeStart = ritualEvent?.timeStart ?: 0
-            this.gameTimeEnd = (ritualEvent?.timeStart ?: 0) + InGameTimeEventType.RITUAL_GOING.getDefaultTime()
+            this.gameTimeEnd = (ritualEvent?.timeStart ?: 0) + calculator.resolve(InGameTimeEventType.RITUAL_GOING)
             this.gameTimeNow = currentGameTime
             this.gameTimeItemsNotches = gameTimeItemsNotches.map {
-                ItemNotchResponse( it)
+                ItemNotchResponse(it)
             }
             this.userIdsInRitual = usersInRitual.map { it.inGameId() }
         }
@@ -63,7 +68,7 @@ class RitualMappingDataHandler {
             usersGoingToLeave + 1
         }
         val madnessPenalty = if (delimeter != 0 && usersInRitual >= usersGoingToLeave - 1) {
-            RitualHandler.MADNESS_PER_USER * usersInRitual / delimeter
+            globalGameSettings.maxUserMadness * usersInRitual / delimeter
         } else {
             0.0
         }

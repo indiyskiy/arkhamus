@@ -3,7 +3,7 @@ package com.arkhamusserver.arkhamus.config.database.levelDesign
 import com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors.LevelDesignLevelTaskInfoProcessor
 import com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors.LevelDesignQuestGiverInfoProcessor
 import com.arkhamusserver.arkhamus.config.database.levelDesign.subprocessors.RandomQuestGenerator
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.CREATE_TEST_QUESTS
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.model.database.entity.game.leveldesign.Level
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.levelDesign.LevelFromJson
@@ -14,6 +14,7 @@ class LevelDesignQuestsRelatedStuffProcessor(
     private val levelDesignQuestGiverInfoProcessor: LevelDesignQuestGiverInfoProcessor,
     private val randomQuestGenerator: RandomQuestGenerator,
     private val levelDesignLevelTaskInfoProcessor: LevelDesignLevelTaskInfoProcessor,
+    private val globalGameSettings: GlobalGameSettings,
 ) {
 
     companion object {
@@ -29,7 +30,7 @@ class LevelDesignQuestsRelatedStuffProcessor(
         val levelTasks =
             levelDesignLevelTaskInfoProcessor.processLevelTasksFromJson(levelFromJson.levelTasks, savedLevel)
 
-        if (CREATE_TEST_QUESTS) {
+        if (globalGameSettings.createTestQuests) {
             LoggingUtils.withContext(
                 eventType = LoggingUtils.EVENT_OUTER_GAME_SYSTEM
             ) {

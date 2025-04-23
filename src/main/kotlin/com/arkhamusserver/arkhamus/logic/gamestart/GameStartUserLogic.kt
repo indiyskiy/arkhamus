@@ -27,7 +27,8 @@ class GameStartUserLogic(
     private val inGameGameUserRepository: InGameGameUserRepository,
     private val startMarkerRepository: StartMarkerRepository,
     private val userOfGameSessionRepository: UserOfGameSessionRepository,
-    private val inRamGameRepository: InRamGameRepository
+    private val inRamGameRepository: InRamGameRepository,
+    private val globalGameSettings: GlobalGameSettings
 ) {
 
     companion object {
@@ -123,12 +124,12 @@ class GameStartUserLogic(
         y = marker.y,
         z = marker.z,
         visibilityModifiers = visibleModifiersByRole(user.roleInGame!!),
-        initialVisibilityLength = GlobalGameSettings.GLOBAL_VISION_DISTANCE,
-        currentVisibilityLength = GlobalGameSettings.GLOBAL_VISION_DISTANCE,
-        initialCooldownSpeed = GlobalGameSettings.DEFAULT_ABILITY_COOLDOWN_MULTIPLIER,
-        currentCooldownSpeed = GlobalGameSettings.DEFAULT_ABILITY_COOLDOWN_MULTIPLIER,
-        initialMovementSpeed = GlobalGameSettings.DEFAULT_MOVEMENT_SPEED_MULTIPLIER,
-        currentMovementSpeed = GlobalGameSettings.DEFAULT_MOVEMENT_SPEED_MULTIPLIER,
+        initialVisibilityLength = globalGameSettings.globalVisionDistance,
+        currentVisibilityLength = globalGameSettings.globalVisionDistance,
+        initialCooldownSpeed = globalGameSettings.defaultAbilityCooldownMultiplier,
+        currentCooldownSpeed = globalGameSettings.defaultAbilityCooldownMultiplier,
+        initialMovementSpeed = globalGameSettings.defaultMovementSpeedMultiplier,
+        currentMovementSpeed = globalGameSettings.defaultMovementSpeedMultiplier,
     )
 
     private fun buildTechData(): TechInGameUserData = TechInGameUserData(
@@ -150,9 +151,9 @@ class GameStartUserLogic(
     private fun buildMadnessData(): MadnessAdditionalInGameUserData = MadnessAdditionalInGameUserData(
         madness = 0.0,
         madnessNotches = listOf(
-            GlobalGameSettings.MAX_USER_MADNESS / 6.0,
-            GlobalGameSettings.MAX_USER_MADNESS / 2.0,
-            GlobalGameSettings.MAX_USER_MADNESS
+            globalGameSettings.maxUserMadness / 6.0,
+            globalGameSettings.maxUserMadness / 2.0,
+            globalGameSettings.maxUserMadness
         ),
     )
 

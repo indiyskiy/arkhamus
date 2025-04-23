@@ -1,7 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_ON_START
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUESTS_TO_REFRESH
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.generateRandomId
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.GameUserData
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameUserQuestProgressRepository
@@ -17,6 +16,7 @@ import kotlin.random.Random
 @Component
 class UserQuestCreationHandler(
     private val inGameUserQuestProgressRepository: InGameUserQuestProgressRepository,
+    private val globalGameSettings: GlobalGameSettings,
 ) {
     companion object {
         private val logger = LoggingUtils.getLogger<UserQuestCreationHandler>()
@@ -50,8 +50,8 @@ class UserQuestCreationHandler(
             .count {
                 it.questState in QUESTS_IN_PROGRESS
             }
-        logger.info("add more quests maybe? $userInProgress < $QUESTS_TO_REFRESH")
-        return userInProgress <= QUESTS_TO_REFRESH
+        logger.info("add more quests maybe? $userInProgress < ${globalGameSettings.questsToRefresh}")
+        return userInProgress <= globalGameSettings.questsToRefresh
     }
 
     @Transactional
@@ -84,7 +84,7 @@ class UserQuestCreationHandler(
         createdInGameQuests: List<InGameQuest>
     ) {
         val quests = getQuestsWithUniqueQuestGivers(createdInGameQuests)
-            .take(QUESTS_ON_START)
+            .take(globalGameSettings.questsOnStart)
             .toMutableList()
         addQuestsForUser(quests, user, 0)
     }
@@ -183,7 +183,7 @@ class UserQuestCreationHandler(
             .count {
                 it.questState in QUESTS_IN_PROGRESS
             }
-        return QUESTS_ON_START - userInProgress
+        return globalGameSettings.questsOnStart - userInProgress
     }
 
     private fun addQuestsForUser(

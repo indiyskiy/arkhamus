@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.view.controller.admin.browser.tech.auth
 
+import com.arkhamusserver.arkhamus.config.auth.JwtProperties
 import com.arkhamusserver.arkhamus.logic.auth.AuthenticationService
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import com.arkhamusserver.arkhamus.view.dto.user.AuthenticationRequest
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping
 
 @Controller
 class AuthBrowserController(
-    private val authenticationService: AuthenticationService
+    private val authenticationService: AuthenticationService,
+    private val jwtProperties: JwtProperties
 ) {
 
     companion object {
@@ -36,7 +38,7 @@ class AuthBrowserController(
         }
         val authResponse = authenticationService.authentication(loginInfo)
         val cookie = Cookie("token", authResponse.accessToken)
-        cookie.maxAge = 1 * 24 * 60 * 60
+        cookie.maxAge = jwtProperties.cookieMaxAgeSeconds
         cookie.isHttpOnly = true
         cookie.path = "/"
         response.addCookie(cookie)

@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.view.maker.ingame
 
+import com.arkhamusserver.arkhamus.logic.globalUtils.TimeBaseCalculator
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToClassResolver
 import com.arkhamusserver.arkhamus.logic.ingame.item.AbilityToItemResolver
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
@@ -10,7 +11,8 @@ import org.springframework.stereotype.Component
 @Component
 class AbilityDtoMaker(
     private val abilityToItemResolver: AbilityToItemResolver,
-    private val abilityToClassResolver: AbilityToClassResolver
+    private val abilityToClassResolver: AbilityToClassResolver,
+    private val timeBaseCalculator: TimeBaseCalculator
 ) {
     fun convert(values: Array<Ability>): List<AbilityDto> {
         return values.map { convert(it) }
@@ -30,7 +32,7 @@ class AbilityDtoMaker(
                 abilityToClassResolver.resolve(value)?.map { it.id }
             } else null,
             availableFor = value.availableForRole.toList(),
-            cooldown = value.cooldown,
+            cooldown = timeBaseCalculator.resolveAbilityCooldown(value),
             globalCooldown = value.globalCooldown,
             targetTypes = value.targetTypes,
             requiresTarget = !value.targetTypes.isNullOrEmpty(),
@@ -50,7 +52,7 @@ class AbilityDtoMaker(
                 abilityToClassResolver.resolve(value)?.map { it.id }
             } else null,
             availableFor = value.availableForRole.toList(),
-            cooldown = value.cooldown,
+            cooldown = timeBaseCalculator.resolveAbilityCooldown(value),
             globalCooldown = value.globalCooldown,
             targetTypes = value.targetTypes,
             requiresTarget = !value.targetTypes.isNullOrEmpty(),

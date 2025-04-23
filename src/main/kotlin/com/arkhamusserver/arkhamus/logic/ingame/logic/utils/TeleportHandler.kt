@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils
 
+import com.arkhamusserver.arkhamus.logic.globalUtils.TimeBaseCalculator
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
 import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class TeleportHandler(
-    private val timeEventHandler: TimeEventHandler
+    private val timeEventHandler: TimeEventHandler,
+    private val timeBaseCalculator: TimeBaseCalculator
 ) {
 
     companion object {
@@ -34,7 +36,7 @@ class TeleportHandler(
             sourceObject = null,
             targetObject = user,
             location = Location(user.x, user.y, user.z),
-            timeLeft = InGameTimeEventType.TELEPORTATION_STUN.getDefaultTime()
+            timeLeft = timeBaseCalculator.resolve(InGameTimeEventType.TELEPORTATION_STUN)
         )
         logger.info("user ${user.inGameId()} teleported to ${user.x()}; ${user.y()}; ${user.z()}")
     }

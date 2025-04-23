@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech
 
+import com.arkhamusserver.arkhamus.logic.globalUtils.TimeBaseCalculator
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameTimeEventRepository
 import com.arkhamusserver.arkhamus.model.database.entity.GameSession
@@ -16,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class TimeEventHandler(
-    private val inGameTimeEventRepository: InGameTimeEventRepository
+    private val inGameTimeEventRepository: InGameTimeEventRepository,
+    private val calculator: TimeBaseCalculator,
 ) {
     companion object {
         private val logger = LoggingUtils.getLogger<TimeEventHandler>()
@@ -99,7 +101,7 @@ class TimeEventHandler(
             gameId = gameId,
             timeStart = startDateTime,
             timePast = 0L,
-            timeLeft = timeLeft ?: eventType.getDefaultTime(),
+            timeLeft = timeLeft ?: calculator.resolve(eventType),
             sourceObjectId = sourceObjectId,
             targetObjectId = targetObjectId,
             type = eventType,

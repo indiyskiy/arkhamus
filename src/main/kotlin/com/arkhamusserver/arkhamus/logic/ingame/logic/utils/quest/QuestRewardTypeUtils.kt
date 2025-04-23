@@ -1,6 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.quest
 
-import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings.Companion.QUEST_REWARD_SLOTS
+import com.arkhamusserver.arkhamus.logic.ingame.GlobalGameSettings
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty
 import com.arkhamusserver.arkhamus.model.enums.ingame.QuestDifficulty.*
 import com.arkhamusserver.arkhamus.model.enums.ingame.RewardType
@@ -15,7 +15,9 @@ import org.springframework.stereotype.Component
 import kotlin.random.Random
 
 @Component
-class QuestRewardTypeUtils {
+class QuestRewardTypeUtils(
+    private val globalGameSettings: GlobalGameSettings
+) {
 
     companion object {
         private val random = Random(System.currentTimeMillis())
@@ -31,7 +33,7 @@ class QuestRewardTypeUtils {
             .map { it.rewardType }
             .filter { it.getOnlyOneForQuest() }
             .toSet()
-        val availableByNumber = if (i != QUEST_REWARD_SLOTS - 1) {
+        val availableByNumber = if (i != globalGameSettings.questRewardSlots - 1) {
             listOf(ITEM)
         } else {
             RewardType.values().toList()

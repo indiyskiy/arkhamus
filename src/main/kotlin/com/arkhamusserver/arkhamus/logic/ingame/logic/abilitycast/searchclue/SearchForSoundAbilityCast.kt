@@ -1,5 +1,6 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.searchclue
 
+import com.arkhamusserver.arkhamus.logic.globalUtils.TimeBaseCalculator
 import com.arkhamusserver.arkhamus.logic.ingame.logic.Location
 import com.arkhamusserver.arkhamus.logic.ingame.logic.abilitycast.AbilityCast
 import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.TimeEventHandler
@@ -18,7 +19,8 @@ import org.springframework.stereotype.Component
 @Component
 class SearchForSoundAbilityCast(
     private val timeEventHandler: TimeEventHandler,
-    private val inGameSoundClueRepository: InGameSoundClueRepository
+    private val inGameSoundClueRepository: InGameSoundClueRepository,
+    private val timeBaseCalculator: TimeBaseCalculator
 ) : AbilityCast {
 
     companion object {
@@ -82,7 +84,7 @@ class SearchForSoundAbilityCast(
                 sourceObject = user,
                 targetObject = target,
                 location = Location(this.x, this.y, this.z),
-                timeLeft = InGameTimeEventType.SOUND_CLUE_JAMMER_TURN_OFF.getDefaultTime()
+                timeLeft = timeBaseCalculator.resolve(InGameTimeEventType.SOUND_CLUE_JAMMER_TURN_OFF)
             )
         }
     }
