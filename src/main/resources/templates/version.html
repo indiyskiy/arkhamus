@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Application Version</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link href="/icon/favicon.ico" rel="icon" type="image/x-icon"/>
+    <style>
+        .version-info {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .version-info h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .version-info p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .version-info .label {
+            font-weight: bold;
+            display: inline-block;
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <footer>
+        <a th:href="@{/public/browser/menu}">Menu</a>
+    </footer>
+</div>
+
+<div class="main">
+    <div class="version-info">
+        <h2>Application Version Information</h2>
+        <p><span class="label">Build Type:</span> <span th:text="${buildType}">test</span></p>
+        <p><span class="label">Version:</span> <span th:text="${version}">0.0.1-SNAPSHOT</span></p>
+    </div>
+</div>
+
+<div class="footer">
+    <footer>
+        <a th:href="@{/public/browser/menu}" title="Menu">Menu</a>
+    </footer>
+</div>
+
+</body>
+</html>

@@ -61,6 +61,7 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.mockk:mockk:1.13.17")
+    testImplementation("com.h2database:h2")
 }
 
 tasks.withType<KotlinCompile> {
@@ -84,8 +85,90 @@ tasks.jar {
     }
 }
 
+// Define build types
+enum class BuildType {
+    TEST, RELEASE
+}
+
+// Default to TEST build if not specified
+val buildType = project.findProperty("buildType")?.toString()?.toUpperCase()?.let {
+    try {
+        BuildType.valueOf(it)
+    } catch (e: IllegalArgumentException) {
+        BuildType.TEST
+    }
+} ?: BuildType.TEST
+
+// Set buildType property for all tasks
+tasks.withType<JavaExec> {
+    systemProperty("buildType", buildType.toString().toLowerCase())
+}
+
+// Configure WAR and JAR tasks to include buildType
+tasks.bootWar {
+    manifest {
+        attributes["Build-Type"] = buildType.toString().toLowerCase()
+    }
+}
+
+tasks.bootJar {
+    manifest {
+        attributes["Build-Type"] = buildType.toString().toLowerCase()
+    }
+}
+
+// Create specific tasks for building WAR files with different property files
+tasks.register<org.springframework.boot.gradle.tasks.bundling.BootWar>("testWar") {
+    group = "build"
+    description = "Builds a WAR file with test properties"
+    archiveBaseName.set("arkhamus")
+    archiveClassifier.set("test")
+
+    mainClass.set("com.arkhamusserver.arkhamus.Application") // Required for BootWar
+    targetJavaVersion.set(JavaVersion.VERSION_17) // Set the required target Java version
+
+    manifest {
+        attributes["Build-Type"] = BuildType.TEST.toString().toLowerCase()
+        attributes["Main-Class"] = "com.arkhamusserver.arkhamus.Application" // Optional, already included
+    }
+
+    // Set system property for the build process
+    doFirst {
+        System.setProperty("buildType", BuildType.TEST.toString().toLowerCase())
+    }
+}
+
+tasks.register<org.springframework.boot.gradle.tasks.bundling.BootWar>("releaseWar") {    group = "build"
+    description = "Builds a WAR file with release properties"
+    archiveBaseName.set("arkhamus")
+    archiveClassifier.set("release")
+
+    mainClass.set("com.arkhamusserver.arkhamus.Application") // Required for BootWar
+    targetJavaVersion.set(JavaVersion.VERSION_17) // Set the required target Java version
+
+    manifest {
+        attributes["Build-Type"] = BuildType.RELEASE.toString().toLowerCase()
+        attributes["Main-Class"] = "com.arkhamusserver.arkhamus.Application" // Optional, already included
+    }
+
+    // Set system property for the build process
+    doFirst {
+        System.setProperty("buildType", BuildType.RELEASE.toString().toLowerCase())
+    }
+
+}
+
+// Task to build both test and release WAR files
+tasks.register("buildAllWars") {
+    group = "build"
+    description = "Builds both test and release WAR files"
+    dependsOn("testWar", "releaseWar")
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
+    // Always use test profile for tests
+    systemProperty("spring.profiles.active", "test")
 }
 
 tasks.bootBuildImage {
