@@ -1310,7 +1310,7 @@
         "id": 812,
         "interactionRadius": 3.5,
         "name": "Observatory Stash",
-        "x": 22.0,
+        "x": 23.0,
         "y": 0.0,
         "z": 43.0
       },
@@ -1377,7 +1377,7 @@
         "id": 2400,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 30.0,
+        "x": 14.0,
         "y": 0.0,
         "z": 34.0
       },
@@ -1385,9 +1385,9 @@
         "id": 2401,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 3.2,
+        "x": 37.0,
         "y": 0.0,
-        "z": 36.6
+        "z": 9.0
       },
       {
         "id": 2402,
@@ -1396,6 +1396,22 @@
         "x": 42.0,
         "y": 0.0,
         "z": 42.0
+      },
+      {
+        "id": 2403,
+        "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 111.5,
+        "y": 0.0,
+        "z": 57.0
+      },
+      {
+        "id": 2404,
+        "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 21.0,
+        "y": 0.0,
+        "z": 75.0
       }
     ],
     "crafters": [
@@ -1447,14 +1463,14 @@
     ],
     "distortionClues": [
       {
-        "canReceive": true,
-        "canTransmit": false,
+        "canReceive": false,
+        "canTransmit": true,
         "effectRadius": 5.0,
         "id": 2500,
         "interactionRadius": 2.0,
-        "x": 43.0,
+        "x": 24.0,
         "y": 0.0,
-        "z": 6.0
+        "z": 22.0
       },
       {
         "canReceive": false,
@@ -1462,9 +1478,109 @@
         "effectRadius": 5.0,
         "id": 2501,
         "interactionRadius": 2.0,
-        "x": 80.0,
+        "x": 15.0,
         "y": 0.0,
-        "z": 61.0
+        "z": 65.0
+      },
+      {
+        "canReceive": false,
+        "canTransmit": true,
+        "effectRadius": 5.0,
+        "id": 2502,
+        "interactionRadius": 2.0,
+        "x": 28.0,
+        "y": 0.0,
+        "z": 80.0
+      },
+      {
+        "canReceive": false,
+        "canTransmit": true,
+        "effectRadius": 5.0,
+        "id": 2503,
+        "interactionRadius": 2.0,
+        "x": 82.0,
+        "y": 0.0,
+        "z": 102.0
+      },
+      {
+        "canReceive": true,
+        "canTransmit": false,
+        "effectRadius": 5.0,
+        "id": 2504,
+        "interactionRadius": 2.0,
+        "x": 63.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      {
+        "canReceive": true,
+        "canTransmit": false,
+        "effectRadius": 5.0,
+        "id": 2505,
+        "interactionRadius": 2.0,
+        "x": 54.0,
+        "y": 0.0,
+        "z": 14.0
+      },
+      {
+        "canReceive": true,
+        "canTransmit": false,
+        "effectRadius": 5.0,
+        "id": 2506,
+        "interactionRadius": 2.0,
+        "x": 94.0,
+        "y": 2.0,
+        "z": 33.5
+      },
+      {
+        "canReceive": true,
+        "canTransmit": false,
+        "effectRadius": 5.0,
+        "id": 2507,
+        "interactionRadius": 2.0,
+        "x": 107.0,
+        "y": 0.0,
+        "z": 47.0
+      },
+      {
+        "canReceive": true,
+        "canTransmit": false,
+        "effectRadius": 5.0,
+        "id": 2508,
+        "interactionRadius": 2.0,
+        "x": 108.0,
+        "y": 0.0,
+        "z": 100.5
+      },
+      {
+        "canReceive": true,
+        "canTransmit": false,
+        "effectRadius": 5.0,
+        "id": 2509,
+        "interactionRadius": 2.0,
+        "x": 50.0,
+        "y": 0.0,
+        "z": 57.0
+      },
+      {
+        "canReceive": true,
+        "canTransmit": false,
+        "effectRadius": 5.0,
+        "id": 2510,
+        "interactionRadius": 2.0,
+        "x": 16.0,
+        "y": 0.0,
+        "z": 85.0
+      },
+      {
+        "canReceive": true,
+        "canTransmit": false,
+        "effectRadius": 5.0,
+        "id": 2511,
+        "interactionRadius": 2.0,
+        "x": 36.0,
+        "y": 0.0,
+        "z": 109.0
       }
     ],
     "doors": [
@@ -1554,6 +1670,30 @@
         "x": 51.0,
         "y": 0.0,
         "z": 92.2
+      },
+      {
+        "effectRadius": 5.0,
+        "id": 2901,
+        "interactionRadius": 2.0,
+        "x": 82.0,
+        "y": 2.0,
+        "z": 2.01
+      },
+      {
+        "effectRadius": 5.0,
+        "id": 2902,
+        "interactionRadius": 2.0,
+        "x": 108.0,
+        "y": 2.0,
+        "z": 80.3
+      },
+      {
+        "effectRadius": 5.0,
+        "id": 2903,
+        "interactionRadius": 2.0,
+        "x": 16.0,
+        "y": 0.0,
+        "z": 42.5
       }
     ],
     "inscriptionGlyphs": [
@@ -1596,6 +1736,126 @@
         "x": 55.0,
         "y": 0.0,
         "z": 92.2
+      },
+      {
+        "id": 3005,
+        "interactionRadius": 3.0,
+        "relatedClue": 2901,
+        "x": 78.0,
+        "y": 2.0,
+        "z": 2.01
+      },
+      {
+        "id": 3006,
+        "interactionRadius": 3.0,
+        "relatedClue": 2901,
+        "x": 80.0,
+        "y": 2.0,
+        "z": 2.01
+      },
+      {
+        "id": 3007,
+        "interactionRadius": 3.0,
+        "relatedClue": 2901,
+        "x": 82.0,
+        "y": 2.0,
+        "z": 2.01
+      },
+      {
+        "id": 3008,
+        "interactionRadius": 3.0,
+        "relatedClue": 2901,
+        "x": 84.0,
+        "y": 2.0,
+        "z": 2.01
+      },
+      {
+        "id": 3009,
+        "interactionRadius": 3.0,
+        "relatedClue": 2901,
+        "x": 86.0,
+        "y": 2.0,
+        "z": 2.01
+      },
+      {
+        "id": 3010,
+        "interactionRadius": 3.0,
+        "relatedClue": 2902,
+        "x": 105.0,
+        "y": 2.0,
+        "z": 80.3
+      },
+      {
+        "id": 3011,
+        "interactionRadius": 3.0,
+        "relatedClue": 2902,
+        "x": 106.5,
+        "y": 2.0,
+        "z": 80.3
+      },
+      {
+        "id": 3012,
+        "interactionRadius": 3.0,
+        "relatedClue": 2902,
+        "x": 108.0,
+        "y": 2.0,
+        "z": 80.3
+      },
+      {
+        "id": 3013,
+        "interactionRadius": 3.0,
+        "relatedClue": 2902,
+        "x": 109.5,
+        "y": 2.0,
+        "z": 80.3
+      },
+      {
+        "id": 3014,
+        "interactionRadius": 3.0,
+        "relatedClue": 2902,
+        "x": 111.0,
+        "y": 2.0,
+        "z": 80.3
+      },
+      {
+        "id": 3015,
+        "interactionRadius": 3.0,
+        "relatedClue": 2903,
+        "x": 12.0,
+        "y": 0.0,
+        "z": 42.5
+      },
+      {
+        "id": 3016,
+        "interactionRadius": 3.0,
+        "relatedClue": 2903,
+        "x": 14.0,
+        "y": 0.0,
+        "z": 42.5
+      },
+      {
+        "id": 3017,
+        "interactionRadius": 3.0,
+        "relatedClue": 2903,
+        "x": 16.0,
+        "y": 0.0,
+        "z": 42.5
+      },
+      {
+        "id": 3018,
+        "interactionRadius": 3.0,
+        "relatedClue": 2903,
+        "x": 18.0,
+        "y": 0.0,
+        "z": 42.5
+      },
+      {
+        "id": 3019,
+        "interactionRadius": 3.0,
+        "relatedClue": 2903,
+        "x": 20.0,
+        "y": 0.0,
+        "z": 42.5
       }
     ],
     "lanterns": [
@@ -1643,9 +1903,9 @@
         "id": 1213,
         "interactionRadius": 3.5,
         "name": "Secret Conversation",
-        "x": 90.51,
+        "x": 90.0,
         "y": 2.0,
-        "z": 29.0
+        "z": 22.5
       },
       {
         "id": 1200,
@@ -1683,9 +1943,9 @@
         "id": 1205,
         "interactionRadius": 3.5,
         "name": "Rob the Museum",
-        "x": 89.0,
+        "x": 86.0,
         "y": 2.0,
-        "z": 9.0
+        "z": 10.5
       },
       {
         "id": 1206,
@@ -1791,9 +2051,9 @@
         "id": 1304,
         "interactionRadius": 3.5,
         "name": "Mysterious Lady",
-        "x": 90.51,
-        "y": 2.0,
-        "z": 29.0
+        "x": 23.0,
+        "y": 0.0,
+        "z": 85.0
       },
       {
         "id": 1305,
@@ -1806,7 +2066,7 @@
       {
         "id": 1307,
         "interactionRadius": 3.5,
-        "name": "Dark Matter",
+        "name": "Amalie Noether",
         "x": 11.0,
         "y": 0.0,
         "z": 55.0
@@ -1814,7 +2074,7 @@
       {
         "id": 1308,
         "interactionRadius": 3.5,
-        "name": "Gardener",
+        "name": "Abigail Gardner",
         "x": 64.5,
         "y": 0.0,
         "z": 55.5
@@ -1871,6 +2131,14 @@
     ],
     "scentClues": [
       {
+        "id": 1910,
+        "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 75.0,
+        "y": 0.0,
+        "z": 98.0
+      },
+      {
         "id": 1900,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
@@ -1890,9 +2158,9 @@
         "id": 1902,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 90.51,
-        "y": 2.0,
-        "z": 29.0
+        "x": 23.0,
+        "y": 0.0,
+        "z": 85.0
       },
       {
         "id": 1903,
@@ -1946,9 +2214,17 @@
         "id": 1909,
         "interactionRadius": 3.5,
         "name": "INTERACTIVE_OBJECT_NAME",
-        "x": 6.0,
+        "x": 37.0,
         "y": 0.0,
-        "z": 33.0
+        "z": 94.0
+      },
+      {
+        "id": 1911,
+        "interactionRadius": 3.5,
+        "name": "INTERACTIVE_OBJECT_NAME",
+        "x": 66.0,
+        "y": 0.0,
+        "z": 109.0
       }
     ],
     "soundClueJammers": [
