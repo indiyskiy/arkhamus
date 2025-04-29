@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.tickparts.processors.abilityProcessors.ActiveAbilityProcessor
 import com.arkhamusserver.arkhamus.model.dataaccess.ingame.clues.InGameDistortionClueRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
+import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityActiveCast
 import org.springframework.stereotype.Component
 
 @Component
@@ -12,12 +12,12 @@ class DistortionInvestigationRelatedAbilityProcessor(
     private val inGameDistortionClueRepository: InGameDistortionClueRepository
 ) : ActiveAbilityProcessor {
 
-    override fun accepts(castAbility: InGameAbilityCast): Boolean {
+    override fun accepts(castAbility: InGameAbilityActiveCast): Boolean {
         return castAbility.ability == Ability.SEARCH_FOR_DISTORTION
     }
 
     override fun processActive(
-        castAbility: InGameAbilityCast,
+        castAbility: InGameAbilityActiveCast,
         globalGameData: GlobalGameData
     ) {
         val distortion = globalGameData.clues.distortion.first { it.stringId() == castAbility.targetId }
@@ -28,7 +28,7 @@ class DistortionInvestigationRelatedAbilityProcessor(
         }
     }
 
-    override fun finishActive(castAbility: InGameAbilityCast, globalGameData: GlobalGameData) {
+    override fun finishActive(castAbility: InGameAbilityActiveCast, globalGameData: GlobalGameData) {
         val distortion = globalGameData.clues.distortion.first { it.stringId() == castAbility.targetId }
         val user = globalGameData.users[castAbility.sourceUserId]
         user?.let {

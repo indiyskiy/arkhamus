@@ -4,7 +4,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.UserLocationHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.tag.UserStateTag
-import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
+import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityActiveCast
 import org.springframework.stereotype.Component
 
 @Component
@@ -12,12 +12,12 @@ class HideInShadowsAbilityProcessor(
     private val userLocationHandler: UserLocationHandler,
 ) : ActiveAbilityProcessor {
 
-    override fun accepts(castAbility: InGameAbilityCast): Boolean {
+    override fun accepts(castAbility: InGameAbilityActiveCast): Boolean {
         return castAbility.ability == Ability.HIDE_IN_SHADOWS
     }
 
     override fun processActive(
-        castAbility: InGameAbilityCast,
+        castAbility: InGameAbilityActiveCast,
         globalGameData: GlobalGameData
     ) {
         val user = globalGameData.users[castAbility.sourceUserId]
@@ -32,12 +32,12 @@ class HideInShadowsAbilityProcessor(
     }
 
     private fun endAbility(
-        cast: InGameAbilityCast,
+        cast: InGameAbilityActiveCast,
     ) {
         cast.timeLeftActive = 0
     }
 
-    override fun finishActive(castAbility: InGameAbilityCast, globalGameData: GlobalGameData) {
+    override fun finishActive(castAbility: InGameAbilityActiveCast, globalGameData: GlobalGameData) {
         val user = globalGameData.users[castAbility.sourceUserId]
         if (user == null) return
         user.stateTags -= UserStateTag.STEALTH

@@ -5,7 +5,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
 
-data class InGameAbilityCast(
+data class InGameAbilityActiveCast(
     override var id: String,
     override var gameId: Long,
     var ability: Ability,
@@ -14,7 +14,6 @@ data class InGameAbilityCast(
     var targetType: GameObjectType? = null,
     var timeStart: Long,
     var timePast: Long,
-    var timeLeftCooldown: Long,
     var timeLeftActive: Long,
     var state: InGameTimeEventState,
     var xLocation: Double? = null,

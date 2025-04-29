@@ -24,7 +24,8 @@ class InGameDataAccessImpl(
     private val altarPollingRepository: InGameAltarPollingRepository,
     private val timeEventRepository: InGameTimeEventRepository,
     private val shortTimeEventRepository: InGameShortTimeEventRepository,
-    private val abilityCastRepository: InGameAbilityCastRepository,
+    private val abilityCastRepository: InGameAbilityActiveCastRepository,
+    private val cooldownRepository: InGameAbilityCooldownRepository,
     private val craftProcessRepository: InGameCraftProcessRepository,
     private val inGameLevelZoneRepository: InGameLevelZoneRepository,
     private val inGameLevelTetragonRepository: InGameLevelTetragonRepository,
@@ -88,8 +89,11 @@ class InGameDataAccessImpl(
     override fun getShortTimeEvents(gameId: Long) =
         shortTimeEventRepository.findByGameId(gameId)
 
-    override fun getCastAbilities(gameId: Long): List<InGameAbilityCast> =
+    override fun getCastAbilities(gameId: Long): List<InGameAbilityActiveCast> =
         abilityCastRepository.findByGameId(gameId)
+
+    override fun getAbilityCooldowns(gameId: Long): List<InGameAbilityCooldown> =
+        cooldownRepository.findByGameId(gameId)
 
     override fun getCraftProcess(gameId: Long): List<InGameCraftProcess> =
         craftProcessRepository.findByGameId(gameId)

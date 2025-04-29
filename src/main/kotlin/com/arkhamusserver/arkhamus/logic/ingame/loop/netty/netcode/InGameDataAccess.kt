@@ -21,7 +21,8 @@ interface InGameDataAccess {
     fun getAltars(gameId: Long): List<InGameAltar>
     fun getTimeEvents(gameId: Long): List<InGameTimeEvent>
     fun getShortTimeEvents(gameId: Long): List<InGameShortTimeEvent>
-    fun getCastAbilities(gameId: Long): List<InGameAbilityCast>
+    fun getCastAbilities(gameId: Long): List<InGameAbilityActiveCast>
+    fun getAbilityCooldowns(gameId: Long): List<InGameAbilityCooldown>
     fun getCraftProcess(gameId: Long): List<InGameCraftProcess>
     fun getZones(gameId: Long): List<InGameLevelZone>
     fun getTetragons(gameId: Long): List<InGameLevelZoneTetragon>
@@ -44,6 +45,7 @@ fun InGameDataAccess.loadGlobalGameData(game: InRamGame): GlobalGameData {
     val allEvents = getTimeEvents(gameId)
     val allShortEvents = getShortTimeEvents(gameId)
     val castAbilities = getCastAbilities(gameId)
+    val abilityCooldown = getAbilityCooldowns(gameId)
     val allLanterns = getLanterns(gameId)
 
     val allVoteSpots = getVoteSpots(gameId)
@@ -83,6 +85,7 @@ fun InGameDataAccess.loadGlobalGameData(game: InRamGame): GlobalGameData {
         this.timeEvents = allEvents
         this.shortTimeEvents = allShortEvents
         this.castAbilities = castAbilities
+        this.abilityCooldown = abilityCooldown
         this.craftProcess = craftProcess
         this.lanterns = allLanterns
         this.clues = allClues

@@ -70,7 +70,11 @@ class MockInGameDataAccess : InGameDataAccess {
         TODO("Not yet implemented")
     }
 
-    override fun getCastAbilities(gameId: Long): List<InGameAbilityCast> {
+    override fun getCastAbilities(gameId: Long): List<InGameAbilityActiveCast> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAbilityCooldowns(gameId: Long): List<InGameAbilityCooldown> {
         TODO("Not yet implemented")
     }
 

@@ -1,21 +1,18 @@
 package com.arkhamusserver.arkhamus.logic.ingame.logic.utils.ability
 
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
-import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
+import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCooldown
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import org.springframework.stereotype.Component
 
 @Component
 class RelatedAbilityCastHandler {
-    fun findForUser(
-        user: InGameUser,
-        ability: Ability,
-        castAbilities: List<InGameAbilityCast>,
-    ) =
+
+    fun findCooldownsForUser(user: InGameUser, ability: Ability, abilityCooldown: List<InGameAbilityCooldown>) =
         if (ability.globalCooldown) {
-            castAbilities.firstOrNull { it.ability == ability && it.timeLeftCooldown > 0 }
+            abilityCooldown.firstOrNull { it.ability == ability && it.timeLeftCooldown > 0 }
         } else {
-            castAbilities.firstOrNull {
+            abilityCooldown.firstOrNull {
                 it.ability == ability &&
                         it.sourceUserId == user.inGameId() &&
                         it.timeLeftCooldown > 0

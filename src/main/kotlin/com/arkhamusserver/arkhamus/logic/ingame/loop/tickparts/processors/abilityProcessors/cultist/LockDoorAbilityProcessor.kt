@@ -7,7 +7,7 @@ import com.arkhamusserver.arkhamus.model.dataaccess.ingame.InGameDoorRepository
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorState
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.DoorTag
-import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
+import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityActiveCast
 import com.arkhamusserver.arkhamus.model.ingame.InGameDoor
 import org.springframework.stereotype.Component
 
@@ -17,19 +17,19 @@ class LockDoorAbilityProcessor(
     val inGameDoorRepository: InGameDoorRepository
 ) : ActiveAbilityProcessor {
 
-    override fun accepts(castAbility: InGameAbilityCast): Boolean {
+    override fun accepts(castAbility: InGameAbilityActiveCast): Boolean {
         return castAbility.ability == Ability.LOCK_DOOR
     }
 
     override fun processActive(
-        castAbility: InGameAbilityCast,
+        castAbility: InGameAbilityActiveCast,
         globalGameData: GlobalGameData
     ) {
 
     }
 
     override fun finishActive(
-        castAbility: InGameAbilityCast,
+        castAbility: InGameAbilityActiveCast,
         globalGameData: GlobalGameData
     ) {
         val targetId = castAbility.targetId

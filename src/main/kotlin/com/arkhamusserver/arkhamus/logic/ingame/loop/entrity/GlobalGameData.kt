@@ -7,7 +7,8 @@ data class GlobalGameData(
     val game: InRamGame,
     var timeEvents: List<InGameTimeEvent> = emptyList(),
     var shortTimeEvents: List<InGameShortTimeEvent> = emptyList(),
-    var castAbilities: List<InGameAbilityCast> = emptyList(),
+    var abilityCooldown: List<InGameAbilityCooldown> = emptyList(),
+    var castAbilities: List<InGameAbilityActiveCast> = emptyList(),
     var inBetweenEvents: InBetweenEventHolder = InBetweenEventHolder(),
 
     var users: Map<Long, InGameUser> = emptyMap(),

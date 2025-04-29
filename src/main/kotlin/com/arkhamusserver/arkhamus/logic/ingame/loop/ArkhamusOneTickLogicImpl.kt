@@ -22,7 +22,8 @@ class ArkhamusOneTickLogicImpl(
     private val oneTickLantern: OneTickLantern,
     private val oneTickTimeEvent: OneTickTimeEvent,
     private val oneTickShortTimeEvent: OneTickShortTimeEvent,
-    private val onTickAbilityCast: OnTickAbilityCast,
+    private val onTickAbilityActiveCast: OnTickAbilityActiveCast,
+    private val onTickAbilityCooldown: OnTickAbilityCooldown,
     private val onTickCraftProcess: OnTickCraftProcess,
     private val afterLoopSaving: AfterLoopSavingComponent,
     private val oneTickTryEndGameMaybeHandler: OneTickTryEndGameMaybeHandler,
@@ -51,11 +52,18 @@ class ArkhamusOneTickLogicImpl(
                 timePassedMillis
             )
             oneTickShortTimeEvent.processShortTimeEvents(globalGameData.shortTimeEvents, timePassedMillis)
-            onTickAbilityCast.applyAbilityCasts(
+
+            onTickAbilityActiveCast.applyAbilityCasts(
                 globalGameData,
                 globalGameData.castAbilities,
                 timePassedMillis
             )
+            onTickAbilityCooldown.applyAbilityCooldown(
+                globalGameData,
+                globalGameData.abilityCooldown,
+                timePassedMillis
+            )
+
             onTickCraftProcess.applyCraftProcess(
                 globalGameData,
                 globalGameData.craftProcess,

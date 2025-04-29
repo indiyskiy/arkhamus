@@ -10,7 +10,7 @@ import com.arkhamusserver.arkhamus.model.enums.ingame.InGameTimeEventType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
 import com.arkhamusserver.arkhamus.model.enums.ingame.objectstate.InGameTimeEventState
-import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
+import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCooldown
 import com.arkhamusserver.arkhamus.model.ingame.InGameTimeEvent
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.AbilityOfUserResponse
@@ -37,12 +37,12 @@ class CanAbilityBeCastHandler(
         globalGameData: GlobalGameData
     ): List<AbilityOfUserResponse> {
         val visibleAbilitiesList = Ability.values().filter { canUserSeeAbility(user, it) }
-        val relatedAbilityCastMap = visibleAbilitiesList.associate {
+        val relatedAbilityCooldownMap = visibleAbilitiesList.associate {
             it.id to
-                    relatedAbilityCastHandler.findForUser(
+                    relatedAbilityCastHandler.findCooldownsForUser(
                         user,
                         it,
-                        globalGameData.castAbilities
+                        globalGameData.abilityCooldown
                     )
         }
         val fitAdditionalConditionsMap: Map<Ability, Boolean> = visibleAbilitiesList.associateWith { ability ->
@@ -53,8 +53,8 @@ class CanAbilityBeCastHandler(
                     it.state == InGameTimeEventState.ACTIVE
         }
         val availableAbilities = visibleAbilitiesList.map {
-            val cooldown = summoningSickness?.timeLeft ?: (relatedAbilityCastMap[it.id]?.timeLeftCooldown ?: 0)
-            val maxCooldown = getMaxCooldown(summoningSickness, relatedAbilityCastMap, it)
+            val cooldown = summoningSickness?.timeLeft ?: (relatedAbilityCooldownMap[it.id]?.timeLeftCooldown ?: 0)
+            val maxCooldown = getMaxCooldown(summoningSickness, relatedAbilityCooldownMap, it)
             val canBeCast = (fitAdditionalConditionsMap[it] != false) && (cooldown <= 0)
             val charges = charges(it, user)
             AbilityOfUserResponse(
@@ -70,12 +70,12 @@ class CanAbilityBeCastHandler(
 
     private fun getMaxCooldown(
         summoningSickness: InGameTimeEvent?,
-        relatedAbilityCastMap: Map<Int, InGameAbilityCast?>,
+        relatedAbilityCastMap: Map<Int, InGameAbilityCooldown?>,
         ability: Ability
     ): Long = summoningSicknessTime(summoningSickness) ?: countRealMaxCooldown(relatedAbilityCastMap, ability)
 
     private fun countRealMaxCooldown(
-        relatedAbilityCastMap: Map<Int, InGameAbilityCast?>,
+        relatedAbilityCastMap: Map<Int, InGameAbilityCooldown?>,
         ability: Ability
     ): Long = (relatedAbilityCastMap[ability.id]?.let { it.timeLeftCooldown + it.timePast } ?: 0)
 

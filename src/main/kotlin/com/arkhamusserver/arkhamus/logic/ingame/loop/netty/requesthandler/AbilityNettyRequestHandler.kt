@@ -20,7 +20,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.parts
 import com.arkhamusserver.arkhamus.model.enums.ingame.GameObjectType
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Ability
 import com.arkhamusserver.arkhamus.model.enums.ingame.core.Item
-import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCast
+import com.arkhamusserver.arkhamus.model.ingame.InGameAbilityCooldown
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
@@ -75,7 +75,7 @@ class AbilityNettyRequestHandler(
             )
             return ability?.let {
                 val relatedAbility =
-                    relatedAbilityCastHandler.findForUser(user, ability, globalGameData.castAbilities)
+                    relatedAbilityCastHandler.findCooldownsForUser(user, ability, globalGameData.abilityCooldown)
                 val requiredItem = abilityToItemResolver.resolve(it)
                 val canUserSeeAbility = canAbilityBeCastHandler.canUserSeeAbility(user, ability, requiredItem)
                 val target = if (targetId != null && targetType != null) {
@@ -122,7 +122,7 @@ class AbilityNettyRequestHandler(
         ability: Ability,
         canBeSeen: Boolean,
         canBeCast: Boolean,
-        relatedAbility: InGameAbilityCast?,
+        relatedAbility: InGameAbilityCooldown?,
         requiredItem: Item?,
         user: InGameUser,
         users: List<InGameUser>,
