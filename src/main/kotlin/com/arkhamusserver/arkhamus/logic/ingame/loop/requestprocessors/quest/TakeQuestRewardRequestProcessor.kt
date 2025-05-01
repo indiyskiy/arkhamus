@@ -51,6 +51,7 @@ class TakeQuestRewardRequestProcessor(
                     ) {
                         logger.info("Quest reward item cannot be added to inventory, skipping reward {} - {}", reward.rewardType, reward.rewardItem)
                     }
+                    return
                 }
                 questRewardUtils.takeReward(user, reward, globalGameData, questGiverGivesReward)
                 questProgressHandler.finishQuest(

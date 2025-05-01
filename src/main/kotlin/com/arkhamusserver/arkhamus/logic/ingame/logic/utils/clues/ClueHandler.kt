@@ -94,9 +94,6 @@ class ClueHandler(
                 ) {
                     logger.info("Clue type $clueTypeToAddNotNull added. added=$added sourceUser=$sourceUser")
                 }
-                if (clueTypeToAddNotNull == Clue.SCENT) {
-                    removeRandomClue(data)
-                }
             } else {
                 LoggingUtils.withContext(
                     gameId = data.game.inGameId(),
