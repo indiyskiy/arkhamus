@@ -8,6 +8,7 @@ import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.OngoingEvent
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.NettyTickRequestMessageDataHolder
 import com.arkhamusserver.arkhamus.logic.ingame.loop.netty.entity.gamedata.quest.TakeQuestRewardRequestProcessData
 import com.arkhamusserver.arkhamus.logic.ingame.loop.requestprocessors.NettyRequestProcessor
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
 import org.springframework.stereotype.Component
 
 @Component
@@ -16,6 +17,11 @@ class TakeQuestRewardRequestProcessor(
     private val questRewardUtils: QuestRewardUtils,
     private val inventoryHandler: InventoryHandler,
 ) : NettyRequestProcessor {
+
+    companion object{
+        private val logger =  LoggingUtils.getLogger<TakeQuestRewardRequestProcessor>()
+    }
+
     override fun accept(request: NettyTickRequestMessageDataHolder): Boolean {
         return request.requestProcessData is TakeQuestRewardRequestProcessData
     }
@@ -33,10 +39,19 @@ class TakeQuestRewardRequestProcessor(
             val user = takeQuestRewardRequestProcessData.gameUser
             val questGiverGivesReward = takeQuestRewardRequestProcessData.questGiverGivesReward
             if (reward != null && quest != null && user != null && questGiverGivesReward != null) {
-                if (!inventoryHandler.itemCanBeAdded(
+                if (reward.rewardItem != null &&
+                    !inventoryHandler.itemCanBeAdded(
                         user, reward.rewardItem
                     )
-                ) return
+                ) {
+                    LoggingUtils.withContext(
+                        userId = user.inGameId().toString(),
+                        gameId = user.gameId,
+                        eventType = LoggingUtils.EVENT_IN_GAME_SYSTEM
+                    ) {
+                        logger.info("Quest reward item cannot be added to inventory, skipping reward {} - {}", reward.rewardType, reward.rewardItem)
+                    }
+                }
                 questRewardUtils.takeReward(user, reward, globalGameData, questGiverGivesReward)
                 questProgressHandler.finishQuest(
                     globalGameData,

@@ -59,6 +59,13 @@ class ClueHandler(
         data: GlobalGameData,
         sourceUser: InGameUser?,
     ) {
+        LoggingUtils.withContext(
+            gameId = data.game.inGameId(),
+            eventType = EVENT_IN_GAME_SYSTEM,
+            userId = sourceUser?.inGameId().toString()
+        ) {
+            logger.info("addRandomClue start")
+        }
         val existingClues = data.clues
         val clueTypes = data.game.god.getTypes()
         val clueTypesCanBeAdded: List<Clue> = clueTypes.filter { clueType ->
@@ -110,6 +117,13 @@ class ClueHandler(
                         clueTypes.joinToString(",") { it.name }
                     }")
             }
+        }
+        LoggingUtils.withContext(
+            gameId = data.game.inGameId(),
+            eventType = EVENT_IN_GAME_SYSTEM,
+            userId = sourceUser?.inGameId().toString()
+        ) {
+            logger.info("addRandomClue end")
         }
     }
 

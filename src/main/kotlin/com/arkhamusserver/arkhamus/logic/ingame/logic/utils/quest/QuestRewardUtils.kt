@@ -201,6 +201,7 @@ class QuestRewardUtils(
         globalGameData: GlobalGameData,
         questGiverGivesReward: InGameQuestGiver
     ) {
+        logger.info("take reward - ${reward.rewardType} ${reward.rewardItem} ${reward.rewardAmount}")
         val tags = questGiverGivesReward.gameTags()
         when (reward.rewardType) {
             ITEM -> {
@@ -211,13 +212,15 @@ class QuestRewardUtils(
                 }
             }
             ADD_CLUE -> {
+                logger.info("take reward - add random clue")
                 if (!tags.contains(InGameObjectTag.DARK_THOUGHTS)) {
+                    logger.info("take reward - add random clue - no dark thoughts")
                     clueHandler.addRandomClue(globalGameData, user)
                 } else {
+                    logger.info("take reward - add random clue - dark thoughts")
                     clueHandler.removeRandomClue(globalGameData)
                 }
             }
-
         }
     }
 
