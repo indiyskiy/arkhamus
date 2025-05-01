@@ -4,9 +4,11 @@ import com.arkhamusserver.arkhamus.logic.ingame.logic.utils.tech.ActivityHandler
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.CluesContainer
 import com.arkhamusserver.arkhamus.logic.ingame.loop.entrity.GlobalGameData
 import com.arkhamusserver.arkhamus.model.enums.ingame.ActivityType
+import com.arkhamusserver.arkhamus.model.enums.ingame.core.Clue
 import com.arkhamusserver.arkhamus.model.ingame.InGameUser
 import com.arkhamusserver.arkhamus.model.ingame.interfaces.WithStringId
 import com.arkhamusserver.arkhamus.util.logging.LoggingUtils
+import com.arkhamusserver.arkhamus.util.logging.LoggingUtils.EVENT_IN_GAME_SYSTEM
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedClueResponse
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
 import org.springframework.stereotype.Component
@@ -56,28 +58,58 @@ class ClueHandler(
     fun addRandomClue(
         data: GlobalGameData,
         sourceUser: InGameUser?,
-        createActivity: Boolean = false,
     ) {
         val existingClues = data.clues
         val clueTypes = data.game.god.getTypes()
-        val clueTypesCanBeAdded = clueTypes.filter { clueType ->
+        val clueTypesCanBeAdded: List<Clue> = clueTypes.filter { clueType ->
             advancedClueHandlers.firstOrNull {
                 it.accept(clueType)
             }?.canBeAdded(existingClues) == true
         }
-        val clueTypeToAdd = clueTypesCanBeAdded.randomOrNull(random) ?: return
-        val added = advancedClueHandlers.firstOrNull {
-            it.accept(clueTypeToAdd)
-        }?.addClue(data)
+        val clueTypeToAdd = clueTypesCanBeAdded.randomOrNull(random)
+        clueTypeToAdd?.let { clueTypeToAddNotNull ->
+            val added = advancedClueHandlers.firstOrNull {
+                it.accept(clueTypeToAddNotNull)
+            }?.addClue(data)
 
-        if (added != null && sourceUser != null && createActivity) {
-            activityHandler.addUserNotTargetActivity(
-                gameId = data.game.gameId,
-                activityType = ActivityType.CLUE_CREATED,
-                sourceUser = sourceUser,
-                gameTime = data.game.globalTimer,
-                relatedEventId = clueTypeToAdd.ordinal.toLong()
-            )
+            if (added != null && sourceUser != null) {
+                activityHandler.addUserNotTargetActivity(
+                    gameId = data.game.gameId,
+                    activityType = ActivityType.CLUE_CREATED,
+                    sourceUser = sourceUser,
+                    gameTime = data.game.globalTimer,
+                    relatedEventId = clueTypeToAddNotNull.ordinal.toLong()
+                )
+                LoggingUtils.withContext(
+                    gameId = data.game.inGameId(),
+                    eventType = EVENT_IN_GAME_SYSTEM,
+                    userId = sourceUser.inGameId().toString()
+                ) {
+                    logger.info("Clue type $clueTypeToAddNotNull added. added=$added sourceUser=$sourceUser")
+                }
+                if (clueTypeToAddNotNull == Clue.SCENT) {
+                    removeRandomClue(data)
+                }
+            } else {
+                LoggingUtils.withContext(
+                    gameId = data.game.inGameId(),
+                    eventType = EVENT_IN_GAME_SYSTEM,
+                    userId = sourceUser?.inGameId().toString()
+                ) {
+                    logger.info("Clue type $clueTypeToAddNotNull can't be added. added=$added sourceUser=$sourceUser")
+                }
+            }
+        } ?: {
+            LoggingUtils.withContext(
+                gameId = data.game.inGameId(),
+                eventType = EVENT_IN_GAME_SYSTEM,
+                userId = sourceUser?.inGameId().toString()
+            ) {
+                logger.info(
+                    "No clue types can be added. clue types: ${
+                        clueTypes.joinToString(",") { it.name }
+                    }")
+            }
         }
     }
 

@@ -61,7 +61,10 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.mockk:mockk:1.13.17")
-    testImplementation("com.h2database:h2")
+    // Removed H2 dependency as per requirement to use PostgreSQL everywhere
+    testImplementation("org.testcontainers:testcontainers:1.19.3")
+    testImplementation("org.testcontainers:postgresql:1.19.3")
+    testImplementation("org.testcontainers:junit-jupiter:1.19.3")
 }
 
 tasks.withType<KotlinCompile> {
@@ -91,7 +94,7 @@ enum class BuildType {
 }
 
 // Default to TEST build if not specified
-val buildType = project.findProperty("buildType")?.toString()?.toUpperCase()?.let {
+val buildType = project.findProperty("buildType")?.toString()?.uppercase()?.let {
     try {
         BuildType.valueOf(it)
     } catch (e: IllegalArgumentException) {
@@ -101,19 +104,19 @@ val buildType = project.findProperty("buildType")?.toString()?.toUpperCase()?.le
 
 // Set buildType property for all tasks
 tasks.withType<JavaExec> {
-    systemProperty("buildType", buildType.toString().toLowerCase())
+    systemProperty("buildType", buildType.toString().lowercase())
 }
 
 // Configure WAR and JAR tasks to include buildType
 tasks.bootWar {
     manifest {
-        attributes["Build-Type"] = buildType.toString().toLowerCase()
+        attributes["Build-Type"] = buildType.toString().lowercase()
     }
 }
 
 tasks.bootJar {
     manifest {
-        attributes["Build-Type"] = buildType.toString().toLowerCase()
+        attributes["Build-Type"] = buildType.toString().lowercase()
     }
 }
 
@@ -128,13 +131,13 @@ tasks.register<org.springframework.boot.gradle.tasks.bundling.BootWar>("testWar"
     targetJavaVersion.set(JavaVersion.VERSION_17) // Set the required target Java version
 
     manifest {
-        attributes["Build-Type"] = BuildType.TEST.toString().toLowerCase()
+        attributes["Build-Type"] = BuildType.TEST.toString().lowercase()
         attributes["Main-Class"] = "com.arkhamusserver.arkhamus.Application" // Optional, already included
     }
 
     // Set system property for the build process
     doFirst {
-        System.setProperty("buildType", BuildType.TEST.toString().toLowerCase())
+        System.setProperty("buildType", BuildType.TEST.toString().lowercase())
     }
 }
 
@@ -147,13 +150,13 @@ tasks.register<org.springframework.boot.gradle.tasks.bundling.BootWar>("releaseW
     targetJavaVersion.set(JavaVersion.VERSION_17) // Set the required target Java version
 
     manifest {
-        attributes["Build-Type"] = BuildType.RELEASE.toString().toLowerCase()
+        attributes["Build-Type"] = BuildType.RELEASE.toString().lowercase()
         attributes["Main-Class"] = "com.arkhamusserver.arkhamus.Application" // Optional, already included
     }
 
     // Set system property for the build process
     doFirst {
-        System.setProperty("buildType", BuildType.RELEASE.toString().toLowerCase())
+        System.setProperty("buildType", BuildType.RELEASE.toString().lowercase())
     }
 
 }

@@ -31,14 +31,17 @@ import com.arkhamusserver.arkhamus.view.dto.netty.request.UserPosition
 import com.arkhamusserver.arkhamus.view.dto.netty.request.containers.container.UpdateContainerRequestMessage
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.InventoryCell
 import com.arkhamusserver.arkhamus.view.dto.netty.response.parts.clues.ExtendedCluesResponse
+import com.arkhamusserver.arkhamus.config.PostgresTestContainer
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import java.sql.Timestamp
 
 @SpringBootTest
+@Import(PostgresTestContainer::class)
 class UpdateContainerRequestProcessorTest {
 
     private val inGameUserBuilder = InGameUserBuilder()

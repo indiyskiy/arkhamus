@@ -212,7 +212,7 @@ class QuestRewardUtils(
             }
             ADD_CLUE -> {
                 if (!tags.contains(InGameObjectTag.DARK_THOUGHTS)) {
-                    clueHandler.addRandomClue(globalGameData, user, true)
+                    clueHandler.addRandomClue(globalGameData, user)
                 } else {
                     clueHandler.removeRandomClue(globalGameData)
                 }
