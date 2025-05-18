@@ -97,11 +97,11 @@ class LootTableHandler {
     private fun roughLootTable(): LootTable {
         val defaultLootRaws: List<LootRaw> = Item.values().map {
             when (it.itemType) {
-                ItemType.LOOT -> LootRaw(it, 10, 1.0)
-                ItemType.RARE_LOOT -> LootRaw(it, 1, 1.0)
-                ItemType.CULTIST_LOOT -> LootRaw(it, 10, 1.0)
-                ItemType.USEFUL_ITEM -> LootRaw(it, 1, 1.0)
-                ItemType.CULTIST_ITEM -> LootRaw(it, 1, 1.0)
+                ItemType.LOOT -> LootRaw(it, 200, 1.0)
+                ItemType.RARE_LOOT -> LootRaw(it, 10, 1.0)
+                ItemType.CULTIST_LOOT -> LootRaw(it, 100, 1.0)
+                ItemType.USEFUL_ITEM -> LootRaw(it, 10, 1.0)
+                ItemType.CULTIST_ITEM -> LootRaw(it, 10, 1.0)
                 ItemType.ADVANCED_USEFUL_ITEM -> LootRaw(it, 1, 1.0)
                 ItemType.ADVANCED_CULTIST_ITEM -> LootRaw(it, 1, 1.0)
                 else -> LootRaw(Item.PURE_NOTHING, 0, 0.0)
@@ -143,9 +143,15 @@ class LootTableHandler {
     private fun magicLootTable(): LootTable {
         val defaultLootRaws: List<LootRaw> = listOf(
             LootRaw(Item.SAINT_QUARTZ, 100, 1.0),
+            LootRaw(Item.CRYSTALLIZED_BLOOD, 100, 1.0),
             LootRaw(Item.ELDER_SIGN, 100, 1.0),
+            LootRaw(Item.CORRUPTED_TOPAZ, 100, 1.0),
             LootRaw(Item.BLACK_STONE, 100, 1.0),
+            LootRaw(Item.BOOK, 100, 1.0),
+            LootRaw(Item.CLOCK, 100, 1.0),
+            LootRaw(Item.EYE, 100, 1.0),
             LootRaw(Item.SOUL_STONE, 100, 1.0),
+            LootRaw(Item.DARK_ESSENCE, 100, 1.0),
         )
         return LootTable(1.0, defaultLootRaws)
     }
@@ -153,7 +159,15 @@ class LootTableHandler {
     private fun scienceLootTable(): LootTable {
         val defaultLootRaws: List<LootRaw> = listOf(
             LootRaw(Item.HIGGS_BOSON, 100, 1.0),
-            LootRaw(Item.DISPELL_FLASK, 100, 1.0),
+            LootRaw(Item.RAGS, 100, 1.0),
+            LootRaw(Item.BLIGHTING_JEWEL, 100, 1.0),
+            LootRaw(Item.MASK, 100, 1.0),
+            LootRaw(Item.PLATE, 100, 1.0),
+            LootRaw(Item.RING, 100, 1.0),
+            LootRaw(Item.SCYTHE, 100, 1.0),
+            LootRaw(Item.TEAR, 100, 1.0),
+            LootRaw(Item.STRANGE_BONE, 100, 1.0),
+            LootRaw(Item.INNSMOUTH_WATTER, 100, 1.0),
         )
         return LootTable(1.0, defaultLootRaws)
     }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 class AdvancedUsefulItemsRecipePart() : RecipeSourcePart {
 
     companion object {
-        val defaultCrafterTypes = listOf(CrafterType.ADVANCED)
+        val defaultCrafterTypes = listOf(CrafterType.ADVANCED, CrafterType.REGULAR)
     }
 
     override fun recipes(): List<Recipe> {

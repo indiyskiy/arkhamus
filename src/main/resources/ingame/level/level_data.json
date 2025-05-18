@@ -3660,7 +3660,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 78.0,
-        "y": 0.0,
+        "y": -5.0,
         "z": 108.5
       },
       {
@@ -3669,7 +3669,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 81.0,
-        "y": 0.0,
+        "y": -5.0,
         "z": 108.5
       },
       {
@@ -3678,7 +3678,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 84.0,
-        "y": 0.0,
+        "y": -5.0,
         "z": 108.5
       },
       {
@@ -3687,7 +3687,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 87.0,
-        "y": 0.0,
+        "y": -5.0,
         "z": 108.5
       },
       {
@@ -3696,7 +3696,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 90.0,
-        "y": 0.0,
+        "y": -5.0,
         "z": 108.5
       },
       {
@@ -3705,7 +3705,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 78.0,
-        "y": 0.0,
+        "y": -5.0,
         "z": 110.5
       },
       {
@@ -3717,7 +3717,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 81.0,
-        "y": 0.0,
+        "y": -5.0,
         "z": 110.5
       },
       {
@@ -3726,7 +3726,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 84.0,
-        "y": 0.0,
+        "y": -5.0,
         "z": 110.5
       },
       {
@@ -3735,7 +3735,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 87.0,
-        "y": 0.0,
+        "y": -5.0,
         "z": 110.5
       },
       {
@@ -3744,7 +3744,7 @@
         "interactionRadius": 3.5,
         "name": "Cheaty Chest",
         "x": 90.0,
-        "y": 0.0,
+        "y": -5.0,
         "z": 110.5
       },
       {
@@ -4173,11 +4173,11 @@
         "z": 2.01
       },
       {
-        "effectRadius": 5.0,
+        "effectRadius": 12.0,
         "id": 2902,
-        "interactionRadius": 2.0,
-        "x": 108.0,
-        "y": 2.0,
+        "interactionRadius": 12.0,
+        "x": 104.0,
+        "y": 0.0,
         "z": 80.3
       },
       {
@@ -4275,7 +4275,7 @@
         "interactionRadius": 3.0,
         "relatedClue": 2902,
         "x": 105.0,
-        "y": 2.0,
+        "y": 0.0,
         "z": 80.3
       },
       {
@@ -4283,7 +4283,7 @@
         "interactionRadius": 3.0,
         "relatedClue": 2902,
         "x": 106.5,
-        "y": 2.0,
+        "y": 0.0,
         "z": 80.3
       },
       {
@@ -4291,7 +4291,7 @@
         "interactionRadius": 3.0,
         "relatedClue": 2902,
         "x": 108.0,
-        "y": 2.0,
+        "y": 0.0,
         "z": 80.3
       },
       {
@@ -4299,7 +4299,7 @@
         "interactionRadius": 3.0,
         "relatedClue": 2902,
         "x": 109.5,
-        "y": 2.0,
+        "y": 0.0,
         "z": 80.3
       },
       {
@@ -4307,7 +4307,7 @@
         "interactionRadius": 3.0,
         "relatedClue": 2902,
         "x": 111.0,
-        "y": 2.0,
+        "y": 0.0,
         "z": 80.3
       },
       {
